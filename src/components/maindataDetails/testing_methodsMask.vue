@@ -17,87 +17,87 @@
 					</div>
 				</div>
 				<div class="mask_content">
-						<div class="accordion">
-							<el-collapse v-model="activeNames">
-								<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
-									<el-collapse-item title="基础信息" name="1">
-										<el-row :gutter="20" class="pb10">
-											<el-col :span="3" class="pull-right">
-												<el-input  v-model="testingForm.VERSION" :disabled="true">
-													<template slot="prepend">版本</template>
-												</el-input>
-											</el-col>
-										</el-row>
-										<el-row>
-											<el-col :span="8">
-												<el-form-item label="编码" prop="M_NUM" >
-													<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="中文名称" prop="M_NAME" >
-													<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="英文名称" prop="M_ENAME" >
-													<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-										<el-row>
-											<el-col :span="8">
-												<el-form-item label="类别" prop="M_TYPE">
-													<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
-														<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
-													</el-select> -->
-													<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8" v-if="dept">
-												<el-form-item label="机构">
-													<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</el-collapse-item>
-									<el-collapse-item title="其它" name="2" v-show="views">
-										<el-row>
-											<el-col :span="8">
-												<el-form-item label="录入人">
-													<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="录入时间">
-													<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="修改人">
-													<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="修改日期">
-													<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
-										</el-row>
-									</el-collapse-item>
-								</el-form>
-								<el-collapse-item title="文件" name="3">
-									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+					<div class="content-accordion">
+						<el-collapse v-model="activeNames">
+							<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
+								<el-collapse-item title="基础信息" name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="3" class="pull-right">
+											<el-input  v-model="testingForm.VERSION" :disabled="true">
+												<template slot="prepend">版本</template>
+											</el-input>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="编码" prop="M_NUM" >
+												<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="中文名称" prop="M_NAME" >
+												<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="英文名称" prop="M_ENAME" >
+												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="类别" prop="M_TYPE">
+												<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-select> -->
+												<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-if="dept">
+											<el-form-item label="机构">
+												<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
 								</el-collapse-item>
-							</el-collapse>
-						</div>
-						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
-							<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
-							<el-button @click="close">取消</el-button>
-						</div>
+								<el-collapse-item title="其它" name="2" v-show="views">
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="录入人">
+												<el-input v-model="testingForm.ENTERBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间">
+												<el-input v-model="testingForm.ENTERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人">
+												<el-input v-model="testingForm.CHANGEBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改日期">
+												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+							</el-form>
+							<el-collapse-item title="文件" name="3">
+								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+							</el-collapse-item>
+						</el-collapse>
+					</div>
+					<div class="content-footer" v-show="noviews">
+						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
+						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
+						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
+						<el-button @click="close">取消</el-button>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -106,7 +106,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'testing_mask',
@@ -179,21 +178,21 @@
 					M_NUM: [{
 						required: false,
 						trigger: 'change',//validateNum
-						validator: Validators.isCodeNum,
+						validator: this.Validators.isCodeNum,
 					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
 						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' },
-						{validator: Validators.isChinese, trigger: 'blur'},
+						{validator: this.Validators.isChinese, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
 						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' },
-						{validator: Validators.isEnglish, trigger: 'blur'},
+						{validator: this.Validators.isEnglish, trigger: 'blur'},
 					],
 					M_TYPE: [
 						{ required: true, message: '请填写', trigger: 'change' },
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					]
 				},
 				hintshow:false,
@@ -309,7 +308,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验检测项目_检验/检测方法';
+					_this.docParm.recordid = _this.testingForm.ID;
+					_this.docParm.appid = 16;
+					_this.$refs.docTable.getData();
+				},100);			
 			},
 			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
 				this.$refs[testingForm].validate((valid) => {
@@ -625,7 +633,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 		mounted() {

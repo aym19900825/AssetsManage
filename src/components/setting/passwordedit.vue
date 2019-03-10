@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 			<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_tabs></navs_tabs>
 	</div>
 
 	<div class="contentbg">
@@ -46,7 +46,7 @@
 						</el-form>
 					</el-collapse-item>
 				</el-collapse>
-				<div class="content-footer">
+				<div class="text-center pt20 pb20">
 				    <button class="btn btn-default btn-large" @click="tips('passwordedit')">重置</button>
 				    <button class="btn btn-primarys btn-large" @click="submitForm('passwordedit')">保存</button>
 				</div>
@@ -62,13 +62,13 @@
 import Config from '../../config.js'
 import vheader from '../common/vheader.vue'
 import navs from '../common/left_navs/nav_left.vue'
-import navs_header from '../common/nav_tabs.vue'
+import navs_tabs from '../common/nav_tabs.vue'
 
 export default {
 	name: 'passwordedit',
 	components: {
 		vheader,
-		navs_header,
+		navs_tabs,
 		navs
 	},
 	data() {

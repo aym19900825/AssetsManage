@@ -17,9 +17,8 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" label-width="100px" class="demo-user">
-						<div class="accordion">
-
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+						<div class="content-accordion">
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="设备基本信息" name="1">
@@ -36,14 +35,15 @@
 										</el-col> -->
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' " :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='ASSET_STATUS'&& item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='ASSET_STATUS' || item.prop =='ISPERIODIC' || item.prop =='ASSET_NUMBER')" disabled></el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 										</el-date-picker>
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
-										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
@@ -53,8 +53,8 @@
 								<!-- 设备保管人员情况 -->
 								<el-collapse-item title="设备保管人员情况" name="2">
 									<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type"  :disabled="true">
-											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople"></el-button>
+										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type" :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addPeople"></el-button>
 										</el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
 									</el-form-item>
@@ -92,7 +92,7 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -118,12 +118,13 @@
 					<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer" v-if="noviews">
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
-	    			<el-button type="primary" @click="addpeoname()">确 定</el-button>
-	  			</span>
+
+				<div slot="footer" v-if="noviews">
+	    			<el-button type="primary" @click="addpeoname">确 定</el-button>
+	    			<el-button @click="resetBasisInfo">取 消</el-button>
+	  			</div>
 			</el-dialog>
 			<!--设备保管人 End-->
 		</div>
@@ -166,62 +167,96 @@
 					'appid': 1
 				},
 				rules: {
-					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+					ASSETNUM: [//设备编号
+						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
-					DESCRIPTION: [
-						{ required: true, message: '请输入设备名称', trigger: 'blur' },
+					DESCRIPTION: [//设备名称
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					CONFIG_UNIT: [
-						{ required: true, message: '请输入配置单位', trigger: 'blur' },
+					CONFIG_UNIT: [//配置单位
+						{ required: true, message: '必填', trigger: 'change'},
 					],
-					INS_SITE: [
-						{ required: true, message: '请输入安装地点', trigger: 'blur' },
+					INS_SITE: [//安装地点
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					VENDOR: [
-						{ required: true, message: '请输入制造商', trigger: 'blur' },
+					VENDOR: [//制造商
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					MODEL: [
-						{ required: true, message: '请输入规格型号', trigger: 'blur' },
+					MODEL: [//规格型号
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ASSET_KPI: [
-						{ required: true, message: '请输入设备状态', trigger: 'blur' },
+					ASSET_KPI: [//技术指标
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					OPTION_STATUS: [
-						{ required: true, message: '请输入设备使用状态', trigger: 'blur' },
+					SUPPORT_ASSET: [//配套设备
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ISMETER: [
-						{ required: true, message: '请选择是否计量器具', trigger: 'blur' },
+					OPTION_STATUS: [//设备使用状态
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					ISPM: [
-						{ required: true, message: '请选择是否需要溯源', trigger: 'blur' },
+					ISMETER: [//是否计量器具
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					KEEPER: [
-						{ required: true,validator: validateKeeper},//设备保管人
+					ISPM: [//是否需要溯源
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					ACCEPT_DATE: [
-						{ required: true, message: '请输入接收日期', trigger: 'blur' },
+					KEEPER: [//设备保管人
+						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata},
 					],
-					S_DATE: [
-						{ required: true, message: '请输入启用日期', trigger: 'blur' },
+					ACCEPT_DATE: [//接收日期
+						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
-					C_ADDRESS: [
-						{ required: true, message: '请输入配置地址', trigger: 'blur' },
+					USEDATE: [//使用日期
+						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
-					A_STATU: [
-						{ required: true, message: '请输入接收状态', trigger: 'blur' },
+					S_DATE: [//启用日期
+						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
 					],
-					MODE1: [
-						{ required: true, message: '请选择鉴定/校准/验证方式', trigger: 'blur' },
+					C_ADDRESS: [//配置地址
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
-					STATUS: [
-						{ required: true, message: '请输入信息状态', trigger: 'blur' },
+					MODE1: [//检定/验证
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					A_STATUS: [
-						{ required: true, message: '请输入接收状态', trigger: 'blur' },
+					STATE: [//设备状态
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					A_PRICE: [
-						{ validator: checkNum, trigger: 'blur' },
+					MODE: [//维护方式
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
+					],
+					STATUS: [//信息状态
+						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
+					],
+					A_STATUS: [//接收状态
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
+					],
+					TYPE: [//设备分类
+						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
+					],
+					A_PRICE: [//设备价值
+						{ required: true, trigger: 'blur', message: '必填',},
+					],
+					FACTOR_NUM: [//出厂编号
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					SUPPLIER: [//供货单位
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					ACCEPT_NUM: [//验收单号
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
+					],
+					TECHNICAL_DATA: [//技术资料
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
+					],
+					MEMO: [//备注
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey },
 					],
 				},
 				basicInfo: [
@@ -475,6 +510,27 @@
 						type: 'textarea',
 						displayType: 'inline-block'
 					},
+					{
+						label: '资产状态',
+						prop: 'ASSET_STATUS',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '资产编号',
+						prop: 'ASSET_NUMBER',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '是否定期检查',
+						prop: 'ISPERIODIC',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
 				],
 				keeperInfo: [
 					{
@@ -603,7 +659,7 @@
 				userList:[],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				selectData:[]
@@ -616,7 +672,6 @@
 			},
 			handlePrice(){
 				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-				console.log(this.dataInfo.A_PRICE);
 			},
 			//机构值
 			getCompany() {
@@ -627,14 +682,21 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
+			//设备保管人员情况
 			addPeople(){
-				console.log(123);
-				this.$emit('request');
-				this.dialogVisible = true;
+				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
+				if(CONFIG_UNIT==""||CONFIG_UNIT=="undenfiend"){
+					this.$message({
+						message: '请先选委托单位名称',
+						type: 'warning'
+					});
+				}else{
+					this.getuserinfo();
+					this.dialogVisible = true;
+				}
 			},
 			addpeoname(){
 				if(this.selUser.length == 0){
@@ -649,9 +711,15 @@
 					});
 				}else{
 					this.dataInfo.KEEPER = this.selUser[0].nickname;
-					this.dialogVisible = false;
+					this.getuserinfo();
+					this.resetBasisInfo();//调用resetBasisInfo函数
 				}
-				this.$emit('request');
+			},
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.userList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -671,11 +739,11 @@
 			 },
 			 sizeChange(val) {
 				this.page.pageSize = val;
-				//				this.requestData();
+				//this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
-				//				this.requestData();
+				//this.requestData();
 			},
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -761,6 +829,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataInfo = this.detailData;
+				this.dataInfo.CONFIG_UNIT = Number(this.dataInfo.CONFIG_UNIT);
 				this.handlePrice();
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -798,7 +867,16 @@
 				this.mview = true;
 				this.noviews = false;//按钮
 				this.dataInfo = data;
-				this.show = true;				
+				this.show = true;		
+				
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '仪器和计量器具';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 47;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 			//点击关闭按钮
 			close() {
@@ -856,9 +934,12 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo();//调用resetBasisInfo函数
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
@@ -930,12 +1011,12 @@
 				this.save(dataInfo);
 				this.show = true;
 			},
-			requestData(index) {//高级查询字段
+			getuserinfo() {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-user/users', {
+				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.dataInfo.CONFIG_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -964,7 +1045,6 @@
 			},
 		},
 		mounted() {
-			this.requestData();
 			this.getCompany();
 		},
 

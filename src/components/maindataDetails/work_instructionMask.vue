@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="WORK_INSTRUCTION" inline-message :rules="rules" ref="WORK_INSTRUCTION" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="作业指导书" name="1">
 									<el-row class="pb10">
@@ -83,7 +83,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('WORK_INSTRUCTION')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('WORK_INSTRUCTION')">修订</el-button>
@@ -98,7 +98,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -152,11 +151,11 @@
 					NUM: [{
 						required: false,
 						trigger: 'change',
-						validator: Validators.isCodeNum,
+						validator: this.Validators.isCodeNum,
 					}],
 					DESCRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				testing_filesForm:{//文件文件数据组
@@ -294,7 +293,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+				
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '作业指导书';
+					_this.docParm.recordid = _this.WORK_INSTRUCTION.ID;
+					_this.docParm.appid = 10;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 			//点击修订按钮
 			modifyversion(WORK_INSTRUCTION) {
@@ -503,7 +511,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 		},
 	}

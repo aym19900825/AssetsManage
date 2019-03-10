@@ -2,11 +2,11 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单调用 End-->
 
 			<!--右侧内容显示 Begin-->
@@ -15,20 +15,8 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                       			</button>
-                       			<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加部门
-                       			</button> -->
-                       			<button type="button" class="btn btn-blue button-margin" @click="modify" id="">
-						    		<i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" id="" @click="deluserinfo">
-						    		<i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch" id="">
-						    		<i class="icon-search"></i>高级查询<i class="icon-arrow1-down" v-show="down"></i><i class="icon-arrow1-up" v-show="up"></i>
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>
 						</div>
@@ -62,8 +50,9 @@
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
-									<el-button type="primary" @click="searchinfo" size="small"  style="margin-top:2px">搜索</el-button>
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -71,8 +60,8 @@
 					<!-- 高级查询划出 -->
 					<el-row :gutter="10">
 						<el-col :span="24">
-							<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:childByValue="childByValue"></tree_grid>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
+							<!-- <el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 							   @size-change="sizeChange" 
 							   @current-change="currentChange" 
 							   :current-page="page.currentPage" 
@@ -80,12 +69,11 @@
 					           :page-size="page.pageSize" 
 					           layout="total, sizes, prev, pager, next"
 					           :total="page.totalCount">
-							</el-pagination>
+							</el-pagination> -->
 						</el-col>
 					</el-row>
 					</div>
 				</div>
-			</div>
 			<!--右侧内容显示 End-->
 			<deptmask :adddeptForm="adddeptForm" ref="child" @request="requestData" @reset="reset" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
@@ -97,29 +85,31 @@
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree.vue'
-//	import tableControle from '../plugin/table-controle/controle.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import deptmask from '../settingDetails/dept_mask.vue'
 
 	export default {
 		name: 'dept_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'deptmask': deptmask,
 			'tree_grid':tree_grid,
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
 					// '序号',
 					'机构名称',
 					'机构编码',
+					'上级机构',
+					'机构属性',
+					'负责人',
 					'版本',
-					'电话号',
+					'备注',
 				],
 				columns: [
 					// {
@@ -138,15 +128,30 @@
 						isShow:true,
 					},
 					{
+						text: '上级机构',
+						dataIndex: 'parent',
+						isShow:true,
+					},
+					{
+						text: '机构属性',
+						dataIndex: 'depttypeName',
+						isShow:true,
+					},
+					{
+						text: '负责人',
+						dataIndex: 'leader',
+						isShow:true,
+					},
+					{
 						text: '版本',
 						dataIndex: 'version',
 						isShow:true,
 					},
 					{
-						text: '电话号',
-						dataIndex: 'telephone',
+						text: '备注',
+						dataIndex: 'tips',
 						isShow:true,
-					}
+					},
 				],
 
 				companyId: '',
@@ -154,7 +159,7 @@
 				selDept: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				total:0,
@@ -179,7 +184,8 @@
 				},
 				treeData: [],
 				selData: [],
-				adddeptForm: {}//修改子组件时传递数据
+				adddeptForm: {},//修改子组件时传递数据
+				buttons:[],//按钮
 			}
 		},
 		methods: {
@@ -214,6 +220,21 @@
 						"changedate":''
 					};
 			},
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	// console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					// console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 			changeCheckedName(value){
 				this.checkedName=value
 				let str=value.toString()
@@ -226,10 +247,24 @@
 				}
 			},
 			//表格传过来
-			childByValue: function (childValue) {
+			childByValue: function (childByValue) {
 		        // childValue就是子组件传过来的
-		        this.selMenu = childValue
+		        this.selMenu = childByValue
 		    },
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				// console.log( childvalue);
+		    	 this.getbutton( childvalue);
+			},
+			getDetail(data){
+				// console.log('tableDetail');
+				this.view(data);
+			},
+			//查看
+			view(data) {
+			 	this.adddeptForm = data;
+				this.$refs.child.view();
+			},
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
 			},
@@ -264,11 +299,31 @@
 
 				})
 			},
+			resetbtn(){
+				this.searchDept = {//高级查询
+					simplename:'',
+					fullname:''
+				};
+				this.requestData();
+			},
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.deluserinfo();
+				}else if(item.name=="彻底删除"){
+				 this.physicsDel();
+				}
+		    },
 			//添加
 			openAddMgr() {
 				this.reset();
 				this.$refs.child.visible();
-
 			},
 			//修改
 			modify() {
@@ -287,7 +342,6 @@
 					return;
 				} else {
 					this.adddeptForm = this.selMenu[0]; 
-					console.log(this.adddeptForm);
 					this.$refs.child.detail();
 				}
 			},
@@ -314,65 +368,110 @@
 							type: 'error'
 						});
 					}else {
-//						var id = changeMenu.id;
-//						var url = this.basic_url + '/api-user/depts/' + id;
-//						this.$axios.delete(url, {}).then((res) => {
-//							//resp_code == 0是后台返回的请求成功的信息
-//							if(res.data.resp_code == 0) {
-//								this.$message({
-//									message: '删除成功',
-//									type: 'success'
-//								});
-//								this.requestData();
-//							}
-//						}).catch((err) => {
-//							this.$message({
-//								message: '网络错误，请重试',
-//								type: 'error'
-//							});
-//						});
-					var url = this.basic_url + '/api-user/depts/deletes';
-					//changeMenu为勾选的数据
-//					var changeMenu = selData[0];
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					console.log(selData);
-					for(var i = 0; i < selData.length; i++) {
-						deleteid.push(selData[i].id);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-					var data = {
-						ids: ids,
-					}
-					console.log(data);
-					this.$confirm('确定删除此数据吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-						this.$axios.delete(url, {
-							params: data
-						}).then((res) => { //.delete 传数据方法
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
+						var url = this.basic_url + '/api-user/depts/deletes';
+						//changeMenu为勾选的数据
+	//					var changeMenu = selData[0];
+						//deleteid为id的数组
+						var deleteid = [];
+						var ids;
+						console.log(selData);
+						for(var i = 0; i < selData.length; i++) {
+							deleteid.push(selData[i].id);
+						}
+						//ids为deleteid数组用逗号拼接的字符串
+						ids = deleteid.toString(',');
+						var data = {
+							ids: ids,
+						}
+						console.log(data);
+						this.$confirm('确定删除此数据吗？', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+						}).then(({
+							value
+						}) => {
+							this.$axios.delete(url, {
+								params: data
+							}).then((res) => { //.delete 传数据方法
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '删除成功',
+										type: 'success'
+									});
+									this.requestData();
+								}
+							}).catch((err) => {
 								this.$message({
-									message: '删除成功',
-									type: 'success'
+									message: '网络错误，请重试',
+									type: 'error'
 								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
 							});
-						});
-					}).catch(() => {
+						}).catch(() => {
 
+						});
+					}
+				}
+			},
+			// 彻底删除
+			deluserinfo() {
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的机构',
+						type: 'warning'
 					});
+					return;
+				} else {
+					var changeMenu = selData[0];
+					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
+						this.$message({
+							message: '先删除子机构',
+							type: 'error'
+						});
+					}else {
+						var url = this.basic_url + '/api-user/depts/physicsDel';
+						//changeMenu为勾选的数据
+	//					var changeMenu = selData[0];
+						//deleteid为id的数组
+						var deleteid = [];
+						var ids;
+						console.log(selData);
+						for(var i = 0; i < selData.length; i++) {
+							deleteid.push(selData[i].id);
+						}
+						//ids为deleteid数组用逗号拼接的字符串
+						ids = deleteid.toString(',');
+						var data = {
+							ids: ids,
+						}
+						console.log(data);
+						this.$confirm('确定删除此数据吗？', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+						}).then(({
+							value
+						}) => {
+							this.$axios.delete(url, {
+								params: data
+							}).then((res) => { //.delete 传数据方法
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '删除成功',
+										type: 'success'
+									});
+									this.requestData();
+								}
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试',
+									type: 'error'
+								});
+							});
+						}).catch(() => {
+
+						});
 					}
 				}
 			},
@@ -390,10 +489,10 @@
 			},
 
 			requestData() {//高级查询字段
+				this.loading = true;
 				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, {
-//					params: data
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
@@ -402,6 +501,7 @@
 						}	
 					}
 					this.deptList = result;
+					this.loading = false;
 //					this.page.totalCount = res.data.count;
 				}).catch((wrong) => {})
 			},

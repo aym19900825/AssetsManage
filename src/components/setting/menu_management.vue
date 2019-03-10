@@ -2,11 +2,11 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -14,7 +14,10 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMenu" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMenu" id="">
 	                            	<i class="icon-add"></i>添加
 	                  			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -22,8 +25,7 @@
 								</button>
 								<button type="button" class="btn btn-red button-margin" @click="delmenu">
 								    <i class="icon-trash"></i>删除
-								</button>
-
+								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -47,9 +49,8 @@
 					</div>
 					<el-row :gutter="10">
 						<el-col :span="24">
-							 <tree_grid :columns="columns" :tree-structure="true" :data-source="menuList" v-on:childByValue="childByValue" ></tree_grid>
-
-							<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							 <tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="menuList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
+							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 						</el-col>
 					</el-row>
@@ -65,14 +66,14 @@
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import assetsTree from '../plugin/vue-tree/tree.vue'
 	import menumask from '../settingDetails/menu_mask.vue'//弹出框
 	export default {
 		name: 'menu_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'menumask': menumask,
 			'v-assetsTree': assetsTree,
@@ -80,6 +81,7 @@
 		},
 		data() {
 			return {
+			loading: false,
 			basic_url: Config.dev_url,
 		    checkedName: [
 					'菜单名称',
@@ -136,10 +138,11 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
-				menu: {}//修改子组件时传递数据
+				menu: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
@@ -155,13 +158,7 @@
 					}
 				}
 			},
-			childByValue: function (childValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childValue
-		       console.log(childValue);
-//		        this.selMenu[0].hidden ? '1' : '0'
-		        
-		    },
+			
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -170,7 +167,18 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
-			
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMenu();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.delmenu();
+				}
+		    },
 			//添加菜单
 			openAddMenu() {
 				this.menu = {
@@ -181,8 +189,6 @@
 					hidden:1,
 					css:''
 				};
-				
-//				this.$refs.child.detail();
 				this.$refs.child.visible();
 			},
 			//修改
@@ -203,12 +209,16 @@
 					return;
 				} else {
 					this.menu = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0]);
 				}
 			},
-			// 查看
-			 view() {
-			 	this.menu=this.selMenu;
+			getDetail(data){
+				console.log('tableDetail');
+				this.view(data);
+			},
+			//查看
+			view(data) {
+			 	this.menu = data;
 				this.$refs.child.view();
 			},
 			// 删除
@@ -233,20 +243,29 @@
 						var id = changeMenu.id;
 						console.log(id);
 						var url = this.basic_url + '/api-user/menus/' + id;
-						this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
+						this.$confirm('确定删除此数据吗？', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+						}).then(({
+							value
+						}) => {
+							this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '删除成功',
+										type: 'success'
+									});
+									this.requestData();
+								}
+							}).catch((err) => {
 								this.$message({
-									message: '删除成功',
-									type: 'success'
+									message: '网络错误，请重试',
+									type: 'error'
 								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
 							});
+						}).catch(() => {
+
 						});
 					}else if(typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
 						this.$message({
@@ -265,6 +284,7 @@
 				this.selMenu = val;
 			},
 			requestData(index) {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -273,39 +293,41 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
+					this.loading = false;
 					let result=res.data
-					
-					// for(let i=0;i<result.length;i++){
-					// 	if(result[i].parentId == "-1" || result[i].parentId == "null") {
-					// 		result[i].isMenu = "目录"
-					// 	} else {
-					// 		result[i].isMenu = "菜单"
-					// 	}	
-					// 	result[i].hidden=result[i].hidden?true:false
-						// if(result[i].children.length>0){
-						// 	let children=result[i].children
-						// 	for(let j=0;j<children.length;j++){
-						// 		if(children[j].parentId == "-1" || children[j].parentId == "null") {
-						// 			children[j].isMenu = "目录"
-						// 		} else {
-						// 			children[j].isMenu = "菜单"
-						// 		}
-						// 		children[j].hidden=children[j].hidden?true:false
-						// 	}
-							
-						// 	result[i].children=children
-						// }
-					// }
-					
 					this.menuList = result;
-					console.log('==='+result+'===');
 					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+				}).catch((wrong) => {
+					
+				})
 			},
 
 			handleNodeClick(data) {},
+			//子表格传过来的值
+			childByValue: function (childValue) {
+		        // childValue就是子组件传过来的
+		        this.selMenu = childValue
+		       console.log(childValue);
+		    },
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
 
+		    },
 		},
 		mounted() {
 			this.requestData();

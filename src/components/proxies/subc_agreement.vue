@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -15,20 +15,17 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
+							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+							</button>
+							<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button> -->
 							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
 							    <i class="icon-download-cloud"></i>导出
+							</button>
+							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+							    <i class="icon-clipboard"></i>报表
 							</button>
 							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
 							    <i class="icon-print"></i>打印
@@ -37,7 +34,7 @@
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
 					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+							</button> -->
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -60,7 +57,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
+								<el-form-item label="单位名称" prop="VENDOR" label-width="70px">
 									<el-input v-model="searchList.VENDOR"></el-input>
 								</el-form-item>
 							</el-col>
@@ -75,16 +72,17 @@
 								  </div>
 								</el-form-item>
 							</el-col>
-							<el-col :span="2">
+							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-				<el-row :gutter="5">
+				<el-row class="relative" id="pageDiv">
 					<!-- 左侧树菜单 Begin-->
-					<el-col :span="5" class="lefttree">
+					<el-col :span="5" class="lefttree" id="left">
 						<div class="lefttreebg">
 							<div class="left_tree_title clearfix" @click="min3max()">
 								<div class="pull-left pr20" v-if="ismin">检索分类</div>
@@ -101,19 +99,46 @@
 						</div>
 					</el-col>
 					<!-- 左侧树菜单 End-->
-					<el-col :span="19" class="leftcont v-resize">
+					<div id="middle"></div>
+					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" :data="subagree" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'subagree', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table ref="table" :header-cell-style="rowClass" 
+								  :data="subagreeList" 
+								  border 
+								  stripe 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'subagreeList', order: 'descending'}" 
+								  @selection-change="SelChange" 
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+								  element-loading-text="加载中…"
+    							  element-loading-spinner="el-icon-loading"
+    							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
+								<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXY_CONTRACT_NUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="分包单位" width="150" sortable prop="VENDOR" v-if="this.checkedName.indexOf('分包单位')!=-1">
+							<el-table-column label="委托方名称" width="150" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托方名称')!=-1">
+							</el-table-column>
+							<el-table-column label="类别" width="150" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类别')!=-1">
+							</el-table-column>
+							<el-table-column label="状态" width="150" sortable prop="state" v-if="this.checkedName.indexOf('状态')!=-1">
+							</el-table-column>
+							<el-table-column label="单位名称" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							</el-table-column>
+							<el-table-column label="分包协议类别" width="150" sortable prop="TYPE" v-if="this.checkedName.indexOf('分包协议类别')!=-1">
 							</el-table-column>
 							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="this.checkedName.indexOf('检验/检测项目内容')!=-1">
-							</el-table-column>						
+							</el-table-column>	
+							<el-table-column label="检验检测项目依据" width="150" sortable prop="BASIS" v-if="this.checkedName.indexOf('检验检测项目依据')!=-1">
+							</el-table-column>					
 							<el-table-column label="对环境和操作人员要求" width="180" sortable prop="REQUIRE" v-if="this.checkedName.indexOf('对环境和操作人员要求')!=-1">
 							</el-table-column>
 							<el-table-column label="对分包报告/证书的要求" width="180" sortable prop="Q_TYPE" v-if="this.checkedName.indexOf('对分包报告/证书的要求')!=-1">
@@ -131,7 +156,7 @@
 							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</el-table>
-						<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
 				            :current-page="page.currentPage"
@@ -146,7 +171,9 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<!-- <customermask @request="requestData" v-bind:page=page></customermask> -->
+		<submask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></submask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -154,34 +181,35 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue' 
+	import navs_tabs from '../common/nav_tabs.vue' 
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import submask from '../proxiesDetails/sub_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
-		name: 'user_management',
+		name: 'subc_agreement',
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
+			submask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
 				checkedName: [
 					'分包协议编号',
 					'委托书编号',
-					'分包单位',
+					'委托方名称',
+					'类别',
+					'状态',
+					'单位名称',
+					'分包协议类别',
 					'检验/检测项目内容',
 					'检验检测项目依据',
 					'对环境和操作人员要求',
@@ -203,8 +231,24 @@
 						prop: 'PROXYNUM'
 					},
 					{
-						label: '分包单位',
+						label: '委托方名称',
+						prop: 'V_NAME'
+					},
+					{
+						label: '类别',
+						prop: 'TYPEDesc'
+					},
+					{
+						label: '状态',
+						prop: 'state'
+					},
+					{
+						label: '单位名称',
 						prop: 'VENDOR'
+					},
+					{
+						label: '分包协议类别',
+						prop: 'TYPE'
 					},
 					{
 						label: '检验/检测项目内容',
@@ -250,9 +294,7 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				// '启用': true,
-				// '冻结': false,
-				subagree: [],
+				subagreeList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -279,23 +321,14 @@
 				//分页显示
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
-				aaaData:[],
+				buttons:[],
+				subcontrac:'subcontrac'//appname
 			}
 		},
-
-		mounted(){
-			// 获取浏览器可视区域高度
-			window.onresize = () => {//获取浏览器可视区域高度
-			 	return (() => {
-			 		this.fullHeight.height = document.documentElement.clientHeight - 100+'px';
-			 	})()
-		 	};	
-		},
 		methods: {
-			
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -303,17 +336,18 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
-			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
+			resetbtn(){
+				this.searchList =  { //点击高级搜索后显示的内容
+					PROXY_CONTRACT_NUM:'',
+					PROXYNUM: '',
+					VENDOR: '',
+					ENTERDATE: '',
+				};
 				this.requestData();
 			},
 			//高级查询
@@ -322,58 +356,41 @@
 				this.down = !this.down,
 				this.up = !this.up
 			},
-			openAddMgr(){
-
+			getbtn(item){
+				if(item.name=="修改"){
+					this.modify();
+				}else if(item.name=="高级查询"){
+					this.modestsearch();
+				}else if(item.name=="导入"){
+				this.download();
+				}else if(item.name=="导出"){
+					this.download();
+				}else if(item.name=="报表"){
+					this.reportdata();
+				}else if(item.name=="打印"){
+					this.Printing();
+				}
 			},
-			modify(){
-
-			},
-			// 删除
-			deluserinfo() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
+			modify() {
+				if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要删除的用户',
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/checkProCont2/deletes';
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-                    var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除该条信息吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-                    }).catch(() => {
-
-                	});
+					this.$refs.child.detail(this.selUser[0].ID);	
 				}
+			},
+			//查看
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			// 导入
 			importData() {
@@ -383,14 +400,15 @@
 			exportData() {
 				
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.subcontrac;
+				this.$refs.reportChild.visible();
+			},
 			// 打印
 			Printing() {
 				
 			},
-			// judge(data) {
-			// 	//taxStatus 布尔值
-			// 	return data.enabled ? '启用' : '冻结'
-			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -402,7 +420,61 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//表格滚动加载
+			loadMore() {
+				//console.log(this.$refs.table.$el.offsetTop)
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
 			requestData(index) {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -412,29 +484,26 @@
 					ENTERBY: this.searchList.ENTERBY,
 					ENTERDATE: this.searchList.ENTERDATE
 				}
-				var url = this.basic_url + '/api-apps/app/checkProCont2';
+				var url = this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(111);
-					console.log(res.data);
-					this.subagree = res.data.data;
-					this.page.totalCount = res.data.count;
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
+					this.subagreeList = res.data.data;;
+					this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
 				}).catch((wrong) => {})
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page++
-			     if (this.page > 10) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     console.log('到底了', this.page)
-			   }
-			 },
+			
 			handleNodeClick(data) {
 				if(data.type == '1') {
 					this.companyId = data.id;
@@ -508,22 +577,72 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+				this.$refs.navsTabs.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	console.log(childByValue);
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+
+		    },
+		    //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			}
 		},
 		mounted(){
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
+			this.requestData();
+			this.getKey();
              // 注册scroll事件并监听  
              let self = this;
               $(".div-table").scroll(function(){
                 self.loadMore();
             })
         },
-
-
-		mounted() {
-			this.requestData();
-			this.getKey();
-		},
+	
 	}
 </script>
 

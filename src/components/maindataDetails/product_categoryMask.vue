@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="产品类别" name="1">
 									<el-row class="pb10">
@@ -27,37 +27,9 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
-										<!--<el-col :span="5" class="pull-right" v-if="modify">
-											<el-input v-model="CATEGORY.STATUS=='1'?'活动':'不活动'" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>
-										<el-col :span="5" class="pull-right" v-else>
-											<el-input v-model="CATEGORY.STATUS" :disabled="true">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>-->
-										<!--<template slot-scope="scope">
-												<label>信息状态</label>
-	 									       <span v-text="scope.STATUS=='1'?'活动':'不活动'"></span>-->
-										<!--<span>{{scope.STATUS}}</span>
-	 									       	
-	 									       </span>
-	 								        </template>-->
-
-										<!-- <el-select v-model="CATEGORY.STATUS" placeholder="请选择信息状态">
-												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-												</el-option>
-											</el-select> -->
-										</el-col>
 									</el-row>
 
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="类别编号" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="edit" placeholder="自动生成"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="编码" prop="NUM">
 												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
@@ -103,10 +75,10 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button>
+						<div class="content-footer" v-show="noviews">
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion()">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -165,7 +137,7 @@
 				}
 			};
 			return {
-				falg:false,//保存验证需要的
+				loading: false,
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
@@ -175,20 +147,11 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2'], //手风琴数量
-				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{
-						required: false,
-						trigger: 'change',
-						validator: validateNum,
-					}],
-					TYPE: [{
-						required: true,
-						trigger: 'blur',
-						validator: validateType,
-					}],
+					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
+					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -207,26 +170,13 @@
 			};
 		},
 		methods: {
-			//编码提示
-			// hint(){
-			// 	this.hintshow = true;
-			// },
-			// hinthide(){
-			// 	this.hintshow = false;
-			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
-			//生成随机数函数
-			rand(min, max) {
-				return Math.floor(Math.random() * (max - min)) + min;
-			},
 			//点击按钮显示弹窗
 			visible() {
-				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
@@ -283,7 +233,6 @@
 			},
 			//这是查看
 			view() {
-				console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -294,8 +243,8 @@
 				this.show = true;				
 			},
 			//点击修订按钮
-			modifyversion(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
+			modifyversion() {
+				this.$refs.CATEGORY.validate((valid) => {
 					if(valid) {
 						var category=JSON.stringify(this.category); 
 	 					var CATEGORY=JSON.stringify(this.CATEGORY);
@@ -357,7 +306,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -404,10 +352,8 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				console.log(233333);
-				console.log(this.CATEGORY);
-				this.$refs[CATEGORY].validate((valid) => {
+			save(parameter) {
+				this.$refs.CATEGORY.validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
@@ -418,6 +364,11 @@
 									message: '保存成功',
 									type: 'success'
 								});
+								if(parameter=="Update"){
+									this.show = false;
+								}else{
+									this.show = true;
+								}
 								//重新加载数据
 								this.$emit('request');
 								this.$emit('reset');
@@ -445,31 +396,18 @@
 								type: 'error'
 							});
 						});
-						this.falg = true;
+						// this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
+						// this.falg = false;
 					}
 				});
 			},
 			
-			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
-				this.show = true;
-			},
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -483,7 +421,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 		},
 		mounted() {
@@ -494,5 +435,9 @@
 </script>
 
 <style scoped>
+	.el-table__body-wrapper 
+	{
+    overflow-y:scroll;
+    }
 	@import '../../assets/css/mask-modules.css';
 </style>

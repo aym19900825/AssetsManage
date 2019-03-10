@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import echarts from 'echarts'
 import ElementUI from 'element-ui'
+import { Loading } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 //import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/reset.css'
@@ -17,16 +18,17 @@ import $ from 'jquery'
 import moment from 'moment'
 import './axios'
 import vueGridLayout from 'vue-grid-layout'
-//import infiniteScroll from 'vue-infinite-scroll'//滚动加载更多
 
 // import Dropzone from 'dropzone/dist/min/dropzone.min.js'
 // import 'dropzone/dist/min/dropzone.min.css'
 
 import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
-import EasyScroll from 'easyscroll'//自定义滚动条
+// import EasyScroll from 'easyscroll'//自定义滚动条
 import common from './assets/js/common.js'
 import store from './store.js'
 import 'babel-polyfill'
+import Validators from './core/util/validators.js'
+import Print from 'vue-print-nb'
 
 
 //import './jquery/dist/jquery.min.js'
@@ -41,41 +43,51 @@ import 'babel-polyfill'
 //import './assets/bootstrap/bootstrap.min.js'
 
 
-
+Vue.config.productionTip = false
 Vue.directive('loadmore', {
 	bind(el, binding) {
-	    const selectWrap = el.querySelector('.el-table__body-wrapper')
+		const selectWrap = el.querySelector('.el-table__body-wrapper');
+		var scrollBeforeTop = 0;
+		var firstFlag = true;
 	    selectWrap.addEventListener('scroll', function() {
-	      let sign = 100
-	      const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-	      if (scrollDistance <= sign) {
-	        binding.value()
-	      }
+			let toBtm = sessionStorage.getItem('toBtm');
+			if(toBtm=='true'){
+				if(firstFlag){
+					scrollBeforeTop = this.scrollTop;
+					firstFlag = false;
+					this.scrollTop = 2;
+				}else{
+					if(this.scrollTop >= scrollBeforeTop){
+						this.scrollTop = 2;
+						scrollBeforeTop = this.scrollTop;
+					}
+				}
+			}
+	      	let sign = 1
+	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
+		    if (scrollDistance <= sign) {
+				sessionStorage.setItem('up2down','down');
+				binding.value();
+				this.scrollTop = 800;
+	      	}else if(this.scrollTop < sign){
+				sessionStorage.setItem('up2down','up');
+				binding.value();
+				this.scrollTop = 2;
+	      	}else{
+	      		return false;
+	      	}
 	    })
 	}
 })
 
-Vue.config.productionTip = false
-//let selectedNav={
-//	css: 'icon-user',
-//	name: '首页',
-//	url: '/index'}
-//
-//
-//var clickedNav=new Array();
-//clickedNav[0]=selectedNav
-////tab 上选中的页面  只能有一个
-//Vue.prototype.$selectedNav = selectedNav //选中的tab
-////所有tab的页面
-//Vue.prototype.$clickedNav = clickedNav   //点选的tab
-
-
-
 Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.prototype.common = common
+Vue.prototype.Validators = Validators
 Vue.use(ElementUI)
 Vue.use(vueztree)
+Vue.use(Print)
+
 // Vue.use(EasyScroll)//自定义滚动条
 //Vue.use(infiniteScroll)
 
@@ -87,17 +99,6 @@ new Vue({
   template: '<App/>'
 })
  
-/*window.Vue.directive('loadmore', {
-  	bind(el, binding) {
-    	const selectWrap = el.querySelector('.el-table__body-wrapper')
-    	selectWrap.addEventListener('scroll', function() {
-     	    let sign = 100;
-     	    const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight
-     	    if (scrollDistance <= sign) {
-     	      	binding.value();
-     	    }
-    	})
-  	}
-})*/
+
 
    

@@ -6,6 +6,7 @@
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加机构</div>
 					<div class="mask_title" v-show="modifytitle">修改机构</div>
+					<div class="mask_title" v-show="viewtitle">查看机构</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -17,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="机构信息" name="1">
 									<el-row :gutter="30">
@@ -40,19 +41,19 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="机构序号" prop="step">
-												<el-input  v-model="adddeptForm.step">
+												<el-input  v-model="adddeptForm.step" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构编码" prop="code">
-												<el-input v-model="adddeptForm.code">
+												<el-input v-model="adddeptForm.code" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构名称" prop="fullname">
-												<el-input v-model="adddeptForm.fullname">
+												<el-input v-model="adddeptForm.fullname" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -61,21 +62,20 @@
 										<el-col :span="8">
 											<el-form-item label="上级机构" prop="parent">
 												<el-input v-model="adddeptForm.parent" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="机构类型" prop="org_range">
-												<el-select v-model="adddeptForm.org_range" placeholder="请选择" style="width: 100%">
+											<el-form-item label="机构类型" prop="depttype">
+												<el-select v-model="adddeptForm.depttype" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
-													</el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构属性" prop="type">
-												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%">
+												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -85,7 +85,7 @@
 										<el-col :span="8">
 											<el-form-item label="是否停用" prop="inactive">
 												<el-input v-if="stopcontent" v-model="adddeptForm.inactive" :disabled="edit"></el-input>
-												<el-select v-if="stopselect" v-model="adddeptForm.inactive" placeholder="请选择" style="width: 100%">
+												<el-select v-if="stopselect" v-model="adddeptForm.inactive" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
 												</el-select>
@@ -93,12 +93,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="联系地址">
-												<el-input v-model="adddeptForm.address"></el-input>
+												<el-input v-model="adddeptForm.address" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮政编码">
-												<el-input v-model="adddeptForm.zipcode">
+												<el-input v-model="adddeptForm.zipcode" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -120,12 +120,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="电话" prop="telephone">
-												<el-input v-model="adddeptForm.telephone"></el-input>
+												<el-input v-model="adddeptForm.telephone" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="传真" prop="fax">
-												<el-input v-model="adddeptForm.fax">
+												<el-input v-model="adddeptForm.fax" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -133,14 +133,14 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="邮箱" prop="email">
-												<el-input v-model="adddeptForm.email"></el-input>
+												<el-input v-model="adddeptForm.email" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="tips">
-												<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入"></el-input>
+												<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -171,8 +171,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer">
-							    
+						<div class="content-footer" v-show="noviews">
 							    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
 							    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 							<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
@@ -186,47 +185,45 @@
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="queding();" >确 定</el-button>
-			    </span>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 
 			<!--负责人 Begin-->
 			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
-				<div class="accordion" id="information">
-					<div class="mask_tab-block">
-						<!-- <div class="mask_tab-head clearfix">
-							<div class="accordion_title">
-								<span class="accordion-toggle">选择负责人</span>
-							</div>
-						</div> -->
-						<!-- 第二层弹出的表格 -->
-							<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-									<el-table-column type="selection" width="55" fixed>
-									</el-table-column>
-									<el-table-column label="账号" sortable width="140px" prop="username">
-									</el-table-column>
-									<el-table-column label="姓名" sortable width="200px" prop="nickname">
-									</el-table-column>
-									<el-table-column label="机构" sortable width="150px" prop="deptName">
-									</el-table-column>
-									<el-table-column label="公司" sortable width="200px" prop="companyName">
-									</el-table-column>
-									<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
-									</el-table-column>
-									<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
-									</el-table-column>
-								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-								</el-pagination>
-							<!-- 表格 -->
+				<div class="content-accordion" id="information">
+					<!-- <div class="mask_tab-head clearfix">
+						<div class="accordion_title">
+							<span class="accordion-toggle">选择负责人</span>
+						</div>
+					</div> -->
+					<!-- 第二层弹出的表格 -->
+						<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+								<el-table-column type="selection" width="55" fixed>
+								</el-table-column>
+								<el-table-column label="账号" sortable width="140px" prop="username">
+								</el-table-column>
+								<el-table-column label="姓名" sortable width="200px" prop="nickname">
+								</el-table-column>
+								<el-table-column label="机构" sortable width="150px" prop="deptName">
+								</el-table-column>
+								<el-table-column label="公司" sortable width="200px" prop="companyName">
+								</el-table-column>
+								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
+								</el-table-column>
+								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
+								</el-table-column>
+							</el-table>
+							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
+						<!-- 表格 -->
 					</div>
-				</div>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogLeader = false">取 消</el-button>
-			       <el-button type="primary" @click="addleader">确 定</el-button>
-			    </span>
+					<div slot="footer">
+				       <el-button type="primary" @click="addleader">确 定</el-button>
+				       <el-button @click="dialogLeader = false">取 消</el-button>
+				    </div>
 			</el-dialog>
 			<!--负责人 End-->
 		</div>
@@ -235,13 +232,10 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
+	// import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
-			page: {
-				type: Object,
-			},
 			adddeptForm: {
 				type: Object,
 				default: function(){
@@ -252,7 +246,7 @@
 						code:'',
 						fullname:'',
 						parent:'',
-						org_range:'',
+						depttype:'',
 						type:'',
 						inactive:'',
 						address:'',
@@ -294,6 +288,7 @@
 				}],
 				personinfo:false,
 				showcode:true,
+				noviews:true,//按钮
 				selMenu:[],
 				selUser: [],
 				selData: [],//获取当前负责人
@@ -303,7 +298,7 @@
 				userList: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				dialogVisible: false, //对话框
@@ -314,8 +309,9 @@
 				isok1: true,
 				isok2: false,
 //				labelPosition: 'top',
-				addtitle:true,
-				modifytitle:false,
+				addtitle:true,//添加弹出框titile
+				modifytitle:false,//修改弹出框titile
+				viewtitle:false,//查看弹出框titile
 				modify:false,
 				dialogLeader:false,
 				stopcontent:false,
@@ -329,23 +325,23 @@
 					label: "fullname"
 				},
 				rules:{
-   					step: [{required:true,trigger: 'blur',validator: Validators.isWorknumber}],//机构序号
+   					step: [{required:true,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
 					fullname: [
 						{required:true, trigger: 'blur', message: '必填'},
-						{validator: Validators.isNickname, trigger: 'blur'},
+						{validator: this.Validators.isNickname, trigger: 'blur'},
 					],//机构名称
-					org_range: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
+					depttype: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
    					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
-   					telephone: [{required:false,trigger: 'blur',validator: Validators.isTelephone}],//电话
-					fax: [{required:false,trigger: 'blur',validator: Validators.isTelephone}],//传真
-					email:[{required:false, trigger: 'blur', validator: Validators.isEmail,}],//邮箱
-					code:[{required: false,trigger: 'blur',validator: Validators.isWorknumber}],//机构属性
-					address:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//联系地址
-					zipcode:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//邮政编码
-					telephone:[{required: false,trigger: 'blur',validator: Validators.isTelephone}],//电话
-					fax:[{required: false,trigger: 'blur',validator: Validators.isTelephone}],//传真
-					email:[{required: false,trigger: 'blur',validator: Validators.isEmail}],//邮箱
-					tips:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],//备注
+   					telephone: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
+					fax: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
+					email:[{required:false, trigger: 'blur', validator: this.Validators.isEmail,}],//邮箱
+					code:[{required: false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构属性
+					address:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
+					zipcode:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//邮政编码
+					telephone:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
+					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
+					email:[{required: false,trigger: 'blur',validator: this.Validators.isEmail}],//邮箱
+					tips:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//备注
 				}
 			}
 		},
@@ -367,6 +363,73 @@
                 	 }
             		}
         	},
+        	
+			visible() {//点击父组件按钮显示弹窗
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+	     			this.adddeptForm.enterby = res.data.nickname;
+	     			var date=new Date();
+					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				 }).catch((err) => {
+				 	this.$message({
+				 		message: '网络错误，请重试',
+				 		type: 'error'
+				 	});
+				});	
+				// this.$refs["adddeptForm"].resetFields();//清空表单验证
+				this.show = true;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.modify = false;
+				this.stopcontent = true;
+				this.stopselect = false;
+				this.showcode = false;
+			},
+			//修改
+			detail() {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+				this.modify = true;
+				this.stopcontent = false;
+				this.stopselect = true;
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+	    			this.adddeptForm.changeby = res.data.nickname;
+	    			var date=new Date();
+					this.adddeptForm.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					for(var key in this.adddeptForm){ 
+						this.adddeptForm.hasOwnProperty('_expanded');
+						this.adddeptForm.hasOwnProperty('_level');
+						this.adddeptForm.hasOwnProperty('_parent');
+						this.adddeptForm.hasOwnProperty('_show');
+						delete this.adddeptForm._expanded;
+						delete this.adddeptForm._level;
+						delete this.adddeptForm._parent;
+						delete this.adddeptForm._show;
+						
+					}
+					//深拷贝数据
+					// let obj = JSON.parse(JSON.stringfy(this.adddeptForm));
+        			// this.ADDDEPTFORM = JSON.parse(obj);
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				});
+                 this.show = true;
+			},
+			view(){
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.modify = true;
+				this.edit = true;
+				this.noedit = true;
+				this.stopcontent = false;
+				this.stopselect = true;
+				this.personinfo = true;
+				this.show = true;
+			},
 			//获取负责人数据
 			getPerson(){
 				this.requestData();
@@ -432,7 +495,59 @@
 			},
 			//点击修订按钮
 			modifyversion(){
-				this.adddeptForm.version = this.adddeptForm.version + 1;
+				this.$refs.adddeptForm.validate((valid) => {
+					if(valid) {
+						var ADDDEPTFORM=JSON.stringify(this.ADDDEPTFORM); //父传的值
+	 					var adddeptForm=JSON.stringify(this.adddeptForm);//新输入的值
+					 	if(adddeptForm==ADDDEPTFORM){
+					  	this.$message({
+								message: '没有修改内容，不允许修订！',
+								type: 'warning'
+							});
+							return false;
+					   }else{
+							var url = this.basic_url + '/api-user/depts/upgraded';
+							this.$axios.post(url, this.adddeptForm).then((res) => {
+								//resp_code == 0是后台返回的请求成功的信息
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '修订成功',
+										type: 'success'
+									});
+									//重新加载数据
+									this.$emit('request');
+									this.show = false;
+								}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									//res.data.resp_msg!=''后台返回提示信息
+									if( res.data.resp_msg!=''){
+									 	this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+									 	});
+									}else{
+										this.$message({
+											message:'相同数据不可重复修订！',
+											type: 'warning'
+										});
+									}
+								}
+							}		
+							}).catch((err) => {
+								this.$message({
+									message: '网络错误，请重试1',
+									type: 'error'
+								});
+							});
+						}
+					} else {
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+					}
+				});
 			},
 
 			//所属上级
@@ -452,12 +567,24 @@
 				});
 			},
 			queding() {
+				console.log(this.checkedNodes);
 				this.getCheckedNodes();
-				this.placetext = false;
-				this.dialogVisible = false;				
-				this.adddeptForm.pid = this.checkedNodes[0].id;
-				this.adddeptForm.parent = this.checkedNodes[0].fullname;
-				
+				if(this.checkedNodes == undefined){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				// }else if(this.checkedNodes.length > 1){
+				// 	this.$message({
+				// 		message:'不可选择多条数据',
+				// 		type:'warning'
+				// 	})
+				}else{
+					this.placetext = false;
+					this.dialogVisible = false;				
+					this.adddeptForm.pid = this.checkedNodes[0].id;
+					this.adddeptForm.parent = this.checkedNodes[0].fullname;
+				}				
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -485,71 +612,10 @@
 			},
 			
 
-			visible() {//点击父组件按钮显示弹窗
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-	     			this.adddeptForm.enterby = res.data.nickname;
-	     			var date=new Date();
-					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				 }).catch((err) => {
-				 	this.$message({
-				 		message: '网络错误，请重试',
-				 		type: 'error'
-				 	});
-				});	
-				// this.$refs["adddeptForm"].resetFields();//清空表单验证
-				this.show = !this.show;
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.modify = false;
-				this.stopcontent = true;
-				this.stopselect = false;
-				this.showcode = false;
-			},
-			//修改
-			detail() {
-				console.log(this.adddeptForm.leader);
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.adddeptForm.changeby = res.data.nickname;
-	    			var date=new Date();
-					this.adddeptForm.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
-
-
-//				var page = this.page.currentPage;
-//				var limit = this.page.pageSize;
-//				var url = this.basic_url + '/api-user/users/';
-//				this.$axios.get(url, {
-//					params: {
-//						page: page,
-//						limit: limit,
-//					},
-//				}).then((res) => {
-//					console.log(res.data);
-//					this.adddeptForm.leader = res.data.id;//给负责人显示用户名称
-//					
-//				}).catch((err) => {
-//					this.$message({
-//						message: '网络错误，请重试',
-//						type: 'error'
-//					});
-//				});
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.modify = true;
-				this.stopcontent = false;
-				this.stopselect = true;
-				this.show = true;
-
-			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -620,16 +686,7 @@
 //		          	 _this.adddeptForm.leader = _this.selData[0].id;
 		          
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
-					_this.adddeptForm = {
-						 "id":this.adddeptForm.id,
-						 "pid":this.adddeptForm.pid,
-						 "fullname":this.adddeptForm.fullname,
-					     "simplename":this.adddeptForm.simplename,
-					    "type":this.adddeptForm.type,
-					    "code":this.adddeptForm.code,
-					     "teltphone":this.adddeptForm.teltphone,
-					     "tips":this.adddeptForm.tips
-					}
+
 					console.log(_this.adddeptForm);
 					this.$axios.post(url, _this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
@@ -638,9 +695,9 @@
 								message: '保存成功',
 								type: 'success'
 							});
-//							//重新加载数据
-//							this.$emit('request');
-							// this.$refs["adddeptForm"].resetFields();//清空验证
+							//重新加载数据
+							this.$emit('request');
+//							 this.$refs["adddeptForm"].resetFields();//清空验证
 						}
 					}).catch((err) => {
 						this.$message({
@@ -677,7 +734,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 		mounted() {

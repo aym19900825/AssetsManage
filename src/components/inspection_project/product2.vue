@@ -95,7 +95,7 @@
 			  </el-table>
 			</el-form>
 			<!-- 表格分页 Begin-->
-			<!-- <el-pagination background class="pull-right pt10 pb10"
+			<!-- <el-pagination background class="text-right pt10 pb10"
 	            @size-change="sizeChange"
 	            @current-change="currentChange"
 	            :current-page="page.currentPage"
@@ -110,32 +110,38 @@
 	</el-card>
 
 	<!-- 产品 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
-				</el-table-column>
-				<el-table-column label="名称" sortable prop="PRO_NAME">
-				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-				</el-table-column>
-				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
-				</el-table-column>
-				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-			</el-table>
-			
-			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		       <el-button type="primary" @click="addproclass">确 定</el-button>
-		    </span>
-		</el-dialog>
-		<!-- 产品 End -->
+	<el-dialog :modal-append-to-body="false" title="选择基础数据——产品" height="300px" :visible.sync="dialogVisible3" width="80%">
+		<!--搜索框 Begin-->
+		<div class="columns pull-right child-search">
+			<el-input placeholder="请输入产品名称" v-model="search">
+			</el-input>
+		</div>
+		<!--搜索框 End-->
+		<!-- 第二层弹出的表格 Begin-->
+		<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" >
+			<el-table-column type="selection" fixed width="55" align="center">
+			</el-table-column>
+			<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
+			</el-table-column>
+			<el-table-column label="产品名称" sortable prop="PRO_NAME">
+			</el-table-column>
+			<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+			</el-table-column>
+			<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+			</el-table-column>
+			<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+			</el-table-column>
+			<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+			</el-table-column>
+		</el-table>
+		
+		<!-- 表格 End-->
+		<span slot="footer" class="dialog-footer">
+	       <el-button type="primary" @click="addproclass">确 定</el-button>
+	       <el-button @click="dialogVisible3 = false">取 消</el-button>
+	    </span>
+	</el-dialog>
+	<!-- 产品 End -->
 </div>
 
 </template>
@@ -147,7 +153,7 @@
 		components: {
 			
 		},
-
+		props: ['parentIds'],
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -179,11 +185,12 @@
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 
-				parentId: 1
+				parentId: 1,
+				selParentId: 1 //父类选中id
 
 				// childData: {}
 			}
@@ -218,7 +225,7 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData_product2()
+			     this.viewfield_product2(this.selParentId,this.parentId);
 			   }
 			 },
 			 addprobtn(row){//查找基础数据中的产品名称
@@ -228,10 +235,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.departmentId, {
+				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					// console.log(this.departmentId);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -254,16 +261,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_product2();
+		      this.viewfield_product2(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_product2();
+		      this.viewfield_product2(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {//设置默认分页数
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_product2();
+				this.viewfield_product2(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -285,9 +292,12 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
+				// console.log(this.parentId);
 				var url = this.basic_url + '/api-apps/app/productType2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
+					// console.log(res.data);
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -322,7 +332,8 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
+					// console.log(res.data);
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -330,8 +341,10 @@
 					}else{
 						this.loadSign=true
 					}
+
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
+
 					for(var i = 1; i <= totalPage; i++){
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							for(var j = 0; j < this.commentArr[i].length; j++){
@@ -341,6 +354,7 @@
 							}
 						}
 					}
+
 					this.product2Form.inspectionList = newarr;//滚动加载更多
 
 					setTimeout(function(){
@@ -362,36 +376,42 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			formatter(row, column) {//禁止产品行编辑
 				return row.enabled;
 			},
 			addfield_product2(NUM) { //插入行到产品类型Table中
 				var isEditingflag=false;
-				//console.log(this.product2Form.inspectionList);
-				for(var i=0;i<this.product2Form.inspectionList.length; i++){
-					if (this.product2Form.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
+				if(Array.isArray(this.product2Form.inspectionList)){
+					for(var i=0;i<this.product2Form.inspectionList.length; i++){
+						if (this.product2Form.inspectionList[i].isEditing==false){
+							isEditingflag=false;
+						}else{
+	                        isEditingflag=true;
+	                        break;
+						}
 					}
+				}else{
+					this.product2Form.inspectionList = [];
 				}
+				
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDatee, currentDept;
+                		var currentUser, currentDatee;
 						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"NUM": this.parentId,//所属类别编号
 							"PRO_NUM": '',
 							"PRO_NAME": '',
-							"STATUS": '1',
+							"STATUS": '',
 							"VERSION": '',
-							"DEPTID": this.currentDept,
+							"DEPTID": '',
 							"ENTERBY": this.currentUser,
 							"ENTERDATE": this.currentDate,
 							"isEditing": true,
@@ -430,7 +450,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_product2();
+							// this.requestData_product2();
+							this.viewfield_product2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
 						this.$message({
@@ -456,7 +477,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_product2();
+							this.viewfield_product2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -473,6 +494,7 @@
 				this.dialogVisible3 = false
 				this.catedata.PRO_NUM = this.selData[0].PRO_NUM;
 				this.catedata.PRO_NAME = this.selData[0].PRO_NAME;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},
@@ -514,8 +536,5 @@
 	left: 0px;
 }
 .el-card:hover .table-func  {display: block;}
-
-
-
 
 </style>

@@ -34,7 +34,12 @@
                 </el-row>
             </el-form>
         </div>
-        <el-table ref="table" :data="list" border style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="selChange">
+        <el-table ref="table" 
+                  :data="list" 
+                  border 
+                  style="width: 100%;" 
+                  :default-sort="{prop:'samplesList', order: 'descending'}" 
+                  @selection-change="selChange">
             <el-table-column type="selection" width="55" fixed >
             </el-table-column>
             <el-table-column label="分类" sortable prop="categoryidDesc">
@@ -42,7 +47,7 @@
             <el-table-column label="关键字" sortable prop="keywordname">
             </el-table-column>
         </el-table>
-        <el-pagination class="pageLeft pull-right pt10"
+        <el-pagination background class="text-right pt10"
             @size-change="sizeChange"
             @current-change="currentChange"
             :current-page="page.currentPage"
@@ -51,9 +56,9 @@
             layout="total, sizes, prev, pager, next"
             :total="page.totalCount">
         </el-pagination>
-        <div slot="footer" class="dialog-footer">
-            <el-button @click="reset">取 消</el-button>
+        <div slot="footer">
             <el-button type="primary" @click="save">确 定</el-button>
+            <el-button @click="reset">取 消</el-button>
         </div>
     </el-dialog>  
 </div>
@@ -65,11 +70,12 @@ export default {
     name: 'keyword',
     data(){
         return {
+            loading: false,
             basic_url: Config.dev_url,
             file_url: Config.file_url,
             page: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             },
             searchList: {
@@ -119,7 +125,7 @@ export default {
             this.param.visible = false;
             this.page = {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             };
         },

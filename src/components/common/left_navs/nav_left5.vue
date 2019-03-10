@@ -1,5 +1,5 @@
 <template>
-	<div  class="navbar-default navbar-static-side" :style="{height: fullHeight}">
+	<div  class="navbar-default navbar-static-side scrollbar" :style="{height: fullHeight}">
 		<div class="navbarbg" @click="min2max()">
 			<span class="navbar-minimalize minimalize-styl-2">
 				<i class="icon-menu1"></i> 
@@ -14,15 +14,12 @@
 			</li>
 		</ul>
 	</div>
-
 </template>
 
 <script>
 import Config from '../../../config.js'
-//import navs_header from '../nav_tabs.vue'
 export default {
 	name: 'navs',
-	
 	data(){
 		return{
 			basic_url: Config.dev_url,
@@ -33,24 +30,15 @@ export default {
             selectedNav: {}
 		}
 	},
-	
 	methods: {
 		addClickNav(item){
-
 			var flag = false;
-<<<<<<< HEAD
-			console.log(this.$store.state.clickedNav);
-			for(var i = 0; i < this.$store.state.clickedNav.length; i++){
-				if(item.name == this.$store.state.clickedNav[i].name){
-=======
 			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
 				if(item.name == this.$store.state.clickedNavs[i].name){
->>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
 					flag = true;
 				}
 			}
 			if(!flag){
-//				this.$store.state.clickedNavs = this.$store.state.clickedNavs.slice();
 				this.$store.state.clickedNavs.push(item);
 				setTimeout(function(){
 		 			var left = $('.page-tabs').offset().left; 
@@ -70,8 +58,6 @@ export default {
 			this.$store.dispatch('setSelectedNavAct',item);
 			//点击的值传给user
 			this.$emit('childByValue',item);
-//			console.log("left5 click:");
-//          console.log( this.$clickedNav );
 		},
 		min2max(){//左侧菜单正常和变小切换
         	if($(".navbar-static-side").width()=="220"){
@@ -94,85 +80,42 @@ export default {
 			$(".navbar-static-side").css("width", "220px");
 			$(".wrapper").css("padding-left", "220px");
 			$(".navs>li").css("margin", "0px 10px");
-		},
-		getleft(){
-			console.log(8888888);
-		var _this = this;
-		var data = {
-			menuId: this.$store.state.navid,
-			roleId: this.$store.state.roleid,
-		};
-		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-		_this.$axios.get(url, {params: data}).then((res) => {			
-			console.log(res);
-			if(_this.$route.path!=_this.$selectedNav.url){
-				_this.$selectedNav=res.data[0]
-			}
-			_this.leftNavs = res.data;
-			_this.$emit('childByValue',_this.$selectedNav);//传值给父亲
-		}).catch((wrong) => {
-			_this.$message({
-				message: '网络错误，请重试左侧1',
-				type: 'error'
-			});
-		});
-		}
-		
+		},	
 	},
 	mounted() {
 		var _this = this;
-		// console.log(_this.$store.state.menuid);
 		if(_this.$store.state.menuid=="undefined"||_this.$store.state.menuid=="null"){
-			// console.log(111111);
 			$('.navbar-default').hide();
-			// console.log($("#wrapper-content"));
 //			$(".wrapper").css({"padding-left":"0px"})
 //			$("#wrapper-content").css({"padding-left":"0px"});
-			// console.log($("#wrapper-content"));
 		     _this.$emit('childByValue',_this.$store.state.selectedNav);
 		}else{
 		    var data = {
-			menuId: _this.$store.state.menuid,
-			roleId: _this.$store.state.roleid,
+				menuId: _this.$store.state.menuid,
+				roleId: _this.$store.state.roleid,
 			};
-		var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-<<<<<<< HEAD
-		_this.$axios.get(url, {params: data}).then((res) => {			
-			console.log(res);
-			if(_this.$route.path!=_this.$selectedNav.url){
-				_this.$selectedNav=res.data[0]
-=======
-		_this.$axios.get(url, {params: data}).then((res) => {
-			if(res.data.length>0&&res.data!='undefined'){
-			     // console.log(_this.$route.path);
-				if(_this.$route.path!=_this.$store.state.selectedNav.url){
-					//赋值
-	//				_this.$selectedNav=res.data[0]
-					_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+			_this.$axios.get(url, {params: data}).then((res) => {
+				if(res.data.length>0&&res.data!='undefined'){
+					if(_this.$route.path!=_this.$store.state.selectedNav.url){
+						_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+					}
+					$('.navbar-default').show();
+	//				$(".wrapper").css({"padding-left":"220px"});
+					_this.leftNavs = res.data;
+					_this.$emit('childByValue',_this.$store.state.selectedNav);
+				}else{
+					$('.navbar-default').hide();
+	//				$(".wrapper").css({"padding-left":"0px"});
+					_this.$emit('childByValue',_this.$store.state.selectedNav);
 				}
-				$('.navbar-default').show();
-//				$(".wrapper").css({"padding-left":"220px"});
-				_this.leftNavs = res.data;
-				//子传父
-				 _this.$emit('childByValue',_this.$store.state.selectedNav);
-			}else{
-				$('.navbar-default').hide();
-//				$(".wrapper").css({"padding-left":"0px"});
-				 _this.$emit('childByValue',_this.$store.state.selectedNav);
-				 
->>>>>>> 8f192f0bc1ba654365c575ae9c6012562b8b4dad
-			}
-				
-		}).catch((wrong) => {
-			_this.$message({
-				message: '网络错误，请重试左侧1',
-				type: 'error'
+			}).catch((wrong) => {
+				_this.$message({
+					message: '网络错误，请重试左侧1',
+					type: 'error'
+				});
 			});
-		});
 		}
-		
-		
-		
 	}
 }
 </script>

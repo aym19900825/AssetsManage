@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="检验/检测报告模板" name="1">
 									<el-row>
@@ -70,7 +70,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
@@ -85,7 +85,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
@@ -110,24 +109,6 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字或字母（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
-			// var validateDeci = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写产品类别名称'));
-			// 	} else {
-			// 		callback();
-			// 	}
-			// };
 			return {
 				docParm: {
 					'model': 'new',
@@ -156,12 +137,12 @@
 				rules: {
 					NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: Validators.isCodeNum,
+						trigger: 'blur',
+						validator: this.Validators.isCodeNum,
 					}],
 					DECRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree
@@ -277,7 +258,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;
+
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验检测项目_原始数据模板';
+					_this.docParm.recordid = _this.CATEGORY.ID;
+					_this.docParm.appid = 17;
+					_this.$refs.docTable.getData();
+				},100);				
 			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
@@ -401,7 +391,7 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionRepTem/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -539,7 +529,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 		},
 		mounted() {

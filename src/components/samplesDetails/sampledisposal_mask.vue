@@ -28,14 +28,14 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="samplesForm.STATE" :disabled="edit">
+											<el-input v-model="samplesForm.STATEDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
 											<el-input v-model="samplesForm.ITEM_STEP" :disabled="edit">
 												<template slot="prepend">样品序号</template>
-												<el-button slot="append" icon="el-icon-search" @click="addsamplenum"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
 											</el-input>
 										</el-col>
 									</el-row>
@@ -51,13 +51,13 @@
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
 												<el-input v-model="samplesForm.ITEMNUM" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getsample"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getsample" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="10000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -110,11 +110,11 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="2" v-show="views">
+								<el-collapse-item title="其他" name="2" v-show="viewtitle">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY">
-												<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBYDesc">
+												<el-input v-model="samplesForm.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -123,15 +123,15 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPARTMENT">
-												<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="samplesForm.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="修改人">
-												<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
+												<el-input v-model="samplesForm.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -191,12 +191,12 @@
 					</el-table-column>
 					<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE">
 					</el-table-column>
-					<el-table-column label="样品状态" sortable width="100px" prop="STATE">
+					<el-table-column label="样品状态" sortable width="100px" prop="STATEDesc">
 					</el-table-column>
 					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
@@ -217,7 +217,7 @@
 					</el-table-column>
 					<el-table-column label="单件码" sortable width="200px" prop="SN">
 					</el-table-column>
-					<el-table-column label="样品状态" sortable width="200px" prop="STATE">
+					<el-table-column label="样品状态" sortable width="200px" prop="STATEDesc">
 					</el-table-column>
 					<el-table-column label="录入时间" sortable width="140px" :formatter="dateFormat" prop="ENTERDATE">
 					</el-table-column>
@@ -226,7 +226,7 @@
 					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
@@ -243,9 +243,6 @@
 	export default {
 		name: 'sampledisposal_mask',
 		props: {
-			page: {
-				type: Object,
-			},
 			samplesForm: { //接收主表单中填写的数据信息
 				type: Object,
 				default: function() {
@@ -355,7 +352,7 @@
 				dialogsample:false,
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				samplesList:[],
@@ -404,7 +401,7 @@
 			//样品序号
 			addsamplenum(){
 				this.dialogsamplenum = true;
-				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
+				this.$axios.get(this.basic_url + '/api-apps/app/itemline?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
 
 				}).then((res) => {
 					this.samplenumList = res.data.data;
@@ -464,7 +461,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -472,7 +472,8 @@
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					// this.samplesForm.DEPARTMENT=res.data.deptName;
-					this.samplesForm.ENTERBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;
+					this.samplesForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					this.samplesForm.ACCEPT_DATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -485,14 +486,16 @@
 				})
 				this.addtitle = true;
             	this.modifytitle = false;
-            	this.modify=false;
+				this.modify=false;
+				this.noviews = true;
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.samplesForm.CHANGEBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -505,6 +508,7 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.modify = true;
+				this.noviews = true;
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;
@@ -666,7 +670,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 		mounted() {

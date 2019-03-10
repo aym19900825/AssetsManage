@@ -2,11 +2,11 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
-			<navs_left></navs_left>
+				<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单调用 End-->
 
 			<!--右侧内容显示 Begin-->
@@ -16,10 +16,10 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 				
-								<!--<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
-								</button>-->
-								 <button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								</button>
+								 <!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			</button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -28,6 +28,9 @@
 								<button type="button" class="btn btn-red button-margin" @click="delroleinfo">
 								    <i class="icon-trash"></i>删除
 								</button>
+								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							    <i class="icon-trash"></i>彻底删除
+							</button>			
 								<button type="button" class="btn btn-primarys button-margin" @click="menu">
 								    <i class="icon-key"></i>权限配置
 								</button>
@@ -39,7 +42,7 @@
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> 
+								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -65,8 +68,9 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -75,7 +79,19 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'roleList', order: 'descending'}" @selection-change="SelChange">
+							<el-table ref="table" :data="roleList" 
+								  border 
+								  stripe 
+								  :header-cell-style="rowClass" 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'roleList', order: 'descending'}" 
+								  @selection-change="SelChange"
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+							  	  element-loading-text="加载中…"
+							  	  element-loading-spinner="el-icon-loading"
+							  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
@@ -90,7 +106,7 @@
 								<el-table-column label="备注" sortable prop="tips"  v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0"
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 					            @size-change="sizeChange"
 					            @current-change="currentChange"
 					            :current-page="page.currentPage"
@@ -115,7 +131,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import rolemask from '../settingDetails/role_mask.vue'
 	import rolemeunmask from '../settingDetails/rolemenu_mask.vue'
 	import datalimitmask from '../settingDetails/datalimit_mask.vue'
@@ -124,7 +140,7 @@
 		name: 'user_management',
 		components: {//引用组件标签命名
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'rolemask': rolemask,
 			'rolemeunmask': rolemeunmask,
@@ -135,6 +151,8 @@
 			return {
 				basic_url: Config.dev_url,
 				value:'',
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				stopoptions: [{
 					value: "1",
 					label: '是'
@@ -182,7 +200,7 @@
 				treeData: [],//树
 				page: {//页码
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				selData:[],
@@ -199,39 +217,74 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
-			//获取pageSize
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
 			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    //获取currentPage
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = {//高级查询数据
+					name: '',
+					inactive:''
+				};
 				this.requestData();
 			},
 			judge(data) {//是否停用
 				return data.inactive=="1" ? '是' : '否'
 			},
-			//请求页面的button接口
-		    getbutton(childByValue){
-		    	console.log(childByValue);
-		    	var data = {
-					menuId: childByValue.id,
-					roleId: this.$store.state.roleid,
-				};
-				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(111)
-					console.log(res);
-					this.buttons = res.data;
-				}).catch((wrong) => {})
-
-		    },
+			
 			 //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -245,7 +298,13 @@
 		    	}else if(item.name=="不活动"){
 		    		this.freezeAccount();
 		    	}else if(item.name=="删除"){
-		    		this.deluserinfo();
+		    		this.delroleinfo();
+		    	}else if(item.name=="彻底删除"){
+		    		this.physicsDel();
+		    	}else if(item.name=="权限配置"){
+		    		this.menu();
+		    	}else if(item.name=="数据范围"){
+		    		this.datalimit();
 		    	}
 		    },
 			//添加用戶
@@ -339,10 +398,60 @@
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
-					console.log(changeUser[0]);
 					for(var i = 0; i < changeUser.length; i++) {
 						deleteid.push(changeUser[i].id);
-						console.log(deleteid);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+			// 彻底删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-user/roles/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -391,22 +500,35 @@
 				this.selUser = val;
 			},
 			//页面加载数据
-			requestData(index) {
-				console.log(this.searchList.inactive);
+			requestData() {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					name: this.searchList.name,
-					inactive:this.searchList.inactive
+					inactive: this.searchList.inactive
 				}
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					console.log(res.data);
+				this.$axios.get(url, {params: data}).then((res) => {
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					this.roleList = res.data.data;
-					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
 			//机构树
 			getKey() {
@@ -431,17 +553,31 @@
 				}
 				return data;
 			},
-			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		console.log(childValue);
-        		// this.$refs.navsheader.showClick(childValue);
-        		this.getbutton(childValue);
+			//左侧菜单带过来
+			childvalue:function(childvalue) {
+     			this.getbutton(childvalue);
       		},
+			  //请求页面的button接口
+		    getbutton(childvalue){
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					this.buttons = res.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
+
+		    },
 		},
 		mounted() {
 			this.requestData();
 			this.getKey();
-			this.getbutton();
 		},
 	}
 </script>

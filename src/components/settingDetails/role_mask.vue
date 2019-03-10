@@ -18,13 +18,13 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="角色编码" prop="code">
-												<el-input v-model="roleList.code" :disabled="modify"></el-input>
+												<el-input v-model="roleList.code" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -98,7 +98,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='submitForm()'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -120,11 +120,9 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		data() {
-			
 			return {
 				basic_url: Config.dev_url,
 				value: '',
@@ -179,12 +177,12 @@
 					deptId: '',
 				},
 				rules: { //验证表单
-					code: [{ required: false, trigger: 'blur', validator: Validators.isWorknumber}],
+					code: [{ required: false, trigger: 'blur', validator: this.Validators.isWorknumber}],
 					name: [
 						{required: true, message: '必填' ,trigger: 'blur',},
-						{validator: Validators.isNickname, trigger: 'blur'},
+						{validator: this.Validators.isNickname, trigger: 'blur'},
 					],
-					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
 					range: [{ required: true, message: '请选择机构属性', trigger: 'chang'}]
 					
 				},
@@ -347,6 +345,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open() {
 				this.show = true;
@@ -431,7 +430,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 		mounted() {

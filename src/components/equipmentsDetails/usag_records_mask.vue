@@ -19,17 +19,17 @@
                     </div>
                 </div>
                 <div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules"   ref="dataInfo" class="demo-user">
-						<div class="accordion">
+					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" class="demo-user">
+						<div class="content-accordion">
 							<!-- 设备header信息 -->
 							<el-collapse v-model="activeNames">							
-	                            <el-collapse-item name="1">
+	                            <el-collapse-item title="基本信息" name="1">
 	                                <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
 											<el-option v-for="item in item.option"
 											:key="item.ID"
 											:label="item.ASSETNUM"
-											:value="item.ASSETNUM">
+											:value="item.ID">
 											</el-option>
 										</el-select>
 	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'"></el-input>
@@ -194,7 +194,7 @@
 	                            </el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -227,10 +227,10 @@
 					<el-table-column label="样品名称" sortable prop="DESCRIPTION">
 					</el-table-column>
 				</el-table>
-				<span slot="footer" class="dialog-footer" style="text-align: center;">
-			       <el-button @click="resetSample">取 消</el-button>
+				<div slot="footer" class="el-dialog__footer">
 			       <el-button type="primary" @click="addSample">确 定</el-button>
-			    </span>
+			       <el-button @click="resetSample">取 消</el-button>
+			    </div>
 			</el-dialog> 
 			<!-- 设备编号弹出框 end-->
 		</div>
@@ -247,7 +247,7 @@
 				sampleDialog: false,
 				rules: {
 					ASSETNUM: [
-						{ required: true, message: '请输入设备编号', trigger: 'blur' },
+						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata },
 					]
 				},
 				basicInfo: [
@@ -358,7 +358,7 @@
 				},
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				sampleList: [],
@@ -426,7 +426,7 @@
 				this.sampleDialog = false;
 				this.page = {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				};
 				this.searchList.DESCRIPTION = '';
@@ -548,7 +548,7 @@
 			selChange(val){
 				var data = this.basicInfo[0].option;
 				var selData = data.filter(function(item){
-					if(item.ASSETNUM == val){
+					if(item.ID == val){
 						return item;
 					}
 				});

@@ -2,11 +2,11 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -15,20 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -54,8 +43,9 @@
 										<el-input v-model="searchList.description"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
-									<el-button class="pull-right" type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -64,7 +54,19 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" :data="applicationList" v-loading="loading" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'applicationList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table ref="table" :header-cell-style="rowClass" 
+								      :data="applicationList" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'applicationList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+								  	  element-loading-text="加载中…"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="应用英文名称" width="155" sortable prop="code" v-if="this.checkedName.indexOf('应用英文名称')!=-1">
@@ -75,11 +77,6 @@
 								</el-table-column>
 								<el-table-column label="应用名称" width="150" sortable prop="name" v-if="this.checkedName.indexOf('应用名称')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
- 								<template slot-scope="scope" >
- 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
- 								</template>
-							</el-table-column>-->
 								<el-table-column label="处理类" width="250" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类')!=-1" align="right">
 								</el-table-column>
 								<el-table-column label="应用描述" width="185" sortable prop="description" v-if="this.checkedName.indexOf('应用描述')!=-1">
@@ -90,13 +87,9 @@
 								</el-table-column>
 								<el-table-column label="排序" width="120" align="right" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="创建人" width="155" prop="createUser" sortable v-if="this.checkedName.indexOf('创建人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="修改人" width="155" prop="updateUser" sortable v-if="this.checkedName.indexOf('修改人')!=-1">
-								</el-table-column> -->
-								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('变更时间')!=-1">
 								</el-table-column>
 								<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程')!=-1">
 								</el-table-column>
@@ -105,7 +98,7 @@
 								<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('流程代办描述')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 End-->
 						</el-col>
@@ -113,14 +106,14 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<categorymask :dataInfo="dataInfo" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
 		</div>
 	</div>
 </template>
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../settingDetails/application_Mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -129,16 +122,16 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			categorymask,
 			tableControle,
 		},
 		data() {
 			return {
 				basic_url: Config.dev_url,
+				loading: false,//默认加载数据时显示loading动画
 				loadSign: true, //鼠标滚动加载数据
 				commentArr: {},
-				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -161,7 +154,6 @@
 					'应用英文名称',
 					'应用名称',
 					'处理类',
-					'类型',
 					'应用描述',
 					'数据库表',
 					'模块',
@@ -173,63 +165,63 @@
 					'流程代办描述'
 				],
 				tableHeader: [{
-						label: '应用英文名称',
-						prop: 'code'
-					},
-					{
-						label: '应用名称',
-						prop: 'name'
-					},
-					{
-						label: '处理类',
-						prop: 'handleclass'
-					},
-					{
-						label: '类型',
-						prop: 'type'
-					},
-					{
-						label: '应用描述',
-						prop: 'description'
-					},
-					{
-						label: '数据库表',
-						prop: 'object_id'
-					},
-					{
-						label: '模块',
-						prop: 'module'
-					},
-					{
-						label: '排序',
-						prop: 'sort'
-					},
-					{
-						label: '创建时间',
-						prop: 'createTime'
-					},
-					{
-						label: '变更时间',
-						prop: 'updateTime'
-					},
-					{
-						label: '流程',
-						prop: 'flowkey'
-					},
-					{
-						label: '流程代办单据号',
-						prop: 'flow_todo_num'
-					},
-					{
-						label: '流程代办描述',
-						prop: '流程代办描述'
-					},
+                        label: '应用英文名称',
+                        prop: 'code'
+                    },
+                    {
+                        label: '应用名称',
+                        prop: 'name'
+                    },
+                    {
+                        label: '处理类',
+                        prop: 'handleclass'
+                    },
+                    {
+                        label: '类型',
+                        prop: 'type'
+                    },
+                    {
+                        label: '应用描述',
+                        prop: 'description'
+                    },
+                    {
+                        label: '数据库表',
+                        prop: 'object_id'
+                    },
+                    {
+                        label: '模块',
+                        prop: 'module'
+                    },
+                    {
+                        label: '排序',
+                        prop: 'sort'
+                    },
+                    {
+                        label: '创建时间',
+                        prop: 'createTime'
+                    },
+                    {
+                        label: '变更时间',
+                        prop: 'updateTime'
+                    },
+                    {
+                        label: '流程',
+                        prop: 'flowkey'
+                    },
+                    {
+                        label: '流程代办单据号',
+                        prop: 'flow_todo_num'
+                    },
+                    {
+                        label: '流程代办描述',
+                        prop: '流程代办描述'
+                    },
 
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-				],
+                    // {
+                    //  label: '信息状态',
+                    //  prop: 'STATUS'
+                    // },
+                ],
 				selUser: [],
 				applicationList: [],
 				search: false,
@@ -253,11 +245,11 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
-				CATEGORY: {},//修改子组件时传递数据
-				selectData: [],
+				dataInfo: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
@@ -265,31 +257,35 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					console.log(res.data);
-					this.selectData = res.data;
-				});
-			},
 			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				//console.log(this.$refs.table.$el.offsetTop)
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data) {
@@ -297,20 +293,40 @@
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					name:'',
+					description: '',
+				};
 				this.requestData();
 			},
 			//清空
 			reset() {
-				this.CATEGORY = {
+				this.dataInfo = {
 					ID: '',
 					NUM: '',
 					TYPE: '',
@@ -322,11 +338,25 @@
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				};
-				if(this.$refs['CATEGORY'] !== undefined) {
-					this.$refs['CATEGORY'].resetFields();
+				if(this.$refs['dataInfo'] !== undefined) {
+					this.$refs['dataInfo'].resetFields();
 				}
 
 			},
+			 //请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+				 this.deluserinfo();
+				}else if(item.name=="彻底删除"){
+				 this.physicsDel();
+				}
+		    },
 			//添加类别
 			openAddMgr() {
 				this.reset();
@@ -349,13 +379,13 @@
 					});
 					return;
 				} else {
-					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.dataInfo = this.selUser[0];
+					this.$refs.categorymask.detail( this.selUser[0].id);
 				}
 			},
 			//查看
 			 view(data) {
-			 	this.CATEGORY =data;
+			 	this.dataInfo =data;
 				this.$refs.categorymask.view();
 			},
 			//高级查询
@@ -366,29 +396,27 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
-				}else if(selData.length > 1){
+				}else if(this.selUser.length > 1){
 					this.$message({
 						message: '不可删除多条数据',
 						type: 'warning'
 					});
 					return;
 				}else {
-					var id = this.selUser[0].id;
-					var url = this.basic_url + '/api-apps/appcfg/'+id;
+					var url = this.basic_url + '/api-apps/appcfg/deletes';
 					//changeUser为勾选的数据
-					var changeUser = selData;
+					var changeUser = this.selUser;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
+						deleteid.push(changeUser[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -423,26 +451,62 @@
 					});
 				}
 			},
-			// 导入
-			importData() {
+			//彻底删除
+			physicsDel(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可删除多条数据',
+						type: 'warning'
+					});
+					return;
+				}else {
+					var url = this.basic_url + '/api-apps/appcfg/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser =this.selUser;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
 
-			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
-			},
-			// 配置关系
-			Configuration() {
-				this.$router.push({
-					path: '/inspection_project'
-				});
-			},
-			judge(data) {
-				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
+					});
+				}
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -455,21 +519,19 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					name:this.searchList.name,
 					description: this.searchList.description,
 				}
-				// console.log(this.searchList.DEPTID);
 				var url = this.basic_url + '/api-apps/appcfg';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(23333333);
-					console.log(res.data);
-					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -478,33 +540,46 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.applicationList = newarr;
-				}).catch((wrong) => {})
+					this.applicationList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
-			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					this.buttons = res.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
+
+		    },
 
 		},
 		mounted() {
 			this.requestData();
-			this.getCompany();
 		},
 	}
 </script>

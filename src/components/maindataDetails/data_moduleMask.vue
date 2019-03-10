@@ -19,7 +19,7 @@
 
 				<div class="mask_content">
 					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="原始数据模板" name="1">
 									<el-row>
@@ -42,10 +42,112 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+								<!-- <el-collapse-item title="原始数据模板单元信息" name="2">
+									<div class="table-func" v-show="noviews">
+										<el-button type="success" size="mini" round @click="addfield">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+									<el-table :header-cell-style="rowClass" :fit="true" :data="CATEGORY.RAW_DATA_TEMPATE_DETAILList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CATEGORY.RAW_DATA_TEMPATE_DETAILList', order: 'descending'}">
+										<el-table-column prop="iconOperation" fixed width="50px" v-show="!viewtitle">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+												<i class="el-icon-edit" v-else="v-else"></i>
+											</template>
+										</el-table-column>
+										<el-table-column label="序号" sortable width="80px" label-width="150px" type="index">
+										</el-table-column>
+										<el-table-column prop="ROWNUMBER" label="列号" sortable width="120px">
+											<template slot-scope="scope">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ROWNUMBER" placeholder="请输入">
+													</el-input>
+													<span v-else="v-else">{{scope.row.ROWNUMBER}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="COLNUMBER" label="行号" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COLNUMBER" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.COLNUMBER}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="DATALENGTH" label="数据长度" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DATALENGTH" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.DATALENGTH}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="DATATYPE" label="值类型" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DATATYPE" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.DATATYPE}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="DESCRIPTION" label="单元格描述" sortable width="150px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="FORMULA" label="计算公式" sortable width="150px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FORMULA" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.FORMULA}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="GRIDTYPE" label="单元格类型" sortable width="150px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.GRIDTYPE" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.GRIDTYPE}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="HASFORMULA" label="是否使用计算公式" sortable width="180px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.HASFORMULA" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.HASFORMULA}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="COLSPAN" label="合并列" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COLSPAN" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.COLSPAN}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="ROWSPAN" label="合并行" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ROWSPAN" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.ROWSPAN}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column prop="ISSPAN" label="是否合并" sortable width="120px">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISSPAN" placeholder="请输入">
+												</el-input>
+												<span v-else="v-else">{{scope.row.ISSPAN}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column fixed="right" label="操作" width="120">
+											<template slot-scope="scope">
+												<el-button @click="deletemodule(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
+                                                 <i class="icon-trash red"></i>
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-collapse-item> -->
+								<el-collapse-item title="文件" name="3">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent="save"></doc-table>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="3" v-show="views">
+								<el-collapse-item title="其它" name="4" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -71,9 +173,9 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+						<div class="content-footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -86,30 +188,29 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		components: {docTable},
-		props: {
-			CATEGORY: {
-				type: Object,
-				default: function() {
-					return {
-						ID: '',
-						NUM: '',
-						DECRIPTION: '',
-						STATUS: '',
-						DEPARTMENT: '',
-						ENTERBY: '',
-						ENTERDATE: '',
-						CHANGEBY: '',
-						CHANGEDATE: ''
-					}
-				}
-			},
-			page: Object,
-		},
+		// props: {
+		// 	CATEGORY: {
+		// 		type: Object,
+		// 		default: function() {
+		// 			return {
+		// 				ID: '',
+		// 				NUM: '',
+		// 				DECRIPTION: '',
+		// 				STATUS: '',
+		// 				DEPARTMENT: '',
+		// 				ENTERBY: '',
+		// 				ENTERDATE: '',
+		// 				CHANGEBY: '',
+		// 				CHANGEDATE: ''
+		// 			}
+		// 		}
+		// 	},
+		// 	page: Object,
+		// },
 		data() {
 			return {
 				docParm: {
@@ -132,19 +233,19 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1','2','3'], //手风琴数量
+				activeNames: ['1','2','3','4'], //手风琴数量
 				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
 					NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: Validators.isCodeNum,
+						trigger: 'blur',
+						validator: this.Validators.isCodeNum,
 					}],
 					DECRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree
@@ -161,6 +262,9 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				CATEGORY:{
+					RAW_DATA_TEMPATE_DETAILList:[]
+				},
 				testing_filesForm:{//文件文件数据组
 					inspectionList: []
 				},
@@ -170,6 +274,57 @@
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			addfield() {
+				var obj = {
+					ID:'',
+					ROWNUMBER:'',
+					COLNUMBER:'',
+					DATALENGTH:'',
+					DATATYPE:'',
+					DESCRIPTION:'',
+					FORMULA:'',
+					GRIDTYPE:'',
+					HASFORMULA:'',
+					COLSPAN:'',
+					ROWSPAN:'',
+					ISSPAN:'',
+					isEditing: true
+				};
+				this.CATEGORY.RAW_DATA_TEMPATE_DETAILList.push(obj);
+			},
+			//刪除新建行
+			deletemodule(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'RAW_DATA_TEMPATE_DETAIL';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/rawDataTem/' + TableName +'/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.resp_code == 0){
+							this.CATEGORY[TableName+'List'].splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}else{
+					this.CATEGORY[TableName+'List'].splice(index,1);
+				}
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
@@ -239,7 +394,7 @@
 //				this.show = true;
 			},
 			// 这里是修改
-			detail() {
+			detail(dataid) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -253,14 +408,26 @@
 				this.statusshow2 = true;
 				this.getUser('edit');
 				var _this = this;
-				setTimeout(function(){
-					_this.docParm.model = 'edit';
-					_this.docParm.appname = '检验检测项目_原始数据模板';
-					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 17;
-					_this.$refs.docTable.getData();
-				},100);
-				this.show = true;
+				var url = this.basic_url + '/api-apps/app/rawDataTem/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					for(var i=0;i<res.data.RAW_DATA_TEMPATE_DETAILList.length;i++){
+						res.data.RAW_DATA_TEMPATE_DETAILList[i].isEditing = false;
+					}
+					this.CATEGORY = res.data;
+					setTimeout(function(){
+						_this.docParm.model = 'edit';
+						_this.docParm.appname = '检验检测项目_原始数据模板';
+						_this.docParm.recordid = _this.CATEGORY.ID;
+						_this.docParm.appid = 17;
+						_this.$refs.docTable.getData();
+					},100);
+					this.show = true;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					})
+				});
 			},
 			//这是查看
 			view() {
@@ -271,7 +438,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+				
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验检测项目_原始数据模板';
+					_this.docParm.recordid = _this.CATEGORY.ID;
+					_this.docParm.appid = 17;
+					_this.$refs.docTable.getData();
+				},100);
 			},
 			//点击更新按钮
 			update(CATEGORY) {
@@ -301,6 +477,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.resetData();
 				this.$emit('request');//关闭弹框去掉勾选
 			},
 			open(){
@@ -338,6 +515,14 @@
 						});
 					}
 					if(valid) {
+						var len = this.$refs.docTable.getFilelen();
+						if(opt != 'docUpload' && len==0){
+							this.$message({
+								message: '请先上传模版文件，再保存！',
+								type: 'error'
+							});
+							return false;
+						}
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
@@ -351,10 +536,18 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.id;
+									this.CATEGORY.NUM = res.data.datas.NUM;
 								}else{
-									this.$emit('request');
+									if(opt == 'save'){
+										this.show = false;
+										this.$emit('request');
+									}
+									if(opt == 'update'){
+										this.show = true;
+										this.visible();
+									}
+									this.resetData();
 									this.$emit('reset');
-									this.visible();
 								}
 							}else{
 								this.show = true;
@@ -372,6 +565,7 @@
 										});
 									}
 								}
+								this.falg = false;
 							}
 						}).catch((err) => {
 							this.$message({
@@ -379,9 +573,8 @@
 								type: 'error'
 							});
 						});
-						this.falg = true;
+						// this.falg = true;
 					} else {
-						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
@@ -390,19 +583,17 @@
 					}
 				});
 			},
+			resetData(){
+				this.CATEGORY = {};
+			},
 			
 			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
-				if(this.falg){
-					this.show = false;
-				}
+			saveAndUpdate() {
+				this.save('save');
 			},
 			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
-				this.show = true;
+			saveAndSubmit() {
+				this.save('update');
 			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
@@ -531,7 +722,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 		},
 	}

@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单调用 Begin-->
@@ -23,11 +23,11 @@
 							</div>
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="部门名称" prop="DEPTID">
-								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData_productType2">
+								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData" :disabled="nameFlag">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
 
-								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData_productType2">
+								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select> -->
 							</el-form-item>
@@ -36,7 +36,7 @@
 					</el-col>
 				</el-row>
 				<!--部门名称 End-->
-				<el-row :gutter="10">
+				<el-row class="relative" id="pageDiv">
 					<el-col :span="6">
 						<el-card class="box-card" :body-style="{ padding: '10px' }">
 							<div slot="header" class="title clearfix">
@@ -91,7 +91,7 @@
 								  </el-table>
 								</el-form>
 								<!-- 表格 Begin-->
-								<!-- <el-pagination background class="pull-right pt10 pb10"
+								<!-- <el-pagination background class="text-right pt10 pb10"
 						            @size-change="sizeChange"
 						            @current-change="currentChange"
 						            :current-page="page.currentPage"
@@ -104,19 +104,19 @@
 							</div>
 						</el-card>
 					</el-col>
-					<el-col :span="6" class="v-resize"><product2child @parentMsd_product2="childMsd_product2" ref="product2child"></product2child></el-col>
-					<el-col :span="6" class="v-resize"><inspectionSta2child @parentMsd_inspectionSta2="childMsd_inspectionSta2" ref="inspectionSta2child"></inspectionSta2child></el-col>
-					<el-col :span="6" class="v-resize"><inspectionPro2child @parentMsd_inspectionPro2="childMsd_inspectionPro2" ref="inspectionPro2child"></inspectionPro2child></el-col>
+					<el-col :span="6" class="v-resize"><product2child @parentMsd_product2="childMsd_product2" ref="product2child" :parentIds="formInline.DEPTID"></product2child></el-col>
+					<el-col :span="6" class="v-resize"><inspectionSta2child @parentMsd_inspectionSta2="childMsd_inspectionSta2" ref="inspectionSta2child" :parentIds="formInline.DEPTID"></inspectionSta2child></el-col>
+					<el-col :span="6" class="v-resize"><inspectionPro2child @parentMsd_inspectionPro2="childMsd_inspectionPro2" ref="inspectionPro2child" :parentIds="formInline.DEPTID"></inspectionPro2child></el-col>
 				</el-row>
 				<div class="el-collapse-item mt10 pt10 pb10" aria-expanded="true" accordion>
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<el-tabs>
 						    	<el-tab-pane label="专业组"><professionGrochild ref="professionGrochild" :parentIds="formInline.DEPTID"></professionGrochild></el-tab-pane>
-						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child"></inspectionMet2child></el-tab-pane>
-						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child"></rawDataTem2child></el-tab-pane>
-						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child"></inspectionRepTem2child></el-tab-pane>
-						    	<el-tab-pane label="检测仪器"><rawDataAssetchild ref="rawDataAssetchild"></rawDataAssetchild></el-tab-pane>
+						    	<el-tab-pane label="检验/检测方法"><inspectionMet2child ref="inspectionMet2child" :parentIds="formInline.DEPTID"></inspectionMet2child></el-tab-pane>
+						    	<el-tab-pane label="原始数据模板"><rawDataTem2child ref="rawDataTem2child" :parentIds="formInline.DEPTID"></rawDataTem2child></el-tab-pane>
+						    	<el-tab-pane label="检验/检测报告模板"><inspectionRepTem2child ref="inspectionRepTem2child" :parentIds="formInline.DEPTID"></inspectionRepTem2child></el-tab-pane>
+						    	<el-tab-pane label="检测仪器"><rawDataAssetchild ref="rawDataAssetchild" :parentIds="formInline.DEPTID"></rawDataAssetchild></el-tab-pane>
 						    </el-tabs>
 						</el-col>
 					</el-row>
@@ -126,14 +126,19 @@
 	<!--右侧内容显示 End-->
 	</div>
 	<!-- 产品类别 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
-			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——产品类别" height="300px" :visible.sync="dialogVisible3" width="80%">
+			<!--搜索框 Begin-->
+			<div class="columns pull-right child-search">
+				<el-input placeholder="请输入类别名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="NUM">
+				<el-table-column label="类别编码" width="155" sortable prop="NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="TYPE">
+				<el-table-column label="类别名称" sortable prop="TYPE">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -144,11 +149,10 @@
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 产品类别 End -->
@@ -157,12 +161,11 @@
 <script>
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import navs_tabs from './common/nav_tabs.vue'
 	import navs_left from './common/left_navs/nav_left5.vue'
 	import product2child from './inspection_project/product2.vue'//产品名称
 	import inspectionSta2child from './inspection_project/inspectionSta2.vue'//检验/检测标准
 	import inspectionPro2child from './inspection_project/inspectionPro2.vue'//检验/检测项目
-
 	import professionGrochild from './inspection_project/professionGro.vue'//专业组
 	import inspectionMet2child from './inspection_project/inspectionMet2.vue'//检验/检测方法
 	import rawDataTem2child from './inspection_project/rawDataTem2.vue'//原始数据模板
@@ -173,11 +176,10 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			product2child,//产品名称
 			inspectionSta2child,//检验/检测标准
 			inspectionPro2child,//检验/检测项目
-
 			professionGrochild,//专业组
 			inspectionMet2child,//检验/检测方法
 			rawDataTem2child,//原始数据模板
@@ -212,19 +214,21 @@
 				}],
 				searchData: {
 			        page: 1,
-			        limit: 10,//分页显示数
+			        limit: 20,//分页显示数
 			        enabled: '',//信息状态
 		        },
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				product2Id: 0,//获取子表产品ID
 				inspectionSta2Id: 0,//获取子表检验/检测标准ID
 				inspectionPro2Id: 0,//获取子表检验/检测项目ID
 				dialogVisible3: false, //对话框
+				parentId: 1,
+				nameFlag: true
 			}
 		},
 		methods: {
@@ -274,8 +278,28 @@
 			// 		})
 			// 	})
 			// },
-
 			loadMore () {//表格滚动加载
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+					}else{
+						this.page.currentPage--
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true
+					}, 1000)
+					this.requestData()
+				}
 			   // if (this.loadSign) {
 			   //   this.loadSign = false
 			   //   this.page.currentPage++
@@ -285,10 +309,9 @@
 			   //   setTimeout(() => {
 			   //     this.loadSign = true
 			   //   }, 1000)
-			   //   this.requestData_productType2()
+			   //   this.requestData()
 			   // }
 			 },
-
 			 addprobtn(row){//查找基础数据中的类别名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -296,10 +319,11 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.departmentId, {
+				// var parentIds=this.formInline.DEPTID;//获取下拉列表中的所属机构ID
+				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.formInline.DEPTID, {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
+					// console.log();
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -322,16 +346,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_productType2();
+		      this.requestData();
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_productType2();
+		      this.requestData();
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData_productType2();
+				this.page.pageSize = 20;
+				this.requestData();
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -354,9 +378,10 @@
                 	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						console.log(res.data);
+						// console.log(this.departmentId);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
+							this.nameFlag = false;
 							this.formInline.DEPTID = res.data[0].id;
 						} else {
 							this.Select_DEPTID.push({
@@ -365,11 +390,11 @@
 							});
 							this.formInline.DEPTID = this.departmentId;
 						}
-						this.requestData_productType2();
+						console.log(this.formInline.DEPTID);
+						this.requestData();
 					}).catch(error => {
 						console.log('请求失败');
 					})
-
 				 }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',
@@ -377,47 +402,18 @@
 	                });
 	            });
 			},
-
-			// getData(){//获取当前用户信息
-	  //           var url = this.basic_url + '/api-user/users/currentMap';
-	  //           this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-   //                  this.departmentIds = res.data.deptId;
-                    	
-   //                  	var depturl = this.basic_url + '/api-user/depts/'+ this.departmentIds;
-			//             this.$axios.get(depturl, {}).then((res) => {//根据当前用户信息查询它的组织机构
-		 //                    // this.formInline.DEPTID = res.data.id;
-		 //                    // console.log(this.departmentId);
-			//             }).catch((err) => {
-			//                 this.$message({
-			//                     message: '网络错误，请重试',
-			//                     type: 'error'
-			//                 });
-			//             });
-
-
-	  //           }).catch((err) => {
-	  //               this.$message({
-	  //                   message: '网络错误，请重试',
-	  //                   type: 'error'
-	  //               });
-	  //           });
-
-	            
-	  //       },
-			requestData_productType2(val) {//加载数据
+			requestData(val) {//加载数据
 				var _this = this;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
 				}
-				
 				var url = this.basic_url + '/api-apps/app/productType2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//console.log(res);
-					this.page.totalCount = res.data.count;	
+					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -447,7 +443,6 @@
 						this.viewchildRow('null');
 					}
 					
-
 					this.$refs.singleTable.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
@@ -457,7 +452,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			formatter(row, column) {//禁止产品类别行编辑
 				return row.enabled;
@@ -474,18 +472,16 @@
 				}
 				if (isEditingflag==false){
                 	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		// console.log(res);
-                		var currentUser, currentDate, currentDept;
+                		var currentUser, currentDate;
 						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
 							"TYPE": '',
-							"STATUS": 1,
+							"STATUS": '',
 							"NUM": '',
 							"VERSION": '',
-							"DEPTID": this.currentDept,
+							"DEPTID": '',
 						    "ENTERBY": this.currentUser,
 						    "ENTERDATE": this.currentDate,
 							"isEditing": true,
@@ -500,6 +496,7 @@
 	            } else {
 	                this.$message.warning("请先保存当前编辑项");
 				}
+				
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['productType2Form'].validate((valid) => {
@@ -523,7 +520,7 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_productType2();
+							this.requestData();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -549,7 +546,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_productType2();
+							this.requestData();
 						}
 					}).catch((err) => {
 						this.$message({
@@ -558,13 +555,14 @@
 						});
 					});
                 }).catch(() => {
-
             	});
 			},
+			
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false;
-				this.catedata.NUM = this.selData[0].ID;
+				this.catedata.NUM = this.selData[0].NUM;
 				this.catedata.TYPE = this.selData[0].TYPE;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},
@@ -573,14 +571,14 @@
 			},
 			// childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		// this.$refs.navsheader.showClick(childValue);
+        		// this.$refs.navsTabs.showClick(childValue);
       		// },
 		},
 		
 		mounted() {
 			this.getDEPTID();
 			// this.getData();
-			// this.requestData_productType2();
+			// this.requestData();
 		},
 	}
 </script>
@@ -593,7 +591,6 @@
 	padding-left: 15px;
 	padding-right: 15px;
 }
-
 .el-table td {
     padding-top: 0px;
     padding-bottom: 0px;
@@ -603,7 +600,6 @@
 	top: 0px;
     right: 0px;
 }
-
 .el-table .cell {
     display: inline-block;
 	cursor: pointer;

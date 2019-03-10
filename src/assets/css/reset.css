@@ -111,6 +111,13 @@ i, cite, em, var, address, dfn {
 }
 
 
+
+/*table子表必填*/
+.required_child {color: red; position:absolute; top: -30px; left: 0px;}
+
+
+
+
 /*滚动条*/
 
 
@@ -152,14 +159,24 @@ i, cite, em, var, address, dfn {
 /*字体颜色 By Heliping*/
 .white,.white a {color:#dae2ea;}
 .white a:hover {color:#ffffff;}
+
 .blue,.blue a {color:#2196F3;}
 .blue a:hover {color:#6585DF;}
 .blue { cursor:pointer; }
+
+
+.textblue,.textblue a {color:#2196F3;}
+.textblue a:hover {color:#6585DF;}
+
 .red,.red a {color:#ea4074;}
 .red a:hover {color:#E97A9B;}
 
 .gray,.gray a {color:#97A3B4;}
 .gray a:hover {color:#5B6371;}
+
+.green,.green a {color:#36d243;}
+.green a:hover {color:#67C23A;}
+
 
 
 .font13 {font-size: 13px;}
@@ -469,7 +486,16 @@ h6 {
 
 
 /*表单提交按钮居中显示*/
-.el-dialog__footer {text-align: center;}
+.el-dialog {
+	background: #F3F6FA;
+	overflow: hidden;
+}
+.el-dialog__body {
+	padding: 10px 20px;
+}
+.el-dialog__footer {
+	text-align: center;
+}
 
 /*横向表单信息样式调整 by heliping*/
 .el-input-group__append, .el-input-group__prepend {
@@ -559,7 +585,7 @@ h6 {
 
 /*手风琴样式修改*/
 
-.el-collapse-item__header {border-bottom: none; font-size: 14px; font-weight: bold; color: rgba(59,66,78,1);}
+.el-collapse-item__header {border-bottom: none; font-size: 14px; height: 40px; line-height: 40px; font-weight: bold; color: rgba(59,66,78,1);}
 .el-collapse-item__header:before {
     width:20px;
     height:3px;
@@ -570,9 +596,15 @@ h6 {
     top:0px;
 	position:absolute;
 }
+.el-collapse-item__content {
+	padding-bottom: 8px;
+}
+.el-collapse-item__wrap {
+	width:100%;
+}
 .el-collapse-item {
-	padding-left: 25px;
-    padding-right: 7px;
+	padding-left: 15px;
+    padding-right: 15px;
     background-color: #FFF;
     box-shadow:0px 5px 10px 0px rgba(223,229,234,1);
 	border-radius:4px;
@@ -733,3 +765,16 @@ h6 {
 .el-tabs__content {overflow: visible;}
 
 
+/*树和表单之间拖拽改变宽度#F5F8FB by Aiyamin20190305*/
+#middle{
+	width: 10px;
+	background: #F5F8FB;
+	height: 100%;
+	position: absolute;
+}
+#middle:hover {
+    cursor: w-resize;
+}
+#right{
+	position: absolute;
+}

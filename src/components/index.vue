@@ -1,8 +1,8 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader @clickfun='getroId' ></vheader>
-		<navs_header ref='navsheader'></navs_header>
+		<vheader @clickfun='getroId' ref="vheader"  @getTodoNum="getTodoNum"></vheader>
+		<navs_tabs ref='navsTabs'></navs_tabs>
 	</div>
 
     <div class="contentbg">
@@ -32,8 +32,51 @@
 					<h3 class="pt30">工作统计</h3>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
-						<el-col :span="6">
+						<el-col :span="12">
 							<div class="statisticsbg">
+								<div class="echart_title clearfix">
+									<div class="pull-left">
+										<h6><el-badge :value="toDoNum" :max="99" class="item">待办任务</el-badge></h6>
+									</div>
+									<div class="pull-right font13 blue">
+										<router-link :to="{path:'/task'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
+									</div>
+								</div>
+								<div id="todoLists" class="pt40" style="width:100%; height:260px;">
+									<!-- 表格 -->
+									<el-table ref="table" :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}"
+										v-loadmore="loadMore"
+										v-loading="loading"
+										element-loading-text="加载中…"
+										element-loading-spinner="el-icon-loading"
+										element-loading-background="rgba(255, 255, 255, 0.9)">
+										<!-- <el-table-column label="数据id" sortable width="140px" prop="bizid">
+										</el-table-column> -->
+										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
+											<template slot-scope="scope">
+												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
+												</p>
+											</template>
+										</el-table-column>
+										<el-table-column label="App" sortable width="140px" prop="app">
+										</el-table-column>
+										<el-table-column label="当前环节" sortable width="160px" prop="name">
+										</el-table-column>
+										<el-table-column label="应用" sortable width="160px" prop="appDesc">
+										</el-table-column>
+										<el-table-column label="任务状态" sortable width="100px" align="center" prop="state">
+										</el-table-column>
+										<el-table-column label="创建时间" sortable width="160px" prop="createTime">
+										</el-table-column>
+									</el-table>
+									<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+									</el-pagination>
+									<!-- 表格 -->
+								</div>
+							</div>
+						</el-col>
+						<el-col :span="6">
+							<div class="statisticsbg" style="height: 290px">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
 										<h6>工作完成情况</h6>
@@ -52,20 +95,23 @@
 								</div>
 								<div class="pt40 clearfix">
 									<div class="pull-left">
-										<p class="big_numb">283</p>
+										<p class="big_numb">{{toDoNum}}</p>
 										<p class="small_font">工作总计</p>
-										<p class="middle_font pt10">
-											待办工作: 32<br />
-											执行中: 41
-										</p>
+										<div class="pt40">
+											<p class="middle_font pt40">
+												<span class="red">待办工作: 22</span>
+												<span class="textblue">执行中: 16</span>
+												<span class="green">已完成: 18</span>
+											</p>
+										</div>
 									</div>
-									<div class="pull-right pt10" style="width: 140px;">
-										<div class="wracircle" data-anim="base wracircle">
-											<div class="circle" data-anim="base left" style=""></div>
-											<div class="circle_font">
-												<p class="font20">46%</p>
-												<p>工作完成率</p>
-											</div>
+									<div class="pull-right" style="width: 200px; padding-top: 80px;">
+											<div class="wracircle" data-anim="base wracircle">
+												<div class="circle" data-anim="base left" style=""></div>
+												<div class="circle_font">
+													<p class="font24">46%</p>
+													<p>工作完成率</p>
+												</div>
 										</div>
 									</div>
 								</div>
@@ -89,24 +135,21 @@
 										</el-dropdown-menu>
 									</el-dropdown>
 								</div>
-								<div id="main" style="width: 100%; height: 140px;"></div>
+								<div id="main" style="width: 100%; height: 260px;"></div>
 							</div>
 						</el-col>
-						<el-col :span="6">
+						<!-- <el-col :span="6">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
-										<h6>注册用户人数 (1000)</h6>
+										<h6>注册用户人数 <font class="red">(1000)</font></h6>
 									</div>
-									
+									<div class="pull-right font13 blue">
+										<router-link :to="{path:'/user_management'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
+									</div>
 								</div>
 							</div>
-						</el-col>
-						<el-col :span="6">
-							<div class="statisticsbg">
-								
-							</div>
-						</el-col>
+						</el-col> -->
 						<!--APPList End-->
 					</el-row>
 					<!--工作统计 End-->
@@ -116,52 +159,156 @@
 		</div>
 	</div>
 	<!--右侧内容显示 End-->
-  	
 </div>
 </template>
 
 <script>
 import Config from '../config.js'
 import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
+import navs_tabs from './common/nav_tabs.vue'
 import  'echarts/theme/macarons.js'
 
 export default {
 	name: 'index',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 		},
 
     data() {
       return {
+      	toDoNum: 0,
       	roleid:1,
       	basic_url: Config.dev_url,
+      	loadSign: true, //鼠标滚动加载数据
+      	loading: false,//默认加载数据时显示loading动画
         show: false,
 		fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-		applistdata: []
+		applistdata: [],
+		todoList:[],
+		searchList: {
+			createTime:'',	
+		},
+		page: {
+			currentPage: 1,
+			pageSize: 20,
+			totalCount: 0
+		},			
 
       }
     },
   
 	methods: {
+		getTodoNum(num){
+			this.toDoNum = num;
+		},
+		//表头居中
+		rowClass({ row, rowIndex}) {
+		    return 'text-align:center'
+		},
+		//审核	
+		audit(item){
+			this.$router.push({path:item.bizMenuUrl ,query: { bizId: item.bizId,}});
+			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
+
+		},
+		//Table默认加载数据
+		requestData() {
+			this.loading = true;//加载动画打开
+			var data = {
+				page: this.page.currentPage,
+				limit: this.page.pageSize,
+			}
+			var url = this.basic_url + '/api-apps/app/flow/flow/todo';
+			this.$axios.get(url, {params: data}).then((res) => {
+				// console.log(res.data);
+				this.page.totalCount = res.data.count;
+				//总的页数
+				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+				if(this.page.currentPage >= totalPage) {
+					this.loadSign = false
+				} else {
+					this.loadSign = true
+				}
+				this.todoList = res.data.data;
+				this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
+			}).catch((wrong) => {
+				
+				
+			})
+		},
+		//表格滚动加载
+		loadMore() {
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
+					}
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1;
+						return false;
+					}
+				}
+				this.loadSign = false;
+				setTimeout(() => {
+					this.loadSign = true;
+				}, 1000)
+				this.requestData();
+			}
+		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
 		goto(item){
 	        var _this = this;
 	        var data = {
 				menuId: item.id,
 				roleId: _this.$store.state.roleid,
 			};
-            this.$store.dispatch('setMenuIdAct',item.id);
+			this.$store.dispatch('setMenuIdAct',item.id);
+			// console.log(item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
-				console.log(res);
+				// console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
-					console.log(item);
+					// this.$router.push({path: item[0].url});
 				}
 				
 					_this.$store.dispatch('setSelectedNavAct',item);
-					console.log(_this.$store.state.selectedNav);
 //					_this.$selectedNav=item;
 					var flag="1";
 					for(var i=0;i<_this.$store.state.clickedNavs.length;i++){
@@ -181,14 +328,31 @@ export default {
 					}
 					if(flag=="0"){
 						_this.$store.state.clickedNavs.push(item);
-						console.log(item);
+						setTimeout(function(){
+				 			var left = $('.page-tabs').offset().left; 
+				            //tabs总宽度
+				            var tabW = $('.page-tabs-content').width();
+				            //总区域内容宽度
+				            var contentW = $('.content-tabs').width()-240;
+				            if(tabW>contentW){
+				            	var poor=tabW-contentW;
+				            	$('.page-tabs').offset({
+				                    left: -poor
+				                });
+				            }
+						},0);
 					}
 			}).catch((wrong) => {
+				this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 			});
 //		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
 		    _this.$store.dispatch('setNavIdAct',item.id);
 		},
-		initEchart(){//引入饼状图图表
+		//引入饼状图图表
+		initEchart(){
 			var myChart = this.$echarts.init(document.getElementById('main'),'macarons');
 	        // 指定图表的配置项和数据
 	        var option = {
@@ -221,14 +385,19 @@ export default {
 	        this.$axios.get(url, {}).then((res) => {
 	            this.applistdata = res.data;
 	        }).catch(error => {
-	            console.log('请求失败');
+	           this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 	        })
         },
 	},
 	mounted(){
+		//加载待办任务
+		this.requestData();
 		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
-		this.$refs.navsheader.showClick({
+		this.$refs.navsTabs.showClick({
                 css: 'icon-user',
                 name: '首页',
                 url: '/index'})
@@ -240,20 +409,25 @@ export default {
         	this.$store.dispatch('setRoleIdAct',res.data.id);
       		this.getFirstMenus(roleid);
       		}).catch(error => {
-            console.log('请求失败111');
+            this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
        		})
 		}else{
 			var roleid=this.$store.state.roleid;
 	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
 	        
 	        this.$axios.get(url, {}).then((res) => {
-	        	console.log(res);
 	            this.applistdata = res.data;
 	        }).catch(error => {
-	            console.log('请求失败');
+	           this.$message({
+					message: '网络错误，请重试',
+					type: 'error'
+				});
 	        })
 		}
-      	
+      	this.getTodoNum();
 	},
 }
 
@@ -275,55 +449,55 @@ export default {
 }
 .big_numb { color: #333333; font-size: 28px; line-height:32px; }
 .small_font { color: #BDBDBD; font-size:10px; line-height:15px;}
-.middle_font { color: #121958; font-size: 12px;  line-height:20px;}
-
+.middle_font { color: #121958; font-size: 13px;  line-height:22px;}
+.middle_font span {display: block;}
 
 
 
 /*半圆统计图效果*/
 
 .wracircle {
-	width: 140px; /* Set the size of the progress bar */
-	height: 140px;
+	width: 200px; /* Set the size of the progress bar */
+	height: 200px;
 	position: absolute; /* Enable clipping */
 	transform:rotate(270deg);
-	clip: rect(0px, 140px, 140px, 70px); /* Hide half of the progress bar */
+	clip: rect(0px, 200px, 200px, 100px); /* Hide half of the progress bar */
 }
 
 /* Set the sizes of the elements that make up the progress bar */
 .circle {
-	width: 140px;
-	height: 140px;
+	width: 200px;
+	height: 200px;
 	border: 10px solid #9399F3;
-	border-radius: 70px;
+	border-radius: 100px;
 	position: absolute;
 	z-index: 1;
-	clip: rect(0px, 70px, 140px, 0px);
+	clip: rect(0px, 100px, 200px, 0px);
 }
 .wracircle:after {
 	content: '';
-	width: 140px;
-	height: 140px;
+	width: 200px;
+	height: 200px;
 	position: absolute;
 	z-index: -1;
 	border: 10px solid #EBF4F7;
-	border-radius: 70px;
+	border-radius: 100px;
 }
 .circle_font {
 	position: absolute;
 	z-index: 6;
 	width:100%;
 	height: 55%;
-	top: 30px;
+	top: 42px;
 	right: 0px;
 	bottom: 0px;
 	text-align: center; 
 	transform:rotate(90deg);
 }
 .circle_font p {
-	font-size: 12px;
+	font-size: 13px;
 }
-.circle_font p.font20 {font-size: 20px;}
+.circle_font p.font24 {font-size: 24px;}
 /* Using the data attributes for the animation selectors. */
 /* Base settings for all animated elements */
 div[data-anim~=base] {

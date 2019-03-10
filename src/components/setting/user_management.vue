@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs  ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
@@ -15,35 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                      			</button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="resetPwd">
-								    <i class="icon-refresh"></i>重置密码
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="unfreeze">
-								    <i class="icon-start"></i>活动
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="freezeAccount">
-								    <i class="icon-stop"></i>不活动
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-								    <i class="icon-role-site"></i>角色分配
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -88,16 +62,17 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
 
-					<el-row :gutter="10">
-						<el-col :span="5" class="lefttree">
+					<el-row class="relative" id="pageDiv">
+						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">组织机构</div>
@@ -113,9 +88,22 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="19" class="leftcont v-resize">
+						<div id="middle"></div>
+						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="userList" border stripe :header-cell-style="rowClass" :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table ref="table" :data="userList" 
+									  border 
+									  stripe 
+									  :header-cell-style="rowClass" 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'userList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+								  	  element-loading-text="加载中…"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
@@ -126,23 +114,29 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="性别" sortable width="100px" prop="sex" :formatter="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
-								</el-table-column>-->
+								<el-table-column label="性别" sortable width="100px" prop="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
+								</el-table-column>
 								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								<el-table-column label="手机号" sortable width="150px" prop="phone" v-if="this.checkedName.indexOf('手机号')!=-1">
 								</el-table-column>
+								<el-table-column label="员工号" sortable width="150px" prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
+								</el-table-column>
+								<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('用户有效期')!=-1">
+								</el-table-column>
+								<!-- <el-table-column label="公司" sortable prop="companyName" v-if="this.checkedName.indexOf('公司')!=-1">
+								</el-table-column> -->
 
 								<!--<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 
 								</el-table-column>-->
-								<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								</el-table-column> -->
 							</el-table>
 							<!-- <span class="demonstration">显示总数</span>" -->
 							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
 							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -151,41 +145,117 @@
 			</div>
 		</div>
 		<usermask :user="user" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
+		<el-dialog title="修改密码" :visible.sync="passdialog" width="30%" :before-close="resetNewpwd">
+			<el-form :model="userpassword" inline-message :rules="rules" ref="newPwdForm">
+	  			<el-form-item label="新密码" prop="newPassword" label-width="100px">
+					<el-input v-model="userpassword.newPassword"></el-input>
+				</el-form-item>
+			</el-form>
+		      <span slot="footer" class="dialog-footer">
+		      	<el-button type="primary" @click="determine">确 定</el-button>
+		        <el-button @click="resetNewpwd">取 消</el-button>
+		      </span>
+        </el-dialog>
+		<!-- 权限管理 -->
+		<el-dialog :modal-append-to-body="false" title="数据配置" :visible.sync="Access" width="30%" :before-close="handleClose">
+			<!--工作任务通知书查询类别-->
+			<div class="scrollbar" style="max-height: 400px;">
+				<el-tree ref="work" :data="workData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework"  >
+				</el-tree>
+				<!--年度计划查询类别-->
+				<el-tree ref="annual" :data="annualData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual" >
+				</el-tree>
+				<!--设置产品类别和产品-->
+				<el-tree ref="product" :data="productData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct" >
+				</el-tree>
+				<span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="Accessconfirm" >确 定</el-button>
+					<el-button @click="resetTree">取 消</el-button>
+				</span>
+			</div>
+		</el-dialog>
+		<!-- 查看权限 -->
+		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
+			<!--设置产品类别和产品-->
+			<div class="scrollbar" style="max-height: 400px;">
+				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >
+				</el-tree>
+			</div>	
+		</el-dialog>	
 		<!--右侧内容显示 End-->
-	</div>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
-//	import assetsTree from '../plugin/vue-tree/tree2.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import usermask from '../settingDetails/user_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'usermask': usermask,
-//			'v-assetsTree': assetsTree
+			'reportmask':reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
+				rules:{
+					newPassword:[
+						{ required: true, message: '请输入密码', trigger: 'blur' }
+					]
+				},
+				permissions:false,//查看权限
+				Access:false,//权限管理的弹出框
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				loadSign: true, //加载
 				commentArr: {},
+				passdialog:false,
+				userpassword:{
+					newPassword: ''
+				},
+				//权限弹出框的数据
+				workData:[],//工作任务单的数据
+				resourework:{
+					children: "children",
+					label: "name"
+				},
+				annualData:[],//年度树数据
+				resoureannual:{
+					children: "children",
+					label: "name"
+				},
+				productData:[],//产品的数据
+				resoureproduct:{
+					children: "children",
+					label: "fullname"
+				},
+				permissionsData:[],//权限查看
+				resourepermissions:{
+					children: "children",
+					label: "name"
+				},
 				checkedName: [
 					'用户名',
 					'姓名',
+					'性别',
 					'机构',
-					'公司',
+					'手机号',
+					'员工号',
+					'用户有效期',
+					// '公司',
 					// '信息状态',
-					'创建时间'
+					// '创建时间'
 				],
 				buttons: [],//请求回的按钮
 				tableHeader: [{
@@ -197,30 +267,39 @@
 						prop: 'nickname'
 					},
 					{
+						label: '性别',
+						prop: 'GENDER'
+					},
+					{
 						label: '机构',
 						prop: 'deptName'
 					},
 					{
-						label: '公司',
-						prop: 'companyName'
+						label: '手机号',
+						prop: 'phone'
+					},
+					{
+						label: '员工号',
+						prop: 'worknumber'
+					},
+					{
+						label: '用户有效期',
+						prop: 'user_active_date'
 					},
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'enabled'
 					// },
-					{
-						label: '创建时间',
-						prop: 'createTime'
-					}
+					// {
+					// 	label: '创建时间',
+					// 	prop: 'createTime'
+					// }
 				],
-				leftitem:'',//点击左侧传过来的
 				companyId: '',
 				deptId: '',
 				selUser: [],
 				'启用': true,
 				'冻结': false,
-				'男': true,
-				'女': false,
 				userList: [],
 				search: false,
 				show: false,
@@ -243,7 +322,7 @@
 				userData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				user: {},//修改子组件时传递数据
@@ -251,6 +330,20 @@
 			}
 		},
 		methods: {
+			getCheckedKeys() { 
+				console.log(this.$refs.tree.getCheckedKeys());
+				},
+			resetTree(){
+				this.Access = false;
+				this.workData = [];
+				this.annualData = [];
+				this.workData = [];
+			},
+			resetNewpwd(){
+				this.passdialog = false;
+				// this.userpassword.newPassword = '';
+				 this.$refs['newPwdForm'].resetFields();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
@@ -265,7 +358,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},
@@ -299,51 +391,72 @@
 				const property = column['property'];
 				return row[property] === value;
 			},
+			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
-					//console.log('到底了', this.page.currentPage)
+					this.requestData();
 				}
 			},
-			//获取pageSize
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
-			//获取currentPage
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
-			//请求页面的button接口
-		    getbutton(childByValue){
-		    	console.log(childByValue);
-		    	var data = {
-					menuId: childByValue.id,
-					roleId: this.$store.state.roleid,
+			resetbtn(){
+				this.searchList = {
+					nickname: '',
+					username: '',
+					deptId: ''
 				};
-				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(111)
-					console.log(res);
-					this.buttons = res.data;
-					
-				}).catch((wrong) => {})
-
-		    },
+				this.requestData();
+			},
+			
 		    //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -353,15 +466,216 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="活动"){
-		    		this.unfreeze();
+		    	 this.unfreeze();
 		    	}else if(item.name=="不活动"){
-		    		this.freezeAccount();
+		    	 this.freezeAccount();
 		    	}else if(item.name=="删除"){
-		    		this.deluserinfo();
+		    	 this.deluserinfo();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
 		    	}else if(item.name=="重置密码"){
-		    		this.resetPwd();
-		    	}
-		    },
+		    	 this.resetPwd();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+		    	}else if(item.name=="数据配置"){
+				 this.configuration();
+				}else if(item.name=="权限查看"){
+				 this.Checkpermissions();
+				}
+			},
+			//权限查看
+			Checkpermissions(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要设置的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时设置多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+				var url = this.basic_url + '/api-user/users/findAuth/'+this.selUser[0].id;
+				this.$axios.get(url, {}).then((res) => {
+					this.permissionsData=res.data;
+					this.permissions=true;
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+				}
+			},
+			//数据配置
+			configuration(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要设置的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时设置多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.getannual(this.selUser[0].id);
+					this.getwork(this.selUser[0].id);
+					this.getproduct(this.selUser[0].id);
+					this.Access=true;
+				}
+			},
+			getwork(id){
+				var arr=[];	
+				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForPM/'+id;
+				this.$axios.get(url, {}).then((res) => {
+					this.workData = res.data;
+					this.recursive(res.data,arr);
+					this.$nextTick(() => {
+							this.worksetChecked(arr);
+						});
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+			getannual(id){
+				var arr=[];	
+				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForTask/'+id;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.annualData = res.data;
+					this.recursive(res.data,arr);
+					this.$nextTick(() => {
+						console.log(arr);
+							this.annualsetChecked(arr);
+						});
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+			getproduct(id){
+				var arr=[];	
+				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id;
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.productData = res.data.datas;
+					this.recursive(res.data.datas,arr);
+					this.$nextTick(() => {
+							this.productsetChecked(arr);
+						});
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+			recursive(mData,arr){
+				console.log(mData.length);
+				var flag=true;
+				for(var a = 0; a < mData.length; a++){
+						if(mData[a].checked){
+							arr.push(mData[a].id);
+							if(mData[a].children!=undefined){
+								for(var b=0;b<mData[a].children.length;b++){
+									if(!mData[a].children[b].checked){
+									flag=false;
+									break;
+									}
+								}
+								if(!flag){
+									arr.pop(mData[a].id)
+								}
+							}
+						}
+						if(mData[a].children!=undefined){
+							this.recursive(mData[a].children,arr);
+						}else{
+							this.recursive(mData[a],arr);
+						}
+						
+					}
+			return mData;		
+			},
+			worksetChecked(arr){
+				this.$refs.work.setCheckedKeys(arr);
+			},
+			annualsetChecked(arr){
+				this.$refs.annual.setCheckedKeys(arr);
+			},
+			productsetChecked(arr){
+				console.log(arr);
+				this.$refs.product.setCheckedKeys(arr);
+			},
+			//
+			Accessconfirm(){//确定
+			console.log(this.$refs.work.getCheckedNodes());
+			console.log(this.$refs.annual.getCheckedNodes());
+			console.log(this.$refs.product.getCheckedNodes());
+			var pmType=[];
+			var taskType=[];
+			var productType=[];
+			var product=[];
+			var work=this.$refs.work.getCheckedNodes();
+			var annual=this.$refs.annual.getCheckedNodes();
+			var products=this.$refs.product.getCheckedNodes();
+			for(var a=0;a<work.length;a++){
+				if(work[a].name!="年度计划"){
+					  pmType.push(work[a].id); 
+				}
+			}
+			for(var b=0;b<annual.length;b++){
+				if(annual[b].name!="工作任务通知书"){
+					  taskType.push(annual[b].id); 
+				}
+			}
+			for(var c=0;c<products.length;c++){
+				if(products[c].type!="dept"&&products[c].type!="producttype"){
+					  product.push(products[c].ID); 
+				}else if(products[c].type!="dept"&&products[c].type!="product"){
+					  productType.push(products[c].ID);
+				}	
+			}
+			pmType = pmType.join(',');
+			taskType = taskType.join(',');
+			product = product.join(',');
+			productType = productType.join(',');
+ 				var data = {
+ 					pmType:pmType,
+					taskType:taskType,
+					productType:productType,
+					product:product,
+				}
+			
+				var url = this.basic_url + '/api-user/users/setAuth?pmType='+pmType+"&taskType="+taskType+"&productType="+productType+"&product="+product+"&userId="+this.selUser[0].id;
+				console.log(url);
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '操作成功',
+							type: 'success'
+						});
+					}
+					this.Access = false;
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -369,7 +683,6 @@
 			},
 			//修改用戶
 			modify() {
-//				this.aaaData = this.selUser;
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -383,12 +696,6 @@
 					});
 					return;
 				} else {
-//					this.aaaData[0].roleId = [];
-//					var roles = this.aaaData[0].roles;
-//					for(var i = 0; i < roles.length; i++) {
-//						this.aaaData[0].roleId.push(roles[i].id);
-//					}
-//					console.log(this.aaaData[0].roleId);
 					this.user = this.selUser[0]; 
 					this.$refs.child.detail(this.selUser[0].id);
 				}
@@ -412,30 +719,98 @@
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
+				} else {
+					var url = this.basic_url + '/api-user/users/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+			// 彻底删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
 					this.$message({
-						message: '不可同时删除多个数据',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
-				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id;
-					this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
+				}  else {
+					var url = this.basic_url + '/api-user/users/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
 							this.$message({
-								message: '删除成功',
-								type: 'success'
+								message: '网络错误，请重试',
+								type: 'error'
 							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
 						});
+					}).catch(() => {
+
 					});
 				}
 			},
@@ -455,26 +830,50 @@
 					});
 					return;
 				} else {
-					var changeUser = selData[0];
-					var id = changeUser.id;
-					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
-					this.$axios.post(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '重置成功',
-								type: 'success'
-							});
-							this.requestData();
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
+					this.passdialog=true;
+//					this.changeUser = selData[0];
+//					var id = changeUser.id;
+//					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
+//					this.$axios.post(url, {}).then((res) => {
+//						//resp_code == 0是后台返回的请求成功的信息
+//						if(res.data.resp_code == 0) {
+//							this.$message({
+//								message: '重置成功',
+//								type: 'success'
+//							});
+//							this.requestData();
+//						}
+//					}).catch((err) => {
+//						this.$message({
+//							message: '网络错误，请重试',
+//							type: 'error'
+//						});
+//					});
 				}
 			},
+			determine(){
+				var id = this.selUser[0].id;
+				var url = this.basic_url + '/api-user/users/' + id + '/password';
+				this.$refs['newPwdForm'].validate((valid) => {
+					if (valid) {
+						this.$axios.put(url,{"newPassword": this.userpassword.newPassword}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '修改成功',
+									type: 'success'
+								});
+								this.resetNewpwd();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}
+				});
+			},
+
 			// 启用
 			unfreeze() {
 				var selData = this.selUser;
@@ -545,12 +944,29 @@
 					});
 				}
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
+			},
 			judge(data) {
 				//taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-			sexName(data) {
-				return data.sex ? '男' : '女'
+
+			// sexName(data) {
+			// 	return data.sex ? '男' : '女'
+			// },
+
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -564,11 +980,12 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					deptId: this.searchList.deptId,
 					nickname: this.searchList.nickname,
 					username: this.searchList.username,
 //					searchKey: 'createTime',
@@ -576,12 +993,13 @@
 					companyId: this.companyId,
 					// deptId: this.deptId
 				}
+				if(!!this.searchList.deptId  && this.searchList.deptId != 128){
+					data.deptId = this.searchList.deptId;
+				}
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res.data);
-					//this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -590,26 +1008,17 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-
-					this.userList = newarr;
-				}).catch((wrong) => {})
-//				this.userList.forEach((item, index) => {
-//					var id = item.id;
-//					this.$axios.get('/users/' + id + '/roles', data).then((res) => {
-//						this.userList.role = res.data.roles[0].name;
-//					}).catch((wrong) => {})
-//				})
+					this.userList = res.data.data;
+					this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
 
 			//机构树
@@ -633,9 +1042,7 @@
 						data[i].children = this.transformTree(data[i].subDepts);
 					}
 				}
-
 				return data;
-				
 			},
 			handleNodeClick(data) {
 				if(data.type == '1') {
@@ -668,10 +1075,56 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		console.log(childValue);
-        		this.$refs.navsheader.showClick(childValue);
+        		this.$refs.navsTabs.showClick(childValue);
         		this.getbutton(childValue);
-      		},
+			  },
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					this.buttons = res.data;
+				}).catch((wrong) => {
+					this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+				})
+		    },
+		    //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			}
 		},
 		beforeMount() {
 			
@@ -681,6 +1134,7 @@
 			this.requestData();
 			this.getKey();
 			this.getCompany();
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 //			this.getbutton();
 //			this.$refs.navleft.getleft();
 		}

@@ -17,7 +17,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="menu" :rules="rules" ref="menu" label-width="100px" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -32,19 +32,19 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="菜单名称" prop="name">
-												<el-input v-model="menu.name">
+												<el-input v-model="menu.name" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="链接地址" prop="url">
-												<el-input v-model="menu.url">
+												<el-input v-model="menu.url" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="排序" prop="sort">
-												<el-input v-model="menu.sort">
+												<el-input v-model="menu.sort" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -71,26 +71,26 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer">
+						<div class="content-footer">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
-			<!--提示弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<!--选择所属上级弹出框 Begin-->
+			<el-dialog :modal-append-to-body="false" title="选择所属上级" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 				</el-tree>
-				<div slot="footer" class="dialog__footer">
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="confirm();" >确 定</el-button>
+			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </div>
 			</el-dialog>
-			<!--提示弹出框 End-->
+			<!--选择所属上级弹出框 End-->
 		</div>
 
-			<!--图标弹出 Begin-->
+			<!--应用中心图标弹出 Begin-->
 	        <div class="mask" v-show="show2"></div>
 			<div class="mask_divbg" v-show="show2">
 				<div class="mask_div">
@@ -98,31 +98,31 @@
 						<div class="mask_title">应用中心图标</div>
 						<div class="mask_anniu">
 							<span class="mask_span mask_max" @click='toggle'>
-								 
 								<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 							</span>
-							<span class="mask_span" @click='close1'>
+							<span class="mask_span" @click='close2'>
 								<i class="icon-close1"></i>
 							</span>
 						</div>
 					</div>
 					<div id="FHScrollbar" :style="{height: fullHeight}">
-						<all_icons v-on:childByValue="childByValue"></all_icons>
-						<div slot="footer" class="el-dialog__footer">
-							<el-button @click="dialogVisible = false">取 消</el-button>
+						<div class="content-accordion">
+							<all_icons v-on:childByValue="childByValue"></all_icons>
+						</div>
+						<div class="content-footer">
 							<el-button type="primary" @click="confirm2();" >确 定</el-button>
+							<el-button @click='close2'>取 消</el-button>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!--图标弹出 End-->	    
+			<!--应用中心图标弹出 End-->	    
 		
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import deliver from '../../assets/js/deliver.js'
 	import all_icons from '../common/all_icons.vue'//弹出框
 	export default {
@@ -181,13 +181,13 @@
 					// pName: [{required: true,trigger: 'blur',validator: validatePass}],
 					name: [
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isNickname, trigger: 'blur'}
+						{validator: this.Validators.isNickname, trigger: 'blur'}
 					],
 					url: [
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isLinkURL, trigger: 'blur'}
+						{validator: this.Validators.isLinkURL, trigger: 'blur'}
 					],
-					sort: [{required: false,trigger: 'blur',validator: Validators.isInteger}],
+					sort: [{required: false,trigger: 'blur',validator: this.Validators.isInteger}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -197,6 +197,7 @@
 					children: "subDepts",
 					label: "name"
 				},
+				noedit:false,
 			};
 		},
 		methods: {
@@ -217,13 +218,22 @@
 			visible() {
 				this.modifytitle=false;
 				this.show = true;
+				this.noedit = false;
 			},
 			
 			// 这里是修改
-			detail() {
-					this.addtitle=false;
-				    this.modifytitle=true;
-					this.show = true;
+			detail(item) {
+				console.log(23333);
+				console.log(item.hidden);
+				this.addtitle=false;
+				this.modifytitle=true;
+				if(item.hidden == '0'){
+					item.hidden = true;
+				}else if(item.hidden == '1'){
+					item.hidden = false;
+				}
+				this.show = true;
+				this.noedit = false;
 			},
 			//这是查看
 			view() {
@@ -235,10 +245,12 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.show = true;
+				this.noedit = true;
 			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -268,15 +280,13 @@
 
 			//保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.menu.parentId);
 				if(this.menu.parentId == ''){//上级为空给后台传-1表示为一级菜单
 					this.menu.parentId = '-1';
 				}
 				this.$refs.menu.validate((valid) => {
 					if(valid) {
-						this.menu.hidden=this.menu.hidden?1:0
-						var menu = this.menu;						
-						console.log(menu)
+						this.menu.hidden = this.menu.hidden?0:1;
+						var menu = this.menu;			
 						var url = this.basic_url + '/api-user/menus/saveOrUpdate';
 						this.menutest={
 								"id":this.menu.id,
@@ -341,21 +351,19 @@
 				this.menu.pName = this.checkedNodes[0].name;
 
 			},
-			close1(){
-				this.show2 = false;
-			},
-		
 		    childByValue: function (childValue) {
 		        // childValue就是子组件传过来的值
-		      
 		        this.sendchildValue = childValue;
 		      
 		    },
-			//图标的带值
+		    //应用中心图标关闭
+		    close2(){
+				this.show2 = false;
+			},
+			//应用中心图标确定
 			confirm2() {
 				this.menu.css = this.sendchildValue;
 				this.show2 = false;
-
 			},
 
 			handleClose(done) {
@@ -363,11 +371,13 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			changeval(Callbackvaule){
-			
-//				this.menu.hidden=Callbackvaule?1:0
+				// this.menu.hidden=Callbackvaule?1:0;
 			},
 			toggleStatus(state){
 			

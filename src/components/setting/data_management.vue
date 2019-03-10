@@ -2,16 +2,19 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
-			<navs_left></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="openAddMgr" id="">
+								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
+								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
                                 	<i class="icon-add"></i>添加
                       			 </button>
 								<button type="button" class="btn btn-blue button-margin" @click="modify">
@@ -30,7 +33,7 @@
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="createtable">
 								    <i class="icon-refresh-cw"></i>生成表
-								</button>
+								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -52,8 +55,9 @@
 										<el-input v-model="searchList.description"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="2">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -62,7 +66,18 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" border stripe  :header-cell-style="rowClass" :height="fullHeight" style="width: 100%; margin: 0 auto;" :default-sort="{prop:'dataList', order: 'descending'}" @selection-change="SelChange">
+							<el-table ref="table" :data="dataList" 
+									  border 
+									  stripe  
+									  :header-cell-style="rowClass" 
+									  :height="fullHeight" 
+									  style="width: 100%; margin: 0 auto;" 
+									  :default-sort="{prop:'dataList', order: 'descending'}" 
+									  @selection-change="SelChange"
+									  v-loading="loading"  
+								  	  element-loading-text="加载中…"
+								  	  element-loading-spinner="el-icon-loading"
+								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column fixed type="selection" width="55" align="center">
 								</el-table-column>
 								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
@@ -93,7 +108,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import datamask from '../settingDetails/data_mask.vue'
 	import relamask from '../settingDetails/rela_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -101,7 +116,7 @@
 		name: 'data_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'datamask': datamask,
 			'relamask': relamask,
@@ -109,6 +124,7 @@
 		},
 		data() {
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				selUser: [],
 				'启用': true,
@@ -149,10 +165,11 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
-				dataList:[]
+				dataList:[],
+				buttons:[],
 			}
 		},
 		methods: {
@@ -164,10 +181,6 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
-			//配置关系
-			setrelation(){
-				this.$refs.rela.visible();
-			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -178,8 +191,37 @@
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					name:'',
+					description:''
+				};
+				this.requestData();
+			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+		         this.openAddMgr();
+		    	}else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="删除"){
+		    		this.deldata();
+		    	}else if(item.name=="彻底删除"){
+		    		this.physicsDel();
+		    	}else if(item.name=="配置关系"){
+		    		this.setrelation();
+		    	}else if(item.name=="生成表"){
+					this.createtable();
+				}
+		    },
+			//配置关系
+			setrelation(){
+				this.$refs.rela.visible();
 			},
 			//添加数据
 			openAddMgr() {
@@ -292,7 +334,8 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -305,6 +348,7 @@
 				}).then((res) => {
 					this.dataList = res.data.data;
 					this.page.totalCount = res.data.count;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			//机构树
@@ -337,6 +381,26 @@
 			formatter(row, column) {
 				return row.enabled;
 			},
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+				console.log( childvalue);
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	console.log(childvalue);
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 		},
 		mounted() {
 			this.requestData();

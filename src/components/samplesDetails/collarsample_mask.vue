@@ -28,14 +28,14 @@
 											</el-input>
 										</el-col>-->
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="samplesForm.STATE" :disabled="true">
+											<el-input v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
 											<el-input v-model="samplesForm.ITEM_STEP" :disabled="true">
 												<template slot="prepend">样品序号</template>
-												<el-button slot="append" icon="el-icon-search" @click="addsamplenum"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
 											</el-input>
 										</el-col>
 									</el-row>
@@ -51,7 +51,7 @@
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
 												<el-input v-model="samplesForm.ITEMNUM" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getsample"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getsample" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -66,7 +66,7 @@
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select> -->
 												<el-input v-model="samplesForm.TYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addprobtn"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addprobtn" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -80,7 +80,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="100" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="10000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number >
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -136,8 +136,8 @@
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBY" label-width="110px">
-												<el-input v-model="samplesForm.ENTERBY" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+												<el-input v-model="samplesForm.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -146,15 +146,15 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入人机构" prop="DEPARTMENT" label-width="110px">
-												<el-input v-model="samplesForm.DEPARTMENT" :disabled="edit"></el-input>
+											<el-form-item label="录入人机构" prop="DEPTIDDesc" label-width="110px">
+												<el-input v-model="samplesForm.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="修改人">
-												<el-input v-model="samplesForm.CHANGEBY" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="CHANGEBYDesc">
+												<el-input v-model="samplesForm.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -167,8 +167,8 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer">
-							<el-button type="primary" @click="saveAndUpdate('samplesForm')">保存</el-button>
+						<div class="content-footer" v-if="!viewtitle">
+							<el-button type="primary" @click="saveAndUpdate('samplesForm')" >保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('samplesForm')">保存并继续</el-button>
 							<el-button @click="close">取消</el-button> 
 						</div>
@@ -218,7 +218,7 @@
 					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
@@ -240,7 +240,7 @@
 					</el-table-column>
 					<el-table-column label="单件码" sortable width="200px" prop="SN">
 					</el-table-column>
-					<el-table-column label="样品状态" sortable width="200px" prop="STATE">
+					<el-table-column label="样品状态" sortable width="200px" prop="STATEDesc">
 					</el-table-column>
 					<el-table-column label="录入时间" sortable width="140px" :formatter="dateFormat" prop="ENTERDATE">
 					</el-table-column>
@@ -249,7 +249,7 @@
 					<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
@@ -278,7 +278,7 @@
 					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
 				<span slot="footer" class="dialog-footer">
@@ -296,9 +296,6 @@
 	export default {
 		name: 'collarsample_mask',
 		props: {
-			page: {
-				type: Object,
-			},
 			samplesForm: { //接收主表单中填写的数据信息
 				type: Object,
 				default: function() {
@@ -318,7 +315,7 @@
 						ACCEPT_DATE: '',//收样日期
 						GRANT_PERSON: '',//领样人
 						GRANT_DATE: '',//领样日期
-						STATE: '1',//状态
+						STATE: '',//状态
 						STATUSDATE: '',//状态日期
 						ENTERBY: '',//录入人
 						ENTERDATE: '',//录入时间
@@ -330,27 +327,7 @@
 			}
 		},
 		data() {
-			var validateItemid = (rule, value, callback) => {//样品编号
-                if (this.samplesForm.ITEMNUM === undefined || this.samplesForm.ITEMNUM === '' || this.samplesForm.ITEMNUM === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateDescri = (rule, value, callback) => {//样品名称
-                if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateType = (rule, value, callback) => {//类别
-                if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
+		
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -395,32 +372,38 @@
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
 					ITEMNUM: [//样品编号
-						{ required: true,validator: validateItemid}
+						{ required: true, message: '必填', trigger: 'blur' }
 					],
 					DESCRIPTION: [//样品名称
-						{ required: true,validator: validateDescri}
+						{ required: true, message: '必填', trigger: 'blur' }
 					],
 					TYPE: [//类别
-						{ required: true,validator: validateType}
+						{ required: true, message: '必填', trigger: 'blur' }
 					],
-					MODEL: [
-						{ required: true, message: '型号不能为空', trigger: 'blur' }
+					MODEL: [//型号
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
-					QUALITY: [
-						{ required: true, message: '请填写数量', trigger: 'blur' }
+					QUALITY: [//数量
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isInteger}
 					],
-					ACCEPT_PERSON: [
-						{ required: true, message: '请填写收样人', trigger: 'blur' }
+					ACCEPT_PERSON: [//收样人
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isNickname}
 					],
-					ACCEPT_DATE: [
-						{ required: true, message: '收样日期不能为空', trigger: 'blur' }
+					ACCEPT_DATE: [//收样时间
+						{required: true, message: '请选择', trigger: 'change' }
 					],
-					GRANT_PERSON: [
-						{ required: true, message: '领样人不能为空', trigger: 'blur' }
+					GRANT_PERSON: [//领样人
+						{ required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator: this.Validators.isNickname}
 					],
-					GRANT_DATE: [
-						{ required: true, message: '领样日期不能为空', trigger: 'blur' }
+					GRANT_DATE: [//领样时间
+						{ required: true, message: '请选择', trigger: 'change' }
 					],
+					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
+					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 				},
 				dialogVisible3: false, //对话框
 				categoryList:[],
@@ -429,7 +412,7 @@
 				samplenumList:[],//样品序号
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				samplesList:[],//样品编号
@@ -455,25 +438,47 @@
 				this.dialogsample = true;
 			},
 			addsamplebtn(){
-				console.log(this.selUser[0]);
-				this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
-				this.samplesForm.DESCRIPTION = this.selUser[0].DESCRIPTION;//样品名称
-				this.dialogsample = false;
-				this.requestData();
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
+					this.samplesForm.DESCRIPTION = this.selUser[0].DESCRIPTION;//样品名称
+					this.dialogsample = false;
+					this.requestData();
+				}
 			},
 			//样品序号
 			addsamplenum(){
 				this.dialogsamplenum = true;
-				console.log(this.samplesForm.ITEMNUM);
-				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
+				this.$axios.get(this.basic_url + '/api-apps/app/itemline?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
 
 				}).then((res) => {
 					this.samplenumList = res.data.data;
 				}).catch((wrong) => {})
 			},
 			addsamplenumbtn(){
-				this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
-				this.dialogsamplenum = false;
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
+					this.dialogsamplenum = false;
+				}
 			},
 			//获取委托书编号数据
 			// getProxy() {
@@ -515,10 +520,21 @@
 				this.dialogVisible3 = true;				
 			},
 			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false;
-				console.log(this.selUser[0].TYPE);
-				this.samplesForm.TYPE = this.selUser[0].TYPE;
-				this.$emit('request');
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '未选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dialogVisible3 = false;
+					this.samplesForm.TYPE = this.selUser[0].TYPE;
+					this.$emit('request');
+				}
 			},
 			//小弹出框关闭按钮事件
 			handleClose(done) {
@@ -526,7 +542,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -534,6 +553,7 @@
 			//这是查看
 			view() {
 				this.addtitle = false;
+				this.modifytitle = false;
 				this.viewtitle = true;
 				this.views = true; //
 				this.noviews = false;
@@ -543,8 +563,8 @@
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
-					this.samplesForm.ENTERBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;
+					this.samplesForm.ENTERBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					this.samplesForm.STATUSDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -563,7 +583,8 @@
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.samplesForm.CHANGEBY=res.data.nickname;
+					this.samplesForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -642,7 +663,6 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								// this.show = false;
 								//重新加载数据
 								this.$emit('request');
 								// this.$refs["samplesForm"].resetFields();
@@ -653,7 +673,10 @@
 								type: 'error'
 							});
 						});
+						console.log(23333);
+						console.log(this.falg);
 						this.falg = true;
+						console.log(this.falg);
 					} else {
 						this.show = true;
 						this.$message({
@@ -666,7 +689,10 @@
 			},
 			saveAndUpdate(samplesForm){
 				this.save(samplesForm);
+				console.log(11111);
+				console.log(this.falg);
 				if(this.falg){
+					console.log(this.falg);
 					this.show = false;
 				}
 				// this.$emit('request');
@@ -681,7 +707,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			//表格滚动加载
 			loadMore() {
@@ -759,7 +788,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 		mounted() {

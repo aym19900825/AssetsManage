@@ -30,7 +30,7 @@
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else="v-else">{{scope.row.S_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else="v-else">{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -101,7 +101,7 @@
 			  </el-table>
 			</el-form>
 			<!-- 表格 Begin-->
-			<!-- <el-pagination background class="pull-right pt10 pb10"
+			<!-- <el-pagination background class="text-right pt10 pb10"
 	            @size-change="sizeChange"
 	            @current-change="currentChange"
 	            :current-page="page.currentPage"
@@ -115,14 +115,20 @@
 	</el-card>
 
 	<!-- 检验/检测标准 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——检验/检测标准" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——检验/检测标准" height="300px" :visible.sync="dialogVisible3" width="80%">
+			<!--搜索框 Begin-->
+			<div class="columns pull-right child-search">
+				<el-input placeholder="请输入标准名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.S_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="S_NUM">
+				<el-table-column label="标准编码" width="155" sortable prop="S_NUM">
 				</el-table-column>
-				<el-table-column label="名称" sortable prop="S_NUM">
+				<el-table-column label="标准名称" sortable prop="S_NUM">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -136,8 +142,8 @@
 			
 			<!-- 表格 End-->
 			<span slot="footer" class="dialog-footer">
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
 		    </span>
 		</el-dialog>
 		<!-- 检验/检测标准 End -->
@@ -151,7 +157,7 @@
 		components: {
 			
 		},
-		// props: ['inspectionSta2Form'],
+		props: ['parentIds'],
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -184,7 +190,7 @@
 				
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				parentId: 1
@@ -214,17 +220,17 @@
 				})
 			},
 			loadMore () {//表格滚动加载
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData_inspectionSta2()
-			   // }
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.requestData_inspectionSta2()
+			   }
 			 },
 			 addprobtn(row){//查找基础数据中的检验/检测标准
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -233,7 +239,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionSta?DEPTID=' + this.departmentId, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionSta?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
 					// console.log(res.data);
@@ -259,16 +265,16 @@
 			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_inspectionSta2();
+		      this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_inspectionSta2();
+		      this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_inspectionSta2();
+				this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -293,6 +299,7 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -372,52 +379,61 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			addfield_inspectionSta2(PRO_NUM) { //插入行到产品类别Table中
-				var isEditingflag=false;
-				for(var i=0;i<this.inspectionSta2Form.inspectionList.length; i++){
-					if (this.inspectionSta2Form.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
-					}
-				}
-				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate, currentDept;
-						this.currentUser=res.data.nickname;
-						this.currentDept=res.data.deptid;
-						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD");
-						this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
-						var obj = {
-							"PRO_NUM": this.parentId,//所属类别编号
-							"S_NUM": '',
-							"S_NAME": '',
-							"STATUS": '1',
-							"VERSION": '',
-							"DEPTID": this.currentDept,
-							"RELEASETIME": this.currentDate,
-							"STARTETIME": this.currentDate,
-							"ENTERBY": this.currentUser,
-							"ENTERDATE": this.currentDateTime,
-							"isEditing": true,
-						};
-						this.inspectionSta2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
+				if (this.parentId == 1) {
+					this.$message({
+						message:'请选择所属产品',
+						type:'warning'
 					})
-	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+				} else {
+					var isEditingflag=false;
+					for(var i=0;i<this.inspectionSta2Form.inspectionList.length; i++){
+						if (this.inspectionSta2Form.inspectionList[i].isEditing==false){
+							isEditingflag=false;
+						}else{
+	                        isEditingflag=true;
+	                        break;
+						}
+					}
+					if (isEditingflag==false){
+	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+	                		var currentUser, currentDate;
+							this.currentUser=res.data.nickname;
+							var date=new Date();
+							this.currentDate = this.$moment(date).format("YYYY-MM-DD");
+							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							var index=this.$moment(date).format("YYYYMMDDHHmmss");
+							var obj = {
+								"PRO_NUM": this.parentId,//所属类别编号
+								"S_NUM": '',
+								"S_NAME": '',
+								"STATUS": '',
+								"VERSION": '',
+								"DEPTID": '',
+								"RELEASETIME": this.currentDate,
+								"STARTETIME": this.currentDate,
+								"ENTERBY": this.currentUser,
+								"ENTERDATE": this.currentDateTime,
+								"isEditing": true,
+							};
+							this.inspectionSta2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						}).catch((err)=>{
+							this.$message({
+								message:'网络错误，请重试',
+								type:'error'
+							})
+						})
+		            } else {
+		                this.$message.warning("请先保存当前编辑项");
+					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
@@ -445,7 +461,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_inspectionSta2();
+							// this.requestData_inspectionSta2();
+							this.viewfield_inspectionSta2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
 						this.$message({
@@ -471,7 +488,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_inspectionSta2();
+							this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -487,6 +504,7 @@
 				this.dialogVisible3 = false
 				this.catedata.S_NUM = this.selData[0].S_NUM;
 				this.catedata.S_NAME = this.selData[0].S_NAME;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},

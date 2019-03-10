@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -14,25 +14,25 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;">
+								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="isUploadBtn">
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
-										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+										<input id="excelFile" type="file" name="uploadFile" @change="upload" />
 									</button>
 								</form>
+								<!-- <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
+									<i class="icon-clipboard"></i>报表
+								</button>
 								<button type="button" class="btn btn-green" @click="showDir">
                                 	<i class="icon-add"></i>新建文件夹
                       			 </button>
-								<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改文件夹
-								</button> -->
-								<button type="button" class="btn btn-red button-margin" @click="delDir">
-								    <i class="icon-trash"></i>删除文件夹
-								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 						    		<i class="icon-search"></i>高级查询
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
+								</button> -->
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>
 						</div>
@@ -51,16 +51,17 @@
 										<template slot="prepend">应用名称</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
-					<el-row :gutter="0">
+					<el-row class="relative" id="pageDiv">
 						<!-- 左侧树菜单 Begin-->
-						<el-col :span="5" class="lefttree">
+						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
 								<div class="left_tree_title clearfix" @click="min3max()">
 									<div class="pull-left pr20" v-if="ismin">文件树</div>
@@ -70,22 +71,37 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" 
-										 :render-content="renderContent" 
-										 :load="loadNode"
-										 node-key="id"
-										 lazy
-										 :props="props"
-										 @node-click="handleNodeClick">
+										<el-tree ref="tree"
+										 	:render-content="renderContent" 
+										 	:load="loadNode"
+											:default-expanded-keys=treeIdSel
+										 	node-key="id"
+										 	lazy
+										 	:props="props"
+										 	@node-click="handleNodeClick"
+											v-if="treeShow">
 										</el-tree>
 									</div>
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="19" class="leftcont v-resize">
+						<div id="middle"></div>
+						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="fileList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<el-table ref="table" :header-cell-style="rowClass"
+									:data="fileList" 
+									border 
+									stripe 
+									:height="fullHeight" 
+									style="width: 100%;" 
+									:default-sort="{prop:'fileList', order: 'descending'}" 
+									@selection-change="SelChange"
+	    							v-loadmore="loadMore"
+									v-loading="loading"  
+								    element-loading-text="加载中…"
+								    element-loading-spinner="el-icon-loading"
+								    element-loading-background="rgba(255, 255, 255, 0.9)">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
@@ -108,15 +124,17 @@
 									</template>
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
 							<!-- 表格 -->
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40, 100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
 						</el-col>
 					</el-row>
 				</div>
+				<!--报表-->
+				<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 			</div>
 		</div>
-		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
+		<!-- <samplesmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
 		<el-dialog :modal-append-to-body="false" title="文件夹" :visible.sync="dirDialog">
 			<el-form :model="dir" label-width="80px">
@@ -124,9 +142,9 @@
 					<el-input v-model="dir.dirName"></el-input>
 				</el-form-item>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="resetDir">取 消</el-button>
+			<div slot="footer">
 				<el-button type="primary" @click="addDir">确 定</el-button>
+				<el-button @click="resetDir">取 消</el-button>
 			</div>
 		</el-dialog>
 		<vkeyword ref="keyword" :param="param"></vkeyword>
@@ -134,30 +152,37 @@
 	</div>
 </template>
 <script>
+	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	import vueDropzone from 'vue2-dropzone'
-	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import vkeyword from '../common/keyword.vue'
 	import vchoose from '../common/dataChoose.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			tableControle,
 			samplesmask,
 			vueDropzone,
 			vkeyword,
-			vchoose
+			vchoose,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
+				treeShow: true,
+				treeIdSel: [],
 				chooseParam: {
 					selShow: false,
 					visible: false,
@@ -257,7 +282,7 @@
 				},
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				deptId: 0,
@@ -268,10 +293,28 @@
 					'deptid': '',
 					'deptfullname': '',
 				},
-				samplesForm: {}//修改子组件时传递数据
+				samplesForm: {},//修改子组件时传递数据
+				buttons:[],
+				isUploadBtn: false
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="上传"){
+		         	this.upload();
+		    	}else if(item.name=="新建文件夹"){
+					this.showDir();
+				}else if(item.name=="高级查询"){
+					this.modestsearch();
+		    	}else if(item.name=="报表"){
+					this.reportdata();
+				}
+		    },
 			delFile(index,row){
 				var url = this.file_url + '/file/deleteFile/' + row.fileid;
                 this.$axios.delete(url,{}).then((res) => {
@@ -304,7 +347,6 @@
 				// listName: this.chooseParam.listName,
                 // data: this.selData
 				var selData = data.data;
-				
 			},
 			resetDir(){
 				this.dir.dirName = '';
@@ -331,11 +373,17 @@
 							message: '新建成功',
 							type: 'success'
 						});
-						this.loadThisNode();
+						this.treeShow = false;
+						var that = this;
+						setTimeout(function(){
+							that.treeShow = true;
+						},200);
+						// this.loadThisNode();
 					}
 				})
 			},
 			loadThisNode(){
+				this.loading = true;
 				var url = this.file_url + '/file/pathList';
 				this.$axios.post(url, {
 					'pathid': this.docId,
@@ -347,6 +395,7 @@
 						pathList[i].name = pathList[i].foldername;
 					}
 					this.loadNode(this.node, this.resolve, 'loadThisNode' , pathList);
+					this.loading = false;
 				});
 			},
 			upload(e){
@@ -379,33 +428,144 @@
 							message: '文档已成功上传至服务器',
 							type: 'success'
 						});
-						this.getFileList();
+						this.requestData();
 					}
 				})
 			},
+			append(node, data) {
+				const newChild = { id: 56, label: 'testtest'};
+				node.childNodes.push(newChild);
+			},
+			remove(node, data) {
+				const parent = node.parent;
+				const children = parent.childNodes || parent.data;
+				const index = children.findIndex(d => d.id === data.id);
+				
+				var url = this.file_url + '/file/deletePath/' + node.data.id;
+				this.$confirm('确定删除此文件夹吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.code == 1) {
+							children.splice(index, 1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.message,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}).catch(() => {});
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (
+					<span class="custom-tree-node" style=" display: block; width: 100%;">
+						<span style="display: block; float: left; margin-top: 3px;">{node.label}</span>
+						<span style="display: block;float: right;">
+							<el-button size="mini" icon="icon-trash red" type="text" on-click={ () => this.remove(node, data) }></el-button>
+						</span>
+					</span>
+				);
+			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					} else {
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+
+			requestData(){
+				this.loading = true;
+				// var data = {
+				// 	page: this.page.currentPage,
+				// 	limit: this.page.pageSize,
+				// 	appname:this.searchList.appname,
+				// }
+				var num = this.page.currentPage - 1;
+				var url = this.file_url + '/file/pathList?size=' + this.page.pageSize +'&page=' + num;
+				this.$axios.post(url, {
+					'pathid': this.docId,
+					'deptid': this.docParm.deptid,
+					'appname': this.searchList.appname
+				}).then((res) => {
+					this.page.totalCount = res.data.fileList.total;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
+					this.fileList = res.data.fileList.fileList;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				});
 			},
 			handleNodeClick(data){
 				this.page.currentPage = 1;
 				this.docId = data.id;
 				this.node = data;
 				this.parentNode = data.parent;
+				this.treeIdSel.indexOf(data.id)==-1?this.treeIdSel.push(data.id):this.treeIdSel.splice(this.treeIdSel.indexOf(data.id),1);
+				// console.log(this.treeIdSel);
 				// this.refreshLazyTree();
-				this.getFileList();
-			},
-			getFileList(){
-				var url = this.file_url + '/file/pathList';
-				this.$axios.post(url, {
-					'pathid': this.docId,
-					'deptid': this.docParm.deptid,
-					'page': this.page.currentPage - 1,
-					'size': this.page.pageSize,
-					'appname': this.searchList.appname
-				}).then((res) => {
-					this.fileList = res.data.fileList.fileList;
-					this.page.totalCount = res.data.fileList.total;
-				});
+				this.requestData();
 			},
 			getUser(){//获取当前用户信息
 				var url = this.basic_url + '/api-user/users/currentMap';
@@ -424,13 +584,13 @@
 			loadNode(node, resolve, opt, param) {
 				if(opt == 'loadThisNode'){
 					var pathList = param;
+					// this.node.doCreateChildren(pathList)
 					return this.resolve(pathList);
 				}
 				this.resolve = resolve;
 				let that = this;
 				var url = that.file_url + '/file/pathList';
 				var pathid = 2;
-				console.log(node);
 				if(node.level === 0){
 					pathid = 0;
 				}else{
@@ -449,6 +609,7 @@
 								pathList[i].id =  pathList[i].pathid;
 								pathList[i].name = pathList[i].foldername;
 							}
+							// this.node.doCreateChildren(pathList);
 							return resolve(pathList);
 						});
 					}, 1000);
@@ -475,7 +636,6 @@
 						m.iconClass = 'icon-file-normal';
 					}
 				}
-				// this.handleNodeClick();
 			},
 			expandClick: function(m) {
 				if(m.iconClass != 'icon-file-text') {
@@ -490,18 +650,17 @@
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
-				this.page.pageSize = val;
-				this.getFileList();
-			},
-			currentChange(val) {//分页，当前页
-				this.page.currentPage = val;
-				this.getFileList();
+
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					appname: '',
+				};
+				// this.requestData();
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.getFileList();
+				this.page.pageSize = 20;
+				this.requestData();
 			},
 			//修改用戶
 			modify() {
@@ -524,14 +683,14 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
+				// this.down = !this.down,
+				// this.up = !this.up
 			},
-			// refreshLazyTree(node, children) {
-			// 	var theChildren = node.childNodes
-			// 	theChildren.splice(0, theChildren.length)
-			// 	this.loadNode();
-			// },
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
+			},
 			findTreeId(parentid,chooseData){
 				var data = chooseData;
 				for(var i=0; i<data.length; i++){
@@ -547,34 +706,35 @@
 			},
 			// 删除
 			delDir() {
-				var parentid = this.node.parentid;
-				this.findTreeId(parentid, this.$refs.tree._data.root.childNodes);
-				console.log(this.$refs);
-				return;
-				var url = this.file_url + '/file/deletePath/' + this.docId;
-				this.$confirm('确定删除此文件夹吗？', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-				}).then(({ value }) => {
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.code == 1) {
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: res.data.message,
-								type: 'error'
-							});
-						}
-					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
-					});
-				}).catch(() => {});
+				const parent = this.node.parent;
+				const children = parent.data.children || parent.data;
+				const index = children.findIndex(d => d.id === data.id);
+				children.splice(index, 1);
+
+				// var url = this.file_url + '/file/deletePath/' + this.docId;
+				// this.$confirm('确定删除此文件夹吗？', '提示', {
+				// 	confirmButtonText: '确定',
+				// 	cancelButtonText: '取消',
+				// }).then(({ value }) => {
+				// 	this.$axios.delete(url, {}).then((res) => {
+				// 		if(res.data.code == 1) {
+				// 			this.$message({
+				// 				message: '删除成功',
+				// 				type: 'success'
+				// 			});
+				// 		}else{
+				// 			this.$message({
+				// 				message: res.data.message,
+				// 				type: 'error'
+				// 			});
+				// 		}
+				// 	}).catch((err) => {
+				// 		this.$message({
+				// 			message: '网络错误，请重试',
+				// 			type: 'error'
+				// 		});
+				// 	});
+				// }).catch(() => {});
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
@@ -598,10 +758,72 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+        		// childValue就是子组件传过来的值
+				this.$refs.navsTabs.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '上传'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
+		    },
+		    //树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=9,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 10 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			},
 		},
-		created() {// 在页面挂载前就发起请求
+		mounted() {// 在页面挂载前就发起请求
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			this.getUser();
 		},
 	}
@@ -614,11 +836,12 @@
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-    cursor: pointer;
     width: 65px;
     left: 0px;
-    height: 40px;
+    height: 30px;
+    z-index: 999;
 }
+.a-upload input,.a-upload input[type="file"] { cursor: pointer; font-size:0px; font-size:20px \9;}
 .upload-btn{
     color: #fff;
     background-color: #286090;

@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs  ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -15,11 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>			
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -36,17 +34,26 @@
 										<template slot="prepend">名称</template>
 									</el-input>
 								</el-col>
-								<el-col :span="3">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
 					<el-row :gutter="0">
-						<el-col class="leftcont v-resize">
+						<el-col :span="24">
 							<!-- 表格 -->
-							<el-table :data="fileList" border :height="fullHeight" style="width: 100%;" :default-sort="{prop:'fileList', order: 'descending'}">
+							<el-table :data="fileList" 
+									  border 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'fileList', order: 'descending'}"
+									  v-loading="loading"  
+								      element-loading-text="加载中…"
+    							      element-loading-spinner="el-icon-loading"
+    							      element-loading-background="rgba(255, 255, 255, 0.9)">
 								<!-- <el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 								</el-table-column> -->
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
@@ -81,14 +88,15 @@
 									</template>
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
 				</div>
 			</div>
-		</div>
+			<!--报表-->
+			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
 	</div>
@@ -98,20 +106,24 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			tableControle,
 			samplesmask,
+			reportmask
 		},
 		data() {
 			return {
+				reportData:{},//报表的数据
+				loading: false,
 				visible2: false,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
@@ -166,7 +178,7 @@
 				treeData: [],
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				userParm: {},
@@ -180,10 +192,19 @@
 					fileupload: 0,
 				},
 				fileAuthShow: false,
-				samplesForm: {}//修改子组件时传递数据
+				samplesForm: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}
+		    },
 			download(row){
 				var url = row.filepath 
                         + '&userid=' + this.userParm.userid
@@ -222,6 +243,12 @@
 				this.page.currentPage = val;
 				this.requestData();
 			},
+		    resetbtn(){
+			this.searchList = { //点击高级搜索后显示的内容
+			filename: '',
+			};
+			this.requestData();
+			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -251,58 +278,16 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-			// 删除
-			deluserinfo() {
-				var selData = this.selMenu;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes';
-					//changeMenu为勾选的数据
-					var changeMenu = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for (var i = 0; i < changeMenu.length; i++) {
-						deleteid.push(changeMenu[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-                    var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {//.delete 传数据方法
-						//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-                    }).catch(() => {
-
-                	});
-				}
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
-			requestData(index) {
+			requestData() {
+				this.loading = true;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -313,6 +298,7 @@
 				this.$axios.post(url, data).then((res) => {
 					this.page.totalCount = res.data.total;
 					this.fileList = res.data.vBaseKeywordFiles;
+					this.loading = false;
 				}).catch((wrong) => {})
 			},
 			transformTree(data) {
@@ -360,8 +346,28 @@
 				this.ismin = !this.ismin;
 			},
 			childByValue:function(childValue) {
-        		this.$refs.navsheader.showClick(childValue);
-      		},
+        		// childValue就是子组件传过来的值
+				this.$refs.navsTabs.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					console.log(res);
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+		    },
 		},
 		mounted() {// 在页面挂载前就发起请求
 			var url = this.basic_url + '/api-user/users/currentMap';

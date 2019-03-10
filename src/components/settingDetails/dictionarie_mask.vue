@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="dictionarieForm" :rules="rules" ref="dictionarieForm" class="demo-user">
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="30">
@@ -98,9 +98,9 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="120">
+												<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 													<template slot-scope="scope">
-														<el-button @click.native.prevent="deleteRow(scope.$index,dictionarieForm.subDicts)" type="text" size="small">
+														<el-button @click ="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small">
 															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -112,7 +112,7 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -125,7 +125,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		components: {
@@ -172,14 +171,14 @@
 				rules: {
 					code: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: Validators.isEnglish, trigger: 'blur'}
+						{ validator: this.Validators.isEnglish, trigger: 'blur'}
 					],
 					name: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: Validators.isSpecificKey, trigger: 'blur'}
+						{ validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
-					sort: [{ required: false, trigger: 'blur',validator: Validators.isSpecificKey}],
-					tips: [{ required: false, trigger: 'blur', validator: Validators.isSpecificKey}],
+					sort: [{ required: false, trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					tips: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
 				},
 				addtitle:true,
 				modifytitle:false,
@@ -276,6 +275,9 @@
 				});
 				var url = this.basic_url + '/api-user/dicts/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
+					for(var i = 0;i<res.data.subDicts.length;i++){
+						res.data.subDicts[i].isEditing = false;
+					}
 					this.dictionarieForm = res.data;
 					// console.log(this.dictionarieForm.subDicts);
 					this.show = true;
@@ -311,6 +313,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;
@@ -421,9 +424,49 @@
 
 			 },
 			//刪除新建行
-			deleteRow(index, rows) { //Table-操作列中的删除行
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'subDicts';
+				}
+				if(row.id){
+					var url = this.basic_url + '/api-user/dicts/' + TableName +'/' + row.id;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dictionarieForm[TableName].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
 
+					});
+				}else{
+					console.log(this.dictionarieForm[TableName]);
+					// this.user[TableName+'List'].splice(index,1);
+					this.dictionarieForm[TableName].splice(index,1);
+				}
 			},
 
 			handleClose(done) {
@@ -431,7 +474,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 		
 			

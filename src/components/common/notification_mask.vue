@@ -17,493 +17,407 @@
 					</div>
 				</div>
 				<div class="mask_content">
-						<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline" inline-message>
-							<div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATE!=3">	
-							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
-							</span>
-							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
-						   <div class="accordion">
-							<el-collapse v-model="activeNames">
-								<el-collapse-item title="类型" name="1">
-									<el-row :gutter="20" class="pb10">
-
-										<!-- <el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
-												<template slot="prepend">信息状态</template>
+					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
+						<div class="text-center" v-show="viewtitle">
+						<span v-if="this.dataInfo.STATE!=3">	
+						<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+						<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+						</span>
+						<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
+						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
+						<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
+					</div>
+					   <div class="content-accordion">
+						<el-collapse v-model="activeNames">
+							<el-collapse-item title="类型" name="1">
+								<el-row :gutter="20" class="pb10">
+									<!-- <el-col :span="5" class="pull-right">
+										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
+											<template slot="prepend">信息状态</template>
+										</el-input>
+									</el-col> -->
+									<el-col :span="4" class="pull-right">
+										<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
+											<template slot="prepend">状态</template>
+										</el-input>
+									</el-col>
+									<el-col :span="5" class="pull-right">
+										<el-input v-model="dataInfo.N_CODE" :disabled="edit" placeholder="自动生成">
+											<template slot="prepend">编号</template>
+										</el-input>
+									</el-col>
+								</el-row>
+								<el-form-item label="" prop="TYPE">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
+										<el-col :span="4">
+											<el-radio label="1">监督抽查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="2">监督抽查复查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="3">质量抽查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="4">质量抽查复查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="5">生产许可证</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="6">认定检验检测</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="7">鉴定试验</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="8">委托检验检测</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="9">专项抽查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="10">专项抽查复查</el-radio>
+										</el-col>
+										<el-col :span="4">
+											<el-radio label="11">其它</el-radio>
+										</el-col>
+									</el-radio-group>
+								</el-form-item>
+							</el-collapse-item>
+							<el-collapse-item title="基本信息" name="2">
+								<el-row>
+									<el-col :span="8">
+										<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
+											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
 											</el-input>
-										</el-col> -->
-										<el-col :span="4" class="pull-right">
-											<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
-												<template slot="prepend">状态</template>
-											</el-input>
-										</el-col>
-										<el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.N_CODE" :disabled="edit" placeholder="自动生成">
-												<template slot="prepend">编号</template>
-											</el-input>
-										</el-col>
-									</el-row>
-									<el-form-item label="" prop="TYPE">
-										<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
-											<el-col :span="4">
-												<el-radio label="1">监督抽查</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="2">监督抽查复查</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="3">质量抽查</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="4">质量抽查复查</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="5">生产许可证</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="6">认定检验检测</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="7">鉴定试验</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="8">委托检验检测</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="9">专项抽查</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="10">专项抽查复查</el-radio>
-											</el-col>
-											<el-col :span="4">
-												<el-radio label="11">其它</el-radio>
-											</el-col>
-										
-										</el-radio-group>
-									</el-form-item>
-								</el-collapse-item>
-								<el-collapse-item title="基本信息" name="2">
-										<el-col :span="8">
-											<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
-												<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
-												<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									
-										<el-col :span="8" v-show="addtitle">
-											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										
-										<el-col :span="8" v-show="!addtitle">
-											<el-form-item label="承检单位" prop="CJDWDesc" :disabled="noedit" label-width="110px">
-												<el-select clearable v-model="dataInfo.CJDWDesc" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										
-										<el-col :span="8">
-											<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
-												<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
-													<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn()"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-												<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
-													   <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addproduct"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
-												<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-								</el-collapse-item>
-								<!-- <el-collapse-item title="依据" name="3">
-									 字段列表 Begin
-									
-									字段列表 End 
-								</el-collapse-item> -->
-								<el-collapse-item title="检验检测要求" name="4" label-width="100px">
-										<el-row>
-										<el-col :span="6">
-											<el-form-item label="受检企业" prop="V_NAME" label-width="110px">
-												<el-input v-model="dataInfo.V_NAME" :disabled="true">
-													   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<!-- <el-col :span="6">
-											<el-form-item label="受检企业编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="dataInfo.VENDOR" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col> -->
-										<el-col :span="6">
-											<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
-												<el-input v-model.number="dataInfo.QUALITY" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="6">
-											<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
-												<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPeople(2)"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-form-item label="抽样方案/判定依据" prop="SOLUTION" label-width="110px">
-											<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
 										</el-form-item>
-									</el-row>
-								</el-collapse-item>
-								<!-- <el-collapse-item title="检验检测项目" name="5">
-									 字段列表 Begin
-									
-									字段列表 End
-								</el-collapse-item> -->
-								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName" @tab-click="handleClick">
-										<el-tab-pane label="依据" name="first">
-											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建</font>
-												</el-button>
-											</div>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
+											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8" >
+										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
+											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="changeCJDW">
+												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="8">
+										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
+											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
+												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
+												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
+											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
+											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
+												<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn('leader')"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
+									<el-row>
+									<el-col :span="8">
+										<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
+											<el-input v-model="dataInfo.V_NAME" :disabled="true">
+												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
+											<el-input v-model.number="dataInfo.QUALITY" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="6">
+										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
+											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
+												<el-button slot="append" icon="el-icon-search" @click="addperbtn('accept')" :disabled="noedit"></el-button>
+											</el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-form-item label="抽样方案/判定依据" prop="SOLUTION" label-width="140px">
+										<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
+									</el-form-item>
+								</el-row>
+							</el-collapse-item>
+							<div class="el-collapse-item pt10 pb20" aria-expanded="true" accordion>
+								<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tab-pane label="依据" name="first">
+										<div class="table-func table-funcb">
+											<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" v-show="noviews">
+												<i class="icon-search"></i>
+												<font>选择</font>
+											</el-button>
+										</div>
 
-											<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
-
-												<el-table-column prop="iconOperation" fixed width="50px">
-													<template slot-scope="scope">
-														<i class="el-icon-check" v-if="scope.row.isEditing">
-									      	</i>
-														<i class="el-icon-edit"  v-else="v-else">
-									      	</i>
-													</template>
-												</el-table-column>
-												<el-table-column label="序号" sortable width="80px" prop="NUMBER">
-													<template slot-scope="scope">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
-													</template>
-												</el-table-column>
-												<el-table-column label="检验标准编号" sortable width="120px" prop="S_NUM">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
-															   <el-button slot="append" icon="el-icon-search"></el-button>
-														</el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<!-- <el-table-column prop="S_NAME" label="检验标准内容" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-												<el-table-column prop="S_NAME" label="检验标准名称" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="S_ENGNAME" label="英文名称" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_ENGNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_ENGNAME}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="VERSION" label="版本" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-												<el-table-column label="附件" sortable width="120px">
-													<template slot-scope="scope">
-														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-															<el-button size="small" type="primary">点击上传</el-button>
-														</el-upload>
-													</template>
-												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="100">
-													<template slot-scope="scope">
-														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKBASISList)" type="text" size="small">
-															移除
-														</el-button>
-													</template>
-												</el-table-column>
-											</el-table>
-										</el-tab-pane>
-										<el-tab-pane label="检验检测项目" name="second">
-											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfieldProject" v-show="!viewtitle">
-													<i class="icon-add"></i>
-													<font>新建</font>
-												</el-button>
-											</div>
-											<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px">
-													<template slot-scope="scope">
-														<i class="el-icon-check" v-show="scope.row.isEditing">
-									      	</i>
-														<i class="el-icon-edit" v-show="!scope.row.isEditing">
-									      	</i>
-													</template>
-												</el-table-column>
-												<el-table-column label="序号" sortable width="120px" prop="NUMBER">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.NUMBER'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input><span v-show="!scope.row.isEditing">{{scope.row.NUMBER}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
-															   <el-button slot="append" icon="el-icon-search"></el-button>
-														</el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="200px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+											<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
+											</el-table-column>
+											<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
+														   <el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="S_NAME" label="检验标准名称" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="VERSION" label="版本" sortable width="120px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column> -->
+											<el-table-column label="附件" sortable width="120px">
+												<template slot-scope="scope" v-if="!views">
+													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
+														<el-button size="small" type="primary" v-if="!viewtitle">点击上传</el-button>
+													</el-upload>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作" width="100">
+												<template slot-scope="scope">
+													<el-button @click="deleteRow(scope.$index,scope.row,'secondList')" type="text" size="small" v-if="!viewtitle">
+														<i class="icon-trash red"></i>
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
+									</el-tab-pane>
+									<el-tab-pane label="检验检测项目" name="second">
+										<div class="table-func table-funcb">
+											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="noviews">
+												<i class="icon-search"></i>
+												<font>选择</font>
+											</el-button>
+										</div>
+										<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
+											<el-table-column label="序号" sortable width="120px" prop="NUMBER" type="index">
+											</el-table-column>
+											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
+														<el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="250px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
 														<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.REMARKS}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<el-table-column prop="VERSION" label="版本" sortable width="80px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column>
-												<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-														</el-form-item>
-													</template>
-												</el-table-column> -->
-												<el-table-column label="附件" sortable width="120px">
-													<template slot-scope="scope">
-														<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-															<el-button size="small" type="primary">点击上传</el-button>
-														</el-upload>
-													</template>
-												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="100">
-													<template slot-scope="scope">
-														<el-button @click="deleteRow(scope.$index, dataInfo.WORK_NOTICE_CHECKPROJECTList)" type="text" size="small">
-															移除
-														</el-button>
-													</template>
-												</el-table-column>
-											</el-table>
-										</el-tab-pane>
-									</el-tabs>
-								</div>
-								<el-collapse-item name="6">
-									<el-row >
-										<el-col :span="8">
-											<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-												<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="检验检测费用" prop="CHECTCOST" label-width="110px">
-												<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
-												<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO" label-width="110px">
-												<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>
-								<el-collapse-item title="其他" name="7" v-show="views">
-									<el-row >
-										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
-												<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
-												<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
-												<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
-												<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
-												<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-								</el-collapse-item>
-							</el-collapse>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="REMARKS" label="要求" sortable width="180px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+														<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="VERSION" label="版本" sortable width="120px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column> -->
+											<el-table-column label="附件" sortable width="120">
+												<template slot-scope="scope" v-if="!views">
+													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
+														<el-button size="small" type="primary" >点击上传</el-button>
+													</el-upload>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作" width="100">
+												<template slot-scope="scope">
+													<el-button @click="deleteRow(scope.$index,scope.row,' onthebasisList')" type="text" size="small" v-if="!viewtitle" :disabled="views">
+														<i class="icon-trash red"></i>
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
+									</el-tab-pane>
+								</el-tabs>
 							</div>
-						</el-form>
-					<div class="el-dialog__footer" v-show="noviews">
+							<el-collapse-item title="完成日期及费用" name="6">
+								<el-row >
+									<el-col :span="8">
+										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="检验检测费用" prop="CHECTCOST" label-width="110px">
+											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
+											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row :gutter="30">
+									<el-col :span="24">
+										<el-form-item label="备注" prop="MEMO" label-width="110px">
+											<el-input type="textarea" rows="5" v-model="dataInfo.MEMO" :disabled="noedit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+							<el-collapse-item title="其他" name="7" v-show="views">
+								<el-row >
+									<el-col :span="8">
+										<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+											<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+											<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
+											<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+								<el-row>
+									<el-col :span="8">
+										<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
+											<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
+										<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
+											<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-collapse-item>
+						</el-collapse>
+						</div>
+					</el-form>
+					<div class="content-footer" v-show="noviews">
 	                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
 						<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
-					<div class="el-dialog__footer" v-show="views">
-							<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成委托书</el-button>
+					<div class="content-footer" v-show="views">
+						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成委托书</el-button>
 					</div>	
 				</div>
 			</div>
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="gridData" @selection-change="SelChange">
-					<el-table-column type="selection" width="55" fixed>
+			<!-- 人员 -->
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose" title="用户信息">
+				<el-form :model="searchList">
+					<el-row :gutter="10">
+						<el-col :span="5">
+							<el-form-item label="用户名" prop="username" label-width="55px">
+								<el-input v-model="searchList.username">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="姓名" prop="nickname" label-width="45px">
+								<el-input v-model="searchList.nickname">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px" :disabled="views">搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+
+				<el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'gridDataList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+				v-loading="loading"  
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
+					<el-table-column type="selection" align="center" width="55" fixed>
 					</el-table-column>
-					<el-table-column label="ID" sortable width="50px" prop="id">
+					<el-table-column label="ID" sortable width="70px" prop="id">
 					</el-table-column>
 					<el-table-column label="姓名" sortable width="200px" prop="nickname">
 					</el-table-column>
 					<el-table-column label="机构" sortable width="200px" prop="deptName">
 					</el-table-column>
-					<el-table-column label="公司" sortable width="200px" prop="companyName">
+					<el-table-column label="公司" sortable prop="companyName">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="pull-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
-				<span slot="footer" class="dialog-footer" v-if="noviews">
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
-	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-	  			</span>
+
+				<div slot="footer">
+	    			<el-button type="primary" @click="dailogconfirm" :disabled="views">确 定</el-button>
+	    			<el-button @click="resetBasisInfo" :disabled="views">取 消</el-button>
+	  			</div>
 			</el-dialog>
-			<!-- <el-dialog :modal-append-to-body="false" title="承检部门" :visible.sync="dialogVisiblecompany" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
-				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisiblecompany = false">取 消</el-button>
-			       <el-button type="primary" @click="diaconfirmcom();" >确 定</el-button>
-			    </span>
-			</el-dialog> -->
-			<!-- 产品名称 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible1" width="80%" :before-close="handleClose">
-				<el-table  :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-									<el-table-column type="selection" fixed width="55" align="center">
-									</el-table-column>
-									<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
-									</el-table-column>
-									<el-table-column label="名称" sortable prop="PRO_NAME">
-									</el-table-column>
-									<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-									</el-table-column>
-									<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-									</el-table-column>
-									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-									</el-table-column>
-									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-									</el-table-column>
-								</el-table>
-								<el-pagination background class="pull-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-								</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible1 = false">取 消</el-button>
-			       <el-button type="primary" @click="addproname">确 定</el-button>
-			    </span>
-			</el-dialog>
-			<!-- 产品名称 End -->
-			<!-- 受检企业 Begin -->
-			<el-dialog :modal-append-to-body="false" title="受检企业" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-								<el-table-column type="selection" width="55" fixed align="center">
-								</el-table-column>
-								<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
-								</el-table-column>
-								<el-table-column label="单位名称" width="300" sortable prop="NAME">
-								</el-table-column>
-								<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
-								</el-table-column>
-							</el-table>
-							<el-pagination background class="pull-right pt10"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
-					        </el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible2 = false">取 消</el-button>
-			       <el-button type="primary" @click="addcomname">确 定</el-button>
-			    </span>
-			</el-dialog>
-			<!-- 产品名称 End -->
-			
+			<!-- 产品类别  -->
+			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
+			<!-- 产品名称  -->
+			<productmask ref="productchild" @appenddata="appenddata"></productmask>
+			<!--受检企业-->
+			<enterprisemask ref="enterprisechild" @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
@@ -512,27 +426,38 @@
 			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
 			<!--当前责任人-->
 			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+			<!-- 检测依据  -->
+			<teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask>
+			<!-- 检测项目  -->
+			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
-	import approvalmask from '../workflow/approving.vue'
-	import flowhistorymask from '../workflow/flowhistory.vue'
-	import flowmapmask from '../workflow/flowmap.vue'
-	import vewPoplemask from '../workflow/vewPople.vue'
+	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
+	import productmask from '../common/common_mask/productlistmask.vue'//产品
+	import enterprisemask from '../common/common_mask/enterprisemask.vue'//受检企业
+	import approvalmask from '../workflow/approving.vue'//审批页面
+	import flowhistorymask from '../workflow/flowhistory.vue'//流程历史
+	import flowmapmask from '../workflow/flowmap.vue'//流程地图
+	import vewPoplemask from '../workflow/vewPople.vue'//当前责任人
+	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检测依据
+	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
 	export default {
 		name: 'masks',
 		components: {
 			 approvalmask,
 			 flowhistorymask,
 			 flowmapmask,
-			 vewPoplemask
+			 vewPoplemask,
+			 categorymask,
+			 productmask,
+			 enterprisemask,
+			 teststandardmask,
+			 testprojectmask
 		},
-		//				props: {
-		//					page: Object ,
-		//				},
 		data() {
 			 var validateItemleader = (rule, value, callback) => {//项目负责人
                 if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
@@ -554,14 +479,28 @@
                 }else {
                     callback();
                 }
-            };
+			};
+			//金额验证
+            var price=(rule, value, callback) => {
+				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+				if(value != '' && value!=undefined){
+					if(exp.test(value)==false){ 
+	                    callback(new Error('请输入数字'));
+	              }else{
+	                    callback();
+	                }
+				}else {
+					callback();
+				}
+			};
 			return {
-				approvingData:{},//流程的数据
+				loading: false,
 				loadSign:true,//加载
+				approvingData:{},//流程的数据
 				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
-				gridData: [], //彈出框的數據
+				gridDataList: [], //彈出框的數據
 				fileList: [],
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 
 				getCheckboxData: {},
@@ -571,8 +510,12 @@
 				},
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
+				},
+				searchList: {
+					nickname: '',
+					username: '',
 				},
 				value: '',
 				selUser: [],
@@ -599,12 +542,11 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7'], //手风琴数量
 				labelPosition: 'right', //表格
 				dialogVisible: false, //对话框
-				dialogVisiblecompany: false, //对话框
-				editSearch: '',
 				dataInfo: { //添加数据库列表信息
 					N_CODE: '',
 					TYPE: '',
 					XD_DATE: '',
+					PRODUCT_TYPE:'',
 					ITEM_NAME: '',
 					ITEM_MODEL: '',
 					V_NAME: '',
@@ -621,35 +563,41 @@
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: []
 				},
-				dialogVisible1:false,
-				dialogVisible2:false,
 				rules: {
-					// TYPE: [{required: true,message: '必填',trigger: 'blur'}], //名称
-					// WP_NUM: [{
-					// 	required: true,
-					// 	message: '必填',
-					// 	trigger: 'blur'
-					// }], //计划编号
-					TYPE:[{required: true,trigger: 'change',message: '必填',}],
-					CJDW: [{required: true,trigger: 'change',message: '必填',}], //承检单位
-					P_LEADERDesc: [{required: true,validator: validateItemleader}], //项目负责人
-					ITEM_NAME: [{required: true,validator: validateproname}], //受检产品名称
-					ITEM_MODEL: [{required: true,trigger: 'blur',message: '必填'}], //受检产品型号
+					TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
+					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
+					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
+					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
+					ITEM_NAME: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品名称
+					ITEM_MODEL: [
+						{required: true,trigger: 'blur',message: '必填'},
+						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+					], //受检产品型号
 					V_NAME: [{required: true,validator: validateVname}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
-					CHECTCOST: [{required: true,trigger: 'blur',message: '必填',	}], //检验检测费用
+					CHECTCOST:[{required: false,trigger: 'change',validator:price}], //检验检测费用
 					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
-					SOLUTION: [{required: true,trigger: 'blur',message: '必填',	}],//抽样方案
+					SOLUTION: [
+						{required: true,trigger: 'blur',message: '必填',	},
+						{trigger: 'blur',validator: this.Validators.isSpecificKey},
+					],//抽样方案
+					MEMO: [
+						{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
+					],
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
-				productList:[],
-				customerList:[],
-				selectData:[],
+				selectData:[],//承检单位数据
 				dataid:2,//修改和查看带过的id
 				workNot:'workNot',//appname
+				catenum:'',//产品类别作为参数传值给依据
+				pronum:'',//产品作为参数传值给依据
+				basisnum:'',////依据选中数据们字符串作为参数传值给项目
+				PRODUCT_TYPE:'',//产品类别
+				username:'',
+				sendchilddata:[],//子表已有的值
 			};
 		},
 		methods: {
@@ -670,6 +618,7 @@
 					TYPE: '',
 					XD_DATE: '',
 					ITEM_NAME: '',
+					PRODUCT_TYPE:'',
 					ITEM_MODEL: '',
 					V_NAME: '',
 					VENDOR:'',
@@ -702,50 +651,39 @@
 					this.selectData = res.data;
 				});
 			},
+			changeCJDW(){
+				this.getCompany();
+				this.dataInfo.PRODUCT_TYPE = '';
+				this.dataInfo.P_NUM = '';
+				this.dataInfo.ITEM_NAME = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
+			addcategory(){//产品类别
+				if(this.dataInfo.CJDW == null || this.dataInfo.CJDW == '' || this.dataInfo.CJDW == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.dataInfo.CJDW);
+				}
+			},
 			addproduct(){//受检产品名称
-				this.$emit('request');
-				this.dialogVisible1 = true;
-			},
-			addproname(){//产品名称弹框确定选中数据
-				if(this.selUser.length == 0){
+				if(this.dataInfo.P_NUM == null || this.dataInfo.P_NUM == '' || this.dataInfo.P_NUM == undefined){
 					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
+						message: '请先选择产品类别',
 						type: 'warning'
 					});
 				}else{
-					this.dialogVisible1 = false;
-					this.dataInfo.ITEM_NAME = this.selUser[0].PRO_NAME;
-					this.$emit('request');
+					this.$refs.productchild.visible(this.dataInfo.P_NUM);
 				}
 			},
-			addCompany(){
-				this.$emit('request');
-				this.dialogVisible2 = true;
-			},                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-			addcomname(){  
-				if(this.selUser.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据11',
-						type: 'warning'
-					});
-				}else{
-					this.dialogVisible2 = false;
-					this.dataInfo.V_NAME = this.selUser[0].NAME;//名称
-					this.dataInfo.V_ADDRESS = this.selUser[0].CONTACT_ADDRESS;//地址
-					this.dataInfo.V_ZIPCODE = this.selUser[0].ZIPCODE;//邮编
-					// this.dataInfo.VENDOR = this.selUser[0].CODE;//受检企业编号
-					this.$emit('request');
-				}
+			//单位
+			addCompany(type){
+				this.$refs.enterprisechild.visible(type);
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
 				//				console.log(data);
@@ -756,21 +694,7 @@
 			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			// getCompany() {
-			// 	this.editSearch = 'dept';
-			// 	var page = this.page.currentPage;
-			// 	var limit = this.page.pageSize;
-			// 	var type = "2";
-			// 	var url = this.basic_url + '/api-user/depts/treeByType';
-			// 	this.$axios.get(url, {
-			// 		params: {
-			// 			type: type
-			// 		},
-			// 	}).then((res) => {
-			// 		this.resourceData = res.data;
-			// 		this.dialogVisiblecompany = true;
-			// 	});
-			// },
+			
 			toNum(str) {
 				return str.replace(/\,|\￥/g, "");
 			},
@@ -779,7 +703,6 @@
 				var money = document.getElementById("cost").value;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.CHECTCOST = num.join(".");
 			},
 
@@ -793,16 +716,55 @@
 				}
 			},
 			//删除行
-			deleteRow(index, rows) { //Table-操作列中的删除行
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='secondList'){
+					TableName = 'WORK_NOTICE_CHECKBASIS';
+				}else{
+					TableName = 'WORK_NOTICE_CHECKPROJECT';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/workNot/' + TableName +'/' + row.ID;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.dataInfo[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}else{
+					this.dataInfo[TableName+'List'].splice(index,1);
+				}
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
-				//				this.requestData();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
-				//				this.requestData();
 			},
 			//新建行
 			addfieldBasis() {
@@ -837,9 +799,6 @@
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.splice(index, 1);
 				}
 			},
-			importdia() {
-				this.dialogVisible = true;
-			},
 			//点击按钮显示弹窗
 			visible() {
 				this.reset();
@@ -867,6 +826,14 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					//依据对号控制
+					for(var i = 0; i<res.data.WORK_NOTICE_CHECKBASISList.length;i++){
+						res.data.WORK_NOTICE_CHECKBASISList[i].isEditing = false;
+					}
+					//项目要求对号控制
+					for(var j = 0; j<res.data.WORK_NOTICE_CHECKPROJECTList.length;j++){
+						res.data.WORK_NOTICE_CHECKPROJECTList[j].isEditing = false;
+					}
 					this.dataInfo = res.data; 
 					this.dataInfo.CJDW=this.dataInfo.CJDWDesc;
 					this.show = true;
@@ -888,7 +855,7 @@
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试1',
 						type: 'error'
 					});
 				});
@@ -900,7 +867,6 @@
 				this.views = false; //
 				this.edit = true;
 				this.noedit = false;
-
 			},
 			//这是查看
 			view(dataid) {
@@ -921,8 +887,21 @@
 							this.start=true;
 							this.approval=false;
 						}else{
-							this.start=false;
-							this.approval=true;
+						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
+								this.start=false;
+							}
+						});
 						}
 					});
 			},
@@ -970,17 +949,55 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
+			//接到产品类别的值
+			categorydata(value){
+				this.dataInfo.P_NUM = value[0];
+				this.dataInfo.PRODUCT_TYPE = value[1];
+				this.dataInfo.ITEM_NAME = '';
+				this.dataInfo.PRO_NUM = '';
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
+			//接到产品的值
+			appenddata(value){
+				this.dataInfo.PRO_NUM = value[0];
+				this.dataInfo.ITEM_NAME = value[1];
+				this.dataInfo.S_NUM = '';
+				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
+			appendnames(value){
+				this.dataInfo.V_NAME = value;//名称
+			},
+			
 			// 保存users/saveOrUpdate
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
 			        		this.$message({
-							message: '依据和检验检测项目是必填项，请填写！',
-							type: 'warning'
-						});
+								message: '依据和检验检测项目是必填项，请填写！',
+								type: 'warning'
+						    });
 						return false;
-			       }else{
+			      }else{
+			         var oDate1 = new Date(this.dataInfo.XD_DATE); //下达日期
+    				 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
+    				  if(oDate1.getTime() > oDate2.getTime()){ 
+        						this.$message({
+								message: '完成时间不能早于下达时间',
+								type: 'warning'
+							}); 
+						return;	
+    				  }
+			        if(typeof(this.dataInfo.CJDW) != 'undefind') {
+			        	 for(var j=0;j<this.selectData.length;j++){
+			        	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
+			        	 		this.dataInfo.CJDW=this.selectData[j].id
+			        	 	}
+			        	 }		
+			        }
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -1027,48 +1044,48 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
-			//获取负责人和接收人
-			getPeople(type) {
-				// type  1 這是負責人  2 這個事接收人
-				var params = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
+			searchinfo() {
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.addperbtn();
+			},
+			//项目负责人放大镜
+			addperbtn(type){
+				if(this.dataInfo.CJDW==""||this.dataInfo.CJDW=="undefined"){
+					this.$message({
+						message: '请先选择承检单位',
+							type: 'warning'
+						});
+				}else{
+					this.loading = true;
+					var params = {
+						page: this.page.currentPage,
+						limit: this.page.pageSize,
+
+						deptId: this.searchList.deptId,
+						nickname: this.searchList.nickname,
+						username: this.searchList.username,
+					}
+					var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
+					this.$axios.get(url, {
+						params: params
+					}).then((res) => {
+						this.page.totalCount = res.data.count;
+						this.gridDataList = res.data.data;
+						this.loading = false;
+					});
+					this.dialogVisible = true;	
+					this.type=type;
 				}
-				var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {
-					params: params
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					this.gridData = res.data.data;
-					this.dialogVisible = true;
-					this.type = type;
-				});
 			},
-			// diaconfirmcom() {
-			// 	this.getCheckedNodes();
-			// 	this.placetext = false;
-			// 	this.dialogVisiblecompany = false;
-			// 	//承检单位
-			// 	this.dataInfo.CJDW = this.getCheckboxData.id;
-			// 	this.dataInfo.CJDWDesc = this.getCheckboxData.fullname;
-			// 	//单位负责人
-			// 	this.dataInfo.P_LEADER = this.getCheckboxData.leader;
-			// 	// var dataid = this.getCheckboxData.leader;
-			// 	// var url = this.basic_url + '/api-user/users/' + dataid;
-			// 	// this.$axios.get(url, {}).then((res) => {
-			// 	// 	this.dataInfo.P_LEADERDesc = res.data.nickname;
-			// 	// }).catch((err) => {
-			// 	// 	this.$message({
-			// 	// 		message: '网络错误，请重试',
-			// 	// 		type: 'error'
-			// 	// 	});
-			// 	// });
-			// },
-			dailogconfirm(type) { //选择人员确定按钮
+			dailogconfirm() { //选择人员确定按钮
 				if(this.selUser.length == 0){
 					this.$message({
 						message: '请选择数据',
@@ -1080,8 +1097,9 @@
 						type: 'warning'
 					});
 				}else{
-					this.dialogVisible = false;
-					if(this.type == '1') {
+					// this.dialogVisible = false;
+					this.resetBasisInfo();//调用resetBasisInfo函数
+					if(this.type == 'leader') {
 						this.dataInfo.P_LEADER = this.selUser[0].id;
 						this.dataInfo.P_LEADERDesc = this.selUser[0].nickname;
 					} else {
@@ -1090,23 +1108,12 @@
 					}
 				}
 			},
-			//项目负责人放大镜
-			addperbtn(){
-				var params = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
-				this.$axios.get(url, {
-					params: params
-				}).then((res) => {
-					this.gridData = res.data.data;
-					// this.gridData = res.data.data;
-					// this.dialogVisible = true;
-					this.type = '1';
-				});
-				this.$emit('request');
-				this.dialogVisible = true;				
+			
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.gridDataList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			//生成委托书
 			build(){
@@ -1147,6 +1154,22 @@
 			     this.requestData()
 			   }
 			 },
+			 //检测依据列表
+			addbasis(value){
+				console.log(value);
+				this.dataInfo.S_NUM = value[0];
+				for(var i = 1;i<value.length;i++){
+					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);
+				}
+				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
+			 //检测项目列表
+			addproject(value){
+				for(var i = 0;i<value.length;i++){
+					value[i].P_DESC = value[i].P_NAME;
+					this.dataInfo.WORK_NOTICE_CHECKPROJECTList.push(value[i]);
+				}
+			},
 			 //启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;
@@ -1161,9 +1184,23 @@
 								message:res.data.resp_msg,
 								type: 'success'
 							});
-							this.requestData();
-							$(".approval").show();
-							$(".start").hide();
+							this.detailgetData();
+						var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
+						this.$axios.get(url, {}).then((res) => {
+								var resullt=res.data.datas;
+								var users='';
+								for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+							}
+								if(users.indexOf(this.username) != -1){
+									this.approval=true;
+									this.start=false;
+								}else{
+									this.approval=false;
+									this.start=false;
+								}
+						});
+							
 				    }
 				});
 			},
@@ -1171,7 +1208,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workNot;
-				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/workNot/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {
 							this.$message({
@@ -1179,7 +1216,7 @@
 								type: 'warning'
 							});
 		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/'+this.workNot+'/flow/isExecute/'+this.dataid;
+		    				var url = this.basic_url + '/api-apps/app/workNot/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
 										this.$message({
@@ -1187,9 +1224,19 @@
 											type: 'warning'
 										});
 								}else{
-									this.$refs.approvalChild.visible();
+									var url = this.basic_url + '/api-apps/app/workNot/flow/customFlowValidate/'+this.dataid;
+								this.$axios.get(url, {}).then((res) => {
+				    				if(res.data.resp_code == 1) {
+										this.$message({
+											message:res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+									 	this.$refs.approvalChild.visible();
+									}
+								})
 								}
-		    		});
+		    				});
 		    		}
 				});
 			},
@@ -1212,65 +1259,49 @@
 				this.approvingData.app=this.workNot;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			requestData(index) {//高级查询字段
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				};
-				
-				var url = this.basic_url + '/api-apps/app/product';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.productList = newarr;
-				}).catch((wrong) => {})
-				//受检企业
-				this.$axios.get(this.basic_url + '/api-apps/app/customer', {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}					
-					this.customerList = newarr;
-				}).catch((wrong) => {})
+			//检测依据放大镜
+			basisleadbtn(){
+				if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+					this.$message({
+						message: '请先选择产品名称',
+						type: 'warning'
+					});
+				}else{
+					this.sendchilddata.push(this.dataInfo.PRO_NUM);
+					this.sendchilddata.push(this.dataInfo.WORK_NOTICE_CHECKBASISList);
+					this.$refs.standardchild.basislead(this.sendchilddata);
+					this.sendchilddata = [];
+				}
 			},
+			//检测项目放大镜
+			basisleadbtn2(){
+				if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					this.$message({
+						message: '请先选择检测依据列表数据',
+						type: 'warning'
+					});
+				}else{
+					this.sendchilddata.push(this.dataInfo.S_NUM);
+					this.sendchilddata.push(this.dataInfo.WORK_NOTICE_CHECKPROJECTList);
+					this.$refs.projectchild.projectlead(this.sendchilddata);
+					this.sendchilddata = [];
+				}
+			},
+		    getuser(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                    this.username = res.data.username;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 		},
 		mounted() {
-			this.requestData();
 			this.getCompany();
+			this.getuser();
 		},
 	}
 </script>

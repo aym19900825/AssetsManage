@@ -2,7 +2,7 @@
 <div>
 		<div class="headerbg">
 			<vheader ></vheader>
-			<navs_header ref='navsheader'></navs_header>	
+			<navs_tabs ref='navsTabs'></navs_tabs>	
 		</div>
         <div class="contentbg">
 	    	<div class="wrapper-content">
@@ -11,9 +11,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button type="button" class="btn btn-green" @click="audit">
+								<!-- <button type="button" class="btn btn-green" @click="audit">
                                 	<i class="icon-add"></i>审核
-                      			</button>
+                      			</button> -->
 								<button type="button" class="btn btn-primarys button-margin" >
 						    		<i class="icon-search"></i>高级查询
 								</button>
@@ -63,25 +63,31 @@
 					<!-- 高级查询划出 End-->
 
 					<el-row :gutter="10">
-						<el-col :span="24" class="leftcont v-resize">
+						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
 							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">
+								<!--<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">-->
+								</el-table-column>
+								<el-table-column label="单据号" sortable prop="bizNum" v-if="this.checkedName.indexOf('单据号')!=-1">
+									<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
+										</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="App" sortable width="140px" prop="app" v-if="this.checkedName.indexOf('App')!=-1">
 								</el-table-column>
-								<el-table-column label="当前环节" sortable width="140px" prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								<el-table-column label="当前环节" sortable prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
 								</el-table-column>
-								<el-table-column label="应用" sortable width="140px" prop="appDesc" v-if="this.checkedName.indexOf('App')!=-1">
+								<el-table-column label="应用" sortable prop="appDesc" v-if="this.checkedName.indexOf('应用')!=-1">
 								</el-table-column>
-								<el-table-column label="单据号" sortable width="140px" prop="bizNum" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								<el-table-column label="任务状态" sortable width="100px" align="center" prop="state" v-if="this.checkedName.indexOf('任务状态')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" sortable width="140px" prop="createTime" v-if="this.checkedName.indexOf('当前环节')!=-1">
+								<el-table-column label="创建时间" sortable width="160px" prop="createTime" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="pull-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 							<!-- 表格 -->
 						</el-col>
@@ -96,13 +102,13 @@
 import Config from '../config.js'
 //import maskrouter from '../maskrouter.js'
 import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
+import navs_tabs from './common/nav_tabs.vue'
 
 export default {
 	name: 'task',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 		},
 
     data() {
@@ -113,17 +119,19 @@ export default {
       	todoList:[],
       	commentArr: {},
       	checkedName: [
-					'数据id',
+//					'数据id',
 					'App',
 					'当前环节',
-					'创建时间',
 					'应用',
 					'单据号',
+					'任务状态',
+					'创建时间',
 					],
-		tableHeader: [{
-			label: '数据id',
-			prop: 'bizid'
-		},
+		tableHeader: [
+//		{
+//			label: '数据id',
+//			prop: 'bizid'
+//		},
 		{
 			label: 'App',
 			prop: 'app'
@@ -141,6 +149,10 @@ export default {
 			prop: 'bizNum'
 		},
 		{
+			label: '任务状态',
+			prop: 'state'
+		},
+		{
 			label: '创建时间',
 			prop: 'createTime'
 		}],
@@ -149,9 +161,9 @@ export default {
 				},
 		page: {
 				currentPage: 1,
-				pageSize: 10,
+				pageSize: 20,
 				totalCount: 0
-				},			
+				},
       }
     },
   
@@ -161,26 +173,11 @@ export default {
 			    return 'text-align:center'
 			},
 		//审核	
-		audit(){
-			if(this.selUser.length == 0) {
-					this.$message({
-						message: '请您选择要审核的数据',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selUser.length > 1) {
-					this.$message({
-						message: '不可同时审核多条数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					console.log(this.selUser[0]);
-					console.log(this.selUser[0].bizMenuUrl);
-					this.$router.push({path:this.selUser[0].bizMenuUrl ,query: { bizId: this.selUser[0].bizId,}});
-					this.$store.dispatch('setMenuIdAct',this.selUser[0].bizFirstMenuId);
-					console.log(this.$store.state.menuid);
-			    }
+		audit(item){
+			console.log(item);
+			this.$router.push({path:item.bizMenuUrl ,query: { bizId: item.bizId,}});
+			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
+
 		},
 		//点击的数据
 		SelChange(val) {
@@ -196,31 +193,51 @@ export default {
 		},
 		//滚动加载更多
 		loadMore() {
-			if(this.loadSign) {
-				this.loadSign = false
-				this.page.currentPage++
+			//console.log(this.$refs.table.$el.offsetTop)
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
 					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						return
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
 					}
+//						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height:400px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1
+						return false;
+					}
+				}
+				this.loadSign = false;
 				setTimeout(() => {
-					this.loadSign = true
+					this.loadSign = true;
 				}, 1000)
 				this.requestData();
 			}
 		},
+
 		requestData() {
-//				var data = {
-//					page: this.page.currentPage,
-//					limit: this.page.pageSize,
-//					PRO_NUM: this.searchList.PRO_NUM,
-//					PRO_NAME: this.searchList.PRO_NAME,
-//					VERSION: this.searchList.VERSION,
-//					DEPTID: this.searchList.DEPTID,
-//					// STATUS: this.searchList.STATUS,
-//				}
+			this.loading = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+
+					PRO_NUM: this.searchList.PRO_NUM,
+					PRO_NAME: this.searchList.PRO_NAME,
+					VERSION: this.searchList.VERSION,
+					DEPTID: this.searchList.DEPTID,
+					// STATUS: this.searchList.STATUS,
+				}
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
+				this.$axios.get(url, {params: data}).then((res) => {
+					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
@@ -229,22 +246,23 @@ export default {
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.todoList = newarr;
+//					this.commentArr[this.page.currentPage] = res.data.data
+//					let newarr = []
+//					for(var i = 1; i <= totalPage; i++) {
+//						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+//							for(var j = 0; j < this.commentArr[i].length; j++) {
+//								newarr.push(this.commentArr[i][j])
+//							}
+//						}
+//					}
+					this.todoList = res.data.data;
+					this.loading = false;
 				}).catch((wrong) => {
 					
 					
 				})
-	},
-},
+			},
+		},
 	  mounted(){
 	  	this.requestData();
 	},

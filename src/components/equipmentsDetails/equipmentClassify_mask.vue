@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="设备分类" name="1">
 									<el-row>
@@ -35,8 +35,10 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="父级分类" prop="PARENT">
-												<el-input v-model="CATEGORY.PARENT" :disabled="noedit"></el-input>
+											<el-form-item label="父级分类" prop="PARENTDesc">
+												<el-input v-model="CATEGORY.PARENTDesc" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="addparclass"  :disabled="noedit"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -72,7 +74,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button> -->
@@ -82,6 +84,15 @@
 					</el-form>
 				</div>
 			</div>
+			<!-- 弹出 -->
+			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				</el-tree>
+				<span slot="footer">
+			       <el-button type="primary" @click="queding" >确 定</el-button>
+			       <el-button @click="resetBasisInfo">取 消</el-button>
+			    </span>
+			</el-dialog>
 		</div>
 	</div>
 </template>
@@ -111,28 +122,28 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		 //             }else{
+		 //                 callback();
+		 //             }
+		 //         }else{
+		 //             callback();
+		 //         }
+			// };
+			// var validateType = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('请填写产品类别名称'));
+			// 	} else {
+			// 		if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		 //                 callback(new Error("请规范填写名称"));
+		 //            }else{
+		 //                callback();
+		 //            }
+			// 	}
+			// };
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -149,15 +160,24 @@
 				selectData: [],
 				rules: {
 					CLASSIFY_NUM: [{
-						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						required: false, trigger: 'change', validator: this.Validators.isWorknumber
 					}],
-					CLASSIFY_DESCRIPTION: [{required: true,trigger: 'blur',message: '请填写分类描述'}],
-                    PARENT: [{required: true,trigger: 'blur',message: '请填写父级分类'}],
+					CLASSIFY_DESCRIPTION: [
+						{required: true,trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+                    PARENT: [
+						{required: true,trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+				},
+				resourceProps: {
+					children: "children",
+					label: "CLASSIFY_DESCRIPTION"
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				category:{},//从父组件接过来的值
 				addtitle:true,
 				modifytitle:false,
@@ -188,11 +208,77 @@
 			rand(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
 			},
+			handleNodeClick(data) {
+			},
+			//父级分类
+			addparclass(){
+				this.dialogVisible = true;
+				let that = this;
+				var url = this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data.datas;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			queding() {
+				this.getCheckedNodes();
+				if(this.checkedNodes == ''){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				}else{					
+					this.placetext = false;
+					// this.dialogVisible = false;	
+					this.CATEGORY.PARENT = this.checkedNodes[0].CLASSIFY_NUM;
+					this.CATEGORY.PARENTDesc = this.checkedNodes[0].CLASSIFY_DESCRIPTION;
+					this.resetBasisInfo();//调用resetBasisInfo函数
+				}				
+			},
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.resourceData = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+			},
+			handleNodeClick(data) { //获取勾选树菜单节点
+				//console.log(data);
+			},
+			handleClicks(data,checked, indeterminate) {
+				this.getCheckboxData = data;
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	}
+            	}
+			},
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
+			getCheckedNodes() {
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
+			},
 			//点击按钮显示弹窗
 			visible() {
 				//				this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
@@ -200,7 +286,7 @@
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试111',
 						type: 'error'
 					});
 				});
@@ -237,11 +323,11 @@
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 					//深拷贝数据
-					let _obj = JSON.stringify(this.CATEGORY);
-        			this.category = JSON.parse(_obj);
+					// let _obj = JSON.stringify(this.CATEGORY);
+        			// this.category = JSON.parse(_obj);
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试222',
 						type: 'error'
 					});
 				});
@@ -249,7 +335,6 @@
 			},
 			//这是查看
 			view() {
-				console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -302,7 +387,7 @@
 							}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试',
+									message: '网络错误，请重试333',
 									type: 'error'
 								});
 							});
@@ -323,7 +408,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -334,7 +418,7 @@
 					}
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试',
+						message: '网络错误，请重试444',
 						type: 'error'
 					});
 				});
@@ -371,9 +455,10 @@
 			},
 			// 保存users/saveOrUpdate
 			save(CATEGORY) {
-				console.log(233333);
-				console.log(this.CATEGORY);
 				this.$refs[CATEGORY].validate((valid) => {
+					if(this.CATEGORY.PARENT == ''||this.CATEGORY.PARENT == undefined){
+						this.CATEGORY.PARENT = '0';
+					}
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/assetClass/saveOrUpdate';
@@ -385,7 +470,7 @@
 									type: 'success'
 								});
 								//重新加载数据
-								this.$emit('request');
+								// this.$emit('request');
 								this.$emit('reset');
 								this.visible();
 							}else{
@@ -407,7 +492,7 @@
 							}
 						}).catch((err) => {
 							this.$message({
-								message: '网络错误，请重试',
+								message: '网络错误，请重试555',
 								type: 'error'
 							});
 						});
@@ -449,13 +534,13 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 		},
-		mounted() {
-			
-		},
-		
+
 	}
 </script>
 

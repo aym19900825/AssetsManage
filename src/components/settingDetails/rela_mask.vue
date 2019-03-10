@@ -16,7 +16,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 								<el-collapse v-model="activeNames">
 									<el-collapse-item title="配置关系" name="2">
 										<!-- 字段列表 Begin-->
@@ -79,7 +79,7 @@
 								</el-collapse>
 							<!-- </div> -->
 						</div>	
-						<div class="el-dialog__footer">
+						<div class="content-footer">
 							<el-button type="primary" @click='submitForm()'>提交</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -88,7 +88,7 @@
 			</div>
 			<!-- 弹出 -->
 			<el-dialog :modal-append-to-body="false" title="添加数据库表" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
-				<div class="accordion" id="information">
+				<div class="content-accordion" id="information">
 					<div class="mask_tab-block">
 						<div class="mask_tab-head clearfix">
 							<div class="accordion_title">
@@ -129,7 +129,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		data() {
@@ -137,8 +136,6 @@
 				basic_url: Config.dev_url,
 				selUser:[],
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				col_but1: true,
 				col_but2: true,
 				show: false,
@@ -392,7 +389,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		}
 	}

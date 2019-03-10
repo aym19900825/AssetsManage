@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content"><!-- status-icon验证后小对号 -->
 					<el-form inline-message ref="CUSTOMER" :model="CUSTOMER" :rules="rules" class="demo-adduserForm" :label-position="labelPosition">
-						<div class="accordion" id="information">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10" style='display:none;'>
@@ -48,7 +48,6 @@
 											<el-form-item label="类型" prop="TYPE" label-width="100px">
 												<el-select v-model="CUSTOMER.TYPE" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(data,index) in SeleCUST_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
-													</el-option>
 												</el-select>
 											</el-form-item>
 											<!--<el-form-item label="类型" prop="TYPE">
@@ -101,18 +100,27 @@
 									</el-row>
 								<!-- </el-form> -->
 								</el-collapse-item>
+								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-										<el-tab-pane label="资质信息" name="first">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield">
+										<el-tab-pane name="first">
+											<span slot="label"><i class="red">*</i> 资质信息</span>
+											<div class="table-func table-funcb" >
+												<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;">
+													<el-button type="primary" size="mini" round class="a-upload">
+														<i class="el-icon-upload2"></i>
+														<font>上传</font>
+														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+													</el-button>
+												</form>
 											</div>
 									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
-										    <el-table-column prop="iconOperation" fixed width="50px">
+										    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 										      <template slot-scope="scope">
 										      	<i class="el-icon-check" v-show="scope.row.isEditing">
 										      	</i>
@@ -121,13 +129,9 @@
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column label="序号" sortable width="120px" prop="STEP">
-										      <template slot-scope="scope">
-										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
-											      </el-form-item>
-										      </template>
+										    <el-table-column label="序号" sortable width="100px" prop="STEP" type="index">
 										    </el-table-column>
+
 										    <el-table-column label="证书编号" sortable width="120px" prop="CERTIFICATE_NUM">
 										      <template slot-scope="scope">
 										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.CERTIFICATE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -146,7 +150,7 @@
 
 										    <el-table-column prop="ACTIVE_DATE" label="资质有效期" sortable width="160">
 										      <template slot-scope="scope">
-										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+										      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" :rules="{required: true, message: '不能为空', trigger: 'change'}">
 											      	<el-form-item :prop="'CUSTOMER_QUALIFICATIONList.'+scope.$index + '.ACTIVE_DATE'" >
 											         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ACTIVE_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd"></el-date-picker>
 											        <span v-show="!scope.row.isEditing" >{{scope.row.ACTIVE_DATE}}</span>
@@ -159,30 +163,21 @@
 										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
 										      </template>
 										    </el-table-column> -->
+											<el-table-column prop="FILESIZE" label="附件大小" sortable width="120px" v-if="!viewtitle">
+												<template slot-scope="scope">
+													<span v-if="!!scope.row.FILESIZE">{{scope.row.FILESIZE+'M'}}</span>
+												</template>
+										    </el-table-column>
+
 										    <el-table-column prop="MEMO" label="备注" sortable width="120px">
 										      <template slot-scope="scope">
 										        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.MEMO}}</span>
 										      </template>
 										    </el-table-column>
 
-										    <el-table-column prop="REASION" label="附件" sortable width="120px">
+										    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 										      <template slot-scope="scope">
-										        <el-upload	class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/"
-													:on-preview="handlePreview"
-													:on-remove="handleRemove"
-													:before-remove="beforeRemove"
-													multiple
-													:limit="3"
-													:on-exceed="handleExceed"
-													:file-list="fileList">
-													<el-button size="small" type="primary">点击上传</el-button>
-												</el-upload>
-										      </template>
-										    </el-table-column>
-
-										    <el-table-column fixed="right" label="操作" width="120">
-										      <template slot-scope="scope">
-										        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_QUALIFICATIONList)" type="text" size="small">
+										        <el-button @click = "deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small">
 										          <i class="icon-trash red"></i>
 										        </el-button>
 										      </template>
@@ -190,16 +185,17 @@
 										  </el-table>
 									  <!-- </el-form> -->
 										</el-tab-pane>
-										<el-tab-pane label="客户联系人" name="second">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addrela">
+										<el-tab-pane name="second">
+											<span slot="label"><i class="red">*</i> 客户联系人</span>
+											<div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addrela" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 												<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_PERSONList', order: 'descending'}">
-												    <el-table-column prop="iconOperation" fixed width="50px">
+												    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												      <template slot-scope="scope">
 												      	<i class="el-icon-check" v-show="scope.row.isEditing">
 												      	</i>
@@ -208,14 +204,14 @@
 												      </template>
 												    </el-table-column>
 
-												    <el-table-column label="序号" sortable width="120px" prop="STEP">
+												    <!-- <el-table-column label="序号" sortable width="120px" prop="STEP">
 												      <template slot-scope="scope">
 												      	<el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.STEP'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" :disabled="noedit"></el-input>
 													      	<span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
 													      </el-form-item>
 												      </template>
-												    </el-table-column>
+												    </el-table-column> -->
 
 												    <el-table-column label="联系人" sortable width="150px" prop="PERSON">
 												      <template slot-scope="scope">
@@ -245,9 +241,10 @@
 													    </el-form-item>
 												      </template>
 												    </el-table-column>
-												    <el-table-column fixed="right" label="操作" width="120">
+
+												    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 												      <template slot-scope="scope">
-												        <el-button @click = "deleteRow(scope.$index, CUSTOMER.CUSTOMER_PERSONList)" type="text" size="small">
+												        <el-button @click = "deleteRow(scope.$index,scope.row,'mainList')" type="text" size="small">
 												         <i class="icon-trash red"></i>
 												        </el-button>
 												      </template>
@@ -261,8 +258,18 @@
 									<!-- <el-form label-width="100px"> -->
 										<el-row :gutter="30">
 											<el-col :span="8">
-												<el-form-item label="录入人" prop="ENTERBY">
-													<el-input v-model="CUSTOMER.ENTERBY" placeholder="当前录入人" :disabled="edit"></el-input>
+												<el-form-item label="录入人" prop="ENTERBYDesc">
+													<el-input v-model="CUSTOMER.ENTERBYDesc" placeholder="当前录入人" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<!-- <el-col :span="8">
+												<el-form-item label="录入人机构" prop="DEPTID">
+													<el-input v-model="CUSTOMER.DEPTID" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col> -->
+											<el-col :span="8" v-if="dept">
+												<el-form-item label="机构" prop="DEPTIDDesc">
+													<el-input v-model="CUSTOMER.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -270,9 +277,11 @@
 													<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row :gutter="30">
 											<el-col :span="8">
-												<el-form-item label="修改人" prop="CHANGEBY">
-													<el-input v-model="CUSTOMER.CHANGEBY" placeholder="记录当前修改人" :disabled="edit"></el-input>
+												<el-form-item label="修改人" prop="CHANGEBYDesc">
+													<el-input v-model="CUSTOMER.CHANGEBYDesc" placeholder="记录当前修改人" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -285,7 +294,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('CUSTOMER')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -300,7 +309,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'customer_masks',
 		data() {
@@ -370,6 +379,7 @@
           //       }
           //   };
 			return {
+				file_url: Config.file_url,
 				basic_url: Config.dev_url,
 				personinfo:false,
 				loadSign:true,//加载
@@ -397,6 +407,7 @@
 				up: false,
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
+				viewtitle:false,//查看弹出框titile
 				activeName: 'first', //tabs
 				activeNames: ['1','2','3'],//手风琴数量
 				labelPosition: 'right', //表单文本左对齐
@@ -410,18 +421,18 @@
 				rules: {
 					CODE:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isWorknumber, trigger: 'blur'}
+						{validator: this.Validators.isWorknumber, trigger: 'blur'}
 					],
 					NAME:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isNickname, trigger: 'blur'}
+						{validator: this.Validators.isNickname, trigger: 'blur'}
 					],
 					CONTACT_ADDRESS:[
 						{required: true,message: '必填',trigger: 'blur'},
-						{validator: Validators.isSpecificKey, trigger: 'blur'}
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
-					MEMO:[{required: false,trigger: 'blur',validator: Validators.isSpecificKey}],
-					ZIPCODE:[{required: false,trigger: 'blur',validator: Validators.isZipcode}],
+					MEMO:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
+					ZIPCODE:[{required: false,trigger: 'blur',validator: this.Validators.isZipcode}],
 					// PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
 					// PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
 					// EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
@@ -430,14 +441,11 @@
 				resourceData: [], //数组，我这里是通过接口获取数据
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				falg:true,
 				index:0,
-				addtitle:true,
-				modifytitle:false,
-				viewtitle:false,
 				dept:false,
 				noedit:false,//表单内容
 				views:false,//录入修改人信息
@@ -446,6 +454,7 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				docParam:{}
 			};
 		},
 		methods: {
@@ -473,23 +482,25 @@
 		    },
 			//新建行
 			addfield(){
-				this.index = this.index + 1;
 				var obj = {
-                    STEP:this.index,
+                    STEP:'',
                     CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
 					ACTIVE_DATE:'',
 					STATUS:'',
 					MEMO:'',
+					FILEID: '',
+					FILENAME: '',
+					FILEPATH: '',
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
 			},
 			//新建行
 			addrela(){
-				this.index = this.index + 1;
+				// this.index = this.index + 1;
 				var obj = {
-					STEP:this.index,
+					// STEP:this.index,
 					ID:'',
                     CODE:'',
                     PERSON:'',
@@ -502,13 +513,55 @@
                     ENTERDATE:'',
                     CHANGEBY:'',
                     CHANGEDATE:'',
+                    DEPTID:'',
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_PERSONList.push(obj);
 			},
 			//删除行
-			deleteRow(index, rows) {//Table-操作列中的删除行
-				rows.splice(index, 1);
+			deleteRow(index, row, listName){
+				console.log(row);
+				var TableName = '';
+				console.log(listName);
+				if(listName =='tableList'){
+					TableName = 'CUSTOMER_QUALIFICATION';
+				}else{
+					TableName = 'CUSTOMER_PERSON';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/customer/' + TableName +'/' + row.ID;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
+							if(res.data.resp_code == 0){
+								this.CUSTOMER[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}else{
+					this.CUSTOMER[TableName+'List'].splice(index,1);
+				}
 			},
 		
 			//生成随机数函数
@@ -534,11 +587,33 @@
 					ENTERDATE:'',
 					CHANGEBY:'',
 					CHANGEDATE:'',
+					DEPTID:'',
 					MEMO:'',
 					CUSTOMER_QUALIFICATIONList:[],
 					CUSTOMER_PERSONList:[]
 				};
-            },
+			},
+			getUser(opt){
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+	    			this.CUSTOMER.ENTERBY = res.data.id;
+					this.CUSTOMER.DEPTID = res.data.deptId;
+					if(opt == 'detail'){
+						var date = new Date();
+						this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					}
+					this.docParam = {
+						username: res.data.username,
+						userid:  res.data.id,
+						deptid: res.data.deptId,
+						deptfullname: res.data.deptName,
+					};
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+			},	
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				this.reset();
@@ -555,14 +630,7 @@
 				this.statusshow2 = false;
 				var date = new Date();
 				this.CUSTOMER.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.ENTERBY = res.data.nickname;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.getUser('visible');
 				// this.show = true;
 			},
 			getsys_depttype() {//获取机构类型
@@ -586,20 +654,18 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.CUSTOMER.CHANGEBY = res.data.nickname;
-	    			var date = new Date();
-					this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				this.getUser('detail');
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
+					//资质
+					for(var i = 0;i<res.data.CUSTOMER_QUALIFICATIONList.length;i++){
+						res.data.CUSTOMER_QUALIFICATIONList[i].isEditing = false;
+					}
+					//客户联系人
+					for(var i = 0;i<res.data.CUSTOMER_PERSONList.length;i++){
+						res.data.CUSTOMER_PERSONList[i].isEditing = false;
+					}
 					this.CUSTOMER = res.data;
-					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {
@@ -648,6 +714,7 @@
 			//点击关闭
 			close() {
 				this.show = false;
+				this.$emit('request');
 			},
 			open(){
 				this.show = true;
@@ -680,26 +747,34 @@
 			save() {
 				this.$refs.CUSTOMER.validate((valid) => {
 		          if (valid) {
-		          	this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
-					var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
-					this.$axios.post(url, this.CUSTOMER).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.$emit('request');
-							// this.$refs["CUSTOMER"].resetFields();
-						}
-					}).catch((err) => {
+					if(this.CUSTOMER.CUSTOMER_QUALIFICATIONList.length==0 || this.CUSTOMER.CUSTOMER_PERSONList.length == 0){
 						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
+							message: '资质信息及客户联系人必填',
+							type: 'warning',
 						});
-					});
-					this.falg = true;
+						this.falg = false;
+					}else{
+						this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
+						var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
+						this.$axios.post(url, this.CUSTOMER).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('request');
+								// this.$refs["CUSTOMER"].resetFields();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+						this.falg = true;
+					}
 		          } else {
 		            this.show = true;
 						this.$message({
@@ -728,7 +803,76 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
+			},
+			upload(e){
+				var list = this.CUSTOMER.CUSTOMER_QUALIFICATIONList || [];
+				var editList = [];
+				for(let i=0; i<list.length; i++){
+					if(list[i].isEditing){
+						editList.push(i);
+					}
+				}
+				if(editList.length > 1){
+					this.$message({
+						message: '不可同时编辑多条数据',
+						type: 'error'
+					});
+					return;
+				}
+				if(editList.length == 0){
+					this.$message({
+						message: '请选择要上传文件的数据',
+						type: 'error'
+					});
+					return;
+				}
+				var formData = new FormData();
+				var loading;
+				loading = Loading.service({
+					fullscreen: true,
+					text: '拼命上传中...',
+					background: 'rgba(F,F, F, 0.8)'
+				});
+				// this.$emit('showLoading');
+				formData.append('files', document.getElementById('excelFile').files[0]);
+				var config = {
+					//添加请求头
+					headers: { "Content-Type": "multipart/form-data" },
+					//添加上传进度监听事件
+					onUploadProgress: e => {
+						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
+						this.progress = completeProgress;
+					}
+				};
+				var url = this.file_url + '/file/uploadfile?userid=' + this.docParam.userid 
+						+ '&username=' + this.docParam.username
+						+ '&deptid=' + this.docParam.deptid
+						+ '&deptfullname=' + this.docParam.deptfullname
+						+ '&recordid=1&appname=客户管理&appid=2';
+				this.$axios.post(url, formData, config
+				).then((res)=>{
+					loading.close();
+					if(res.data.code == 0){
+						this.$message({
+							message: res.data.message,
+							type: 'error'
+						});
+					}else{
+						this.$message({
+							message: '文件已成功上传至服务器',
+							type: 'success'
+						});
+						var index = editList[0];
+						this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index].FILEID = res.data.fileid;
+						this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index].FILESIZE = res.data.filesize;
+						this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index].FILEPATH = res.data.webUrl;
+						this.$set(this.CUSTOMER.CUSTOMER_QUALIFICATIONList,index,this.CUSTOMER.CUSTOMER_QUALIFICATIONList[index]); 
+					}
+				})
 			}
 		},
 		mounted() {
@@ -739,4 +883,15 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+	.a-upload input{
+		position: absolute;
+		font-size: 5px;
+		right: 0px;
+		top: 0;
+		opacity: 0;
+		filter: alpha(opacity=0);
+		cursor: pointer;
+		width: 70px;
+		cursor: pointer;
+	}
 </style>

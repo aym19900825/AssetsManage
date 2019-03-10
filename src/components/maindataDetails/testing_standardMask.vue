@@ -2,7 +2,7 @@
 	<div>
 		<div class="mask" v-if="show"></div>
 		<div class="mask_divbg" v-if="show">
-			<div class="mask_div">
+			<div class="mask_div" v-loading="loading">
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加检验/检测标准</div>
 					<div class="mask_title" v-show="modifytitle">修改检验/检测标准</div>
@@ -16,9 +16,9 @@
 						</span>
 					</div>
 				</div>
-				<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
-					<div class="mask_content">
-						<div class="accordion" id="information">
+				<div class="mask_content">
+					<el-form :model="dataInfo" inline-message :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row class="pb10" style="margin-right: 5px;">
@@ -34,8 +34,8 @@
 												<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-tooltip class="item" effect="dark" :content="dataInfo.S_NAME" placement="top">
+										<el-col :span="8"><!--移上去显示数据 :content="dataInfo.S_NAME"-->
+											<el-tooltip class="item" effect="dark" placement="top">
 												<el-form-item label="标准名称" prop="S_NAME">
 													<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
 												</el-form-item>
@@ -78,7 +78,7 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="3" v-show="views">
 									<el-row>
@@ -106,16 +106,15 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-
-						<div class="el-dialog__footer" v-show="noviews">
-								<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-								<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-								<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
-								<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
-								<el-button @click="close">取消</el-button>
+						<div class="content-footer" v-show="noviews">
+							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
+							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
+							<el-button @click="close">取消</el-button>
 						</div>
-					</div>
-				</el-form>
+					</el-form>
+				</div>
 			</div>
 
 			<el-dialog :modal-append-to-body="false" title="信息" :visible.sync="dialogFormVisible" :before-close="resetEditBox">
@@ -124,8 +123,8 @@
 						<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
 					</el-form-item>
 					<el-form-item class="text-center pt20">
-						<el-button @click="resetEditBox">取 消</el-button>
 						<el-button type="primary" @click="saveEditBox">确 定</el-button>
+						<el-button @click="resetEditBox">取 消</el-button>
 					</el-form-item>
 				</el-form>
 			</el-dialog>
@@ -135,8 +134,8 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import docTable from '../common/doc.vue'
+	import { Loading } from 'element-ui'
 	export default {
 		name: 'masks',
 		props: {
@@ -205,9 +204,9 @@
 				}
 			};
 			return {
+				loading: false,
 				editDataInfo: '',
 				editDataInfoProp: '',
-
 				docParm: {
 					'model': 'new',
 					'recordid': 1,
@@ -282,17 +281,17 @@
 					}
 				],
 				rules: {
-					S_NUM: [{required: false, trigger: 'blur',validator: Validators.isCodeNum}],//编号
-					S_NAME: [{required: true, trigger: 'blur',validator: Validators.isNickname}],//中文名称
-					S_ENGNAME: [{required: true, trigger: 'blur', validator: Validators.isEnglish}],//英文名称
+					S_NUM: [{required: false, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isNickname}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},
-						{validator: Validators.isEnglish,trigger: 'blur'}
+						{validator: this.Validators.isEnglish,trigger: 'blur'}
 					],
 //					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [
 						{required: true,trigger: 'blur',message: '必填',},
-						{validator: Validators.isSpecificKey, trigger: 'blur'},
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 				},
 				//tree
@@ -312,6 +311,12 @@
 			};
 		},
 		methods: {
+			showLoading(){
+				this.loading = true;
+			},
+			closeLoading(){
+				this.loading = false;
+			},
 			editBox(val){
 				this.dialogFormVisible = true;
 				this.editDataInfoProp = val;
@@ -397,7 +402,6 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-
 				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
@@ -420,7 +424,6 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-
 				this.getUser('edit');
 				var _this = this;
 				setTimeout(function(){
@@ -441,7 +444,16 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				this.show = true;				
+				this.show = true;	
+
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验检测项目_检验/检测标准';
+					_this.docParm.recordid = _this.dataInfo.ID;
+					_this.docParm.appid = 13;
+					_this.$refs.docTable.getData();
+				},100);			
 			},
 			//点击关闭按钮
 			close() {
@@ -475,7 +487,7 @@
 			},
 			//修订
 			modifyversion(){
-				this.$refs[dataInfo].validate((valid) => {
+				this.$refs.dataInfo.validate((valid) => {
 		          	if (valid) {
 		          		var DATAINFO = JSON.stringify(this.DATAINFO); //接过来的数据
  						var dataInfo = JSON.stringify(this.dataInfo); //获取新新的数据
@@ -543,7 +555,6 @@
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					if(!valid && opt == 'docUpload'){
-						console.log('message');
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
 							type: 'warning'
@@ -566,7 +577,6 @@
 									});
 									this.$emit('request');
 									this.$emit('reset');
-									//this.$refs['dataInfo'].resetFields();
 									this.visible();
 								}
 							}else{
@@ -619,7 +629,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		}
 	}

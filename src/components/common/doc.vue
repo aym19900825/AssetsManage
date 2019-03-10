@@ -1,26 +1,26 @@
 <template>
 <div>
     <div class="table-func">
-        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model!='new'">
-            <el-button type="warn" size="mini" round class="a-upload">
+        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model=='edit'">
+            <el-button type="primary" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>
-                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model!='new'"/>
+                <input id="excelFile" type="file" name="uploadFile" @change="upload" v-if="docParm.model=='edit'"/>
             </el-button>
         </form>
-        <el-button type="warn" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
+        <el-button type="primary" size="mini" round class="a-upload" @click="uploadTip" v-show="docParm.model=='new'">
             <i class="el-icon-upload2"></i>
             <font>上传</font>
         </el-button>
-        <el-button type="error" size="mini" @click="download" round  style="margin-left: 10px;">
+        <el-button type="primary" size="mini" @click="download" round  style="margin-left: 10px;" v-if="docParm.model=='edit'">
             <i class="el-icon-download"></i>
             <font>下载</font>
         </el-button>
-        <!-- <el-button type="error" size="mini" @click="testAuto" round  style="margin-left: 10px;">
+        <!-- <el-button type="primary" size="mini" @click="testAuto" round  style="margin-left: 10px;">
             <i class="el-icon-download"></i>
             <font>测试上传</font>
         </el-button> -->
-        <el-button type="error" size="mini" @click="delFile" round>
+        <el-button type="danger" size="mini" @click="delFile" round v-if="docParm.model=='edit'">
             <i class="el-icon-delete"></i>
             <font>删除行</font>
         </el-button>
@@ -43,8 +43,9 @@
             fixed="right"
             label="操作"
             width="100">
-            <template slot-scope="scope">
+            <template slot-scope="scope" v-if="docParm.model=='edit'">
                 <el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+                <el-button @click="readAuth(scope.row)" type="text" size="small">查看</el-button>
             </template>
         </el-table-column>
     </el-table>
@@ -76,6 +77,7 @@
 <script>
 import Config from '../../config.js'
 import vkeyword from '../common/keyword.vue'
+import { Loading } from 'element-ui'
 export default {
     name: 'nav_tabs',
     components: {
@@ -88,13 +90,14 @@ export default {
             },
             basic_url: Config.dev_url,
             file_url: Config.file_url,
+            po_url:Config.po_url,//pageoffice 服务路径
             doc: [],
             fileList: [],
             selFiles: [],
             //分页显示
             page: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             },
             tipSaveShow: false
@@ -102,12 +105,19 @@ export default {
     },
     props: ['docParm'],
     methods: {
+        autoLoad(){
+            setTimeout(function(){
+                $('#excelFile').click();
+            },500);
+        },
         reset(){
             this.tipSaveShow = false;
         },
+        getFilelen(){
+        	return this.doc.length;
+        },
         saveMain(){
             var _this = this;
-            console.log('saveMain');
             this.$emit('saveParent','docUpload');
             this.reset();
         },
@@ -117,19 +127,21 @@ export default {
             this.$refs.keyword.getData();
 			this.$refs.keyword.requestData();
         },
+        readAuth(row){
+            var url = this.po_url+"/show?filename=" +row.filename
+                    + '&fileid=' +  row.fileid
+                    + '&userid=' +  this.docParm.userid
+                    + '&username=' + this.docParm.username
+                    + '&deptid=' + this.docParm.deptid
+                    + '&deptfullname=' + this.docParm.deptfullname
+                    + '&recordid=' + this.docParm.recordid
+                    + '&appname=' + this.docParm.appname
+                    + '&appid=' + this.docParm.appid;
+         window.open(url); 
+        },
         uploadTip(){
             this.tipSaveShow = true;
         },
-        autoLoad(){
-            setTimeout(function(){
-                console.log($('#excelFile'));
-                $('#excelFile').click();
-            },500);
-        },
-        // testAuto(){
-        //     var _this = this;
-            
-        // },
         sizeChange(val) {
             this.page.pageSize = val;
             this.getData();
@@ -142,7 +154,21 @@ export default {
             this.selFiles = val;
         },
         upload(e){
+            if(this.docParm.appid == 17 && this.doc.length >= 1){
+                this.$message({
+                    message: '原始数据模板只能上传一个文档！',
+                    type: 'error'
+                });
+                return;
+            }
             var formData = new FormData();
+            var loading;
+            loading = Loading.service({
+                fullscreen: true,
+                text: '拼命上传中...',
+                background: 'rgba(F,F, F, 0.8)'
+            });
+            // this.$emit('showLoading');
             formData.append('files', document.getElementById('excelFile').files[0]);
             var config = {
                 //添加请求头
@@ -160,8 +186,11 @@ export default {
                     + '&recordid=' + this.docParm.recordid
                     + '&appname=' + this.docParm.appname
                     + '&appid=' + this.docParm.appid;
+            console.log(url);
             this.$axios.post(url, formData, config
             ).then((res)=>{
+                loading.close();
+                // this.$emit('closeLoading');
                 if(res.data.code == 0){
                     this.$message({
                         message: res.data.message,
@@ -178,6 +207,7 @@ export default {
         },
         getData(){
             if(this.docParm.model == 'new'){
+                res.data.fileList = [];
                 return false;
             }
             var pageNum = this.page.currentPage - 1;
@@ -212,7 +242,6 @@ export default {
                         + '&username=' + this.docParm.username
                         + '&deptid=' + this.docParm.deptid
                         + '&deptfullname=' + this.docParm.deptfullname;
-                
                 window.open(url); 
             }
         },
@@ -258,12 +287,14 @@ export default {
 <style scoped>  
 .a-upload input{
     position: absolute;
-    font-size: 100px;
-    right: 100px;
+    font-size: 5px;
+    right: 115px;
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-    cursor: pointer
+    cursor: pointer;
+    width: 70px;
+    cursor: pointer;
 }
 .upload-btn{
     color: #fff;
@@ -274,10 +305,11 @@ export default {
     height: 34px;
     line-height: 28px;
     border: none;
+    cursor: pointer;
 }
 .pageLeft{
     float: right;
-    margin-top: 30px;
-    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 </style>

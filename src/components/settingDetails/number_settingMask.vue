@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
-						<div class="accordion">
+						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="20">
@@ -36,34 +36,56 @@
 												<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 												</el-option>
 											</el-select> -->
+										<!-- </el-col> -->
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="是否初始化" prop="isinitbydate" label-width="110px">
+												<el-input v-model="numbsetForm.isinitbydate" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="初始化日期格式">
+												<el-input v-model="numbsetForm.initformat" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="前缀" prop="prefix">
+												<el-input v-model="numbsetForm.prefix" :disabled="noedit"></el-input>
+											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="110px">
-												<el-input v-model="numbsetForm.AUTOKEY" :disabled="noedit"></el-input>
+											<el-form-item label="初始化起始数" prop="initnum" label-width="110px">
+												<el-input v-model="numbsetForm.initnum" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="前缀">
-												<el-input v-model="numbsetForm.PREFIX" :disabled="noedit"></el-input>
+											<el-form-item label="增加量">
+												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="起始数" prop="S_NUM">
-												<el-input v-model="numbsetForm.S_NUM" :disabled="noedit"></el-input>
+											<el-form-item label="是否拼接日期" prop="issplicingdate">
+												<el-input v-model="numbsetForm.issplicingdate" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8" v-if="dept">
-												<el-form-item label="机构" label-width="110px">
-													<el-input v-model="numbsetForm.DEPARTMENT" :disabled="true"></el-input>
-												</el-form-item>
-											</el-col>
 									</el-row>
-									<el-row :gutter="30">
-										<el-col :span="24">
-											<el-form-item label="备注" label-width="110px">
-												<el-input type="textarea" v-model="numbsetForm.MEMO" :disabled="noedit"></el-input>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="拼接日期格式" prop="splicingformat" label-width="110px">
+												<el-input v-model="numbsetForm.splicingformat" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="序列号">
+												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="保留位数" prop="retain">
+												<el-input v-model="numbsetForm.retain" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -71,25 +93,25 @@
 								<el-collapse-item title="其它" name="2"  v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人"  label-width="110px">
-												<el-input v-model="numbsetForm.ENTERBY" :disabled="true"></el-input>
+											<el-form-item label="创建人"  label-width="110px">
+												<el-input v-model="numbsetForm.createuserDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" label-width="80px">
-												<el-input v-model="numbsetForm.ENTERDATE" :disabled="true"></el-input>
+											<el-form-item label="创建时间" label-width="80px">
+												<el-input v-model="numbsetForm.createtime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-										<el-form-item label="修改人" label-width="80px">
-												<el-input v-model="numbsetForm.CHANGEBY" :disabled="true"></el-input>
+										<el-form-item label="变更人" label-width="80px">
+												<el-input v-model="numbsetForm.updateuserDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="修改时间"  label-width="110px">
-												<el-input v-model="numbsetForm.CHANGEDATE" :disabled="true"></el-input>
+											<el-form-item label="变更时间"  label-width="110px">
+												<el-input v-model="numbsetForm.updatetime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -97,7 +119,7 @@
 							</el-collapse>
 						</div>
 
-						<div class="el-dialog__footer" v-show="noviews">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="submitForm('numbsetForm')">保存</el-button>
 							<el-button @click="cancelForm">取消</el-button>
 						</div>
@@ -111,7 +133,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	export default {
 		name: 'masks',
 		props: {
@@ -122,17 +143,15 @@
 				type: Object,
 				default: function(){
 					return {
-						ID:'',
-						STATUS:'',
-						AUTOKEY:'',
-						PREFIX:'',
-						S_NUM:'',
-						MEMO:'',
-						DEPARTMENT:'',
-						ENTERBY:'',
-						ENTERDATE:'',
-						CHANGEBY:'',
-						CHANGEDATE:'',
+						isinitbydate:'',
+						initformat:'',
+						prefix:'',
+						initnum:'',
+						increase:'',
+						issplicingdate:'',
+						splicingformat:'',
+						serialnum:'',
+						retain:'',
 					}
 				}
 			}
@@ -177,15 +196,15 @@
 				isok2: false,
 //				labelPosition: 'top',//标题在上方显示
 				rules:{
-          			AUTOKEY:[
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ validator: Validators.isWorknumber, trigger: 'blur'}
-					],
-					PREFIX:[{ required: false, trigger: 'blur', validator: Validators.isEnglish}],
-          			S_NUM:[
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ validator: Validators.isInteger, trigger: 'blur'}
-					],
+          			// AUTOKEY:[
+					// 	{ required: true, message: '必填', trigger: 'blur'},
+					// 	{ validator: this.Validators.isWorknumber, trigger: 'blur'}
+					// ],
+					// PREFIX:[{ required: false, trigger: 'blur', validator: this.Validators.isEnglish}],
+          			// S_NUM:[
+					// 	{ required: true, message: '必填', trigger: 'blur'},
+					// 	{ validator: this.Validators.isInteger, trigger: 'blur'}
+					// ],
           		
 	          	},
 	          	addtitle:true,
@@ -202,29 +221,31 @@
 			};
 		},
 		methods: {
-			
 			//form表单内容清空
 			resetNew(){
                 this.numbsetForm = {
-					STATUS:'活动',//添加时默认显示信息状态
-					AUTOKEY:'',
-					PREFIX:'',
-					S_NUM:'',
-					MEMO:'',
-					DEPARTMENT:'',
-					ENTERBY:'',
-					ENTERDATE:'',
-					CHANGEBY:'',
-					CHANGEDATE:''
+					isinitbydate:'',
+					initformat:'',
+					prefix:'',
+					initnum:'',
+					increase:'',
+					issplicingdate:'',
+					splicingformat:'',
+					serialnum:'',
+					retain:'',
+					createuser:'',
+					createuserDesc:'',
+					updateuser:'',
+					updateuserDesc:''
 				}
             },
             childMethods() {//添加内容时从父组件带过来的
-            	//console.log(this.numbsetForm);
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.DEPARTMENT=res.data.deptName;
-					this.numbsetForm.ENTERBY=res.data.nickname;
+					console.log(res.data);
+					this.numbsetForm.createuser=res.data.id;
+					this.numbsetForm.createuserDesc=res.data.nickname;
 					var date=new Date();
-					this.numbsetForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					this.numbsetForm.createtime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -246,9 +267,11 @@
             },
             detail() {//修改内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					this.numbsetForm.CHANGEBY=res.data.nickname;
+					console.log(res.data);
+					this.numbsetForm.updateuser=res.data.id;
+					this.numbsetForm.updateuserDesc=res.data.nickname;
 					var date=new Date();
-					this.numbsetForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.numbsetForm.updatetime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -321,8 +344,8 @@
 			submitForm(numbsetForm) {
 				this.$refs[numbsetForm].validate((valid) => {
 		          if (valid) {
-		          	this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
-					var url = this.basic_url + '/api-apps/app/autokey/saveOrUpdate';
+		          	// this.numbsetForm.STATUS=((this.numbsetForm.STATUS=="1"||this.numbsetForm.STATUS=='活动') ? '1' : '0');
+					var url = this.basic_url + '/api-user/serialnum/saveOrUpdate';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -356,7 +379,10 @@
 					.then(_ => {
 						done();
 					})
-					.catch(_ => {});
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			}
 		},
 	}

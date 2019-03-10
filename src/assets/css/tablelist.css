@@ -14,5 +14,5 @@ table {
 .table tr:nth-child(even) {background-color: #F5F7FA;}
 .table tr:hover {background-color: #F8F9FF;}
 
-
+.el-icon-loading {font-size: 22px;}
 

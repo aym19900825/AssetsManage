@@ -29,7 +29,7 @@ const validators = {
 	},
 
 	SpecificWord:function (str) {// 特殊字符
-		var specialKey = "[`~!#^&*()=|{}':;',\\[\\].<>?~！#……&*{}‘；']‘'"; 
+		var specialKey = "[`~!#^&*()=|{}':;'\\[\\]<>?~！#……&*{}‘；']‘'"; 
 			for (var i = 0; i < str.length; i++) {
 				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
 					return false;
@@ -64,6 +64,17 @@ const validators = {
 		return eng.test(str);
 	},
 
+	Numbers:function (str) {// 仅限数字
+		const numbe = /^[0-9]*$/;
+		return numbe.test(str);
+	},
+
+
+	CompanyCode:function (str) {// 统一社会信用代码 正则验证
+		const companycode = /[1-9A-GY]{1}[1239]{1}[1-5]{1}[0-9]{5}[0-9A-Z]{10}/;
+		return companycode.test(str);
+	},
+
 
 //---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
@@ -72,6 +83,18 @@ const validators = {
 		} else {
 			if(!validators.SpecificWord(value)) {
 				callback(new Error('不支持特殊符号'));
+			} else {
+				callback();
+			}
+		}
+	},
+
+	isCompanyCode:function (rule, value, callback) { //统一社会信用代码
+		if(!value) {
+			callback();
+		} else {
+			if(!validators.SpecificWord(value)) {
+				callback(new Error('不是正确的统一社会信用代码'));
 			} else {
 				callback();
 			}
@@ -87,7 +110,7 @@ const validators = {
 			} else {
 				var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
 				if( !targ.test(value)){
-					callback(new Error('只能由字母数字下划线组成'));
+					callback(new Error('只能由字母开头可含数字下划线'));
 				} else {
 					callback();
 				}
@@ -115,7 +138,11 @@ const validators = {
 	   if(value && (!validators.SpecificWord(value))) {
 			callback(new Error('不支持特殊符号'));
 		} else {
-			callback();
+			if(validators.Numbers(value)) {
+				callback(new Error('不只支持全数字'));
+			} else {
+				callback();
+			}
 		}
 	},
 
@@ -327,6 +354,15 @@ const validators = {
 		}
 	},
 
+	
+	isChoosedata:function (rule, value, callback) {//放大镜选择验证
+		// (value == '' || typeof(value) == undefined)
+        if (typeof(value) == undefined || value == '' || value == null) {
+            callback(new Error('请选择'));
+        }else {
+            callback();
+        }
+    }
 
 };
 

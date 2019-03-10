@@ -3,9 +3,9 @@
     	{{name}}
 
     	<el-table-column  label="创建人" width="120">
-                <template slot-scope="scope">
-                <user-info :userId="scope.row.id">  </user-info>
-                </template>
+            <template slot-scope="scope">
+                <user-info :userId="scope.row.id"></user-info>
+            </template>
 		</el-table-column>
 
     </div>

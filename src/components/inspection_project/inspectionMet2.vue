@@ -16,12 +16,12 @@
 			</div>
 		</div>
 		<el-form :model="inspectionMet2Form" ref="inspectionMet2Form">
-		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
 			
 		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" :disabled="true"></el-input><span v-else="v-else">{{scope.row.P_NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -29,16 +29,16 @@
 		  	<el-table-column label="方法编号" width="160" prop="M_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NUM" disabled></el-input><span v-else="v-else">{{scope.row.M_NUM}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NUM" :disabled="true" placeholder="自动生成"></el-input><span v-else="v-else">{{scope.row.M_NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
 
 		    <el-table-column label="方法中文名称" sortable prop="M_NAME">
-		      <template slot-scope="scope">
+		      <template slot-scope="scope" @click="addprobtn(scope.row)">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NAME" placeholder="请输入内容">
-		        		<el-button slot="append" icon="icon-search"></el-button>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NAME" :disabled="true" placeholder="请选择">
+		        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 		        	</el-input><span v-else="v-else">{{scope.row.M_NAME}}</span>
 				</el-form-item>
 		      </template>
@@ -47,32 +47,15 @@
 		    <el-table-column label="方法英文名称" width="160" sortable prop="M_ENAME">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_ENAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_ENAME" placeholder="请输入内容">
-		        		<el-button slot="append" icon="icon-search"></el-button>
-		        	</el-input><span v-else="v-else">{{scope.row.M_ENAME}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_ENAME" :disabled="true" placeholder="自动生成"></el-input><span v-else="v-else">{{scope.row.M_ENAME}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
 
 		    <el-table-column label="类别" sortable width="160" prop="M_TYPE">
-		      <template slot-scope="scope">
+		    	<template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<!-- <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_TYPE" placeholder="请输入内容">
-		        		<el-button slot="append" icon="icon-search"></el-button>
-		        	</el-input> -->
-		        	<el-select v-if="scope.row.isEditing" v-model="scope.row.M_TYPE" placeholder="请选择">
-						<el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.label"></el-option>
-					</el-select><span v-else="v-else">{{scope.row.M_TYPE}}</span>
-				</el-form-item>
-		      </template>
-		    </el-table-column>
-
-		    <el-table-column label="内容描述" sortable width="160" prop="DESCRIPTION">
-		      <template slot-scope="scope">
-		        <el-form-item :prop="'inspectionList.'+scope.$index + '.DESCRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入内容">
-		        		<el-button slot="append" icon="icon-search"></el-button>
-		        	</el-input><span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_TYPE" :disabled="true" placeholder="自动生成"></el-input><span v-else="v-else">{{scope.row.M_TYPE}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -112,16 +95,16 @@
 			        </el-button>
 			    </template>
 			 </el-table-column> -->
+				<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)">
+		        	<i class="icon-edit" title="修改"></i>
+				</el-button> -->
 			 <el-table-column prop="iconOperation" fixed="right" label="操作" width="80">
 		      <template slot-scope="scope">
 		        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 		        	<i class="icon-check" title="保存"></i>
 				</el-button>
-				<el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
-		        	<i class="icon-edit" title="修改"></i>
-				</el-button>
 
-		        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
+		        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
 		          <i class="icon-trash red"></i>
 		        </el-button>
 		      </template>
@@ -130,7 +113,7 @@
 		  </el-table>
 		</el-form>
 		<!-- 表格 Begin-->
-		<el-pagination background class="pull-right pt10 pb10"
+		<el-pagination background class="text-right pt10 pb10"
             @size-change="sizeChange"
             @current-change="currentChange"
             :current-page="page.currentPage"
@@ -141,6 +124,43 @@
         </el-pagination>
 		<!-- 表格 End-->
 	</div>
+	<!-- 检验/检测方法 Begin -->
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——检验/检测方法" height="300px" :visible.sync="dialogVisible3" width="80%">
+			<!--搜索框 Begin-->
+			<div class="pull-right child-search">
+				<el-input placeholder="请输入方法中文名称" v-model="search">
+				</el-input>
+			</div>
+			<!--搜索框 End-->
+			<!-- 第二层弹出的表格 Begin-->
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column>
+				<el-table-column label="方法编号" width="125" sortable prop="M_NUM">
+				</el-table-column>
+				<el-table-column label="方法中文名称" sortable prop="M_NAME">
+				</el-table-column>
+				<el-table-column label="方法英文名称" sortable prop="M_ENAME">
+				</el-table-column>
+				<el-table-column label="方法类别" sortable prop="M_TYPE">
+				</el-table-column>
+				<el-table-column label="方法类别" sortable prop="M_TYPE">
+				</el-table-column>
+				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				</el-table-column>
+				<el-table-column label="创建时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+				</el-table-column>
+			</el-table>
+			
+			<!-- 表格 End-->
+			<span slot="footer" class="dialog-footer">
+		       <el-button type="primary" @click="addproclass">确 定</el-button>
+		       <el-button @click="dialogVisible3 = false">取 消</el-button>
+		    </span>
+		</el-dialog>
+		<!-- 检验/检测方法 End -->
 </div>
 </template>
 <script>
@@ -150,6 +170,7 @@
 		components: {
 
 		},
+		props: ['parentIds'],
 		data() {
 			return {
 				basic_url: Config.dev_url,
@@ -157,6 +178,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+					departmentId: '',//当前用户机构号
+					categoryList:[],//获取产品数据
+					catedata:'',//获取产品类别一条数据放到table行中
+					dialogVisible3: false, //对话框
+					selData:[],
 				isEditing: '',
 				loadSign:true,//加载
 				commentArr:{},//下拉加载
@@ -192,9 +218,10 @@
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
+				parentId: 1
 			}
 		},
 		methods: {
@@ -227,21 +254,55 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData_inspectionMet2()
+			     this.viewfield_inspectionMet2(this.selParentId,this.parentId);
 			   }
 			 },
+			 // /api-apps/app/inspection_method?DEPTID=' + this.parentIds;
+			 addprobtn(row){//查找基础数据中的检验/检测项目
+				this.catedata = row;//弹出框中选中的数据赋值给到table行中
+				this.dialogVisible3 = true;
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				console.log(this.parentIds);
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet?DEPTID=' + this.parentIds, {
+					params: data
+				}).then((res) => {
+					// console.log(this.parentIds);
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.commentArr[this.page.currentPage] = res.data.data
+					let newarr = []
+					for(var i = 1; i <= totalPage; i++) {
+						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+							for(var j = 0; j < this.commentArr[i].length; j++) {
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.categoryList = newarr;
+				}).catch((wrong) => {})
+			},
 			sizeChange(val) {//页数
 		      this.page.pageSize = val;
-		      this.requestData_inspectionMet2();
+		      this.viewfield_inspectionMet2(this.selParentId,this.parentId);
 		    },
 		    currentChange(val) {//当前页
 		      this.page.currentPage = val;
-		      this.requestData_inspectionMet2();
+		      this.viewfield_inspectionMet2(this.selParentId,this.parentId);
 		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.requestData_inspectionMet2();
+				this.viewfield_inspectionMet2(this.selParentId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -264,9 +325,10 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionMet2/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -319,48 +381,74 @@
 					this.inspectionMet2Form.inspectionList = newarr;
 				}).catch((wrong) => {})
 			},
-			
+			//获取导入表格勾选信息
+			SelChange(val) {
+				this.selData = val;
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
+			handleClose(done) {//关闭选择产品类别弹出框
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
+			},
 			formatter(row, column) {
 				return row.enabled;
 			},
-			addfield_inspectionMet2(P_NUM) { //插入行到产品类型Table中
-				var isEditingflag=false;
-				for(var i=0;i<this.inspectionMet2Form.inspectionList.length; i++){
-					if (this.inspectionMet2Form.inspectionList[i].isEditing==false){
-						isEditingflag=false;
-					}else{
-                        isEditingflag=true;
-                        break;
-					}
-				}
-				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
-						this.currentUser=res.data.nickname;
-						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var obj = {
-							"M_NAME": '',
-							"M_ENAME": '',
-							"M_TYPE": '',
-							"DESCRIPTION": '',
-							"STATUS": '1',
-							"P_NUM": this.parentId,
-							"M_NUM": '',
-							"VERSION": 1,
-							"CHANGEBY": this.currentUser,
-							"CHANGEDATE": this.currentDate,
-							"isEditing": true,
-						};
-						this.inspectionMet2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
-					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
+			addfield_inspectionMet2(P_NUM) { //插入行到检验/检测方法Table中
+				if (this.parentId == 1) {
+					this.$message({
+						message:'请选择所属检验/检测项目',
+						type:'warning'
 					})
-	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+				} else {
+					var isEditingflag=false;
+					console.log(this.inspectionMet2Form.inspectionList);
+					for(var i=0;i<this.inspectionMet2Form.inspectionList.length; i++){
+						if (this.inspectionMet2Form.inspectionList[i].isEditing==false){
+							isEditingflag=false;
+						}else{
+	                        isEditingflag=true;
+	                        break;
+						}
+					}
+					
+					if (isEditingflag==false){
+	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+	                		var currentUser, currentDate
+							this.currentUser=res.data.nickname;
+							var date=new Date();
+							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							var obj = {
+								"P_NUM": this.parentId,
+								"M_NUM": '',
+								"M_NAME": '',
+								"M_ENAME": '',
+								"M_TYPE": '',
+								"STATUS": '',
+								"VERSION": '',
+								"DEPTID": '',
+								"ENTERBY": this.currentUser,
+								"ENTERDATE": this.currentDate,
+								"isEditing": true,
+							};
+							this.inspectionMet2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
+						}).catch((err)=>{
+							this.$message({
+								message:'网络错误，请重试',
+								type:'error'
+							})
+						})
+		            } else {
+		                this.$message.warning("请先保存当前编辑项");
+					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
@@ -375,11 +463,11 @@
 						"M_NAME": row.M_NAME,
 						"M_ENAME": row.M_ENAME,
 						"M_TYPE": row.M_TYPE,
-						"DESCRIPTION": row.DESCRIPTION,
 						"STATUS": row.STATUS,
 					    "VERSION": row.VERSION,
-						"CHANGEBY": row.CHANGEBY,
-					    "CHANGEDATE": row.CHANGEDATE,
+					    "DEPTID": row.DEPTID,
+						"ENTERBY": row.CHANGEBY,
+					    "ENTERDATE": row.CHANGEDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -388,7 +476,8 @@
 								type: 'success'
 							});
 							//重新加载数据
-							this.requestData_inspectionMet2();
+							// this.requestData_inspectionMet2();
+							this.viewfield_inspectionMet2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
 						this.$message({
@@ -414,7 +503,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.requestData_inspectionMet2();
+							this.viewfield_inspectionMet2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
 						this.$message({
@@ -426,12 +515,21 @@
 
             	});
 			},
-			
+			addproclass() { //小弹出框确认按钮事件
+				this.dialogVisible3 = false
+				this.catedata.M_NUM = this.selData[0].M_NUM;
+				this.catedata.M_NAME = this.selData[0].M_NAME;
+				this.catedata.M_ENAME = this.selData[0].M_ENAME;
+				this.catedata.M_TYPE = this.selData[0].M_TYPE;
+				this.catedata.DEPTID = this.selData[0].DEPTID;
+				this.catedata.VERSION = this.selData[0].VERSION;
+				this.$emit('request');
+			},
 		},
 		
-		mounted() {
-			this.requestData_inspectionMet2();
-		},
+		// mounted() {
+			// this.requestData_inspectionMet2();
+		// },
 		
 
 	}

@@ -213,7 +213,7 @@
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
-												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;">
+												<form method="post" id="file" v-loading="loading" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;position: relative;">
 													<el-button type="primary" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i>
 														<font>上传</font>
@@ -499,6 +499,7 @@
 	            callback();
 		     };
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
 				user: {
@@ -1165,13 +1166,8 @@
 					});
 					return;
 				}
+				this.loading = true;
 				var formData = new FormData();
-				var loading;
-				loading = Loading.service({
-					fullscreen: true,
-					text: '拼命上传中...',
-					background: 'rgba(F,F, F, 0.8)'
-				});
 				// this.$emit('showLoading');
 				formData.append('files', document.getElementById('excelFile').files[0]);
 				var config = {
@@ -1190,7 +1186,7 @@
 						+ '&recordid=1&appname=客户管理&appid=2';
 				this.$axios.post(url, formData, config
 				).then((res)=>{
-					loading.close();
+					this.loading = false;
 					if(res.data.code == 0){
 						this.$message({
 							message: res.data.message,
@@ -1228,7 +1224,7 @@
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 70px;
+		width: 40px;
 		cursor: pointer;
 	}
 </style>

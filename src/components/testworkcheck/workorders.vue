@@ -121,7 +121,7 @@
 					</div>
 				</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
+			<sendtasklist ref="task"  v-bind:page=page @refresh="refresh"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>

@@ -192,12 +192,15 @@
 			title="条码"
 			:visible.sync="codeDialog"
 			width="30%"
+			:before-close="resetCode"
 			center>
 			<div id="printdom">
-				<img  id="barcode" src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码" />
+				<img  id="barcode" :src="codeUrl" alt="条码" />
 			</div>
 			<span slot="footer">
-				<el-button type="primary" @click="printCode">打印条码</el-button>
+				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
+					<el-button type="primary">打印条码</el-button>
+				</router-link>
 			</span>
 		</el-dialog>
 	</div>
@@ -223,8 +226,8 @@
 		},
 		data() {
 			return {
-				codeDialog: true,
-				codeUrl: 'http://192.168.1.115:7902/stripcode/image/91325219.jpg',
+				codeDialog: false,
+				codeUrl: 'http://192.168.1.126:9200/stripcode/image/25157709.jpg',
 				code_url: Config.code_url,
 				reportData:{},//报表的数据
 				loading: false,
@@ -465,11 +468,11 @@
 					});
 					return;
 				} else {
-					var url = this.code_url + '/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
+					var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
 					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
 						if(res.data.resp_code == 0) {
 							this.codeDialog = true;
-							this.codeUrl = '';
+							this.codeUrl = this.code_url + res.data.datas;
 						}
 					}).catch((err) => {
 						this.$message({
@@ -479,19 +482,26 @@
 					});
 				}
 			},
+			resetCode(){
+				this.codeDialog = false;
+				this.selMenu = [];
+			},
 			printCode(){
-				var oldstr = document.body.innerHTML;
-				var newstr = '<img src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码"/>';
-				document.body.innerHTML = $("#printdom").html();
-				console.log('===========old=============');
-				console.log(oldstr);
-				console.log('===========new=============');
-				console.log(document.body.innerHTML);
-				window.print();
-				document.body.innerHTML = oldstr;
+				// var oldstr = document.body.innerHTML;
+				// var newstr = '<img src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码"/>';
+				// document.body.innerHTML = $("#printdom").html();
 				// window.print();
+				// document.body.innerHTML = oldstr;
 				// $("img#barcode").printArea();  
 				// this.$print(this.$refs.printdom);
+				let routeUrl = this.$router.resolve({
+					name: '/print',
+					query:{
+						imgUrl: this.codeUrl,
+					}
+				});
+				this.resetCode();
+				window.open(routeUrl.href, '_blank');
 			},
 			//添加样品管理
 			openAddMgr() {
@@ -843,17 +853,9 @@
 
 <style scope>
 .p15 {padding:10px 15px;}
-@media print {
-  #printdom {
-	  page-break-before: always;
-	  width: 50mm;
-	  height: 50mm;
-	  text-align: center;
-	  display: block;
-	}
-	#printdom img {
-		width: 35mm;
-		height: 35mm;
-	}	
+#printdom {
+	page-break-before: always;
+	text-align: center;
+	display: block;
 }
 </style>

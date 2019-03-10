@@ -440,13 +440,13 @@
 							</el-col>		
 						</el-row>
 						<el-row :gutter="10">
-							<el-col :span="6">
+							<!-- <el-col :span="6">
 								<el-form-item label="机构" prop="DEPTID">
 									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 									</el-select>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 							<el-col :span="6">
 								<el-form-item label="发布时间" prop="RELEASETIME">
 									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
@@ -1377,6 +1377,12 @@
 			},
 			//检测依据数据
 			requestBasis(){
+				if(!!!this.WORKPLAN.PROP_UNIT){
+					this.$message({
+						message: '请先选择提出单位',
+						type: 'warning'
+					});
+				}
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1384,13 +1390,13 @@
 					S_NAME: this.searchList.S_NAME,
 					S_ENGNAME:this.searchList.S_ENGNAME,
 					VERSION: this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
+					DEPTID: this.WORKPLAN.PROP_UNIT,
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 				};
 				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum+'&S_NUM_where_not_in='+this.basissnums;
 				this.$axios.get(url, {
-					
+					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	
 					//总的页数
@@ -1416,6 +1422,13 @@
 			},
 			//检测项目数据
 			requestProject(){
+				if(!!!this.WORKPLAN.PROP_UNIT){
+					this.$message({
+						message: '请先选择提出单位',
+						type: 'warning'
+					});
+					return;
+				}
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1426,13 +1439,13 @@
 					STARTETIME: this.searchList.STARTETIME,
 					STATUS: this.searchList.STATUS,
 					P_NUM: this.searchList.P_NUM,
-					DEPTID: this.searchList.DEPTID,
+					DEPTID: this.WORKPLAN.PROP_UNIT,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
 				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums, {
-				
+					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	
 					//总的页数
@@ -1865,11 +1878,6 @@
 						}
 						if(this.worlplanlist.length>0){
 							for(var i=0;i<this.worlplanlist.length;i++){
-								console.log(this.worlplanlist);
-								console.log(!this.worlplanlist[i].WORLPLANLINE_PROJECTList);
-								console.log(!this.worlplanlist[i].WORLPLANLINE_BASISList);
-								console.log(this.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0);
-								console.log(this.worlplanlist[i].WORLPLANLINE_BASISList.length == 0);
 								if(!this.worlplanlist[i].WORLPLANLINE_PROJECTList||!this.worlplanlist[i].WORLPLANLINE_BASISList||this.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0||this.worlplanlist[i].WORLPLANLINE_BASISList.length == 0){
 									this.$message({
 										message: '检测依据、检测项目与要求是必填项，请填写！',

@@ -235,6 +235,7 @@
 						message: '生成成功',
 						type: 'success'
 					});
+					this.$emit.refresh();
 				}
 			}).catch((err) => {
 				this.$message({

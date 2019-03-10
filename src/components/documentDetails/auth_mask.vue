@@ -121,12 +121,12 @@
 						}
 
 					],
-					search: [
-						{
-							name: 'deptId',
-							val: ''
-						}
-					],
+					// search: [
+					// 	{
+					// 		name: 'deptId',
+					// 		val: ''
+					// 	}
+					// ],
 					url: '/api-user/users'
 				},
 				rules: {

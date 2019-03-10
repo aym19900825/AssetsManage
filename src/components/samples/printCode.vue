@@ -1,7 +1,7 @@
 <template>
 	<div>
 	    <div id="printdom">
-            <img  id="barcode" src="../../assets/img/code.jpg" alt="条码" />
+            <img  id="barcode" :src="codeUrl" alt="条码" />
         </div>
 	</div>
 </template>
@@ -14,7 +14,7 @@
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
-		name: 'samples',//接样
+		name: 'printCode',//接样
 		components: {
 			vheader,
 			navs_left,
@@ -33,6 +33,8 @@
 
 		},
 		mounted(){
+			this.codeUrl = this.$route.query.imgUrl;
+			console.log(this.codeUrl);
             setTimeout(function(){
                 window.print();
             },1000);
@@ -43,12 +45,12 @@
 <style scope>
 .p15 {padding:10px 15px;}
 @media print {
-  #printdom {
-	  page-break-before: always;
-	  width: 50mm;
-	  height: 50mm;
-	  text-align: center;
-	  display: block;
+    #printdom {
+	    page-break-before: always;
+	    width: 50mm;
+	    height: 50mm;
+	    text-align: center;
+	    display: block;
 	}
 	#printdom img {
 		width: 35mm;

@@ -72,6 +72,9 @@
 				NUM: '',
 		},
 		DEPTID:'',//当前选择的机构值
+		datamodule:[],//原始数据模板已选数据
+		datamodulenums:'',//原始数据模板已选数据编号
+		projectnums:''//当前检测项目
     }
   },
 
@@ -113,8 +116,25 @@
 	close() {
 		this.dialogtemplate = false;
 	},
-  	visible() {
+  	visible(value) {
+		console.log(value);
+		//value[0]检测项目
+		this.projectnums = value[0];
+		//value[1]原始数据模板已选数据
 		this.dialogtemplate = true;
+		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+			this.datamodule = value[1];
+			var datamodulenum = [];
+			for(var i = 0;i<this.datamodule.length;i++){
+				datamodulenum.push(this.datamodule[i].NUM);
+			}
+			this.datamodulenums = datamodulenum.toString(',');
+		}else{
+			this.datamodulenums = '';
+		}
+		console.log(123456);
+		console.log(this.datamodulenums);
+		this.requestData();
   	},
   	loadMore () {
 	   if (this.loadSign) {
@@ -137,7 +157,11 @@
 			DECRIPTION:this.searchList.DECRIPTION,
 			NUM:this.searchList.NUM
 		}
-		var url = this.basic_url + '/api-apps/app/rawDataTem';
+		console.log(11111);
+		console.log(this.projectnums);
+		// var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums+'&NUM_where_not_in='+this.datamodulenums;
+		console.log(url);
+		var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums;
 		this.$axios.get(url, {}).then((res) => {
 			this.page.totalCount = res.data.count;
 			//总的页数
@@ -198,7 +222,7 @@
 	},
   },
   mounted() {
-		this.requestData();
+		// this.requestData();
 	},
 }
 </script>

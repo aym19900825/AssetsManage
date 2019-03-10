@@ -84,6 +84,8 @@ const flowmap  = r => require.ensure([], () => r(require('@/components/workflow/
 
 const flow_management  = r => require.ensure([], () => r(require('@/components/flow/flow_management')), 'flow_management')//流程模型
 const flow_process  = r => require.ensure([], () => r(require('@/components/flow/flow_process')), 'flow_process')//流程模型
+
+const print  = r => require.ensure([], () => r(require('@/components/samples/print')), 'print')//流程模型
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -434,6 +436,11 @@ Vue.use(Router)
       path: '/jobgroup',
       name: 'jobgroup',
       component: jobgroup
+    },
+    {//任务管理
+      path: '/print',
+      name: 'print',
+      component: print
     },
 ];
 

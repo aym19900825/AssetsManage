@@ -187,7 +187,19 @@
 		<samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
 			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<el-dialog
+			title="条码"
+			:visible.sync="codeDialog"
+			width="30%"
+			center>
+			<div id="printdom">
+				<img  id="barcode" src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码" />
+			</div>
+			<span slot="footer">
+				<el-button type="primary" @click="printCode">打印条码</el-button>
+			</span>
+		</el-dialog>
 	</div>
 	</div>
 </template>
@@ -211,6 +223,9 @@
 		},
 		data() {
 			return {
+				codeDialog: true,
+				codeUrl: 'http://192.168.1.115:7902/stripcode/image/91325219.jpg',
+				code_url: Config.code_url,
 				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
@@ -415,25 +430,69 @@
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+		       		 this.openAddMgr();
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+		    		 this.modify();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+		    		 this.physicsDel();
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		 this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
+		    		 this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    		 this.deluserinfo();
 		    	}else if(item.name=="导出"){
-		    	 this.exportData();
+		    	 	this.exportData();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
-				 this.Printing();
+				 	this.Printing();
+				}else{
+					this.barcode();
 				}
-		    },
+			},
+			barcode(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时修改多条数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.code_url + '/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
+					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+						if(res.data.resp_code == 0) {
+							this.codeDialog = true;
+							this.codeUrl = '';
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
+			printCode(){
+				var oldstr = document.body.innerHTML;
+				var newstr = '<img src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码"/>';
+				document.body.innerHTML = $("#printdom").html();
+				console.log('===========old=============');
+				console.log(oldstr);
+				console.log('===========new=============');
+				console.log(document.body.innerHTML);
+				window.print();
+				document.body.innerHTML = oldstr;
+				// window.print();
+				// $("img#barcode").printArea();  
+				// this.$print(this.$refs.printdom);
+			},
 			//添加样品管理
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -784,4 +843,17 @@
 
 <style scope>
 .p15 {padding:10px 15px;}
+@media print {
+  #printdom {
+	  page-break-before: always;
+	  width: 50mm;
+	  height: 50mm;
+	  text-align: center;
+	  display: block;
+	}
+	#printdom img {
+		width: 35mm;
+		height: 35mm;
+	}	
+}
 </style>

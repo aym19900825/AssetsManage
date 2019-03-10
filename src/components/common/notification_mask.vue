@@ -361,7 +361,8 @@
 						<el-button @click='close'>取消</el-button>
 					</div>
 					<div class="content-footer" v-show="views">
-						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成委托书</el-button>
+						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildcheck">生成检验委托书</el-button>
+						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildtest">生成检测委托书</el-button>
 					</div>	
 				</div>
 			</div>
@@ -1115,19 +1116,42 @@
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
-			//生成委托书
-			build(){
+			//生成检验委托书
+			buildcheck(){
 				var dataid = this.dataInfo.ID;
-				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid;
+				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE_wheres=1';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '生成委托书成功',
+								message: '生成检验委托书成功',
 								type: 'success'
 							});
 						}else{
 							this.$message({
-							message: '已经生成委托书，请勿重复生成',
+							message: '已经生成检验委托书，请勿重复生成',
+							type: 'warning'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			},
+			//生成检测委托书
+			buildtest(){
+				var dataid = this.dataInfo.ID;
+				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE_wheres=2';
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '生成检测委托书成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+							message: '已经生成检测委托书，请勿重复生成',
 							type: 'warning'
 							});
 						}

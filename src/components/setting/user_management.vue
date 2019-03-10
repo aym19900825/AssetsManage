@@ -82,7 +82,7 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 										</el-tree>
 									</div>
 								</div>
@@ -386,7 +386,6 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-
 			filterHandler(value, row, column) {
 				const property = column['property'];
 				return row[property] === value;

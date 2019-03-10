@@ -91,7 +91,6 @@
 									</el-input>
 								</el-form-item>
 							</el-col>
-							
 							<!-- <el-col :span="5">
 								<el-form-item label="联系电话" prop="PHONE">
 									<el-input v-model="searchList.PHONE">
@@ -201,6 +200,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				commentArr:{},
 				value: '',
 				options: [{
@@ -512,11 +512,19 @@
 				this.reportData.app=this.customer;
 				this.$refs.reportChild.visible();
 			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
+			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;
             },
-          	
 			// 导入
 			download() {
 				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');

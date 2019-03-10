@@ -35,7 +35,8 @@
 										:on-success="fileSuccess"
 										:limit=1
 										multiple
-										method:="post">
+										method:="post"
+										:file-list="fileList">
 											<i class="icon-upload-cloud"></i> 上传
 										</el-upload>
     								</el-dropdown-item>
@@ -186,6 +187,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				value: '',
 				options: [{
 					value: '1',
@@ -569,6 +571,15 @@
 
                 	});
 				}
+			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');

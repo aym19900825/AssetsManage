@@ -499,7 +499,8 @@
 			},
 			//查看
 			view(id) {
-				// console.log(id);
+				 console.log(123456);
+				 console.log(id);
 				this.$refs.child.view(id);
 			},
 			//代办跳转
@@ -731,17 +732,16 @@
 				}
 				return data;
 			},
+			
 			handleNodeClick(data) {
-				for(var i = 0; i < this.selectData.length; i++) {
-					if(data.label == this.selectData[i].name) {
-						this.searchList.TYPE = this.selectData[i].code;
-						// console.log(this.selectData[i].code);
-						// console.log(this.searchList.TYPE);
+				for(var i = 0; i < this.resourceData.length; i++) {
+					if(data.name == this.resourceData[i].name) {
+						this.searchList.TYPE = this.resourceData[i].code;
 					}
 				}
 				this.requestData();
 			},
-			//			树节点的内容区的渲染 Function
+			//树节点的内容区的渲染 Function
 			renderContent(h, {
 				node,
 				data,

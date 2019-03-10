@@ -547,13 +547,13 @@
 				}
 			},
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+                var url = this.basic_url +'/api-apps/app/inspectionMet/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;
             },
           	
 			// 导入
 			download() {
-				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var url = this.basic_url + '/api-apps/app/inspectionMet/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
 				var xhr = new XMLHttpRequest();
 					xhr.open('POST', url, true);
 					xhr.responseType = "blob";

@@ -97,7 +97,7 @@
 									<el-form-item label="类型" prop="TYPE" label-width="45px">
 										<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%">
 											<el-option label="监督抽查" value="1"></el-option>
-											<el-option label="质量抽查" value="3"></el-option>
+											<el-option label="质量抽查" value="2"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
@@ -154,7 +154,7 @@
 								</el-table-column>
 								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
 								</el-table-column>
-								<el-table-column label="类型" sortable  width="100px" prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" sortable  width="100px" prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="产品类别" sortable width="200px" prop="ITEMTYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
@@ -710,7 +710,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
@@ -795,10 +795,12 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				if(data.label == '监督抽查'){
-					this.searchList.TYPE =  '1';
-				}else if(data.label == '质量抽查'){
-					this.searchList.TYPE =  '3';
+				console.log(data);
+				console.log(this.resourceData);
+				for(var i = 0; i < this.resourceData.length; i++) {
+					if(data.name == this.resourceData[i].name) {
+						this.searchList.TYPE = this.resourceData[i].code;
+					}
 				}
 				this.requestData();
 			},

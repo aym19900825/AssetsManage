@@ -85,8 +85,8 @@
 								</el-collapse-item> -->
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-show="viewtitle">
-							<el-button title="查看文件" type="primary" @click="saveAndUpdate()">查看</el-button>
+						<div class="content-footer" v-show="!addtitle">
+							<el-button title="查看文件" type="primary" @click="readAuth()">查看文件</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -546,6 +546,16 @@
 				this.show = true;
 				this.reset();
 			},
+			//查看
+			readAuth(){
+				this.detailgetData();
+            var url = this.po_url+"/show?fileid=" +this.report.FILEID
+                        + '&userid=' +  this.userid
+                        + '&username=' + this.username
+                        + '&deptid=' + this.deptid
+                        + '&deptfullname=' + this.deptfullname
+             window.open(url); 
+        	},
 			reset(){
 				this.report = {
                     ID:'',	//报告ID
@@ -579,7 +589,10 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-	                    this.username = res.data.username;
+						this.userid = res.data.id;
+						this.username = res.data.username;
+						this.deptid = res.data.deptId;
+						this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',

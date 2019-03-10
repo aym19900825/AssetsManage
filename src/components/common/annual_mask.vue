@@ -60,7 +60,7 @@
 											<el-form-item label="类别" prop="TYPE"  label-width="85px">
 												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择" :disabled="noedit">
 													<el-option label="监督抽查" value="1"></el-option>
-													<el-option label="质量抽查" value="3"></el-option>
+													<el-option label="质量抽查" value="2"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>

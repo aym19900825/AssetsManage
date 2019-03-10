@@ -160,13 +160,13 @@
 		<el-dialog :modal-append-to-body="false" title="数据配置" :visible.sync="Access" width="30%" :before-close="handleClose">
 			<!--工作任务通知书查询类别-->
 			<div class="scrollbar" style="max-height: 400px;">
-				<el-tree ref="work" :data="workData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework"  >
+				<el-tree ref="work" :data="workData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework" empty-text="" >
 				</el-tree>
 				<!--年度计划查询类别-->
-				<el-tree ref="annual" :data="annualData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual" >
+				<el-tree ref="annual" :data="annualData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual" empty-text="" >
 				</el-tree>
 				<!--设置产品类别和产品-->
-				<el-tree ref="product" :data="productData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct" >
+				<el-tree ref="product" :data="productData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct" empty-text="" >
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="Accessconfirm" >确 定</el-button>
@@ -518,10 +518,27 @@
 					});
 					return;
 				} else {
-					this.getannual(this.selUser[0].id);
-					this.getwork(this.selUser[0].id);
-					this.getproduct(this.selUser[0].id);
-					this.Access=true;
+					var url = this.basic_url + '/api-user/menus/findFirstMenu/'+this.selUser[0].id;
+					this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data==0){
+						this.$message({
+								message: '角色没有相应的权限配置',
+								type: 'warning'
+							});
+					}else{
+						this.getannual(this.selUser[0].id);
+						this.getwork(this.selUser[0].id);
+						this.getproduct(this.selUser[0].id);
+						this.Access=true;	
+					}
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+					
 				}
 			},
 			getwork(id){
@@ -562,12 +579,13 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
-					this.productData = res.data.datas;
-					this.recursive(res.data.datas,arr);
-					this.$nextTick(() => {
+					if(res.data.datas!=null){
+						this.productData = res.data.datas;
+						this.recursive(res.data.datas,arr);
+						this.$nextTick(() => {
 							this.productsetChecked(arr);
 						});
+					}
 				}).catch(error => {
 					this.$message({
 								message: '网络错误，请重试',
@@ -955,6 +973,7 @@
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
+						this.requestData();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
@@ -973,7 +992,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,

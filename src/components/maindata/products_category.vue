@@ -16,7 +16,7 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
-									<i :class="item.icon"></i>{{item.name}}
+								<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
@@ -247,9 +247,14 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			fileSuccess(){
+			fileSuccess(){//上传成功后返回数据
 				this.page.currentPage = 1;
 				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			//机构值
 			getCompany() {
@@ -542,11 +547,6 @@
 
 					});
 				}
-			},
-			handleSuccess(response, file, fileList){
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');

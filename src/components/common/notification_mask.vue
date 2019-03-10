@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
+					<el-form :model="dataInfo" inline-message :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
 						<div class="text-center" v-show="viewtitle">
 						<span v-if="this.dataInfo.STATE!=3">	
 						<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>

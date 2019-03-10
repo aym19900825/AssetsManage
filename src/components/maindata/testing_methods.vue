@@ -193,6 +193,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				value: '',
 				options: [{
 					value: '1',
@@ -374,7 +375,15 @@
 				this.page.pageSize = 20;
 				this.requestData();
 			},
-			
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
+			},
 			//重置
 			reset(){
 				this.testingForm = {

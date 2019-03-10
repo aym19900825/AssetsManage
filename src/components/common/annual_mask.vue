@@ -122,7 +122,7 @@
 											<i class="icon-upload-cloud"></i>
 											<font>导入</font>
 										</el-button> -->
-										<el-dropdown size="small">
+										<el-dropdown size="small" v-show="!viewtitle">
 											<el-button round type="primary" size="mini">
 												<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
 											</el-button>
@@ -149,7 +149,7 @@
 											<i class="icon-upload-cloud"></i>
 											<font>导出</font>
 										</el-button>
-										<el-button type="success" size="mini" round  @click="addfield1" v-show="!viewtitle">
+										<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -928,6 +928,15 @@
 						}
 					}
 					xhr.send();
+			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			uploadUrl(){
 				var url = this.basic_url +'/api-apps/app/workplan/importExc?table=WORLPLANLINE&access_token='+sessionStorage.getItem('access_token');

@@ -146,6 +146,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				commentArr: {},
 				value: '',
 				options: [{
@@ -261,6 +262,15 @@
 			},
 			tableControle(data) {
 				this.checkedName = data;
+			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			//改变页数
 			sizeChange(val) {

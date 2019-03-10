@@ -197,6 +197,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
 				options: [{
@@ -307,8 +308,10 @@
 		},
 
 		methods: {
+			//上传成功后返回数据
 			fileSuccess(){
-
+				this.page.currentPage = 1;
+				this.requestData();
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
@@ -584,6 +587,13 @@
 					});
 				}
 			},
+			//上传文件列表
+			handleSuccess(response, file, fileList){
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
+			},
+			// 导入
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;

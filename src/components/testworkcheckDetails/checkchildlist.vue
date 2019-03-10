@@ -1,30 +1,29 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
-		<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-            <el-row :gutter="20">
-                <el-col :span="7" class="pull-right">
-                    <el-input v-model="workorderForm.WONUM" :disabled="true">
-                            <template slot="prepend">子任务单编号</template>
-                    </el-input>
-                </el-col>
-            </el-row>
-            <el-table ref="table" :data="workorderForm.WORKORDERList" row-key="ID" border height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDERList', order: 'descending'}">
-                <el-table-column type="selection" width="55" fixed align="center">
-                </el-table-column>
-                <el-table-column prop="P_NUM" label="检测项目编号" sortable>
-                </el-table-column>
-                <el-table-column prop="P_DESC" label="检测项目名称" sortable>
-                </el-table-column>
-                <el-table-column prop="REMARKS" label="要求" sortable>
-                </el-table-column>
-                <el-table-column prop="VERSION" label="版本" sortable>
-                </el-table-column>
-            </el-table>
-        </div>
-		<div class="content-footer">
-			<el-button @click='close'>关闭</el-button>
-		</div>
+		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="50%" :before-close="handleClose" >
+            <div class="scrollbar" style="max-height:360px;">
+                <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion v-for="item in selectData" :key="item.WONUM">
+                    <el-row :gutter="20">
+                        <el-col :span="11" class="pull-right pb10">
+                            <el-input v-model="item.WONUM" :disabled="true">
+                                    <template slot="prepend">子任务单编号</template>
+                            </el-input>
+                        </el-col>
+                    </el-row>
+                    <el-table ref="table" :data="item.TEMPLATELiST" row-key="ID" border max-height="360" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.TEMPLATELiST', order: 'descending'}">
+                        <el-table-column prop="D_DESC" label="描述" sortable>
+                        </el-table-column>
+                        <el-table-column fixed="right" label="操作" width="100">
+                            <template slot-scope="scope">
+                                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </div>
+            <div slot="footer">
+                <el-button @click='close'>关闭</el-button>
+            </div>
 		</el-dialog>
 	</div>
 </template>
@@ -33,12 +32,11 @@
 	import Config from '../../config.js';
 	export default {
 //	props:["approvingData"],//第一种方式
-  name: 'product',
+  name: 'checkchildlist',
   
   data() {
     return {
 		basic_url: Config.dev_url,
-		productList: [],
 		dialogProduct: false,
 		loadSign: true, //鼠标滚动加载数据
 		loading: false,//默认加载数据时显示loading动画
@@ -53,16 +51,16 @@
         activeName: 'first', //tabs
         workorderForm:{
             WONUM:'',
-            WORKORDERList:[]
-		},
-		proMenu: [],
-		conMenu: [],
-		WORKORDER_PROJECTLISTID:[],
-		WORKORDER_CONTRACTLISTID:[]
+            TEMPLATELiST:[]
+        },
+        selectData:[]
     }
   },
 
   methods: {
+    handleClick(row) {
+        console.log(row);
+    },
 	handleClose(done) {
 		this.$confirm('确认关闭？')
 			.then(_ => {
@@ -145,12 +143,15 @@
 	},
   	visible(dataid) {
 		this.requestData(dataid);
-	},
+    },
+    //查看子任务单
 	requestData(dataid){
         console.log(dataid);
 		var url = this.basic_url + '/api-apps/app/workorder/operate/queryWorkorder?ID='+dataid;
         this.$axios.get(url,{}).then((res) => {
+            console.log(res.data.datas);
             if(res.data.resp_code == 0) {
+                this.selectData = res.data.datas;
                 this.dialogProduct = true;
             }else if(res.data.resp_code == 1){
                 this.$message({

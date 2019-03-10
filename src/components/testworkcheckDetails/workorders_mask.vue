@@ -968,6 +968,8 @@
       		<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
 			<!-- 查看子任务单  -->
 			<checkchildlist ref="checkchildlist"></checkchildlist>
+			<!-- 生成报告弹出显示数据  -->
+			<reportdata ref="reportdata"></reportdata>
 		</div>
 	</div>
 </template>
@@ -987,6 +989,7 @@
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
 	import checkchildlist from './checkchildlist.vue'//查看子任务单
+	import reportdata from './reportdata.vue'//生成报告弹出显示数据
 	export default {
 		name: 'masks',
 		components: {
@@ -1001,7 +1004,8 @@
 			 productmask,
 			 teststandardmask,
 			 testprojectmask,
-			 checkchildlist
+			 checkchildlist,
+			 reportdata
 		},
 		data() {
 			var validateProxynum = (rule, value, callback) => {//委托书编号
@@ -1876,15 +1880,11 @@
 				};
 				this.workorderForm.WORKORDER_ASSETList.push(obj);
 			},
-			openwrite() {
-				this.$prompt('请输入报告名称', '提示', {
-				confirmButtonText: '确定',
-				cancelButtonText: '取消'
-				}).then(({ value }) => {
-					this.reportname = value;
-				}).catch(() => {
-					       
-				});
+			reprotids(val){
+
+			},
+			reportname(val){
+
 			},
 			//生成报告
 			getreport(){
@@ -1915,46 +1915,53 @@
 							type: 'warning'
 						});
 					}else if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
-						this.openwrite();
+						var data = [];
+						data.push(this.workorderForm.ID);
+						data.push(this.reportname);
+						data.push(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
+						data.push(this.workorderForm.PROXYNUM);
+						data.push(this.workorderForm.WONUM);
+						data.push(this.workorderForm.DEPTIDDesc);
+						data.push(this.workorderForm.ID);
+						this.$refs.reportdata.visible(data);
 					}else{
-						console.log(this.reportname);
-						// var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-						var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
+						// console.log(this.reportname);
+						// // var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
+						// var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
 						
-						this.$axios.post(url, {
+						// this.$axios.post(url, {
+						// 		"filePath":ids,
+						// 		"fileName":this.reportname,
+						// 		"proxynum":this.workorderForm.PROXYNUM,
+						// 		"wonum":this.workorderForm.WONUM,
+						// 		"deptfullname":this.workorderForm.DEPTIDDesc,
+						// 		"recordid":this.workorderForm.ID
 
-								"filePath":ids,
-								"fileName":this.reportname,
-								"proxynum":this.workorderForm.PROXYNUM,
-								"wonum":this.workorderForm.WONUM,
-								"deptfullname":this.workorderForm.DEPTIDDesc,
-								"recordid":this.workorderForm.ID
-
-						}).then((res) => {
-							this.workorderreportid = res.data.datas.id;
-							console.log(res);
-							console.log()
-							var obj = {
-								REPORTNUM:res.data.datas.reportnum,
-								REPORTNAME:res.data.datas.reportname,
-								// PREVIEW:'',
-								VERSION:res.data.datas.version,
-							}
-							console.log(obj);
-							this.workorderForm.WORKORDER_REPORTList.push(obj);
-							console.log(this.workorderForm.WORKORDER_REPORTList);
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '生成成功',
-									type: 'success'
-								});
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
+						// }).then((res) => {
+						// 	this.workorderreportid = res.data.datas.id;
+						// 	console.log(res);
+						// 	console.log()
+						// 	var obj = {
+						// 		REPORTNUM:res.data.datas.reportnum,
+						// 		REPORTNAME:res.data.datas.reportname,
+						// 		// PREVIEW:'',
+						// 		VERSION:res.data.datas.version,
+						// 	}
+						// 	console.log(obj);
+						// 	this.workorderForm.WORKORDER_REPORTList.push(obj);
+						// 	console.log(this.workorderForm.WORKORDER_REPORTList);
+						// 	if(res.data.resp_code == 0) {
+						// 		this.$message({
+						// 			message: '生成成功',
+						// 			type: 'success'
+						// 		});
+						// 	}
+						// }).catch((err) => {
+						// 	this.$message({
+						// 		message: '网络错误，请重试',
+						// 		type: 'error'
+						// 	});
+						// });
 					}
 				}
 			},

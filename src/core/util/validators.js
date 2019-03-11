@@ -354,16 +354,45 @@ const validators = {
 		}
 	},
 
-	
+
 	isChoosedata:function (rule, value, callback) {//放大镜选择验证
 		// (value == '' || typeof(value) == undefined)
-        if (typeof(value) == undefined || value == '' || value == null) {
-            callback(new Error('请选择'));
-        }else {
-            callback();
-        }
-    }
+		if (typeof(value) == undefined || value == '' || value == null) {
+			callback(new Error('请选择'));
+		} else {
+			callback();
+		}
+	},
 
+
+	isCheckOldpassword:function (rule, value, callback) {//原始密码
+		if (!value) {
+			return callback(new Error('密码不能为空'));
+		}
+		setTimeout(() => {
+			var regs = /^.{6,18}$/g
+			if (!regs.test(value)) {
+				callback(new Error('密码长度不能少于6个字符且不能大于18个字符'));
+			} else {
+				callback();
+			}
+		}, 500);
+	},
+
+	isValidatePass:function (rule, value, callback) {//新密码
+		if (!value) {
+			callback(new Error('请输入密码'));
+		}
+		setTimeout(() => {
+			var regs = /^.{6,18}$/g
+			if (!regs.test(value)) {
+				callback(new Error('密码长度不能少于6个字符且不能大于18个字符'));
+			} else {
+				callback();
+			}
+		}, 500);
+    },
+    
 };
 
 

@@ -625,12 +625,19 @@
 
 			<!-- 产品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose4">
-				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
-					<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+					<el-table-column label="所属产品类别编码" width="200" sortable prop="NUM">
 					</el-table-column>
-					<el-table-column label="名称" sortable prop="PRO_NAME">
+					<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
+					</el-table-column>
+					<el-table-column label="产品名称" sortable prop="PRO_NAME">
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 					</el-table-column>
@@ -798,7 +805,8 @@
 					value: '0',
 					label: '不活动'
 				}],
-				loadSign:true,//加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},
 				selUser:[],
 				productList:[],
@@ -1259,12 +1267,21 @@
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
+
+			
+
 			addproduct(item){//产品名称按钮
-				if(this.WORKPLAN.ITEMTYPE)
+				if(this.WORKPLAN.ITEMTYPE == null||this.WORKPLAN.ITEMTYPE == undefined || this.WORKPLAN.ITEMTYPE == ''){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
 					this.requestProname();
 					this.requestnum = '2';
 					this.dialogVisible4 = true;
 					this.proindex = item;
+				}
 			},
 			//产品名称弹框确定选中数据
 			addbasis4(){
@@ -1327,6 +1344,7 @@
 			},
 			//产品名称数据
 			requestProname(){
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1343,17 +1361,17 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.productList = newarr;
-				}).catch((wrong) => {})
+					this.productList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
             //tabs
 			handleClick(tab, event) {
@@ -2010,58 +2028,141 @@
 			saveAndSubmit(WORKPLAN) {
 				this.save('update');
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			    setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-				//  this.requestData()
-				if(this.requestnum == '1'){
-					this.requesCategory();
-				}else if(this.requestnum == '2'){
-					this.requestProname();
-				}else if(this.requestnum == '3'){
-					this.requestDeptname();
-				}else if(this.requestnum == '4'){
-					this.requestBasis();
-				}else if(this.requestnum == '5'){
-					this.requestProject();
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					if(this.requestnum == '1'){
+						this.requesCategory();
+					}else if(this.requestnum == '2'){
+						this.requestProname();
+					}else if(this.requestnum == '3'){
+						this.requestDeptname();
+					}else if(this.requestnum == '4'){
+						this.requestBasis();
+					}else if(this.requestnum == '5'){
+						this.requestProject();
+					}
 				}
-			   }
-			 },
+			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
-				if(this.requestnum == '1'){
-					this.requesCategory();
-				}else if(this.requestnum == '2'){
-					this.requestProname();
-				}else if(this.requestnum == '3'){
-					this.requestDeptname();
-				}else if(this.requestnum == '4'){
-					this.requestBasis();
-				}else if(this.requestnum == '5'){
-					this.requestProject();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
 				}
+				if(this.requestnum == '1'){
+						this.requesCategory();
+					}else if(this.requestnum == '2'){
+						this.requestProname();
+					}else if(this.requestnum == '3'){
+						this.requestDeptname();
+					}else if(this.requestnum == '4'){
+						this.requestBasis();
+					}else if(this.requestnum == '5'){
+						this.requestProject();
+					}
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				if(this.requestnum == '1'){
-					this.requesCategory();
-				}else if(this.requestnum == '2'){
-					this.requestProname();
-				}else if(this.requestnum == '3'){
-					this.requestDeptname();
-				}else if(this.requestnum == '4'){
-					this.requestBasis();
-				}else if(this.requestnum == '5'){
-					this.requestProject();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
 				}
+				if(this.requestnum == '1'){
+						this.requesCategory();
+					}else if(this.requestnum == '2'){
+						this.requestProname();
+					}else if(this.requestnum == '3'){
+						this.requestDeptname();
+					}else if(this.requestnum == '4'){
+						this.requestBasis();
+					}else if(this.requestnum == '5'){
+						this.requestProject();
+					}
 			},
+
+			// loadMore () {
+			//    if (this.loadSign) {
+			//      this.loadSign = false
+			//      this.page.currentPage++
+			//      if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			//        return
+			//      }
+			//     setTimeout(() => {
+			//        this.loadSign = true
+			//      }, 1000)
+			// 	//  this.requestData()
+			// 	if(this.requestnum == '1'){
+			// 		this.requesCategory();
+			// 	}else if(this.requestnum == '2'){
+			// 		this.requestProname();
+			// 	}else if(this.requestnum == '3'){
+			// 		this.requestDeptname();
+			// 	}else if(this.requestnum == '4'){
+			// 		this.requestBasis();
+			// 	}else if(this.requestnum == '5'){
+			// 		this.requestProject();
+			// 	}
+			//    }
+			//  },
+			// sizeChange(val) {
+			// 	this.page.pageSize = val;
+			// 	if(this.requestnum == '1'){
+			// 		this.requesCategory();
+			// 	}else if(this.requestnum == '2'){
+			// 		this.requestProname();
+			// 	}else if(this.requestnum == '3'){
+			// 		this.requestDeptname();
+			// 	}else if(this.requestnum == '4'){
+			// 		this.requestBasis();
+			// 	}else if(this.requestnum == '5'){
+			// 		this.requestProject();
+			// 	}
+			// },
+			// currentChange(val) {
+			// 	this.page.currentPage = val;
+			// 	if(this.requestnum == '1'){
+			// 		this.requesCategory();
+			// 	}else if(this.requestnum == '2'){
+			// 		this.requestProname();
+			// 	}else if(this.requestnum == '3'){
+			// 		this.requestDeptname();
+			// 	}else if(this.requestnum == '4'){
+			// 		this.requestBasis();
+			// 	}else if(this.requestnum == '5'){
+			// 		this.requestProject();
+			// 	}
+			// },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

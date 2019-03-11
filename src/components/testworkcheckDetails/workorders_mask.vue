@@ -963,7 +963,7 @@
 			<!-- 查看子任务单  -->
 			<checkchildlist ref="checkchildlist"></checkchildlist>
 			<!-- 生成报告弹出显示数据  -->
-			<reportdata ref="reportdata"></reportdata>
+			<reportdata ref="reportdata" @reportdatavalue = "reportdatavalue"></reportdata>
 		</div>
 	</div>
 </template>
@@ -1132,7 +1132,7 @@
 				workorderreportid:'',//存放生成报告id
 				btnshow:true,//报告提交按钮
 				sendchilddata:[],//子表已有的值
-				pronums:'',
+				pronums:[],
 			};
 		},
 		methods: {
@@ -1964,6 +1964,20 @@
 						// });
 					}
 				}
+			},
+			reportdatavalue(value){
+				this.workorderreportid = value.id;
+                console.log(res);
+                console.log()
+                var obj = {
+                    REPORTNUM:value.reportnum,
+                    REPORTNAME:value.reportname,
+                    // PREVIEW:'',
+                    VERSION:value.version,
+                }
+                console.log(obj);
+                this.workorderForm.WORKORDER_REPORTList.push(obj);
+				console.log(this.workorderForm.WORKORDER_REPORTList);
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {

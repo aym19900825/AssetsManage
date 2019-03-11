@@ -215,6 +215,9 @@
 									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
 									          <i class="icon-send"></i>
 									        </el-button>
+											<el-button type="primary" circle title="工作任务通知书已下达" @click="assign(scope.row)" size="small" v-if="assignnoshow">
+									          <i class="icon-send"></i>
+									        </el-button>
 									      </template>
 									    </el-table-column>
 									</el-table>
@@ -791,6 +794,7 @@
 		        fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				value: '',
 				assignshow:false,//下达任务通知书按钮
+				assignnoshow:false,//工作任务通知书已下达
 				options: [{
 					value: '1',
 					label: '活动'
@@ -1723,6 +1727,7 @@
 			detail(dataid) {
 				this.getCompany();
 				this.assignshow = true;
+				this.assignnoshow = false;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 						res.data.WORLPLANLINEList[i].isEditing = false;
@@ -1786,6 +1791,8 @@
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;
+				this.attributebefore = true;
+				this.attributeafter = false;
 			},
 			//查看
 			view(dataid) {

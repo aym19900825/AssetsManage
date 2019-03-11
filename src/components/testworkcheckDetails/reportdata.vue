@@ -191,6 +191,8 @@
 			this.openwrite();
 			return;
 		}else {
+			this.sortKey(this.selUser,'NUM')
+			console.log(this.selUser);
             var ids = '';
             var id = [];
             for(var i = 0;i<this.selUser.length;i++){
@@ -219,12 +221,15 @@
                 // }
                 // console.log(obj);
                 // this.workorderForm.WORKORDER_REPORTList.push(obj);
-                // console.log(this.workorderForm.WORKORDER_REPORTList);
+				// console.log(this.workorderForm.WORKORDER_REPORTList);
+				
                 if(res.data.resp_code == 0) {
                     this.$message({
                         message: '生成成功',
                         type: 'success'
-                    });
+					});
+					var reportvalue = res.data.datas;
+					this.$emit('reportdatavalue',reportvalue);
                 }
             }).catch((err) => {
                 this.$message({
@@ -236,11 +241,18 @@
 			this.dialogProduct = false;
             this.$emit('request');
 		}
-	},	
+	},
+	sortKey(array,key){
+        array.sort(function(a,b){
+			var x = a[key];
+			var y = b[key];
+			return ((x<y)?-1:(x>y)?1:0)
+    	})
+	}	
   },
   mounted() {
   	
-	},
+  },
 }
 </script>
 

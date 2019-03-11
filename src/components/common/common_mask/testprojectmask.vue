@@ -36,14 +36,14 @@
 							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table  :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -276,6 +276,7 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
 		};
+		console.log(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums);
         this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
         
         }).then((res) => {
@@ -283,19 +284,22 @@
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
             if(this.page.currentPage >= totalPage){
-                this.loadSign = false
+                    this.loadSign = false
             }else{
                 this.loadSign=true
             }
             this.commentArr[this.page.currentPage]=res.data.data
             let newarr=[]
             for(var i = 1; i <= totalPage; i++){
+            
                 if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+                    
                     for(var j = 0; j < this.commentArr[i].length; j++){
                         newarr.push(this.commentArr[i][j])
                     }
                 }
             }
+            
             this.projectList = newarr;
         }).catch((wrong) => {})
 	},
@@ -319,10 +323,13 @@
     },
     handleClose(done) {
         this.$confirm('确认关闭？')
-            .then(_ => {
-                done();
-            })
-            .catch(_ => {});
+        .then(_ => {
+            this.resetBasisInfo();
+        })
+        .catch(_ => {
+			console.log('取消关闭');
+			$('.v-modal').hide();
+		});
     },
     //上传文件 End
     judge(data) {

@@ -1,52 +1,52 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
-		<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-			<el-tabs v-model="activeName" @tab-click="handleClick">						
-                <el-tab-pane label="检测项目与要求" name="first">
-                    <el-table ref="table" :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
-						<el-table-column type="selection" width="55" fixed align="center">
-						</el-table-column>
-                        <el-table-column prop="P_NUM" label="检测项目编号" sortable>
-                        </el-table-column>
-                        <el-table-column prop="P_DESC" label="检测项目名称" sortable>
-                        </el-table-column>
-                        <el-table-column prop="REMARKS" label="要求" sortable>
-                        </el-table-column>
-                        <el-table-column prop="VERSION" label="版本" sortable>
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-                <el-tab-pane label="分包项目" name="second">
-                    <el-table ref="table" :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border @selection-change="conChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
-                        <el-table-column type="selection" width="55" fixed align="center">
-						</el-table-column>
-						<el-table-column prop="WONUM" label="工作任务单编号" sortable width="150px">
-                        </el-table-column>
-                        <el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
-                        </el-table-column>
-                        <el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
-                        </el-table-column>
-                        <el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
-                        </el-table-column>
-                        <el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
-                        </el-table-column>
-                        <el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
-                        </el-table-column>
-                        <el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
-                        </el-table-column>
-                        <el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
-                        </el-table-column>
-                        <el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
-                        </el-table-column>
-                    </el-table>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
-		<div class="content-footer">
-			<el-button type="primary" @click="submit">确定</el-button>
-			<el-button @click='close'>取消</el-button>
-		</div>
+			
+				<el-tabs v-model="activeName" @tab-click="handleClick">
+	                <el-tab-pane label="检测项目与要求1234509876" name="first">
+	                    <el-table ref="table" :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
+							<el-table-column type="selection" width="55" fixed align="center">
+							</el-table-column>
+	                        <el-table-column prop="P_NUM" label="检测项目编号" sortable>
+	                        </el-table-column>
+	                        <el-table-column prop="P_DESC" label="检测项目名称" sortable>
+	                        </el-table-column>
+	                        <el-table-column prop="REMARKS" label="要求" sortable>
+	                        </el-table-column>
+	                        <el-table-column prop="VERSION" label="版本" sortable>
+	                        </el-table-column>
+	                    </el-table>
+	                </el-tab-pane>
+	                <el-tab-pane label="分包项目" name="second">
+	                    <el-table ref="table" :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border @selection-change="conChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
+	                        <el-table-column type="selection" width="55" fixed align="center">
+							</el-table-column>
+							<el-table-column prop="WONUM" label="工作任务单编号" sortable width="150px">
+	                        </el-table-column>
+	                        <el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
+	                        </el-table-column>
+	                        <el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
+	                        </el-table-column>
+	                        <el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
+	                        </el-table-column>
+	                        <el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
+	                        </el-table-column>
+	                        <el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
+	                        </el-table-column>
+	                        <el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
+	                        </el-table-column>
+	                        <el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
+	                        </el-table-column>
+	                        <el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
+	                        </el-table-column>
+	                    </el-table>
+	                </el-tab-pane>
+	            </el-tabs>
+       
+			<div slot="footer">
+				<el-button type="primary" @click="submit">确定</el-button>
+				<el-button @click='close'>取消</el-button>
+			</div>
 		</el-dialog>
 	</div>
 </template>
@@ -235,6 +235,7 @@
 						message: '生成成功',
 						type: 'success'
 					});
+					this.$emit.refresh();
 				}
 			}).catch((err) => {
 				this.$message({

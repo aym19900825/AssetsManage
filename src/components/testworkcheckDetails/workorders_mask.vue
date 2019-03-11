@@ -538,7 +538,7 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
-													<el-button type="success" size="mini" round  class="a-upload">
+													<el-button type="success" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
@@ -634,24 +634,18 @@
 												</el-table-column>
 												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETNUM" placeholder="请输入">
-														</el-input>
-														<span v-else>{{scope.row.ASSETNUM}}</span>
+														<span>{{scope.row.ASSETNUM}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入">
-														</el-input>
-														<span v-else>{{scope.row.DESCRIPTION}}</span>
+														<span>{{scope.row.DESCRIPTION}}</span>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入">
-														</el-input>
-														<span v-else>{{scope.row.MODEL}}</span>
+														<span>{{scope.row.MODEL}}</span>
 													</template>
 												</el-table-column>
 
@@ -765,11 +759,11 @@
 														<span v-else>{{scope.row.V_NAME}}</span>
 													</template>
 												</el-table-column>
-												<el-table-column prop="DEPTTYPE" label="机构属性" sortable width="120px">
+												<el-table-column prop="DEPTTYPEDesc" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPE" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else>{{scope.row.DEPTTYPE}}</span>
+														<span v-else>{{scope.row.DEPTTYPEDesc}}</span>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
@@ -845,10 +839,10 @@
 												</el-table-column>
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
-														<span v-else>{{scope.row.CHECKCOST}}</span>
-														</el-form-item>
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" > -->
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<span v-else>{{scope.row.CHECKCOST}}</span>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
@@ -2283,13 +2277,14 @@
 	.ml60 {margin-left: 60px;}
 	.a-upload input{
 		position: absolute;
-		font-size: 100px;
-		right: 0;
+		font-size: 0;
+		left: 0;
 		top: 0;
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 40px;
+		width: 80px;
+		height: 30px;
 		cursor: pointer;
 	}
 	.upload-btn{

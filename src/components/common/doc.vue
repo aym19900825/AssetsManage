@@ -128,6 +128,7 @@ export default {
 			this.$refs.keyword.requestData();
         },
         readAuth(row){
+            console.log(row);
             var url = this.po_url+"/show?filename=" +row.filename
                     + '&fileid=' +  row.fileid
                     + '&userid=' +  this.docParm.userid

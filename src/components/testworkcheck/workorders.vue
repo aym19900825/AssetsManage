@@ -121,11 +121,7 @@
 					</div>
 				</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-<<<<<<< HEAD
-			<sendtasklist ref="task" v-bind:page=page></sendtasklist>
-=======
 			<sendtasklist ref="task"  v-bind:page=page @refresh="refresh"></sendtasklist>
->>>>>>> 28a7456beffde4cfd03f91b2d507bca98b12cf44
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -652,6 +648,9 @@
 			
 			SelChange(val) {
 				this.selMenu = val;
+			},
+			refresh(){
+				this.requestData();
 			},
 			requestData() {
 				this.loading = true;

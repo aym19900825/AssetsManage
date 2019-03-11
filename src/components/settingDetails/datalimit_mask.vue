@@ -147,13 +147,15 @@
 				var permissionIds = [];
 				var deptIds = [];
 				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
-				var menu = this.$refs.tree.getHalfCheckedNodes();
+				// var menu = this.$refs.tree.getHalfCheckedNodes();
+				console.log(permission);
+				console.log(menu);
 				for(var j = 0; j < menu.length; j++) {
 					deptIds.push(menu[j].id);
 				}
-				for(var i = 0; i < permission.length; i++) {
-					deptIds.push(permission[i].id);
-				}
+				// for(var i = 0; i < permission.length; i++) {
+				// 	deptIds.push(permission[i].id);
+				// }
 				var data = {
 					deptids: deptIds,
 //					roleid: this.roId,

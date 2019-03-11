@@ -132,6 +132,9 @@
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
+						<div class="content-footer" v-show ="!addtitle">
+							<el-button  type="primary" @click="readAuth()">查看文件</el-button>
+						</div>
 					</el-form>
 				</div>
 			</div>
@@ -224,6 +227,7 @@
 				approvingData:{},//流程数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				po_url:Config.po_url,//pageoffice 服务路径
 				loading: false,
 				loadSign: true,//加载
 				selUser: [],
@@ -766,6 +770,17 @@
 				this.reset();
 				this.show = true;
 			},
+			//查看
+			readAuth(){
+				this.detailgetData();
+				console.log(this.USESEAL);
+            var url = this.po_url+"/show?fileid=" +this.USESEAL.FILEID
+                        + '&userid=' +  this.userid
+                        + '&username=' + this.username
+                        + '&deptid=' + this.deptid
+                        + '&deptfullname=' + this.deptfullname
+             window.open(url); 
+        	},
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -787,8 +802,12 @@
 			//获取当前用户
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-	                    this.username = res.data.username;
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				console.log(res);
+	                    this.userid = res.data.id;
+						this.username = res.data.username;
+						this.deptid = res.data.deptId;
+						this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',
@@ -799,6 +818,7 @@
 		},
 		mounted() {
 			this.getCompany();
+			this.getUser();
 		},
 		
 	}

@@ -3,13 +3,13 @@
 		<el-dialog :modal-append-to-body="false" title="数据范围" :visible.sync="dialogVisible" width="30%">
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-select v-model="value" placeholder="请选择" @change="valueChange">
-	    		<el-option v-for="item in options":key="item.value":label="item.label" :value="item.value"></el-option>
+	    		<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
 	  			</el-select>
 				<el-tree class="tree" ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
 				</el-tree>
 				<div slot="footer" class="el-dialog__footer">
-			       <el-button type="primary" @click="determine();" >确 定</el-button>
-			       <el-button @click="dialogVisible = false">取 消</el-button>
+			       <el-button type="primary" @click="determine()" >确 定</el-button>
+			       <el-button @click="cancel()">取 消</el-button>
 			    </div>
 			</div>
 		</el-dialog>
@@ -59,6 +59,8 @@
 					$('.tree').show();
 				}else{
 					$('.tree').hide();
+					var arr =[];
+					this.setChecked(arr);
 				}
 			},
 			
@@ -140,6 +142,7 @@
 			},
 			//显示勾选
 			setChecked(arr) {
+			   console.log(arr);
 				this.$refs.tree.setCheckedKeys(arr);
 			},
 			//确定
@@ -147,15 +150,9 @@
 				var permissionIds = [];
 				var deptIds = [];
 				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
-				// var menu = this.$refs.tree.getHalfCheckedNodes();
-				console.log(permission);
-				console.log(menu);
-				for(var j = 0; j < menu.length; j++) {
-					deptIds.push(menu[j].id);
+				for(var i = 0; i < permission.length; i++) {
+					deptIds.push(permission[i].id);
 				}
-				// for(var i = 0; i < permission.length; i++) {
-				// 	deptIds.push(permission[i].id);
-				// }
 				var data = {
 					deptids: deptIds,
 //					roleid: this.roId,
@@ -168,6 +165,7 @@
 							type: 'success'
 						});
 					}
+					this.$emit('request');
 					this.dialogVisible = false;
 				}).catch((err) => {
 					this.$message({
@@ -175,6 +173,11 @@
 						type: 'error'
 					});
 				});
+			},
+			//取消
+			cancel(){
+				this.dialogVisible = false;
+				this.$emit('request');
 			},
 			getdetail(id){
 				console.log(123456);

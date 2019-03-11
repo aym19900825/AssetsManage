@@ -198,7 +198,6 @@
             }
             ids = id.toString(',');
 			
-            
             var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
 						
             this.$axios.post(url, {

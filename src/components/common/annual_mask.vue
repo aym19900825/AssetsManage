@@ -60,7 +60,7 @@
 											<el-form-item label="类别" prop="TYPE"  label-width="85px">
 												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择" :disabled="noedit">
 													<el-option label="监督抽查" value="1"></el-option>
-													<el-option label="质量抽查" value="3"></el-option>
+													<el-option label="质量抽查" value="2"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -467,7 +467,7 @@
 							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>

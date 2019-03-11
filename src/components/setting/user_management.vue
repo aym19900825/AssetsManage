@@ -210,8 +210,14 @@
 			return {
 				reportData:{},//报表的数据
 				rules:{
-					newPassword:[{ required: true, message: '请输入密码', trigger: 'blur' }],
-					Password:[{required: true, message: '请输入密码', trigger: 'blur'}]
+					newpassword: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isValidatePass, trigger: 'blur'},
+				],
+					Password: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isValidatePass, trigger: 'blur'},
+				]
 				},
 				permissions:false,//查看权限
 				Access:false,//权限管理的弹出框

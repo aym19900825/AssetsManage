@@ -28,7 +28,6 @@ import common from './assets/js/common.js'
 import store from './store.js'
 import 'babel-polyfill'
 import Validators from './core/util/validators.js'
-import Print from 'vue-print-nb'
 
 
 //import './jquery/dist/jquery.min.js'
@@ -86,7 +85,6 @@ Vue.prototype.common = common
 Vue.prototype.Validators = Validators
 Vue.use(ElementUI)
 Vue.use(vueztree)
-Vue.use(Print)
 
 // Vue.use(EasyScroll)//自定义滚动条
 //Vue.use(infiniteScroll)

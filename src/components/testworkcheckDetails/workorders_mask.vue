@@ -538,7 +538,7 @@
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
-													<el-button type="success" size="mini" round  class="a-upload">
+													<el-button type="success" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
@@ -2271,13 +2271,14 @@
 	.ml60 {margin-left: 60px;}
 	.a-upload input{
 		position: absolute;
-		font-size: 100px;
-		right: 0;
+		font-size: 0;
+		left: 0;
 		top: 0;
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 40px;
+		width: 80px;
+		height: 30px;
 		cursor: pointer;
 	}
 	.upload-btn{

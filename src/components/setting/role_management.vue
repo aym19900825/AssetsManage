@@ -121,7 +121,7 @@
 				</div>
 			</div>
 			<rolemask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></rolemask>
-			<datalimitmask ref="limit" :roleIds="roleIds"></datalimitmask>
+			<datalimitmask ref="limit"  @request="requestData" :roleIds="roleIds"></datalimitmask>
 			<rolemeunmask ref="role"></rolemeunmask>
 			<!--右侧内容显示 End-->
 		</div>

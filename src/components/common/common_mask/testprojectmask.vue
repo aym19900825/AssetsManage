@@ -125,7 +125,6 @@
 		projectpnums:'',//已选的检测项目拼接的字符串
     }
   },
-
   methods: {
   	dateFormat(row, column) {
 		var date = row[column.property];
@@ -345,5 +344,4 @@
 </script>
 
 <style>
-
 </style>

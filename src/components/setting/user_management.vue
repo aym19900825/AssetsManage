@@ -147,8 +147,11 @@
 		<usermask :user="user" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
 		<el-dialog title="修改密码" :visible.sync="passdialog" width="30%" :before-close="resetNewpwd">
 			<el-form :model="userpassword" inline-message :rules="rules" ref="newPwdForm">
-	  			<el-form-item label="新密码" prop="newPassword" label-width="100px">
-					<el-input v-model="userpassword.newPassword"></el-input>
+	  			<el-form-item label="新密码" prop="Password" label-width="100px">
+					<el-input  type="password" v-model="userpassword.Password"></el-input>
+				</el-form-item>
+				<el-form-item label="确认新密码" prop="newPassword" label-width="100px">
+					<el-input type="password" v-model="userpassword.newPassword"></el-input>
 				</el-form-item>
 			</el-form>
 		      <span slot="footer" class="dialog-footer">
@@ -207,9 +210,8 @@
 			return {
 				reportData:{},//报表的数据
 				rules:{
-					newPassword:[
-						{ required: true, message: '请输入密码', trigger: 'blur' }
-					]
+					newPassword:[{ required: true, message: '请输入密码', trigger: 'blur' }],
+					Password:[{required: true, message: '请输入密码', trigger: 'blur'}]
 				},
 				permissions:false,//查看权限
 				Access:false,//权限管理的弹出框
@@ -222,7 +224,8 @@
 				commentArr: {},
 				passdialog:false,
 				userpassword:{
-					newPassword: ''
+					newPassword: '',
+					Password:''
 				},
 				//权限弹出框的数据
 				workData:[],//工作任务单的数据
@@ -341,12 +344,11 @@
 			},
 			resetNewpwd(){
 				this.passdialog = false;
-				// this.userpassword.newPassword = '';
+				this.requestData();
 				 this.$refs['newPwdForm'].resetFields();
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//机构值
@@ -362,7 +364,6 @@
 				});
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				//console.log();
 				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
@@ -526,7 +527,6 @@
 				} else {
 					var url = this.basic_url + '/api-user/menus/findFirstMenu/'+this.selUser[0].id;
 					this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data==0){
 						this.$message({
 								message: '角色没有相应的权限配置',
@@ -567,11 +567,9 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/findMenuByRoleIdsForTask/'+id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.annualData = res.data;
 					this.recursive(res.data,arr);
 					this.$nextTick(() => {
-						console.log(arr);
 							this.annualsetChecked(arr);
 						});
 				}).catch(error => {
@@ -600,7 +598,6 @@
 				})
 			},
 			recursive(mData,arr){
-				console.log(mData.length);
 				var flag=true;
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
@@ -633,14 +630,10 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
-				console.log(arr);
 				this.$refs.product.setCheckedKeys(arr);
 			},
 			//
 			Accessconfirm(){//确定
-			console.log(this.$refs.work.getCheckedNodes());
-			console.log(this.$refs.annual.getCheckedNodes());
-			console.log(this.$refs.product.getCheckedNodes());
 			var pmType=[];
 			var taskType=[];
 			var productType=[];
@@ -677,7 +670,6 @@
 				}
 			
 				var url = this.basic_url + '/api-user/users/setAuth?pmType='+pmType+"&taskType="+taskType+"&productType="+productType+"&product="+product+"&userId="+this.selUser[0].id;
-				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -848,47 +840,39 @@
 					return;
 				} else {
 					this.passdialog=true;
-//					this.changeUser = selData[0];
-//					var id = changeUser.id;
-//					var url = this.basic_url + '/api-user/users/' + id + '/resetPassword';
-//					this.$axios.post(url, {}).then((res) => {
-//						//resp_code == 0是后台返回的请求成功的信息
-//						if(res.data.resp_code == 0) {
-//							this.$message({
-//								message: '重置成功',
-//								type: 'success'
-//							});
-//							this.requestData();
-//						}
-//					}).catch((err) => {
-//						this.$message({
-//							message: '网络错误，请重试',
-//							type: 'error'
-//						});
-//					});
 				}
 			},
+			//密码的确定
 			determine(){
 				var id = this.selUser[0].id;
-				var url = this.basic_url + '/api-user/users/' + id + '/password';
-				this.$refs['newPwdForm'].validate((valid) => {
-					if (valid) {
-						this.$axios.put(url,{"newPassword": this.userpassword.newPassword}).then((res) => {
-							if(res.data.resp_code == 0) {
+				var newPassword=this.userpassword.newPassword;
+				var Password=this.userpassword.Password;
+				if(newPassword==Password){
+					var url = this.basic_url + '/api-user/users/' + id + '/password';
+					this.$refs.newPwdForm.validate((valid) => {
+						if (valid) {
+							this.$axios.put(url,{"newPassword": this.userpassword.newPassword}).then((res) => {
+								if(res.data.resp_code == 0) {
+									this.$message({
+										message: '修改成功',
+										type: 'success'
+									});
+									this.resetNewpwd();
+								}
+							}).catch((err) => {
 								this.$message({
-									message: '修改成功',
-									type: 'success'
+									message: '网络错误，请重试',
+									type: 'error'
 								});
-								this.resetNewpwd();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
 							});
-						});
-					}
-				});
+						}
+					});
+				}else{
+					this.$message({
+									message:'新密码和确认新密码的值不一样请重新填写',
+									type: 'error'
+								});
+				}
 			},
 
 			// 启用

@@ -963,7 +963,7 @@
 			<!-- 查看子任务单  -->
 			<checkchildlist ref="checkchildlist"></checkchildlist>
 			<!-- 生成报告弹出显示数据  -->
-			<reportdata ref="reportdata"></reportdata>
+			<reportdata ref="reportdata" @reportdatavalue = "reportdatavalue"></reportdata>
 		</div>
 	</div>
 </template>
@@ -1042,6 +1042,7 @@
 				file_url: Config.file_url,
 				dialogVisible2:false,
 				workorderForm: {
+					PROJ_NUM:'',
 					WORKORDER_BASISList:[],//检测依据
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
@@ -1131,6 +1132,7 @@
 				workorderreportid:'',//存放生成报告id
 				btnshow:true,//报告提交按钮
 				sendchilddata:[],//子表已有的值
+				pronums:[],
 			};
 		},
 		methods: {
@@ -1316,7 +1318,7 @@
 					WORKORDER_REPORTList:[],//报告
 					WORKORDER_CONTRACTList:[],//分包项目					
 				};
-				pronums:''//检测项目编号字符串
+				pronums:[]//检测项目编号字符串
 			},
 			//表格传过来
 			childByValue: function (childValue) {
@@ -1532,9 +1534,13 @@
 					this.workorderForm.WORKORDER_PROJECTList.push(value[i]);
 				}
 				for(var i = 0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-					pronum.push(this.workorderForm.WORKORDER_PROJECTList[i].P_NUM);
+					this.pronums.push(this.workorderForm.WORKORDER_PROJECTList[i].P_NUM);
+					console.log(2323);
+					console.log(this.pronums);
 				}
-				this.workorderForm.PROJ_NUM = pronum.toString(',');
+				this.workorderForm.PROJ_NUM = this.pronums.toString(',');
+				console.log(111222);
+				console.log(this.workorderForm.PROJ_NUM);
 			},
 			 //模版编号
             templateNumber(item){
@@ -1958,6 +1964,20 @@
 						// });
 					}
 				}
+			},
+			reportdatavalue(value){
+				this.workorderreportid = value.id;
+                console.log(res);
+                console.log()
+                var obj = {
+                    REPORTNUM:value.reportnum,
+                    REPORTNAME:value.reportname,
+                    // PREVIEW:'',
+                    VERSION:value.version,
+                }
+                console.log(obj);
+                this.workorderForm.WORKORDER_REPORTList.push(obj);
+				console.log(this.workorderForm.WORKORDER_REPORTList);
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {

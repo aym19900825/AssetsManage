@@ -1261,7 +1261,7 @@
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 40px;
+		width: 70px;
 		height: 30px;
 		cursor: pointer;
 	}

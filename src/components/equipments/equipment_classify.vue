@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -91,16 +91,19 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							 <tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
-
-							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							<!-- <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination> -->
 						</el-col>
 					</el-row>
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
-				<!--报表-->
+			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page="page"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"></categorymask>
+			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
@@ -108,7 +111,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../equipmentsDetails/equipmentClassify_mask.vue'
     import tree_grid from '../common/TreeGrid.vue'//树表格
@@ -118,7 +121,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			categorymask,
 			tree_grid,
 			reportmask
@@ -128,16 +131,6 @@
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loading: false,//默认加载数据时显示loading动画
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					'编码',
                     '分类描述',
@@ -192,7 +185,7 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				CATEGORY: {},//修改子组件时传递数据
@@ -215,19 +208,6 @@
 						this.columns[i].isShow=false
 					}
 				}
-			},
-			sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-			},
-			currentChange(val) {
-				this.page.currentPage = val;
-				this.requestData();
-			},
-			searchinfo() {
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData();
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
@@ -374,7 +354,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/assetClass/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/assetClass/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -476,8 +456,25 @@
 				this.searchList.CLASSIFY_DESCRIPTION = data.CLASSIFY_DESCRIPTION;
 				this.requestData();
 			},
+			
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				this.requestData();
+			},
+			searchinfo() {
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
+			//Table默认加载数据
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
 				}
@@ -485,9 +482,16 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res);
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					this.categoryList = res.data.datas;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试2',
@@ -495,35 +499,35 @@
 					})
 				})
 			},
-			// handleNodeClick(data) {},
+
 			formatter(row, column) {
 				return row.enabled;
 			},
 			getDetail(data){
-			console.log('tableDetail');
+			// console.log('tableDetail');
 			this.view(data);
 			},
 			classByValue(childValue) {
 			// childValue就是子组件传过来的
-			console.log('classByValue');
+			// console.log('classByValue');
 		  this.selUser = childValue;
 			},
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值
-				console.log('childvalue');
-				this.$refs.navsheader.showClick(childValue);
+				// console.log('childvalue');
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			 //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

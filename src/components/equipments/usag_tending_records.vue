@@ -3,7 +3,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref='navsheader'></navs_header>
+		<navs_tabs ref='navsTabs'></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -83,7 +83,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" 
+						<el-table ref="table" :header-cell-style="rowClass" 
 							      :data="userList" 
 								  border 
 								  stripe 
@@ -141,7 +141,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import detailPage from '../equipmentsDetails/usag_records_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -150,7 +150,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			detailPage,
 			reportmask
@@ -158,19 +158,15 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				dataUrl: '/api/api-user/users',
-				searchData: {
-			        page: 1,
-			        limit: 20,//分页显示数
-		        },
 				checkedName: [
 					'设备编号',
 					'设备名称',
 					'规格型号',
 					'保管人',
-					
 				],
 				tableHeader: [
 					{
@@ -194,10 +190,7 @@
 						prop: 'KEEPER'
 					}
 				],
-				
-			
 				selUser: [],
-				
 				userList: [],
 				search: false,
 				show: false,
@@ -237,19 +230,6 @@
 			},
 			tableControle(data){
 				this.checkedName = data;
-			},
-			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
@@ -444,12 +424,69 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
-			
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			searchinfo(index) {
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -470,67 +507,33 @@
 						this.loadSign = true
 					}
 					this.userList =  res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {})
 				
-			},
-			loadMore () {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-					}else{
-						this.page.currentPage--
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-				}
-				   // if (this.loadSign) {
-				   //   this.loadSign = false
-				   //   this.page++
-				   //   if (this.page > 10) {
-				   //     return
-				   //   }
-				   //   setTimeout(() => {
-				   //     this.loadSign = true
-				   //   }, 1000)
-				   //   console.log('到底了', this.page)
-				   // }
-			 },
-			handleNodeClick(data) {
-			},
+			},			
 			formatter(row, column) {
 				return row.enabled;
 			},
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值
-				console.log('childvalue');
-				this.$refs.navsheader.showClick(childValue);
+				// console.log('childvalue');
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			 //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',

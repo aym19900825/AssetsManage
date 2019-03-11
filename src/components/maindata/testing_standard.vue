@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs  ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -177,7 +177,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import standardmask from '../maindataDetails/testing_standardMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -185,7 +185,7 @@
 		name: 'testing_standard',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			navs_left,
 			standardmask,
@@ -197,6 +197,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				value: '',
 				options: [{
@@ -307,6 +308,11 @@
 		},
 
 		methods: {
+			//上传成功后返回数据
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
@@ -539,7 +545,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectionSta/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/inspectionSta/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -581,6 +587,13 @@
 					});
 				}
 			},
+			//上传文件列表
+			handleSuccess(response, file, fileList){
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
+			},
+			// 导入
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/inspectionSta/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;
@@ -691,7 +704,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

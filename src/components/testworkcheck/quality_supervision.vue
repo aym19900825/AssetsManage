@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -72,7 +72,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" 
+							<el-table ref="table" :header-cell-style="rowClass" 
 									  :data="USESEAL" 
 									  border 
 									  stripe 
@@ -115,7 +115,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import qualitysup from '../testworkcheckDetails/qualitysup_mask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
@@ -125,7 +125,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			qualitysup,
             tableControle,
             reportmask
@@ -133,11 +133,10 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
-				commentArr: {},
 				loading: false,//默认加载数据时显示loading动画
+				commentArr: {},
 				value: '',
 				options: [{
 					value: '1',
@@ -183,7 +182,7 @@
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				buttons:[],
@@ -196,27 +195,57 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
 			},
 			tableControle(data) {
 				this.checkedName = data;
 			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			//重置
@@ -230,7 +259,7 @@
 			//搜索
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.requestData();
 			},
 			//添加类别
@@ -252,7 +281,6 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
 					this.$refs.qualitysup.detail(this.selUser[0].ID);
 				}
 			},
@@ -419,8 +447,9 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
                     limit: this.page.pageSize,
@@ -439,34 +468,29 @@
 					} else {
 						this.loadSign = true
 					}
-					console.log(res);
 					this.USESEAL=res.data.data;
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
-					// this.USESEAL = newarr;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,

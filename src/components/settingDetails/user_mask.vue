@@ -83,17 +83,18 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="nickname" label-width="100px">
-												<el-input v-model="user.nickname" :disabled="noedit"></el-input>
+												<el-input v-if="user.username == 'admin'" v-model="user.nickname" :disabled="edit"></el-input>
+												<el-input v-else v-model="user.nickname" :disabled="noedit"></el-input>
 												<span class="error"></span>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="8">
 											<el-form-item label="职务" prop="post" label-width="100px">
 												<el-input v-model="user.post" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="工号" prop="worknumber" label-width="100px">
 												<el-input v-model="user.worknumber" :disabled="noedit"></el-input>
@@ -101,24 +102,39 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="性別" prop="sex" label-width="100px">
-												<el-radio-group v-model="user.sex" :disabled="noedit">
+												<el-radio-group v-show="addtitle" v-model="user.sex" :disabled="noedit">
 													<el-radio label="1">男</el-radio>
 													<el-radio label="0">女</el-radio>
 												</el-radio-group>
+
+												<el-radio-group v-show="modifytitle" v-model="user.sex" :disabled="noedit">
+													<el-radio label="1">男</el-radio>
+													<el-radio label="0">女</el-radio>
+												</el-radio-group>
+
+												<el-radio-group v-show="viewtitle" v-model="user.sex" :disabled="noedit">
+													<el-radio :label="1">男</el-radio>
+													<el-radio :label="0">女</el-radio>
+												</el-radio-group>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="8">
 											<el-form-item label="身份证号" prop="idnumber" label-width="100px">
 												<el-input v-model="user.idnumber" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="手机号" prop="phone" label-width="100px">
 												<el-input v-model="user.phone" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
+								 			<el-form-item label="联系电话" prop="telephone" label-width="100px">
+												<el-input v-model="user.telephone" :disabled="noedit"></el-input>
+											</el-form-item>	
+								 		</el-col>
 										<el-col :span="8">
 											<el-form-item label="电子邮箱" prop="email" label-width="100px">
 												<el-input v-model="user.email" :disabled="noedit"></el-input>
@@ -134,7 +150,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许授权" prop="ispermit" label-width="100px">
-												<el-radio-group v-model="user.ispermit" :disabled="noedit">
+												<el-radio-group v-if="user.username == 'admin'" v-model="user.ispermit" :disabled="edit">
+													<el-radio label="1">是</el-radio>
+													<el-radio label="2">否</el-radio>
+												</el-radio-group>
+
+												<el-radio-group v-else v-model="user.ispermit" :disabled="noedit">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
@@ -142,7 +163,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许登录" prop="islogin" label-width="100px">
-												<el-radio-group v-model="user.islogin" :disabled="noedit">
+												<el-radio-group v-if="user.username == 'admin'" v-model="user.islogin" :disabled="edit">
+													<el-radio label="1">是</el-radio>
+													<el-radio label="2">否</el-radio>
+												</el-radio-group>
+
+												<el-radio-group v-else v-model="user.islogin" :disabled="noedit">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
@@ -164,6 +190,17 @@
 											</el-form-item>-->
 										</el-col>
 										<el-col :span="8">
+											<el-form-item label="角色" prop="roleId" label-width="100px">
+												<el-select v-if="user.username == 'admin'" v-model="user.roleId" multiple :disabled="edit" default-first-option value-key="item.id" style="width: 100%;">
+													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+
+												<el-select v-else v-model="user.roleId" multiple :disabled="noedit" default-first-option value-key="item.id" style="width: 100%;">
+													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="学历" prop="education" label-width="100px">
 												<el-select v-model="user.education" placeholder="请选择" style="width: 100%" :disabled="noedit">
 													<el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value">
@@ -171,14 +208,22 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="ERP" prop="erp_orgname" label-width="100px">
-												<el-input v-model="user.erp_orgname" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-										
 									</el-row>
-									<el-row>
+									
+								 	<!-- <el-row>
+								 		<el-col :span="16">
+								 			 <el-form-item label="地址" prop="address" label-width="100px">
+										    <el-input v-model="user.address"></el-input>
+										  </el-form-item>	
+								 		</el-col>
+								 		<el-col :span="8">
+								 			<el-form-item label="邮编" prop="zipcode" label-width="100px">
+											    <el-input v-model="user.zipcode"></el-input>
+											  </el-form-item>
+								 		</el-col>
+								 	</el-row> -->
+
+								 	<el-row>
 										<el-col :span="8">
 											<!-- <el-form-item label="IP地址" prop="ipaddress" label-width="100px">
 												<el-input v-model="user.ipaddress" :disabled="noedit"></el-input>
@@ -190,17 +235,16 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="noedit"  default-first-option value-key="item.id"  style="width: 100%;">
-													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
-												</el-select>
+											<el-form-item label="ERP" prop="erp_orgname" label-width="100px">
+												<el-input v-model="user.erp_orgname" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
+
 									<el-row>
 										<el-col :span="24">
 											<el-form-item label="备注" prop="tips" label-width="100px">
-												<el-input type="textarea" v-model="user.tips" :disabled="noedit"></el-input>
+												<el-input type="textarea" :rows="3" v-model="user.tips" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -213,16 +257,16 @@
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
-												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;">
+												<form method="post" id="file" v-loading="loading" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;position: relative;">
 													<el-button type="primary" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i>
 														<font>上传</font>
-														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+														<input id="excelFile" type="file" name="uploadFile" @change="upload" />
 													</el-button>
 												</form>
 											</div>
 											<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
-												<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualifications" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualifications', order: 'descending'}">
+												<el-table :header-cell-style="rowClass" :fig="true" :data="user.qualification" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.qualification', order: 'descending'}">
 													<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -233,7 +277,7 @@
 													</el-table-column>
 													<el-table-column prop="c_num" label="证书编号" sortable width="180px">
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+															<el-form-item :prop="'qualification.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
 																</el-input>
 																<span v-else>{{scope.row.c_num}}</span>
@@ -242,7 +286,7 @@
 													</el-table-column>
 													<el-table-column prop="c_name" label="证书名称" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
+															<el-form-item :prop="'qualification.'+scope.$index + '.c_name'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
 																</el-input>
 																<span v-else>{{scope.row.c_name}}</span>
@@ -256,8 +300,8 @@
 													</el-table-column>
 													<el-table-column prop="c_date" label="资质有效期" sortable width="200px">
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
-																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
+															<el-form-item :prop="'qualification.'+scope.$index + '.c_date'">
+																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: inherit;">
 																</el-date-picker>
 																<span v-else>{{scope.row.c_date}}</span>
 															</el-form-item>
@@ -266,7 +310,7 @@
 													
 													<!-- <el-table-column prop="enterby" label="录入人" sortable width="120px">
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
+															<el-form-item :prop="'qualification.'+scope.$index + '.enterbyName'">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
 																</el-input>
 																<span v-else>{{scope.row.enterbyName}}</span>
@@ -275,7 +319,7 @@
 													</el-table-column> -->
 													<!-- <el-table-column prop="enterdate" label="录入时间" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
+															<el-form-item :prop="'qualification.'+scope.$index + '.enterdate'">
 																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 																</el-date-picker>
 																<span v-else>{{scope.row.enterdate}}</span>
@@ -284,7 +328,7 @@
 													</el-table-column> -->
 													<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+															<el-form-item :prop="'qualification.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
 																</el-input>
 																<span v-else>{{scope.row.status}}</span>
@@ -293,7 +337,7 @@
 													</el-table-column> -->
 													<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
 											<template slot-scope="scope">
-												<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-form-item :prop="'user_qualification.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
 												</el-input>
 												<span v-else>{{scope.row.VERSION}}</span>
@@ -372,7 +416,7 @@
 													<font>新建行</font>
 												</el-button>
 											</div>
-												<el-table :header-cell-style="rowClass" :fit="true" :data="user.ips" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.ips', order: 'descending'}">
+												<el-table :header-cell-style="rowClass" :fit="true" :data="user.ip" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'user.ip', order: 'descending'}">
 													<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -380,28 +424,28 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column label="序号" sortable width="120px" prop="STEP">
+													<el-table-column label="序号" sortable width="120px" prop="step">
 													   <template slot-scope="scope">
 													         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
-													         <span v-show="!scope.row.isEditing" >{{scope.row.STEP}}</span>
+													         <span v-show="!scope.row.isEditing" >{{scope.row.step}}</span>
 													   </template>
 													</el-table-column>
-													<el-table-column prop="IP_BEGIN" label="起始IP地址" sortable>
+													<el-table-column prop="ip_begin" label="起始IP地址" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'ips.'+scope.$index + '.IP_BEGIN'">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_BEGIN" placeholder="请输入起始IP地址">
+															<el-form-item :prop="'ip.'+scope.$index + '.ip_begin'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ip_begin" placeholder="请输入起始IP地址">
 																</el-input>
-																<span v-else>{{scope.row.IP_BEGIN}}</span>
+																<span v-else>{{scope.row.ip_begin}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="IP_END" label="结束IP地址" sortable>
+													<el-table-column prop="ip_end" label="结束IP地址" sortable>
 														<template slot-scope="scope">
-															<el-form-item :prop="'ips.'+scope.$index + '.IP_END'">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.IP_END" placeholder="请输入结束IP地址">
+															<el-form-item :prop="'ip.'+scope.$index + '.ip_end'">
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ip_end" placeholder="请输入结束IP地址">
 																</el-input>
-																<span v-else>{{scope.row.IP_END}}</span>
+																<span v-else>{{scope.row.ip_end}}</span>
 															</el-form-item>
 														</template>
 													</el-table-column>
@@ -499,6 +543,7 @@
 	            callback();
 		     };
 			return {
+				loading: false,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
 				user: {
@@ -506,8 +551,8 @@
 					roleId: [],
 					roles: [],
 					traings: [],
-					qualifications: [],
-					ips: [],
+					qualification: [],
+					ip: [],
 				},
 				options: [{
 						value: '高中',
@@ -588,6 +633,7 @@
 						{required: true,trigger: 'blur',message: '必填'},
 						{validator: this.Validators.isPhone, trigger: 'blur'},
 					],
+					telephone: [{required: false, trigger: 'blur', validator: this.Validators.isTelephone}],
 					email: [
 						{required: true,trigger: 'blur',message: '必填'},
 						{validator: this.Validators.isEmail, trigger: 'blur'},
@@ -677,8 +723,8 @@
 					tips: '',
 					enabled: true,
 					traings: [],
-					qualifications: [],
-					ips: [],
+					qualification: [],
+					ip: [],
 				}
 			},
 			//点击按钮显示弹窗
@@ -729,8 +775,8 @@
 						//少附件
 						isEditing: true
 					};
-					this.user.qualifications.push(obj);
-					// console.log(typeof(this.user.qualifications));
+					this.user.qualification.push(obj);
+					// console.log(typeof(this.user.qualification));
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -757,21 +803,21 @@
 					IP_END: '',
 					isEditing: true
 				};
-				this.user.ips.push(obj);
+				this.user.ip.push(obj);
 			},
 			
 			//刪除新建行
 			deleteRow(index, row, listName){
 				var TableName = '';
 				if(listName =='tableList'){
-					TableName = 'qualifications';
+					TableName = 'qualification';
 				}else if(listName =='traingList'){
 					TableName = 'traings';
 				}else{
-					TableName = 'ips';
+					TableName = 'ip';
 				}
 				if(row.id){
-					var url = this.basic_url + '/api-user/users/' + TableName +'/' + row.id;
+					var url = this.basic_url + '/api-user/users/' + row.id;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -814,12 +860,7 @@
 					this.$refs.tree.setCheckedNodes([]);
 				}
 			},
-
-
-			handleNodeClick(data) { //获取勾选树菜单节点
-				//				console.log(data);
-			},
-
+			
 			//点击按钮显示弹窗
 			visible() {
 				this.user = {
@@ -841,8 +882,8 @@
 					tips: '',
 					enabled: true,
 					traings: [],
-					qualifications: [],
-					ips: [],
+					qualification: [],
+					ip: [],
 				};
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 
@@ -916,8 +957,8 @@
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//资质信息
-					for(var i = 0;i<res.data.qualifications.length;i++){
-						res.data.qualifications[i].isEditing = false;
+					for(var i = 0;i<res.data.qualification.length;i++){
+						res.data.qualification[i].isEditing = false;
 					}
 					
 					//培训
@@ -926,13 +967,11 @@
 					}
 
 					//IP地址管理
-					// for(var i = 0;i<res.data.ips.length;i++){
-					// 	res.data.ips[i].isEditing = false;
+					// for(var i = 0;i<res.data.ip.length;i++){
+					// 	res.data.ip[i].isEditing = false;
 					// }
-					console.log(res);
 				    res.data.sex=res.data.sex.toString();
 					this.user = res.data;
-					console.log(res);
 					// this.user.enabled = this.user.enabled ? '活动' : '不活动';
 					this.user.roleId = this.user.roleId.split(',');
 					var arr = [];
@@ -1144,7 +1183,7 @@
 			});
 			},
 			upload(e){
-				var list = this.user.qualifications || [];
+				var list = this.user.qualification || [];
 				var editList = [];
 				for(let i=0; i<list.length; i++){
 					if(list[i].isEditing){
@@ -1165,13 +1204,8 @@
 					});
 					return;
 				}
+				this.loading = true;
 				var formData = new FormData();
-				var loading;
-				loading = Loading.service({
-					fullscreen: true,
-					text: '拼命上传中...',
-					background: 'rgba(F,F, F, 0.8)'
-				});
 				// this.$emit('showLoading');
 				formData.append('files', document.getElementById('excelFile').files[0]);
 				var config = {
@@ -1190,7 +1224,7 @@
 						+ '&recordid=1&appname=客户管理&appid=2';
 				this.$axios.post(url, formData, config
 				).then((res)=>{
-					loading.close();
+					this.loading = false;
 					if(res.data.code == 0){
 						this.$message({
 							message: res.data.message,
@@ -1202,10 +1236,10 @@
 							type: 'success'
 						});
 						var index = editList[0];
-						this.user.qualifications[index].FILEID = res.data.fileid;
-						this.user.qualifications[index].FILESIZE = res.data.filesize;
-						this.user.qualifications[index].FILEPATH = res.data.webUrl;
-						this.$set(this.user.qualifications,index,this.user.qualifications[index]);
+						this.user.qualification[index].FILEID = res.data.fileid;
+						this.user.qualification[index].FILESIZE = res.data.filesize;
+						this.user.qualification[index].FILEPATH = res.data.webUrl;
+						this.$set(this.user.qualification,index,this.user.qualification[index]);
 					}
 				})
 			}
@@ -1222,13 +1256,15 @@
 	@import '../../assets/css/mask-modules.css';
 	.a-upload input{
 		position: absolute;
-		font-size: 5px;
-		right: 0px;
+		font-size: 0;
+		font-size: 20 \9;
+		left: 0px;
 		top: 0;
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 70px;
+		width: 40px;
+		height: 30px;
 		cursor: pointer;
 	}
 </style>

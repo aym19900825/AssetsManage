@@ -68,9 +68,9 @@ const verification_plan  = r => require.ensure([], () => r(require('@/components
 const verification_records  = r => require.ensure([], () => r(require('@/components/equipments/verification_records')), 'verification_records')//期间核查记录   
 const testing  = r => require.ensure([], () => r(require('@/components/testing')), 'testing')//期间核查记录
 
-const doc_category  = r => require.ensure([], () => r(require('@/components/document/category')), 'doc_category')//关键字类别
-const doc_keyword  = r => require.ensure([], () => r(require('@/components/document/keyword')), 'doc_keyword')//关键字
-const doc_authorize  = r => require.ensure([], () => r(require('@/components/document/authorize')), 'doc_authorize')//关键字授权
+const doc_category  = r => require.ensure([], () => r(require('@/components/document/doc_category')), 'doc_category')//关键字类别
+const doc_keyword  = r => require.ensure([], () => r(require('@/components/document/doc_keyword')), 'doc_keyword')//关键字
+const doc_authorize  = r => require.ensure([], () => r(require('@/components/document/doc_authorize')), 'doc_authorize')//关键字授权
 const doc_root  = r => require.ensure([], () => r(require('@/components/document/doc_root')), 'doc_root')//文件目录
 const doc_list  = r => require.ensure([], () => r(require('@/components/document/doc_list')), 'doc_list')//文件列表
 const job  = r => require.ensure([], () => r(require('@/components/job/job')), 'job')//任务管理
@@ -84,6 +84,8 @@ const flowmap  = r => require.ensure([], () => r(require('@/components/workflow/
 
 const flow_management  = r => require.ensure([], () => r(require('@/components/flow/flow_management')), 'flow_management')//流程模型
 const flow_process  = r => require.ensure([], () => r(require('@/components/flow/flow_process')), 'flow_process')//流程模型
+
+const printCode  = r => require.ensure([], () => r(require('@/components/samples/printCode')), 'printCode')//打印条码
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -434,6 +436,11 @@ Vue.use(Router)
       path: '/jobgroup',
       name: 'jobgroup',
       component: jobgroup
+    },
+    {//打印条码
+      path: '/printCode',
+      name: 'printCode',
+      component: printCode
     },
 ];
 

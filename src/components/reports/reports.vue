@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -68,7 +68,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table :data="reportsList" 
+						<el-table ref="table" :data="reportsList" 
 							      border 
 								  stripe 
 								  :height="fullHeight" 
@@ -86,9 +86,9 @@
 							</el-table-column>
 							<el-table-column label="代码" width="200" sortable prop="code" v-if="this.checkedName.indexOf('代码')!=-1">
 							</el-table-column>
-							<el-table-column label="报表名称" width="200" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
+							<el-table-column label="报表名称" width="220" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="报表文件" width="160" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
+							<el-table-column label="报表文件" width="230" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
 							</el-table-column>
 							<el-table-column label="备注" width="200" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
@@ -99,10 +99,11 @@
 							<el-table-column label="录入时间" width="160" sortable prop="createdate" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>	
 							<el-table-column label="修改人" width="120" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>	
-						
+							</el-table-column>
 							<el-table-column label="修改日期" width="160" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
-							</el-table-column>	
+							</el-table-column>
+						</el-table>
+						<!-- 表格 End-->
 						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
 				            @size-change="sizeChange"
 				            @current-change="currentChange"
@@ -112,14 +113,12 @@
 				            layout="total, sizes, prev, pager, next"
 				            :total="page.totalCount">
 				        </el-pagination>
-						<!-- 表格 End-->
-						</el-table>
 					</el-col>
 				</el-row>
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<reportmask ref="child"  @request="requestData" ></reportmask>
+		<reportmask ref="child" @request="requestData" ></reportmask>
 	</div>
 </div>
 </template>
@@ -127,7 +126,7 @@
 	import Config from '../../config.js';
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from '../reportDetails/reportConfigurationMask.vue'
 	export default {
@@ -135,14 +134,15 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			reportmask
 		},
 		data() {
 			return {
-				loading: false,
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
 					'代码',
 					'报表名称',
@@ -374,8 +374,61 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//Table默认加载数据
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -391,77 +444,40 @@
 						this.loadSign = true
 					}
 					this.reportsList = res.data.data;
-					this.loading = false;
-					// this.page.totalCount = res.data.count;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
-				
-			},
-			loadMore () {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-					}else{
-						this.page.currentPage--
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-				}
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page++
-			   //   if (this.page > 10) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   console.log('到底了', this.page)
-			   // }
-			 },
-			handleNodeClick(data) {
 			},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
-			  //请求页面的button接口
+			//请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 		    },
 		},

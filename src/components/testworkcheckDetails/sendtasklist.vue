@@ -4,7 +4,7 @@
 		<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 			<el-tabs v-model="activeName" @tab-click="handleClick">						
                 <el-tab-pane label="检测项目与要求" name="first">
-                    <el-table :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border  @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
+                    <el-table ref="table" :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
                         <el-table-column prop="P_NUM" label="检测项目编号" sortable>
@@ -18,7 +18,7 @@
                     </el-table>
                 </el-tab-pane>
                 <el-tab-pane label="分包项目" name="second">
-                    <el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border  @selection-change="conChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
+                    <el-table ref="table" :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border @selection-change="conChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
                         <el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column prop="WONUM" label="工作任务单编号" sortable width="150px">
@@ -62,11 +62,12 @@
 		basic_url: Config.dev_url,
 		productList: [],
 		dialogProduct: false,
-		loadSign:true,//加载
+		loadSign: true, //鼠标滚动加载数据
+		loading: false,//默认加载数据时显示loading动画
 		commentArr:{},
 		page: {
 			currentPage: 1,
-			pageSize: 10,
+			pageSize: 20,
 			totalCount: 0
 		},
 		DEPTID:'',//当前选择的机构值
@@ -108,12 +109,56 @@
 	rowClass({ row, rowIndex}) {
 	    return 'text-align:center'
 	},
-  	sizeChange(val) {
+  	//表格滚动加载
+	loadMore() {
+		let up2down = sessionStorage.getItem('up2down');
+		if(this.loadSign) {					
+			if(up2down=='down'){
+				this.page.currentPage++;
+				if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+					this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					return false;
+				}
+				let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}
+			}else{
+				sessionStorage.setItem('toBtm','false');
+				this.page.currentPage--;
+				if(this.page.currentPage < 1) {
+					this.page.currentPage=1;
+					return false;
+				}
+			}
+			this.loadSign = false;
+			setTimeout(() => {
+				this.loadSign = true;
+			}, 1000)
+			this.requestData();
+		}
+	},
+	//改变页数
+	sizeChange(val) {
 		this.page.pageSize = val;
+		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+			sessionStorage.setItem('toBtm','true');
+		}else{
+			sessionStorage.setItem('toBtm','false');
+		}
 		this.requestData();
 	},
+	//当前页数
 	currentChange(val) {
 		this.page.currentPage = val;
+		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+			sessionStorage.setItem('toBtm','true');
+		}else{
+			sessionStorage.setItem('toBtm','false');
+		}
 		this.requestData();
 	},
   	//点击关闭按钮
@@ -122,20 +167,29 @@
 	},
   	visible(dataid) {
 		this.workorderForm.ID = dataid;
-		this.showdata(dataid);
+		this.requestData(dataid);
 	},
-	showdata(dataid){
-		// var url = 'http://192.168.1.115:7902/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
+	//Table默认加载数据
+	requestData(dataid){
+		this.loading = true;//加载动画打开
 		var url = this.basic_url +'/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
-		console.log(url);
 		this.$axios.get(url, {}).then((res) => {
-			console.log(111);
-			console.log(res.data);			
 			if(res.data.resp_code == 0) {
+				this.page.totalCount = res.data.count;//页码赋值
+				//总的页数
+				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+				if(this.page.currentPage >= totalPage) {
+					this.loadSign = false;
+				} else {
+					this.loadSign = true;
+				}
 				this.workorderForm.WORKORDER_PROJECTList = res.data.datas.WORKORDER_PROJECT;
 				this.workorderForm.WORKORDER_CONTRACTList = res.data.datas.WORKORDER_CONTRACT;
 				this.dialogProduct = true;
-
+				this.loading = false;//加载动画关闭
+				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+					$('.el-table__body-wrapper table').find('.filing').remove();
+				}//滚动加载数据判断filing
 			}else if(res.data.resp_code == 1){
 				this.$message({
 					message: res.data.resp_msg,
@@ -175,14 +229,13 @@
 			var contractid = this.WORKORDER_CONTRACTLISTID.toString(',');
 			// var url = 'http://192.168.1.115:7902/app/workorder/operate/subtask?WORKORDERID='+id+'&WORKORDER_PROJECTLISTID='+projectid+'WORKORDER_CONTRACTLISTID='+contractid;
 			var url = this.basic_url +'/api-apps/app/workorder/operate/subtask?WORKORDERID='+id+'&WORKORDER_PROJECTLISTID='+projectid+'&WORKORDER_CONTRACTLISTID='+contractid;
-			console.log(url);
 			this.$axios.get(url,{}).then((res) => {
-				console.log(res);
 				if(res.data.resp_code == 0) {
 					this.$message({
 						message: '生成成功',
 						type: 'success'
 					});
+					this.$emit.refresh();
 				}
 			}).catch((err) => {
 				this.$message({
@@ -197,6 +250,7 @@
 	},	
   },
   mounted() {
+  	
 	},
 }
 </script>

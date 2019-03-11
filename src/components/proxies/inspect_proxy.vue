@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -113,7 +113,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="inspectList" 
+							<el-table ref="table" :data="inspectList" 
 									  :header-cell-style="rowClass" 
 									  border 
 									  stripe 
@@ -182,7 +182,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 
@@ -191,7 +191,7 @@
 		components: {
 			'vheader': vheader,
 			'navs_left': navs_left,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'inspectmask': inspectmask,
 			reportmask
 		},
@@ -651,7 +651,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectPro/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/inspectPro/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -843,7 +843,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

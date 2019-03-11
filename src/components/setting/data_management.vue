@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
@@ -66,7 +66,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table :data="dataList" 
+							<el-table ref="table" :data="dataList" 
 									  border 
 									  stripe  
 									  :header-cell-style="rowClass" 
@@ -74,26 +74,20 @@
 									  style="width: 100%; margin: 0 auto;" 
 									  :default-sort="{prop:'dataList', order: 'descending'}" 
 									  @selection-change="SelChange"
+									  v-loadmore="loadMore"
 									  v-loading="loading"  
 								  	  element-loading-text="加载中…"
 								  	  element-loading-spinner="el-icon-loading"
 								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column fixed type="selection" width="55" align="center">
 								</el-table-column>
-								<el-table-column label="表名" sortable width="320" prop="name"  v-if="this.checkedName.indexOf('表名')!=-1">
+								<el-table-column label="表名" sortable width="320" prop="name" v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>
-								<el-table-column label="描述" sortable prop="description" width="820"  v-if="this.checkedName.indexOf('描述')!=-1">
+								<el-table-column label="描述" sortable prop="description" v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
 							</el-table>
-							<el-pagination v-if="this.checkedName.length>0" class="pull-right pt10"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
-					        </el-pagination>
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40, 100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
 							<!-- 表格end -->
 						</el-col>
 					</el-row>
@@ -108,7 +102,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import datamask from '../settingDetails/data_mask.vue'
 	import relamask from '../settingDetails/rela_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -116,7 +110,7 @@
 		name: 'data_management',
 		components: {
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'datamask': datamask,
 			'relamask': relamask,
@@ -124,8 +118,9 @@
 		},
 		data() {
 			return {
-				loading: false,
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				selUser: [],
 				'启用': true,
 				'冻结': false,
@@ -181,14 +176,6 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
-			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
@@ -334,8 +321,61 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//Table默认加载数据
 			requestData() {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -346,9 +386,19 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					this.dataList = res.data.data;
-					this.page.totalCount = res.data.count;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {})
 			},
 			//机构树
@@ -383,21 +433,17 @@
 			},
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
-				console.log( childvalue);
 		    	 this.getbutton( childvalue);
 		    },
 			//请求页面的button接口
 		    getbutton(childvalue){
-		    	console.log(childvalue);
 		    	var data = {
 					menuId: childvalue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {})
 
 		    },

@@ -2,7 +2,7 @@
 <div>
 		<div class="headerbg">
 			<vheader ></vheader>
-			<navs_header ref='navsheader'></navs_header>	
+			<navs_tabs ref='navsTabs'></navs_tabs>	
 		</div>
         <div class="contentbg">
 	    	<div class="wrapper-content">
@@ -102,13 +102,13 @@
 import Config from '../config.js'
 //import maskrouter from '../maskrouter.js'
 import vheader from './common/vheader.vue'
-import navs_header from './common/nav_tabs.vue'
+import navs_tabs from './common/nav_tabs.vue'
 
 export default {
 	name: 'task',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 		},
 
     data() {

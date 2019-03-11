@@ -97,7 +97,7 @@ export default {
             //分页显示
             page: {
                 currentPage: 1,
-                pageSize: 10,
+                pageSize: 20,
                 totalCount: 0
             },
             tipSaveShow: false
@@ -130,16 +130,15 @@ export default {
         readAuth(row){
             console.log(row);
             var url = this.po_url+"/show?filename=" +row.filename
-                        + '&fileid=' +  row.fileid
-                        + '&userid=' +  this.docParm.userid
-                        + '&username=' + this.docParm.username
-                        + '&deptid=' + this.docParm.deptid
-                        + '&deptfullname=' + this.docParm.deptfullname
-                        // + '&recordid=' + this.docParm.recordid
-                        + '&appname=' + this.docParm.appname
-                        + '&appid=' + this.docParm.appid;
-             window.open(url); 
-             console.log(url);
+                    + '&fileid=' +  row.fileid
+                    + '&userid=' +  this.docParm.userid
+                    + '&username=' + this.docParm.username
+                    + '&deptid=' + this.docParm.deptid
+                    + '&deptfullname=' + this.docParm.deptfullname
+                    + '&recordid=' + this.docParm.recordid
+                    + '&appname=' + this.docParm.appname
+                    + '&appid=' + this.docParm.appid;
+         window.open(url); 
         },
         uploadTip(){
             this.tipSaveShow = true;

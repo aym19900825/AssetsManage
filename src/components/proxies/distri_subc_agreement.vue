@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -96,7 +96,7 @@
 					<div id="middle"></div>
 					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" 
+						<el-table ref="table" :header-cell-style="rowClass" 
 								  :data="subagreeList" 
 								  border 
 								  stripe 
@@ -161,32 +161,22 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue' 
+	import navs_tabs from '../common/nav_tabs.vue' 
 	import tableControle from '../plugin/table-controle/controle.vue'
 	export default {
 		name: 'user_management',
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 		},
 		data() {
 			return {
-				loadSign: true, //鼠标滚动加载数据
-				loading: false,//默认加载数据时显示loading动画
 				// dataUrl: '/api/api-user/users',
 				basic_url: Config.dev_url,
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        nickname: '',
-			        enabled: '',
-			        searchKey: '',
-			        searchValue: '',
-			        companyId: '',
-			        deptId: ''
-		        },
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
 					'分包协议编号',
 					'委托书编号',
@@ -529,7 +519,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

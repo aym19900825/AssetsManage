@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header></navs_header>
+		<navs_tabs></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -12,7 +12,7 @@
 
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content">
-			<EasyScrollbar>
+			<!-- <EasyScrollbar> -->
 				<div id="wrapper" :style="{height: fullHeight}">
 					<div id="information" style="height: inherit;">
 						<div class="ibox-content">
@@ -112,7 +112,7 @@
 						</div>
 					</div>
 				</div>
-			</EasyScrollbar>
+			<!-- </EasyScrollbar> -->
 		</div>
 		<!--右侧内容显示 End-->
 	</div>
@@ -122,7 +122,7 @@
 	import Config from '../config.js'
 	import vheader from './common/vheader.vue'
 	import navs_left from './common/left_navs/nav_left3.vue'
-	import navs_header from './common/nav_tabs.vue'
+	import navs_tabs from './common/nav_tabs.vue'
 	import table from './plugin/table/table-normal.vue'
 	import tableControle from './plugin/table-controle/controle.vue'
 	export default {
@@ -130,7 +130,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			table,
 		},
@@ -281,7 +281,7 @@
 				userData:[],
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				aaaData:[],

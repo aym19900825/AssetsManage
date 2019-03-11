@@ -3,7 +3,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header ref="navsheader"></navs_header>
+		<navs_tabs ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -57,52 +57,50 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-						<el-form :model="searchList" label-width="70px">
-							<el-row :gutter="10">
-								<el-col :span="5">
-									
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="设备名称" prop="DESCRIPTION">
-										<el-input v-model="searchList.DESCRIPTION"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="制造商" prop="VENDOR">
-										<el-input v-model="searchList.VENDOR"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-									<el-form-item label="保管人" prop="KEEPER">
-										<el-input v-model="searchList.KEEPER"></el-input>
-									</el-form-item>
-								</el-col>
-								<!-- <el-col :span="5">
-									<el-input v-model="searchList.STATE">
-										<template slot="prepend">设备状态</template>
-									</el-input>
-									<el-select v-model="searchList.STATE" placeholder="请选择">
-										<el-option
-										v-for="item in status"
-										:key="item.value"
-										:label="item.label"
-										:value="item.value">
-										</el-option>
-										<template slot="prepend">设备状态</template>
-									</el-select>
-								</el-col>
-								<el-col :span="4">
-									<el-input v-model="searchList.OPTION_STATUS">
-										<template slot="prepend">设备使用状态</template>
-									</el-input>
-								</el-col> -->
-								<el-col :span="4">
-									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
-								</el-col>
-							</el-row>
-						</el-form>
-					</div>
+					<el-form :model="searchList" label-width="70px">
+						<el-row :gutter="10">
+							<el-col :span="5"></el-col>
+							<el-col :span="5">
+								<el-form-item label="设备名称" prop="DESCRIPTION">
+									<el-input v-model="searchList.DESCRIPTION"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="5">
+								<el-form-item label="制造商" prop="VENDOR">
+									<el-input v-model="searchList.VENDOR"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-form-item label="保管人" prop="KEEPER">
+									<el-input v-model="searchList.KEEPER"></el-input>
+								</el-form-item>
+							</el-col>
+							<!-- <el-col :span="5">
+								<el-input v-model="searchList.STATE">
+									<template slot="prepend">设备状态</template>
+								</el-input>
+								<el-select v-model="searchList.STATE" placeholder="请选择">
+									<el-option
+									v-for="item in status"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+									</el-option>
+									<template slot="prepend">设备状态</template>
+								</el-select>
+							</el-col>
+							<el-col :span="4">
+								<el-input v-model="searchList.OPTION_STATUS">
+									<template slot="prepend">设备使用状态</template>
+								</el-input>
+							</el-col> -->
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
 				<!-- 高级查询划出 End-->
 				<el-row class="relative" id="pageDiv">
 					<el-col :span="5" class="lefttree" id="left">
@@ -115,7 +113,7 @@
 							</div>
 							<div class="left_treebg" :style="{height: fullHeight}">
 								<div class="p15" v-if="ismin">
-									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all  :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
 									</el-tree>
 								</div>
 							</div>
@@ -124,19 +122,19 @@
 					<div id="middle"></div>
 					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
-						<el-table :header-cell-style="rowClass" 
-								  :data="assetList" 
-								  border 
-								  stripe 
-								  :height="fullHeight" 
-								  style="width: 100%;" 
-								  :default-sort="{prop:'assetList', order: 'descending'}" 
-								  @selection-change="SelChange" 
-								  v-loadmore="loadMore"
-								  v-loading="loading"  
-								  element-loading-text="加载中…"
-    							  element-loading-spinner="el-icon-loading"
-    							  element-loading-background="rgba(255, 255, 255, 0.9)">
+						<el-table ref="table" :header-cell-style="rowClass" 
+							  :data="assetList" 
+							  border 
+							  stripe 
+							  :height="fullHeight" 
+							  style="width: 100%;" 
+							  :default-sort="{prop:'assetList', order: 'descending'}" 
+							  @selection-change="SelChange" 
+							  v-loadmore="loadMore"
+							  v-loading="loading"  
+							  element-loading-text="加载中…"
+							  element-loading-spinner="el-icon-loading"
+							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
@@ -147,9 +145,9 @@
 							</el-table-column>
 							<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('设备名称')!=-1">
 							</el-table-column>
-							<el-table-column label="型号" sortable prop="MODEL" v-if="this.checkedName.indexOf('型号')!=-1">
+							<el-table-column label="型号" width="160" sortable prop="MODEL" v-if="this.checkedName.indexOf('型号')!=-1">
 							</el-table-column>
-							<el-table-column label="技术指标" width="120" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
+							<el-table-column label="技术指标" width="140" sortable prop="ASSET_KPI" v-if="this.checkedName.indexOf('技术指标')!=-1">
 							</el-table-column>						
 							<el-table-column label="制造商" width="140" sortable prop="VENDOR" v-if="this.checkedName.indexOf('制造商')!=-1">
 							</el-table-column>
@@ -195,7 +193,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -203,7 +201,7 @@
 		name: 'instruments',
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			instrumentsmask,
 			tableControle,
@@ -212,8 +210,8 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
-				loadSign: true, //加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},
 				status: [
 					{
@@ -313,7 +311,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				
 				assetList: [],
 				search: false,
 				show: false,
@@ -373,14 +370,6 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
-			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
@@ -510,7 +499,7 @@
 					});
 					return;
 				} else {						
-					var url = this.basic_url + '/api-apps/app/asset/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/asset/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -599,7 +588,7 @@
 				this.selUser = val;
 			},
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -613,8 +602,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// this.assetList = res.data.data;
-					// this.page.totalCount = res.data.count;
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -624,19 +611,10 @@
 						this.loadSign = true
 					}
 					this.assetList =  res.data.data;
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
-					// this.assetList = newarr;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -668,48 +646,65 @@
 				}
 				return data;
 			},
+			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
-				// if(this.loadSign) {
-				// 	this.loadSign = false
-				// 	this.page.currentPage++
-				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-				// 			return
-				// 		}
-				// 	setTimeout(() => {
-				// 		this.loadSign = true
-				// 	}, 1000)
-				// 	this.requestData()
-					//console.log('到底了', this.page.currentPage)
+					this.requestData();
 				}
 			},
-			handleNodeClick(data) {
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
 			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

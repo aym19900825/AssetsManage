@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -187,7 +187,22 @@
 		<samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
 			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<el-dialog
+			title="条码"
+			:visible.sync="codeDialog"
+			width="30%"
+			:before-close="resetCode"
+			center>
+			<div id="printdom">
+				<img  id="barcode" :src="codeUrl" alt="条码" />
+			</div>
+			<span slot="footer">
+				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
+					<el-button type="primary">打印条码</el-button>
+				</router-link>
+			</span>
+		</el-dialog>
 	</div>
 	</div>
 </template>
@@ -195,7 +210,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -204,13 +219,16 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			samplesmask,
 			reportmask
 		},
 		data() {
 			return {
+				codeDialog: false,
+				codeUrl: 'http://192.168.1.126:9200/stripcode/image/25157709.jpg',
+				code_url: Config.code_url,
 				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
@@ -415,25 +433,76 @@
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+		       		 this.openAddMgr();
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+		    		 this.modify();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+		    		 this.physicsDel();
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		 this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
+		    		 this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    		 this.deluserinfo();
 		    	}else if(item.name=="导出"){
-		    	 this.exportData();
+		    	 	this.exportData();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
-				 this.Printing();
+				 	this.Printing();
+				}else{
+					this.barcode();
 				}
-		    },
+			},
+			barcode(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时修改多条数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
+					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+						if(res.data.resp_code == 0) {
+							this.codeDialog = true;
+							this.codeUrl = this.code_url + res.data.datas;
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+				}
+			},
+			resetCode(){
+				this.codeDialog = false;
+				this.selMenu = [];
+			},
+			printCode(){
+				// var oldstr = document.body.innerHTML;
+				// var newstr = '<img src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码"/>';
+				// document.body.innerHTML = $("#printdom").html();
+				// window.print();
+				// document.body.innerHTML = oldstr;
+				// $("img#barcode").printArea();  
+				// this.$print(this.$refs.printdom);
+				let routeUrl = this.$router.resolve({
+					name: '/print',
+					query:{
+						imgUrl: this.codeUrl,
+					}
+				});
+				this.resetCode();
+				window.open(routeUrl.href, '_blank');
+			},
 			//添加样品管理
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -529,7 +598,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/item/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/item/physicsDel';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;
 					//deleteid为id的数组
@@ -718,7 +787,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口
@@ -784,4 +853,9 @@
 
 <style scope>
 .p15 {padding:10px 15px;}
+#printdom {
+	page-break-before: always;
+	text-align: center;
+	display: block;
+}
 </style>

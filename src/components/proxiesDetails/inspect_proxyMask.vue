@@ -471,7 +471,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
-												<el-input v-model="dataInfo.REPORT_NUM" :disabled="noedit" ></el-input>
+												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
@@ -535,7 +535,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="实收比例" prop="ACTUAL_PERCENT" label-width="110px">
+											<el-form-item label="实收比例(%)" prop="ACTUAL_PERCENT" label-width="110px">
 												<el-input v-model="dataInfo.ACTUAL_PERCENT" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -875,7 +875,7 @@
 				gridDataList: [], //彈出框的數據
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				options: [{

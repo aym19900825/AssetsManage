@@ -2,7 +2,7 @@
 <div>
 	<div class="headerbg">
 		<vheader></vheader>
-		<navs_header  ref="navsheader"></navs_header>
+		<navs_tabs  ref="navsTabs"></navs_tabs>
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
@@ -167,7 +167,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import projectmask from '../maindataDetails/testing_projectMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -176,7 +176,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			tableControle,
 			projectmask,
 			reportmask
@@ -187,6 +187,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				value: '',
 				options: [{
 					value: '1',
@@ -533,7 +534,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectionPro/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/inspectionPro/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -570,6 +571,15 @@
 
                 	});
 				}
+			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/inspectionPro/importExc?access_token='+sessionStorage.getItem('access_token');
@@ -676,7 +686,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

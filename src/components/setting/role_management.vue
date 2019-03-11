@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header></navs_header>
+			<navs_tabs></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单调用 Begin-->
@@ -79,18 +79,19 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table :data="roleList" 
-									  border 
-									  stripe 
-									  :header-cell-style="rowClass" 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'roleList', order: 'descending'}" 
-									  @selection-change="SelChange"
-									  v-loading="loading"  
-								  	  element-loading-text="加载中…"
-								  	  element-loading-spinner="el-icon-loading"
-								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
+							<el-table ref="table" :data="roleList" 
+								  border 
+								  stripe 
+								  :header-cell-style="rowClass" 
+								  :height="fullHeight" 
+								  style="width: 100%;" 
+								  :default-sort="{prop:'roleList', order: 'descending'}" 
+								  @selection-change="SelChange"
+								  v-loadmore="loadMore"
+								  v-loading="loading"  
+							  	  element-loading-text="加载中…"
+							  	  element-loading-spinner="el-icon-loading"
+							  	  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
@@ -130,7 +131,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import rolemask from '../settingDetails/role_mask.vue'
 	import rolemeunmask from '../settingDetails/rolemenu_mask.vue'
 	import datalimitmask from '../settingDetails/datalimit_mask.vue'
@@ -139,7 +140,7 @@
 		name: 'user_management',
 		components: {//引用组件标签命名
 			'vheader': vheader,
-			'navs_header': navs_header,
+			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'rolemask': rolemask,
 			'rolemeunmask': rolemeunmask,
@@ -148,9 +149,10 @@
 		},
 		data() {
 			return {
-				loading: false,
 				basic_url: Config.dev_url,
 				value:'',
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				stopoptions: [{
 					value: "1",
 					label: '是'
@@ -198,7 +200,7 @@
 				treeData: [],//树
 				page: {//页码
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				selData:[],
@@ -215,16 +217,7 @@
 			tableControle(data){
 				this.checkedName = data;
 			},
-			//获取pageSize
-			sizeChange(val) {
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    //获取currentPage
-		    currentChange(val) {
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+			
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
@@ -306,8 +299,6 @@
 					});
 					return;
 				} else {
-					console.log(2333333);
-					console.log(this.selData[0].id);
 					this.$refs.child.detail(this.selData[0].id);
 				}
 			},
@@ -402,7 +393,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-user/roles/deletes/physicsDel';
+					var url = this.basic_url + '/api-user/roles/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -457,9 +448,61 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
 			//页面加载数据
-			requestData() {
-				this.loading = true;
+			requestData(index) {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -467,12 +510,28 @@
 					inactive: this.searchList.inactive
 				}
 				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+				this.$axios.get(url, {
+						params: data
+					}).then((res) => {
+					this.page.totalCount = res.data.count;//页码赋值
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
 					this.roleList = res.data.data;
-					this.page.totalCount = res.data.count;
-					this.loading = false;
-				}).catch((wrong) => {})
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
 			//机构树
 			getKey() {
@@ -503,15 +562,12 @@
       		},
 			  //请求页面的button接口
 		    getbutton(childvalue){
-		    	console.log(childvalue);
 		    	var data = {
 					menuId: childvalue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(111)
-					console.log(res);
 					this.buttons = res.data;
 				}).catch((wrong) => {
 					this.$message({

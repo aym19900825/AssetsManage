@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -17,7 +17,7 @@
 								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="isUploadBtn">
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
-										<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+										<input id="excelFile" type="file" name="uploadFile" @change="upload" />
 									</button>
 								</form>
 								<!-- <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
@@ -31,7 +31,6 @@
 						    		<i class="icon-arrow1-down" v-show="down"></i>
 						    		<i class="icon-arrow1-up" v-show="up"></i>
 								</button> -->
-
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
@@ -89,18 +88,20 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="fileList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'fileList', order: 'descending'}" 
-									  @selection-change="SelChange"
-									  v-loading="loading"  
-								      element-loading-text="加载中…"
-    							      element-loading-spinner="el-icon-loading"
-    							      element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<el-table ref="table" :header-cell-style="rowClass"
+									:data="fileList" 
+									border 
+									stripe 
+									:height="fullHeight" 
+									style="width: 100%;" 
+									:default-sort="{prop:'fileList', order: 'descending'}" 
+									@selection-change="SelChange"
+	    							v-loadmore="loadMore"
+									v-loading="loading"  
+								    element-loading-text="加载中…"
+								    element-loading-spinner="el-icon-loading"
+								    element-loading-background="rgba(255, 255, 255, 0.9)">
+								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="名称" sortable prop="filename" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
@@ -123,17 +124,17 @@
 									</template>
 								</el-table-column>
 							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
 							<!-- 表格 -->
+							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40, 100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+							</el-pagination>
 						</el-col>
 					</el-row>
 				</div>
-							<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild"></reportmask>
+				<!--报表-->
+				<reportmask :reportData="reportData" ref="reportChild"></reportmask>
 			</div>
 		</div>
-		<!-- <samplesmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
+		<!-- <samplesmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
 		<el-dialog :modal-append-to-body="false" title="文件夹" :visible.sync="dirDialog">
 			<el-form :model="dir" label-width="80px">
@@ -141,9 +142,9 @@
 					<el-input v-model="dir.dirName"></el-input>
 				</el-form-item>
 			</el-form>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click="resetDir">取 消</el-button>
+			<div slot="footer">
 				<el-button type="primary" @click="addDir">确 定</el-button>
+				<el-button @click="resetDir">取 消</el-button>
 			</div>
 		</el-dialog>
 		<vkeyword ref="keyword" :param="param"></vkeyword>
@@ -154,7 +155,7 @@
 	import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
@@ -166,7 +167,7 @@
 		name: 'samples',//接样
 		components: {
 			vheader,
-			navs_header,
+			navs_tabs,
 			navs_left,
 			tableControle,
 			samplesmask,
@@ -178,7 +179,8 @@
 		data() {
 			return {
 				reportData:{},//报表的数据
-				loading: false,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				treeShow: true,
 				treeIdSel: [],
 				chooseParam: {
@@ -280,7 +282,7 @@
 				},
 				page: {
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				deptId: 0,
@@ -297,6 +299,10 @@
 			}
 		},
 		methods: {
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
+			},
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="上传"){
@@ -341,7 +347,6 @@
 				// listName: this.chooseParam.listName,
                 // data: this.selData
 				var selData = data.data;
-				
 			},
 			resetDir(){
 				this.dir.dirName = '';
@@ -423,7 +428,7 @@
 							message: '文档已成功上传至服务器',
 							type: 'success'
 						});
-						this.getFileList();
+						this.requestData();
 					}
 				})
 			},
@@ -431,7 +436,6 @@
 				const newChild = { id: 56, label: 'testtest'};
 				node.childNodes.push(newChild);
 			},
-
 			remove(node, data) {
 				const parent = node.parent;
 				const children = parent.childNodes || parent.data;
@@ -473,28 +477,95 @@
 					</span>
 				);
 			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					} else {
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+
+			requestData(){
+				this.loading = true;
+				// var data = {
+				// 	page: this.page.currentPage,
+				// 	limit: this.page.pageSize,
+				// 	appname:this.searchList.appname,
+				// }
+				var num = this.page.currentPage - 1;
+				var url = this.file_url + '/file/pathList?size=' + this.page.pageSize +'&page=' + num;
+				this.$axios.post(url, {
+					'pathid': this.docId,
+					'deptid': this.docParm.deptid,
+					'appname': this.searchList.appname
+				}).then((res) => {
+					this.page.totalCount = res.data.fileList.total;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false;
+					} else {
+						this.loadSign = true;
+					}
+					this.fileList = res.data.fileList.fileList;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				});
+			},
 			handleNodeClick(data){
 				this.page.currentPage = 1;
 				this.docId = data.id;
 				this.node = data;
 				this.parentNode = data.parent;
 				this.treeIdSel.indexOf(data.id)==-1?this.treeIdSel.push(data.id):this.treeIdSel.splice(this.treeIdSel.indexOf(data.id),1);
-				console.log(this.treeIdSel);
+				// console.log(this.treeIdSel);
 				// this.refreshLazyTree();
-				this.getFileList();
-			},
-			getFileList(){
-				var url = this.file_url + '/file/pathList';
-				this.$axios.post(url, {
-					'pathid': this.docId,
-					'deptid': this.docParm.deptid,
-					'page': this.page.currentPage - 1,
-					'size': this.page.pageSize,
-					'appname': this.searchList.appname
-				}).then((res) => {
-					this.fileList = res.data.fileList.fileList;
-					this.page.totalCount = res.data.fileList.total;
-				});
+				this.requestData();
 			},
 			getUser(){//获取当前用户信息
 				var url = this.basic_url + '/api-user/users/currentMap';
@@ -579,14 +650,7 @@
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
-				this.page.pageSize = val;
-				this.getFileList();
-			},
-			currentChange(val) {//分页，当前页
-				this.page.currentPage = val;
-				this.getFileList();
-			},
+
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
 					appname: '',
@@ -595,8 +659,8 @@
 			},
 			searchinfo(index) {//高级查询
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.getFileList();
+				this.page.pageSize = 20;
+				this.requestData();
 			},
 			//修改用戶
 			modify() {
@@ -695,7 +759,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口
@@ -772,11 +836,12 @@
     top: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-    cursor: pointer;
     width: 65px;
     left: 0px;
-    height: 40px;
+    height: 30px;
+    z-index: 999;
 }
+.a-upload input,.a-upload input[type="file"] { cursor: pointer; font-size:0px; font-size:20px \9;}
 .upload-btn{
     color: #fff;
     background-color: #286090;

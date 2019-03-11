@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
+					<el-form :model="dataInfo" inline-message :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
 						<div class="text-center" v-show="viewtitle">
 						<span v-if="this.dataInfo.STATE!=3">	
 						<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
@@ -167,7 +167,7 @@
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="依据" name="first">
 										<div class="table-func table-funcb">
-											<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" :disabled="views">
+											<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" v-show="noviews">
 												<i class="icon-search"></i>
 												<font>选择</font>
 											</el-button>
@@ -193,7 +193,7 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="VERSION" label="版本" sortable width="200px">
+											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -215,7 +215,7 @@
 													</el-upload>
 												</template>
 											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="100" >
+											<el-table-column fixed="right" label="操作" width="100">
 												<template slot-scope="scope">
 													<el-button @click="deleteRow(scope.$index,scope.row,'secondList')" type="text" size="small" v-if="!viewtitle">
 														<i class="icon-trash red"></i>
@@ -226,7 +226,7 @@
 									</el-tab-pane>
 									<el-tab-pane label="检验检测项目" name="second">
 										<div class="table-func table-funcb">
-											<el-button type="primary" size="mini" round @click="basisleadbtn2" :disabled="views">
+											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="noviews">
 												<i class="icon-search"></i>
 												<font>选择</font>
 											</el-button>
@@ -259,7 +259,7 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column prop="VERSION" label="版本" sortable width="80px">
+											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
@@ -275,14 +275,14 @@
 													</el-form-item>
 												</template>
 											</el-table-column> -->
-											<el-table-column label="附件" sortable width="120px">
+											<el-table-column label="附件" sortable width="120">
 												<template slot-scope="scope" v-if="!views">
 													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
 														<el-button size="small" type="primary" >点击上传</el-button>
 													</el-upload>
 												</template>
 											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="100" >
+											<el-table-column fixed="right" label="操作" width="100">
 												<template slot-scope="scope">
 													<el-button @click="deleteRow(scope.$index,scope.row,' onthebasisList')" type="text" size="small" v-if="!viewtitle" :disabled="views">
 														<i class="icon-trash red"></i>
@@ -361,7 +361,8 @@
 						<el-button @click='close'>取消</el-button>
 					</div>
 					<div class="content-footer" v-show="views">
-						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成委托书</el-button>
+						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildcheck">生成检验委托书</el-button>
+						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildtest">生成检测委托书</el-button>
 					</div>	
 				</div>
 			</div>
@@ -480,8 +481,8 @@
                     callback();
                 }
 			};
-			 //金额验证
-            var price=(rule, value, callback) => { 
+			//金额验证
+            var price=(rule, value, callback) => {
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
 				if(value != '' && value!=undefined){
 					if(exp.test(value)==false){ 
@@ -492,7 +493,7 @@
 				}else {
 					callback();
 				}
-           };
+			};
 			return {
 				loading: false,
 				loadSign:true,//加载
@@ -1115,19 +1116,42 @@
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
-			//生成委托书
-			build(){
+			//生成检验委托书
+			buildcheck(){
 				var dataid = this.dataInfo.ID;
-				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid;
+				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE_wheres=1';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '生成委托书成功',
+								message: '生成检验委托书成功',
 								type: 'success'
 							});
 						}else{
 							this.$message({
-							message: '已经生成委托书，请勿重复生成',
+							message: '已经生成检验委托书，请勿重复生成',
+							type: 'warning'
+							});
+						}
+					}).catch((err) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					});
+			},
+			//生成检测委托书
+			buildtest(){
+				var dataid = this.dataInfo.ID;
+				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE_wheres=2';
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '生成检测委托书成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+							message: '已经生成检测委托书，请勿重复生成',
 							type: 'warning'
 							});
 						}

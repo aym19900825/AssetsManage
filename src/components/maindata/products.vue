@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header  ref="navsheader"></navs_header>
+			<navs_tabs  ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -95,19 +95,19 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<el-table ref="table" :header-cell-style="rowClass" 
-									   :data="productList" 
-									   line-center 
-									   border 
-									   stripe 
-									   :height="fullHeight" 
-									   style="width: 100%;" 
-									   :default-sort="{prop:'productList', order: 'descending'}" 
-									   @selection-change="SelChange" 
-									   v-loadmore="loadMore"
-									   v-loading="loading"  
-									   element-loading-text="加载中…"
-    								   element-loading-spinner="el-icon-loading"
-    								   element-loading-background="rgba(255, 255, 255, 0.9)">
+								   :data="productList" 
+								   line-center 
+								   border 
+								   stripe 
+								   :height="fullHeight" 
+								   style="width: 100%;" 
+								   :default-sort="{prop:'productList', order: 'descending'}" 
+								   @selection-change="SelChange" 
+								   v-loadmore="loadMore"
+								   v-loading="loading"  
+								   element-loading-text="加载中…"
+								   element-loading-spinner="el-icon-loading"
+								   element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
@@ -147,7 +147,7 @@
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import productmask from '../maindataDetails/product_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -156,7 +156,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			productmask,
 			tableControle,
 			reportmask
@@ -167,6 +167,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				commentArr: {},
 				value: '',
 				options: [{
@@ -263,6 +264,10 @@
 			rowClass({ row, rowIndex}) {
 			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
+			},
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
 			},
 			//机构值
 			getCompany() {
@@ -493,7 +498,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/product/deletes/physicsDel';
+					var url = this.basic_url + '/api-apps/app/product/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -534,6 +539,11 @@
 
 					});
 				}
+			},
+			handleSuccess(response, file, fileList){
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			// 导入
 			uploadUrl(){
@@ -631,7 +641,7 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				this.$refs.navsheader.showClick(childValue);
+				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			  //请求页面的button接口

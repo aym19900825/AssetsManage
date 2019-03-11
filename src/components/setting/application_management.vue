@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_header ref="navsheader"></navs_header>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -54,7 +54,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table :header-cell-style="rowClass" 
+							<el-table ref="table" :header-cell-style="rowClass" 
 								      :data="applicationList" 
 									  border 
 									  stripe 
@@ -77,7 +77,7 @@
 								</el-table-column>
 								<el-table-column label="应用名称" width="150" sortable prop="name" v-if="this.checkedName.indexOf('应用名称')!=-1">
 								</el-table-column>
-								<el-table-column label="处理类" width="250" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类')!=-1" align="right">
+								<el-table-column label="处理类" width="250" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类')!=-1">
 								</el-table-column>
 								<el-table-column label="应用描述" width="185" sortable prop="description" v-if="this.checkedName.indexOf('应用描述')!=-1">
 								</el-table-column>
@@ -113,7 +113,7 @@
 <script>
 	import Config from '../../config.js'
 	import vheader from '../common/vheader.vue'
-	import navs_header from '../common/nav_tabs.vue'
+	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../settingDetails/application_Mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
@@ -122,7 +122,7 @@
 		components: {
 			vheader,
 			navs_left,
-			navs_header,
+			navs_tabs,
 			categorymask,
 			tableControle,
 		},
@@ -480,7 +480,6 @@
 					var data = {
 						ids: ids,
 					}
-					console.log(data);
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -520,8 +519,9 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -540,22 +540,11 @@
 					} else {
 						this.loadSign = true
 					}
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
 					this.applicationList = res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
-					}
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -563,32 +552,27 @@
 					});
 				})
 			},
-			handleNodeClick(data) {},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
-				console.log( childvalue);
 		    	 this.getbutton( childvalue);
 		    },
 			//请求页面的button接口
 		    getbutton(childvalue){
-		    	console.log(childvalue);
 		    	var data = {
 					menuId: childvalue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 
 		    },

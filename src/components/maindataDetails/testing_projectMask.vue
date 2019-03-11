@@ -104,7 +104,7 @@
 										</el-button>
 									</div>
 									<div class="pt10">
-										<el-table :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
+										<el-table ref="table" :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -190,7 +190,7 @@
 
 			<!-- 作业指导书 Begin -->
 			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table ref="table" :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="分发号" width="155" sortable prop="NUM">
@@ -389,7 +389,7 @@
 				},
 				page: { //分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				// initcost: '',

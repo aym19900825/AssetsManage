@@ -30,7 +30,7 @@
 			<div class="ibox-content" :style="{height: fullHeight}">
 				<el-collapse v-model="activeNames">
 					<el-collapse-item title="修改密码" name="1">
-						<el-form :model="passwordedit" status-icon :rules="rules2" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
+						<el-form :model="passwordedit" inline-message status-icon :rules="rules2" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
 							  <el-form-item label="当前用户" prop="username">
 							    <el-input v-model.number="passwordedit.username" disabled></el-input>
 							  </el-form-item>
@@ -72,39 +72,39 @@ export default {
 		navs
 	},
 	data() {
-		var checkOldpassword = (rule, value, callback) => {
-			if (!value) {
-				return callback(new Error('密码不能为空'));
-			}
-			setTimeout(() => {
-				if (!/^.{5,16}$/g.test(value)) {
-					callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-				} else {
-					callback();
-				}
-			}, 1000);
-		};
-		var validatePass = (rule, value, callback) => {
-			if (value === '') {
-					callback(new Error('请输入密码'));
-				} else if (!/^.{5,16}$/g.test(value)) {
-					callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-				} else {
-					if (this.passwordedit.checkPass !== '') {
-						this.$refs.passwordedit.validateField('checkPass');
-					}
-					callback();
-		        }
-	        };
-		var validatePass2 = (rule, value, callback) => {
-			if (value === '') {
-				callback(new Error('请再次输入密码'));
-			} else if (value !== this.passwordedit.newpassword) {
-				callback(new Error('两次输入密码不一致!'));
-			} else {
-				callback();
-			}
-		};
+		// var checkOldpassword = (rule, value, callback) => {
+		// 	if (!value) {
+		// 		return callback(new Error('密码不能为空'));
+		// 	}
+		// 	setTimeout(() => {
+		// 		if (!/^.{5,16}$/g.test(value)) {
+		// 			callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+		// 		} else {
+		// 			callback();
+		// 		}
+		// 	}, 1000);
+		// };
+		// var validatePass = (rule, value, callback) => {
+		// 	if (value === '') {
+		// 			callback(new Error('请输入密码'));
+		// 		} else if (!/^.{5,16}$/g.test(value)) {
+		// 			callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
+		// 		} else {
+		// 			if (this.passwordedit.checkPass !== '') {
+		// 				this.$refs.passwordedit.validateField('checkPass');
+		// 			}
+		// 			callback();
+		//         }
+	 //        };
+		// var validatePass2 = (rule, value, callback) => {
+		// 	if (value === '') {
+		// 		callback(new Error('请再次输入密码'));
+		// 	} else if (value !== this.passwordedit.newpassword) {
+		// 		callback(new Error('两次输入密码不一致!'));
+		// 	} else {
+		// 		callback();
+		// 	}
+		// };
 		return {
 			basic_url: Config.dev_url,
 			activeNames: ['1'],//手风琴数量
@@ -122,13 +122,16 @@ export default {
 			},
 	        rules2: {
 				oldpassword: [
-					{ validator: checkOldpassword, trigger: 'blur' }
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isCheckOldpassword, trigger: 'blur'},
 				],
 				newpassword: [
-					{ validator: validatePass, trigger: 'blur' }
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isValidatePass, trigger: 'blur'},
 				],
 				checkPass: [
-					{ validator: validatePass2, trigger: 'blur' }
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isValidatePass, trigger: 'blur'},
 				]
 			},
 			leftNavs: [//leftNavs左侧菜单数据
@@ -165,26 +168,34 @@ export default {
 		            var userid = this.passwordedit.id;
 		            var oldpassword = this.passwordedit.oldpassword;
 		            var newpassword= this.passwordedit.newpassword;
-		            var url = this.basic_url + '/api-user/users/password';
-		            this.$axios.put(url, {
-	            		id: userid,
-	            		oldPassword: oldpassword,
-	            		newPassword: newpassword
-					}).then((res) => {
-						if(res.data.resp_code == 0) {//resp_code == 0是后台返回的请求成功的信息
-							this.$message({
-								message: '修改成功',
-								type: 'success'
-							});
-						} else {
-							if(res.data.resp_code == 1) {
+		            var checkPass= this.passwordedit.checkPass;
+		            if (newpassword == checkPass) {
+			            var url = this.basic_url + '/api-user/users/password';
+			            this.$axios.put(url, {
+		            		id: userid,
+		            		oldPassword: oldpassword,
+		            		newPassword: newpassword
+						}).then((res) => {
+							if(res.data.resp_code == 0) {//resp_code == 0是后台返回的请求成功的信息
 								this.$message({
-									message: res.data.resp_msg,
-									type: 'error'
+									message: '修改成功',
+									type: 'success'
 								});
+							} else {
+								if(res.data.resp_code == 1) {
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'error'
+									});
+								}
 							}
-						}
-					});
+						});
+					} else {
+						this.$message({
+							message: '密码与确认密码不一致，请重新填写',
+							type: 'error'
+						});
+					}
 				} else {
 					return false;
 				}

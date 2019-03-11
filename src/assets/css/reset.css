@@ -772,6 +772,14 @@ h6 {
 	height: 100%;
 	position: absolute;
 }
+#middle:before {
+	font-family: 'hxqheam' !important;
+    content: "\E92C";
+    color: #a3a8bb;
+    position: absolute;
+    top: 40%;
+    left: -3px;
+}
 #middle:hover {
     cursor: w-resize;
 }

@@ -1883,9 +1883,9 @@
 			reprotids(val){
 
 			},
-			reportname(val){
+			// reportname(val){
 
-			},
+			// },
 			//生成报告
 			getreport(){
 				console.log(this.reportname);

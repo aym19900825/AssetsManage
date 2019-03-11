@@ -365,7 +365,7 @@
 												</el-form-item>
 											</el-col>
 										</el-row>
-										<el-row >
+										<!-- <el-row >
 											<el-col :span="8">
 												<el-form-item label="寄出时间">
 													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择寄出时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -384,7 +384,7 @@
 													</el-input>
 												</el-form-item>
 											</el-col>
-										</el-row>
+										</el-row> -->
 									</div>
 								</el-collapse-item>
 								<!-- 原始数据模板 End -->

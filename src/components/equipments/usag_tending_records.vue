@@ -220,7 +220,7 @@
 				},
 				aaaData:[],
 				buttons:[],
-				asset:'asset'//appname
+				asset2:'asset2'//appname
 			}
 		},
 		methods: {
@@ -304,7 +304,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/asset/deletes';
+					var url = this.basic_url + '/api-apps/app/asset2/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -356,7 +356,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/asset/physicsDel';
+					var url = this.basic_url + '/api-apps/app/asset2/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -412,7 +412,7 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.asset;
+				this.reportData.app=this.asset2;
 				this.$refs.reportChild.visible();
 			},
 			//时间格式化  
@@ -494,7 +494,7 @@
 					DESCRIPTION: this.searchList.DESCRIPTION,
 					MODEL: this.searchList.MODEL
 				}
-				var url = this.basic_url + '/api-apps/app/asset';
+				var url = this.basic_url + '/api-apps/app/asset2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

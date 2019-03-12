@@ -82,24 +82,28 @@
 								  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="ID" sortable prop="id" v-if="this.checkedName.indexOf('id')!=-1">
+							<el-table-column label="序号" sortable prop="id" v-if="this.checkedName.indexOf('序号')!=-1">
+								<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.id}}
+									</p>
+								</template>
 							</el-table-column>
-							<el-table-column label="代码" width="200" sortable prop="code" v-if="this.checkedName.indexOf('代码')!=-1">
+							<el-table-column label="报表名称" width="200" sortable prop="code" v-if="this.checkedName.indexOf('报表名称')!=-1">
 							</el-table-column>
-							<el-table-column label="报表名称" width="220" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
+							<el-table-column label="报表文件" width="220" sortable prop="name" v-if="this.checkedName.indexOf('报表文件')!=-1">
 							</el-table-column>
-							<el-table-column label="报表文件" width="230" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
+							<!-- <el-table-column label="报表文件" width="230" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
+							</el-table-column> -->
+							<el-table-column label="备注" width="200" sortable prop="remarks" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
-							<el-table-column label="备注" width="200" sortable prop="remarks"v-if="this.checkedName.indexOf('备注')!=-1">
-							</el-table-column>
-							<el-table-column label="类型" sortable width="140" prop="type"v-if="this.checkedName.indexOf('类型')!=-1">
+							<el-table-column label="类型" sortable width="140" prop="type" v-if="this.checkedName.indexOf('类型')!=-1">
 							</el-table-column>						
-							<el-table-column label="录入人" sortable width="120" prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>	
+							<!-- <el-table-column label="录入人" sortable width="120" prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
+							</el-table-column>	 -->
 							<el-table-column label="录入时间" width="160" sortable prop="createdate" v-if="this.checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>	
-							<el-table-column label="修改人" width="120" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>
+							<!-- <el-table-column label="修改人" width="120" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
+							</el-table-column> -->
 							<el-table-column label="修改日期" width="160" sortable prop="updatedate" v-if="this.checkedName.indexOf('修改日期')!=-1">
 							</el-table-column>
 						</el-table>
@@ -118,7 +122,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<reportmask ref="child" @request="requestData" ></reportmask>
+		<reportmask ref="child" @request="requestData" :dataInfo="dataInfo"></reportmask>
 	</div>
 </div>
 </template>
@@ -144,33 +148,29 @@
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
-					'代码',
+					'序号',
 					'报表名称',
-					'id',
+					// 'id',
 					'报表文件',
 					'备注',
 					'类型',
-					'录入人',
+					// '录入人',
 					'录入时间',
-					'修改人',
+					// '修改人',
 					'修改日期'
 				],
 				tableHeader: [
 					{
-						label: '代码',
-						prop: 'username'
-					},
-					{
-						label: '报表名称',
-						prop: 'nickname'
-					},
-					{
-						label: 'id',
+						label: '序号',
 						prop: 'id'
 					},
 					{
+						label: '报表名称',
+						prop: 'code'
+					},
+					{
 						label: '报表文件',
-						prop: 'deptName'
+						prop: 'name'
 					},
 					{
 						label: '备注',
@@ -180,18 +180,18 @@
 						label: '类型',
 						prop: 'type'
 					},
-					{
-						label: '录入人',
-						prop: 'createby'
-					},
+					// {
+					// 	label: '录入人',
+					// 	prop: 'createby'
+					// },
 					{
 						label: '录入时间',
 						prop: 'createdate'
 					},
-					{
-						label: '修改人',
-						prop: 'updateby'
-					},
+					// {
+					// 	label: '修改人',
+					// 	prop: 'updateby'
+					// },
 					{
 						label: '修改日期',
 						prop: 'updatedate'
@@ -284,6 +284,11 @@
 				} else {
 					this.$refs.child.detail(this.selUser[0].id);
 				}
+			},
+			//查看
+			 view(dataid) {
+			 	this.reportsList =data;
+				this.$refs.child.view(dataid);
 			},
 			//高级查询
 			modestsearch() {

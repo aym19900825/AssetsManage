@@ -10,8 +10,6 @@
 		<div class="wrapper-content">
 			<div id="information" :style="{height: fullHeight}">
 				<div class="ibox-content pl20 pr20">
-<<<<<<< HEAD
-=======
 					<!--我的应用 Begin-->
 					<div class="clearfix">
 						<h3 class="pull-left">我的应用</h3>
@@ -27,7 +25,6 @@
 						<!--APPList End-->
 					</el-row>
 					<!--我的应用 End-->
->>>>>>> 3574d1e7e614064acbfc3d73f5958f76a614dda4
 
 					<!--工作统计 Begin-->
 					<div class="clearfix">

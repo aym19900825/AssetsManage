@@ -20,17 +20,6 @@
 										<input id="excelFile" type="file" name="uploadFile" @change="upload" />
 									</button>
 								</form>
-								<!-- <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-									<i class="icon-clipboard"></i>报表
-								</button>
-								<button type="button" class="btn btn-green" @click="showDir">
-                                	<i class="icon-add"></i>新建文件夹
-                      			 </button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>

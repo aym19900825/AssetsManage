@@ -2,7 +2,7 @@
 <div>
     <el-dialog title="关键字" :visible.sync="param.visible" :before-close="reset" :modal-append-to-body="false">
         <p class="selTab">已选择：
-            <el-tag class="tag" type="success" v-for="item in selkeys" style="margin-right: 10px;margin-bottom: 20px;" @close="closeTag(item)" closable>{{item.keywordname}}
+            <el-tag class="tag" type="success" v-for="item in selkeys" :key="item.id" style="margin-right: 10px;margin-bottom: 20px;" @close="closeTag(item)" closable>{{item.keywordname}}
             </el-tag>
         </p>
         <!-- <div class="keyCat">

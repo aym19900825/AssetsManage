@@ -3,9 +3,7 @@
 		<el-dialog :modal-append-to-body="false" title="报表参数" :visible.sync="innerVisible" width="60%">
 		<div >
 			<el-form :model="dataInfo" ref="dataInfo" label-width="100px" >
-				
 					<!-- 报表信息 -->
-					<el-collapse>
 						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required != 0" :rules="{required: true, message: '请填写', trigger: 'blur'}">
 							<el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
 							</el-input> 
@@ -13,7 +11,7 @@
 							</el-date-picker>
 							
 							<el-input v-model="dataInfo[item.param]" v-if="item.type==4||item.type==3"  :disabled="true">
-									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item.type)"></el-button>
+									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item)"></el-button>
 							</el-input>
 						</el-form-item>
 						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required!='1'">
@@ -23,10 +21,9 @@
 							</el-date-picker>
 							
 							<el-input v-model="dataInfo[item.param]" v-if="item.type==4||item.type==3"  :disabled="true">
-									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item.type)"></el-button>
+									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item)"></el-button>
 							</el-input>
 						</el-form-item>
-					</el-collapse>
 				<div class="el-dialog__footer">
 					<el-button type="primary" @click="determine">确定</el-button>
 					<el-button @click='closeinnerVisible'>取消</el-button>
@@ -65,7 +62,7 @@
 			<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 			</el-tree>
 			<span slot="footer" class="dialog-footer">
-		       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+		       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		    </span>
 		</el-dialog>
@@ -160,6 +157,7 @@
 			//点击按钮显示弹窗
 			visible(pramList,file) {	
 				this.file=file;
+				console.log(pramList);
 				console.log(this.file);
 				for(var i=0;i<pramList.length;i++){
 					pramList[i].width="40%"
@@ -175,22 +173,10 @@
 			closeinnerVisible(){
 				this.innerVisible=false;
 				this.dataInfo={};
+				this.$emit('requestData');
 			},
-			addcusname(){
-				if(this.selval.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selval.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.dialogVisibleuser = false;
-				}
-			},
+			
+			
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
 					this.maxDialog();
@@ -223,14 +209,15 @@
 
 			
 			addPeople(item){
-				if(item==4){
-					this.getDept();
+				console.log(item.param);
+				if(item.type==4){
+					this.getDept(item.param);
 				}else{
-					this.requestData();
+					this.requestData(item.param);
 				}
 			},
 			determine(){
-				console.log(this.file);
+					console.log(this.dataInfo);
 		  		var str=JSON.stringify(this.dataInfo);
 				for(var j=0;j<str.length;j++){
 					str=str.replace("\":\"",'=');
@@ -249,14 +236,31 @@
 				console.log(url);
              window.open(url); 
 			},
-			getDept() {
+			getDept(item) {
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					this.dialogVisible = true;
+					sessionStorage.setItem("prop", item);
+					console.log(item);
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'warning'
+					});
 				});
 			},
-			requestData(){
+			dailogconfirm() { //小弹出框确认按钮事件
+					var value = sessionStorage.getItem("prop");
+					console.log(value);
+					console.log(this.dataInfo.value);
+					this.dataInfo[value]=this.getCheckboxData.fullname;
+					// this.user.deptId = this.getCheckboxData.id;
+					// this.user.deptName = this.getCheckboxData.fullname;
+					this.dialogVisible = false;
+					
+			},
+			requestData(item){
 				var data = {
 						page: 1,
 						limit: 10,
@@ -266,6 +270,7 @@
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
+					sessionStorage.setItem("user", item);
 					this.userList = res.data.data;
 					this.dialogVisibleuser = true;
 				}).catch((wrong) => {
@@ -274,6 +279,25 @@
 						type: 'warning'
 					});
 				});
+			},
+			//人员的确定
+			addcusname(){
+				if(this.selval.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selval.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					console.log(this.selval[0]);
+					var value = sessionStorage.getItem("user");
+				  this.dataInfo[value]=this.selval[0].username;
+					this.dialogVisibleuser = false;
+				}
 			},
 		},
 		mounted() {

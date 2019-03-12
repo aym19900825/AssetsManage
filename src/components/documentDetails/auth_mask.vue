@@ -24,7 +24,7 @@
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="5" class="pull-right"></el-col>
 									</el-row>
-									<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" disabled></el-input>
 										<el-input v-model="dataInfo[item.prop]" :disabled="true" v-if="item.label=='姓名'">
 											<el-button slot="append" icon="el-icon-search" @click="addUser"></el-button>

@@ -155,9 +155,9 @@ export default {
             this.selFiles = val;
         },
         upload(e){
-            if(this.docParm.appid == 17 && this.doc.length >= 1){
+            if((this.docParm.appid == 17 || this.docParm.appid == 13) && this.doc.length >= 1){
                 this.$message({
-                    message: '原始数据模板只能上传一个文档！',
+                    message: '只能上传一个文档！',
                     type: 'error'
                 });
                 return;
@@ -202,6 +202,10 @@ export default {
                         message: '文件已成功上传至服务器',
                         type: 'success'
                     });
+                    //检测标准需要存储文件相关信息
+                    if( this.docParm.appid == 13){
+                        this.$emit('getFileInfo',res.data);
+                    }
                 }
                 this.getData();
             })

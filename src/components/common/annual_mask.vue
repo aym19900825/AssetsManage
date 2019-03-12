@@ -1349,7 +1349,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.itemtypenum;
+				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.itemtypenum+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
 					
 				}).then((res) => {
@@ -1421,7 +1421,7 @@
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 				};
-				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum+'&S_NUM_where_not_in='+this.basissnums;
+				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum+'&S_NUM_where_not_in='+this.basissnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1471,7 +1471,7 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums, {
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -1514,7 +1514,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				var url = this.basic_url + '/api-apps/app/customer';
+				var url = this.basic_url + '/api-apps/app/customer?&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

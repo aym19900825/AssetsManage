@@ -98,6 +98,8 @@
 											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row>
 									<el-col :span="8" >
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
 											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="changeCJDW">
@@ -105,8 +107,6 @@
 											</el-select>
 										</el-form-item>
 									</el-col>
-								</el-row>
-								<el-row>
 									<el-col :span="8">
 										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
 											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
@@ -121,6 +121,8 @@
 											</el-input>
 										</el-form-item>
 									</el-col>
+								</el-row>
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
 											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
@@ -460,27 +462,27 @@
 			 testprojectmask
 		},
 		data() {
-			 var validateItemleader = (rule, value, callback) => {//项目负责人
-                if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			 var validateproname = (rule, value, callback) => {//受检产品名称
-                if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			 var validateVname = (rule, value, callback) => {//受检企业
-                if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-			};
+			//  var validateItemleader = (rule, value, callback) => {//项目负责人
+   //              if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			//  var validateproname = (rule, value, callback) => {//受检产品名称
+   //              if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+   //          };
+			//  var validateVname = (rule, value, callback) => {//受检企业
+   //              if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
+   //                  callback(new Error('必填'));
+   //              }else {
+   //                  callback();
+   //              }
+			// };
 			//金额验证
             var price=(rule, value, callback) => {
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
@@ -569,12 +571,13 @@
 					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
 					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
 					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
+					PRODUCT_TYPE: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品类别
 					ITEM_NAME: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品名称
 					ITEM_MODEL: [
 						{required: true,trigger: 'blur',message: '必填'},
 						{trigger: 'blur', validator:this.Validators.isSpecificKey}
 					], //受检产品型号
-					V_NAME: [{required: true,validator: validateVname}], //受检企业
+					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
 					CHECTCOST:[{required: false,trigger: 'change',validator:price}], //检验检测费用
@@ -679,15 +682,17 @@
 						type: 'warning'
 					});
 				}else{
-					this.$refs.productchild.visible(this.dataInfo.P_NUM);
+					this.$refs.productchild.visible(this.dataInfo.P_NUM,this.dataInfo.CJDW);
 				}
 			},
 			//单位
 			addCompany(type){
-				this.$refs.enterprisechild.visible(type);
+				var CJDW = this.dataInfo.CJDW;
+				var id;
+				this.$refs.enterprisechild.visible(type,id,CJDW);
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//				console.log(data);
+				//console.log(data);
 			},
 			handleCheckChange(data, checked, indeterminate) {
 				this.getCheckboxData = data;

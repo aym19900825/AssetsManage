@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="产品类别" height="400px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="所属类别" height="360px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
 			<el-form :model="searchList" label-width="45px">
 				<el-row :gutter="10">
 					<el-col :span="5">
@@ -25,7 +25,7 @@
 				</el-row>
 			</el-form>
 
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
+			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
 					  v-loadmore="loadMore"
 					  v-loading="loading"  
 					  element-loading-text="加载中…"
@@ -67,8 +67,8 @@
   data() {
     return {
 		basic_url: Config.dev_url,
-		loading: false,
-		loadSign:true,//加载
+		loadSign: true, //鼠标滚动加载数据
+		loading: false,//默认加载数据时显示loading动画
 		productList: [],
 		commentArr:{},
 		selUser: [],//接勾选的值
@@ -103,14 +103,7 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
-  	sizeChange(val) {
-		this.page.pageSize = val;
-		this.requestData();
-	},
-	currentChange(val) {
-		this.page.currentPage = val;
-		this.requestData();
-	},
+  	
 	searchinfo() {
 		this.page.currentPage = 1;
 		this.page.pageSize = 20;
@@ -132,19 +125,59 @@
 		this.dialogCategory = true;
 		this.requestData();
   	},
-  	loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
-	},
+  	//表格滚动加载
+		loadMore() {
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
+					}
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1;
+						return false;
+					}
+				}
+				this.loadSign = false;
+				setTimeout(() => {
+					this.loadSign = true;
+				}, 1000)
+				this.requestData();
+			}
+		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+	//Table默认加载数据
 	requestData(){
 		this.loading = true;
 		var data = {
@@ -166,18 +199,26 @@
 			} else {
 				this.loadSign = true
 			}
-			this.commentArr[this.page.currentPage] = res.data.data
-			let newarr = []
-			for(var i = 1; i <= totalPage; i++) {
-				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-					for(var j = 0; j < this.commentArr[i].length; j++) {
-						newarr.push(this.commentArr[i][j])
-					}
-				}
-			}
-			this.categoryList = newarr;
-			this.loading = false;
-		}).catch((wrong) => {})
+			// this.commentArr[this.page.currentPage] = res.data.data
+			// let newarr = []
+			// for(var i = 1; i <= totalPage; i++) {
+			// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+			// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+			// 			newarr.push(this.commentArr[i][j])
+			// 		}
+			// 	}
+			// }
+			this.categoryList = res.data.data;
+			this.loading = false;//加载动画关闭
+			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+				$('.el-table__body-wrapper table').find('.filing').remove();
+			}//滚动加载数据判断filing
+		}).catch((wrong) => {
+			this.$message({
+				message: '网络错误，请重试1',
+				type: 'error'
+			});
+		})
 	},
 	determine(){
 		if(this.selUser.length == 0){
@@ -206,7 +247,7 @@
         this.dialogCategory = false;//关闭弹出框
         this.categoryList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 10;//页码重新传值
+        this.page.pageSize = 20;//页码重新传值
     },
     handleClose(done) {
         this.$confirm('确认关闭？')

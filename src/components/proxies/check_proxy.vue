@@ -183,7 +183,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
-	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+	import inspectmask from '../proxiesDetails/check_proxyMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 
 	export default {

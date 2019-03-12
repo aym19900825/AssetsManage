@@ -6,7 +6,7 @@
 			</span>
 		</div>
 		<ul class="navs" id="side-menu" v-show="!isShow" >
-			<li v-for="item in leftNavs" @click="addClickNav(item)">
+			<li v-for="item in leftNavs" :key="item.id" @click="addClickNav(item)">
 				<router-link :to="item.url">
 					<i :class="item.css"></i>
 					<span class="nav-label" v-show="ismin">{{item.name}}</span>
@@ -54,7 +54,6 @@ export default {
 		            }
 				},0);				
 			}
-//			this.$selectedNav=item;
 			this.$store.dispatch('setSelectedNavAct',item);
 			//点击的值传给user
 			this.$emit('childByValue',item);
@@ -83,12 +82,8 @@ export default {
 		},	
 	},
 	mounted() {
-		console.log(this.$store.state.menuid);
 		if(this.$store.state.menuid=="undefined"||this.$store.state.menuid=="null"){
-			$('.navbar-default').hide();
-//			$(".wrapper").css({"padding-left":"0px"})
-//			$("#wrapper-content").css({"padding-left":"0px"});
-			console.log(this.$store.state.selectedNav);
+			  $('.navbar-default').hide();
 		     this.$emit('childByValue',this.$store.state.selectedNav);
 		}else{
 		    var data = {
@@ -102,12 +97,10 @@ export default {
 						this.$store.dispatch('setSelectedNavAct',res.data[0]);
 					}
 					$('.navbar-default').show();
-	//				$(".wrapper").css({"padding-left":"220px"});
 					this.leftNavs = res.data;
 					this.$emit('childByValue',this.$store.state.selectedNav);
 				}else{
 					$('.navbar-default').hide();
-	//				$(".wrapper").css({"padding-left":"0px"});
 					this.$emit('childByValue',this.$store.state.selectedNav);
 				}
 			}).catch((wrong) => {

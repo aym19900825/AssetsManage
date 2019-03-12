@@ -25,10 +25,18 @@
 		      </template>
 		    </el-table-column>
 
-		  	<el-table-column label="设备编号" width="160" prop="NUM">
+		  	<el-table-column label="设备编号" width="210" prop="NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
+				</el-form-item>
+		      </template>
+		    </el-table-column>
+
+		    <el-table-column label="规格型号" width="160" sortable prop="MODEL">
+		      <template slot-scope="scope">
+		        <el-form-item :prop="'inspectionList.'+scope.$index + '.MODEL'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="自动生成" disabled></el-input><span v-else="v-else">{{scope.row.MODEL}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -42,6 +50,7 @@
 				</el-form-item>
 		      </template>
 		    </el-table-column>
+
 
 			<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 		      <template slot-scope="scope">
@@ -112,7 +121,9 @@
 			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="设备编号" width="125" sortable prop="ASSETNUM">
+				<el-table-column label="设备编号" width="165" sortable prop="ASSETNUM">
+				</el-table-column>
+				<el-table-column label="规格型号" width="125" sortable prop="MODEL">
 				</el-table-column>
 				<el-table-column label="设备名称" sortable prop="DESCRIPTION">
 				</el-table-column>
@@ -277,6 +288,7 @@
 					//todo  相关数据设置
 				}
 				this.parentId = num;
+				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					// console.log(res);
@@ -379,6 +391,7 @@
 								"DECRIPTION": '',
 								"STATUS": '',
 								"NUM": '',
+								"MODEL": '',
 								"VERSION": '',
 								"DEPTID": '',
 								"CHANGEBY": this.currentUser,
@@ -406,6 +419,7 @@
 						"ID":row.ID,
 						"P_NUM": row.P_NUM,
 					    "NUM": row.NUM,
+					    "MODEL": row.MODEL,
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
 					    "VERSION": row.VERSION,
@@ -462,6 +476,7 @@
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false
 				this.catedata.NUM = this.selData[0].ASSETNUM;
+				this.catedata.MODEL = this.selData[0].MODEL;
 				this.catedata.DECRIPTION = this.selData[0].DESCRIPTION;
 				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;

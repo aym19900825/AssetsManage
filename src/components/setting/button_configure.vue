@@ -53,9 +53,9 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
-									<el-form-item label="所属应用ID" prop="menuIdDesc">
+									<el-form-item label="所属菜单" prop="menuIdDesc">
 										<!-- <el-input v-model="searchList.menuIdDesc"></el-input> -->
-										<el-select v-model="searchList.menuIdDesc" :disabled="noedit" style="width: 100%">
+										<el-select v-model="searchList.menuIdDesc" style="width: 100%">
 											<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
 										</el-select>
 									</el-form-item>
@@ -93,9 +93,9 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="所属应用ID" width="140" sortable prop="menuIdDesc" v-if="this.checkedName.indexOf('所属应用ID')!=-1" align="center">
+								<el-table-column label="所属菜单" width="180" sortable prop="menuIdDesc" v-if="this.checkedName.indexOf('所属菜单')!=-1" align="center">
 								</el-table-column>
-								<el-table-column label="按钮图标" width="125" align="right" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
+								<el-table-column label="按钮图标" width="125" align="center" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
 									<template slot-scope="scope">
 										<i :class="scope.row.icon"></i> <!-- {{scope.row.icon}} -->
 									</template>
@@ -161,7 +161,7 @@
 				permissions:'permissions',//appname
 				checkedName: [
 					'按钮名称',
-					'所属应用ID',
+					'所属菜单',
 					'按钮图标',
 					'按钮颜色',
 					'排序',
@@ -172,7 +172,7 @@
 						label: '按钮名称',
 						prop: 'name'
 					},{
-						label: '所属应用ID',
+						label: '所属菜单',
 						prop: 'menuIdDesc'
 					},
 					
@@ -288,16 +288,16 @@
 			},
 			//获取按钮颜色
 			getMenuId(){
-				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
+				var url = this.basic_url + '/api-user/menus/findAllMenu';
 				this.$axios.get(url, {}).then((res) => {
 					// console.log(res);
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {
 					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})	
 			},
 			//重置

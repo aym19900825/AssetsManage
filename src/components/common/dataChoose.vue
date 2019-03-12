@@ -4,7 +4,7 @@
         <p class="selTab" v-show="chooseParam.selShow">已选择：
             <el-tag class="tag" 
                 type="success" 
-                v-for="item in selData" 
+                v-for="item in selData" :key='item.id'
                 style="margin-right: 10px;margin-bottom: 20px;"  
                 @close="closeTag(item)"
                 closable>{{item.keywordname}}
@@ -15,7 +15,7 @@
             </el-table-column>
             <el-table-column type="index" sortable label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="item in chooseParam.tableHeader" :prop="item.propName" :label="item.labelName" sortable>
+            <el-table-column v-for="item in chooseParam.tableHeader" :key='item.id' :prop="item.propName" :label="item.labelName" sortable>
             </el-table-column>
         </el-table>
         <el-pagination background class="text-right pt10"

@@ -28,7 +28,7 @@
 											</el-input> -->
 										</el-col>
 									</el-row>
-									<el-form-item v-for="item in basicInfo" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
 										<el-select v-model="dataInfo[item.prop]" placeholder="请选择" v-if="item.type == 'select'">
 											<el-option v-for="item in cats"

@@ -597,12 +597,10 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/1';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.datas!=null){
 						this.productData = res.data.datas;
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
-							console.log(arr);
 							this.productsetChecked(arr);
 						});
 					}
@@ -617,10 +615,8 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/2';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.datas!=null){
 						this.testingproductData = res.data.datas;
-						console.log(arr);
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
 							this.testproductsetChecked(arr);
@@ -666,11 +662,9 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
-				console.log("==============:"+arr);
 				this.$refs.product.setCheckedKeys(arr);
 			},
 			testproductsetChecked(arr){
-				console.log("###############"+arr);
 				this.$refs.testproduct.setCheckedKeys(arr);
 			},
 			//
@@ -685,8 +679,6 @@
 			var annual=this.$refs.annual.getCheckedNodes();
 			var products=this.$refs.product.getCheckedNodes();
 			var testingproduct=this.$refs.testproduct.getCheckedNodes();
-			console.log(products);
-			console.log(testingproduct);
 			for(var a=0;a<work.length;a++){
 				if(work[a].name!="年度计划"){
 					  pmType.push(work[a].id); 

@@ -8,7 +8,6 @@ const state={//要设置的全局访问的state对象
    navid: null,
    menuid:null,//一级菜单id
    menusid:null,//二级菜单id
-   secondmenu:[],//二级菜单
    selectedNav:{
       css: 'icon-user',
       name: '首页',
@@ -44,9 +43,6 @@ const getters = {   //实时监听state值的变化(最新状态)
    getClickedNav(state){
       return state.clickedNavs;
    },
-   getsecondmenu(state){
-      return state.secondmenu;
-   },
 };
    //修改 state 用 vuex 的 mutation 
 const mutations = {
@@ -69,9 +65,6 @@ const mutations = {
    },
    setClickedNav(state,clickedNavs){
       state.clickedNavs=clickedNavs;
-   },
-   setsecondmenu(state,secondmenu){
-      state.secondmenu=secondmenu;
    },
    updateLoadingStatus (state, payload) {
       state.isLoading = payload.isLoading;
@@ -97,12 +90,9 @@ const actions = {
    setSelectedNavAct(context,selectedNav){
       context.commit('setSelectedNav',selectedNav);
    },
-   setsecondmenuNavAct(context,secondmenu){
-      context.commit('setsecondmenu',secondmenu);
-   },
    setClickedNavAct(context,clickedNav){
       context.commit('setClickedNav',clickedNav);
-   }
+   },
 };
 
 router.beforeEach(function (to, from, next) {

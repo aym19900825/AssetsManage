@@ -3,7 +3,7 @@
 	<el-dialog :modal-append-to-body="false" title="流程历史" :visible.sync="innerVisible" width="45%">
     <div class="approvalProcess" >
         <el-steps :active="active" direction="vertical">
-           <el-step :title="item.nodeName" :status="item.flag" v-for="item in approvalProcessProject" :id="item.id">
+           <el-step :title="item.nodeName" :status="item.flag" :key="item.id" v-for="item in approvalProcessProject" :id="item.id">
             <template slot="description" >
              <div class="step-row">
                 <el-row :gutter="30" class="processing_content">

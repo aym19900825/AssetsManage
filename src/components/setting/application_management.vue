@@ -6,7 +6,7 @@
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
-			<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
+			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
@@ -556,7 +556,9 @@
 				return row.enabled;
 			},
 			//左侧菜单传来
-		    childvalue:function ( childvalue) {
+		    childByValue:function ( childvalue) {
+				// childValue就是子组件传过来的值
+				this.$refs.navsTabs.showClick(childvalue);
 		    	 this.getbutton( childvalue);
 		    },
 			//请求页面的button接口

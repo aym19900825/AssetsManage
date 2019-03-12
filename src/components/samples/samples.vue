@@ -826,7 +826,7 @@
 						iT < 0 && (iT = 0); 
 						iT > maxT/2 && (iT = maxT/2); 
 						middle.style.left = left.style.width = iT + "px"; 
-						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.width = maxT - iT -middleWidth -240 + "px"; 
 						right.style.left = iT+middleWidth+"px"; 
 						return false 
 					}; 

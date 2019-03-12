@@ -770,7 +770,7 @@
 			//机构树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-apps/appCustom/proxyTree/1';
+				var url = this.basic_url + '/api-apps/appCustom/proxyTree/2';
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.resourceData = res.data.datas;

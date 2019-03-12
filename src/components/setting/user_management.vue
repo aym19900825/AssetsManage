@@ -180,7 +180,7 @@
 			</div>
 		</el-dialog>
 		<!-- 查看权限 -->
-		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose2">
 			<!--设置产品类别和产品-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >
@@ -517,9 +517,9 @@
 					this.permissions=true;
 				}).catch(error => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 				}
 			},
@@ -597,12 +597,10 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/1';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.datas!=null){
 						this.productData = res.data.datas;
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
-							console.log(arr);
 							this.productsetChecked(arr);
 						});
 					}
@@ -617,10 +615,8 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/2';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.datas!=null){
 						this.testingproductData = res.data.datas;
-						console.log(arr);
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
 							this.testproductsetChecked(arr);
@@ -666,11 +662,9 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
-				console.log("==============:"+arr);
 				this.$refs.product.setCheckedKeys(arr);
 			},
 			testproductsetChecked(arr){
-				console.log("###############"+arr);
 				this.$refs.testproduct.setCheckedKeys(arr);
 			},
 			//
@@ -685,8 +679,6 @@
 			var annual=this.$refs.annual.getCheckedNodes();
 			var products=this.$refs.product.getCheckedNodes();
 			var testingproduct=this.$refs.testproduct.getCheckedNodes();
-			console.log(products);
-			console.log(testingproduct);
 			for(var a=0;a<work.length;a++){
 				if(work[a].name!="年度计划"){
 					  pmType.push(work[a].id); 
@@ -1015,12 +1007,21 @@
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
-						this.requestData();
 					})
 					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -1179,9 +1180,7 @@
 				}; 
 			}
 		},
-		beforeMount() {
-			
-		},
+		
 		mounted() {	
 			// 在页面挂载前就发起请求
 			this.requestData();

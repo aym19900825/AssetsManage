@@ -2013,7 +2013,7 @@
                 console.log()
                 var obj = {
 					ID:value.ID,
-                    REPORTNUM:workorderForm.PROXYNUM,
+                    REPORTNUM:value.reportnum,
                     REPORTNAME:value.reportname,
                     // PREVIEW:'',
                     VERSION:value.version,

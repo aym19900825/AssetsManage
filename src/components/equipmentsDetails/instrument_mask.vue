@@ -102,9 +102,42 @@
 				</div>
 				<!--底部-->
 			</div>
+
+			<!--设备分类 Begin-->
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
+				<el-table :data="assetTypeList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'assetTypeList', order: 'descending'}" @selection-change="SelChange"
+						v-loadmore="loadMore"
+						v-loading="loading"
+						element-loading-text="加载中…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
+					<el-table-column type="selection" width="55" fixed align="center">
+					</el-table-column>
+					<el-table-column label="设备编码" sortable width="140px" prop="username">
+					</el-table-column>
+					<el-table-column label="分类描述" sortable width="200px" prop="nickname">
+					</el-table-column>
+					<el-table-column label="父级分类" sortable width="150px" prop="deptName">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+
+				<div slot="footer" v-if="noviews">
+	    			<el-button type="primary" @click="addAssetType">确 定</el-button>
+	    			<el-button @click="resetBasisInfo2">取 消</el-button>
+	  			</div>
+			</el-dialog>
+			<!--设备分类 End-->
+
 			<!--设备保管人 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
+						v-loadmore="loadMore"
+						v-loading="loading"
+						element-loading-text="加载中…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="用户名" sortable width="140px" prop="username">
@@ -154,7 +187,8 @@
                 }
             };
 			return {
-				loadSign:true,//加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},
 				docParm: {
 					'model': 'new',
@@ -261,10 +295,20 @@
 				},
 				basicInfo: [
 					{
-						label: '设备价值',
-						prop: 'A_PRICE',
+						label: '设备分类',
+						prop: 'TYPE',
 						width: '30%',
-						type: 'input',
+						type: 'radio',
+						 opts: [
+                            {
+								label: '仪器',
+								val: '仪器'
+                            },
+                            {
+								label: '量具',
+								val: '量具'
+                            }
+                        ],
 						displayType: 'inline-block'
 					},
 					{
@@ -275,10 +319,10 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '接收日期',
-						prop: 'ACCEPT_DATE',
+						label: '设备价值',
+						prop: 'A_PRICE',
 						width: '30%',
-						type: 'date',
+						type: 'input',
 						displayType: 'inline-block'
 					},
                     {
@@ -293,6 +337,13 @@
 						prop: 'CONFIG_UNIT',
 						width: '30%',
 						type: 'select',
+						displayType: 'inline-block'
+					},
+					{
+						label: '接收日期',
+						prop: 'ACCEPT_DATE',
+						width: '30%',
+						type: 'date',
 						displayType: 'inline-block'
 					},
                     {
@@ -473,23 +524,6 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '设备分类',
-						prop: 'TYPE',
-						width: '30%',
-						type: 'radio',
-						 opts: [
-                            {
-								label: '仪器',
-								val: '仪器'
-                            },
-                            {
-								label: '量具',
-								val: '量具'
-                            }
-                        ],
-						displayType: 'inline-block'
-					},
-					{
 						label: '安装地点',
 						prop: 'INS_SITE',
 						width: '30%',
@@ -587,7 +621,6 @@
 				],
 
 				basic_url: Config.dev_url,
-
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -690,13 +723,36 @@
 				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
 				if(CONFIG_UNIT==""||CONFIG_UNIT=="undenfiend"){
 					this.$message({
-						message: '请先选委托单位名称',
+						message: '请先选配置单位名称',
 						type: 'warning'
 					});
 				}else{
 					this.getuserinfo();
 					this.dialogVisible = true;
 				}
+			},
+			addAssetType(){
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+					this.dataInfo.TYPE = this.selUser[0].nickname;
+					this.getuserinfo();
+					this.resetBasisInfo2();//调用resetBasisInfo2函数
+				}
+			},
+			resetBasisInfo2(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible2 = false;//关闭弹出框
+				this.assetTypeList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			addpeoname(){
 				if(this.selUser.length == 0){
@@ -724,26 +780,57 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
-			 },
-			 sizeChange(val) {
-				this.page.pageSize = val;
-				//this.requestData();
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
 			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				//this.requestData();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
 			},
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -1012,6 +1099,7 @@
 				this.show = true;
 			},
 			getuserinfo() {//高级查询字段
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1027,19 +1115,22 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
 
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
 
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-
-					this.userList = newarr;
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					this.userList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {})
 				
 			},

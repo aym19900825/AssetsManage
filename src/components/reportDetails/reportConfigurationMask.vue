@@ -31,7 +31,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="代码" prop="code" label-width="110px">
-												<el-input v-model="dataInfo.code" :disabled="noedit"></el-button>
+												<el-input v-model="dataInfo.code" :disabled="noedit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -47,12 +47,12 @@
 										</el-col>
 									</el-row>
 									<el-row >
-										<!--<el-col :span="8">
+										<el-col :span="8">
 											<el-form-item label="类型" prop="type" label-width="110px">
 												<el-input v-model="dataInfo.type" :disabled="noedit">
 												</el-input>
 											</el-form-item>
-										</el-col>-->
+										</el-col>
 										<el-col :span="8">
 											<el-form-item label="备注" prop="remarks" label-width="110px">
 												<el-input v-model="dataInfo.remarks" :disabled="noedit"></el-input>

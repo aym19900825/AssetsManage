@@ -17,7 +17,6 @@
 				</el-table-column>
 				<el-table-column label="报表文件" sortable prop="file">
 				</el-table-column>
-				</el-table-column>
 				<el-table-column label="备注" sortable prop="remarks">
 				</el-table-column>
 				<el-table-column label="类型" sortable prop="type">

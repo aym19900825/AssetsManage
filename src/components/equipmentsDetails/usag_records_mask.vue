@@ -525,7 +525,7 @@
 					TableName = 'ASSET_MAINTENANCE';
 				}
 				if(row.ID){
-					var url = this.basic_url + '/api-apps/app/asset/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/api-apps/app/asset2/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this.dataInfo[listName].splice(index,1);
@@ -575,7 +575,7 @@
 			// 这里是修改
 			detail() {
 				var ID = this.detailData.ID;
-				var url = this.basic_url + '/api-apps/app/asset/' + ID;
+				var url = this.basic_url + '/api-apps/app/asset2/' + ID;
 				this.$axios.get(url, {}).then((res) => {
 					this.modify = true;
 					this.show = true;
@@ -599,7 +599,7 @@
 			},
 			//这是查看
 			view(dataid) {
-				var url = this.basic_url + '/api-apps/app/asset/' + dataid;
+				var url = this.basic_url + '/api-apps/app/asset2/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					// this.modify = true;
 					// this.show = true;
@@ -656,7 +656,7 @@
 			},
 			save(dataInfo) {
 				var _this = this;
-				var url = this.basic_url + '/api-apps/app/asset/saveOrUpdate';
+				var url = this.basic_url + '/api-apps/app/asset2/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						if(this.dataInfo.tableList.length==0 || this.dataInfo.maintenList.length == 0){
@@ -707,7 +707,7 @@
 			},
 		},
 		mounted() {
-			var url = this.basic_url + '/api-apps/app/asset';
+			var url = this.basic_url + '/api-apps/app/asset2';
 			this.$axios.get(url, {
 				params: {}
 			}).then((res) => {

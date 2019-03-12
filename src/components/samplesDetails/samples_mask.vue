@@ -1068,7 +1068,7 @@
 						});
 					});
 			},
-			loadMore (val) {
+			// loadMore (val) {
 			//    if (this.loadSign) {
 			//      this.loadSign = false
 			//      this.page.currentPage++
@@ -1084,61 +1084,58 @@
 			// 		 this.requestData()
 			// 	 }
 			//    }
-			 },
-			// sizeChange(val) {
-			// 	this.page.pageSize = val;
-			// 	if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-			// 		$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-			// 		sessionStorage.setItem('toBtm','true');
-			// 	}else{
-			// 		sessionStorage.setItem('toBtm','false');
-			// 	}
-			// 	this.requestData();
-			// },
-			// currentChange(val) {
-			// 	this.page.currentPage = val;
-			// 	if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-			// 		$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-			// 		sessionStorage.setItem('toBtm','true');
-			// 	}else{
-			// 		sessionStorage.setItem('toBtm','false');
-			// 	}
-			// 	this.requestData();
-			// },
+			//  },
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
 			// //表格滚动加载
 			loadMore(val) {
 				//console.log(this.$refs.table.$el.offsetTop)
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					if(val == 'proxy'){
-						this.proxydata();
-					}else if(val == 'type'){
-						this.requestData()
-					}
-				}
+				// let up2down = sessionStorage.getItem('up2down');
+				// if(this.loadSign) {					
+				// 	if(up2down=='down'){
+				// 		this.page.currentPage++;
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+				// 			return false;
+				// 		}
+				// 		// let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+				// 		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				// 			sessionStorage.setItem('toBtm','true');
+				// 		}
+				// 	}else{
+				// 		sessionStorage.setItem('toBtm','false');
+				// 		this.page.currentPage--;
+				// 		if(this.page.currentPage < 1) {
+				// 			this.page.currentPage=1;
+				// 			return false;
+				// 		}
+				// 	}
+				// 	this.loadSign = false;
+				// 	setTimeout(() => {
+				// 		this.loadSign = true;
+				// 	}, 1000)
+				// 	if(val == 'proxy'){
+				// 		this.proxydata();
+				// 	}else if(val == 'type'){
+				// 		this.requestData()
+				// 	}
+				// }
 			},
 			requestData(index) {//高级查询字段
 				var data = {

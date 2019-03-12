@@ -203,6 +203,11 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
+											<el-table-column prop="FILESIZE" label="文件大小" sortable width="120px">
+												<template slot-scope="scope">
+													<span>{{(scope.row.FILESIZE<0?scope.row.FILESIZE:0) + 'M'}}</span>
+												</template>
+											</el-table-column>
 											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
@@ -210,16 +215,19 @@
 													</el-form-item>
 												</template>
 											</el-table-column> -->
-											<el-table-column label="附件" sortable width="120px">
+											<!-- <el-table-column label="附件" sortable width="120px">
 												<template slot-scope="scope" v-if="!views">
 													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
 														<el-button size="small" type="primary" v-if="!viewtitle">点击上传</el-button>
 													</el-upload>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column fixed="right" label="操作" width="100">
 												<template slot-scope="scope">
 													<el-button @click="deleteRow(scope.$index,scope.row,'secondList')" type="text" size="small" v-if="!viewtitle">
+														<i class="icon-trash red"></i>
+													</el-button>
+													<el-button @click="viewFile(scope.row)" type="text" size="small" v-if="!viewtitle">
 														<i class="icon-trash red"></i>
 													</el-button>
 												</template>
@@ -503,6 +511,7 @@
 				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				po_url: Config.po_url,
 				gridDataList: [], //彈出框的數據
 				fileList: [],
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 
@@ -605,6 +614,14 @@
 			};
 		},
 		methods: {
+			viewFile(){
+				var url = this.po_url+'/show?fileid=' +  row.FILEID
+						+ '&userid=' +  this.docParm.userid
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+				window.open(url); 
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'

@@ -287,7 +287,8 @@
 			},
 			//查看
 			 view(dataid) {
-			 	this.reportsList =data;
+				console.log(dataid);
+			 	// this.reportsList =data;
 				this.$refs.child.view(dataid);
 			},
 			//高级查询

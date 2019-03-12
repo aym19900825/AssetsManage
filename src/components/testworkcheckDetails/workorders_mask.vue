@@ -344,7 +344,7 @@
 								</el-collapse-item>
 								<!-- 检测项目与要求 End -->
 								<!-- 原始数据模板 Begin-->
-								<el-collapse-item title="原始数据模板" name="6">	
+								<!-- <el-collapse-item title="原始数据模板" name="6">	
 					            	<div class="clearfix pt10">
 						            	<el-row >
 											<el-col :span="8">
@@ -365,7 +365,7 @@
 												</el-form-item>
 											</el-col>
 										</el-row>
-										<!-- <el-row >
+										<el-row >
 											<el-col :span="8">
 												<el-form-item label="寄出时间">
 													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择寄出时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -384,9 +384,9 @@
 													</el-input>
 												</el-form-item>
 											</el-col>
-										</el-row> -->
+										</el-row>
 									</div>
-								</el-collapse-item>
+								</el-collapse-item>-->
 								<!-- 原始数据模板 End -->
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -427,11 +427,14 @@
 											    </el-table-column> -->
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-											      <template slot-scope="scope">
-											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
-											      <i class="icon-trash red"></i>
-											        </el-button>
-											      </template>
+											        <template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
+															<i class="icon-trash red"></i>
+														</el-button>
+														<el-button @click.native.prevent="viewFile(scope.row)" type="text" size="small">
+															<i class="icon-trash red"></i>
+														</el-button>
+											        </template>
 											    </el-table-column>
 											  </el-table>
 										</el-tab-pane>
@@ -564,6 +567,15 @@
 													    </el-table-column>
 														<el-table-column label="模板编号" sortable prop="D_NUM">
 													      <template slot-scope="scope">
+													      	<el-select v-if="scope.row.isEditing" v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
+																<el-option label="基础数据选择" value="1"></el-option>
+																<el-option label="链条选择" value="2"></el-option>															
+															</el-select>
+													      	<span v-else>{{scope.row.DATA_TYPE}}</span>
+													      </template>
+													    </el-table-column>
+														<el-table-column label="模板编号" sortable prop="D_NUM">
+													      <template slot-scope="scope">
 													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
 													      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
 													      	</el-input>
@@ -603,7 +615,7 @@
 									            	</el-table>
 												</el-col>
 							            		<el-col :span="24" class="text-right pt10">
-													<el-button type="primary" size="small" round @click="getreport" v-show="modifytitle">
+													<el-button type="primary" size="small" round @click="getreport" v-show="showcreatereoprt">
 														<i class="icon-wordbook"></i><font> 生成报告</font>
 													</el-button>
 												</el-col>
@@ -1040,6 +1052,7 @@
 			return {
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
+				po_url: Config.po_url,
 				dialogVisible2:false,
 				workorderForm: {
 					PROJ_NUM:'',
@@ -1133,9 +1146,18 @@
 				btnshow:true,//报告提交按钮
 				sendchilddata:[],//子表已有的值
 				pronums:[],
+				showcreatereoprt:false,//生成报告按钮
 			};
 		},
 		methods: {
+			viewFile(row){
+				var url = this.po_url+'/show?fileid=' +  row.FILEID
+						+ '&userid=' +  this.docParm.userid
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+				window.open(url); 
+			},
 			downLoadRow(row){
 				if(row.FILECHECKED){
 					var url = row.FILEPATH 
@@ -1552,12 +1574,22 @@
 			},
 			 //模版编号
             templateNumber(item){
-				this.modulenum = item;
-				var data = [];
-				data.push(this.workorderForm.PROJ_NUM);
-				data.push(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
-				this.$refs.templatechild.visible(data);
-				data = [];
+				console.log(this.workorderForm.WORKORDER_PROJECTList);
+				if((item.DATA_TYPE == '2')&&(this.workorderForm.WORKORDER_PROJECTList==''||this.workorderForm.WORKORDER_PROJECTList==null||this.workorderForm.WORKORDER_PROJECTList==undefined)){
+					this.$message({
+						message: '请先选择检测项目与要求',
+						type: 'warning'
+					});
+				}else{
+					this.modulenum = item;
+					var data = [];
+					var datatype = item.DATA_TYPE;
+					data.push(this.workorderForm.PROJ_NUM);
+					data.push(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
+					data.push(datatype);
+					this.$refs.templatechild.visible(data);
+					data = [];
+				}
             },
 			showModule(data){
 				this.modulenum.D_NUM = data.num;
@@ -1860,6 +1892,7 @@
 			//原始数据模版
 			addfield4(){
 				var obj = {
+					DATA_TYPE:'',
 					D_NUM:'',
 					D_DESC: '',
 					STATUS: '1',
@@ -1974,11 +2007,13 @@
 				}
 			},
 			reportdatavalue(value){
+				console.log(value);
 				this.workorderreportid = value.id;
                 console.log(res);
                 console.log()
                 var obj = {
-                    REPORTNUM:value.reportnum,
+					ID:value.ID,
+                    REPORTNUM:workorderForm.PROXYNUM,
                     REPORTNAME:value.reportname,
                     // PREVIEW:'',
                     VERSION:value.version,
@@ -2053,6 +2088,11 @@
 						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 					}
 					console.log(res.data);
+					if(res.data.IS_MAIN == '1'){//是主任务单
+						this.showcreatereoprt = true;//显示生成报告按钮
+					}else{//不是主任务单
+						this.showcreatereoprt = false;
+					}
 					this.show = true;
 				}).catch((err) => {
 					this.$message({

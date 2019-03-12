@@ -74,7 +74,8 @@
 		DEPTID:'',//当前选择的机构值
 		datamodule:[],//原始数据模板已选数据
 		datamodulenums:'',//原始数据模板已选数据编号
-		projectnums:''//当前检测项目
+		projectnums:'',//当前检测项目
+		datatype:'',//请求模板类型
     }
   },
 
@@ -119,6 +120,7 @@
   	visible(value) {
 		console.log(value);
 		//value[0]检测项目
+		this.datatype = value[2];
 		this.projectnums = value[0];
 		//value[1]原始数据模板已选数据
 		this.dialogtemplate = true;
@@ -134,7 +136,11 @@
 		}
 		console.log(123456);
 		console.log(this.datamodulenums);
-		this.requestData();
+		if(this.datatype == '1'){
+			this.requestinitData();
+		}else if(this.datatype == '2'){
+			this.requestData();
+		}
   	},
   	loadMore () {
 	   if (this.loadSign) {
@@ -146,8 +152,50 @@
 	     setTimeout(() => {
 	       this.loadSign = true
 	     }, 1000)
-	     this.requestData();
+	     if(this.datatype == '1'){
+			this.requestinitData();
+		}else if(this.datatype == '2'){
+			this.requestData();
+		}
 	   }
+	},
+	requestinitData(){
+		this.loading = true;
+		var data = {
+			page: this.page.currentPage,
+			limit: this.page.pageSize,
+			DECRIPTION:this.searchList.DECRIPTION,
+			NUM:this.searchList.NUM
+		}
+		var url = this.basic_url + '/api-apps/app/rawDataTem';//业务基础数据原始数据模板
+		this.$axios.get(url, {}).then((res) => {
+			this.page.totalCount = res.data.count;
+			//总的页数
+			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+			if(this.page.currentPage >= totalPage) {
+				this.loadSign = false;
+			} else {
+				this.loadSign = true;
+			}
+			this.commentArr[this.page.currentPage] = res.data.data
+			let newarr = [];
+			for(var i = 1; i <= totalPage; i++) {
+
+				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+					for(var j = 0; j < this.commentArr[i].length; j++) {
+						newarr.push(this.commentArr[i][j])
+					}
+				}
+			}
+			this.categoryList = newarr;
+			this.loading = false;
+		}).catch((wrong) => {
+			this.$message({
+				message: '网络错误，请重试',
+				type: 'error'
+			});
+		})
 	},
 	requestData(){
 		this.loading = true;
@@ -160,6 +208,7 @@
 		console.log(11111);
 		console.log(this.projectnums);
 		// var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums+'&NUM_where_not_in='+this.datamodulenums;
+		// var url = this.basic_url + '/api-apps/app/rawDataTem';//业务基础数据原始数据模板
 		console.log(url);
 		var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums;
 		this.$axios.get(url, {}).then((res) => {
@@ -203,14 +252,12 @@
 				type: 'warning'
 			});
 		}else{
-			// this.dialogtemplate = false;
 			var moduleObj = {
 				id: this.selUser[0].ID,
 				num: this.selUser[0].NUM,
 				desc: this.selUser[0].DECRIPTION
 			};
 			this.$emit('showModule',moduleObj);
-			this.requestData();
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},

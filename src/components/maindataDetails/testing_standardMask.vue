@@ -78,7 +78,7 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @getFileInfo = "getFileInfo" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="3" v-show="views">
 									<el-row>
@@ -156,6 +156,9 @@
 						ENTERDATE: '',
 						CHANGEBY: '',
 						CHANGEDATE: '',
+						FILEID: '',
+						FILEPATH: '',
+						FILESIZE: ''
 					}
 				}
 			},
@@ -311,6 +314,11 @@
 			};
 		},
 		methods: {
+			getFileInfo(fileData){
+				this.dataInfo.FILESIZE = fileData.filesize;
+				this.dataInfo.FILEID = fileData.fileid;
+				this.dataInfo.FILEPATH = fileData.webUrl;
+			},
 			showLoading(){
 				this.loading = true;
 			},

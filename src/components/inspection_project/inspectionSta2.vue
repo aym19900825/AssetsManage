@@ -506,6 +506,9 @@
 				this.catedata.S_NAME = this.selData[0].S_NAME;
 				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;
+				this.catedata.FILESIZE = this.selData[0].FILESIZE;
+				this.catedata.FILEID = this.selData[0].FILEID;
+				this.catedata.FILEPATH = this.selData[0].FILEPATH;
 				this.$emit('request');
 			},
 			viewchildRow(ID,S_NUM) {//查看子项数据

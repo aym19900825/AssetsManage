@@ -246,10 +246,17 @@
 							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160"></el-table-column>
 							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350"></el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" sortable width="80"></el-table-column>
+							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="80"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 											      <template slot-scope="scope">
 											        <el-button
 											          @click="delPlan(scope.$index,scope.row,'WORLPLANLINE_BASIS','basisList')"
+											          type="text"
+											          size="small" v-if="!viewtitle">
+											          	<i class="icon-trash red"></i>
+											        </el-button>
+													<el-button
+											          @click="viewPlanFile(scope.row)"
 											          type="text"
 											          size="small" v-if="!viewtitle">
 											          	<i class="icon-trash red"></i>
@@ -792,6 +799,7 @@
 					'appid': 1
 				},
 				basic_url: Config.dev_url,
+				po_url: Config.po_url,
 				showEdit: [], //显示编辑框
 		        showBtn: [],
 		        showBtnOrdinary: true,
@@ -922,8 +930,16 @@
 			};
 		},
 		methods: {
+			viewPlanFile(row){
+				var url = this.po_url+'/show?fileid=' +  row.FILEID
+						+ '&userid=' +  this.docParm.userid
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+				window.open(url); 
+			},
 			download() {
-				var url = this.basic_url + '/api-apps/app/workplan/importExcTemplete/WORLPLANLINE?access_token='+sessionStorage.getItem('access_token');
+				var url = this.basic_url + '/api-apps/app/workplan/importExcTemplete?table=WORLPLANLINE&access_token='+sessionStorage.getItem('access_token');
 				var xhr = new XMLHttpRequest();
 					xhr.open('POST', url, true);
 					xhr.responseType = "blob";

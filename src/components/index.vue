@@ -27,7 +27,9 @@
 					<!--我的应用 End-->
 
 					<!--工作统计 Begin-->
-					<h3 class="pt30">工作统计</h3>
+					<div class="clearfix">
+						<h3>工作统计</h3>
+					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
 						<el-col :span="12">
@@ -103,7 +105,7 @@
 											</p>
 										</div>
 									</div>
-									<div class="pull-right" style="width: 200px; padding-top: 80px;">
+									<div class="pull-right" style="width: 160px; padding-top: 80px;">
 											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
 												<div class="circle_font">
@@ -151,6 +153,8 @@
 						<!--APPList End-->
 					</el-row>
 					<!--工作统计 End-->
+
+					
 				</div>
 			</div>
 				
@@ -469,27 +473,27 @@ export default {
 /*半圆统计图效果*/
 
 .wracircle {
-	width: 200px; /* Set the size of the progress bar */
-	height: 200px;
+	width: 160px; /* Set the size of the progress bar */
+	height: 160px;
 	position: absolute; /* Enable clipping */
 	transform:rotate(270deg);
-	clip: rect(0px, 200px, 200px, 100px); /* Hide half of the progress bar */
+	clip: rect(0px, 160px, 160px, 80px); /* Hide half of the progress bar */
 }
 
 /* Set the sizes of the elements that make up the progress bar */
 .circle {
-	width: 200px;
-	height: 200px;
+	width: 160px;
+	height: 160px;
 	border: 10px solid #9399F3;
-	border-radius: 100px;
+	border-radius: 80px;
 	position: absolute;
 	z-index: 1;
-	clip: rect(0px, 100px, 200px, 0px);
+	clip: rect(0px, 80px, 160px, 0px);
 }
 .wracircle:after {
 	content: '';
-	width: 200px;
-	height: 200px;
+	width: 160px;
+	height: 160px;
 	position: absolute;
 	z-index: -1;
 	border: 10px solid #EBF4F7;

@@ -129,7 +129,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table :data="samplesList" 
+							<el-table ref="table" :data="samplesList" 
 									  :header-cell-style="rowClass"
 									   border 
 									   stripe 
@@ -152,7 +152,7 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="样品类别" sortable width="300px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位" sortable width="260px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
@@ -230,11 +230,11 @@
 				codeUrl: 'http://192.168.1.126:9200/stripcode/image/25157709.jpg',
 				code_url: Config.code_url,
 				reportData:{},//报表的数据
-				loading: false,
 				basic_url: Config.dev_url,
 				isShow: false,
 				ismin: true,
-				loadSign: true, //加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},
 				checkedName: [
 					'样品编号',
@@ -366,51 +366,58 @@
 
 			
 			//表格滚动加载
-			loadMore () {
+			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
-
-// 			   if (this.loadSign) {
-// 			     this.loadSign = false
-// 			     this.page.currentPage++
-// 			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-// 			       return
-// 			     }
-// 			     setTimeout(() => {
-// 			       this.loadSign = true
-// 			     }, 1000)
-// 			     this.requestData()
-// //			     console.log('到底了', this.page.currentPage)
-// 			   }
-			 },
+			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
+			//改变页数
+			sizeChange(val) {
 				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
-			currentChange(val) {//分页，当前页
+			//当前页数
+			currentChange(val) {
 				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
 				this.requestData();
 			},
 			searchinfo(index) {//高级查询
@@ -660,8 +667,9 @@
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
+			//Table默认加载数据
 			requestData(index) {
-				this.loading = true;
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -691,20 +699,11 @@
 					} else {
 						this.loadSign = true
 					}
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}0
-					// }
-					// this.samplesList = newarr;
 					this.samplesList = res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试1',
@@ -827,7 +826,7 @@
 						iT < 0 && (iT = 0); 
 						iT > maxT/2 && (iT = maxT/2); 
 						middle.style.left = left.style.width = iT + "px"; 
-						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.width = maxT - iT -middleWidth -240 + "px"; 
 						right.style.left = iT+middleWidth+"px"; 
 						return false 
 					}; 

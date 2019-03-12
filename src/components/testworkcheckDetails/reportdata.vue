@@ -3,8 +3,8 @@
 		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
 		<div class="scrollbar" style="max-height:360px;">
 			<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-				<el-table ref="table" :data="REPORTList" row-key="ID" border height="260"  @selection-change="SelChange" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'REPORTList', order: 'descending'}">
-					<el-table-column type="selection" fixed width="55" align="center">
+				<el-table ref="multipleTable" :data="REPORTList" row-key="ID" border height="260"  @selection-change="SelChange" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'REPORTList', order: 'descending'}">
+					<el-table-column type="selection" fixed width="55" align="center"> 
 					</el-table-column>
 					<el-table-column prop="D_DESC" label="描述" sortable width="220px">
 					</el-table-column>
@@ -62,6 +62,15 @@
   },
 
   methods: {
+	// toggleSelection() {
+	// 	this.$refs.multipleTable.toggleAllSelection();
+	// },
+	// handleSelectionChange(val) {
+	// 	this.multipleSelection = val;
+	// },
+	selectdata(){
+		return false;
+	},
     SelChange(val) {
 		this.selUser = val;
 	},
@@ -146,26 +155,39 @@
 		this.dialogProduct = false;
 	},
   	visible(value) {
+		console.log(value);
         this.dataid = value[0];
         this.reportdata = value[1];
-        var reporttable = value[2];
-        this.PROXYNUM = value[3],
-        this.WONUM = value[4],
-        this.DEPTIDDesc = value[5],
-        this.ID = value[6]
-		this.requestData();
-		console.log(this.REPORTList);
-        for(var i = 0;i<reporttable.length;i++){
-            this.REPORTList.push(reporttable[i]);
-		}
-		console.log(this.REPORTList);
-        this.dialogProduct = true;
+        // var reporttable = value[2];
+        this.PROXYNUM = value[3];
+        this.WONUM = value[4];
+        this.DEPTIDDesc = value[5];
+		this.ID = value[6];
+		
+		this.loading = true;//加载动画打开
+		console.log(this.dataid);
+		var url = this.basic_url +'/api-apps/app/workorder/operate/templatedata?id='+this.dataid;
+		console.log(url);
+        this.$axios.get(url,{}).then((res) => {
+			console.log(res.data);
+			this.REPORTList = res.data;
+			this.$refs.multipleTable.toggleAllSelection();
+        }).catch((err) => {
+            this.$message({
+                message: '网络错误，请重试',
+                type: 'error'
+            });
+		});		
+		this.dialogProduct = true;
 	},
 	//Table默认加载数据
 	requestData(){
 		this.loading = true;//加载动画打开
+		console.log(this.dataid);
 		var url = this.basic_url +'/api-apps/app/workorder/operate/templatedata?id='+this.dataid;
+		console.log(url);
         this.$axios.get(url,{}).then((res) => {
+			console.log(res.data);
             this.REPORTList = res.data;
         }).catch((err) => {
             this.$message({
@@ -180,72 +202,71 @@
 	conChange(val) {
 		this.conMenu = val;
     },
-    openwrite() {
-        this.$prompt('请输入报告名称', '提示', {
+	submit(){
+		this.$prompt('请输入报告名称', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
         }).then(({ value }) => {
-            this.reportname = value;
-        }).catch(() => {
-                    
-        });
-    },
-	submit(){
-		if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
-			this.openwrite();
-			return;
-		}else {
-			this.sortKey(this.selUser,'NUM')
-			console.log(this.selUser);
-            var ids = '';
-            var id = [];
-            for(var i = 0;i<this.selUser.length;i++){
-                id.push(this.selUser[i].ID);
-            }
-            ids = id.toString(',');
-			
-            var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
-						
-            this.$axios.post(url, {
-                "filePath":ids,
-                "fileName":this.reportname,
-                "proxynum":this.PROXYNUM,
-                "wonum":this.WONUM,
-                "deptfullname":this.DEPTIDDesc,
-                "recordid":this.ID
-            }).then((res) => {
-                // this.workorderreportid = res.data.datas.id;
-                // console.log(res);
-                // console.log()
-                // var obj = {
-                //     REPORTNUM:res.data.datas.reportnum,
-                //     REPORTNAME:res.data.datas.reportname,
-                //     // PREVIEW:'',
-                //     VERSION:res.data.datas.version,
-                // }
-                // console.log(obj);
-                // this.workorderForm.WORKORDER_REPORTList.push(obj);
-				// console.log(this.workorderForm.WORKORDER_REPORTList);
-				
-                if(res.data.resp_code == 0) {
-                    this.$message({
-                        message: '生成成功',
-                        type: 'success'
+			this.reportname = value;
+			if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
+				this.$message({
+					message: '请输入报告名称',
+					type: 'warning'
+				});
+				return;
+			}else {
+				this.sortKey(this.selUser,'NUM')
+				console.log(this.selUser);
+				var ids = '';
+				var id = [];
+				for(var i = 0;i<this.selUser.length;i++){
+					id.push(this.selUser[i].FILEID);
+				}
+				ids = id.toString(',');
+				var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";			
+				this.$axios.post(url, {
+					"filePath":ids,
+					"fileName":this.reportname,
+					"proxynum":this.PROXYNUM,
+					"wonum":this.WONUM,
+					"deptfullname":this.DEPTIDDesc,
+					"recordid":this.ID
+				}).then((res) => {
+					// this.workorderreportid = res.data.datas.id;
+					// console.log(res);
+					// console.log()
+					// var obj = {
+					//     REPORTNUM:res.data.datas.reportnum,
+					//     REPORTNAME:res.data.datas.reportname,
+					//     // PREVIEW:'',
+					//     VERSION:res.data.datas.version,
+					// }
+					// console.log(obj);
+					// this.workorderForm.WORKORDER_REPORTList.push(obj);
+					// console.log(this.workorderForm.WORKORDER_REPORTList);
+					
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '生成成功',
+							type: 'success'
+						});
+						var reportvalue = res.data.datas;
+						this.$emit('reportdatavalue',reportvalue);
+					}
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
 					});
-					var reportvalue = res.data.datas;
-					this.$emit('reportdatavalue',reportvalue);
-                }
-            }).catch((err) => {
-                this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
-            });
-            this.selMenu = [];
-			this.dialogProduct = false;
-			this.REPORTList = [];
-            this.$emit('request');
-		}
+				});
+				this.selMenu = [];
+				this.dialogProduct = false;
+				this.REPORTList = [];
+				this.$emit('request');
+			}
+        }).catch(() => {
+       
+        });
 	},
 	sortKey(array,key){
         array.sort(function(a,b){

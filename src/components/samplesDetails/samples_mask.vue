@@ -92,21 +92,17 @@
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
 												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit"></el-input-number>
-												
-												<el-button class="table-funbc" type="success" size="mini" round @click="addfield" v-show="!viewtitle">
-													<font>生成列表</font>
-												</el-button>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="类别" prop="TYPE" label-width="110px">
 												<el-input v-model="samplesForm.TYPE" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getcategory" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="16">
 											<el-form-item label="其他资料" prop="OTHER" label-width="110px">
 												<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
@@ -184,14 +180,14 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" >
-											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+											<el-form-item label="所属类别" prop="PRODUCT_TYPE"  label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+											<el-form-item label="所属名称" prop="PRODUCT" label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
 												</el-input>
@@ -207,13 +203,18 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2">								
-									<!-- <div class="table-func">
+									<div class="table-func">
+										<span><i class="red font16">*</i>此处是按样品数量生成的列表行</span>
 										<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
+											<i class="icon-start"></i>
+											<font>生成</font>
+										</el-button>
+										<!-- <el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
-										</el-button>
-									</div> -->
-									<el-table :fit="true" max-height="260" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
+										</el-button> -->
+									</div>
+									<el-table ref="table" :fit="true" max-height="260" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope">
 									      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -238,7 +239,7 @@
 									      </template>
 									    </el-table-column>
 
-										<el-table-column prop="SN" label="单件码" sortable width="170px" >
+										<el-table-column prop="SN" label="单件码" sortable>
 									      <template slot-scope="scope">
 											  	<!-- <el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required: true, message: '不能为空', trigger: 'blur'}"> -->
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请填写">
@@ -262,7 +263,7 @@
 									    </el-table-column> -->
 									
 
-									    <el-table-column prop="ENTERDATE" label="录入时间" sortable>
+									    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="170px">
 									      <template slot-scope="scope">
 									      	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.ENTERDATE'" >
 									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" :disabled="true" value-format="yyyy-MM-dd"></el-date-picker>
@@ -331,27 +332,20 @@
 
 			<!--委托书编号-弹出框 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose1">
-				<el-table :data="gridDataList" height="400px" @selection-change="SelChange" v-loadmore="loadMore('proxy')">
-					<!-- <el-table ref="table" :header-cell-style="rowClass"
-									:data="categoryList"
-									border
-									stripe
-									:height="fullHeight"
-									style="width: 100%;"
-	    							:default-sort="{prop:'categoryList', order: 'descending'}"
-	    							@selection-change="SelChange"
-	    							v-loadmore="loadMore"
-									v-loading="loading"
-									element-loading-text="加载中…"
-	    							element-loading-spinner="el-icon-loading"
-	    							element-loading-background="rgba(255, 255, 255, 0.9)"> -->
+				<el-table ref="table" :data="gridDataList" height="400px" @selection-change="SelChange"
+					v-loadmore="loadMore('proxy')"
+					v-loading="loading"
+					element-loading-text="加载中…"
+					element-loading-spinner="el-icon-loading"
+					element-loading-background="rgba(255, 255, 255, 0.9)">
+
 					<el-table-column type="selection" width="55" fixed >
 					</el-table-column>
-					<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" >
+					<el-table-column label="检验委托书编号" sortable width="200px" prop="PROXYNUM" >
 					</el-table-column>
-					<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME">
+					<el-table-column label="委托单位名称" sortable width="220px" prop="V_NAME">
 					</el-table-column>
-					<el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME">
+					<el-table-column label="生产单位名称" sortable width="220px" prop="P_NAME">
 					</el-table-column>
 					<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME">
 					</el-table-column>
@@ -361,7 +355,7 @@
 					</el-table-column>
 					<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
 					</el-table-column>
-					<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable :formatter="dateFormat" type="date" >
+					<el-table-column label="完成日期" width="200px" prop="COMPDATE" sortable :formatter="dateFormat" type="date">
 					</el-table-column>
 					<el-table-column label="完成方式" width="200px" prop="COMPMODE" sortable>
 					</el-table-column>
@@ -376,14 +370,19 @@
 					</el-pagination>
 				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-	    			<el-button @click="resetproxy">取 消</el-button>
+	    			<el-button @click="resetBasisInfo1">取 消</el-button>
 	  			</div>
 			</el-dialog>
 			<!--委托书编号-弹出框 Begin-->
 
 			<!-- 类别-弹出框 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose2">
-				<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('type')">
+			<!-- <el-dialog :modal-append-to-body="false" title="类别" height="300px" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose2">
+				<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
+						v-loadmore="loadMore('type')"
+						v-loading="loading"
+						element-loading-text="加载中…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -403,14 +402,19 @@
 				</el-pagination>
 				<div slot="footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+			       <el-button @click="resetBasisInfo2">取 消</el-button>
 			    </div>
-			</el-dialog>
+			</el-dialog> -->
 			<!-- 类别-弹出框 End -->
 
 			<!-- 收样人、接样人-弹出框 Begin -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible4" height="300px" width="80%" :before-close="handleClose3">
-				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible3" height="300px" width="80%" :before-close="handleClose3">
+				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
+						v-loadmore="loadMore"
+						v-loading="loading"
+						element-loading-text="加载中…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="用户名" sortable width="140px" prop="username">
@@ -430,15 +434,15 @@
 
 				<div slot="footer">
 			       <el-button type="primary" @click="addPerson">确 定</el-button>
-			       <el-button @click="dialogVisible4 = false">取 消</el-button>
+			       <el-button @click="resetBasisInfo3">取 消</el-button>
 			    </div>
 			</el-dialog>
 			<!-- 收样人、接样人-弹出框 End -->
 
-			<!-- 产品类别-弹出框子组件  -->
+			<!-- 所属类别-弹出框子组件  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 
-			<!-- 产品名称-弹出框子组件  -->
+			<!-- 所属名称-弹出框子组件  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 		</div>
 	</div>
@@ -446,7 +450,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
+	import categorymask from '../common/common_mask/categorylistmask.vue'//所属类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	export default {
 		name: 'samples_mask',
@@ -455,67 +459,13 @@
 			productmask,
 		},
 		data() {
-			// var validateProxynum = (rule, value, callback) => {//委托书编号
-   //              if (this.samplesForm.PROXYNUM === undefined || this.samplesForm.PROXYNUM === '' || this.samplesForm.PROXYNUM === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validateVendor = (rule, value, callback) => {//委托单位编号
-   //              if (this.samplesForm.VENDOR === undefined || this.samplesForm.VENDOR === '' || this.samplesForm.VENDOR === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validateVname = (rule, value, callback) => {//委托单位名称
-   //              if (this.samplesForm.V_NAME === undefined || this.samplesForm.V_NAME === '' || this.samplesForm.V_NAME === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validateProcompany = (rule, value, callback) => {//生产单位编号
-   //              if (this.samplesForm.PRODUCT_COMPANY === undefined || this.samplesForm.PRODUCT_COMPANY === '' || this.samplesForm.PRODUCT_COMPANY === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validatePname = (rule, value, callback) => {//生产单位名称
-   //              if (this.samplesForm.P_NAME === undefined || this.samplesForm.P_NAME === '' || this.samplesForm.P_NAME === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validateDescri = (rule, value, callback) => {//样品名称
-   //              if (this.samplesForm.DESCRIPTION === undefined || this.samplesForm.DESCRIPTION === '' || this.samplesForm.DESCRIPTION === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validateProcode  = (rule, value, callback) => {//产品标识代码
-   //              if (this.samplesForm.PRODUCT_CODE === undefined || this.samplesForm.PRODUCT_CODE === '' || this.samplesForm.PRODUCT_CODE === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			// var validateType = (rule, value, callback) => {//类别
-   //              if (this.samplesForm.TYPE === undefined || this.samplesForm.TYPE === '' || this.samplesForm.TYPE === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
+			
 			return {
-				loadSign:true,//加载
 				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -542,8 +492,8 @@
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',
 				dialogVisible: false, //对话框
-				dialogVisible3:false,//产品类别弹出框
-				dialogVisible4:false,//接样人、收样人弹出框
+				dialogVisible2:false,//所属类别弹出框
+				dialogVisible3:false,//接样人、收样人弹出框
 				activeNames: ['1', '2','3'], //手风琴数量
 				labelPosition: 'right', //表单标题在上方
 				addtitle: true,
@@ -579,6 +529,9 @@
 					ACCEPT_DATE: [{required: true, message: '请选择', trigger: 'change' }],
 					RECIP_DATE: [{ required: true, message: '请选择', trigger: 'change' }],
 					STATUSDATE: [{required: true, message: '请选择', trigger: 'change' }],
+					CJDW: [{required: true, message: '请选择', trigger: 'change' }],
+					PRODUCT_TYPE: [{required: true, message: '请选择', trigger: 'blur' }],
+					PRODUCT: [{required: true, message: '请选择', trigger: 'blur' }],
 					MODEL: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//型号
 					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
 					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
@@ -610,7 +563,7 @@
 				this.samplesForm.PRODUCT = '';
 				this.samplesForm.PRO_NUM = '';
 			},
-			addcategory(){//产品类别
+			addcategory(){//所属类别
 				if(this.samplesForm.CJDW == null || this.samplesForm.CJDW == '' || this.samplesForm.CJDW == undefined){
 					this.$message({
 						message: '请先选择承检单位',
@@ -620,27 +573,26 @@
 					this.$refs.categorychild.visible(this.samplesForm.CJDW);
 				}
 			},
-			//接到产品类别的值
+			//接到所属类别的值
 			categorydata(value){
 				this.samplesForm.P_NUM = value[0];
 				this.samplesForm.PRODUCT_TYPE  = value[1];
-				this.samplesForm.P_VERSION = value[2];//产品类别版本
+				this.samplesForm.P_VERSION = value[2];//所属类别版本
 				this.samplesForm.PRODUCT = '';
 				this.samplesForm.PRO_NUM = '';
 			},
 			addproduct(){//受检产品名称
 				if(this.samplesForm.P_NUM == null || this.samplesForm.P_NUM == '' || this.samplesForm.P_NUM == undefined){
 					this.$message({
-						message: '请先选择产品类别',
+						message: '请先选择所属类别',
 						type: 'warning'
 					});
 				}else{
-					this.$refs.productchild.visible(this.samplesForm.P_NUM);
+					this.$refs.productchild.visible(this.samplesForm.P_NUM,this.samplesForm.CJDW);
 				}
 			},
 			//接到产品的值
 			appenddata(value){
-				console.log(value);
 				this.samplesForm.PRO_NUM = value[0];
 				this.samplesForm.PRODUCT = value[1];
 				this.samplesForm.PRO_VERSION = value[2];//产品版本
@@ -674,8 +626,8 @@
 					CHANGEDATE: '',//修改时间
 					TYPE: '',//样品类别
 					CJDW:'',//承检单位
-					P_NUM:'',//产品类别编号
-					PRODUCT_TYPE:'',//产品类别
+					P_NUM:'',//所属类别编号
+					PRODUCT_TYPE:'',//所属类别
 					PRO_NUM:'',//产品编号
 					PRODUCT:'',//产品
 					STATUS: '1',//信息状态
@@ -688,10 +640,17 @@
 				this.dialogVisible = true;
 			},
 			proxydata(){
-				var url = this.basic_url + '/api-apps/app/inspectPro';
-				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
-					this.gridDataList= res.data.data;
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+					this.deptid = res.data.deptId;
+					var url = this.basic_url + '/api-apps/app/inspectPro?DEPTID_wheres='+this.deptid;
+					this.$axios.get(url, {}).then((res) => {
+						this.gridDataList= res.data.data;
+					});
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				});
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
@@ -711,8 +670,7 @@
 					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;//产品标识代码
 					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
 					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
-					// this.dialogVisible = false;
-					this.resetproxy();
+					this.resetBasisInfo1();
 				}else if(this.selval.length > 1){
 					this.$message({
 						message:'不可选择多条数据',
@@ -720,21 +678,15 @@
 					})
 				}
 			},
-			resetproxy(){
-				this.page.currentPage = 1;//页码重新传值
-				this.page.pageSize = 10;//页码重新传值
-				this.dialogVisible = false;
-				this.gridDataList = [];
-			},
+
 			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisible = false;//关闭弹出框
-				this.categoryList = [];//列表数据置空
+				this.gridDataList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
-				this.page.pageSize = 10;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
-			SelChange(val) {
-				this.selval = val;
-			},
+			
+			
 			visible() {//添加内容时从父组件带过来的
 				this.samplesForm.ACCEPT_DATE =  '';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -828,14 +780,7 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			// sizeChange(val) {
-			// 	this.page.pageSize = val;
-			// 	this.requestData();
-			// },
-			// currentChange(val) {
-			// 	this.page.currentPage = val;
-			// 	this.requestData();
-			// },
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -855,19 +800,19 @@
 			},
 			//
 			getcategory(){
-				this.dialogVisible3 = true;				
+				this.dialogVisible2 = true;				
 			},
 			//收样人
 			getReceive(){
 				this.tips = '1';
 				this.$emit('request');
-				this.dialogVisible4 = true;
+				this.dialogVisible3 = true;
 			},
 			//接样人
 			getCatch(){
 				this.tips = '2';
 				this.$emit('request');
-				this.dialogVisible4 = true;
+				this.dialogVisible3 = true;
 			},
 			addPerson(){
 				if(this.selval.length == 0){
@@ -883,14 +828,22 @@
 				}else{
 					if (this.tips == '1') {
 						this.samplesForm.ACCEPT_PERSON = this.selval[0].username; //收样人
-						this.dialogVisible4 = false;
+						// this.dialogVisible3 = false;
+						this.resetBasisInfo3();
 						this.$emit('request');
 					}else if(this.tips == '2'){
 						this.samplesForm.RECIP_PERSON = this.selval[0].username;//接样人
-						this.dialogVisible4 = false;
+						// this.dialogVisible3 = false;
+						this.resetBasisInfo3();
 						this.$emit('request');
 					}
 				}
+			},
+			resetBasisInfo3(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible3 = false;//关闭弹出框
+				this.userList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
 			addproclass(){
 				if(this.selval.length == 0){
@@ -905,16 +858,24 @@
 					});
 				}else{
 					this.samplesForm.TYPE = this.selval[0].TYPE;
-					this.dialogVisible3 = false;
+					// this.dialogVisible2 = false;
+					this.resetBasisInfo2();
 					this.$emit('request');
 				}
 			},
+			resetBasisInfo2(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible2 = false;//关闭弹出框
+				this.categoryList = [];//列表数据置空
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
+			},
+			
 			SelChange(val) {
 				this.selval = val;
 			},
 			addfield() { 
 				//插入行到文件文件Table中
-				console.log(this.samplesForm.QUATITY);
+				// console.log(this.samplesForm.QUATITY);
 				this.samplesForm.ITEM_LINEList = [];
 				var date=new Date();
 				var time = this.$moment(date).format("YYYY-MM-DD");
@@ -941,17 +902,11 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.dialogVisible = false;
+				this.dialogVisible2 = false;
 				this.dialogVisible3 = false;
-				this.dialogVisible4 = false;
 				this.$emit('request');
 			},
-			// cancelForm() {
-			// 	this.show = false;
-			// 	this.reset();
-			// },
-			// reset() {
-			// 	this.show = false;
-			// },
 			
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -1030,11 +985,11 @@
 			},
 			//生成委托书
 			generate(){
-				console.log(this.samplesForm);
+				// console.log(this.samplesForm);
 				var dataid = this.samplesForm.ID;
 				var url =this.basic_url + '/api-apps/app/item/operate/isExcProxy?ID=' +dataid;
 				this.$axios.get(url,{}).then((res) => {
-					console.log(res);
+					// console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1088,6 +1043,7 @@
 			sizeChange(val) {
 				this.page.pageSize = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
@@ -1097,6 +1053,7 @@
 			currentChange(val) {
 				this.page.currentPage = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
@@ -1105,7 +1062,7 @@
 			},
 			// //表格滚动加载
 			loadMore(val) {
-				//console.log(this.$refs.table.$el.offsetTop)
+				// console.log(this.$refs.table.$el.offsetTop)
 				// let up2down = sessionStorage.getItem('up2down');
 				// if(this.loadSign) {					
 				// 	if(up2down=='down'){
@@ -1137,7 +1094,9 @@
 				// 	}
 				// }
 			},
-			requestData(index) {//高级查询字段
+			//所属类别数据
+			requestData(index) {
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1145,7 +1104,6 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType', {
 					params: data
 				}).then((res) => {
-					// console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1154,46 +1112,53 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
+					this.categoryList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {})
-				var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					// console.log(res);
-					//this.userList = res.data.data;
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
+			},
+			//收样人、接样人数据
+			requestData2(index) {
+				this.loading = true;//加载动画打开
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+					this.deptid = res.data.deptId;
+					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.deptid;
+					console.log(this.deptid);
+					this.$axios.get(url, {
+						params: data
+					}).then((res) => {
+						this.page.totalCount = res.data.count;
+						//总的页数
+						let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						if(this.page.currentPage >= totalPage) {
+							this.loadSign = false
+						} else {
+							this.loadSign = true
 						}
-					}
-					this.userList = newarr;
-				}).catch((wrong) => {})
+						this.userList = res.data.data;
+						this.loading = false;//加载动画关闭
+						if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+							$('.el-table__body-wrapper table').find('.filing').remove();
+						}//滚动加载数据判断filing
+					}).catch((wrong) => {
+						this.$message({
+							message: '网络错误，请重试',
+							type: 'error'
+						});
+					})
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+				
 			},
 			getITEM_STATUS() {//获取样品状态
 				var url =  this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
@@ -1204,35 +1169,36 @@
 					console.log('请求失败');
 				})
 			},
+
 			handleClose1(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
+				.then(_ => {
+					this.resetBasisInfo1();
+				})
+				.catch(_ => {
+					console.log('取消关闭');
 					$('.v-modal').hide();
 				});
 			},
 			//小弹出框关闭按钮事件
 			handleClose2(done) {
 				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
+				.then(_ => {
+					this.resetBasisInfo2();
+				})
+				.catch(_ => {
+					console.log('取消关闭');
 					$('.v-modal').hide();
 				});
 			},
 			//小弹出框关闭按钮事件
 			handleClose3(done) {
 				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
+				.then(_ => {
+					this.resetBasisInfo3();
+				})
+				.catch(_ => {
+					console.log('取消关闭');
 					$('.v-modal').hide();
 				});
 			},
@@ -1240,6 +1206,7 @@
 		mounted() {
 			this.getType();
 			this.requestData();
+			this.requestData2();
 			this.getITEM_STATUS();
 			this.getCompany();
 		},

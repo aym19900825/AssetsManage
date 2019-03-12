@@ -226,7 +226,6 @@
 					return;
 				} else {
 					var changeMenu = selData[0];
-					// console.log(changeMenu.children.length);
 					if(changeMenu.children == null){
 						var id = changeMenu.id;
 						console.log(id);

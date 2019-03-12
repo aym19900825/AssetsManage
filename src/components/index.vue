@@ -10,6 +10,8 @@
 		<div class="wrapper-content">
 			<div id="information" :style="{height: fullHeight}">
 				<div class="ibox-content pl20 pr20">
+<<<<<<< HEAD
+=======
 					<!--我的应用 Begin-->
 					<div class="clearfix">
 						<h3 class="pull-left">我的应用</h3>
@@ -18,18 +20,19 @@
 						<!--APPList Begin-->
 						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
 							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
-								<router-link :to="item.url">
 									<span><i :class="item.css"></i></span>
 									<font>{{item.name}}</font>
-								</router-link>
 							</div>
 						</el-col>
 						<!--APPList End-->
 					</el-row>
 					<!--我的应用 End-->
+>>>>>>> 3574d1e7e614064acbfc3d73f5958f76a614dda4
 
 					<!--工作统计 Begin-->
-					<h3 class="pt30">工作统计</h3>
+					<div class="clearfix">
+						<h3>工作统计</h3>
+					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
 						<el-col :span="12">
@@ -153,6 +156,24 @@
 						<!--APPList End-->
 					</el-row>
 					<!--工作统计 End-->
+
+					<!--我的应用 Begin-->
+					<div class="clearfix pt30">
+						<h3 class="pull-left">我的应用</h3>
+					</div>
+					<el-row :gutter="20" class="applist">
+						<!--APPList Begin-->
+						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
+							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
+								<router-link :to="item.url">
+									<span><i :class="item.css"></i></span>
+									<font>{{item.name}}</font>
+								</router-link>
+							</div>
+						</el-col>
+						<!--APPList End-->
+					</el-row>
+					<!--我的应用 End-->
 				</div>
 			</div>
 				
@@ -221,7 +242,6 @@ export default {
 			}
 			var url = this.basic_url + '/api-apps/app/flow/flow/todo';
 			this.$axios.get(url, {params: data}).then((res) => {
-				// console.log(res.data);
 				this.page.totalCount = res.data.count;
 				//总的页数
 				let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
@@ -299,59 +319,72 @@ export default {
 							menuId: item.id,
 							roleId: _this.$store.state.roleid,
 						};
-			// _this.$store.dispatch('setMenuIdAct',item.id);
-			console.log(_this.$store.state.menuid);
-			// console.log(item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
 				// console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
-					// this.$router.push({path: item[0].url});
 				}
 				
-					_this.$store.dispatch('setSelectedNavAct',item);
-//					_this.$selectedNav=item;
-					var flag="1";
-					for(var i=0;i<_this.$store.state.clickedNavs.length;i++){
-						if(_this.$store.state.clickedNavs.length==1){
+				_this.$store.dispatch('setSelectedNavAct',item);
+				var flag="1";
+				for(var i=0;i<_this.$store.state.clickedNavs.length;i++){
+					if(_this.$store.state.clickedNavs.length==1){
+						flag="0";
+					}else{
+						if(typeof(_this.$store.state.clickedNavs[i].id)!=undefined&&i!=0){
+						if(_this.$store.state.clickedNavs[i].id != item.id){
 							flag="0";
 						}else{
-							if(typeof(_this.$store.state.clickedNavs[i].id)!=undefined&&i!=0){
-							if(_this.$store.state.clickedNavs[i].id != item.id){
-								flag="0";
-							}else{
-								flag="1";
-								break;
-							}
+							flag="1";
+							break;
 						}
-						}
-						
 					}
-					if(flag=="0"){
-						_this.$store.state.clickedNavs.push(item);
-						setTimeout(function(){
-				 			var left = $('.page-tabs').offset().left; 
-				            //tabs总宽度
-				            var tabW = $('.page-tabs-content').width();
-				            //总区域内容宽度
-				            var contentW = $('.content-tabs').width()-240;
-				            if(tabW>contentW){
-				            	var poor=tabW-contentW;
-				            	$('.page-tabs').offset({
-				                    left: -poor
-				                });
-				            }
-						},0);
-					}
+					}	
+				}
+				if(flag=="0"){
+					_this.$store.state.clickedNavs.push(item);
+					setTimeout(function(){
+						var left = $('.page-tabs').offset().left; 
+									//tabs总宽度
+									var tabW = $('.page-tabs-content').width();
+									//总区域内容宽度
+									var contentW = $('.content-tabs').width()-240;
+									if(tabW>contentW){
+										var poor=tabW-contentW;
+										$('.page-tabs').offset({
+													left: -poor
+											});
+									}
+					},0);
+				}
 			}).catch((wrong) => {
 				this.$message({
 					message: '网络错误，请重试',
 					type: 'error'
 				});
 			});
-//		    _this.$store.dispatch('setRoleIdAct',this.$store.state.roleid);
-		    _this.$store.dispatch('setNavIdAct',item.id);
+				_this.$store.dispatch('setNavIdAct',item.id);
+				var data = {
+				menuId: this.$store.state.menuid,
+				roleId: this.$store.state.roleid,
+			};
+			var url = this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+			this.$axios.get(url, {params: data}).then((res) => {
+				if(res.data.length>0&&res.data!='undefined'){
+					var leftnav=res.data;
+				  this.$router.push({path:leftnav[0].url});
+					this.$emit('childByValue',this.$store.state.selectedNav);
+				}else {
+					this.$router.push({path:item.url});
+					this.$emit('childByValue',this.$store.state.selectedNav);
+				}
+			}).catch((wrong) => {
+				this.$message({
+					message: '网络错误，请重试左侧1',
+					type: 'error'
+				});
+			});
 		},
 		//引入饼状图图表
 		initEchart(){

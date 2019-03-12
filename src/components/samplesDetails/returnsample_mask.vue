@@ -33,10 +33,16 @@
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-input placeholder="请选择" v-model="samplesForm.ITEM_STEP" :disabled="edit">
+											<el-input placeholder="请选择" v-model="samplesForm.ITEM_STEP" :disabled="edit"  v-if="sampleType=='sampleNum'">
 												<template slot="prepend">样品序号</template>
 												<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
 											</el-input>
+										</el-col>
+										<el-col :span="6" class="pull-right">
+											<el-select v-model="sampleType" placeholder="返样类型" :disabled="noedit" @change="getSampleList">
+												<el-option key="1" label="样品批次" value="sampleBatch"></el-option>
+												<el-option key="2" label="样品序号" value="sampleNum"></el-option>
+											</el-select>
 										</el-col>
 									</el-row>
 
@@ -50,7 +56,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="1" :step="5" :max="10000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :max="maxNum" label="描述文字" style="width: 100%"></el-input-number>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -259,6 +265,8 @@
 //		},
 		data() {
 			return {
+				maxNum: 1,
+				sampleType: '',
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				value: '',
@@ -384,9 +392,23 @@
 					this.samplesForm.MEMO = this.getCheckboxData.fullname;
 				}
 			},
+			getSampleList(){
+				this.$axios.get(this.basic_url + '/api-apps/app/itemline?ITEMNUM_wheres='+this.samplesForm.ITEMNUM, {
+				}).then((res) => {
+					this.samplenumList = res.data.data;
+					if(this.sampleType == 'sampleBatch'){
+						this.maxNum = res.data.count;
+					}else{
+						this.maxNum = 1;
+						this.samplesForm.QUALITY = 1;
+					}
+					
+				}).catch((wrong) => {})
+			},
 			//样品编号
 			getsample(){
 				this.requestData();
+				this.getSampleList();
 				this.dialogsample = true;
 			},
 			addsamplebtn(){

@@ -699,9 +699,11 @@
 			}
 			for(var c=0;c<products.length;c++){
 				if(products[c].type!="dept"&&products[c].type!="producttype"){
-					  product.push(products[c].id); 
+					if(!!products[c].id){
+						product.push(products[c].id); 
+					}
 				}else if(products[c].type!="dept"&&products[c].type!="product"){
-					  productType.push(products[c].id);
+					productType.push(products[c].id);
 				}	
 			}
 			for(var c=0;c<testingproduct.length;c++){

@@ -820,6 +820,7 @@
 				loadSign:true,//加载
 				commentArr:{},
 				basic_url: Config.dev_url,
+				po_url: Config.po_url,
 				dataInfo: {
 					MAINGROUP:'',
 					LEADER:'',
@@ -977,6 +978,14 @@
 			};
 		},
 		methods: {
+			viewFile(row){
+				var url = this.po_url+'/show?fileid=' +  row.FILEID
+						+ '&userid=' +  this.docParm.userid
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+				window.open(url); 
+			},
 			testbasis(){},
 			handleNodeClick(data) { //获取勾选树菜单节点
 			},
@@ -1558,7 +1567,7 @@
 				if(this.main == 'main'){
 					this.dataInfo.S_NUM = value[0];
 					for(var i = 1;i<value.length;i++){
-						value[i].S_DESC = value[i].S_NAME;
+						value[i].S_DESC = value[i].S_NAME;value[i].S_DESC = value[i].S_NAME;
 						this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
 					}
 					this.dataInfo.INSPECT_PROXY_PROJECList = [];

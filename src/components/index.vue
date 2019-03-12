@@ -10,26 +10,11 @@
 		<div class="wrapper-content">
 			<div id="information" :style="{height: fullHeight}">
 				<div class="ibox-content pl20 pr20">
-					<!--我的应用 Begin-->
-					<div class="clearfix">
-						<h3 class="pull-left">我的应用</h3>
-					</div>
-					<el-row :gutter="20" class="applist">
-						<!--APPList Begin-->
-						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
-							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
-								<router-link :to="item.url">
-									<span><i :class="item.css"></i></span>
-									<font>{{item.name}}</font>
-								</router-link>
-							</div>
-						</el-col>
-						<!--APPList End-->
-					</el-row>
-					<!--我的应用 End-->
 
 					<!--工作统计 Begin-->
-					<h3 class="pt30">工作统计</h3>
+					<div class="clearfix">
+						<h3>工作统计</h3>
+					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
 						<el-col :span="12">
@@ -153,6 +138,24 @@
 						<!--APPList End-->
 					</el-row>
 					<!--工作统计 End-->
+
+					<!--我的应用 Begin-->
+					<div class="clearfix pt30">
+						<h3 class="pull-left">我的应用</h3>
+					</div>
+					<el-row :gutter="20" class="applist">
+						<!--APPList Begin-->
+						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
+							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
+								<router-link :to="item.url">
+									<span><i :class="item.css"></i></span>
+									<font>{{item.name}}</font>
+								</router-link>
+							</div>
+						</el-col>
+						<!--APPList End-->
+					</el-row>
+					<!--我的应用 End-->
 				</div>
 			</div>
 				

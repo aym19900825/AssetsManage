@@ -427,11 +427,14 @@
 											    </el-table-column> -->
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-											      <template slot-scope="scope">
-											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
-											      <i class="icon-trash red"></i>
-											        </el-button>
-											      </template>
+											        <template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
+															<i class="icon-trash red"></i>
+														</el-button>
+														<el-button @click.native.prevent="viewFile(scope.row)" type="text" size="small">
+															<i class="icon-trash red"></i>
+														</el-button>
+											        </template>
 											    </el-table-column>
 											  </el-table>
 										</el-tab-pane>
@@ -1040,6 +1043,7 @@
 			return {
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
+				po_url: Config.po_url,
 				dialogVisible2:false,
 				workorderForm: {
 					PROJ_NUM:'',
@@ -1136,6 +1140,14 @@
 			};
 		},
 		methods: {
+			viewFile(row){
+				var url = this.po_url+'/show?fileid=' +  row.FILEID
+						+ '&userid=' +  this.docParm.userid
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname
+				window.open(url); 
+			},
 			downLoadRow(row){
 				if(row.FILECHECKED){
 					var url = row.FILEPATH 

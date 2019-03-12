@@ -48,7 +48,7 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="noedit">
+									<el-radio-group v-model="dataInfo.TYPE" disabled>
 										<el-col :span="4">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>

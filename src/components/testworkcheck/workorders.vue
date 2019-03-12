@@ -121,11 +121,7 @@
 					</div>
 				</div>
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-<<<<<<< HEAD
-			<sendtasklist ref="task" v-bind:page=page></sendtasklist>
-=======
-			<sendtasklist ref="task"  v-bind:page=page @refresh="refresh"></sendtasklist>
->>>>>>> 28a7456beffde4cfd03f91b2d507bca98b12cf44
+			<sendtasklist ref="task"  v-bind:page=page></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -436,11 +432,20 @@
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
 				}
-		    },
+			},
+			getCurrentRole(){//获取当前用户信息
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	                return res.data.roleId;
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
+        	},
 			//修改检验工作处理到子组件
 			modify() {
-				console.log('this.selMenu');
-				console.log(this.selMenu.length);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -453,36 +458,38 @@
 						type: 'warning'
 					});
 					return;
-				} else {
-					console.log(this.selMenu[0].STATE);
-					if(this.selMenu[0].STATE == 3 || this.selMenu[0].STATE == 2) {
-						this.$message({
-							message: '已启动的流程，不允许修改数据，只可以查看。',
-							type: 'warning'
-						});
-						this.$refs.child.view(this.selMenu[0].ID);
-					}
-					//驳回
-					else if(this.selMenu[0].STATE == 0) {
+				} else{
+					if(this.selMenu[0].STATE == 3 || this.selMenu[0].STATE == 2 || this.selMenu[0].STATE == 0) {
+						//判断是不是当前执行者
 						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selMenu[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/workorder/flow/isPromoterNode/' + this.selMenu[0].ID;
-								this.$axios.get(url, {}).then((res) => {
-									if(res.data.resp_code == 0) {
-										this.$refs.child.detail(this.selMenu[0].ID);
-									} else {
-										this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-										});
-									}
-								});
+								this.$refs.child.detail(this.selMenu[0].ID);
+								// var nodeId = '';
+								// var url = this.dev_url + '/api-apps/app/workorder/flow/NodeId/' + this.selMenu[0].ID;
+								// this.$axios.get(url, {}).then((res) => {
+								// 	if(res.data.resp_code == 0) {
+								// 		nodeId = res.data.datas;
+								// 	} else {
+								// 		this.$message({
+								// 			message: res.data.resp_msg,
+								// 			type: 'warning'
+								// 		});
+								// 	}
+								// });
+								// if(nodeId == 'jyfzr'){
+								// 	this.$refs.child.detail(this.selMenu[0].ID,'第二个节点');	
+								// }else if(nodeId == 'jyy'){
+								// 	this.$refs.child.detail(this.selMenu[0].ID,'第三个节点');	
+								// }else{
+								// 	//cxlr
+								// 	this.$refs.child.view(this.selMenu[0].ID,'第一个节点');
+								// }
 							} else {
 								this.$message({
 									message: res.data.resp_msg,
 									type: 'warning'
-									});
+								});
 							}
 						});
 					}else{

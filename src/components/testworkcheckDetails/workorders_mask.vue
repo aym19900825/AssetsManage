@@ -44,7 +44,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="7" class="pull-right">
-											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" :disabled="edit">
+											<el-input placeholder="自动生成" v-model="workorderForm.WONUM" disabled>
 													<template slot="prepend">工作任务单编号</template>
 											</el-input>
 										</el-col>
@@ -53,14 +53,14 @@
 									<el-row class="pt10">
 										<el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM">
-												<el-input v-model="workorderForm.PROXYNUM" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="addworkorder" :disabled="noedit"></el-button>
+												<el-input v-model="workorderForm.PROXYNUM" disabled>
+													<el-button slot="append" icon="el-icon-search" @click="addworkorder" disabled></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="委托书版本" prop="PROXY_VERSION" >
-												<el-input v-model="workorderForm.PROXY_VERSION" :disabled="edit"></el-input>
+												<el-input v-model="workorderForm.PROXY_VERSION" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -73,8 +73,8 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="主检员" prop="MASTER_INSPECTOR" >
-												<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addperson('1')" :disabled="noedit"></el-button>
+												<el-input v-model="workorderForm.MASTER_INSPECTOR" disabled>
+													<el-button slot="append" icon="el-icon-search" @click="addperson('1')" disabled></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -92,36 +92,36 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="ITEM_NAME">
-												<el-input v-model="workorderForm.ITEM_NAME" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" :disabled="noedit"></el-button>
+												<el-input v-model="workorderForm.ITEM_NAME" disabled>
+													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" disabled></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="规格型号" prop="ITEM_MODEL" >
-												<el-input v-model="workorderForm.ITEM_MODEL" :disabled="edit"></el-input>
+												<el-input v-model="workorderForm.ITEM_MODEL" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品状态" prop="ITEM_STATUS">
-												<el-input v-model="workorderForm.ITEM_STATUS" :disabled="edit"></el-input>
+												<el-input v-model="workorderForm.ITEM_STATUS" :disabled="pageState!=1 && noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input v-model="workorderForm.ITEMNUM" :disabled="edit"></el-input>
+												<el-input v-model="workorderForm.ITEMNUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="商标标识" prop="ITEM_TRADEMARK">
-												<el-input v-model="workorderForm.ITEM_TRADEMARK" :disabled="noedit"></el-input>
+												<el-input v-model="workorderForm.ITEM_TRADEMARK" :disabled="pageState!=1 || noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="抽样日期" prop="CHECK_DATE">
-												<el-date-picker v-model="workorderForm.CHECK_DATE" type="date" placeholder="请选择抽样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="workorderForm.CHECK_DATE" type="date" placeholder="请选择抽样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="pageState!=1 || noedit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
@@ -131,20 +131,20 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="生产日期/批" prop="PRODUCT_DATE">
-												<el-date-picker v-model="workorderForm.PRODUCT_DATE" type="date" placeholder="请选择生产日期/批" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="workorderForm.PRODUCT_DATE" type="date" placeholder="请选择生产日期/批" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="pageState!=1  || noedit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 
 										<el-col :span="8">
 											<el-form-item label="到站日期" prop="ARRIVAL_DATE">
-												<el-date-picker v-model="workorderForm.ARRIVAL_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="workorderForm.ARRIVAL_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="pageState!=1  || noedit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品来源" prop="ITEM_SOURCE">
-												<el-select v-model="workorderForm.ITEM_SOURCE" style="width: 100%" :disabled="noedit">
+												<el-select v-model="workorderForm.ITEM_SOURCE" style="width: 100%" disabled>
 													<el-option v-for="(data,index) in Select_ITEM_SOURCE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -154,7 +154,7 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="ITEM_QUALITY">
-												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
+												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="pageState!=1  || noedit"></el-input-number>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" >
@@ -187,7 +187,7 @@
 									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="抽样方案/判定依据" label-width="130px">
-												<el-input type="textarea" rows="5" v-model="workorderForm.CHECK_BASIS" :disabled="noedit"></el-input>
+												<el-input type="textarea" rows="5" v-model="workorderForm.CHECK_BASIS" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -206,7 +206,7 @@
 						            	<el-row>
 											<el-col :span="8">
 												<el-form-item label="委托方提供技术资料" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="pageState!=1 || noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<!-- <el-col :span="8">
@@ -216,33 +216,33 @@
 											</el-col> -->
 											<el-col :span="8">
 												<el-form-item label="特殊要求">
-													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="noedit"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="pageState!=1 || noedit"></el-input>
 												</el-form-item>
 											</el-col>
 										
 											<el-col :span="8">
 												<el-form-item label="样品接收人">
-													<el-input placeholder="请输入内容" v-model="workorderForm.ITEM_RECCEPT_USER" :disabled="noedit"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.ITEM_RECCEPT_USER" :disabled="pageState!=1 || noedit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品接收日期">
-													<el-date-picker v-model="workorderForm.ITEM_RECEPT_DATE" type="date" placeholder="请选择样品接收日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													<el-date-picker v-model="workorderForm.ITEM_RECEPT_DATE" type="date" placeholder="请选择样品接收日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="pageState!=1">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="完成日期" prop="COMPLETE_DATE">
-													<el-date-picker v-model="workorderForm.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													<el-date-picker v-model="workorderForm.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" disabled>
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
 										
 											<el-col :span="8">
 												<el-form-item label="完成方式">
-													<el-radio-group v-model="workorderForm.COMPLETE_MODE" :disabled="noedit">
+													<el-radio-group v-model="workorderForm.COMPLETE_MODE" disabled>
 														<el-radio v-for="(data,index) in Select_COMPLETE_MODE" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
@@ -251,7 +251,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品接收状态">
-													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS" :disabled="noedit">
+													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS" :disabled="pageState!=1 || noedit">
 														<el-radio v-for="(data,index) in Select_ITEM_RECEPT_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
@@ -262,7 +262,7 @@
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input> -->
 													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP" label-width="150px">
-														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" placeholder="请选择" style="width: 100%;" :disabled="noedit">
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" placeholder="请选择" style="width: 100%;" :disabled="pageState!=1 || noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</el-form-item>
@@ -270,7 +270,7 @@
 										
 											<el-col :span="8">
 												<el-form-item label="样品承接日期">
-													<el-date-picker v-model="workorderForm.UNDERTAKE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													<el-date-picker v-model="workorderForm.UNDERTAKE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="pageState!=1 || noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
@@ -278,7 +278,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATU">
-													<el-input v-model="workorderForm.ITEM_STATU" :disabled="noedit"></el-input>
+													<el-input v-model="workorderForm.ITEM_STATU" disabled></el-input>
 													<!--<el-select v-model="workorderForm.ITEM_STATUS" style="width: 100%">
 														<el-option v-for="(data,index) in Select_ITEM_STATUS" :key="index" :value="data.code" :label="data.name"></el-option>
 													</el-select>-->
@@ -286,7 +286,7 @@
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="样品返回数量" label-width="150px">
-													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
+													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="pageState != '3'"></el-input-number>
 												</el-form-item>
 											</el-col>
 										
@@ -296,7 +296,7 @@
 														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 													</el-select> -->
 													<el-input v-model="workorderForm.RETURN_ITEM_USER" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="pageState != '3' || noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -304,13 +304,13 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回日期">
-													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="pageState != '3'">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="样品检后状态" label-width="150px">
-													<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="noedit">
+													<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="pageState != '3'">
 														<el-radio v-for="(data,index) in Select_ITEM_CHECK_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
@@ -318,7 +318,7 @@
 										
 											<el-col :span="8">
 												<el-form-item label="样品处置">
-													<el-select v-model="workorderForm.ITEM_MANAGEMENT" style="width: 100%" :disabled="noedit">
+													<el-select v-model="workorderForm.ITEM_MANAGEMENT" style="width: 100%" :disabled="pageState != '3'">
 														<el-option v-for="(data,index) in Select_ITEM_MANAGEMENT" :key="index" :value="data.code" :label="data.name"></el-option>
 													</el-select>
 												</el-form-item>
@@ -327,15 +327,15 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品承接人">
-													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USER" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="noedit"></el-button>
+													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USER" :disabled="pageState != '3' || noedit">
+														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="pageState != '3' || noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="专业技术/质量负责人" label-width="150px">
 													<el-input v-model="workorderForm.PROFESSIONAL" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('qualityperson')" :disabled="noedit"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('qualityperson')" :disabled="pageState != '3' || noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -344,7 +344,7 @@
 								</el-collapse-item>
 								<!-- 检测项目与要求 End -->
 								<!-- 原始数据模板 Begin-->
-								<el-collapse-item title="原始数据模板" name="6">	
+								<!-- <el-collapse-item title="原始数据模板" name="6">	
 					            	<div class="clearfix pt10">
 						            	<el-row >
 											<el-col :span="8">
@@ -386,17 +386,17 @@
 											</el-col>
 										</el-row>
 									</div>
-								</el-collapse-item>
+								</el-collapse-item> -->
 								<!-- 原始数据模板 End -->
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检测依据" name="first">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
+											</div> -->
 
 											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
 
@@ -426,22 +426,22 @@
 											      </template>
 											    </el-table-column> -->
 
-											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+											    <!-- <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											         <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
 											      <i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
-											    </el-table-column>
+											    </el-table-column> -->
 											  </el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检测项目与要求" name="second">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
+											</div> -->
 							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 
 							            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
@@ -471,23 +471,23 @@
 														<span v-else>{{scope.row.VERSION}}</span>
 													</template>
 												</el-table-column>
-											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+											      <!-- <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											         <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small">
 											      		<i class="icon-trash red"></i>
 											        </el-button>
 											      </template>
-											    </el-table-column>
+											    </el-table-column> -->
 							            	</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验员信息" name="third">
 											<div class="table-func table-funcb">
-												<el-button type="success" size="mini" round @click="addfield3" v-show="!viewtitle">
+												<el-button type="success" size="mini" round @click="addfield3" v-show="pageState == '2' && edit">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
 							            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
-							            		<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+							            		<el-table-column prop="iconOperation" fixed width="50px" v-if="pageState == '2' && edit">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
@@ -534,10 +534,11 @@
 										</el-tab-pane>
 										<el-tab-pane label="成果数据" name="fourth">
 											<div class="table-func table-funcb">
-												<el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
+												<!-- <el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="pageState == '2' && edit"> -->
+												<el-button style="float:left;" type="success" size="mini" round @click="addfield4">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
-												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;"  v-show="pageState == '2' && edit">
 													<el-button type="success" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
@@ -578,7 +579,7 @@
 													    </el-table-column>
 									            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
 															<template slot-scope="scope">
-															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
+															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG<0?0:scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
 																<!-- <span v-if="scope.row.FILESIZE_ORG == -1">0kb</span> -->
 															</template>
 														</el-table-column>
@@ -603,28 +604,28 @@
 									            	</el-table>
 												</el-col>
 							            		<el-col :span="24" class="text-right pt10">
-													<el-button type="primary" size="small" round @click="getreport" v-show="modifytitle">
+													<el-button type="primary" size="small" round @click="getreport" v-if="pageState=='3'&&edit">
 														<i class="icon-wordbook"></i><font> 生成报告</font>
 													</el-button>
 												</el-col>
 											</el-row>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测设备" name="fifth">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addequip">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
-											</div>
+											</div> -->
 
 											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+												<!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											      	<i class="el-icon-check" v-show="scope.row.isEditing">
 											      	</i>
 											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
 											      	</i>
 											      </template>
-											    </el-table-column>
+											    </el-table-column> -->
 												<el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM" placeholder="自动生成">	
@@ -657,13 +658,13 @@
 													</template>
 												</el-table-column>
 												
-												<el-table-column fixed="right" label="操作" width="120px">
+												<!-- <el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
 													  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'equipList')" type="text" size="small">
 														<i class="icon-trash red"></i>
 													  </el-button>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 											</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检验报告" name="sixth">
@@ -708,7 +709,7 @@
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="150px">
+												<el-table-column fixed="right" label="操作" width="150px" v-if="pageState == '3' && edit">
 													<template slot-scope="scope">
 													  <el-button title="编辑" type="text" size="small">
 														<i class="icon-edit2"></i>
@@ -722,7 +723,7 @@
 													  <el-button title="查看" type="text" size="small">
 														<i class="icon-file-text"></i>
 													  </el-button>
-													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-show="btnshow">
+													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-if="pageState == '3' && edit">
 														<i class="icon-send"></i>
 													  </el-button>
 													</template>
@@ -768,9 +769,12 @@
 												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
-														<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.INSPECT_GROUP">
+														</el-input>
+														<span v-else>{{scope.row.INSPECT_GROUP}}</span>
+														<!-- <el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
 															<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
-														</el-select>
+														</el-select> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
@@ -845,13 +849,13 @@
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-												<el-table-column fixed="right" label="操作" width="120">
+												<!-- <el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button title="生成分包协议" type="text" size="small" @click="proagree(scope.row)">
 															 <i class="icon-send red"></i>
 														</el-button>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 											</el-table>
 									    </el-tab-pane>
 									</el-tabs>
@@ -1038,6 +1042,7 @@
                 }
             };
 			return {
+				pageState: '',
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
 				dialogVisible2:false,
@@ -1709,7 +1714,6 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1717,25 +1721,25 @@
 							});
 				    }else{
 				    	this.$message({
-								message:res.data.resp_msg,
-								type: 'success'
-							});
-							this.detailgetData();
-							var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
-							this.$axios.get(url, {}).then((res) => {
-								var resullt=res.data.datas;
-								var users='';
-								for(var i=0;i<resullt.length;i++){
-									users = users + resullt[i].username+",";
-								}
-								if(users.indexOf(this.username) != -1){
-									this.approval=true;
-									this.start=false;
-								}else{
-									this.approval=false;
-									this.start=false;
-								}
-							});
+							message:res.data.resp_msg,
+							type: 'success'
+						});
+						this.detailgetData();
+						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
+						this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
+								this.start=false;
+							}
+						});
 				    }
 				});
 			},
@@ -2057,19 +2061,52 @@
 					});
 				});
 				this.detailgetData();
+				
 				this.btnshow = true;//显示报告提交按钮
 				this.views = false;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle=false;
-				this.modify = true;
-				this.show = true;
 				this.edit = true;
 				this.noedit = false;
+				this.modify = true;
+				this.show = true;
+				this.getNodeId(dataid);
+			},
+			getNodeId(dataid){
+				var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selMenu[0].ID;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 0) {
+						var nodeId = '';
+						var url = this.dev_url + '/api-apps/app/workorder/flow/NodeId/' + this.selMenu[0].ID;
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								nodeId = res.data.datas;
+							} else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						});
+						if(nodeId == 'jyfzr'){
+							this.pageState = '2';	
+						}else if(nodeId == 'jyy'){
+							this.pageState = '3';
+						}else{
+							//cxlr
+							this.pageState = '1';
+						}
+					} else {
+						this.$message({
+							message: res.data.resp_msg,
+							type: 'warning'
+						});
+					}
+				});
 			},
 			//这是查看
 			view(dataid) {
-				// console.log(this.username);
 				this.btnshow = true;//显示报告提交按钮
 				this.dataid=dataid;	
 				this.modifytitle = false;
@@ -2081,23 +2118,20 @@
 				this.noedit = true;
 				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
+				this.getNodeId(dataid);
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
 					}else{
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
-						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								// console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;

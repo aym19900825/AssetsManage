@@ -331,7 +331,20 @@
 
 			<!--委托书编号-弹出框 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose1">
-				<el-table :data="gridDataList" height="400px" @selection-change="SelChange">
+				<el-table :data="gridDataList" height="400px" @selection-change="SelChange" v-loadmore="loadMore('proxy')">
+					<!-- <el-table ref="table" :header-cell-style="rowClass"
+									:data="categoryList"
+									border
+									stripe
+									:height="fullHeight"
+									style="width: 100%;"
+	    							:default-sort="{prop:'categoryList', order: 'descending'}"
+	    							@selection-change="SelChange"
+	    							v-loadmore="loadMore"
+									v-loading="loading"
+									element-loading-text="加载中…"
+	    							element-loading-spinner="el-icon-loading"
+	    							element-loading-background="rgba(255, 255, 255, 0.9)"> -->
 					<el-table-column type="selection" width="55" fixed >
 					</el-table-column>
 					<el-table-column label="检验委托书编号" sortable width="140px" prop="PROXYNUM" >
@@ -363,14 +376,14 @@
 					</el-pagination>
 				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
+	    			<el-button @click="resetproxy">取 消</el-button>
 	  			</div>
 			</el-dialog>
 			<!--委托书编号-弹出框 Begin-->
 
 			<!-- 类别-弹出框 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose2">
-				<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('type')">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -671,12 +684,15 @@
             },
 			//获取委托书编号数据
 			getProxy() {
+				this.proxydata();
+				this.dialogVisible = true;
+			},
+			proxydata(){
 				var url = this.basic_url + '/api-apps/app/inspectPro';
 				this.$axios.get(url, {}).then((res) => {
 					// console.log(res.data);
 					this.gridDataList= res.data.data;
 				});
-				this.dialogVisible = true;
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
 				if(this.selval.length == 0){
@@ -696,13 +712,19 @@
 					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
 					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
 					// this.dialogVisible = false;
-
+					this.resetproxy();
 				}else if(this.selval.length > 1){
 					this.$message({
 						message:'不可选择多条数据',
 						type:'warning'
 					})
 				}
+			},
+			resetproxy(){
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
+				this.dialogVisible = false;
+				this.gridDataList = [];
 			},
 			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisible = false;//关闭弹出框
@@ -806,14 +828,14 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-			},
-			currentChange(val) {
-				this.page.currentPage = val;
-				this.requestData();
-			},
+			// sizeChange(val) {
+			// 	this.page.pageSize = val;
+			// 	this.requestData();
+			// },
+			// currentChange(val) {
+			// 	this.page.currentPage = val;
+			// 	this.requestData();
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -1046,19 +1068,78 @@
 						});
 					});
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
+			loadMore (val) {
+			//    if (this.loadSign) {
+			//      this.loadSign = false
+			//      this.page.currentPage++
+			//      if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			//        return
+			//      }
+			//      setTimeout(() => {
+			//        this.loadSign = true
+			// 	 }, 1000)
+			// 	 if(val == 'proxy'){
+			// 		 this.proxydata();
+			// 	 }else if(val == 'type'){
+			// 		 this.requestData()
+			// 	 }
+			//    }
 			 },
+			// sizeChange(val) {
+			// 	this.page.pageSize = val;
+			// 	if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			// 		$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+			// 		sessionStorage.setItem('toBtm','true');
+			// 	}else{
+			// 		sessionStorage.setItem('toBtm','false');
+			// 	}
+			// 	this.requestData();
+			// },
+			// currentChange(val) {
+			// 	this.page.currentPage = val;
+			// 	if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			// 		$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+			// 		sessionStorage.setItem('toBtm','true');
+			// 	}else{
+			// 		sessionStorage.setItem('toBtm','false');
+			// 	}
+			// 	this.requestData();
+			// },
+			// //表格滚动加载
+			loadMore(val) {
+				//console.log(this.$refs.table.$el.offsetTop)
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					if(val == 'proxy'){
+						this.proxydata();
+					}else if(val == 'type'){
+						this.requestData()
+					}
+				}
+			},
 			requestData(index) {//高级查询字段
 				var data = {
 					page: this.page.currentPage,

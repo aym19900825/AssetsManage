@@ -365,7 +365,7 @@
 												</el-form-item>
 											</el-col>
 										</el-row>
-										<el-row >
+										<!-- <el-row >
 											<el-col :span="8">
 												<el-form-item label="寄出时间">
 													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择寄出时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -384,7 +384,7 @@
 													</el-input>
 												</el-form-item>
 											</el-col>
-										</el-row>
+										</el-row> -->
 									</div>
 								</el-collapse-item> -->
 								<!-- 原始数据模板 End -->
@@ -916,7 +916,7 @@
 				</div>
 			</div>
 			<!--人员信息 Begin-->
-			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%">
+			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<div class="scrollbar" style="max-height: 360px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
@@ -937,7 +937,7 @@
 					</el-pagination>
 					<span slot="footer" class="dialog-footer">
 				       <el-button type="primary" @click="addpersonname">确 定</el-button>
-				       <el-button @click="dialogVisible2 = false">取 消</el-button>
+				       <el-button @click="resetBasisInfo2">取 消</el-button>
 				    </span>   
 				</el-dialog>
 			<!--主检员 End-->
@@ -967,7 +967,7 @@
 			<!-- 查看子任务单  -->
 			<checkchildlist ref="checkchildlist"></checkchildlist>
 			<!-- 生成报告弹出显示数据  -->
-			<reportdata ref="reportdata"></reportdata>
+			<reportdata ref="reportdata" @reportdatavalue = "reportdatavalue"></reportdata>
 		</div>
 	</div>
 </template>
@@ -1047,6 +1047,7 @@
 				file_url: Config.file_url,
 				dialogVisible2:false,
 				workorderForm: {
+					PROJ_NUM:'',
 					WORKORDER_BASISList:[],//检测依据
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
@@ -1136,6 +1137,7 @@
 				workorderreportid:'',//存放生成报告id
 				btnshow:true,//报告提交按钮
 				sendchilddata:[],//子表已有的值
+				pronums:[],
 			};
 		},
 		methods: {
@@ -1321,7 +1323,7 @@
 					WORKORDER_REPORTList:[],//报告
 					WORKORDER_CONTRACTList:[],//分包项目					
 				};
-				pronums:''//检测项目编号字符串
+				pronums:[]//检测项目编号字符串
 			},
 			//表格传过来
 			childByValue: function (childValue) {
@@ -1401,9 +1403,17 @@
 					}else{
 						this.numtips.NAME = this.selMenu[0].nickname;
 					}
-					this.dialogVisible2 = false;
+					this.resetBasisInfo2();
+					// this.dialogVisible2 = false;
 					this.getuser();
 				}
+			},
+			//检测依据弹出框数据置空
+			resetBasisInfo2(){
+				this.dialogVisible2 = false;
+				this.userList = [];
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			//主任务单时，确定报告按钮
 			admirereport(){
@@ -1537,9 +1547,13 @@
 					this.workorderForm.WORKORDER_PROJECTList.push(value[i]);
 				}
 				for(var i = 0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-					pronum.push(this.workorderForm.WORKORDER_PROJECTList[i].P_NUM);
+					this.pronums.push(this.workorderForm.WORKORDER_PROJECTList[i].P_NUM);
+					console.log(2323);
+					console.log(this.pronums);
 				}
-				this.workorderForm.PROJ_NUM = pronum.toString(',');
+				this.workorderForm.PROJ_NUM = this.pronums.toString(',');
+				console.log(111222);
+				console.log(this.workorderForm.PROJ_NUM);
 			},
 			 //模版编号
             templateNumber(item){
@@ -1881,9 +1895,9 @@
 			reprotids(val){
 
 			},
-			reportname(val){
+			// reportname(val){
 
-			},
+			// },
 			//生成报告
 			getreport(){
 				console.log(this.reportname);
@@ -1962,6 +1976,20 @@
 						// });
 					}
 				}
+			},
+			reportdatavalue(value){
+				this.workorderreportid = value.id;
+                console.log(res);
+                console.log()
+                var obj = {
+                    REPORTNUM:value.reportnum,
+                    REPORTNAME:value.reportname,
+                    // PREVIEW:'',
+                    VERSION:value.version,
+                }
+                console.log(obj);
+                this.workorderForm.WORKORDER_REPORTList.push(obj);
+				console.log(this.workorderForm.WORKORDER_REPORTList);
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
@@ -2218,7 +2246,7 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo2();
 					})
 					.catch(_ => {
 						console.log('取消关闭');

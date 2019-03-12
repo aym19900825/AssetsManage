@@ -126,8 +126,9 @@
 	close() {
 		this.dialogCustomer = false;
 	},
-  	visible(type,id) {
+  	visible(type,id,CJDW) {
 		this.type=type;
+		this.CJDW=CJDW;
 		if(!!id && type == 'vname'){
 			this.selkeys.push(id);
 		}
@@ -149,7 +150,7 @@
 	   }
 	},
 	requestData(){
-		// this.loading = true;
+		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -157,9 +158,10 @@
 			CODE: this.searchList.CODE,
 			CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
-		this.$axios.get(this.basic_url + '/api-apps/app/customer', {
+		this.$axios.get(this.basic_url + '/api-apps/app/customer?&DEPTID_wheres='+this.CJDW, {
 			params: data
 		}).then((res) => {
+			console.log(this.CJDW);
 			this.page.totalCount = res.data.count;	
 			//总的页数
 			let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -168,23 +170,11 @@
 			}else{
 				this.loadSign=true
 			}
-			// this.commentArr[this.page.currentPage]=res.data.data
-			// let newarr=[]
-			// for(var i = 1; i <= totalPage; i++){
-			
-			// 	if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-					
-			// 		for(var j = 0; j < this.commentArr[i].length; j++){
-			// 			newarr.push(this.commentArr[i][j])
-			// 		}
-			// 	}
-			// }					
-			// this.customerList = newarr;
 			this.customerList = res.data.data;
 			setTimeout(()=>{
 				this.setSelectRow();
 			}, 200)
-			// this.loading = false;
+			this.loading = false;
 		}).catch((wrong) => {})
 	},
 	determine(){

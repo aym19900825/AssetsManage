@@ -180,7 +180,7 @@
 			</div>
 		</el-dialog>
 		<!-- 查看权限 -->
-		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose2">
 			<!--设置产品类别和产品-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >
@@ -517,9 +517,9 @@
 					this.permissions=true;
 				}).catch(error => {
 					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				})
 				}
 			},
@@ -1013,12 +1013,21 @@
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
-						this.requestData();
 					})
 					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						done();
+					})
+					.catch(_ => {
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -1177,9 +1186,7 @@
 				}; 
 			}
 		},
-		beforeMount() {
-			
-		},
+		
 		mounted() {	
 			// 在页面挂载前就发起请求
 			this.requestData();

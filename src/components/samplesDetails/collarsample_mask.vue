@@ -131,7 +131,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row >
@@ -175,8 +174,9 @@
 					</el-form>
 				</div>
 			</div>
+
 			<!--点击委托书编号弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="提示" :visible.sync="dialogVisible" width="30%" :before-close="handleClose1">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange">
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
@@ -185,10 +185,11 @@
 			    </span>
 			</el-dialog>
 			<!--点击委托书编号弹出框 Begin-->
+
 			<!-- 样品编号 Begin -->
-			<el-dialog :modal-append-to-body="false" title="样品编号" height="300px" :visible.sync="dialogsample" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="样品编号" height="300px" :visible.sync="dialogsample" width="80%" :before-close="handleClose2">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table ref="table" :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
@@ -221,17 +222,17 @@
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogsample = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="addsamplebtn">确 定</el-button>
-			    </span>
+			       <el-button @click="dialogsample = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 样品编号 End -->
 
 			<!-- 样品序号 Begin -->
-			<el-dialog :modal-append-to-body="false" title="样品序号" height="300px" :visible.sync="dialogsamplenum" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="样品序号" height="300px" :visible.sync="dialogsamplenum" width="80%" :before-close="handleClose3">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :data="samplenumList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table ref="table" :data="samplenumList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
@@ -252,17 +253,17 @@
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogsamplenum = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="addsamplenumbtn">确 定</el-button>
-			    </span>
+			       <el-button @click="dialogsamplenum = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 样品序号 End -->
 
 			<!-- 产品类别 Begin -->
-			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="产品类别" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose4">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">
@@ -281,10 +282,10 @@
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 				</el-pagination>
 				<!-- 表格 End-->
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+				<div slot="footer">
 			       <el-button type="primary" @click="addproclass">确 定</el-button>
-			    </span>
+			       <el-button @click="dialogVisible3 = false">取 消</el-button>
+			    </div>
 			</el-dialog>
 			<!-- 产品类别 End -->
 		</div>
@@ -331,6 +332,8 @@
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -536,17 +539,7 @@
 					this.$emit('request');
 				}
 			},
-			//小弹出框关闭按钮事件
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			},
+			
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
@@ -702,16 +695,7 @@
 				// this.$emit('reset');
 				// this.$emit('request');
 			},
-			handleClose(done) { //大弹出框确定关闭按钮
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			},
+			
 			//表格滚动加载
 			loadMore() {
 				if(this.loadSign) {
@@ -743,21 +727,23 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
-				}).catch((wrong) => {})
-
-
+					this.categoryList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
+			},
+			requestData2(index) {//高级查询字段
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
 				this.$axios.get(this.basic_url + '/api-apps/app/item', {
 					params: data
 				}).then((res) => {
@@ -769,30 +755,61 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.samplesList = newarr;
-				}).catch((wrong) => {})
+					this.samplesList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
-			handleClose(done) {
+			
+			handleClose1(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo1();
+					})
+					.catch(_ => {
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo2();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
-			}
+					$('.v-modal').hide();
+				});
+			},
+			//小弹出框关闭按钮事件
+			handleClose3(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo3();
+					})
+					.catch(_ => {
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
+			//小弹出框关闭按钮事件
+			handleClose4(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo4();
+					})
+					.catch(_ => {
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
 		},
 		mounted() {
 			this.getType();

@@ -293,12 +293,14 @@ export default {
 			this.requestData();
 		},
 		goto(item){
-	        var _this = this;
+					this.$store.dispatch('setMenuIdAct',item.id);
+					var _this = this;
 	        var data = {
-				menuId: item.id,
-				roleId: _this.$store.state.roleid,
-			};
-			this.$store.dispatch('setMenuIdAct',item.id);
+							menuId: item.id,
+							roleId: _this.$store.state.roleid,
+						};
+			// _this.$store.dispatch('setMenuIdAct',item.id);
+			console.log(_this.$store.state.menuid);
 			// console.log(item.id);
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {

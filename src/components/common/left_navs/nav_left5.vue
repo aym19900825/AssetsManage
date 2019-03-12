@@ -83,34 +83,35 @@ export default {
 		},	
 	},
 	mounted() {
-		var _this = this;
-		if(_this.$store.state.menuid=="undefined"||_this.$store.state.menuid=="null"){
+		console.log(this.$store.state.menuid);
+		if(this.$store.state.menuid=="undefined"||this.$store.state.menuid=="null"){
 			$('.navbar-default').hide();
 //			$(".wrapper").css({"padding-left":"0px"})
 //			$("#wrapper-content").css({"padding-left":"0px"});
-		     _this.$emit('childByValue',_this.$store.state.selectedNav);
+			console.log(this.$store.state.selectedNav);
+		     this.$emit('childByValue',this.$store.state.selectedNav);
 		}else{
 		    var data = {
-				menuId: _this.$store.state.menuid,
-				roleId: _this.$store.state.roleid,
+				menuId: this.$store.state.menuid,
+				roleId: this.$store.state.roleid,
 			};
-			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
-			_this.$axios.get(url, {params: data}).then((res) => {
+			var url = this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
+			this.$axios.get(url, {params: data}).then((res) => {
 				if(res.data.length>0&&res.data!='undefined'){
-					if(_this.$route.path!=_this.$store.state.selectedNav.url){
-						_this.$store.dispatch('setSelectedNavAct',res.data[0]);
+					if(this.$route.path!=this.$store.state.selectedNav.url){
+						this.$store.dispatch('setSelectedNavAct',res.data[0]);
 					}
 					$('.navbar-default').show();
 	//				$(".wrapper").css({"padding-left":"220px"});
-					_this.leftNavs = res.data;
-					_this.$emit('childByValue',_this.$store.state.selectedNav);
+					this.leftNavs = res.data;
+					this.$emit('childByValue',this.$store.state.selectedNav);
 				}else{
 					$('.navbar-default').hide();
 	//				$(".wrapper").css({"padding-left":"0px"});
-					_this.$emit('childByValue',_this.$store.state.selectedNav);
+					this.$emit('childByValue',this.$store.state.selectedNav);
 				}
 			}).catch((wrong) => {
-				_this.$message({
+				this.$message({
 					message: '网络错误，请重试左侧1',
 					type: 'error'
 				});

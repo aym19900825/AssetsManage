@@ -15,41 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr">
-                                	<i class="icon-add"></i>添加
-                      			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-purple button-margin"  @click="delinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-upload-cloud"></i>导入
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-download-cloud"></i>导出
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-print"></i>打印
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-alert-triangle"></i>中止
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -146,31 +114,31 @@
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<el-table ref="table" :data="inspectList" 
-								  :header-cell-style="rowClass" 
-								  border 
-								  stripe 
-								  :height="fullHeight" 
-								  style="width: 100%;" 
-								  :default-sort="{prop:'inspectList', order: 'descending'}" 
-								  @selection-change="SelChange" 
-								  v-loadmore="loadMore"
-								  v-loading="loading"  
-								  element-loading-text="加载中…"
-								  element-loading-spinner="el-icon-loading"
-								  element-loading-background="rgba(255, 255, 255, 0.9)">
+									  :header-cell-style="rowClass" 
+									  border 
+									  stripe 
+									  :height="fullHeight" 
+									  style="width: 100%;" 
+									  :default-sort="{prop:'inspectList', order: 'descending'}" 
+									  @selection-change="SelChange" 
+									  v-loadmore="loadMore"
+									  v-loading="loading"  
+									  element-loading-text="加载中…"
+    								  element-loading-spinner="el-icon-loading"
+    								  element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="检测委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检测委托书编号')!=-1">
+								<el-table-column label="检验委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位名称" sortable width="200px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
-								<el-table-column label="样品名称" sortable width="220px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
@@ -204,10 +172,10 @@
 				</div>
 			</div>
 		</div>
-		<checkmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></checkmask>
+		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
 		<!--右侧内容显示 End-->
-		<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+					<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </template>
 <script>
@@ -215,7 +183,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
-	import checkmask from '../proxiesDetails/check_proxyMask.vue'
+	import inspectmask from '../proxiesDetails/check_proxyMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 
 	export default {
@@ -224,7 +192,7 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
-			'checkmask': checkmask,
+			'inspectmask': inspectmask,
 			reportmask
 		},
 //		created() {
@@ -235,7 +203,7 @@
 			return {
 				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
-				loading: false,//默认加载数据时显示loading动画
+				loading: false, //默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				value: '',
 				options: [{
@@ -262,7 +230,7 @@
 				ismin: true,
 				commentArr: {},
 				checkedName: [
-					'检测委托书编号',
+					'检验委托书编号',
 					'委托单位名称',
 					'生产单位名称',
 					'样品名称',
@@ -279,7 +247,7 @@
 					'版本'
 				],
 				tableHeader: [{
-						label: '检测委托书编号',
+						label: '检验委托书编号',
 						prop: 'PROXYNUM'
 					},
 					{
@@ -368,7 +336,7 @@
 					label: "fullname"
 				},
 				treeData: [],
-				page: {
+				page: { //分页显示
 					currentPage: 1,
 					pageSize: 20,
 					totalCount: 0
@@ -383,7 +351,7 @@
 			    return 'text-align:center'
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
+				return (<span><i class={data.iconClass}></i><span  title={data.lable}>{data.lable}</span></span>)
 			},
 			// 点击节点
 			nodeClick: function(m) {
@@ -407,7 +375,7 @@
 				m.isFolder = !m.isFolder;
 			},
 
-			//表格滚动加载
+			//滚动加载更多
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
@@ -437,7 +405,6 @@
 					this.requestData();
 				}
 			},
-			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
@@ -448,7 +415,6 @@
 				}
 				this.requestData();
 			},
-			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
@@ -476,7 +442,8 @@
 				this.page.pageSize = 20;
 				this.requestData();
 			},
-			 getbtn(item){
+				//请求点击
+		    getbtn(item){
 		    	if(item.name=="添加"){
 		         this.openAddMgr();
 		    	}else if(item.name=="修改"){
@@ -503,9 +470,11 @@
 			openAddMgr() {
 				this.$refs.child.reset();
 				this.$refs.child.visible();
+				
 			},
 			//修改
 			modify() {
+				console.log(111);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -519,7 +488,8 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+					console.log(this.selUser[0]);
+					if(this.selUser[0].STATUS == 3 || this.selUser[0].STATUS == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
@@ -527,7 +497,7 @@
 						this.$refs.child.view(this.selUser[0].ID);
 					}
 					//驳回
-					else if(this.selUser[0].STATE == 0) {
+					else if(this.selUser[0].STATUS == 0) {
 						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selUser[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -557,135 +527,6 @@
 			//查看
 			 view(id) {
 				this.$refs.child.view(id);
-			},
-			getRouterData() {
-      		// 只是改了query，其他都不变
-				  this.id = this.$route.query.bizId;
-				  this.$refs.child.view(this.id);
-			},
-			//高级查询
-			modestsearch() {
-				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
-			},
-//			// 删除
-			delinfo() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/inspectPro/deletes';
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for(var i = 0; i < changeUser.length; i++) {
-						if(changeUser[i].STATE!=1){
-						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
-								type: 'error'
-							});
-							return;
-						}else{
-							deleteid.push(changeUser[i].ID);
-						}
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-					var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-						this.$axios.delete(url, {
-							params: data
-						}).then((res) => { //.delete 传数据方法
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-					}).catch(() => {
-
-					});
-				}
-			},
-			// 彻底删除
-			physicsDel() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/inspectPro/physicsDel';
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for(var i = 0; i < changeUser.length; i++) {
-						if(changeUser[i].STATE!=1){
-						 	this.$message({
-								message: '您的数据中有已启动的流程，所以能删除',
-								type: 'error'
-							});
-							return;
-						}else{
-							deleteid.push(changeUser[i].ID);
-						}
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-					var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-						this.$axios.delete(url, {
-							params: data
-						}).then((res) => { //.delete 传数据方法
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
-					}).catch(() => {
-
-					});
-				}
 			},
 			//中止
 			breakoff(){
@@ -725,6 +566,141 @@
 					})
 				}
 			},
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizId;
+				  this.$refs.child.view(this.id);
+			},
+			//高级查询
+			modestsearch() {
+				this.search = !this.search;
+				this.down = !this.down,
+					this.up = !this.up
+			},
+						//报表
+			reportdata(){
+				this.reportData.app=this.inspectPro;
+				this.$refs.reportChild.visible();
+			},
+//			// 删除
+			delinfo() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectPro/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						if(changeUser[i].STATUS!=1){
+						 	this.$message({
+								message: '您的数据中有已启动的流程，所以不能删除',
+								type: 'error'
+							});
+							return;
+						}else{
+							deleteid.push(changeUser[i].ID);
+						}
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+					// 删除
+			physicsDel() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-apps/app/inspectPro/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						if(changeUser[i].STATE!=1){
+						 	this.$message({
+								message: '您的数据中有已启动的流程，所以不能删除',
+								type: 'error'
+							});
+							return;
+						}else{
+							deleteid.push(changeUser[i].ID);
+						}
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+							this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
+//			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -742,19 +718,24 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+
 					V_NAME:this.searchList.V_NAME,
 					ITEM_NAME: this.searchList.ITEM_NAME,
 					REPORT_NUM: this.searchList.REPORT_NUM,
 					PROXYNUM: this.searchList.PROXYNUM,
 					COMPDATE: this.searchList.COMPDATE,
 					ENTERBY: this.searchList.ENTERBY,
-					STATUS: this.searchList.STATUS
+					STATUS: this.searchList.STATUS,
+					P_NUM: this.searchList.P_NUM,
+					PRO_NUM: this.searchList.PRO_NUM,
+					DEPTID: this.searchList.DEPTID
 				}
-				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
+				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					this.page.totalCount = res.data.count;//页码赋值
+					//					this.inspectList = res.data.data;
+					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 					if(this.page.currentPage >= totalPage) {
@@ -762,7 +743,17 @@
 					} else {
 						this.loadSign = true
 					}
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
 
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
 					this.inspectList = res.data.data;
 					this.loading = false;//加载动画关闭
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
@@ -770,47 +761,64 @@
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					this.$message({
-						message: '网络错误，请重试1',
+						message: '网络错误，请重试',
 						type: 'error'
 					});
 				})
 			},
-			//报表
-			reportdata(){
-				this.reportData.app=this.inspectPro;
-				this.$refs.reportChild.visible();
-			},
+
 			//机构树
 			getKey() {
 				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-apps/appCustom/proxyTree/1';
 				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+					console.log(res);
+					this.resourceData = res.data.datas;
 					this.treeData = this.transformTree(this.resourceData);
+					console.log(this.treeData);
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
 				});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {
 						data[i].iconClass = 'icon-file-text';
 					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
+					if($.isArray(data[i].children)) {
+						data[i].subDepts = this.transformTree(data[i].children);
 					}
 				}
 				return data;
-				
 			},
 			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
+				if(!!data.fullname) {
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.id;
+					this.page.currentPage = 1;
+				}else if(!!data.TYPE){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else if(!!data.PRO_NUM){
+					this.searchList.P_NUM = data.NUM;
+					this.searchList.PRO_NUM = data.PRO_NUM;
+					this.searchList.DEPTID = data.DEPTID;
+					this.page.currentPage = 1;
+				}else{
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = '';
+					this.searchList.DEPTID = '';
+					this.page.currentPage = 1;
 				}
 				this.requestData();
 			},
@@ -840,14 +848,14 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
+		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
@@ -857,8 +865,8 @@
 							});
 				})
 
-		    },
-		    //树和表单之间拖拽改变宽度
+			},
+			//树和表单之间拖拽改变宽度
 			treeDrag(){
 				var middleWidth=9,
 				left = document.getElementById("left"),

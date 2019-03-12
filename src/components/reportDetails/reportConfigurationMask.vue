@@ -148,13 +148,13 @@
 									<div class="accordion-body tab-content">
 										<el-row >
 											<el-col :span="8">
-												<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
-													<el-input v-model="dataInfo.ENTERBYDesc" :disabled="edit"></el-input>
+												<el-form-item label="录入人" prop="createbyDesc" label-width="110px">
+													<el-input v-model="dataInfo.createbyDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
-													<el-input v-model="dataInfo.ENTERDATE" :disabled="edit"></el-input>
+												<el-form-item label="录入时间" prop="createdate" label-width="110px">
+													<el-input v-model="dataInfo.createdate" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -165,13 +165,13 @@
 										</el-row>
 										<el-row >
 											<el-col :span="8">
-												<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
-													<el-input v-model="dataInfo.CHANGEBYDesc" :disabled="edit"></el-input>
+												<el-form-item label="修改人" prop="updatebyDesc" label-width="110px">
+													<el-input v-model="dataInfo.updatebyDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="修改时间" prop="CHANGEDATE" label-width="110px">
-													<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
+												<el-form-item label="修改时间" prop="updatedate" label-width="110px">
+													<el-input v-model="dataInfo.updatedate" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 
@@ -265,6 +265,10 @@
 					remarks:'',
 					u_type:'',
 					params: [],
+					createby:'',
+					createdate:'',
+					updateby:'',
+					updatedate:''
 				};	  
 			},
 			handleClick(tab, event) {
@@ -307,10 +311,10 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
 					this.dataInfo.DEPTID = res.data.deptId;
-					this.dataInfo.ENTERBY = res.data.id;
+					this.dataInfo.createby = res.data.id;
 					this.username=res.data.username;
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.dataInfo.createdate = this.$moment(date).format("YYYY-MM-DD");
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
@@ -349,9 +353,9 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-					this.dataInfo.CHANGEBY = res.data.id;
+					this.dataInfo.updateby = res.data.id;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+					this.dataInfo.updatedate = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

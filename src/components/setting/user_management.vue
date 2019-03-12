@@ -161,15 +161,17 @@
         </el-dialog>
 		<!-- 权限管理 -->
 		<el-dialog :modal-append-to-body="false" title="数据配置" :visible.sync="Access" width="30%" :before-close="handleClose">
-			<!--工作任务通知书查询类别-->
+			<!--年度计划查询类别-->
 			<div class="scrollbar" style="max-height: 400px;">
-				<el-tree ref="work" :data="workData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework" empty-text="" >
+				<el-tree ref="work" :data="workData"  v-show="workData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework" >
 				</el-tree>
-				<!--年度计划查询类别-->
-				<el-tree ref="annual" :data="annualData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual" empty-text="" >
+				<!--工作任务通知书查询类别-->
+				<el-tree ref="annual" :data="annualData" v-show="annualData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual"  >
 				</el-tree>
 				<!--设置产品类别和产品-->
-				<el-tree ref="product" :data="productData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct" empty-text="" >
+				<el-tree ref="product" :data="productData" v-show="productData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct"  >
+				</el-tree>
+				<el-tree ref="testproduct" :data="testingproductData" v-show="testingproductData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resouretestingproduct" >
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="Accessconfirm" >确 定</el-button>
@@ -210,8 +212,14 @@
 			return {
 				reportData:{},//报表的数据
 				rules:{
-					newPassword:[{ required: true, message: '请输入密码', trigger: 'blur' }],
-					Password:[{required: true, message: '请输入密码', trigger: 'blur'}]
+					newpassword: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isValidatePass, trigger: 'blur'},
+				],
+					Password: [
+					{required: true,trigger: 'blur',message: '必填'},
+					{validator: this.Validators.isValidatePass, trigger: 'blur'},
+				]
 				},
 				permissions:false,//查看权限
 				Access:false,//权限管理的弹出框
@@ -240,6 +248,11 @@
 				},
 				productData:[],//产品的数据
 				resoureproduct:{
+					children: "children",
+					label: "fullname"
+				},
+				testingproductData:[],//检验检测产品的数据
+				resouretestingproduct:{
 					children: "children",
 					label: "fullname"
 				},
@@ -536,6 +549,7 @@
 						this.getannual(this.selUser[0].id);
 						this.getwork(this.selUser[0].id);
 						this.getproduct(this.selUser[0].id);
+						this.gettestproduct(this.selUser[0].id);
 						this.Access=true;	
 					}
 				}).catch(error => {
@@ -581,13 +595,35 @@
 			},
 			getproduct(id){
 				var arr=[];	
-				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id;
+				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/1';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					if(res.data.datas!=null){
 						this.productData = res.data.datas;
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
+							console.log(arr);
 							this.productsetChecked(arr);
+						});
+					}
+				}).catch(error => {
+					this.$message({
+								message: '网络错误，请重试',
+								type: 'error'
+							});
+				})
+			},
+		    gettestproduct(id){
+				var arr=[];	
+				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/2';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					if(res.data.datas!=null){
+						this.testingproductData = res.data.datas;
+						console.log(arr);
+						this.recursive(res.data.datas,arr);
+						this.$nextTick(() => {
+							this.testproductsetChecked(arr);
 						});
 					}
 				}).catch(error => {
@@ -630,7 +666,12 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
+				console.log("==============:"+arr);
 				this.$refs.product.setCheckedKeys(arr);
+			},
+			testproductsetChecked(arr){
+				console.log("###############"+arr);
+				this.$refs.testproduct.setCheckedKeys(arr);
 			},
 			//
 			Accessconfirm(){//确定
@@ -638,9 +679,14 @@
 			var taskType=[];
 			var productType=[];
 			var product=[];
+			var checkProduct=[];
+			var checkProductType=[];
 			var work=this.$refs.work.getCheckedNodes();
 			var annual=this.$refs.annual.getCheckedNodes();
 			var products=this.$refs.product.getCheckedNodes();
+			var testingproduct=this.$refs.testproduct.getCheckedNodes();
+			console.log(products);
+			console.log(testingproduct);
 			for(var a=0;a<work.length;a++){
 				if(work[a].name!="年度计划"){
 					  pmType.push(work[a].id); 
@@ -653,9 +699,16 @@
 			}
 			for(var c=0;c<products.length;c++){
 				if(products[c].type!="dept"&&products[c].type!="producttype"){
-					  product.push(products[c].ID); 
+					  product.push(products[c].id); 
 				}else if(products[c].type!="dept"&&products[c].type!="product"){
-					  productType.push(products[c].ID);
+					  productType.push(products[c].id);
+				}	
+			}
+			for(var c=0;c<testingproduct.length;c++){
+				if(testingproduct[c].type!="dept"&&testingproduct[c].type!="producttype"){
+					  checkProduct.push(testingproduct[c].id); 
+				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
+					  checkProductType.push(testingproduct[c].id);
 				}	
 			}
 			pmType = pmType.join(',');
@@ -667,9 +720,10 @@
 					taskType:taskType,
 					productType:productType,
 					product:product,
+					checkProduct,
+					checkProductType,
 				}
-			
-				var url = this.basic_url + '/api-user/users/setAuth?pmType='+pmType+"&taskType="+taskType+"&productType="+productType+"&product="+product+"&userId="+this.selUser[0].id;
+				var url = this.basic_url + '/api-user/users/setAuth?pmType='+pmType+"&taskType="+taskType+"&productType="+productType+"&product="+product+"&checkProduct="+checkProduct+"&checkProductType="+checkProductType+"&userId="+this.selUser[0].id;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -677,6 +731,7 @@
 							type: 'success'
 						});
 					}
+					this.requestData();
 					this.Access = false;
 				}).catch((err) => {
 					this.$message({
@@ -954,11 +1009,6 @@
 				//taxStatus 布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
-
-			// sexName(data) {
-			// 	return data.sex ? '男' : '女'
-			// },
-
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {

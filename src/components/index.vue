@@ -10,8 +10,6 @@
 		<div class="wrapper-content">
 			<div id="information" :style="{height: fullHeight}">
 				<div class="ibox-content pl20 pr20">
-<<<<<<< HEAD
-=======
 					<!--我的应用 Begin-->
 					<div class="clearfix">
 						<h3 class="pull-left">我的应用</h3>
@@ -27,7 +25,6 @@
 						<!--APPList End-->
 					</el-row>
 					<!--我的应用 End-->
->>>>>>> 3574d1e7e614064acbfc3d73f5958f76a614dda4
 
 					<!--工作统计 Begin-->
 					<div class="clearfix">
@@ -158,21 +155,21 @@
 					<!--工作统计 End-->
 
 					<!--我的应用 Begin-->
-					<div class="clearfix pt30">
+					<!-- <div class="clearfix pt30">
 						<h3 class="pull-left">我的应用</h3>
 					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
-						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
+						<!-- <el-col :span="4" v-for="(item,index) in applistdata" :key="index">
 							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
 								<router-link :to="item.url">
 									<span><i :class="item.css"></i></span>
 									<font>{{item.name}}</font>
 								</router-link>
 							</div>
-						</el-col>
+						</el-col> -->
 						<!--APPList End-->
-					</el-row>
+					<!-- </el-row> -->
 					<!--我的应用 End-->
 				</div>
 			</div>

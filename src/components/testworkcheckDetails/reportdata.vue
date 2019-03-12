@@ -1,19 +1,21 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
-		<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-            <el-table ref="table" :data="REPORTList" row-key="ID" border height="260"  @selection-change="SelChange" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'REPORTList', order: 'descending'}">
-                <el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
-                <el-table-column prop="D_DESC" label="描述" sortable width="220px">
-                </el-table-column>
-                <el-table-column prop="NUM" label="排序" sortable width="220px">
-                    <template slot-scope="scope">
-                        <el-input size="small" v-model="scope.row.NUM"></el-input>
-                    </template>
-                </el-table-column>
-            </el-table>
-        </div>
+		<div class="scrollbar" style="max-height:360px;">
+			<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
+				<el-table ref="table" :data="REPORTList" row-key="ID" border height="260"  @selection-change="SelChange" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'REPORTList', order: 'descending'}">
+					<el-table-column type="selection" fixed width="55" align="center">
+					</el-table-column>
+					<el-table-column prop="D_DESC" label="描述" sortable width="220px">
+					</el-table-column>
+					<el-table-column prop="NUM" label="排序" sortable width="220px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.NUM"></el-input>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
 		<div class="content-footer">
 			<el-button type="primary" @click="submit">确定</el-button>
 			<el-button @click='close'>取消</el-button>
@@ -151,10 +153,12 @@
         this.WONUM = value[4],
         this.DEPTIDDesc = value[5],
         this.ID = value[6]
-        this.requestData();
+		this.requestData();
+		console.log(this.REPORTList);
         for(var i = 0;i<reporttable.length;i++){
             this.REPORTList.push(reporttable[i]);
-        }
+		}
+		console.log(this.REPORTList);
         this.dialogProduct = true;
 	},
 	//Table默认加载数据
@@ -239,6 +243,7 @@
             });
             this.selMenu = [];
 			this.dialogProduct = false;
+			this.REPORTList = [];
             this.$emit('request');
 		}
 	},

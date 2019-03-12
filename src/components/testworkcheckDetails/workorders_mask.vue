@@ -365,7 +365,7 @@
 												</el-form-item>
 											</el-col>
 										</el-row>
-										<el-row >
+										<!-- <el-row >
 											<el-col :span="8">
 												<el-form-item label="寄出时间">
 													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择寄出时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -384,7 +384,7 @@
 													</el-input>
 												</el-form-item>
 											</el-col>
-										</el-row>
+										</el-row> -->
 									</div>
 								</el-collapse-item>
 								<!-- 原始数据模板 End -->
@@ -912,7 +912,7 @@
 				</div>
 			</div>
 			<!--人员信息 Begin-->
-			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%">
+			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<div class="scrollbar" style="max-height: 360px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
 						<el-table-column type="selection" width="55" fixed align="center">
@@ -933,7 +933,7 @@
 					</el-pagination>
 					<span slot="footer" class="dialog-footer">
 				       <el-button type="primary" @click="addpersonname">确 定</el-button>
-				       <el-button @click="dialogVisible2 = false">取 消</el-button>
+				       <el-button @click="resetBasisInfo2">取 消</el-button>
 				    </span>   
 				</el-dialog>
 			<!--主检员 End-->
@@ -1398,9 +1398,17 @@
 					}else{
 						this.numtips.NAME = this.selMenu[0].nickname;
 					}
-					this.dialogVisible2 = false;
+					this.resetBasisInfo2();
+					// this.dialogVisible2 = false;
 					this.getuser();
 				}
+			},
+			//检测依据弹出框数据置空
+			resetBasisInfo2(){
+				this.dialogVisible2 = false;
+				this.userList = [];
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 10;//页码重新传值
 			},
 			//主任务单时，确定报告按钮
 			admirereport(){
@@ -2204,7 +2212,7 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetBasisInfo2();
 					})
 					.catch(_ => {
 						console.log('取消关闭');

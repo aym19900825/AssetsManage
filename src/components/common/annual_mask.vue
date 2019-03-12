@@ -87,7 +87,7 @@
 											    <el-date-picker
 											      v-model="WORKPLAN.REPORTDATE "
 											      type="date"
-											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%" :disabled="noedit">
+											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%":disabled="noedit">
 											    </el-date-picker>
 											  </div>
 											 </el-form-item>
@@ -180,7 +180,7 @@
 									      <template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容">
 												</el-input>
-												<span v-else>{{scope.row.MODEL}}</span>
+												<span v-else="v-else">{{scope.row.MODEL}}</span>
 										  </template>
 									    </el-table-column>
 										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
@@ -188,22 +188,22 @@
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容" :disabled="true">
 														<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
 													</el-input>
-													<span v-else>{{scope.row.V_NAME}}</span>
+													<span v-else="v-else">{{scope.row.V_NAME}}</span>
 											</template>
 										</el-table-column>
 									    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 									      <template slot-scope="scope">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else>{{scope.row.MEMO}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 									      <template slot-scope="scope">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-else id="costshow">{{scope.row.CHECKCOST}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-else="v-else" id="costshow">{{scope.row.CHECKCOST}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column prop="REASION" label="项目提出理由" sortable width="220px">
 									      <template slot-scope="scope">
-									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else>{{scope.row.REASION}}</span>
+									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -213,9 +213,6 @@
 									        </el-button>
 
 									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
-									          <i class="icon-send"></i>
-									        </el-button>
-											<el-button type="primary" circle title="工作任务通知书已下达" @click="assign(scope.row)" size="small" v-if="assignnoshow">
 									          <i class="icon-send"></i>
 									        </el-button>
 									      </template>
@@ -242,7 +239,7 @@
 											        	<span>{{scope.$index + 1}}</span>
 											      	</template> -->
 											      	<template slot-scope="scope">
-											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
+											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
 							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" sortable width="150"></el-table-column>
@@ -273,12 +270,12 @@
 												<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
 							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 							            			<template slot-scope="scope">
-											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
+											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
 							            		<el-table-column label="所属计划序号" sortable width="120px" prop="WP_LINENUM">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else>{{scope.row.WP_LINENUM}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
 											      </template>
 											    </el-table-column>
 							            		<el-table-column prop="P_NUM" label="检验项目编号" width="100"></el-table-column>
@@ -549,7 +546,7 @@
 							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -628,12 +625,19 @@
 
 			<!-- 产品名称 Begin -->
 			<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogVisible4" width="80%" :before-close="handleClose4">
-				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :header-cell-style="rowClass" :data="productList" line-center border stripe height="400px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
-					<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
+					<el-table-column label="所属产品类别编码" width="200" sortable prop="NUM">
 					</el-table-column>
-					<el-table-column label="名称" sortable prop="PRO_NAME">
+					<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
+					</el-table-column>
+					<el-table-column label="产品名称" sortable prop="PRO_NAME">
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 					</el-table-column>
@@ -794,7 +798,6 @@
 		        fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				value: '',
 				assignshow:false,//下达任务通知书按钮
-				assignnoshow:false,//工作任务通知书已下达
 				options: [{
 					value: '1',
 					label: '活动'
@@ -802,7 +805,8 @@
 					value: '0',
 					label: '不活动'
 				}],
-				loadSign:true,//加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},
 				selUser:[],
 				productList:[],
@@ -1263,12 +1267,21 @@
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
+
+			
+
 			addproduct(item){//产品名称按钮
-				if(this.WORKPLAN.ITEMTYPE)
+				if(this.WORKPLAN.ITEMTYPE == null||this.WORKPLAN.ITEMTYPE == undefined || this.WORKPLAN.ITEMTYPE == ''){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
 					this.requestProname();
 					this.requestnum = '2';
 					this.dialogVisible4 = true;
 					this.proindex = item;
+				}
 			},
 			//产品名称弹框确定选中数据
 			addbasis4(){
@@ -1331,11 +1344,12 @@
 			},
 			//产品名称数据
 			requestProname(){
+				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.itemtypenum;
+				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.itemtypenum+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
 					
 				}).then((res) => {
@@ -1347,17 +1361,17 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.productList = newarr;
-				}).catch((wrong) => {})
+					this.productList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试1',
+						type: 'error'
+					});
+				})
 			},
             //tabs
 			handleClick(tab, event) {
@@ -1407,7 +1421,7 @@
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 				};
-				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum+'&S_NUM_where_not_in='+this.basissnums;
+				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.pronamenum+'&S_NUM_where_not_in='+this.basissnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1457,7 +1471,7 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums, {
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -1500,7 +1514,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				var url = this.basic_url + '/api-apps/app/customer';
+				var url = this.basic_url + '/api-apps/app/customer?&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1727,7 +1741,6 @@
 			detail(dataid) {
 				this.getCompany();
 				this.assignshow = true;
-				this.assignnoshow = false;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 						res.data.WORLPLANLINEList[i].isEditing = false;
@@ -1791,8 +1804,6 @@
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;
-				this.attributebefore = true;
-				this.attributeafter = false;
 			},
 			//查看
 			view(dataid) {
@@ -2017,58 +2028,141 @@
 			saveAndSubmit(WORKPLAN) {
 				this.save('update');
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			    setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-				//  this.requestData()
-				if(this.requestnum == '1'){
-					this.requesCategory();
-				}else if(this.requestnum == '2'){
-					this.requestProname();
-				}else if(this.requestnum == '3'){
-					this.requestDeptname();
-				}else if(this.requestnum == '4'){
-					this.requestBasis();
-				}else if(this.requestnum == '5'){
-					this.requestProject();
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					if(this.requestnum == '1'){
+						this.requesCategory();
+					}else if(this.requestnum == '2'){
+						this.requestProname();
+					}else if(this.requestnum == '3'){
+						this.requestDeptname();
+					}else if(this.requestnum == '4'){
+						this.requestBasis();
+					}else if(this.requestnum == '5'){
+						this.requestProject();
+					}
 				}
-			   }
-			 },
+			},
+			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
-				if(this.requestnum == '1'){
-					this.requesCategory();
-				}else if(this.requestnum == '2'){
-					this.requestProname();
-				}else if(this.requestnum == '3'){
-					this.requestDeptname();
-				}else if(this.requestnum == '4'){
-					this.requestBasis();
-				}else if(this.requestnum == '5'){
-					this.requestProject();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
 				}
+				if(this.requestnum == '1'){
+						this.requesCategory();
+					}else if(this.requestnum == '2'){
+						this.requestProname();
+					}else if(this.requestnum == '3'){
+						this.requestDeptname();
+					}else if(this.requestnum == '4'){
+						this.requestBasis();
+					}else if(this.requestnum == '5'){
+						this.requestProject();
+					}
 			},
+			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				if(this.requestnum == '1'){
-					this.requesCategory();
-				}else if(this.requestnum == '2'){
-					this.requestProname();
-				}else if(this.requestnum == '3'){
-					this.requestDeptname();
-				}else if(this.requestnum == '4'){
-					this.requestBasis();
-				}else if(this.requestnum == '5'){
-					this.requestProject();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
 				}
+				if(this.requestnum == '1'){
+						this.requesCategory();
+					}else if(this.requestnum == '2'){
+						this.requestProname();
+					}else if(this.requestnum == '3'){
+						this.requestDeptname();
+					}else if(this.requestnum == '4'){
+						this.requestBasis();
+					}else if(this.requestnum == '5'){
+						this.requestProject();
+					}
 			},
+
+			// loadMore () {
+			//    if (this.loadSign) {
+			//      this.loadSign = false
+			//      this.page.currentPage++
+			//      if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			//        return
+			//      }
+			//     setTimeout(() => {
+			//        this.loadSign = true
+			//      }, 1000)
+			// 	//  this.requestData()
+			// 	if(this.requestnum == '1'){
+			// 		this.requesCategory();
+			// 	}else if(this.requestnum == '2'){
+			// 		this.requestProname();
+			// 	}else if(this.requestnum == '3'){
+			// 		this.requestDeptname();
+			// 	}else if(this.requestnum == '4'){
+			// 		this.requestBasis();
+			// 	}else if(this.requestnum == '5'){
+			// 		this.requestProject();
+			// 	}
+			//    }
+			//  },
+			// sizeChange(val) {
+			// 	this.page.pageSize = val;
+			// 	if(this.requestnum == '1'){
+			// 		this.requesCategory();
+			// 	}else if(this.requestnum == '2'){
+			// 		this.requestProname();
+			// 	}else if(this.requestnum == '3'){
+			// 		this.requestDeptname();
+			// 	}else if(this.requestnum == '4'){
+			// 		this.requestBasis();
+			// 	}else if(this.requestnum == '5'){
+			// 		this.requestProject();
+			// 	}
+			// },
+			// currentChange(val) {
+			// 	this.page.currentPage = val;
+			// 	if(this.requestnum == '1'){
+			// 		this.requesCategory();
+			// 	}else if(this.requestnum == '2'){
+			// 		this.requestProname();
+			// 	}else if(this.requestnum == '3'){
+			// 		this.requestDeptname();
+			// 	}else if(this.requestnum == '4'){
+			// 		this.requestBasis();
+			// 	}else if(this.requestnum == '5'){
+			// 		this.requestProject();
+			// 	}
+			// },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;

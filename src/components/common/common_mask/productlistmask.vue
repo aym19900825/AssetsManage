@@ -52,7 +52,8 @@
 			totalCount: 0
 		},
 		DEPTID:'',//当前选择的机构值
-		NUM:'',//类别编号
+		CJDW:'',//机构编号
+		NUM:'',//产品类别编号
     }
   },
 
@@ -118,8 +119,9 @@
 			this.categoryList = newarr;
 		}).catch((wrong) => {})
 	},
-  	visible(NUM) {
+  	visible(NUM,CJDW) {
 		this.NUM = NUM;
+		this.CJDW = CJDW;
 		this.dialogProduct = true;
 		this.requestData();
   	},
@@ -141,7 +143,7 @@
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 		};
-		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM;
+		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_wheres='+this.CJDW;
 		this.$axios.get(url, {
 			
 		}).then((res) => {

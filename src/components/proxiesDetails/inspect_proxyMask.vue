@@ -59,7 +59,6 @@
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')">
 													</el-button>
 												</el-input>
-
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -1267,7 +1266,7 @@
 					this.show = true;
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试21',
+						message: '网络错误，请重试',
 						type: 'error'
 					})
 				})

@@ -1,10 +1,10 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="受检企业" :visible.sync="dialogCustomer" width="80%">
+		<el-dialog :modal-append-to-body="false" title="客户单位列表" :visible.sync="dialogCustomer" width="80%">
 			<el-form :model="searchList" label-width="70px">
 				<el-row :gutter="10">
 					<el-col :span="5">
-						<el-form-item label="统一信用代码" prop="CODE" label-width="100px">
+						<el-form-item label="组织机构代码" prop="CODE" label-width="100px">
 							<el-input v-model="searchList.CODE">
 							</el-input>
 						</el-form-item>
@@ -35,7 +35,7 @@
 				@selection-change="SelChange">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
-				<el-table-column label="统一信用代码/组织机构代码" width="200" sortable prop="CODE" >
+				<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
 				</el-table-column>
 				<el-table-column label="单位名称" sortable prop="NAME" >
 				</el-table-column>
@@ -65,18 +65,18 @@
 	data() {
 		return {
 			basic_url: Config.dev_url,
-			loading: false,
-			loadSign:true,//加载
+			loadSign: true, //鼠标滚动加载数据
+			loading: false,//默认加载数据时显示loading动画
 			customerList: [],
 			dialogCustomer: false,
 			commentArr:{},
 			selUser: [],//接勾选的值
 			type:'',
 			searchList: {
-						NAME: '',
-						CODE: '',
-						CONTACT_ADDRESS: '',
-					},
+				NAME: '',
+				CODE: '',
+				CONTACT_ADDRESS: '',
+			},
 			page: {
 				currentPage: 1,
 				pageSize: 20,
@@ -107,16 +107,7 @@
 			_this.changePageCoreRecordData();
 		},800);
 	},
-  	sizeChange(val) {
-		this.changePageCoreRecordData();
-		this.page.pageSize = val;
-		this.requestData();
-	},
-	currentChange(val) {
-		this.changePageCoreRecordData();
-		this.page.currentPage = val;
-		this.requestData();
-	},
+  	
 	searchinfo() {
 		this.page.currentPage = 1;
 		this.page.pageSize = 20;
@@ -136,22 +127,61 @@
 		this.requestData();
 		this.dialogCustomer = true;
   	},
-  	loadMore () {//滚动加载更多
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-		 }, 1000)
-		 this.changePageCoreRecordData();
-	     this.requestData();
-	   }
-	},
+  	//表格滚动加载
+		loadMore() {
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
+					}
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1;
+						return false;
+					}
+				}
+				this.loadSign = false;
+				setTimeout(() => {
+					this.loadSign = true;
+				}, 1000)
+				this.requestData();
+			}
+		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+	//Table默认加载数据
 	requestData(){
-		this.loading = true;
+		this.loading = true;//加载动画打开
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -159,12 +189,11 @@
 			CODE: this.searchList.CODE,
 			CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
-		var url = this.basic_url + '/api-apps/app/customer';
-        url = !!this.CJDW ? url+'&DEPTID_wheres='+this.CJDW : url;
+		var url = this.basic_url + '/api-apps/app/customer';//如果父组件没有传CJDW承检单位侧显示所有数据
+        	url = !!this.CJDW ? url+'&DEPTID_wheres='+this.CJDW : url;//如果父组件有传CJDW承检单位侧显示查询条件
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
-			console.log(this.CJDW);
 			this.page.totalCount = res.data.count;	
 			//总的页数
 			let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -177,7 +206,10 @@
 			setTimeout(()=>{
 				this.setSelectRow();
 			}, 200)
-			this.loading = false;
+			this.loading = false;//加载动画关闭
+			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+				$('.el-table__body-wrapper table').find('.filing').remove();
+			}//滚动加载数据判断filing
 		}).catch((wrong) => {})
 	},
 	determine(){
@@ -192,18 +224,22 @@
 				type: 'warning'
 			});
 		}else{
-			if(this.type=="vname"){ 
+			if(this.type=="vname"){ //委托单位名称
 				var name=this.selUser[0].NAME;//名称
 				var address=this.selUser[0].CONTACT_ADDRESS;//地址 
 				var	zipcode=this.selUser[0].ZIPCODE;//地址
 				var id=this.selUser[0].ID;
+				var code=this.selUser[0].CODE;//组织机构代码
 				this.$emit('appendname',name);
 				this.$emit('appendadd',address);
 				this.$emit('appendzip',zipcode);
 				this.$emit('appendid',id);
+				this.$emit('appendcode',code);
 			}else if(this.type="pname"){
-				var names=this.selUser[0].NAME;//生产单位
+				var names=this.selUser[0].NAME;//生产单位名称
+				var codes=this.selUser[0].CODE;//组织机构代码
 				this.$emit('appendnames',names);
+				this.$emit('appendcodes',codes);
 			}else if(this.type="notivname"){
 				var names=this.selUser[0].NAME;//生产单位
 				this.$emit('appendnames',names);

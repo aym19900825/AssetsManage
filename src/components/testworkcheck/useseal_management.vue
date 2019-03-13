@@ -568,10 +568,18 @@
 				})
 
 		    },
-
+		    //代办跳转
+			getRouterData() {
+				// 只是改了query，其他都不变
+				this.id = this.$route.query.bizId;
+				this.$refs.child.view(this.id);
+			}
 		},
 		mounted() {
 			this.requestData();
+			if(this.$route.query.bizId != undefined) {
+				this.getRouterData();
+			}
 		},
 	}
 </script>

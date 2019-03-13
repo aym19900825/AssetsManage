@@ -35,7 +35,7 @@
 										</el-col> -->
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='ASSET_STATUS'&& item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='ASSET_STATUS' && item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='ASSET_STATUS' || item.prop =='ISPERIODIC' || item.prop =='ASSET_NUMBER')" disabled></el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
@@ -209,7 +209,7 @@
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					CONFIG_UNIT: [//配置单位
-						{ required: true, message: '必填', trigger: 'change'},
+						{ required: true, message: '必填', trigger: 'blur'},
 					],
 					INS_SITE: [//安装地点
 						{ required: true, message: '必填', trigger: 'blur' },
@@ -334,9 +334,9 @@
 					},
                     {
 						label: '配置单位',
-						prop: 'CONFIG_UNIT',
+						prop: 'CONFIG_UNITDes',
 						width: '30%',
-						type: 'select',
+						type: 'input',
 						displayType: 'inline-block'
 					},
 					{
@@ -638,7 +638,7 @@
 				},
 				selectData: [], //
 				getCheckboxData: {},
-
+				selectUserDept: [], //选择配置单位
 				dataInfo: {
 					'ID': '',  //主键ID，必填但页面没有字段
 					'ASSETNUM': '',
@@ -688,7 +688,9 @@
 				statusshow1:true,
 				statusshow2:false,
 				falg:false,
+				dialogVisible2:false,//设备分类
 				dialogVisible:false,//设备管理人
+				assetTypeList:[],//设备分类
 				userList:[],
 				page: {
 					currentPage: 1,
@@ -708,16 +710,30 @@
 			},
 			//机构值
 			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.selectData = res.data;
-				});
+				var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+	            	// this.deptId = res.data.deptId;
+	            	this.dataInfo.CONFIG_UNIT = res.data.deptId;
+	            	this.dataInfo.CONFIG_UNITDes = res.data.deptName;
+	            	console.log(res.data.deptId)
+	            	// var type = "2";
+					// var url = this.basic_url + '/api-user/depts/'+this.deptId;
+					// this.$axios.get(url, {
+					// 	params: {
+					// 		type: type
+					// 	},
+					// }).then((res) => {
+					// 	console.log(res.data);
+					// 	this.selectData = res.data;
+					// });
+	            }).catch((err) => {
+	                this.$message({
+	                    message: '网络错误，请重试',
+	                    type: 'error'
+	                });
+	            });
 			},
+			
 			//设备保管人员情况
 			addPeople(){
 				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
@@ -744,7 +760,7 @@
 					});
 				}else{
 					this.dataInfo.TYPE = this.selUser[0].nickname;
-					this.getuserinfo();
+					this.getuserinfo2();
 					this.resetBasisInfo2();//调用resetBasisInfo2函数
 				}
 			},
@@ -912,6 +928,8 @@
 					'appid': 47
 				};
 				this.getUser('new');
+
+				this.getCompany();
 			},
 			// 这里是修改
 			detail(dataid) {
@@ -941,6 +959,8 @@
 				},100);
 
 				this.show = true;
+
+				this.getCompany();
 			},
 			//这是查看
 			view(data) {
@@ -1028,6 +1048,16 @@
 					$('.v-modal').hide();
 				});
 			},
+			handleClose2(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo2();//调用resetBasisInfo函数
+					})
+					.catch(_ => {
+				console.log('取消关闭');
+					$('.v-modal').hide();
+				});
+			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;
 				this.isok2 = true;
@@ -1098,6 +1128,32 @@
 				this.save(dataInfo);
 				this.show = true;
 			},
+			
+			getuserinfo2() {//设备分类
+				this.loading = true;//加载动画打开
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.dataInfo.CONFIG_UNIT, {//要修改接口路径
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+					if(this.page.currentPage >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.assetTypeList = res.data.data;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {})
+				
+			},
 			getuserinfo() {//高级查询字段
 				this.loading = true;//加载动画打开
 				var data = {
@@ -1115,17 +1171,6 @@
 					} else {
 						this.loadSign = true
 					}
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
 					this.userList = res.data.data;
 					this.loading = false;//加载动画关闭
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){

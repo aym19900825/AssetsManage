@@ -142,6 +142,7 @@
 		},
 		data() {
 			return {
+				btn:'',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -327,10 +328,43 @@
 			},
 			 //请求点击
 		    getbtn(item){
+		    	var isshowbtn=this.btn;
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有添加的权限',
+						type: 'warning'
+					});
+					}else{
+                       this.openAddMgr();
+					}
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有修改的权限',
+						type: 'warning'
+					});
+					}else{
+				        this.modify();
+					}
+		    	}else if(item.name=="彻底删除"){
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有彻底删除的权限',
+						type: 'warning'
+					});
+					}else{
+      					this.physicsDel();
+					}
+				}else if(item.name=="删除"){
+					if(isshowbtn=='0'){
+					this.$message({
+						message: '您没有删除的权限',
+						type: 'warning'
+					});
+				}else{
+					this.deluserinfo();
+					}
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="报表"){
@@ -339,10 +373,6 @@
 		    	 this.exportData();
 				}else if(item.name=="打印"){
 		    	 this.Printing();
-				}else if(item.name=="删除"){
-		    	 this.deluserinfo();
-		    	}else if(item.name=="物理删除"){
-		    	 this.physicsDel();
 		    	}
 		    },
 			//添加
@@ -621,11 +651,23 @@
 					
 				}).catch((wrong) => {})
 
-		    },
+			},
+			getdept(){
+				var url = this.basic_url + '/api-user/users/findDeptAttr';
+				this.$axios.get(url, {}).then((res) => {
+					this.btn=res.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
+			}
 		},
 		mounted() {
 			this.requestData();
 			this.getCompany();
+			this.getdept();
 		},
 	}
 </script>

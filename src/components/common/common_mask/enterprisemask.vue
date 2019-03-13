@@ -160,7 +160,7 @@
 			CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
 		var url = this.basic_url + '/api-apps/app/customer';
-		url = !!this.CJDW ? url+'&DEPTID_wheres='+this.CJDW : url;
+        url = !!this.CJDW ? url+'&DEPTID_wheres='+this.CJDW : url;
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {

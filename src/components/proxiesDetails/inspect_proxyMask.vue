@@ -1471,7 +1471,10 @@
 					this.dataInfo.INSPECT_PROXY_BASISList = [];
 					this.dataInfo.INSPECT_PROXY_PROJECList = [];
 				}else{
+					console.log(value);
+					
 					this.deptindex.PT_NUM = value[0];
+					console.log(this.deptindex.PT_NUM);
 					this.deptindex.PRODUCT_TYPE = value[1];
 					this.deptindex.P_VERSIONNUM = value[0]+':'+value[2];//类别编号+版本
 					this.deptindex.PRO_NUM ='';//产品编号
@@ -1505,7 +1508,8 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.productchild.visible(this.deptindex.PT_NUM);
+						console.log(this.deptindex.PT_NUM);
+						this.$refs.productchild.visible(this.deptindex.PT_NUM,this.deptindex.VENDOR);
 						this.main = 'table';
 					}
 				}

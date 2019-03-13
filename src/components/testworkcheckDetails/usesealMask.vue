@@ -294,6 +294,7 @@
 				sealUse:'sealUse',//appname
 				dataid:'',
 				username:'',
+				
 			};
 		},
 		methods: {
@@ -646,7 +647,7 @@
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportApprove;
+				this.approvingData.app=this.sealUse;
 				 var url = this.basic_url + '/api-apps/app/sealUse/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {

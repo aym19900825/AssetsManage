@@ -350,16 +350,23 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPARTMENT = '';
-					this.CATEGORY.DEPTID = res.data.deptId;
-					this.CATEGORY.ENTERBY = res.data.id;
-					var date = new Date();
-
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
+					//判断新建和修改时创建人/时间/机构和修改人/时间的变化
+					if(opt == 'new'){
+						this.CATEGORY.DEPTID = res.data.deptId;//创建人机构
+						this.CATEGORY.ENTERBY = res.data.id;//创建人
+						var date = new Date();
+						this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//创建时间
+					}
+					if(opt == 'edit'){
+						this.CATEGORY.CHANGEBY = res.data.id;//修改人
+						var date = new Date();
+						this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//修改时间
+					}
 
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 					if(opt != 'new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
@@ -371,9 +378,8 @@
 					});
 				});
 			},
-			//点击按钮显示弹窗
+			//点击添加按钮显示弹窗
 			visible() {
-				this.getUser('new');
 				this.docParm = {
 					'model': 'new',
 					'appname': '检验检测项目_原始数据模板',
@@ -391,6 +397,7 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.getUser('new');//新建时当前用户
 //				this.show = true;
 			},
 			// 这里是修改
@@ -406,7 +413,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.getUser('edit');
+				this.getUser('edit');//修改时当前用户
 				var _this = this;
 				var url = this.basic_url + '/api-apps/app/rawDataTem/' + dataid;
 				this.$axios.get(url, {}).then((res) => {

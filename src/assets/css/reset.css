@@ -353,6 +353,7 @@ h6 {
 .applist .el-col {margin-top: 10px;}
 .applist .applistbg,.statisticsbg { 
 	text-align: center;
+	cursor: pointer;
 	min-height:120px;
 	*height:100px;
 	padding-top:15px;
@@ -778,7 +779,7 @@ h6 {
     color: #a3a8bb;
     position: absolute;
     top: 40%;
-    left: -2px;
+    left: -5px;
 }
 #middle:hover {
     cursor: w-resize;

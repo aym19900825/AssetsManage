@@ -18,8 +18,8 @@
 						<!--APPList Begin-->
 						<el-col :span="4" v-for="(item,index) in applistdata" :key="index">
 							<div class="applistbg" @click="goto(item)" :data-id='applistdata.id'>
-									<span><i :class="item.css"></i></span>
-									<font>{{item.name}}</font>
+								<span><i :class="item.css"></i></span>
+								<font>{{item.name}}</font>
 							</div>
 						</el-col>
 						<!--APPList End-->
@@ -27,7 +27,7 @@
 					<!--我的应用 End-->
 
 					<!--工作统计 Begin-->
-					<div class="clearfix">
+					<div class="clearfix pt30">
 						<h3>工作统计</h3>
 					</div>
 					<el-row :gutter="20" class="applist">

@@ -432,7 +432,7 @@
 															<i class="icon-trash red"></i>
 														</el-button>
 														<el-button @click.native.prevent="viewFile(scope.row)" type="text" size="small">
-															<i class="icon-trash red"></i>
+															<i class="icon-log red"></i>
 														</el-button>
 											        </template>
 											    </el-table-column>
@@ -682,11 +682,11 @@
 											<el-table :data="workorderForm.WORKORDER_REPORTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_REPORTList', order: 'descending'}">
 												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="320px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
-															   <el-button slot="append" icon="el-icon-search"></el-button>
-														</el-input>
-														<span v-else>{{scope.row.REPORTNUM}}</span>
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'">
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
+																<el-button slot="append" icon="el-icon-search"></el-button>
+															</el-input>
+															<span v-else>{{scope.row.REPORTNUM}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -1111,7 +1111,7 @@
 					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
 					ITEM_MODEL: [{ required: true,validator: validateItemname}],//规格型号
 					ITEMNUM: [{ required: true,validator: validateItemnum}],//样品编号
-					ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					// ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_SOURCE: [{ required: true, message: '不能为空', trigger: 'change' }],
 					ITEM_QUALITY: [{ required: true, message: '不能为空', trigger: 'blur' }],

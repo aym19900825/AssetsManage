@@ -259,7 +259,7 @@
 											          @click="viewPlanFile(scope.row)"
 											          type="text"
 											          size="small" v-if="!viewtitle">
-											          	<i class="icon-trash red"></i>
+											          	<i class="icon-log red"></i>
 											        </el-button>
 											      </template>
 											    </el-table-column>

@@ -144,7 +144,8 @@
 									    </el-tab-pane>
 									</el-tabs>
 								</div>
-								<el-collapse-item title="其他" name="3" v-show="views">
+								<!-- <el-collapse-item title="其他" name="3" v-show="views"> -->
+								<el-collapse-item title="其他" name="3">
 									<div class="accordion-body tab-content">
 										<el-row >
 											<el-col :span="8">
@@ -200,7 +201,7 @@
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
-				dataInfo: {
+				dataInfo:{
 					status: '1',
 					code:'',
 					file:'',
@@ -209,6 +210,10 @@
 					remarks:'',
 					u_type:'',
 					params: [],
+					createby:'',
+					createdate:'',
+					updateby:'',
+					updatedate:''
 				},
 				edit: true, //禁填
 				noedit: false,
@@ -352,10 +357,11 @@
 				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
+					console.log(res.data.id);
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.updateby = res.data.id;
 					var date = new Date();
-					this.dataInfo.updatedate = this.$moment(date).format("yyyy-MM-dd");
+					this.dataInfo.updatedate = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

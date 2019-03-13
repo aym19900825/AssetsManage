@@ -96,167 +96,166 @@
 <script>
 	import Config from '../../../config.js';
 	export default {
-  name: 'sample',
-  
-  data() {
-    return {
-		basic_url: Config.dev_url,
-        loading: false,
-        loadSign:true,//加载
-		userList: [],
-		dialogwork: false,
-		commentArr:{},
-		selval: [],//接勾选的值
-		page: {
-			currentPage: 1,
-			pageSize: 20,
-			totalCount: 0
-			},
-		searchList: {
-            WONUM: '',//工作任务单编号
-            ITEM_NAME: '',//样品名称
-            PROXYNUM: '',//委托书编号
-            STATE: '',//状态
-            COMPLETE_DATE: '',//完成日期
-            // ENTERBY: '',//录入人
-            ENTERDATE: '',//录入日期
+        name: 'sample',
+        data() {
+            return {
+                basic_url: Config.dev_url,
+                loading: false,
+                loadSign:true,//加载
+                userList: [],
+                dialogwork: false,
+                commentArr:{},
+                selval: [],//接勾选的值
+                page: {
+                    currentPage: 1,
+                    pageSize: 20,
+                    totalCount: 0
+                    },
+                searchList: {
+                    WONUM: '',//工作任务单编号
+                    ITEM_NAME: '',//样品名称
+                    PROXYNUM: '',//委托书编号
+                    STATE: '',//状态
+                    COMPLETE_DATE: '',//完成日期
+                    // ENTERBY: '',//录入人
+                    ENTERDATE: '',//录入日期
+                },
+                
+            }
         },
-        
-    }
-  },
 
-  methods: {
-  	dateFormat(row, column) {
-		var date = row[column.property];
-		if(date == undefined) {
-			return "";
-		}
-		return this.$moment(date).format("YYYY-MM-DD");
-	},
-  	//表头居中
-	rowClass({ row, rowIndex}) {
-	    return 'text-align:center'
-	},
-	SelChange(val) {
-		this.selval = val;
-	},
-  	sizeChange(val) {
-		this.page.pageSize = val;
-		this.requestData();
-	},
-	currentChange(val) {
-		this.page.currentPage = val;
-		this.requestData();
-	},
-	resetbtn(){
-		this.searchList =  { //点击高级搜索后显示的内容
-			WONUM: '',//工作任务单编号
-            ITEM_NAME: '',//样品名称
-            PROXYNUM: '',//委托书编号
-            STATE: '',//状态
-            COMPLETE_DATE: '',//完成日期
-            // ENTERBY: '',//录入人
-            ENTERDATE: '',//录入日期
-		};
-	},
-	searchinfo(index) {
-        this.page.currentPage = 1;
-        this.page.pageSize = 10;
-        this.requestData();
-    },
-  	//点击关闭按钮
-	close() {
-		this.dialogwork = false;
-	},
-  	visible() {
-		this.dialogwork = true;
-  	},
-  	loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
-	},
-	requestData() {
-        this.loading = true;
-        var data = {
-            page: this.page.currentPage,
-            limit: this.page.pageSize,
-
-            WONUM: this.searchList.WONUM,
-            ITEM_NAME: this.searchList.ITEM_NAME,
-            PROXYNUM: this.searchList.PROXYNUM,
-            STATE: this.searchList.STATE,
-            COMPLETE_DATE: this.searchList.COMPLETE_DATE,
-            ENTERBY: this.searchList.ENTERBY,
-            ENTERDATE: this.searchList.ENTERDATE,
-        }
-        var url = this.basic_url + '/api-apps/app/workorder';
-        this.$axios.get(url, {
-            params: data
-        }).then((res) => {
-            // console.log(res)
-            this.page.totalCount = res.data.count;	
-            //总的页数
-            this.userList=res.data.data;
-            let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-            if(this.page.currentPage >= totalPage){
-                    this.loadSign = false
-            }else{
-                this.loadSign=true
-            }
-            this.commentArr[this.page.currentPage]=res.data.data
-            let newarr=[]
-            for(var i = 1; i <= totalPage; i++){
-            
-                if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-                    
-                    for(var j = 0; j < this.commentArr[i].length; j++){
-                        newarr.push(this.commentArr[i][j])
-                    }
+        methods: {
+            dateFormat(row, column) {
+                var date = row[column.property];
+                if(date == undefined) {
+                    return "";
                 }
+                return this.$moment(date).format("YYYY-MM-DD");
+            },
+            //表头居中
+            rowClass({ row, rowIndex}) {
+                return 'text-align:center'
+            },
+            SelChange(val) {
+                this.selval = val;
+            },
+            sizeChange(val) {
+                this.page.pageSize = val;
+                this.requestData();
+            },
+            currentChange(val) {
+                this.page.currentPage = val;
+                this.requestData();
+            },
+            resetbtn(){
+                this.searchList =  { //点击高级搜索后显示的内容
+                    WONUM: '',//工作任务单编号
+                    ITEM_NAME: '',//样品名称
+                    PROXYNUM: '',//委托书编号
+                    STATE: '',//状态
+                    COMPLETE_DATE: '',//完成日期
+                    // ENTERBY: '',//录入人
+                    ENTERDATE: '',//录入日期
+                };
+            },
+            searchinfo(index) {
+                this.page.currentPage = 1;
+                this.page.pageSize = 10;
+                this.requestData();
+            },
+            //点击关闭按钮
+            close() {
+                this.dialogwork = false;
+            },
+            visible() {
+                this.dialogwork = true;
+            },
+            loadMore () {
+            if (this.loadSign) {
+                this.loadSign = false
+                this.page.currentPage++
+                if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+                return
+                }
+                setTimeout(() => {
+                this.loadSign = true
+                }, 1000)
+                this.requestData();
             }
-            this.userList = newarr;
-            this.loading = false;
-        }).catch((wrong) => {})
-    },
-	determine(){
-		if(this.selval.length == 0){
-			this.$message({
-				message: '请选择数据',
-				type: 'warning'
-			});
-		}else if(this.selval.length > 1){
-			this.$message({
-				message: '不可同时选择多条数据',
-				type: 'warning'
-			});
-		}else{
-			var worknum = this.selval[0].WONUM;
-			this.$emit('appendwork',worknum);
-            // this.dialogwork = false;
-			// this.requestData();
-            this.resetBasisInfo();//调用resetBasisInfo函数
-		}
-	},
-    resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
-        this.dialogwork = false;//关闭弹出框
-        this.userList = [];//列表数据置空
-        this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 10;//页码重新传值
-    },
-  },
-  mounted() {
-        this.requestData();
-    },
-}
+            },
+            requestData() {
+                this.loading = true;
+                var data = {
+                    page: this.page.currentPage,
+                    limit: this.page.pageSize,
+
+                    WONUM: this.searchList.WONUM,
+                    ITEM_NAME: this.searchList.ITEM_NAME,
+                    PROXYNUM: this.searchList.PROXYNUM,
+                    STATE: this.searchList.STATE,
+                    COMPLETE_DATE: this.searchList.COMPLETE_DATE,
+                    ENTERBY: this.searchList.ENTERBY,
+                    ENTERDATE: this.searchList.ENTERDATE,
+                }
+                var url = this.basic_url + '/api-apps/app/workorder';
+                this.$axios.get(url, {
+                    params: data
+                }).then((res) => {
+                    // console.log(res)
+                    this.page.totalCount = res.data.count;	
+                    //总的页数
+                    this.userList=res.data.data;
+                    let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+                    if(this.page.currentPage >= totalPage){
+                            this.loadSign = false
+                    }else{
+                        this.loadSign=true
+                    }
+                    this.commentArr[this.page.currentPage]=res.data.data
+                    let newarr=[]
+                    for(var i = 1; i <= totalPage; i++){
+                    
+                        if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+                            
+                            for(var j = 0; j < this.commentArr[i].length; j++){
+                                newarr.push(this.commentArr[i][j])
+                            }
+                        }
+                    }
+                    this.userList = newarr;
+                    this.loading = false;
+                }).catch((wrong) => {})
+            },
+            determine(){
+                if(this.selval.length == 0){
+                    this.$message({
+                        message: '请选择数据',
+                        type: 'warning'
+                    });
+                }else if(this.selval.length > 1){
+                    this.$message({
+                        message: '不可同时选择多条数据',
+                        type: 'warning'
+                    });
+                }else{
+                    var worknum = this.selval[0].WONUM;
+                    this.$emit('appendwork',worknum);
+                    // this.dialogwork = false;
+                    // this.requestData();
+                    this.resetBasisInfo();//调用resetBasisInfo函数
+                }
+            },
+            resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+                this.dialogwork = false;//关闭弹出框
+                this.userList = [];//列表数据置空
+                this.page.currentPage = 1;//页码重新传值
+                this.page.pageSize = 10;//页码重新传值
+            },
+        },
+        mounted() {
+            this.requestData();
+        }
+    }
 </script>
 
 <style>

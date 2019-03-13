@@ -743,9 +743,12 @@
 													  <el-button title="查看" type="text" size="small" @click="lookoverreport(scope.row)">
 														<i class="icon-file-text"></i>
 													  </el-button>
-													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-show="btnshow">
+													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-if="btnshow">
 														<i class="icon-send"></i>
 													  </el-button>
+													  <!-- <el-button title="报告提交" type="text" size="small" @click="admirereport" v-if="btnshow&&(scope.row.ISCREATED==1)" >
+														<i class="icon-send"></i>
+													  </el-button> -->
 													</template>
 												</el-table-column>
 											</el-table>
@@ -2091,8 +2094,8 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
 					
-					for(var i = 0;i<this.workorderForm.WORKORDER_REPORTList.length;i++){
-						if(this.workorderForm.WORKORDER_REPORTList[0].ISCREATED == '1'){
+					for(var i = 0;i<res.data.WORKORDER_REPORTList.length;i++){
+						if(res.data.WORKORDER_REPORTList[0].ISCREATED == '1'){
 							this.btnshow = false;
 						}
 					}

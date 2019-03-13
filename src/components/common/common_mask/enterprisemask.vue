@@ -126,6 +126,7 @@
 	close() {
 		this.dialogCustomer = false;
 	},
+	// this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
   	visible(type,id,CJDW) {
 		this.type=type;
 		this.CJDW=CJDW;
@@ -158,7 +159,9 @@
 			CODE: this.searchList.CODE,
 			CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
-		this.$axios.get(this.basic_url + '/api-apps/app/customer?&DEPTID_wheres='+this.CJDW, {
+		var url = this.basic_url + '/api-apps/app/customer';
+		url = !!this.CJDW ? url+'&DEPTID_wheres='+this.CJDW : url;
+		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
 			console.log(this.CJDW);

@@ -19,7 +19,6 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="content-accordion">
-
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">

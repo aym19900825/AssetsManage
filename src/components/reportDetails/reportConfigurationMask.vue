@@ -144,8 +144,7 @@
 									    </el-tab-pane>
 									</el-tabs>
 								</div>
-								<!-- <el-collapse-item title="其他" name="3" v-show="views"> -->
-								<el-collapse-item title="其他" name="3">
+								<el-collapse-item title="其他" name="3" v-show="views">
 									<div class="accordion-body tab-content">
 										<el-row >
 											<el-col :span="8">
@@ -159,8 +158,8 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
-													<el-input v-model="dataInfo.DEPTIDDesc" :disabled="edit"></el-input>
+												<el-form-item label="机构" prop="deptidDesc" label-width="110px">
+													<el-input v-model="dataInfo.deptidDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -213,7 +212,8 @@
 					createby:'',
 					createdate:'',
 					updateby:'',
-					updatedate:''
+					updatedate:'',
+					deptid:''
 				},
 				edit: true, //禁填
 				noedit: false,
@@ -313,20 +313,20 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
-					this.dataInfo.DEPTID = res.data.deptId;
-					this.dataInfo.createby = res.data.id;
-					this.username=res.data.username;
-					var date = new Date();
-					this.dataInfo.createdate = this.$moment(date).format("YYYY-MM-DD");
-					this.show = true;
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
-				})
+				// this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+				// 	console.log(res);
+				// 	// this.dataInfo.DEPTID = res.data.deptId;
+				// 	this.dataInfo.createby = res.data.id;
+				// 	this.username=res.data.username;
+				// 	var date = new Date();
+				// 	this.dataInfo.createdate = this.$moment(date).format("YYYY-MM-DD");
+				// 	this.show = true;
+				// }).catch((err) => {
+				// 	this.$message({
+				// 		message: '网络错误，请重试',
+				// 		type: 'error'
+				// 	})
+				// })
                	this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -334,6 +334,7 @@
 				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
+				this.show = true;
 			},
 			//
 			detailgetData() {
@@ -355,19 +356,19 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
-				var usersUrl = this.basic_url + '/api-user/users/currentMap'
-				this.$axios.get(usersUrl, {}).then((res) => {
-					console.log(res.data.id);
-					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-					this.dataInfo.updateby = res.data.id;
-					var date = new Date();
-					this.dataInfo.updatedate = this.$moment(date).format("YYYY-MM-DD");
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				// var usersUrl = this.basic_url + '/api-user/users/currentMap'
+				// this.$axios.get(usersUrl, {}).then((res) => {
+				// 	console.log(res.data.id);
+				// 	// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+				// 	this.dataInfo.updateby = res.data.id;
+				// 	var date = new Date();
+				// 	this.dataInfo.updatedate = this.$moment(date).format("YYYY-MM-DD");
+				// }).catch((err) => {
+				// 	this.$message({
+				// 		message: '网络错误，请重试',
+				// 		type: 'error'
+				// 	});
+				// });
 				this.detailgetData();
 				this.modifytitle = true;
 				this.addtitle = false;

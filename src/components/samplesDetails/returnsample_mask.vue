@@ -446,13 +446,14 @@
 						message:'请选择数据',
 						type:'warning'
 					})
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message:'不可选择多条数据',
-						type:'warning'
-					})
 				}else{
-					this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
+					var num = [];
+					var nums = '';
+					for(var i = 0;i<this.selUser.length;i++){
+						num.push(this.selUser[i].ITEM_STEP);
+					}
+					nums = num.toString(',');
+					this.samplesForm.ITEM_STEP = nums;
 					this.dialogsamplenum = false;
 				}
 			},

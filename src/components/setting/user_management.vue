@@ -732,7 +732,7 @@
 					product:product,
 					checkProduct:checkProduct,
 					checkProductType:checkProductType,
-                                          userId:this.selUser[0].id}).then((res) => {
+          userId:this.selUser[0].id}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '操作成功',
@@ -740,9 +740,7 @@
 						});
 					}
 					this.requestData();
-          this.resetTree();//置空数据
-					//this.Access = false;
-                                        
+          this.resetTree();//置空数据                            
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',

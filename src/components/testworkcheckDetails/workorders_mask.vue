@@ -700,6 +700,15 @@
 														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
+												<el-table-column prop="FILEID" label="文件id" sortable :disabled="true">
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FILEID" placeholder="请输入">	
+														</el-input>
+														<span v-else>{{scope.row.FILEID}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
 												
 												<!-- <el-table-column prop="PREVIEW" label="预览" sortable width="120px">
 													<template slot-scope="scope">
@@ -2017,24 +2026,16 @@
 				+ '&deptid=' + this.currentuserinfo.deptId
 				+ '&deptfullname=' + this.currentuserinfo.deptName
 				window.open(url); 
-
-
-				// this.userid = this.currentuserinfo.id;
-	            //     this.username = this.currentuserinfo.username;
-				// 	this.deptid = this.currentuserinfo.deptId;
-				// 	this.deptfullname = this.currentuserinfo.deptName;
 			},
 			reportdatavalue(value){
 				this.reportvalue = value;//储存生成报告数据
 				console.log(value);
 				this.workorderreportid = value.id;
-                console.log(res);
-                console.log()
                 var obj = {
 					ID:value.ID,
                     REPORTNUM:value.reportnum,
                     REPORTNAME:value.reportname,
-                    // PREVIEW:'',
+                    FILEID:value.fileid,
                     VERSION:value.version,
                 }
                 console.log(obj);

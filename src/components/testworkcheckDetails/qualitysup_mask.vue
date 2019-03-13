@@ -405,7 +405,7 @@
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportOnhole;
+				this.approvingData.app=this.qualitySupApp;
 				 var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {

@@ -122,7 +122,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<reportmask ref="child" @request="requestData" :dataInfo="dataInfo"></reportmask>
+		<reportmask ref="child" @request="requestData"></reportmask>
 	</div>
 </div>
 </template>
@@ -144,6 +144,7 @@
 		},
 		data() {
 			return {
+				dataInfo:{},
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -267,21 +268,22 @@
 			openAddMgr() {
 				this.$refs.child.visible();
 			},
-			//修改用戶
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修改的用户',
+						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selUser.length > 1) {
 					this.$message({
-						message: '不可同时修改多个用户',
+						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
 				} else {
+					console.log(this.selUser[0]);
 					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},

@@ -117,6 +117,7 @@
 	close() {
 		this.dialogCustomer = false;
 	},
+	// this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
   	visible(type,id,CJDW) {
 		this.type=type;
 		this.CJDW=CJDW;

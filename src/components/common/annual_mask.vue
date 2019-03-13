@@ -211,8 +211,10 @@
 									        <el-button type="text" title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
 									          <i class="icon-trash red"></i>
 									        </el-button>
-
-									        <el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow">
+											<el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow&&(scope.row.ISCREATED!=1)">
+									          <i class="icon-send"></i>
+									        </el-button>
+									        <el-button type="primary" circle title="工作任务通知书已下达" @click="assign(scope.row)" size="small" v-if="assignshow&&(scope.row.ISCREATED==1)">
 									          <i class="icon-send"></i>
 									        </el-button>
 									      </template>

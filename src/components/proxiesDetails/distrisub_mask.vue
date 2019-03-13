@@ -5,8 +5,8 @@
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
 					<!-- <div class="mask_title" v-show="addtitle">添加报告归档</div> -->
-					<div class="mask_title" v-show="modifytitle">修改承包方分包协议</div>
-					<div class="mask_title" v-show="viewtitle">查看承包方分包协议</div>
+					<div class="mask_title" v-show="modifytitle">修改分包方分包协议</div>
+					<div class="mask_title" v-show="viewtitle">查看分包方分包协议</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>

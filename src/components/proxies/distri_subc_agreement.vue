@@ -112,6 +112,10 @@
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
+								<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXY_CONTRACT_NUM}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
@@ -154,6 +158,7 @@
 				</el-row>
 			</div>
 		</div>
+		<distrisubmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></distrisubmask>
 	</div>
 </div>
 </template>
@@ -163,6 +168,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue' 
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import distrisubmask from '../proxiesDetails/distrisub_mask.vue'
 	export default {
 		name: 'user_management',
 		components: {
@@ -170,6 +176,7 @@
 			navs_left,
 			navs_tabs,
 			tableControle,
+			distrisubmask
 		},
 		data() {
 			return {
@@ -330,6 +337,10 @@
 				this.search = !this.search;
 				this.down = !this.down,
 				this.up = !this.up
+			},
+			//查看
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			// 导入
 			importData() {

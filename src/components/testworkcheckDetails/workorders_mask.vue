@@ -871,8 +871,8 @@
 												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button title="生成分包协议" type="text" size="small" @click="proagree(scope.row)">
-															 <i class="icon-send red"></i>
+														<el-button title="生成分包协议" type="text" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
+															<i class="icon-send red"></i>
 														</el-button>
 													</template>
 												</el-table-column>
@@ -1161,6 +1161,7 @@
 				showcreatereoprt:false,//生成报告按钮
 				reportvalue:{},//储存生成报告数据
 				currentuserinfo:{},//储存当前用户信息
+				showcreateagree:true,//生成分包协议按钮
 			};
 		},
 		methods: {
@@ -1757,6 +1758,7 @@
 							message: '生成成功',
 							type: 'success'
 						});
+						this.showcreateagree = false;
 					}
 				}).catch((err) => {
 					this.$message({
@@ -2099,6 +2101,11 @@
 							this.btnshow = false;
 						}
 					}
+					// for(var i = 0;i<res.data.WORKORDER_CONTRACTList.length;i++){
+					// 	if(res.data.WORKORDER_CONTRACTList[0].ISCREATED == '1'){
+					// 		this.showcreateagree = false;
+					// 	}
+					// }
 					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
 						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 					}

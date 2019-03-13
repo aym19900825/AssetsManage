@@ -315,7 +315,7 @@
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					console.log(res);
-					this.dataInfo.DEPTID = res.data.deptId;
+					// this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.createby = res.data.id;
 					this.username=res.data.username;
 					var date = new Date();
@@ -358,7 +358,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					console.log(res.data.id);
-					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+					// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.updateby = res.data.id;
 					var date = new Date();
 					this.dataInfo.updatedate = this.$moment(date).format("YYYY-MM-DD");

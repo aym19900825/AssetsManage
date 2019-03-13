@@ -680,7 +680,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验报告" name="sixth">
 											<el-table :data="workorderForm.WORKORDER_REPORTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_REPORTList', order: 'descending'}">
-												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="150px">
+												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="320px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
@@ -711,15 +711,15 @@
 													</template>
 												</el-table-column> -->
 
-												<el-table-column prop="VERSION" label="版本" sortable width="120px">
+												<!-- <el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
-														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
 														</el-input>
 														<span v-else>{{scope.row.VERSION}}</span>
-														<!-- </el-form-item> -->
+														</el-form-item>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column fixed="right" label="操作" width="150px">
 													<template slot-scope="scope">
 													  <el-button title="编辑" type="text" size="small">
@@ -728,10 +728,10 @@
 													  <el-button title="打印" type="text" size="small">
 														<i class="icon-print"></i>
 													  </el-button>
-													  <el-button title="下载" type="text" size="small">
+													  <!-- <el-button title="下载" type="text" size="small">
 														<i class="icon-arrow-down-circle"></i>
-													  </el-button>
-													  <el-button title="查看" type="text" size="small">
+													  </el-button> -->
+													  <el-button title="查看" type="text" size="small" @click="lookoverreport(scope.row)">
 														<i class="icon-file-text"></i>
 													  </el-button>
 													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-show="btnshow">
@@ -1147,6 +1147,8 @@
 				sendchilddata:[],//子表已有的值
 				pronums:[],
 				showcreatereoprt:false,//生成报告按钮
+				reportvalue:{},//储存生成报告数据
+				currentuserinfo:{},//储存当前用户信息
 			};
 		},
 		methods: {
@@ -2006,7 +2008,24 @@
 					}
 				}
 			},
+			//查看报告
+			lookoverreport(item){
+				this.detailgetData();
+				var url = this.po_url+"/show?fileid=" +item.FILEID
+				+ '&userid=' + this.currentuserinfo.id
+				+ '&username=' + this.currentuserinfo.username
+				+ '&deptid=' + this.currentuserinfo.deptId
+				+ '&deptfullname=' + this.currentuserinfo.deptName
+				window.open(url); 
+
+
+				// this.userid = this.currentuserinfo.id;
+	            //     this.username = this.currentuserinfo.username;
+				// 	this.deptid = this.currentuserinfo.deptId;
+				// 	this.deptfullname = this.currentuserinfo.deptName;
+			},
 			reportdatavalue(value){
+				this.reportvalue = value;//储存生成报告数据
 				console.log(value);
 				this.workorderreportid = value.id;
                 console.log(res);
@@ -2306,7 +2325,12 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-	                    this.username = res.data.username;
+					console.log(res.data);
+					this.currentuserinfo = res.data;
+				 	// this.userid = res.data.id;
+	                this.username = res.data.username;
+					// this.deptid = res.data.deptId;
+					// this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',

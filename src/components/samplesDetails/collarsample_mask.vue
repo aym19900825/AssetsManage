@@ -238,7 +238,7 @@
 			<!-- 样品序号 Begin -->
 			<el-dialog :modal-append-to-body="false" title="样品序号" height="300px" :visible.sync="dialogsamplenum" width="80%" :before-close="handleClose3">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table ref="table" :data="samplenumList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table ref="table" :data="samplenumList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplenumList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
@@ -444,7 +444,7 @@
 			},
 			//样品编号
 			getsample(){
-				this.requestData();
+				this.requestData2();
 				this.getSampleList();
 				this.dialogsample = true;
 			},
@@ -490,13 +490,14 @@
 						message: '未选择数据',
 						type: 'warning'
 					});
-				}else if(this.selUser.length > 1){
-					this.$message({
-						message: '不可选择多条数据',
-						type: 'warning'
-					});
 				}else{
-					this.samplesForm.ITEM_STEP = this.selUser[0].ITEM_STEP;
+					var num = [];
+					var nums = '';
+					for(var i = 0;i<this.selUser.length;i++){
+						num.push(this.selUser[i].ITEM_STEP);
+					}
+					nums = num.toString(',');
+					this.samplesForm.ITEM_STEP = nums;
 					this.dialogsamplenum = false;
 				}
 			},
@@ -669,6 +670,7 @@
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
+								this.falg = true;
 								this.$message({
 									message: '保存成功',
 									type: 'success'
@@ -683,10 +685,7 @@
 								type: 'error'
 							});
 						});
-						console.log(23333);
-						console.log(this.falg);
-						this.falg = true;
-						console.log(this.falg);
+						
 					} else {
 						this.show = true;
 						this.$message({
@@ -699,10 +698,7 @@
 			},
 			saveAndUpdate(samplesForm){
 				this.save(samplesForm);
-				console.log(11111);
-				console.log(this.falg);
 				if(this.falg){
-					console.log(this.falg);
 					this.show = false;
 				}
 				// this.$emit('request');

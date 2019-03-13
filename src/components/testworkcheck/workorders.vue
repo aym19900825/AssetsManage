@@ -808,12 +808,12 @@
 		    },
 		    //树和表单之间拖拽改变宽度
 			treeDrag(){
-				var middleWidth=9,
+				var middleWidth=5,
 				left = document.getElementById("left"),
 				right =  document.getElementById("right"), 
 				middle =  document.getElementById("middle"); 
 				middle.style.left = left.clientWidth + 'px';
-				right.style.left = left.clientWidth + 10 + 'px';
+				right.style.left = left.clientWidth + 5 + 'px';
 				middle.onmousedown = function(e) { 
 					var disX = (e || event).clientX; 
 					middle.left = middle.offsetLeft; 

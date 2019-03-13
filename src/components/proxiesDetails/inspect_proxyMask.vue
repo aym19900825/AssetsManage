@@ -59,7 +59,6 @@
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')">
 													</el-button>
 												</el-input>
-
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

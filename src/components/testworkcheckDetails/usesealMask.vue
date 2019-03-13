@@ -292,6 +292,7 @@
 				sealUse:'sealUse',//appname
 				dataid:'',
 				username:'',
+				
 			};
 		},
 		methods: {

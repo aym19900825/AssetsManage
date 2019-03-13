@@ -215,16 +215,22 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.WORK_INSTRUCTION.DEPARTMENT = '';
-					this.WORK_INSTRUCTION.DEPTID = res.data.deptId;
-					this.WORK_INSTRUCTION.ENTERBY = res.data.id;
-					var date = new Date();
-					this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-
+					//判断新建和修改时创建人/时间/机构和修改人/时间的变化
+					if(opt == 'new'){
+						this.WORK_INSTRUCTION.DEPTID = res.data.deptId;//创建人机构
+						this.WORK_INSTRUCTION.ENTERBY = res.data.id;//创建人
+						var date = new Date();
+						this.WORK_INSTRUCTION.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//创建时间
+					}
+					if(opt == 'edit'){
+						this.WORK_INSTRUCTION.CHANGEBY = res.data.id;//修改人
+						var date = new Date();
+						this.WORK_INSTRUCTION.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//修改时间
+					}
 					if( opt!='new' ){
 						//深拷贝数据
 						let _obj = JSON.stringify(this.WORK_INSTRUCTION);
@@ -238,7 +244,8 @@
 					});
 				});
 			},
-			//点击按钮显示弹窗
+			
+			//点击添加按钮显示弹窗
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -257,7 +264,7 @@
 					'recordid': 1,
 					'appid': 10
 				};
-				this.getUser('new');
+				this.getUser('new');//新建时当前用户
 //				this.show = true;
 			},
 			// 这里是修改
@@ -273,7 +280,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.getUser();
+				this.getUser('edit');//修改时当前用户
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';

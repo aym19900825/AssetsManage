@@ -180,16 +180,22 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPARTMENT = '';
-					this.CATEGORY.DEPTID = res.data.deptId;
-					this.CATEGORY.ENTERBY = res.data.id;
-
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-
-					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					//判断新建和修改时创建人/时间/机构和修改人/时间的变化
+					if(opt == 'new'){
+						this.CATEGORY.DEPTID = res.data.deptId;//创建人机构
+						this.CATEGORY.ENTERBY = res.data.id;//创建人
+						var date = new Date();
+						this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//创建时间
+					}
+					if(opt == 'edit'){
+						this.CATEGORY.CHANGEBY = res.data.id;//修改人
+						var date = new Date();
+						this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//修改时间
+					}
 					if(opt!='new'){
 						let _obj = JSON.stringify(this.CATEGORY);
 						this.category = JSON.parse(_obj);
@@ -201,7 +207,7 @@
 					});
 				});
 			},
-			//点击按钮显示弹窗
+			//点击添加按钮显示弹窗
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;

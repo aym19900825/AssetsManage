@@ -80,7 +80,7 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="8">
-								<el-form-item label="统一信用代码/组织机构代码" prop="CODE" label-width="190px">
+								<el-form-item label="组织机构代码" prop="CODE" label-width="190px">
 									<el-input v-model="searchList.CODE">
 									</el-input>
 								</el-form-item>
@@ -135,8 +135,8 @@
 							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<!-- <el-table-column label="统一信用代码/组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一信用代码/组织机构代码')!=-1"> -->
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一信用代码/组织机构代码')!=-1">
+							<!-- <el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1"> -->
+							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
 									</p>
@@ -211,7 +211,7 @@
 					label: '不活动'
 				}],
 				checkedName: [
-					'统一信用代码/组织机构代码',
+					'组织机构代码',
 					'单位名称',
 					'联系地址',
 					'类型',
@@ -221,7 +221,7 @@
 				],
 				tableHeader: [
 					{
-						label: '统一信用代码/组织机构代码',
+						label: '组织机构代码',
 						prop: 'CODE'
 					},
 					{

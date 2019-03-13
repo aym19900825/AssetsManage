@@ -223,19 +223,27 @@
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.testingForm.DEPARTMENT = '';
-					this.testingForm.DEPTID = res.data.deptId;
-					this.testingForm.ENTERBY = res.data.id;
-					var date=new Date();
-					this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					//判断新建和修改时创建人/时间/机构和修改人/时间的变化
+					if(opt == 'new'){
+						this.testingForm.DEPTID = res.data.deptId;//创建人机构
+						this.testingForm.ENTERBY = res.data.id;//创建人
+						var date = new Date();
+						this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//创建时间
+					}
+					if(opt == 'edit'){
+						this.testingForm.CHANGEBY = res.data.id;//修改人
+						var date = new Date();
+						this.testingForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//修改时间
+					}
 					if(opt != 'new'){
 						//深拷贝数据
 						let _obj = JSON.stringify(this.testingForm);
 						this.TESTINGFORM = JSON.parse(_obj);
 					}
-					this.docParm.userid = res.data.id;
-					this.docParm.username = res.data.username;
-					this.docParm.deptid = res.data.deptId;
-					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err)=>{
 					this.$message({
 						message:'网络错误，请重试',
@@ -245,7 +253,6 @@
 				
 			},
 			visible() {//添加内容时从父组件带过来的
-				this.getUser('new');
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'new';
@@ -266,6 +273,7 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.getUser('new');//新建时当前用户
             	// this.show = true;
 			},
 			detail() { //修改内容时从父组件带过来的
@@ -282,8 +290,7 @@
 				this.statusshow2 = true;
 //				this.testingForm.STATUS=this.testingForm.STATUS=="1"?'活动':'不活动';
 				this.show = true;
-
-				this.getUser('edit');
+				this.getUser('edit');//修改时当前用户
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';

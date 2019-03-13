@@ -43,45 +43,44 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="委托单位编号" prop="VENDOR" label-width="110px">
-												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="委托单位名称" prop="V_NAME" label-width="110px">
-												<el-input v-model="samplesForm.V_NAME" :disabled="true"></el-input>
+												<el-input v-model="samplesForm.V_NAME" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')" :disabled="noedit"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
-										</el-row>
-										<el-row>
-										<el-col :span="8">
-											<el-form-item label="生产单位编号" prop="PRODUCT_COMPANY" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-												<el-input v-model="samplesForm.P_NAME" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="110px">
-												<el-input v-model="samplesForm.DESCRIPTION" :disabled="true"></el-input>
+										<el-col :span="16">
+											<el-form-item label="委托单位组织机构代码" prop="VENDOR" label-width="180px">
+												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
+											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
+												<el-input v-model="samplesForm.P_NAME" :disabled="noedit">
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"  :disabled="noedit"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="16">
+											<el-form-item label="生产单位组织机构代码" prop="PRODUCT_COMPANY" label-width="180px">
+												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="110px">
+												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -96,6 +95,11 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8">
+											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
+												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
 										<!-- <el-col :span="8">
 											<el-form-item label="类别" prop="TYPE" label-width="110px">
 												<el-input v-model="samplesForm.TYPE" :disabled="true">
@@ -203,9 +207,9 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2">								
-									<div class="table-func">
+									<div class="table-func" v-show="!viewtitle">
 										<span><i class="red font16">*</i>此处是按样品数量生成的列表行</span>
-										<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
+										<el-button type="success" size="mini" round @click="addfield">
 											<i class="icon-start"></i>
 											<font>生成</font>
 										</el-button>
@@ -224,7 +228,7 @@
 									      </template>
 									    </el-table-column>
 		
-									    <el-table-column label="样品编号" sortable width="170px" prop="ITEMNUM" >
+									    <el-table-column label="样品编号" sortable width="220px" prop="ITEMNUM" >
 									      <template slot-scope="scope">
 									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEMNUM" :disabled="edit" placeholder="自动获取">
 									      	</el-input>
@@ -232,7 +236,7 @@
 									      </template>
 									    </el-table-column>
 
-									    <el-table-column label="样品序号" sortable width="170px" prop="ITEM_STEP">
+									    <el-table-column label="样品序号" sortable width="120px" prop="ITEM_STEP">
 									      <template slot-scope="scope">
 									      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ITEM_STEP" :disabled="true"></el-input>
 									      	<span v-show="!scope.row.isEditing">{{scope.row.ITEM_STEP}}</span>
@@ -241,7 +245,7 @@
 
 										<el-table-column prop="SN" label="单件码" sortable>
 									      <template slot-scope="scope">
-											  	<!-- <el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required: true, message: '不能为空', trigger: 'blur'}"> -->
+											  	<!-- <el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required:true, message: '不能为空', trigger:'blur'}"> -->
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请填写">
 													</el-input>
 													<span v-else="v-else">{{scope.row.SN}}</span>
@@ -439,6 +443,9 @@
 			</el-dialog>
 			<!-- 收样人、接样人-弹出框 End -->
 
+			<!--受检企业-->
+			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendnames="appendnames" @appendcode="appendcode" @appendcodes="appendcodes"></enterprisemask>
+
 			<!-- 所属类别-弹出框子组件  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 
@@ -452,11 +459,13 @@
 	import Config from '../../config.js'
 	import categorymask from '../common/common_mask/categorylistmask.vue'//所属类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
+	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	export default {
 		name: 'samples_mask',
 		components: {
 			categorymask,
 			productmask,
+			enterprisemask,
 		},
 		data() {
 			
@@ -501,6 +510,7 @@
 				viewtitle: false, //查看弹出框title
 				noviews: true, //保存的按钮
 				views: false,
+				customid:"",
 				samplesForm:{
 					ITEM_LINEList:[]
 				},
@@ -512,29 +522,28 @@
 				commentArr:{},//下拉加载
 				tips:'1',
 				rules: { //定义需要校验数据的名称
-					PROXYNUM: [{ required: true, trigger: 'blur', message: '必填'}],//委托书编号
-					VENDOR: [{ required: true, trigger: 'blur', message: '必填'}],//委托单位编号
-					V_NAME: [{ required: true, trigger: 'blur', message: '必填'}],//委托单位名称
-					PRODUCT_COMPANY: [{ required: true, trigger: 'blur', message: '必填'}],//生产单位编号
-					P_NAME: [{ required: true, trigger: 'blur', message: '必填'}],//生产单位名称
-					DESCRIPTION: [{ required: true, trigger: 'blur', message: '必填'}],//样品名称
+					// PROXYNUM: [{ required:true, trigger:'blur', message:'必填'}],//委托书编号
+					VENDOR: [{ required:true, trigger:'blur', message:'必填'}],//委托单位编号
+					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托单位名称
+					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
+					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
+					DESCRIPTION: [{ required:true, trigger:'blur', message:'必填'}],//样品名称
 					PRODUCT_CODE: [
-						{ required: true, trigger: 'blur', message: '必填',},
-						{ trigger: 'blur', validator: this.Validators.isWorknumber},
+						{ required:false, trigger:'blur', validator: this.Validators.isWorknumber},
 					],//产品标识代码
-					SN: [{ required: true, message: '必填', trigger: 'blur' }],
-					TYPE: [{ required: true, trigger: 'blur', message: '必填'}],//类别
-					QUATITY: [{ required: true, trigger: 'blur', validator: this.Validators.isInteger}],
-					ACCEPTDATE: [{required: true, message: '请选择', trigger: 'change' }],
-					ACCEPT_DATE: [{required: true, message: '请选择', trigger: 'change' }],
-					RECIP_DATE: [{ required: true, message: '请选择', trigger: 'change' }],
-					STATUSDATE: [{required: true, message: '请选择', trigger: 'change' }],
-					CJDW: [{required: true, message: '请选择', trigger: 'change' }],
-					PRODUCT_TYPE: [{required: true, message: '请选择', trigger: 'blur' }],
-					PRODUCT: [{required: true, message: '请选择', trigger: 'blur' }],
-					MODEL: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//型号
-					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
-					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
+					SN: [{ required:true, message:'必填', trigger:'blur' }],
+					TYPE: [{ required:true, trigger:'blur', message:'必填'}],//类别
+					QUATITY: [{ required:true, trigger:'blur', validator: this.Validators.isInteger}],
+					ACCEPTDATE: [{required:true, message: '请选择', trigger:'change' }],
+					ACCEPT_DATE: [{required:true, message: '请选择', trigger:'change' }],
+					RECIP_DATE: [{ required:true, message: '请选择', trigger:'change' }],
+					STATUSDATE: [{required:true, message: '请选择', trigger:'change' }],
+					CJDW: [{required:true, message: '请选择', trigger:'change' }],
+					PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
+					PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
+					MODEL: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//型号
+					OTHER: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//其它资料
+					MEMO: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//备注
 				},
 				selectDept:[],//承检单位
 			};
@@ -543,6 +552,23 @@
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
+			},
+			//委托单位组织机构代码
+			appendcode(value){
+				this.samplesForm.VENDOR=value;
+			},
+			//委托单位
+			appendname(value){
+				this.samplesForm.V_NAME = value;//名称
+			},
+
+			//生成单位
+			appendnames(value){
+				this.samplesForm.P_NAME=value;
+			},
+			//生成单位组织机构代码
+			appendcodes(value){
+				this.samplesForm.PRODUCT_COMPANY=value;//委托单位编号
 			},
 			//承检单位
 			getCompany() {
@@ -589,6 +615,14 @@
 					});
 				}else{
 					this.$refs.productchild.visible(this.samplesForm.P_NUM,this.samplesForm.CJDW);
+				}
+			},
+			//委托单位名称
+			getCustomer(type) {
+				if(type == 'vname'){
+					this.$refs.enterprisechild.visible(type , this.samplesForm.appendid);
+				}else{
+					this.$refs.enterprisechild.visible(type);
 				}
 			},
 			//接到产品的值
@@ -724,7 +758,7 @@
 					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
-					console.log(res.data);
+					// console.log(res.data);
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
 						res.data.ITEM_LINEList[i].isEditing = false;
 					}
@@ -957,6 +991,7 @@
 									type: 'error'
 								});
 							});
+							this.show = false;
 							this.falg = true;
 						}
 					} else {
@@ -1129,7 +1164,7 @@
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 					this.deptid = res.data.deptId;
 					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.deptid;
-					console.log(this.deptid);
+					// console.log(this.deptid);
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {

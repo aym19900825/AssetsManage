@@ -144,6 +144,7 @@
 		},
 		data() {
 			return {
+				dataInfo:{},
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画

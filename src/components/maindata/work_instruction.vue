@@ -15,38 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>	
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-file-text1"></i>报表
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -157,6 +128,7 @@
 		},
 		data() {
 			return {
+				btn:'',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -337,20 +309,49 @@
 			},
 			//请求点击
 		    getbtn(item){
+		    	var isshowbtn=this.btn;
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有添加的权限',
+						type: 'warning'
+					});
+					}else{
+                       this.openAddMgr();
+					}
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有修改的权限',
+						type: 'warning'
+					});
+					}else{
+				        this.modify();
+					}
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有彻底删除的权限',
+						type: 'warning'
+					});
+					}else{
+      					this.physicsDel();
+					}
+				}else if(item.name=="删除"){
+					if(isshowbtn=='0'){
+					this.$message({
+						message: '您没有删除的权限',
+						type: 'warning'
+					});
+				}else{
+					this.deluserinfo();
+					}
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
 		    	 this.download();
 		    	}else if(item.name=="导出"){
 				this.exportData();
-				}else if(item.name=="删除"){
-		    	 this.deluserinfo();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
 				}else if(item.name=="打印"){
@@ -609,11 +610,23 @@
 							});
 				})
 
-		    },
+			},
+			getdept(){
+				var url = this.basic_url + '/api-user/users/findDeptAttr';
+				this.$axios.get(url, {}).then((res) => {
+					this.btn=res.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
+			}
 		},
 		mounted() {
 			this.requestData();
 			this.getCompany();
+			this.getdept();
 		},
 	}
 </script>

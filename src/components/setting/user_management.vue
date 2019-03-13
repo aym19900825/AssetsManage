@@ -180,7 +180,7 @@
 			</div>
 		</el-dialog>
 		<!-- 查看权限 -->
-		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose2">
+		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
 			<!--设置产品类别和产品-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >
@@ -351,9 +351,10 @@
 				},
 			resetTree(){
 				this.Access = false;
-				this.workData = [];
-				this.annualData = [];
-				this.workData = [];
+				this.$refs.testproduct.setCheckedKeys([]);
+				this.$refs.product.setCheckedKeys([]);
+				this.$refs.annual.setCheckedKeys([]);
+				this.$refs.work.setCheckedKeys([]);
 			},
 			resetNewpwd(){
 				this.passdialog = false;
@@ -517,9 +518,9 @@
 					this.permissions=true;
 				}).catch(error => {
 					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+								message: '网络错误，请重试',
+								type: 'error'
+							});
 				})
 				}
 			},
@@ -617,7 +618,7 @@
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.datas!=null){
 						this.testingproductData = res.data.datas;
-						this.recursive(res.data.datas,arr);
+						this.recursive(res.data.datas,arr);                                 
 						this.$nextTick(() => {
 							this.testproductsetChecked(arr);
 						});
@@ -691,16 +692,20 @@
 			}
 			for(var c=0;c<products.length;c++){
 				if(products[c].type!="dept"&&products[c].type!="producttype"){
-					if(!!products[c].id){
-						product.push(products[c].id); 
-					}
+                                        if(!!products[c].id){
+                                                    product.push(products[c].id); 
+                                        }
+
+					 // product.push(products[c].id); 
 				}else if(products[c].type!="dept"&&products[c].type!="product"){
-					productType.push(products[c].id);
+					  productType.push(products[c].id);
 				}	
 			}
 			for(var c=0;c<testingproduct.length;c++){
 				if(testingproduct[c].type!="dept"&&testingproduct[c].type!="producttype"){
-					  checkProduct.push(testingproduct[c].id); 
+                                        if(!!testingproduct[c].id){
+					  checkProduct.push(testingproduct[c].id);
+                                        }
 				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
 					  checkProductType.push(testingproduct[c].id);
 				}	
@@ -709,16 +714,25 @@
 			taskType = taskType.join(',');
 			product = product.join(',');
 			productType = productType.join(',');
+			checkProduct = checkProduct.join(',');
+			checkProductType = checkProductType.join(',');
  				var data = {
  					pmType:pmType,
 					taskType:taskType,
 					productType:productType,
 					product:product,
-					checkProduct,
-					checkProductType,
+					checkProduct:checkProduct,
+					checkProductType:checkProductType,
+          userId:this.selUser[0].id
 				}
-				var url = this.basic_url + '/api-user/users/setAuth?pmType='+pmType+"&taskType="+taskType+"&productType="+productType+"&product="+product+"&checkProduct="+checkProduct+"&checkProductType="+checkProductType+"&userId="+this.selUser[0].id;
-				this.$axios.get(url, {}).then((res) => {
+				var url = this.basic_url + '/api-user/users/setAuth';
+				this.$axios.post(url, {pmType:pmType,
+					taskType:taskType,
+					productType:productType,
+					product:product,
+					checkProduct:checkProduct,
+					checkProductType:checkProductType,
+                                          userId:this.selUser[0].id}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '操作成功',
@@ -726,7 +740,9 @@
 						});
 					}
 					this.requestData();
-					this.Access = false;
+          this.resetTree();//置空数据
+					//this.Access = false;
+                                        
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -1007,21 +1023,12 @@
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();
+						this.requestData();
 					})
 					.catch(_ => {
-					console.log('取消关闭');
-					$('.v-modal').hide();
-				});
-			},
-			handleClose2(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-					console.log('取消关闭');
-					$('.v-modal').hide();
-				});
+				console.log('取消关闭');
+				$('.v-modal').hide();
+			});
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -1180,7 +1187,9 @@
 				}; 
 			}
 		},
-		
+		beforeMount() {
+			
+		},
 		mounted() {	
 			// 在页面挂载前就发起请求
 			this.requestData();

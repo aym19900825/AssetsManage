@@ -15,9 +15,12 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style"  @click="getbtn(item)">
+							
+							<!-- <button v-for="item in buttons" :key='item.id' style='color:red;' v-if="this.btn=='0'&&(item.name=='添加'||item.name=='修改'||item.name=='删除'||item.name=='彻底删除')" @click="getbtn(item)"> -->
 								<i :class="item.icon"></i>{{item.name}}
 							</button>
+
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
 										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
@@ -162,6 +165,7 @@
 		},
 		data() {
 			return {
+				btn:'',
 				reportData:{},//报表的数据
 				// up2down:'down',
 				basic_url: Config.dev_url,
@@ -388,18 +392,48 @@
 			},
 			//请求点击
 		    getbtn(item){
+			var isshowbtn=this.btn;
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有添加的权限',
+						type: 'warning'
+					});
+					}else{
+                       this.openAddMgr();
+					}
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有修改的权限',
+						type: 'warning'
+					});
+					}else{
+				        this.modify();
+					}
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+					if(isshowbtn=='0'){
+                       this.$message({
+						message: '您没有彻底删除的权限',
+						type: 'warning'
+					});
+					}else{
+      					this.physicsDel();
+					}
+				}else if(item.name=="删除"){
+					if(isshowbtn=='0'){
+					this.$message({
+						message: '您没有删除的权限',
+						type: 'warning'
+					});
+				}else{
+					this.deluserinfo();
+					}
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
 		    	 this.download();
-		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    	
 		    	}else if(item.name=="配置关系"){
 		    	 this.Configuration();
 		    	}else if(item.name=="报表"){
@@ -407,6 +441,7 @@
 				}else if(item.name=="打印"){
 				 this.Printing();
 				}
+				
 		    },
 			//添加类别
 			openAddMgr() {
@@ -689,11 +724,25 @@
 						type: 'error'
 					});
 				})
-		    },
+			},
+			//根据机构设置按钮权限
+			getdept(){
+				var url = this.basic_url + '/api-user/users/findDeptAttr';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.btn=res.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})
+			}
 		},
 		mounted() {
 			this.requestData();
 			this.getCompany();
+			this.getdept();
 		}
 	}
 </script>

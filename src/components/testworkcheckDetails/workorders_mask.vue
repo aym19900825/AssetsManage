@@ -565,13 +565,13 @@
 													      	</i>
 													      </template>
 													    </el-table-column>
-														<el-table-column label="模板编号" sortable prop="D_NUM">
+														<el-table-column label="模板来源" sortable prop="DATA_TYPE">
 													      <template slot-scope="scope">
-													      	<el-select v-if="scope.row.isEditing" v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
+													      	<el-select v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
 																<el-option label="基础数据选择" value="1"></el-option>
 																<el-option label="链条选择" value="2"></el-option>															
 															</el-select>
-													      	<span v-else>{{scope.row.DATA_TYPE}}</span>
+													      	<!-- <span v-else>{{scope.row.DATA_TYPEDesc}}</span> -->
 													      </template>
 													    </el-table-column>
 														<el-table-column label="模板编号" sortable prop="D_NUM">
@@ -682,22 +682,22 @@
 											<el-table :data="workorderForm.WORKORDER_REPORTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_REPORTList', order: 'descending'}">
 												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="320px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'">
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'"> -->
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
 																<el-button slot="append" icon="el-icon-search"></el-button>
 															</el-input>
 															<span v-else>{{scope.row.REPORTNUM}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="REPORTNAME" label="报告名称" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNAME" placeholder="请输入">	
 														</el-input>
 														<span v-else>{{scope.row.REPORTNAME}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												
@@ -824,29 +824,29 @@
 
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button>
 															</el-input>
 														<span v-else>{{scope.row.P_REMARKS}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
 														<span v-else>{{scope.row.REQUIRES}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
 														<span v-else>{{scope.row.Q_TYPE}}</span>
-														</el-form-item>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">

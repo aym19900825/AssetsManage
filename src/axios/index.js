@@ -42,8 +42,8 @@ axios.interceptors.response.use(
           router.push({ path: '/' });
         case 403:
           router.push({ path: '/' });
-        case 404:
-          router.push({ path: '/' });
+        // case 404:
+        //   router.push({ path: '/' });
       }
     }
     return Promise.reject(error.response.data);

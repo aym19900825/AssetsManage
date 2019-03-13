@@ -2066,7 +2066,6 @@
 				this.viewtitle=false;
 				this.edit = true;
 				this.noedit = false;
-				
 			},
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
@@ -2301,7 +2300,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {
 					params: data
 				}).then((res) => {
-					console.log(res);
 					//this.userList = res.data.data;
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -2351,7 +2349,7 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
-			this.getuser();//用户
+			// this.getuser();//用户
 			this.getCompany();
 			this.getUser();
 		},

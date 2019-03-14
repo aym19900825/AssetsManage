@@ -15,26 +15,9 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -392,22 +375,10 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
-			// 导入
-			importData() {
-				
-			},
-			// 导出
-			exportData() {
-				
-			},
 			//报表
 			reportdata(){
 				this.reportData.app=this.subcontrac;
 				this.$refs.reportChild.visible();
-			},
-			// 打印
-			Printing() {
-				
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -422,7 +393,6 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -518,7 +488,6 @@
 				return row.enabled;
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
-				console.log();
 				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
 			// 点击节点
@@ -582,23 +551,19 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
 							});
 				})
-
 		    },
 		    //树和表单之间拖拽改变宽度
 			treeDrag(){
@@ -630,17 +595,21 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
-			}
+			},
+			//代办跳转
+			getRouterData() {
+				// 只是改了query，其他都不变
+				this.id = this.$route.query.bizId;
+				this.$refs.child.view(this.id);
+			},
 		},
 		mounted(){
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			this.requestData();
 			this.getKey();
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
+            if(this.$route.query.bizId != undefined) {
+				this.getRouterData();
+			}
         },
 	
 	}

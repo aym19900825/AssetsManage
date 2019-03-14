@@ -191,11 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-if="user.username == 'admin'" v-model="user.roleId" multiple :disabled="edit" default-first-option value-key="item.id" style="width: 100%;">
-													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
-												</el-select>
-
-												<el-select v-else v-model="user.roleId" multiple :disabled="noedit" default-first-option value-key="item.id" style="width: 100%;">
+												<el-select v-model="user.roleId" multiple :disabled="!edit" default-first-option value-key="item.id" style="width: 100%;" @change="showUserRole">
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -675,6 +671,9 @@
 			};
 		},
 		methods: {
+			showUserRole(){
+				console.log(this.user.roleId);
+			},
 			resetTree(){
 				this.dialogVisible = false;
 				this.resourceCheckedKey = [];
@@ -1096,12 +1095,21 @@
 								});
 								this.show=true;
 								user.roleId = user.roleId.split(',');
+								var roleId = this.user.roleId;
+								for(var i=0; i< roleId.length; i++){
+									roleId[i] =  parseInt(roleId[i]);
+								}
 							}
 						}).catch((err) => {
 							this.$message({
 								message: '网络错误，请重试',
 								type: 'error'
 							});
+							user.roleId = user.roleId.split(',');
+							var roleId = this.user.roleId;
+							for(var i=0; i< roleId.length; i++){
+								roleId[i] =  parseInt(roleId[i]);
+							}
 						});
 					} else {
 						this.show = true;

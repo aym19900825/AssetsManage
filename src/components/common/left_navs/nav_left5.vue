@@ -105,7 +105,7 @@ export default {
 				}
 			}).catch((wrong) => {
 				this.$message({
-					message: '网络错误，请重试左侧1',
+					message: '网络错误，请重试左侧',
 					type: 'error'
 				});
 			});

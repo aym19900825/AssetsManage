@@ -26,7 +26,7 @@
 
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="item.disabled"></el-date-picker>
 	                                    <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'&&item.prop == 'C_PLANNUM'" :disabled="true" placeholder="自动生成"></el-input>
-										 <el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'&&item.prop != 'C_PLANNUM'" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.type == 'input'&&item.prop != 'C_PLANNUM'" :disabled="noedit"></el-input>
 	                                </el-form-item>
 	                            </el-collapse-item>
 
@@ -46,7 +46,7 @@
 										<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
-												<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-edit" v-else @click="changeEdit(scope.row)"></i>
 											</template>
 										</el-table-column>
 
@@ -63,7 +63,7 @@
 														:value="item.ID">
 														</el-option>
 													</el-select>
-	                                                <span v-else="v-else">{{scope.row.ASSETNUM}}</span>
+	                                                <span v-else>{{scope.row.ASSETNUM}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -73,7 +73,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.A_NAME'">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.A_NAME" placeholder="自动获取" disabled>
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.A_NAME}}</span>
+	                                                <span v-else>{{scope.row.A_NAME}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -83,7 +83,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.MODEL'">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="自动获取" disabled>
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.MODEL}}</span>
+	                                                <span v-else>{{scope.row.MODEL}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -93,7 +93,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.PM_ZQ'" :rules="{required: true, trigger: 'blur', message: '不能为空，且只能为数字'},">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_ZQ" placeholder="请输入溯源周期">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.PM_ZQ}}</span>
+	                                                <span v-else>{{scope.row.PM_ZQ}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -103,7 +103,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.PM_YXQ'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.PM_YXQ" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.PM_YXQ}}</span>
+	                                                <span v-else>{{scope.row.PM_YXQ}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -113,7 +113,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.C_PLAN_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.C_PLAN_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.C_PLAN_DATE}}</span>
+	                                                <span v-else>{{scope.row.C_PLAN_DATE}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -123,7 +123,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.COMPDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.COMPDATE}}</span>
+	                                                <span v-else>{{scope.row.COMPDATE}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -133,7 +133,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.CHECKMEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKMEMO" placeholder="请输入核查结果">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.CHECKMEMO}}</span>
+	                                                <span v-else>{{scope.row.CHECKMEMO}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>

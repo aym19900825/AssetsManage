@@ -75,7 +75,7 @@
 												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
 													<template slot-scope="scope">
 														<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-														<i class="el-icon-edit" v-else="v-else"></i>
+														<i class="el-icon-edit" v-else></i>
 													</template>
 												</el-table-column>
 
@@ -85,7 +85,7 @@
 														<el-form-item :prop="'params.'+scope.$index + '.param'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.param" :disabled="noedit">
 														</el-input>
-														<span v-else="v-else">{{scope.row.param}}</span>
+														<span v-else>{{scope.row.param}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -95,7 +95,7 @@
 														<el-form-item :prop="'params.'+scope.$index + '.label'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.label" placeholder="请输入参数名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.label}}</span>
+														<span v-else>{{scope.row.label}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -105,7 +105,7 @@
 														<el-form-item :prop="'params.'+scope.$index + '.defaultVal'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.defaultVal" placeholder="请输入分包方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.defaultVal}}</span>
+														<span v-else>{{scope.row.defaultVal}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>-->
@@ -116,7 +116,7 @@
 													<el-select v-if="scope.row.isEditing" v-model="scope.row.required" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label"></el-option>
 										    		</el-select>
-														<span v-else="v-else">{{scope.row.requiredDesc}}</span>
+														<span v-else>{{scope.row.requiredDesc}}</span>
 												</el-form-item>
 													</template>
 												</el-table-column>
@@ -127,7 +127,7 @@
 														<el-select v-if="scope.row.isEditing" v-model="scope.row.type" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 														</el-select>
-														<span v-else="v-else">{{scope.row.typeDesc}}</span>
+														<span v-else>{{scope.row.typeDesc}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>

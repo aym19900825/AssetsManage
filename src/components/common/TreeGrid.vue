@@ -7,11 +7,7 @@
     stripe 
     :header-cell-style="rowClass" 
     :height="fullHeight" 
-    @selection-change="SelChange"
-    v-loading="loading"  
-		element-loading-text="加载中…"
-    element-loading-spinner="el-icon-loading"
-    element-loading-background="rgba(255, 255, 255, 0.9)">
+    @selection-change="SelChange">
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
@@ -25,11 +21,11 @@
         <span v-else-if="index===0" class="ms-tree-space"></span>
 
         <span v-if="index===0" title="点击查看详情" class="blue" @click="view(scope.row)">{{scope.row[column.dataIndex]}}</span>  
-        <span v-else>{{scope.row[column.dataIndex]}}</span>   
-
+        <span v-else>{{scope.row[column.dataIndex]}}</span>
 
       </template>
     </el-table-column>
+
     <el-table-column v-for="(column, index) in columns" :width="column.width" :key="column.dataIndex"
       :label="column.text" v-if="column.isShow && column.dataIndex == 'version'" align="right">
       <template slot-scope="scope">

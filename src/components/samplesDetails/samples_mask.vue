@@ -248,7 +248,7 @@
 											  	<!-- <el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required:true, message: '不能为空', trigger:'blur'}"> -->
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请填写">
 													</el-input>
-													<span v-else="v-else">{{scope.row.SN}}</span>
+													<span v-else>{{scope.row.SN}}</span>
 												<!-- </el-form-item> -->
 									      </template>
 									    </el-table-column>
@@ -256,7 +256,7 @@
 										<el-table-column prop="STATEDesc" label="样品状态" sortable width="170px">
 									      <template slot-scope="scope">
 									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATEDesc" placeholder="请输入内容" :disabled="true"></el-input>
-									      	<span v-else="v-else">{{scope.row.STATEDesc}}</span>
+									      	<span v-else>{{scope.row.STATEDesc}}</span>
 										  </template>
 									    </el-table-column>
 									    

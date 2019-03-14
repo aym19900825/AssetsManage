@@ -304,42 +304,7 @@
 														</template>
 													</el-table-column>
 													
-													<!-- <el-table-column prop="enterby" label="录入人" sortable width="120px">
-														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.enterbyName'">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.enterbyName" placeholder="请输入要求">
-																</el-input>
-																<span v-else>{{scope.row.enterbyName}}</span>
-															</el-form-item>
-														</template>
-													</el-table-column> -->
-													<!-- <el-table-column prop="enterdate" label="录入时间" sortable>
-														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.enterdate'">
-																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.enterdate" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
-																</el-date-picker>
-																<span v-else>{{scope.row.enterdate}}</span>
-															</el-form-item>
-														</template>
-													</el-table-column> -->
-													<!-- <el-table-column prop="status" label="信息状态" sortable width="120px">
-														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.status'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.status" placeholder="请输入要求">
-																</el-input>
-																<span v-else>{{scope.row.status}}</span>
-															</el-form-item>
-														</template>
-													</el-table-column> -->
-													<!--<el-table-column prop="VERSION" label="上传附件" sortable width="120px">
-											<template slot-scope="scope">
-												<el-form-item :prop="'user_qualifications.'+scope.$index + '.VERSION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入分包方名称">
-												</el-input>
-												<span v-else>{{scope.row.VERSION}}</span>
-												</el-form-item>
-											</template>
-										</el-table-column>-->
+												
 													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 														<template slot-scope="scope">
 															<el-button @click="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small">
@@ -499,7 +464,7 @@
 			<!--弹出-->
 
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
 			       <el-button @click="resetTree">取 消</el-button>
@@ -1044,35 +1009,14 @@
 				$(".mask_div").css("top", "100px");
 			},
 
-			//	保存users/saveOrUpdate
+			//保存users/saveOrUpdate
 			save(parameter) {
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						_this.user.enabled = true;
-						// _this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
-						// _this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
-						// user.sex = user.sex == '男' ? 1 : 0;
 						var roleId = [];
-						// if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
-						// 	var arr = [];
-						// 	user.roleId.forEach(function(item) {
-						// 		var roles = _this.selectData;
-						// 		for(var j = 0; j < roles.length; j++) {
-						// 			if(roles[j].id == item) {
-						// 				arr.push(roles[j]);
-						// 				roleId.push(roles[j].id);
-						// 				// roleId = roleId + roles[j].id + ",";
-						// 			}
-						// 		}
-						// 	});
-						// 	user.roleId = roleId;
-						// 	user.roles = arr;
-						// } else {
-						// 	user.roleId = '';
-						// 	user.roles = [];
-						// }
 						user.roleId = user.roleId.join(',');
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {

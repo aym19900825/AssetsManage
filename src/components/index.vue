@@ -58,8 +58,6 @@
 												</p>
 											</template>
 										</el-table-column>
-										<el-table-column label="App" sortable width="140px" prop="app">
-										</el-table-column>
 										<el-table-column label="当前环节" sortable width="160px" prop="name">
 										</el-table-column>
 										<el-table-column label="应用" sortable width="160px" prop="appDesc">
@@ -201,7 +199,7 @@ export default {
     },
   
 	methods: {
-		getTodoNum(num){
+		getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 			this.toDoNum = num;
 		},
 		//表头居中
@@ -294,12 +292,12 @@ export default {
 			this.requestData();
 		},
 		goto(item){
-					this.$store.dispatch('setMenuIdAct',item.id);
-					var _this = this;
+			this.$store.dispatch('setMenuIdAct',item.id);
+			var _this = this;
 	        var data = {
-							menuId: item.id,
-							roleId: _this.$store.state.roleid,
-						};
+				menuId: item.id,
+				roleId: _this.$store.state.roleid,
+			};
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
 				if(res.data!="undefined"&&res.data.length>0){
@@ -326,16 +324,16 @@ export default {
 					_this.$store.state.clickedNavs.push(item);
 					setTimeout(function(){
 						var left = $('.page-tabs').offset().left; 
-									//tabs总宽度
-									var tabW = $('.page-tabs-content').width();
-									//总区域内容宽度
-									var contentW = $('.content-tabs').width()-240;
-									if(tabW>contentW){
-										var poor=tabW-contentW;
-										$('.page-tabs').offset({
-													left: -poor
-											});
-									}
+						//tabs总宽度
+						var tabW = $('.page-tabs-content').width();
+						//总区域内容宽度
+						var contentW = $('.content-tabs').width()-240;
+						if(tabW>contentW){
+							var poor=tabW-contentW;
+							$('.page-tabs').offset({
+										left: -poor
+								});
+						}
 					},0);
 				}
 			}).catch((wrong) => {
@@ -361,7 +359,7 @@ export default {
 				}
 			}).catch((wrong) => {
 				this.$message({
-					message: '网络错误，请重试左侧1',
+					message: '网络错误，请刷新',
 					type: 'error'
 				});
 			});
@@ -413,9 +411,9 @@ export default {
 		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
 		this.$refs.navsTabs.showClick({
-                css: 'icon-user',
-                name: '首页',
-                url: '/index'})
+            css: 'icon-user',
+            name: '首页',
+            url: '/index'})
 		//默认请求roid
 		if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
 			var url = this.basic_url + '/api-user/roles/default';
@@ -442,7 +440,7 @@ export default {
 				});
 	        })
 		}
-      	this.getTodoNum();
+      	this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
 	},
 }
 

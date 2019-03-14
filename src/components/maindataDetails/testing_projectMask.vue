@@ -108,7 +108,7 @@
 											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-													<i class="el-icon-edit" v-else="v-else"></i>
+													<i class="el-icon-edit" v-else></i>
 												</template>
 											</el-table-column>
 											<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
@@ -119,7 +119,7 @@
 														<el-input v-if="scope.row.isEditing" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
 															<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
 														</el-input>
-														<span v-else="v-else">{{scope.row.C_NAME}}</span>
+														<span v-else>{{scope.row.C_NAME}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>

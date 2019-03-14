@@ -287,7 +287,7 @@
 				}
 			};
 			var validateDOCLINKS_NUM = (rule, value, callback) => {
-				console.log(this.testing_projectForm.DOCLINKS_NUM);
+				// console.log(this.testing_projectForm.DOCLINKS_NUM);
 				if(this.testing_projectForm.DOCLINKS_NUM === '') {
 					callback(new Error('请选择作业指导书'));
 				} else {
@@ -295,15 +295,15 @@
 				}
 			};
 			 //金额验证
-            var price=(rule, value, callback) => {//生产单位名称 
+				var price=(rule, value, callback) => {//生产单位名称 
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				console.log(value);
+				// console.log(value);
 				if(value != '' && value!=undefined){
 					if(exp.test(value)==false){ 
-	                    callback(new Error('请输入数字'));
-	              }else{
-	                    callback();
-	                }
+						callback(new Error('请输入数字'));
+					}else{
+						callback();
+						}
 				}else {
 					callback();
 				}
@@ -580,7 +580,6 @@
 					WORK_INSTRUCTIONList: []
 				},
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-//					this.testing_projectForm.DEPARTMENT = res.data.companyName;
 					this.testing_projectForm.DEPARTMENT = '';
 					this.testing_projectForm.DEPTID = res.data.deptId;
 					this.testing_projectForm.ENTERBY = res.data.id;
@@ -610,7 +609,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					console.log(res.data);
 					this.testing_projectForm.DEPARTMENT = '';
-					this.testing_projectForm.DEPTID = res.data.deptId;
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
@@ -625,7 +623,6 @@
 				});
 				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
 					for(var i=0;i<res.data.QUALIFICATIONList.length;i++){
 						res.data.QUALIFICATIONList[i].isEditing = false;
 					}
@@ -654,7 +651,6 @@
 			view(dataid) {
 				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data);
 					this.testing_projectForm = res.data;
 				}).catch((err) => {
 					this.$message({
@@ -834,8 +830,6 @@
 				this.show = true;
 			},
 			getpepole(item) {
-				console.log(233333312432342);
-				console.log(item);
 				this.peoplegrid = item;
 				var url = this.basic_url + '/api-user/users/qualifications';
 				this.$axios.get(url, {

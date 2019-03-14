@@ -378,7 +378,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import { Loading } from 'element-ui'

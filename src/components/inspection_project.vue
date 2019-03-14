@@ -55,7 +55,7 @@
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" :disabled="true"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else="v-else">{{scope.row.NUM}}</span>
+								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" :disabled="true"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else>{{scope.row.NUM}}</span>
 										</el-form-item>
 								      </template>
 								    </el-table-column>
@@ -65,7 +65,7 @@
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请选择" :disabled="true">
 								        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
-								        	</el-input><span v-else="v-else">{{scope.row.TYPE}}</span>
+								        	</el-input><span v-else>{{scope.row.TYPE}}</span>
 										</el-form-item>
 								      </template>
 								    </el-table-column>
@@ -78,7 +78,7 @@
 										<!-- <el-button type="text" size="medium" @click="modifyversion(scope.row)">
 								        	<i class="icon-edit" title="修改"></i>
 										</el-button> -->
-								        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
+								        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 								          <i class="icon-trash red"></i>
 								        </el-button>
 

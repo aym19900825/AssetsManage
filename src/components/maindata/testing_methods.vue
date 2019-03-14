@@ -406,6 +406,7 @@
 			},
 			//请求点击
 		    getbtn(item){
+				var isshowbtn= this.btn;
 		    	if(item.name=="添加"){
 					if(isshowbtn=='0'){
                        this.$message({

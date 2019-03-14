@@ -772,10 +772,10 @@
 				let that = this;
 				var url = this.basic_url + '/api-apps/appCustom/proxyTree/1';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data.datas;
-					this.treeData = this.transformTree(this.resourceData);
-					console.log(this.treeData);
+					if(this.resourceData!=null){
+						 this.treeData = this.transformTree(this.resourceData);
+					}
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',

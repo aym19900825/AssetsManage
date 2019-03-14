@@ -53,7 +53,7 @@
 										<el-table-column prop="iconOperation" fixed width="50px" v-show="!viewtitle">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-												<i class="el-icon-edit" v-else="v-else"></i>
+												<i class="el-icon-edit" v-else></i>
 											</template>
 										</el-table-column>
 										<el-table-column label="序号" sortable width="80px" label-width="150px" type="index">
@@ -62,77 +62,77 @@
 											<template slot-scope="scope">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ROWNUMBER" placeholder="请输入">
 													</el-input>
-													<span v-else="v-else">{{scope.row.ROWNUMBER}}</span>
+													<span v-else>{{scope.row.ROWNUMBER}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="COLNUMBER" label="行号" sortable width="120px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COLNUMBER" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.COLNUMBER}}</span>
+												<span v-else>{{scope.row.COLNUMBER}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="DATALENGTH" label="数据长度" sortable width="120px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DATALENGTH" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.DATALENGTH}}</span>
+												<span v-else>{{scope.row.DATALENGTH}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="DATATYPE" label="值类型" sortable width="120px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DATATYPE" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.DATATYPE}}</span>
+												<span v-else>{{scope.row.DATATYPE}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="DESCRIPTION" label="单元格描述" sortable width="150px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DESCRIPTION" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.DESCRIPTION}}</span>
+												<span v-else>{{scope.row.DESCRIPTION}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="FORMULA" label="计算公式" sortable width="150px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FORMULA" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.FORMULA}}</span>
+												<span v-else>{{scope.row.FORMULA}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="GRIDTYPE" label="单元格类型" sortable width="150px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.GRIDTYPE" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.GRIDTYPE}}</span>
+												<span v-else>{{scope.row.GRIDTYPE}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="HASFORMULA" label="是否使用计算公式" sortable width="180px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.HASFORMULA" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.HASFORMULA}}</span>
+												<span v-else>{{scope.row.HASFORMULA}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="COLSPAN" label="合并列" sortable width="120px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COLSPAN" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.COLSPAN}}</span>
+												<span v-else>{{scope.row.COLSPAN}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="ROWSPAN" label="合并行" sortable width="120px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ROWSPAN" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.ROWSPAN}}</span>
+												<span v-else>{{scope.row.ROWSPAN}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="ISSPAN" label="是否合并" sortable width="120px">
 											<template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISSPAN" placeholder="请输入">
 												</el-input>
-												<span v-else="v-else">{{scope.row.ISSPAN}}</span>
+												<span v-else>{{scope.row.ISSPAN}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column fixed="right" label="操作" width="120">

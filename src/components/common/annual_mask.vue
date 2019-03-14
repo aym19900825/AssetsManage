@@ -87,7 +87,7 @@
 											    <el-date-picker
 											      v-model="WORKPLAN.REPORTDATE "
 											      type="date"
-											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%":disabled="noedit">
+											      placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%" :disabled="noedit">
 											    </el-date-picker>
 											  </div>
 											 </el-form-item>
@@ -180,7 +180,7 @@
 									      <template slot-scope="scope">
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请输入内容">
 												</el-input>
-												<span v-else="v-else">{{scope.row.MODEL}}</span>
+												<span v-else>{{scope.row.MODEL}}</span>
 										  </template>
 									    </el-table-column>
 										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
@@ -188,22 +188,22 @@
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入内容" :disabled="true">
 														<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
 													</el-input>
-													<span v-else="v-else">{{scope.row.V_NAME}}</span>
+													<span v-else>{{scope.row.V_NAME}}</span>
 											</template>
 										</el-table-column>
 									    <el-table-column prop="MEMO" label="近三年监督抽查情况" sortable width="260px">
 									      <template slot-scope="scope">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.MEMO}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入内容"></el-input><span v-else>{{scope.row.MEMO}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 									      <template slot-scope="scope">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-else="v-else" id="costshow">{{scope.row.CHECKCOST}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-else id="costshow">{{scope.row.CHECKCOST}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column prop="REASION" label="项目提出理由" sortable width="220px">
 									      <template slot-scope="scope">
-									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else="v-else">{{scope.row.REASION}}</span>
+									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else>{{scope.row.REASION}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -241,7 +241,7 @@
 											        	<span>{{scope.$index + 1}}</span>
 											      	</template> -->
 											      	<template slot-scope="scope">
-											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
+											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
 							            		<el-table-column prop="WP_LINENUM" label="所属计划序号" sortable width="150"></el-table-column>
@@ -279,12 +279,12 @@
 												<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
 							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 							            			<template slot-scope="scope">
-											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_NUM}}</span>
+											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
 							            		<el-table-column label="所属计划序号" sortable width="120px" prop="WP_LINENUM">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else="v-else">{{scope.row.WP_LINENUM}}</span>
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else>{{scope.row.WP_LINENUM}}</span>
 											      </template>
 											    </el-table-column>
 							            		<el-table-column prop="P_NUM" label="检验项目编号" width="100"></el-table-column>
@@ -875,9 +875,7 @@
 					PROP_UNIT:[{required: true, trigger: 'change', validator: validateUnit}],//提出单位 
 					basisList:[{required: true, trigger: 'change', validator: validateBasislist}],//检测依据
 					DESCRIPTION:[{required: true, trigger: 'blur', validator: this.Validators.isFillTips}],//计划描述
-
 					TYPE:[{required: true, message: '请选择', trigger: 'change'}],//类别
-
 					COMPACTOR:[//编制人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
@@ -890,14 +888,10 @@
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
 					],
-
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
-
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-
        				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别
-
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 

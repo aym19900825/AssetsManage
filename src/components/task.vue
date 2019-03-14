@@ -157,13 +157,13 @@ export default {
 			prop: 'createTime'
 		}],
 		searchList: {
-					createTime:'',	
-				},
+				createTime:'',	
+			},
 		page: {
-				currentPage: 1,
-				pageSize: 20,
-				totalCount: 0
-				},
+			currentPage: 1,
+			pageSize: 20,
+			totalCount: 0
+			},
       }
     },
   
@@ -181,19 +181,11 @@ export default {
 		},
 		//点击的数据
 		SelChange(val) {
-				this.selUser = val;
+			this.selUser = val;
 	    },
-	    sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-		},
-		currentChange(val) {
-			this.page.currentPage = val;
-			this.requestData();
-		},
-		//滚动加载更多
+	   
+		//表格滚动加载
 		loadMore() {
-			//console.log(this.$refs.table.$el.offsetTop)
 			let up2down = sessionStorage.getItem('up2down');
 			if(this.loadSign) {					
 				if(up2down=='down'){
@@ -202,16 +194,16 @@ export default {
 						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 						return false;
 					}
-//						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
 					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height:400px;width: 100%;"></div>');
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 						sessionStorage.setItem('toBtm','true');
 					}
 				}else{
 					sessionStorage.setItem('toBtm','false');
 					this.page.currentPage--;
 					if(this.page.currentPage < 1) {
-						this.page.currentPage=1
+						this.page.currentPage=1;
 						return false;
 					}
 				}
@@ -222,9 +214,31 @@ export default {
 				this.requestData();
 			}
 		},
-
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.requestData();
+		},
+		//Table默认加载数据
 		requestData() {
-			this.loading = true;
+			this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -237,7 +251,7 @@ export default {
 				}
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res.data);
+					console.log(res.data);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
@@ -246,17 +260,11 @@ export default {
 					} else {
 						this.loadSign = true
 					}
-//					this.commentArr[this.page.currentPage] = res.data.data
-//					let newarr = []
-//					for(var i = 1; i <= totalPage; i++) {
-//						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-//							for(var j = 0; j < this.commentArr[i].length; j++) {
-//								newarr.push(this.commentArr[i][j])
-//							}
-//						}
-//					}
 					this.todoList = res.data.data;
-					this.loading = false;
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 				}).catch((wrong) => {
 					
 					

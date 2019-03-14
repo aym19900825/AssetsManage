@@ -1051,29 +1051,8 @@
 				this.$refs.user.validate((valid) => {
 					if(valid) {
 						_this.user.enabled = true;
-						// _this.user.ispermit = _this.user.ispermit == '是' ? '1' : '2';
-						// _this.user.islogin = _this.user.islogin == '是' ? '1' : '2';
 						var user = _this.user;
-						// user.sex = user.sex == '男' ? 1 : 0;
 						var roleId = [];
-						// if(typeof(user.roleId) != 'undefind' && user.roleId.length > 0) {
-						// 	var arr = [];
-						// 	user.roleId.forEach(function(item) {
-						// 		var roles = _this.selectData;
-						// 		for(var j = 0; j < roles.length; j++) {
-						// 			if(roles[j].id == item) {
-						// 				arr.push(roles[j]);
-						// 				roleId.push(roles[j].id);
-						// 				// roleId = roleId + roles[j].id + ",";
-						// 			}
-						// 		}
-						// 	});
-						// 	user.roleId = roleId;
-						// 	user.roles = arr;
-						// } else {
-						// 	user.roleId = '';
-						// 	user.roles = [];
-						// }
 						user.roleId = user.roleId.join(',');
 						var url = _this.basic_url + '/api-user/users/saveOrUpdate';
 						this.$axios.post(url, _this.user).then((res) => {

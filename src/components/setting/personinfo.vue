@@ -113,12 +113,7 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="允许授权" prop="ispermit" label-width="100px">
-										<el-radio-group v-if="personinfo.username == 'admin'" v-model="personinfo.ispermit" :disabled="true">
-											<el-radio label="1">是</el-radio>
-											<el-radio label="2">否</el-radio>
-										</el-radio-group>
-
-										<el-radio-group v-else v-model="personinfo.ispermit" :disabled="false">
+										<el-radio-group v-model="personinfo.ispermit" :disabled="true">
 											<el-radio label="1">是</el-radio>
 											<el-radio label="2">否</el-radio>
 										</el-radio-group>
@@ -126,12 +121,7 @@
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="允许登录" prop="islogin" label-width="100px">
-										<el-radio-group v-if="personinfo.username == 'admin'" v-model="personinfo.islogin" :disabled="true">
-											<el-radio label="1">是</el-radio>
-											<el-radio label="2">否</el-radio>
-										</el-radio-group>
-
-										<el-radio-group v-show v-model="personinfo.islogin" :disabled="false">
+										<el-radio-group v-model="personinfo.islogin" :disabled="true">
 											<el-radio label="1">是</el-radio>
 											<el-radio label="2">否</el-radio>
 										</el-radio-group>
@@ -145,29 +135,22 @@
 						 	<!-- 第四行 -->
 						 	<el-row :gutter="30">
 								<el-col :span="8">
-									<el-form-item label="所属机构" prop="deptName" v-if="personinfo.username === 'admin'">
-										<el-input v-model="personinfo.deptName" disabled>
-										<el-button slot="append" icon="icon-search" @click="getDept"></el-button>
-										</el-input>
-									</el-form-item>
-									<el-form-item label="所属机构" prop="deptName" v-else>
-										<el-input v-model="personinfo.deptName" disabled>
+									<el-form-item label="所属机构" prop="deptName">
+										<el-input v-model="personinfo.deptName" :disabled="true">
+											<el-button slot="append" icon="icon-search" @click="getDept" :disabled="true"></el-button>
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 					 				<el-form-item label="角色" prop="roleId" label-width="100px">
-					 					<el-select v-if="personinfo.username == 'admin'" v-model="personinfo.roleId" multiple placeholder="请选择" :disabled="true" style="width: 100%">
-											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
-										</el-select>
-										<el-select v-else v-model="personinfo.roleId" multiple placeholder="请选择" :disabled="false" style="width: 100%">
-											<el-option v-for="item in selectData" :key="item.name" :value="item.id" :label="item.name"></el-option>
+					 					<el-select v-model="personinfo.roleId" multiple placeholder="请选择" :disabled="true" style="width: 100%" value-key="item.id">
+											<el-option v-for="item in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 										</el-select>
 									</el-form-item>
 						 		</el-col>
 						 		<el-col :span="8">
 						 			 <el-form-item label="最高学历">
-						 				<el-input v-model="personinfo.education" disabled></el-input>
+						 				<el-input v-model="personinfo.education" :disabled="true"></el-input>
 						 			</el-form-item>	
 						 		</el-col>
 						 	</el-row>
@@ -433,15 +416,17 @@
 	            dialogVisible: false, //对话框
 	            personinfo:{
 	          		worknumber:'',//工号
-	          		companyId: '',//所属组织ID
-	          		companyName: '',//所属组织
-	          		deptId: '',//所属机构ID
-	          		deptID: '',//所属机构
-	          		nickname:'',//人员姓名
 	          		username:'',//用户名
+	          		password:'',//密码
+	          		nickname:'',//人员姓名
+	          		user_active_date: '',//用户有效期
+	          		islogin: '',//是否允许登录
+	          		ispermit: '',//是否允许授权
+	          		deptId: '',//所属组织ID
+	          		deptName: '',//所属组织名称
+	          		companyName: '',//所属组织
 	          		enabled:'',//配置信息状态
 	          		enabledName:'',//配置信息状态名称
-	          		password:'',//密码
 	          		birthday:'',//出生日期
 	          		sex:'',//性别
 	          		idnumber:'',//身份证号
@@ -456,6 +441,8 @@
 	          		zipcode:'',//邮编
 	          		ipaddress:'',//IP地址
 	          		macaddress:'',//MAC地址
+	          		erp_orgname:'',//ERP
+	          		education:'',//最高学历
 	          		//logintype: [],//登录方式
 	          		//rex:'',//传真号
 	          		//orders:'',//排序号
@@ -608,6 +595,7 @@
 	    		var url = this.basic_url + '/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => { 
 	    			this.personinfo=res.data;
+	    			console.log(res.data);
 	    			this.personinfo.roleId = [];
 					var roles =res.data.roles;
 					this.docParm.userid = res.data.id;
@@ -626,7 +614,7 @@
 					});
 				});
 			},
-			getImgUrl(){
+			getImgUrl(){//用户头像
 				var url = this.file_url + '/file/icon?appname=icon&userid=' + this.docParm.userid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.code==1){
@@ -667,7 +655,7 @@
 				this.editSearch = 'dept';
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					// console.log(res);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -676,7 +664,7 @@
 			getRole() {
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data.data);
+					// console.log(res.data.data);
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');
@@ -693,7 +681,7 @@
 					this.personinfo.companyName = this.checkedNodes[0].fullname;
 				} else {
 					this.personinfo.deptId = this.checkedNodes[0].id;
-					this.personinfo.deptID = this.checkedNodes[0].fullname;
+					this.personinfo.deptName = this.checkedNodes[0].fullname;
 				}
 
 			},
@@ -753,33 +741,28 @@
 			},
 
 			resetForm(formName) {//重置按钮调用
-				this.personinfo = {
-	          		worknumber:'',//工号
-	          		companyId: '',//所属组织ID
-	          		companyName: '',//所属组织
-	          		deptId: '',//所属机构ID
-	          		deptID: '',//所属机构
-	          		nickname:'',//人员姓名
-	          		username:'',//用户名
-	          		enabled:'',//配置信息状态
-	          		enabledName:'',//配置信息状态名称
-	          		password:'',//密码
-	          		birthday:'',//出生日期
-	          		sex:'',//性别
-	          		idnumber:'',//身份证号
-					roleId: [],//角色ID
-	          		roles: [],//角色
-	          		entrytime:'',//入职日
-	          		email:'',//邮箱
-	          		phone:'',//手机
-	          		address:'',//地址
-	          		tips:'',//备注
-	          		telephone:'',//联系电话
-	          		zipcode:'',//邮编
-	          		ipaddress:'',//IP地址
-	          		macaddress:'',//MAC地址
-	          	};
-				this.$refs[formName].resetFields();
+				// this.personinfo = {
+	   //        		companyId: '',//所属组织ID
+	   //        		companyName: '',//所属组织
+	   //        		deptId: '',//所属机构ID
+	   //        		deptName: '',//所属机构
+	   //        		nickname:'',//人员姓名
+	   //        		username:'',//用户名
+	   //        		enabled:'',//配置信息状态
+	   //        		enabledName:'',//配置信息状态名称
+	   //        		birthday:'',//出生日期
+	   //        		sex:'',//性别
+	   //        		entrytime:'',//入职日
+	   //        		email:'',//邮箱
+	   //        		phone:'',//手机
+	   //        		address:'',//地址
+	   //        		tips:'',//备注
+	   //        		telephone:'',//联系电话
+	   //        		zipcode:'',//邮编
+	   //        		ipaddress:'',//IP地址
+	   //        		macaddress:'',//MAC地址
+	   //        	};
+				this.$refs[formName].resetFields();//
 			},
 
 			handleAvatarSuccess(res, file) {//上传头像

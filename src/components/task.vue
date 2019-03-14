@@ -65,11 +65,11 @@
 					<el-row :gutter="10">
 						<el-col :span="24" class="leftcont">
 							<!-- 表格 -->
-							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+							<el-table :data="todoList" :header-cell-style="rowClass" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}" @selection-change="SelChange" >
 								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
 								<!--<el-table-column label="数据id" sortable width="140px" prop="bizid" v-if="this.checkedName.indexOf('数据id')!=-1">-->
-								</el-table-column>
+								<!-- </el-table-column> -->
 								<el-table-column label="单据号" sortable prop="bizNum" v-if="this.checkedName.indexOf('单据号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
@@ -243,10 +243,10 @@ export default {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 
-					PRO_NUM: this.searchList.PRO_NUM,
-					PRO_NAME: this.searchList.PRO_NAME,
-					VERSION: this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
+					// PRO_NUM: this.searchList.PRO_NUM,
+					// PRO_NAME: this.searchList.PRO_NAME,
+					// VERSION: this.searchList.VERSION,
+					// DEPTID: this.searchList.DEPTID,
 					// STATUS: this.searchList.STATUS,
 				}
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';

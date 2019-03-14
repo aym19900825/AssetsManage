@@ -2338,10 +2338,10 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					console.log(res.data);
 					this.currentuserinfo = res.data;
-				 	// this.userid = res.data.id;
-	                this.username = res.data.username;
-					// this.deptid = res.data.deptId;
-					// this.deptfullname = res.data.deptName;
+				 	this.userid = res.data.id;
+	        this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	                this.$message({
 	                    message: '网络错误，请重试',

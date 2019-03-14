@@ -15,20 +15,9 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -266,8 +255,6 @@
 				companyId: '',
 				deptId: '',
 				selUser: [],
-				// '启用': true,
-				// '冻结': false,
 				subagreeList: [],
 				search: false,
 				show: false,
@@ -342,26 +329,6 @@
 			 view(id) {
 				this.$refs.child.view(id);
 			},
-			// 导入
-			importData() {
-				
-			},
-			// 导出
-			exportData() {
-				
-			},
-			// 打印
-			Printing() {
-				
-			},
-			//下发协议
-			distribute(){
-
-			},
-			// judge(data) {
-			// 	//taxStatus 布尔值
-			// 	return data.enabled ? '启用' : '冻结'
-			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -583,18 +550,22 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
-			}
+			},
+			//代办跳转
+			getRouterData() {
+				// 只是改了query，其他都不变
+				this.id = this.$route.query.bizId;
+				this.$refs.child.view(this.id);
+			},
 		},
 		mounted(){
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
-            this.requestData();
+      this.requestData();
 			this.getKey();
-             // 注册scroll事件并监听  
-             let self = this;
-              $(".div-table").scroll(function(){
-                self.loadMore();
-            })
-        },
+			if(this.$route.query.bizId != undefined) {
+				this.getRouterData();
+			}
+    },
 	}
 </script>
 

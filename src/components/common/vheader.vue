@@ -83,6 +83,7 @@ export default {
                 url: '/index'});
             this.$store.dispatch('setRoleIdAct',null);
             this.$store.dispatch('setNavIdAct',null);
+            this.$store.dispatch('setcurrentrolesnameNavAct',null);
     	},
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
@@ -155,7 +156,7 @@ export default {
       	    var content=$.trim(e.target.innerHTML)
               this.GetRolesname=content;
               this.$router.push({path: item.url});
-              this.$store.dispatch('setcurrentrolesname',content);
+              this.$store.dispatch('setcurrentrolesnameNavAct',content);
       	      var GetRoles=this.GetRoles
       	    for(let i=0;i<GetRoles.length;i++){
       	    	if(GetRoles[i].name==content){

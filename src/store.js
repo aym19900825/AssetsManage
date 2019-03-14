@@ -100,7 +100,7 @@ const actions = {
    setClickedNavAct(context,clickedNav){
       context.commit('setClickedNav',clickedNav);
    },
-   setcurrentrolesname(context,currentRolesname){
+   setcurrentrolesnameNavAct(context,currentRolesname){
       context.commit('setcurrentrolesname',currentRolesname);
    },
 };

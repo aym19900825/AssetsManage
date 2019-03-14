@@ -713,7 +713,7 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
@@ -730,7 +730,7 @@
 					PRO_NUM: this.searchList.PRO_NUM,
 					DEPTID: this.searchList.DEPTID
 				}
-				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
+				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -772,10 +772,10 @@
 				let that = this;
 				var url = this.basic_url + '/api-apps/appCustom/proxyTree/2';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data.datas;
-					this.treeData = this.transformTree(this.resourceData);
-					console.log(this.treeData);
+					if(this.resourceData!=null){
+						 this.treeData = this.transformTree(this.resourceData);
+					}
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',

@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.STATUSDesc" :disabled="edit">
+											<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -809,8 +809,8 @@
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				dataInfo: {
-					STATUS: '1',
-					STATUSDesc:'草稿',
+					STATE: '1',
+					STATEDesc:'草稿',
 					VERSION:'1',
 					TYPE:'2',//检测
 					TYPEDesc:'检测',
@@ -1072,17 +1072,15 @@
 			},
 			actualPrice(){
 				var money = document.getElementById("actualcost").value;
-				// this.initactual = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.ACTUALCOST = num.join(".");
 			},
 			reset() {					
 				this.dataInfo={
 					VERSION: '1',
-					STATUS: '1',
-					STATUSDesc:'草稿',
+					STATE: '1',
+					STATEDesc:'草稿',
 					ITEM_NAME:'',
 					VENDOR:'',
 					P_NUM:'',
@@ -1409,7 +1407,6 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -1766,7 +1763,7 @@
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试7',
+							message: '网络错误，请重试',
 							type: 'error'
 						});
 					});
@@ -1936,7 +1933,7 @@
 	                this.username = res.data.username;
 	            }).catch((err) => {
 	                this.$message({
-	                    message: '网络错误，请重试',
+	                    message: '网络错误，请重试  3',
 	                    type: 'error'
 	                });
 	            });

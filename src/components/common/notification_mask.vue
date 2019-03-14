@@ -470,27 +470,6 @@
 			 testprojectmask
 		},
 		data() {
-			//  var validateItemleader = (rule, value, callback) => {//项目负责人
-   //              if (this.dataInfo.P_LEADERDesc === undefined || this.dataInfo.P_LEADERDesc === '' || this.dataInfo.P_LEADERDesc === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			//  var validateproname = (rule, value, callback) => {//受检产品名称
-   //              if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-   //          };
-			//  var validateVname = (rule, value, callback) => {//受检企业
-   //              if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
-   //                  callback(new Error('必填'));
-   //              }else {
-   //                  callback();
-   //              }
-			// };
 			//金额验证
             var price=(rule, value, callback) => {
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;

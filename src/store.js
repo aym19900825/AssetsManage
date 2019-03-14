@@ -8,6 +8,7 @@ const state={//要设置的全局访问的state对象
    navid: null,
    menuid:null,//一级菜单id
    menusid:null,//二级菜单id
+   currentRolesname:null,//当前的角色name
    selectedNav:{
       css: 'icon-user',
       name: '首页',
@@ -43,6 +44,9 @@ const getters = {   //实时监听state值的变化(最新状态)
    getClickedNav(state){
       return state.clickedNavs;
    },
+   getcurrentrolesname(state){
+      return state.currentRolesname;
+   },
 };
    //修改 state 用 vuex 的 mutation 
 const mutations = {
@@ -69,6 +73,9 @@ const mutations = {
    updateLoadingStatus (state, payload) {
       state.isLoading = payload.isLoading;
    },
+   setcurrentrolesname(state,currentRolesname){
+      state.currentRolesname=currentRolesname;
+   },
   
 };
 
@@ -92,6 +99,9 @@ const actions = {
    },
    setClickedNavAct(context,clickedNav){
       context.commit('setClickedNav',clickedNav);
+   },
+   setcurrentrolesname(context,currentRolesname){
+      context.commit('setcurrentrolesname',currentRolesname);
    },
 };
 

@@ -3,11 +3,6 @@
         <router-link :to="{path:'/index'}"><div class="logo"></div></router-link>
         <ul class="nav-head pull-left">
             <li class="current" ><router-link :to="{path:'/index'}">控制台</router-link></li>
-            <!-- <li><router-link :to="{path:'/dashboardList'}" >程序设计器</router-link></li>
-            <li><router-link :to="{path:'/dashboardList'}" >权限管理</router-link></li>
-            <li>
-                <router-link :to="{path:'/user_management'}" @click.native = "setTabs">系统配置</router-link>
-            </li> -->
         </ul>
         <div class="nav-head pull-right nav-right">
 	            <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30" >
@@ -28,17 +23,6 @@
                         {{item.name}}
                     </div>
                 </el-dropdown-item>
-                
-                <!-- <el-dropdown-item>
-                    <router-link to="/personinfo">
-                        <img class="userimgs" src="../../assets/img/male.png" />管理员
-                    </router-link>
-                </el-dropdown-item>
-                <el-dropdown-item>
-                    <router-link to="/personinfo">
-                        <img class="userimgs" src="../../assets/img/male.png" />站长
-                    </router-link>
-                </el-dropdown-item> -->
 
                 <el-dropdown-item class="border-linet pt10 mt10">
                     <router-link to="/personinfo">
@@ -103,7 +87,6 @@ export default {
         getData(){//获取当前用户信息
             var url = this.basic_url + '/api-user/users/currentMap';
             this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-            	// console.log(res);
                     this.username = res.data.username;
                     this.nickname = res.data.nickname;
                     this.userid = res.data.id;
@@ -124,8 +107,11 @@ export default {
                     this.$emit('getTodoNum',this.toDoNumber);
                 }
             }).catch(error => {
-                console.log('请求失败');
-            })
+                  this.$message({
+                    message: '网络错误，请重试',
+                    type: 'error'
+                });
+            });
         },
         getImgUrl(){
             var url = this.file_url + '/file/icon?appname=icon&userid=' + this.userid;
@@ -133,32 +119,44 @@ export default {
                 if(res.data.code==1){
                     this.headImgUrl = res.data.icon;
                 }
+            }).catch(error => {
+                  this.$message({
+                    message: '网络错误，请重试',
+                    type: 'error'
+                });
             });
         },
        getITEM_Roles() {
             var url = this.basic_url + '/api-user/roles/current';
             this.$axios.get(url, {}).then((res) => {
                 this.GetRoles = res.data;
-                this.GetRolesname=this.GetRoles[0].name;
-            	// console.log(this.GetRolesname);
-                if(res.data!=null&&res.data.length>0)
-                {
+                if(this.$store.state.currentRolesname!=undefined){
+                    this.GetRolesname=this.$store.state.currentRolesname
+                }else{
+                    this.GetRolesname=this.GetRoles[0].name;
+                }
+                if(res.data!=null&&res.data.length>0){
                     let item = res.data[0];
-                    if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
-//                  	this.$store.dispatch('setRoleIdAct',item.id);
-                   	}
                 }
             }).catch(error => {
-                console.log('请求失败');
+                  this.$message({
+                    message: '网络错误，请重试',
+                    type: 'error'
+                });
             })
-  
         },
 		 clickfun(e) {
       		// e.target 是你当前点击的元素
-      		// e.currentTarget 是你绑定事件的元素
+              // e.currentTarget 是你绑定事件的元素
+              var item={
+        		css: 'icon-user',
+                name: '首页',
+                url: '/index'};
       	    var content=$.trim(e.target.innerHTML)
-      	    this.GetRolesname=content;
-      	    var GetRoles=this.GetRoles
+              this.GetRolesname=content;
+              this.$router.push({path: item.url});
+              this.$store.dispatch('setcurrentrolesname',content);
+      	      var GetRoles=this.GetRoles
       	    for(let i=0;i<GetRoles.length;i++){
       	    	if(GetRoles[i].name==content){
       	    		var roId=this.GetRoles[i].id

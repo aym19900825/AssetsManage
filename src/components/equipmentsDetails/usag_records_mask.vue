@@ -49,7 +49,7 @@
 										<el-table-column prop="iconOperation" fixed label="" width="50px">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
-												<i class="el-icon-edit" v-else="v-else" @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-edit" v-else @click="changeEdit(scope.row)"></i>
 											</template>
 										</el-table-column>
 	                                    <el-table-column type="index" sortable label="序号" width="50">
@@ -59,7 +59,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.USEDATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 													<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USEDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.USEDATE}}</span>
+	                                                <span v-else>{{scope.row.USEDATE}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -69,7 +69,7 @@
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入样品编号">
 														<el-button slot="append" icon="icon-search" @click="changeNum(scope.row)"></el-button>
 													</el-input>
-	                                                <span v-else="v-else">{{scope.row.S_NUM}}</span>
+	                                                <span v-else>{{scope.row.S_NUM}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -79,7 +79,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.USE_START'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_START" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.USE_START}}</span>
+	                                                <span v-else>{{scope.row.USE_START}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -88,7 +88,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.USE_END'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_END" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.USE_END}}</span>
+	                                                <span v-else>{{scope.row.USE_END}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -97,7 +97,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.ASSETOPRATION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETOPRATION" placeholder="请输入设备运行情况">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.ASSETOPRATION}}</span>
+	                                                <span v-else>{{scope.row.ASSETOPRATION}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -106,7 +106,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.USE_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入使用人">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.USE_PERSON}}</span>
+	                                                <span v-else>{{scope.row.USE_PERSON}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -115,7 +115,7 @@
 												<el-form-item :prop="'tableList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.MEMO}}</span>
+	                                                <span v-else>{{scope.row.MEMO}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -139,7 +139,7 @@
 										<el-table-column prop="iconOperation" fixed width="50px">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
-												<i class="el-icon-edit" v-else="v-else"  @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-edit" v-else  @click="changeEdit(scope.row)"></i>
 											</template>
 										</el-table-column>
 	                                    <el-table-column type="index" sortable label="序号" width="50">
@@ -149,7 +149,7 @@
 												<el-form-item :prop="'maintenList.'+scope.$index + '.PROJECT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROJECT" placeholder="请输入维护项目">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.PROJECT}}</span>
+	                                                <span v-else>{{scope.row.PROJECT}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -158,7 +158,7 @@
 												<el-form-item :prop="'maintenList.'+scope.$index + '.W_DATE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                 <el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.W_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 	                                                </el-date-picker>
-	                                                <span v-else="v-else">{{scope.row.W_DATE}}</span>
+	                                                <span v-else>{{scope.row.W_DATE}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>
@@ -167,7 +167,7 @@
 												<el-form-item :prop="'maintenList.'+scope.$index + '.W_PERSON'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.W_PERSON" placeholder="请输入维护人">
 	                                                </el-input>
-	                                                <span v-else="v-else">{{scope.row.W_PERSON}}</span>
+	                                                <span v-else>{{scope.row.W_PERSON}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>

@@ -211,7 +211,7 @@
 											<el-table-column prop="iconOperation" fixed width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-													<i class="el-icon-edit" v-else="v-else"></i>
+													<i class="el-icon-edit" v-else></i>
 												</template>
 											</el-table-column>
 											<el-table-column prop="step" label="序号" sortable width="120px" type="index">
@@ -221,7 +221,7 @@
 													<el-form-item :prop="'qualifications.'+scope.$index + '.c_num'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_num" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.c_num}}</span>
+														<span v-else>{{scope.row.c_num}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -230,7 +230,7 @@
 													<el-form-item :prop="'qualifications.'+scope.$index + '.c_name'">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.c_name" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.c_name}}</span>
+														<span v-else>{{scope.row.c_name}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -244,7 +244,7 @@
 													<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
 														<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd">
 														</el-date-picker>
-														<span v-else="v-else">{{scope.row.c_date}}</span>
+														<span v-else>{{scope.row.c_date}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -270,7 +270,7 @@
 											<el-table-column prop="iconOperation" fixed label="" width="50px">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-													<i class="el-icon-edit" v-else="v-else"></i>
+													<i class="el-icon-edit" v-else></i>
 												</template>
 											</el-table-column>
 											<el-table-column label="序号" sortable width="120px" type="index">
@@ -280,7 +280,7 @@
 													<el-form-item :prop="'traings.'+scope.$index + '.t_date'">
 														<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.t_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd hh:mm:ss">
 														</el-date-picker>
-														<span v-else="v-else">{{scope.row.t_date}}</span>
+														<span v-else>{{scope.row.t_date}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -289,7 +289,7 @@
 													<el-form-item :prop="'traings.'+scope.$index + '.t_description'">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.t_description" placeholder="请输入委托方名称">
 														</el-input>
-														<span v-else="v-else">{{scope.row.t_description}}</span>
+														<span v-else>{{scope.row.t_description}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -329,7 +329,7 @@
 													<el-form-item :prop="'ips.'+scope.$index + '.ip_begin'">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ip_begin" placeholder="请输入起始IP地址">
 														</el-input>
-														<span v-else="v-else">{{scope.row.ip_begin}}</span>
+														<span v-else>{{scope.row.ip_begin}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -339,7 +339,7 @@
 													<el-form-item :prop="'ips.'+scope.$index + '.ip_end'">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ip_end" placeholder="请输入结束IP地址">
 														</el-input>
-														<span v-else="v-else">{{scope.row.ip_end}}</span>
+														<span v-else>{{scope.row.ip_end}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>

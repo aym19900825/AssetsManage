@@ -65,7 +65,7 @@
 													<template slot-scope="scope">
 														<div v-show="noviews" style="width: 50px;">
 															<i class="el-icon-check" v-if="scope.row.isEditing"></i>
-															<i class="el-icon-edit" v-else="v-else"></i>
+															<i class="el-icon-edit" v-else></i>
 														</div>
 													</template>
 												</el-table-column>
@@ -75,7 +75,7 @@
 														<el-form-item :prop="'subDicts.'+scope.$index + '.sort'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" placeholder="请输入">
 															</el-input>
-															<span v-else="v-else">{{scope.row.sort}}</span>
+															<span v-else>{{scope.row.sort}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -85,7 +85,7 @@
 														<el-form-item :prop="'subDicts.'+scope.$index + '.name'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.name" placeholder="请输入值名称">
 															</el-input>
-															<span v-else="v-else">{{scope.row.name}}</span>
+															<span v-else>{{scope.row.name}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -94,7 +94,7 @@
 														<el-form-item :prop="'subDicts.'+scope.$index + '.code'">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.code" placeholder="请输入值名称的代号，一般用数字表示">
 															</el-input>
-															<span v-else="v-else">{{scope.row.code}}</span>
+															<span v-else>{{scope.row.code}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>

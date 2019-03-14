@@ -50,7 +50,7 @@
 									        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 									        	<i class="icon-check" title="保存"></i>
 											</el-button> -->
-											<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else="v-else">
+											<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)" v-else>
 									        	<i class="icon-edit" title="修改"></i>
 											</el-button> -->
 									        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" >
@@ -62,7 +62,7 @@
 									  	<el-table-column label="产品类别编号" sortable width="140" prop="NUM">
 									      <template slot-scope="scope">
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else="v-else">{{scope.row.NUM}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID)" v-else>{{scope.row.NUM}}</span>
 											</el-form-item>
 									      </template>
 									    </el-table-column>
@@ -72,7 +72,7 @@
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请输入内容">
 									        		<el-button slot="append" icon="icon-search"></el-button>
-									        	</el-input><span v-else="v-else">{{scope.row.TYPE}}</span>
+									        	</el-input><span v-else>{{scope.row.TYPE}}</span>
 											</el-form-item>
 									      </template>
 									    </el-table-column>
@@ -82,32 +82,32 @@
 									        <el-form-item :prop="'inspectionList.'+scope.$index + '.DEPARTMENT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 									        	<el-select v-if="scope.row.isEditing" v-model="scope.row.DEPARTMENT" placeholder="请选择">
 													<el-option v-for="item in DEPARTMENTS" :key="item.value" :label="item.label" :value="item.label"></el-option>
-												</el-select><span v-else="v-else">{{scope.row.DEPARTMENT}}</span>
+												</el-select><span v-else>{{scope.row.DEPARTMENT}}</span>
 											</el-form-item>
 									      </template>
 									    </el-table-column>
 
 										<el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else>{{scope.row.STATUS}}</span>
 									      </template>
 									    </el-table-column>
 										
 										<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
 									      <template slot-scope="scope">
-									       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
+									       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else>{{scope.row.VERSION}}</span>
 									      </template>
 									    </el-table-column> -->
 
 									    <el-table-column prop="CHANGEBY" label="修改人" sortable width="120">
 									      <template slot-scope="scope">
-									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEBY}}</span>
+									        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容" disabled></el-input><span v-else>{{scope.row.CHANGEBY}}</span>
 									      </template>
 									    </el-table-column>
 
 									     <el-table-column prop="CHANGEDATE" label="修改时间" sortable width="160" :formatter="dateFormat">
 									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" disabled></el-input><span v-else="v-else">{{scope.row.CHANGEDATE}}</span>
+									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHANGEDATE" disabled></el-input><span v-else>{{scope.row.CHANGEDATE}}</span>
 									      </template>
 									    </el-table-column>
 
@@ -117,7 +117,7 @@
 										        	<i class="icon-check" title="保存"></i>
 												</el-button>
 
-											 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else="v-else">
+											 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
 										          添加
 										        </el-button>
 										    </template>

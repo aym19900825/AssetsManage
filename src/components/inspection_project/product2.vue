@@ -21,7 +21,7 @@
 			  	<!-- <el-table-column label="所属类别" width="80" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else="v-else">{{scope.row.NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column> -->
@@ -29,7 +29,7 @@
 			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM" class="pl30">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else="v-else">{{scope.row.PRO_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else>{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -39,32 +39,32 @@
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NAME" :disabled="true" placeholder="请选择">
 			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
-			        	</el-input><span v-else="v-else">{{scope.row.PRO_NAME}}</span>
+			        	</el-input><span v-else>{{scope.row.PRO_NAME}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 
 				<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120" :formatter="judge">
 			      <template slot-scope="scope">
-			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else="v-else">{{scope.row.STATUS}}</span>
+			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else>{{scope.row.STATUS}}</span>
 			      </template>
 			    </el-table-column> -->
 				
 				<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
 			      <template slot-scope="scope">
-			       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else="v-else">{{scope.row.VERSION}}</span>
+			       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else>{{scope.row.VERSION}}</span>
 			      </template>
 			    </el-table-column> -->
 
 			    <!-- <el-table-column prop="ENTERBY" label="修改人" sortable width="120">
 			      <template slot-scope="scope">
-			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容" disabled></el-input><span v-else="v-else">{{scope.row.ENTERBY}}</span>
+			        <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容" disabled></el-input><span v-else>{{scope.row.ENTERBY}}</span>
 			      </template>
 			    </el-table-column> -->
 
 			     <!-- <el-table-column prop="ENTERDATE" label="修改时间" sortable width="160" :formatter="dateFormat">
 			      <template slot-scope="scope">
-			      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" disabled></el-input><span v-else="v-else">{{scope.row.ENTERDATE}}</span>
+			      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ENTERDATE" disabled></el-input><span v-else>{{scope.row.ENTERDATE}}</span>
 			      </template>
 			    </el-table-column> -->
 
@@ -73,19 +73,19 @@
 			        <!-- <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
 			        	<i class="icon-check" title="保存"></i>
 					</el-button> -->
-					<!-- <el-button type="text" size="medium" @click="modifyversion(scope.row)" v-else="v-else">
+					<!-- <el-button type="text" size="medium" @click="modifyversion(scope.row)" v-else>
 			        	<i class="icon-edit" title="修改"></i>
 					</el-button> -->
 			        <el-button type="text" id="Edit" size="medium" @click="saveRow(scope.row)" v-if="scope.row.isEditing">
 			        	<i class="icon-check" title="保存"></i>
 					</el-button>
 
-			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else="v-else">
+			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 			          <i class="icon-trash red"></i>
 			        </el-button>
 			       
 
-				 	<!--  <el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else="v-else">
+				 	<!--  <el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
 			          添加
 			        </el-button> -->
 			      </template>

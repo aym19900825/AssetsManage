@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<el-form :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo"  inline-message  class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATUS!=3">
+							<span v-if="this.dataInfo.STATE!=3">
 								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
 								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
+											<el-input v-model="dataInfo.STATUSDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -374,7 +374,7 @@
 												</el-table-column>
 												<el-table-column prop="DEPTTYPEDesc" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
 														</el-input>
 														<span v-else>{{scope.row.DEPTTYPEDesc}}</span>
 													</template>
@@ -580,14 +580,14 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检组" prop="MAINGROUP"  label-width="110px">
-												<el-select v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" style="width: 100%;">
+												<el-select v-model="dataInfo.MAINGROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit"  @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" style="width: 100%;">
 													<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @change="setLeader">
+												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @visible-change="visableleader($event)">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
 												</el-select>
 											</el-form-item>
@@ -645,7 +645,7 @@
 							<el-button @click='close'>取消</el-button>
 						</div>
 						<div class="content-footer" v-show="views">
-							<el-button type="success" v-if="this.dataInfo.STATUS == 3" @click="build">生成工作任务单</el-button>
+							<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成工作任务单</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -1384,7 +1384,7 @@
 							}		
 							}).catch((err) => {
 								this.$message({
-									message: '网络错误，请重试5',
+									message: '网络错误，请重试',
 									type: 'error'
 								});
 							});
@@ -1470,10 +1470,7 @@
 					this.dataInfo.INSPECT_PROXY_BASISList = [];
 					this.dataInfo.INSPECT_PROXY_PROJECList = [];
 				}else{
-					console.log(value);
-					
 					this.deptindex.PT_NUM = value[0];
-					console.log(this.deptindex.PT_NUM);
 					this.deptindex.PRODUCT_TYPE = value[1];
 					this.deptindex.P_VERSIONNUM = value[0]+':'+value[2];//类别编号+版本
 					this.deptindex.PRO_NUM ='';//产品编号
@@ -1507,7 +1504,6 @@
 							type: 'warning'
 						});
 					}else{
-						console.log(this.deptindex.PT_NUM);
 						this.$refs.productchild.visible(this.deptindex.PT_NUM,this.deptindex.VENDOR);
 						this.main = 'table';
 					}
@@ -1608,7 +1604,7 @@
 						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'main';
 						this.sendchilddata = [];
-						// this.deptindex = {};
+					    this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1869,11 +1865,11 @@
 					});
 				});		
 			},
-			setLeader(id){
-				this.$nextTick(() => {
-					this.$set(this.dataInfo,'LEADER',id);
-				})
-			},
+			// setLeader(id){
+			// 	this.$nextTick(() => {
+			// 		this.$set(this.dataInfo,'LEADER',id);
+			// 	})
+			// },
 			//获取负责人和接收人
 			getCustomer(type) {
 				if(type == 'vname'){

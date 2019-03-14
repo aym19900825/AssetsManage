@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="dataInfo.STATUSDesc" :disabled="edit">
+											<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -823,8 +823,8 @@
 				dataInfo: {
 					MAINGROUP:'',
 					LEADER:'',
-					STATUS: '1',
-					STATUSDesc:'草稿',
+					STATE: '1',
+					STATEDesc:'草稿',
 					VERSION:'1',
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
@@ -1089,8 +1089,8 @@
 			reset() {					
 				this.dataInfo={
 					VERSION: '1',
-					STATUS: '1',
-					STATUSDesc:'草稿',
+					STATE: '1',
+					STATEDesc:'草稿',
 					ITEM_NAME:'',
 					VENDOR:'',
 					P_NUM:'',

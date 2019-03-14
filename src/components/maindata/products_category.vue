@@ -729,7 +729,6 @@
 			getdept(){
 				var url = this.basic_url + '/api-user/users/findDeptAttr';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.btn=res.data;
 				}).catch((wrong) => {
 					this.$message({

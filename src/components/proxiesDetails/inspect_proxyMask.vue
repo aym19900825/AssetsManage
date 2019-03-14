@@ -372,11 +372,11 @@
 														<span v-else>{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
-												<el-table-column prop="depttypeName" label="机构属性" sortable width="120px">
+												<el-table-column prop="DEPTTYPEDesc" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="">
 														</el-input>
-														<span v-else>{{scope.row.depttypeName}}</span>
+														<span v-else>{{scope.row.DEPTTYPEDesc}}</span>
 													</template>
 												</el-table-column>
 
@@ -1041,8 +1041,8 @@
 			deptdata(value){
 				this.deptindex.VENDOR = value[0];//id
 				this.deptindex.VENDORDesc = value[1];//名称
-				this.deptindex.depttype = value[2];//机构属性id
-				this.deptindex.depttypeName = value[3];//机构属性名称
+				this.deptindex.DEPTTYPE = value[2];//机构属性id
+				this.deptindex.DEPTTYPEDesc = value[3];//机构属性名称
 			},
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
@@ -1183,8 +1183,8 @@
 					PROJECT_ID:'',
 					VENDOR: '',//承检单位
 					VENDORDesc:'',//承检单位名称
-					depttype:'',//机构属性id
-					depttypeName:'',//机构属性名称
+					DEPTTYPE:'',//机构属性id
+					DEPTTYPEDesc:'',//机构属性名称
 					PT_NUM:'',//产品类别编号
 					PRODUCT_TYPE:'',//产品类别
 					PRO_NUM:'',//产品编号

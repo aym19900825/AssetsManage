@@ -302,7 +302,6 @@ export default {
 						};
 			var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			_this.$axios.get(url, {params: data}).then((res) => {
-				// console.log(res);
 				if(res.data!="undefined"&&res.data.length>0){
 					item = res.data[0];
 				}

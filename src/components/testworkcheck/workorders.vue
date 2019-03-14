@@ -784,6 +784,7 @@
 			},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
+			   console.log(childValue);
         		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
@@ -794,6 +795,7 @@
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
+				console.log(data);
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.buttons = res.data;

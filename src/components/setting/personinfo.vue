@@ -615,8 +615,11 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 	    			 // console.log(roles);
-	    			for(var i = 0; i < roles.length; i++) {
-						this.personinfo.roleId.push(roles[i].id);
+	    		this.user.roleId = this.user.roleId.split(',');
+					var arr = [];
+					var roleId = this.user.roleId;
+					for(var i=0; i< roleId.length; i++){
+						roleId[i] =  parseInt(roleId[i]);
 					}
 	    			this.getImgUrl();
 				}).catch((err) => {
@@ -672,16 +675,16 @@
 					this.dialogVisible = true;
 				});
 			},
-			//角色
-			getRole() {
-				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data.data);
-					this.selectData = res.data.data;
-				}).catch(error => {
-					console.log('请求失败');
-				})
-			},
+			// //角色
+			// getRole() {
+			// 	var url = this.basic_url + '/api-user/roles';
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		console.log(res.data.data);
+			// 		this.selectData = res.data.data;
+			// 	}).catch(error => {
+			// 		console.log('请求失败');
+			// 	})
+			// },
 			getCheckedNodes() {//获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
@@ -933,7 +936,6 @@
 		},
 		mounted() {
 			this.getData();
-			this.getRole();
 		},
 	}
 </script>

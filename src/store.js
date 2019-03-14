@@ -9,6 +9,7 @@ const state={//要设置的全局访问的state对象
    menuid:null,//一级菜单id
    menusid:null,//二级菜单id
    currentRolesname:null,//当前的角色name
+   firstselectnav:{},//当只有一级菜单
    selectedNav:{
       css: 'icon-user',
       name: '首页',
@@ -44,6 +45,9 @@ const getters = {   //实时监听state值的变化(最新状态)
    getClickedNav(state){
       return state.clickedNavs;
    },
+   getfirstselectnav(state){
+      return state.firstselectnav;
+   },
    getcurrentrolesname(state){
       return state.currentRolesname;
    },
@@ -73,6 +77,9 @@ const mutations = {
    updateLoadingStatus (state, payload) {
       state.isLoading = payload.isLoading;
    },
+   setfirstselectnav(state,firstselectnav){
+      state.selectedNav=firstselectnav;
+   },
    setcurrentrolesname(state,currentRolesname){
       state.currentRolesname=currentRolesname;
    },
@@ -99,6 +106,9 @@ const actions = {
    },
    setClickedNavAct(context,clickedNav){
       context.commit('setClickedNav',clickedNav);
+   },
+   setfirstselectnavAct(state,firstselectnav){
+      context.commit('setfirstselectnav',firstselectnav);
    },
    setcurrentrolesnameNavAct(context,currentRolesname){
       context.commit('setcurrentrolesname',currentRolesname);

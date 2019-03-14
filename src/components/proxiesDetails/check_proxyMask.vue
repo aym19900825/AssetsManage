@@ -1409,7 +1409,6 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -1766,7 +1765,7 @@
 						this.maingroup = res.data;
 					}).catch((err) => {
 						this.$message({
-							message: '网络错误，请重试7',
+							message: '网络错误，请重试',
 							type: 'error'
 						});
 					});
@@ -1936,7 +1935,7 @@
 	                this.username = res.data.username;
 	            }).catch((err) => {
 	                this.$message({
-	                    message: '网络错误，请重试',
+	                    message: '网络错误，请重试  3',
 	                    type: 'error'
 	                });
 	            });

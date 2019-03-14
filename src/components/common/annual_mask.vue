@@ -875,9 +875,7 @@
 					PROP_UNIT:[{required: true, trigger: 'change', validator: validateUnit}],//提出单位 
 					basisList:[{required: true, trigger: 'change', validator: validateBasislist}],//检测依据
 					DESCRIPTION:[{required: true, trigger: 'blur', validator: this.Validators.isFillTips}],//计划描述
-
 					TYPE:[{required: true, message: '请选择', trigger: 'change'}],//类别
-
 					COMPACTOR:[//编制人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
@@ -890,14 +888,10 @@
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
 					],
-
 					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
-
 					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
 					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-
        				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别
-
        				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
        				//检测依据 

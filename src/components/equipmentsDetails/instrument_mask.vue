@@ -88,7 +88,7 @@
 									</el-table>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="4">
-									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								
 								<!-- 其他信息 -->
@@ -144,7 +144,6 @@
 				</div>
 				<!-- 高级查询划出 End-->
 				<tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
-
 				<div slot="footer" v-if="noviews">
 	    			<el-button type="primary" @click="addAssetType">确 定</el-button>
 	    			<el-button @click="resetBasisInfo2">取 消</el-button>
@@ -1158,6 +1157,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.dataInfo.ID = res.data.datas.id;
+									this.dataInfo.ASSETNUM = res.data.datas.ASSETNUM;
 								}else{
 									this.$message({
 										message: '保存成功',

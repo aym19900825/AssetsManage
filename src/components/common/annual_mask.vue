@@ -1950,6 +1950,7 @@
 													this.docParm.model = 'edit';
 													this.$refs.docTable.autoLoad();
 													this.WORKPLAN.ID = res.data.datas.id;
+													this.WORKPLAN.WP_NUM = res.data.datas.WP_NUM;
 												}else{
 													this.$message({
 														message: '保存成功',

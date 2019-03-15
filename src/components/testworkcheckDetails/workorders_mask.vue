@@ -643,35 +643,35 @@
 											    </el-table-column>
 												<el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM" placeholder="自动生成">	
-														</el-input>
-														<span v-else>{{scope.row.WONUM}}</span>
+														<el-input disabled  size="small" v-model="scope.row.WONUM" placeholder="自动生成">	</el-input>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
 													<template slot-scope="scope">
-														<span>{{scope.row.ASSETNUM}}</span>
+														<el-input disabled  size="small" v-model="scope.row.ASSETNUM"></el-input>
 													</template>
 												</el-table-column>
 												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
 													<template slot-scope="scope">
-														<span>{{scope.row.DESCRIPTION}}</span>
+														<el-input disabled  size="small" v-model="scope.row.DESCRIPTION"></el-input>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
 													<template slot-scope="scope">
-														<span>{{scope.row.MODEL}}</span>
+														<el-input disabled  size="small" v-model="scope.row.MODEL"></el-input>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="USE_PERSON" label="使用人" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON">
+														  	<el-button slot="append" icon="el-icon-search" @click="addperson(scope.row, 'WORKORDER_ASSETList')" :disabled="noedit"></el-button>
 														</el-input>
-														<span v-else>{{scope.row.USE_PERSON}}</span>
 													</template>
 												</el-table-column>
+
+												
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
@@ -1166,6 +1166,7 @@
 				reportvalue:{},//储存生成报告数据
 				currentuserinfo:{},//储存当前用户信息
 				showcreateagree:true,//生成分包协议按钮
+				addPersonTable: ''
 			};
 		},
 		methods: {
@@ -1409,9 +1410,11 @@
 			appendite(value){
 				this.workorderForm.ITEMNUM = value;//样品名称
 			},
-			addperson(num){
+			addperson(num,opt){
+				//opt主要是区是哪个子表添加人员
 				this.getuser();
 				this.numtips = num;
+				this.addPersonTable = opt;
 				this.dialogVisible2 = true;
 			},
 			addpersonname(){
@@ -1445,12 +1448,17 @@
 						this.workorderForm.ITEM_RECCEPT_USERDesc = this.selMenu[0].nickname;
 						this.workorderForm.ITEM_RECCEPT_USER = this.selMenu[0].id;
 					}else{
-						this.numtips.NAME = this.selMenu[0].nickname;
-						this.numtips.USER = this.selMenu[0].id;
-						this.numtips.USERDesc = this.selMenu[0].username;
-						this.numtips.DEPARTMENT = this.selMenu[0].deptName;
-						this.numtips.DEPTID = this.selMenu[0].deptId;
-						this.numtips.TELPHONE = this.selMenu[0].phone;
+						if(addPersonTable == 'WORKORDER_ASSETList'){
+							this.numtips.USE_PERSON = this.selMenu[0].id;
+							this.numtips.USE_PERSONDesc = this.selMenu[0].username;
+						}else{
+							this.numtips.NAME = this.selMenu[0].nickname;
+							this.numtips.USER = this.selMenu[0].id;
+							this.numtips.USERDesc = this.selMenu[0].username;
+							this.numtips.DEPARTMENT = this.selMenu[0].deptName;
+							this.numtips.DEPTID = this.selMenu[0].deptId;
+							this.numtips.TELPHONE = this.selMenu[0].phone;
+						}
 					}
 					this.resetBasisInfo2();
 					// this.dialogVisible2 = false;

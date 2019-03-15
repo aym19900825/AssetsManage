@@ -455,6 +455,7 @@
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
 									this.WORK_INSTRUCTION.ID = res.data.datas.id;
+									this.WORK_INSTRUCTION.NUM = res.data.datas.NUM;
 								}else{
 									this.$emit('request');
 									this.$emit('reset');

@@ -413,6 +413,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.report.id = res.data.datas.id;
+									this.report.REPORTNUM = res.data.datas.REPORTNUM;
 								}else{
 									this.$message({
 										message: '保存成功',

@@ -579,6 +579,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.dataInfo.ID = res.data.datas.id;
+									this.dataInfo.C_PLANNUM = res.data.datas.C_PLANNUM;
 								}else{
 									this.$emit('request');
 									this.resetForm();

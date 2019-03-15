@@ -42,7 +42,7 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="3" v-show="views">
 									<el-row>
@@ -469,6 +469,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.id;
+									this.CATEGORY.NUM = res.data.datas.NUM;
 								}else{
 									this.$emit('request');
 									this.$emit('reset');

@@ -594,17 +594,15 @@
 	    		var url = this.basic_url + '/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => { 
 	    			this.personinfo=res.data;
-	    			console.log(res.data);
-	    			this.personinfo.roleId = [];
 					var roles =res.data.roles;
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 	    			 // console.log(roles);
-	    		this.user.roleId = this.user.roleId.split(',');
+	    			this.personinfo.roleId = this.personinfo.roleId.split(',');
 					var arr = [];
-					var roleId = this.user.roleId;
+					var roleId = this.personinfo.roleId;
 					for(var i=0; i< roleId.length; i++){
 						roleId[i] =  parseInt(roleId[i]);
 					}
@@ -923,6 +921,7 @@
 			},
 		},
 		mounted() {
+			this.getRole();
 			this.getData();
 		},
 	}

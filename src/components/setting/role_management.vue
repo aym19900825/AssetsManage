@@ -32,7 +32,7 @@
 							    <i class="icon-trash"></i>彻底删除
 							</button>			
 								<button type="button" class="btn btn-primarys button-margin" @click="menu">
-								    <i class="icon-key"></i>权限配置
+								    <i class="icon-key"></i>应用模块权限配置
 								</button>
 								<button type="button" class="btn btn-primarys button-margin" @click="datalimit">
 								    <i class="icon-data"></i>数据范围
@@ -250,7 +250,7 @@
 		    		this.delroleinfo();
 		    	}else if(item.name=="彻底删除"){
 		    		this.physicsDel();
-		    	}else if(item.name=="权限配置"){
+		    	}else if(item.name=="应用模块权限配置"){
 		    		this.menu();
 		    	}else if(item.name=="数据范围"){
 		    		this.datalimit();

@@ -1,11 +1,11 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="权限配置" :visible.sync="dialogVisible" width="30%"  >
+		<el-dialog :modal-append-to-body="false" title="应用模块权限配置" :visible.sync="dialogVisible" width="30%"  >
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys" default-expand-all>
 				</el-tree>
 			</div>
-			<div slot="footer" class="el-dialog__footer">
+			<div slot="footer">
 		       <el-button type="primary" @click="queding();" >确 定</el-button>
 		       <el-button @click="dialogVisible = false">取 消</el-button>
 		    </div>

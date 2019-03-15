@@ -133,38 +133,38 @@
 				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
 					'编码',
-                    '分类描述',
-                    '父级分类',
+					'分类描述',
+					'父级分类',
 					// '信息状态',
 					'录入时间',
 					'修改时间'
 				],
 				columns: [{
-			            text: '编码',
-			            dataIndex: 'CLASSIFY_NUM',
-			            isShow:true,
-			          },
-			          {
-			            text: '分类描述',
-			            dataIndex: 'CLASSIFY_DESCRIPTION',
-			            isShow:true,
-			          },
-			          {
-			            text: '父级分类',
-			            dataIndex: 'PARENTDesc',
-			            isShow:true,
-			          },
-			          {
-			          	text: '录入时间',
-			          	dataIndex: 'ENTERDATE',
-			          	isShow:true,
-			          },
-			          {
-			            text: '修改时间',
-			            dataIndex: 'CHANGEDATE',
-			            isShow:true,
-			          },
-			        ],
+					text: '编码',
+					dataIndex: 'CLASSIFY_NUM',
+					isShow:true,
+				},
+				{
+					text: '分类描述',
+					dataIndex: 'CLASSIFY_DESCRIPTION',
+					isShow:true,
+				},
+				{
+					text: '父级分类',
+					dataIndex: 'PARENTDesc',
+					isShow:true,
+				},
+				{
+					text: '录入时间',
+					dataIndex: 'ENTERDATE',
+					isShow:true,
+				},
+				{
+					text: '修改时间',
+					dataIndex: 'CHANGEDATE',
+					isShow:true,
+				},
+			],
 				selUser: [],
 				categoryList: [],
 				search: false,
@@ -222,13 +222,13 @@
 				this.CATEGORY = {
 					ID: '',
 					STATUS: '1',
-                    CLASSIFY_NUM:'',
-                    CLASSIFY_DESCRIPTION:'',
-                    PARENT:'',
-                    ENTERBY:'',
-                    NTERDATE:'',
-                    CHANGEBY:'',
-                    CHANGEDATE:''
+						CLASSIFY_NUM:'',
+						CLASSIFY_DESCRIPTION:'',
+						PARENT:'',
+						ENTERBY:'',
+						NTERDATE:'',
+						CHANGEBY:'',
+						CHANGEDATE:''
 				};
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();

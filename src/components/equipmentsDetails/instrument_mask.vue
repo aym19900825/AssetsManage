@@ -35,25 +35,36 @@
 										</el-col> -->
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='ASSET_STATUS' && item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='ASSET_STATUS' || item.prop =='ISPERIODIC' || item.prop =='ASSET_NUMBER')" disabled></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='TYPE' && item.prop !='ASSET_STATUS' && item.prop !='CONFIG_UNITDes' && item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
+										
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='ASSET_STATUS' || item.prop =='CONFIG_UNITDes' || item.prop =='ISPERIODIC' || item.prop =='ASSET_NUMBER')" disabled></el-input>
+										<!--设备分类-->
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='TYPE')" :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addAsset"></el-button>
+										</el-input>
+
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
+
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 										</el-date-picker>
+
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
+
 										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
+
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
+										
 									</el-form-item>
 								</el-collapse-item>
 
 								<!-- 设备保管人员情况 -->
 								<el-collapse-item title="设备保管人员情况" name="2">
 									<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER'" :type="item.type" :disabled="true">
+										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER' && item.prop =='KEEPER'" :type="item.type" :disabled="true">
 											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addPeople"></el-button>
 										</el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
@@ -85,7 +96,7 @@
 									<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-if="item.prop=='DEPARTMENT'" v-show="dept">
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled v-if="item.prop=='DEPARTMENT'"></el-input>
 									</el-form-item>
-									<el-form-item   v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
+									<el-form-item v-for="item in otherInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" v-show="views">
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" disabled ></el-input>
 									</el-form-item>	
 								</el-collapse-item>
@@ -105,23 +116,34 @@
 
 			<!--设备分类 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
-				<el-table :data="assetTypeList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'assetTypeList', order: 'descending'}" @selection-change="SelChange"
-						v-loadmore="loadMore"
-						v-loading="loading"
-						element-loading-text="加载中…"
-						element-loading-spinner="el-icon-loading"
-						element-loading-background="rgba(255, 255, 255, 0.9)">
-					<el-table-column type="selection" width="55" fixed align="center">
-					</el-table-column>
-					<el-table-column label="设备编码" sortable width="140px" prop="username">
-					</el-table-column>
-					<el-table-column label="分类描述" sortable width="200px" prop="nickname">
-					</el-table-column>
-					<el-table-column label="父级分类" sortable width="150px" prop="deptName">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
+				<!-- 高级查询划出 Begin-->
+				<div class="clearfix">
+					<el-form :model="searchList" label-width="45px">
+						<el-row :gutter="10">
+							<!-- <el-col :span="5">
+								<el-form-item label="编码" prop="CLASSIFY_NUM">
+									<el-input v-model="searchList.CLASSIFY_NUM"></el-input>
+								</el-form-item>
+							</el-col> -->
+							<el-col :span="8">
+								<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
+									<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
+								</el-form-item>
+							</el-col>
+							<!-- <el-col :span="5">
+								<el-form-item label="父级分类" prop="PARENTDesc" label-width="80px">
+									<el-input v-model="searchList.PARENTDesc"></el-input>
+								</el-form-item>
+							</el-col> -->
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
+				<!-- 高级查询划出 End-->
+				<tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
 
 				<div slot="footer" v-if="noviews">
 	    			<el-button type="primary" @click="addAssetType">确 定</el-button>
@@ -132,7 +154,7 @@
 
 			<!--设备保管人 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
-				<el-table :data="userList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
+				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
 						v-loadmore="loadMore"
 						v-loading="loading"
 						element-loading-text="加载中…"
@@ -167,10 +189,14 @@
 <script>
 	import Config from '../../config.js'
 	import docTable from '../common/doc.vue'
+	import tree_grid from '../common/TreeGrid.vue'//树表格
 	export default {
 		name: 'masks',
 		props: ['detailData'],
-		components: {docTable},
+		components: {
+			docTable,
+			tree_grid,
+		},
 		data() {
 			var checkNum = (rule, value, callback) => {
 				if (!value) {
@@ -200,10 +226,24 @@
 					'deptfullname': '',
 					'appid': 1
 				},
+				columns: [
+					{
+						text: '编码',
+						dataIndex: 'CLASSIFY_NUM',
+						isShow:true,
+					},
+					{
+						text: '分类描述',
+						dataIndex: 'CLASSIFY_DESCRIPTION',
+						isShow:true,
+					},
+					{
+						text: '父级分类',
+						dataIndex: 'PARENTDesc',
+						isShow:true,
+					},
+				],
 				rules: {
-					ASSETNUM: [//设备编号
-						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
-					],
 					DESCRIPTION: [//设备名称
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
@@ -244,13 +284,13 @@
 						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata},
 					],
 					ACCEPT_DATE: [//接收日期
-						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
+						{ required: true, message: '请选择日期', trigger: 'blur' },
 					],
 					USEDATE: [//使用日期
-						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
+						{ required: true, message: '请选择日期', trigger: 'blur' },
 					],
 					S_DATE: [//启用日期
-						{ type: 'date', required: true, message: '请选择日期', trigger: 'change' },
+						{  required: true, message: '请选择日期', trigger: 'blur' },
 					],
 					C_ADDRESS: [//配置地址
 						{ required: true, message: '必填', trigger: 'blur' },
@@ -298,17 +338,7 @@
 						label: '设备分类',
 						prop: 'TYPE',
 						width: '30%',
-						type: 'radio',
-						 opts: [
-                            {
-								label: '仪器',
-								val: '仪器'
-                            },
-                            {
-								label: '量具',
-								val: '量具'
-                            }
-                        ],
+						type: 'input',						
 						displayType: 'inline-block'
 					},
 					{
@@ -629,9 +659,6 @@
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				// dialogVisible: false, //对话框
 				modify: false,
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
 					children: "subDepts",
 					label: "simplename"
@@ -688,10 +715,19 @@
 				statusshow1:true,
 				statusshow2:false,
 				falg:false,
-				dialogVisible2:false,//设备分类
-				dialogVisible:false,//设备管理人
-				assetTypeList:[],//设备分类
-				userList:[],
+				dialogVisible2:false,//设备分类弹出框
+				dialogVisible:false,//设备保管人弹出框
+				categoryList:[],//设备分类数据
+				userList:[],//设备保管人数据
+				searchList: { //点击高级搜索后显示的内容
+					CLASSIFY_NUM:'',
+					CLASSIFY_DESCRIPTION: '',
+					PARENT:'',
+				},
+				//tree
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				page: {
 					currentPage: 1,
 					pageSize: 20,
@@ -733,6 +769,21 @@
 	                });
 	            });
 			},
+			getDetail(data){
+				// console.log('tableDetail');
+				this.view(data);
+			},
+			classByValue(childValue) {
+				// childValue就是子组件传过来的
+				// console.log('classByValue');
+				this.selUser = childValue;
+			},
+			childByValue(childValue) {
+				// childValue就是子组件传过来的值
+				// console.log('childvalue');
+				this.$refs.navsTabs.showClick(childValue);
+				this.getbutton(childValue);
+			},
 			
 			//设备保管人员情况
 			addPeople(){
@@ -747,6 +798,20 @@
 					this.dialogVisible = true;
 				}
 			},
+			//点击设备分类选值
+			addAsset(){
+				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
+				if(CONFIG_UNIT==""||CONFIG_UNIT=="undenfiend"){
+					this.$message({
+						message: '请先选配置单位名称',
+						type: 'warning'
+					});
+				}else{
+					this.requestData();
+					this.dialogVisible2 = true;
+				}
+			},
+			//设备分类
 			addAssetType(){
 				if(this.selUser.length == 0){
 					this.$message({
@@ -759,17 +824,18 @@
 						type: 'warning'
 					});
 				}else{
-					this.dataInfo.TYPE = this.selUser[0].nickname;
-					this.getuserinfo2();
+					this.dataInfo.TYPE = this.selUser[0].CLASSIFY_DESCRIPTION;
+					this.requestData();
 					this.resetBasisInfo2();//调用resetBasisInfo2函数
 				}
 			},
 			resetBasisInfo2(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisible2 = false;//关闭弹出框
-				this.assetTypeList = [];//列表数据置空
+				this.categoryList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
-				this.page.pageSize = 10;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
+			//设备保管人
 			addpeoname(){
 				if(this.selUser.length == 0){
 					this.$message({
@@ -1128,16 +1194,30 @@
 				this.save(dataInfo);
 				this.show = true;
 			},
-			
-			getuserinfo2() {//设备分类
+			searchinfo() {//点击高级搜索-搜索按钮后显示的内容
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索-重置按钮后显示的内容
+					CLASSIFY_NUM:'',
+					CLASSIFY_DESCRIPTION: '',
+					PARENT:'',
+				};
+				this.requestData();
+			},
+			requestData() {//设备分类
 				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
 				};
-				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.dataInfo.CONFIG_UNIT, {//要修改接口路径
+				this.$axios.get(this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT', {//要修改接口路径
 					params: data
 				}).then((res) => {
+					console.log(res);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -1146,13 +1226,9 @@
 					} else {
 						this.loadSign = true
 					}
-					this.assetTypeList = res.data.data;
+					this.categoryList = res.data.datas;
 					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
 				}).catch((wrong) => {})
-				
 			},
 			getuserinfo() {//高级查询字段
 				this.loading = true;//加载动画打开

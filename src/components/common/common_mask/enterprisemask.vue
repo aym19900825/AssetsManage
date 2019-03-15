@@ -210,7 +210,12 @@
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
 			}//滚动加载数据判断filing
-		}).catch((wrong) => {})
+		}).catch((wrong) => {
+				this.$message({
+				message: '网络错误，请重试',
+				type: 'erro'
+			});
+		})
 	},
 	determine(){
 		if(this.selUser.length == 0){

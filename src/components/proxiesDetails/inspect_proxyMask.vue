@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="4" class="pull-right">
-											<el-input v-model="dataInfo.STATUSDesc" :disabled="edit">
+											<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
@@ -56,7 +56,7 @@
 										<el-col :span="8">
 											<el-form-item label="名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getCustomer('vname')">
 													</el-button>
 												</el-input>
 											</el-form-item>
@@ -76,7 +76,7 @@
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
 												<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
-													 <el-button slot="append" icon="el-icon-search" @click="addname"></el-button>
+													 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -263,9 +263,9 @@
 												<el-table-column prop="P_DESC" label="检验项目描述" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
-														</el-input>
-														<span v-else>{{scope.row.P_DESC}}</span>
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
+															</el-input>
+															<span v-else>{{scope.row.P_DESC}}</span>
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -273,8 +273,9 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">		
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入">		
 															</el-input>
+															<span v-else>{{scope.row.P_DESC}}</span>
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -374,7 +375,7 @@
 												</el-table-column>
 												<el-table-column prop="DEPTTYPEDesc" label="机构属性" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.depttypeName" placeholder="">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="">
 														</el-input>
 														<span v-else>{{scope.row.DEPTTYPEDesc}}</span>
 													</template>
@@ -517,7 +518,7 @@
 									    <el-col :span="16">
 										<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
 											<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
-												<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"></el-button>
+												<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
 											</el-input>
 										</el-form-item>
 										</el-col>

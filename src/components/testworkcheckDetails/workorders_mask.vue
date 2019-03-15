@@ -72,8 +72,8 @@
 
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="主检员" prop="MASTER_INSPECTOR" >
-												<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="true">
+											<el-form-item label="主检员" prop="MASTER_INSPECTORDesc" >
+												<el-input v-model="workorderForm.MASTER_INSPECTORDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addperson('1')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -103,8 +103,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品状态" prop="ITEM_STATUS">
-												<el-input v-model="workorderForm.ITEM_STATUS" :disabled="edit"></el-input>
+											<el-form-item label="样品状态" prop="ITEM_STATUSDesc">
+												<el-input v-model="workorderForm.ITEM_STATUSDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -222,7 +222,9 @@
 										
 											<el-col :span="8">
 												<el-form-item label="样品接收人">
-													<el-input placeholder="请输入内容" v-model="workorderForm.ITEM_RECCEPT_USER" :disabled="noedit"></el-input>
+													<el-input v-model="workorderForm.ITEM_RECCEPT_USERDesc" :disabled="true">
+														<el-button slot="append" icon="el-icon-search" @click="addperson('ITEM_RECCEPT_USER')" :disabled="noedit"></el-button>
+													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -261,8 +263,8 @@
 													<!-- <el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input> -->
-													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP" label-width="150px">
-														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" placeholder="请选择" style="width: 100%;" :disabled="noedit">
+													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUPDesc" label-width="150px">
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUPDesc" placeholder="请选择" style="width: 100%;" :disabled="noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</el-form-item>
@@ -295,7 +297,7 @@
 													<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
 														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 													</el-select> -->
-													<el-input v-model="workorderForm.RETURN_ITEM_USER" :disabled="edit">
+													<el-input v-model="workorderForm.RETURN_ITEM_USERDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
@@ -327,14 +329,14 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品承接人">
-													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USER" :disabled="edit">
+													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USERDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="专业技术/质量负责人" label-width="150px">
-													<el-input v-model="workorderForm.PROFESSIONAL" :disabled="edit">
+													<el-input v-model="workorderForm.PROFESSIONALDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('qualityperson')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
@@ -391,12 +393,12 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检测依据" name="first">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
+											</div> -->
 
 											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
 
@@ -439,12 +441,12 @@
 											  </el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检测项目与要求" name="second">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
+											</div> -->
 							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 
 							            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
@@ -506,24 +508,27 @@
 													<span v-else>{{scope.row.NAME}}</span>
 											      </template>
 											    </el-table-column>
-											    <el-table-column label="用户名" sortable prop="USER">
+											    <el-table-column label="用户名" sortable prop="USERDesc">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USER"></el-input><span v-else>{{scope.row.USER}}</span>
+											      	<el-input size="small" v-model="scope.row.USERDesc" disabled></el-input>
 											      </template>
 											    </el-table-column>
 												<el-table-column label="是否是负责人" sortable prop="ISMAINPERSON">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISMAINPERSON"></el-input><span v-else>{{scope.row.ISMAINPERSON}}</span>
+													<el-select v-model="scope.row.ISMAINPERSON" placeholder="请选择" :disabled="!scope.row.isEditing">
+														<el-option label="是" value="1">是</el-option>
+														<el-option label="否" value="2">否</el-option>
+													</el-select>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="机构" sortable prop="DEPARTMENT">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT"></el-input><span v-else>{{scope.row.DEPARTMENT}}</span>
+													<el-input size="small" v-model="scope.row.DEPARTMENT" disabled></el-input>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="电话" sortable prop="TELPHONE">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE"></el-input><span v-else>{{scope.row.TELPHONE}}</span>
+													<el-input size="small" v-model="scope.row.TELPHONE" disabled></el-input>
 											      </template>
 											    </el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -622,12 +627,11 @@
 											</el-row>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测设备" name="fifth">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addequip">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
-											</div>
-
+											</div> -->
 											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
@@ -639,35 +643,35 @@
 											    </el-table-column>
 												<el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM" placeholder="自动生成">	
-														</el-input>
-														<span v-else>{{scope.row.WONUM}}</span>
+														<el-input disabled  size="small" v-model="scope.row.WONUM" placeholder="自动生成">	</el-input>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
 													<template slot-scope="scope">
-														<span>{{scope.row.ASSETNUM}}</span>
+														<el-input disabled  size="small" v-model="scope.row.ASSETNUM"></el-input>
 													</template>
 												</el-table-column>
 												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
 													<template slot-scope="scope">
-														<span>{{scope.row.DESCRIPTION}}</span>
+														<el-input disabled  size="small" v-model="scope.row.DESCRIPTION"></el-input>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
 													<template slot-scope="scope">
-														<span>{{scope.row.MODEL}}</span>
+														<el-input disabled  size="small" v-model="scope.row.MODEL"></el-input>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="USE_PERSON" label="使用人" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON" placeholder="请输入">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON">
+														  	<el-button slot="append" icon="el-icon-search" @click="addperson(scope.row, 'WORKORDER_ASSETList')" :disabled="noedit"></el-button>
 														</el-input>
-														<span v-else>{{scope.row.USE_PERSON}}</span>
 													</template>
 												</el-table-column>
+
+												
 												
 												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
@@ -1162,6 +1166,7 @@
 				reportvalue:{},//储存生成报告数据
 				currentuserinfo:{},//储存当前用户信息
 				showcreateagree:true,//生成分包协议按钮
+				addPersonTable: ''
 			};
 		},
 		methods: {
@@ -1405,9 +1410,11 @@
 			appendite(value){
 				this.workorderForm.ITEMNUM = value;//样品名称
 			},
-			addperson(num){
+			addperson(num,opt){
+				//opt主要是区是哪个子表添加人员
 				this.getuser();
 				this.numtips = num;
+				this.addPersonTable = opt;
 				this.dialogVisible2 = true;
 			},
 			addpersonname(){
@@ -1423,17 +1430,35 @@
 					});
 				}else{
 					if(this.numtips == '1'){
-						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].nickname;
+						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].id;
+						this.workorderForm.MASTER_INSPECTORDesc = this.selMenu[0].nickname;
 					}else if(this.numtips == '2'){
-						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_PROFESSIONAL_GROUPDesc = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].id;
 					}else if(this.numtips == '3'){
-						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].nickname;
+						this.workorderForm.RETURN_ITEM_USERDesc = this.selMenu[0].nickname;
+						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].id;
 					}else if(this.numtips == 'sampleget'){
-						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_UNDERTAKE_USERDesc = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].id;
 					}else if(this.numtips == 'qualityperson'){
-						this.workorderForm.PROFESSIONAL = this.selMenu[0].nickname;
+						this.workorderForm.PROFESSIONALDesc = this.selMenu[0].nickname;
+						this.workorderForm.PROFESSIONAL = this.selMenu[0].id;
+					}else if(this.numtips == 'ITEM_RECCEPT_USER'){
+						this.workorderForm.ITEM_RECCEPT_USERDesc = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_RECCEPT_USER = this.selMenu[0].id;
 					}else{
-						this.numtips.NAME = this.selMenu[0].nickname;
+						if(addPersonTable == 'WORKORDER_ASSETList'){
+							this.numtips.USE_PERSON = this.selMenu[0].id;
+							this.numtips.USE_PERSONDesc = this.selMenu[0].username;
+						}else{
+							this.numtips.NAME = this.selMenu[0].nickname;
+							this.numtips.USER = this.selMenu[0].id;
+							this.numtips.USERDesc = this.selMenu[0].username;
+							this.numtips.DEPARTMENT = this.selMenu[0].deptName;
+							this.numtips.DEPTID = this.selMenu[0].deptId;
+							this.numtips.TELPHONE = this.selMenu[0].phone;
+						}
 					}
 					this.resetBasisInfo2();
 					// this.dialogVisible2 = false;
@@ -2306,6 +2331,13 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+				}
+				if(!this.workorderForm.CJDW || this.workorderForm.CJDW == '' ){
+					this.$message({
+	                    message: '请先选择承检单位',
+	                    type: 'warning'
+					});
+					return;
 				}
 				 //用户
 				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {

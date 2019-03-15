@@ -61,6 +61,10 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
+								<el-collapse-item title="文件" name="3">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+								</el-collapse-item>
+
 								<el-collapse-item title="其它" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
@@ -85,10 +89,8 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
+
 							</el-form>
-							<el-collapse-item title="文件" name="3">
-								<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
-							</el-collapse-item>
 						</el-collapse>
 					</div>
 					<div class="content-footer" v-show="noviews">

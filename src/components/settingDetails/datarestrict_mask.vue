@@ -31,7 +31,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="表对象" prop="objectid">
+											<el-form-item label="" prop="objectid">
 												<el-input v-model="CATEGORY.objectid" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>

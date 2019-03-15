@@ -76,7 +76,7 @@
 
 								</el-col>
 								<el-col :span="8">
-									<form method="post" id="file" action="" enctype="multipart/form-data" style="width: 100%; position: relative; height: 160px;">
+									<form method="post" id="file2" action="" enctype="multipart/form-data" style="width: 100%; position: relative; height: 160px;">
 										<el-button type="warn" round class="a-upload" style="width: 100%; position: relative;">
 											<img v-if="headImgUrl" :src="headImgUrl" class="avatar">
 											<i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -378,7 +378,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import Validators from '../../core/util/validators.js'
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import { Loading } from 'element-ui'
@@ -595,17 +594,15 @@
 	    		var url = this.basic_url + '/api-user/users/currentMap';
 	    		this.$axios.get(url, {}).then((res) => { 
 	    			this.personinfo=res.data;
-	    			console.log(res.data);
-	    			this.personinfo.roleId = [];
 					var roles =res.data.roles;
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 	    			 // console.log(roles);
-	    		this.user.roleId = this.user.roleId.split(',');
+	    			this.personinfo.roleId = this.personinfo.roleId.split(',');
 					var arr = [];
-					var roleId = this.user.roleId;
+					var roleId = this.personinfo.roleId;
 					for(var i=0; i< roleId.length; i++){
 						roleId[i] =  parseInt(roleId[i]);
 					}
@@ -924,6 +921,7 @@
 			},
 		},
 		mounted() {
+			this.getRole();
 			this.getData();
 		},
 	}

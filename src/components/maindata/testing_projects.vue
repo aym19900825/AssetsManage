@@ -18,7 +18,7 @@
 							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<el-dropdown size="small">
+							<el-dropdown size="small" v-if="isUploadBtn">
 									<button class="btn mr5 btn-primarys">
 										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
 									</button>
@@ -183,6 +183,7 @@
 		},
 		data() {
 			return {
+				isUploadBtn: false,
 				btn:'',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -729,8 +730,20 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					// console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',

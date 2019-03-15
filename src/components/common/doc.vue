@@ -130,14 +130,14 @@ export default {
         readAuth(row){
             console.log(row);
             var url = this.po_url+"/show?filename=" +row.filename
-                    + '&fileid=' +  row.fileid
-                    + '&userid=' +  this.docParm.userid
-                    + '&username=' + this.docParm.username
-                    + '&deptid=' + this.docParm.deptid
-                    + '&deptfullname=' + this.docParm.deptfullname
-                    + '&recordid=' + this.docParm.recordid
-                    + '&appname=' + this.docParm.appname
-                    + '&appid=' + this.docParm.appid;
+                + '&fileid=' +  row.fileid
+                + '&userid=' +  this.docParm.userid
+                + '&username=' + this.docParm.username
+                + '&deptid=' + this.docParm.deptid
+                + '&deptfullname=' + this.docParm.deptfullname
+                + '&recordid=' + this.docParm.recordid
+                + '&appname=' + this.docParm.appname
+                + '&appid=' + this.docParm.appid;
          window.open(url); 
         },
         uploadTip(){
@@ -181,12 +181,12 @@ export default {
                 }
             };
             var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
-                    + '&username=' + this.docParm.username
-                    + '&deptid=' + this.docParm.deptid
-                    + '&deptfullname=' + this.docParm.deptfullname
-                    + '&recordid=' + this.docParm.recordid
-                    + '&appname=' + this.docParm.appname
-                    + '&appid=' + this.docParm.appid;
+                + '&username=' + this.docParm.username
+                + '&deptid=' + this.docParm.deptid
+                + '&deptfullname=' + this.docParm.deptfullname
+                + '&recordid=' + this.docParm.recordid
+                + '&appname=' + this.docParm.appname
+                + '&appid=' + this.docParm.appid;
             console.log(url);
             this.$axios.post(url, formData, config
             ).then((res)=>{
@@ -243,10 +243,10 @@ export default {
                 });
             }else{
                 var url = this.selFiles[0].filepath 
-                        + '&userid=' + this.docParm.userid
-                        + '&username=' + this.docParm.username
-                        + '&deptid=' + this.docParm.deptid
-                        + '&deptfullname=' + this.docParm.deptfullname;
+                    + '&userid=' + this.docParm.userid
+                    + '&username=' + this.docParm.username
+                    + '&deptid=' + this.docParm.deptid
+                    + '&deptfullname=' + this.docParm.deptfullname;
                 window.open(url); 
             }
         },

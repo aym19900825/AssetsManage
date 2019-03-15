@@ -72,8 +72,8 @@
 
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="主检员" prop="MASTER_INSPECTOR" >
-												<el-input v-model="workorderForm.MASTER_INSPECTOR" :disabled="true">
+											<el-form-item label="主检员" prop="MASTER_INSPECTORDesc" >
+												<el-input v-model="workorderForm.MASTER_INSPECTORDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addperson('1')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -103,8 +103,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品状态" prop="ITEM_STATUS">
-												<el-input v-model="workorderForm.ITEM_STATUS" :disabled="edit"></el-input>
+											<el-form-item label="样品状态" prop="ITEM_STATUSDesc">
+												<el-input v-model="workorderForm.ITEM_STATUSDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -222,7 +222,9 @@
 										
 											<el-col :span="8">
 												<el-form-item label="样品接收人">
-													<el-input placeholder="请输入内容" v-model="workorderForm.ITEM_RECCEPT_USER" :disabled="noedit"></el-input>
+													<el-input v-model="workorderForm.ITEM_RECCEPT_USERDesc" :disabled="true">
+														<el-button slot="append" icon="el-icon-search" @click="addperson('ITEM_RECCEPT_USER')" :disabled="noedit"></el-button>
+													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -261,8 +263,8 @@
 													<!-- <el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input> -->
-													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUP" label-width="150px">
-														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" placeholder="请选择" style="width: 100%;" :disabled="noedit">
+													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUPDesc" label-width="150px">
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUPDesc" placeholder="请选择" style="width: 100%;" :disabled="noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</el-form-item>
@@ -295,7 +297,7 @@
 													<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
 														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
 													</el-select> -->
-													<el-input v-model="workorderForm.RETURN_ITEM_USER" :disabled="edit">
+													<el-input v-model="workorderForm.RETURN_ITEM_USERDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
@@ -327,14 +329,14 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品承接人">
-													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USER" :disabled="edit">
+													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USERDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="专业技术/质量负责人" label-width="150px">
-													<el-input v-model="workorderForm.PROFESSIONAL" :disabled="edit">
+													<el-input v-model="workorderForm.PROFESSIONALDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('qualityperson')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
@@ -506,9 +508,9 @@
 													<span v-else>{{scope.row.NAME}}</span>
 											      </template>
 											    </el-table-column>
-											    <el-table-column label="用户名" sortable prop="USER">
+											    <el-table-column label="用户名" sortable prop="USERDesc">
 											      <template slot-scope="scope">
-											      	<el-input size="small" v-model="scope.row.USER" disabled></el-input>
+											      	<el-input size="small" v-model="scope.row.USERDesc" disabled></el-input>
 											      </template>
 											    </el-table-column>
 												<el-table-column label="是否是负责人" sortable prop="ISMAINPERSON">
@@ -1425,18 +1427,27 @@
 					});
 				}else{
 					if(this.numtips == '1'){
-						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].nickname;
+						this.workorderForm.MASTER_INSPECTOR = this.selMenu[0].id;
+						this.workorderForm.MASTER_INSPECTORDesc = this.selMenu[0].nickname;
 					}else if(this.numtips == '2'){
-						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_PROFESSIONAL_GROUPDesc = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_PROFESSIONAL_GROUP = this.selMenu[0].id;
 					}else if(this.numtips == '3'){
-						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].nickname;
+						this.workorderForm.RETURN_ITEM_USERDesc = this.selMenu[0].nickname;
+						this.workorderForm.RETURN_ITEM_USER = this.selMenu[0].id;
 					}else if(this.numtips == 'sampleget'){
-						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_UNDERTAKE_USERDesc = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_UNDERTAKE_USER = this.selMenu[0].id;
 					}else if(this.numtips == 'qualityperson'){
-						this.workorderForm.PROFESSIONAL = this.selMenu[0].nickname;
+						this.workorderForm.PROFESSIONALDesc = this.selMenu[0].nickname;
+						this.workorderForm.PROFESSIONAL = this.selMenu[0].id;
+					}else if(this.numtips == 'ITEM_RECCEPT_USER'){
+						this.workorderForm.ITEM_RECCEPT_USERDesc = this.selMenu[0].nickname;
+						this.workorderForm.ITEM_RECCEPT_USER = this.selMenu[0].id;
 					}else{
 						this.numtips.NAME = this.selMenu[0].nickname;
-						this.numtips.USER = this.selMenu[0].username;
+						this.numtips.USER = this.selMenu[0].id;
+						this.numtips.USERDesc = this.selMenu[0].username;
 						this.numtips.DEPARTMENT = this.selMenu[0].deptName;
 						this.numtips.DEPTID = this.selMenu[0].deptId;
 						this.numtips.TELPHONE = this.selMenu[0].phone;
@@ -2312,6 +2323,13 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+				}
+				if(!this.workorderForm.CJDW || this.workorderForm.CJDW == '' ){
+					this.$message({
+	                    message: '请先选择承检单位',
+	                    type: 'warning'
+					});
+					return;
 				}
 				 //用户
 				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {

@@ -56,7 +56,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="1" :max="maxNum" label="描述文字" style="width: 100%"></el-input-number>
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :max="maxNum" :disabled="noedit" label="描述文字" style="width: 100%"></el-input-number>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

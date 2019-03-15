@@ -76,7 +76,7 @@ const doc_list  = r => require.ensure([], () => r(require('@/components/document
 const job  = r => require.ensure([], () => r(require('@/components/job/job')), 'job')//任务管理
 const jobblog  = r => require.ensure([], () => r(require('@/components/job/jobblog')), 'jobblog')//调度日志
 const jobgroup  = r => require.ensure([], () => r(require('@/components/job/jobgroup')),'jobgroup')//执行器管理
-
+const data_restrict = r => require.ensure([], () => r(require('@/components/setting/data_restrict')), 'data_restrict')//数据限制
 
 const approving  = r => require.ensure([], () => r(require('@/components/workflow/approving')), 'approving')//审批意见
 const flowhistory  = r => require.ensure([], () => r(require('@/components/workflow/flowhistory')), 'flowhistory')//流程历史
@@ -251,6 +251,11 @@ Vue.use(Router)
       path: '/verification_records',
       name: 'verification_records',
       component: verification_records
+    },
+    {//数据限制
+      path: '/data_restrict',
+      name: 'data_restrict',
+      component: data_restrict
     },
     {//个人资料
       path: '/personinfo',

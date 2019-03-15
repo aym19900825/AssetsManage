@@ -391,12 +391,12 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检测依据" name="first">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
+											</div> -->
 
 											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
 
@@ -439,12 +439,12 @@
 											  </el-table>
 										</el-tab-pane>
 										<el-tab-pane label="检测项目与要求" name="second">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
+											</div> -->
 							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 
 							            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
@@ -508,22 +508,25 @@
 											    </el-table-column>
 											    <el-table-column label="用户名" sortable prop="USER">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USER"></el-input><span v-else>{{scope.row.USER}}</span>
+											      	<el-input size="small" v-model="scope.row.USER" disabled></el-input>
 											      </template>
 											    </el-table-column>
 												<el-table-column label="是否是负责人" sortable prop="ISMAINPERSON">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ISMAINPERSON"></el-input><span v-else>{{scope.row.ISMAINPERSON}}</span>
+													<el-select v-model="scope.row.ISMAINPERSON" placeholder="请选择" :disabled="!scope.row.isEditing">
+														<el-option label="是" value="1">是</el-option>
+														<el-option label="否" value="2">否</el-option>
+													</el-select>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="机构" sortable prop="DEPARTMENT">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPARTMENT"></el-input><span v-else>{{scope.row.DEPARTMENT}}</span>
+													<el-input size="small" v-model="scope.row.DEPARTMENT" disabled></el-input>
 											      </template>
 											    </el-table-column>
 											    <el-table-column label="电话" sortable prop="TELPHONE">
 											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TELPHONE"></el-input><span v-else>{{scope.row.TELPHONE}}</span>
+													<el-input size="small" v-model="scope.row.TELPHONE" disabled></el-input>
 											      </template>
 											    </el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -622,12 +625,11 @@
 											</el-row>
 										</el-tab-pane>
 										<el-tab-pane label="检验检测设备" name="fifth">
-											<div class="table-func table-funcb">
+											<!-- <div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addequip">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
-											</div>
-
+											</div> -->
 											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 											      <template slot-scope="scope">
@@ -1434,6 +1436,10 @@
 						this.workorderForm.PROFESSIONAL = this.selMenu[0].nickname;
 					}else{
 						this.numtips.NAME = this.selMenu[0].nickname;
+						this.numtips.USER = this.selMenu[0].username;
+						this.numtips.DEPARTMENT = this.selMenu[0].deptName;
+						this.numtips.DEPTID = this.selMenu[0].deptId;
+						this.numtips.TELPHONE = this.selMenu[0].phone;
 					}
 					this.resetBasisInfo2();
 					// this.dialogVisible2 = false;

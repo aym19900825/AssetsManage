@@ -120,6 +120,7 @@
 					{
 						text: '机构名称',
 						dataIndex: 'fullname',
+						width:'240',
 						isShow:true,
 					},
 					{

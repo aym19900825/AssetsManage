@@ -158,7 +158,7 @@ const validators = {
 				callback(new Error('不支持特殊符号'));
 			} else {
 				if(!validators.LetterNumber(value)) {
-					callback(new Error('只支持英文、数字'));
+					callback(new Error('只支持英文、数字或下划线'));
 				} else {
 					callback();
 				}

@@ -76,7 +76,7 @@
 
 								</el-col>
 								<el-col :span="8">
-									<form method="post" id="file" action="" enctype="multipart/form-data" style="width: 100%; position: relative; height: 160px;">
+									<form method="post" id="file2" action="" enctype="multipart/form-data" style="width: 100%; position: relative; height: 160px;">
 										<el-button type="warn" round class="a-upload" style="width: 100%; position: relative;">
 											<img v-if="headImgUrl" :src="headImgUrl" class="avatar">
 											<i v-else class="el-icon-plus avatar-uploader-icon"></i>

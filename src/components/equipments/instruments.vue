@@ -16,38 +16,33 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
-									<i :class="item.icon"></i>{{item.name}}
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+								<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
+							<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+								<el-dropdown-menu slot="dropdown">
+    								<el-dropdown-item>
+    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+    								</el-dropdown-item>
+    								
+    								<el-dropdown-item>
+										<el-upload
+										ref="upload"
+										class="upload"
+										:action="uploadUrl()"
+										:on-success="fileSuccess"
+										:limit=1
+										multiple
+										method:="post"
+										:file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
+    								</el-dropdown-item>
+						  		</el-dropdown-menu>
+							</el-dropdown>
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -184,8 +179,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<instrumentsmask :detailData="selUser[0]" ref="child" @request="requestData"></instrumentsmask>
-					<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -213,6 +208,7 @@
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},
+				fileList:[],//文件上传的接收数据
 				status: [
 					{
 						label: '启用',
@@ -541,9 +537,29 @@
 					});
 				}
 			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/asset/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
 			// 导入
-			importData() {
-				
+			download() {
+				var url = this.basic_url + '/api-apps/app/asset/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			// 导出
 			exportData() {
@@ -716,9 +732,19 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
-					this.buttons = res.data;
-					
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {
 					this.$message({
 								message: '网络错误，请重试',

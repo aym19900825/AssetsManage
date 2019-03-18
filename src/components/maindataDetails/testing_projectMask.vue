@@ -478,7 +478,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {

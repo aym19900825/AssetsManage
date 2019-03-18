@@ -29,11 +29,9 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			insert() {
-				console.log("aaaaaaaaaaaaaa");
 				this.users.push(this.user)
 			},
 			remove(index) {

@@ -304,7 +304,6 @@
 						}).catch((err) => {
 						});
 					} else {
-						var middleWidth=5;
 						return false;
 					}
 				});

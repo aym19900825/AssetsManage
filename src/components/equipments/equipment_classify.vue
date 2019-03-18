@@ -493,7 +493,6 @@
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-				
 				})
 		    },
 		},

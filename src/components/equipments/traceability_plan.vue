@@ -676,7 +676,9 @@
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
+
 				}).catch((wrong) => {
+
 				})
 		    },
 		},

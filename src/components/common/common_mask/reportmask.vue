@@ -115,7 +115,6 @@
 	     setTimeout(() => {
 	       this.loadSign = true
 	     }, 1000)
-	     console.log('到底了', this.page)
 	   }
 	 },
 	getreport(){
@@ -133,7 +132,6 @@
 		})	
 	},
 	determine(){
-		// console.log(this.selUser);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',

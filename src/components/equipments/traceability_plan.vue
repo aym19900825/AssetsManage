@@ -658,7 +658,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},

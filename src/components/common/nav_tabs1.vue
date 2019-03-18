@@ -135,7 +135,6 @@ export default {
                 }]}));
         },
         sessionGet(){
-        	console.log(new Date())
         	this.tabs = this.$clickedNav
         	this.selectedTab = this.$selectedNav
 //	        if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
@@ -152,7 +151,6 @@ export default {
     	this.sessionGet();
 //  	 if(sessionStorage.getItem('clickedNav') != null && sessionStorage.getItem('clickedNav').length>0){
 //	    		this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-//	    		console.log(this.tabs);
 //	    	}else{
 //	    		this.showindex()
 //	    	}
@@ -161,7 +159,6 @@ export default {
 //	    	}
     	
 //  	this.tabs = JSON.parse(sessionStorage.getItem('clickedNav')).arr;
-//  	console.log(this.tabs);
 //      this.selectedTab = JSON.parse(sessionStorage.getItem('selectedNav'));
 
     }

@@ -57,14 +57,10 @@ export default {
 					menuId: sessionStorage.getItem('menuId'),
 					roleId: sessionStorage.getItem('roleid'),
 				}
-				console.log(menuId);
-				console.log(roleId);
 				var promise = new Promise(function(resolve, reject) {
 					var url = _this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 					_this.$axios.get(url, {params: data}).then((res) => {
 						_this.leftNavs = res.data;
-						console.log(1234);
-						console.log(res.data);
 						resolve(res);
 					}).catch((wrong) => {
 						_this.$message({
@@ -139,7 +135,6 @@ export default {
 //		this.getNaveLeft();
 		var that=this;
 		that.getNaveLeft().then(function (result){
-			console.log(result);
 			var data=result.data;
 			let item = data[0];
 			that.addClickNav(item);

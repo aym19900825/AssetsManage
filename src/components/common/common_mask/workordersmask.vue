@@ -201,7 +201,6 @@
                 this.$axios.get(url, {
                     params: data
                 }).then((res) => {
-                    // console.log(res)
                     this.page.totalCount = res.data.count;	
                     //总的页数
                     this.userList=res.data.data;

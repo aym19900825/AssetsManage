@@ -758,7 +758,6 @@
 					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
-					// console.log(res.data);
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
 						res.data.ITEM_LINEList[i].isEditing = false;
 					}

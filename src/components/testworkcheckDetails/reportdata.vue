@@ -169,7 +169,6 @@
 		var url = this.basic_url +'/api-apps/app/workorder/operate/templatedata?id='+this.dataid;
 		console.log(url);
         this.$axios.get(url,{}).then((res) => {
-			console.log(res.data);
 			this.REPORTList = res.data;
 			this.$refs.multipleTable.toggleAllSelection();
         }).catch((err) => {
@@ -187,7 +186,6 @@
 		var url = this.basic_url +'/api-apps/app/workorder/operate/templatedata?id='+this.dataid;
 		console.log(url);
         this.$axios.get(url,{}).then((res) => {
-			console.log(res.data);
             this.REPORTList = res.data;
         }).catch((err) => {
             this.$message({

@@ -137,7 +137,6 @@
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//				console.log(data);
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -157,8 +156,6 @@
 			//点击按钮显示弹窗
 			visible(pramList,file) {	
 				this.file=file;
-				console.log(pramList);
-				console.log(this.file);
 				for(var i=0;i<pramList.length;i++){
 					pramList[i].width="40%"
 					
@@ -209,7 +206,6 @@
 
 			
 			addPeople(item){
-				console.log(item.param);
 				if(item.type==4){
 					this.getDept(item.param);
 				}else{
@@ -217,7 +213,6 @@
 				}
 			},
 			determine(){
-					console.log(this.dataInfo);
 		  		var str=JSON.stringify(this.dataInfo);
 				for(var j=0;j<str.length;j++){
 					str=str.replace("\":\"",'=');
@@ -231,9 +226,7 @@
 					var pos = url.lastIndexOf(':');
 					url=url.substring(0,pos+1); 
 					this.url=url+"5300";
-					console.log(url);
 				var url = this.url+"/ureport/preview?_u=mysql:"+this.file
-				console.log(url);
              window.open(url); 
 			},
 			getDept(item) {
@@ -242,7 +235,6 @@
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 					sessionStorage.setItem("prop", item);
-					console.log(item);
 				}).catch((wrong) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -252,8 +244,6 @@
 			},
 			dailogconfirm() { //小弹出框确认按钮事件
 					var value = sessionStorage.getItem("prop");
-					console.log(value);
-					console.log(this.dataInfo.value);
 					this.dataInfo[value]=this.getCheckboxData.fullname;
 					// this.user.deptId = this.getCheckboxData.id;
 					// this.user.deptName = this.getCheckboxData.fullname;
@@ -293,7 +283,6 @@
 						type: 'warning'
 					});
 				}else{
-					console.log(this.selval[0]);
 					var value = sessionStorage.getItem("user");
 				  this.dataInfo[value]=this.selval[0].username;
 					this.dialogVisibleuser = false;

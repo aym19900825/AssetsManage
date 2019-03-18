@@ -28,7 +28,6 @@
 			delBtn: {
 				handler: (newVal, oldVal)=>{
 					this.delButton = newVal;
-					console.log(this.delButton.name);
 				},
 				immediate:true,
             	deep:true

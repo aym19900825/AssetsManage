@@ -147,10 +147,6 @@
 						}).catch((err) => {
 						});
 					} else {
-<<<<<<< HEAD
-						var middleWidth=5,
-=======
->>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 						this.show = false;
 						return false;
 					}

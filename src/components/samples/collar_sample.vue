@@ -735,13 +735,6 @@
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-<<<<<<< HEAD
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-=======
->>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 				})
 		    },
 		    //树和表单之间拖拽改变宽度

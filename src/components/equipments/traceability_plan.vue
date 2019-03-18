@@ -662,12 +662,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 					this.buttons = res.data;
-=======
 					var resData = res.data;
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{
@@ -681,15 +676,9 @@
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
->>>>>>> 690dfbbdb5270f7ed89163137e3c0b377f186f3c
+
 				}).catch((wrong) => {
-<<<<<<< HEAD
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-=======
->>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
+
 				})
 		    },
 		},

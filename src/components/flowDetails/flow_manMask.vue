@@ -139,15 +139,18 @@
 					if (valid) {
 					   var url = this.basic_url + '/api-flow/flow/model/create';
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.modelId);
 							this.modelId=res.data.modelId;
-							console.log(res);
+							
 							if(res.status ==200) {
      						this.$refs.child.visible();
 							}
 						}).catch((err) => {
 						});
 					} else {
+<<<<<<< HEAD
+						var middleWidth=5,
+=======
+>>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 						this.show = false;
 						return false;
 					}

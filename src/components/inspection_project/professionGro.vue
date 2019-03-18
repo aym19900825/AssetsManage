@@ -204,7 +204,7 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
 				})
@@ -268,7 +268,7 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
+					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -297,7 +297,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res);
+					// 
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -426,7 +426,6 @@
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                 	var url = this.basic_url + '/api-apps/app/professionGro/' + row.ID;
-                	// console.log(row.ID);
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

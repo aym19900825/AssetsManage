@@ -75,7 +75,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//清空
@@ -233,7 +232,6 @@
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
-					console.log(selData);
 					for(var i = 0; i < selData.length; i++) {
 						deleteid.push(selData[i].id);
 					}
@@ -242,7 +240,6 @@
 					var data = {
 						ids: ids,
 					}
-					console.log(data);
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -285,7 +282,7 @@
 				this.loading = true;
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

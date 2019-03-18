@@ -328,9 +328,7 @@
 				this.$refs[testingForm].validate((valid) => {
 			        if (valid) {
 			          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
-			          	// console.log(TESTINGFORM);
 	 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
-	 					// console.log(testingForm);
 					 	if(testingForm==TESTINGFORM){
 					  		this.$message({
 								message: '没有修改内容，不允许修订',
@@ -523,8 +521,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionMet/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -538,7 +534,6 @@
 			},
 			//执行保存
 			save(opt) {
-				console.log('testingForm-----save');
 				var _this = this;
 				this.$refs['testingForm'].validate((valid) => {
 					if(!valid && opt == 'docUpload'){

@@ -474,7 +474,6 @@
 			},
 			//修改
 			modify() {
-				console.log(111);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -488,7 +487,6 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
 					if(this.selUser[0].STATUS == 3 || this.selUser[0].STATUS == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
@@ -828,14 +826,13 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
+					// 
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

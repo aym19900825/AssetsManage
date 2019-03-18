@@ -364,17 +364,21 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
+<<<<<<< HEAD
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+=======
+>>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 				})
 		    },
 		},

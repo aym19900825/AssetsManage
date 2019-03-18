@@ -295,9 +295,7 @@
 			},
 			//刪除新建行
 			deletemodule(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='tableList'){
 					TableName = 'RAW_DATA_TEMPATE_DETAIL';
 				}
@@ -452,8 +450,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/rawDataTem/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',

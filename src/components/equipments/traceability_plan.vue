@@ -651,19 +651,18 @@
 			},
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值
-				console.log('childvalue');
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
 			 //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
+					this.buttons = res.data;
 					var resData = res.data;
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{

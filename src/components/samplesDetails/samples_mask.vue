@@ -887,7 +887,6 @@
 			},
 			addfield() { 
 				//插入行到文件文件Table中
-				// console.log(this.samplesForm.QUATITY);
 				this.samplesForm.ITEM_LINEList = [];
 				var date=new Date();
 				var time = this.$moment(date).format("YYYY-MM-DD");
@@ -998,7 +997,6 @@
 				var dataid = this.samplesForm.ID;
 				var url =this.basic_url + '/api-apps/app/item/operate/isExcProxy?ID=' +dataid;
 				this.$axios.get(url,{}).then((res) => {
-					// console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1063,7 +1061,6 @@
 			},
 			// //表格滚动加载
 			loadMore(val) {
-				// console.log(this.$refs.table.$el.offsetTop)
 				// let up2down = sessionStorage.getItem('up2down');
 				// if(this.loadSign) {					
 				// 	if(up2down=='down'){
@@ -1130,7 +1127,6 @@
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
 					this.deptid = res.data.deptId;
 					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.deptid;
-					// console.log(this.deptid);
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {
@@ -1156,7 +1152,6 @@
 			getITEM_STATUS() {//获取样品状态
 				var url =  this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res)
 					// this.Select_STATUS = res.data;
 				}).catch(error => {
 				})

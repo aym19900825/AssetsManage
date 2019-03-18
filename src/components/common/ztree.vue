@@ -75,8 +75,6 @@
         }
       },
       mounted(){
-      	console.log($.fn.zTree);
-//    $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
       }
     }
 </script>

@@ -206,7 +206,7 @@
 					row.ENTERBY=res.data.nickname;
 					var date=new Date();
 					row.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
 				})
@@ -234,7 +234,6 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
-					// console.log(this.departmentId);
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -283,13 +282,11 @@
 				if(id=='null'){
 					this.product2Form.inspectionList = [];
 					this.viewchildRow('null');
-					// this.$refs.inspectionSta2child.viewfield_inspectionSta2('null');
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				// console.log(this.parentId);
 				var url = this.basic_url + '/api-apps/app/productType2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;

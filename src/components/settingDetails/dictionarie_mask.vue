@@ -199,17 +199,13 @@
 		},
 		methods: {
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			handleClick(tab, event) {
-				console.log(tab, event);
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-
 					row.isEditing = !row.isEditing;
-
 				}
 			},
 			//清空
@@ -271,7 +267,6 @@
 						res.data.subDicts[i].isEditing = false;
 					}
 					this.dictionarieForm = res.data;
-					// console.log(this.dictionarieForm.subDicts);
 					this.show = true;
 				}).catch((err) => {
 				});
@@ -329,12 +324,9 @@
 				this.$refs.dictionarieForm.validate((valid) => {
 					if(valid) {
 						this.dictionarieForm.hidden=this.dictionarieForm.hidden?1:0
-						//console.log(this.dictionarieForm.hidden)
 						var dictionarieForm = this.dictionarieForm;
 						var url = this.basic_url + '/api-user/dicts/saveOrUpdate';
-						//return false;
 						this.$axios.post(url, this.dictionarieForm).then((res) => {
-							//console.log(this.dictionarieForm)
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -389,7 +381,6 @@
 			// 			//少附件
 			// 			isEditing: true,
 			// 		};
-			// 		console.log(obj);
 			// 		this.dictionarieForm.subDicts.push(obj);
 			// 	// }).catch((err) => {
 			// 	// 	this.$message({
@@ -401,9 +392,7 @@
 			 },
 			//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='tableList'){
 					TableName = 'subDicts';
 				}
@@ -416,7 +405,7 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
-							console.log(res);
+							
 							if(res.data.resp_code == 0){
 								this.dictionarieForm[TableName].splice(index,1);
 								this.$message({
@@ -435,8 +424,6 @@
 
 					});
 				}else{
-					console.log(this.dictionarieForm[TableName]);
-					// this.user[TableName+'List'].splice(index,1);
 					this.dictionarieForm[TableName].splice(index,1);
 				}
 			},

@@ -243,7 +243,7 @@
 				this.page.pageSize = 10;//页码重新传值
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
+				
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;

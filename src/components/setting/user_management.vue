@@ -351,7 +351,6 @@
 		},
 		methods: {
 			getCheckedKeys() { 
-				console.log(this.$refs.tree.getCheckedKeys());
 				},
 			resetTree(){
 				this.Access = false;

@@ -37,16 +37,14 @@
 				this.cccData = data;
 			},
 			getCheckedKeys() {
-				console.log(this.$refs.tree.getCheckedKeys());
 			},
 			menu(id) {
-				console.log(id);
 				var _this = this;
 				this.roId=id;	
 				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.menuData = res.data;
 					// var menuData = res.data;//第一级
 					// for(var a = 0; a < menuData.length; a++){
@@ -56,7 +54,6 @@
 					// 			arr.pop(menuData[a].id)
 					// 			var menuDataChild=menuData[a].children//2
 					// 			for(var b=0;b<menuData[a].children.length;b++){
-					// 				console.log(menuData[a].children.length);
 					// 				if(menuData[a].children[b].checked) {
 					// 					arr.push(menuData[a].children[b].id);
 					// 					if(menuData[a].children[b].children.length > 0) {
@@ -75,7 +72,6 @@
 					
 				this.recursive(res.data,arr);
 				this.$nextTick(() => {
-					console.log(arr);
 						this.setChecked(arr);
 					});
 				this.dialogVisible = true;
@@ -83,7 +79,6 @@
 				});
 			},
 			recursive(mData,arr){
-				console.log(mData.length);
 				var flag=true;
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
@@ -124,15 +119,10 @@
 				})
 			},
 			queding() {
-				console.log(this.roId);
 				var permissionIds = [];
 				var menuIds = [];
 				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
 				var menu = this.$refs.tree.getHalfCheckedNodes();
-				console.log(this.$refs.tree.getCheckedKeys().concat(menuIds));
-				console.log(this.$refs.tree.getCheckedKeys());
-				console.log(menu); //父的
-				console.log(permission); //勾選的子
 				for(var j = 0; j < menu.length; j++) {
 					if(menu[j].type == "menu") {
 						menuIds.push(menu[j].id);
@@ -154,7 +144,7 @@
 				}
 				var url = this.basic_url + '/api-user/menus/granted'
 				this.$axios.post(url, data).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_msg == "0") {
 						this.$message({
 							message: "操作成功",

@@ -71,7 +71,7 @@ export default {
 				this.$axios.post(url, this.approveForm).then((res) => {
 				console.log(this.approveForm);
 					if(res.data.resp_code == 1) {
-						console.log(res);
+						
 							this.$message({
 								message:res.data.resp_msg,
 								type: 'warning'
@@ -101,7 +101,7 @@ export default {
 							"opinion":this.approveForm.opinion,
 					}
 				this.$axios.post(url, this.approveForm).then((res) => {
-				console.log(res);
+				
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,

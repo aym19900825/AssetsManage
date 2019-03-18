@@ -363,7 +363,6 @@
 					}else{
 						var url = this.basic_url + '/api-apps/app/subcontrac/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
 							var users='';
@@ -394,7 +393,6 @@
 							});
 						var url = this.basic_url + '/api-apps/app/subcontrac/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){

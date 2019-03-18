@@ -309,7 +309,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			//机构值
@@ -490,7 +489,6 @@
 					});
 					return;
 				} else {
-					console.log('===='+this.selMenu[0].ID);
 					this.testing_projectForm = this.selMenu[0]; 
 					this.$refs.child.detail(this.selMenu[0].ID); 
 				}
@@ -709,16 +707,13 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
 					var resData = res.data;
-
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{
 						if(item.name == '导入'){
@@ -732,6 +727,13 @@
 					}
 					this.buttons = resData;
 				}).catch((wrong) => {
+<<<<<<< HEAD
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+=======
+>>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 				})
 
 			},

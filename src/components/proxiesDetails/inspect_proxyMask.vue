@@ -1559,7 +1559,6 @@
 			},
 			//分包要求检验依据名称
 			testbasisname(value){
-				console.log('testbasisname');
 				this.deptindex.BASIS = value;
 			},
 			//检测依据编号+版本

@@ -295,7 +295,7 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/reportOnhole/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -322,7 +322,7 @@
 				this.detailgetData();
 				// var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isStart/'+this.dataid;
 				// this.$axios.get(url, {}).then((res) => {
-				// 	 console.log(res);
+				// 	 
 				// 	if(res.data.resp_code==1){
 				// 		this.start=true;
 				// 		this.approval=false;

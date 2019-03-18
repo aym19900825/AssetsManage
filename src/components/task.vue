@@ -174,7 +174,6 @@ export default {
 			},
 		//审核	
 		audit(item){
-			console.log(item);
 			this.$router.push({path:item.bizMenuUrl ,query: { bizId: item.bizId,}});
 			this.$store.dispatch('setMenuIdAct',item.bizFirstMenuId);
 

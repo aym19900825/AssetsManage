@@ -266,9 +266,8 @@
 				});
 				var url=this.basic_url + '/api-apps/appcfg/'+ id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.dataInfo=res.data;
-					console.log(this.dataInfo.reportId);
 					if(typeof(this.dataInfo.reportId) != 'undefind'&&this.dataInfo.reportId != null&&this.dataInfo.reportId.length > 0) {
 							this.dataInfo.reportId=[];
 							var reports = this.dataInfo.reports;
@@ -333,7 +332,6 @@
 				var _this = this;
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
-						console.log(this.dataInfo);
 						var dataInfo = _this.dataInfo;
 						var reportId = "";
 						if(typeof(dataInfo.reportId) != 'undefind' && dataInfo.reportId.length > 0) {
@@ -354,7 +352,6 @@
 							dataInfo.reports = [];
 						}
 						var url = this.basic_url + '/api-apps/appcfg/saveOrUpdate';
-						console.log(this.dataInfo);
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -402,7 +399,7 @@
 			getreport(){
 				var url = this.basic_url + '/api-report/report';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.selectData = res.data.data;
 					
 				}).catch((wrong) => {

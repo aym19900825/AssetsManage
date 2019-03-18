@@ -210,7 +210,7 @@
 					row.RELEASETIME = this.$moment(date).format("YYYY-MM-DD");
 					row.STARTETIME = this.$moment(date).format("YYYY-MM-DD");
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
 				})
@@ -286,7 +286,6 @@
 				return index + 1;
 			},
 			viewfield_inspectionSta2(id,num){//点击父级筛选出子级数据
-				// console.log(ID);
 				if(id=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
 					this.viewchildRow('null');

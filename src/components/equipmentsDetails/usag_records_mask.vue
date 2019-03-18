@@ -388,7 +388,6 @@
 			},
 			//tabs
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
 			searchSam(){
 				this.page.currentPage = 1;

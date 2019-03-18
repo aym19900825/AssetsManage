@@ -260,7 +260,6 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				console.log(dataid);
 				this.dataid=dataid;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -320,21 +319,18 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/reportApprove/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 console.log(res);
+					 
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
 					}else{
 						var url = this.basic_url + '/api-apps/app/reportApprove/flow/Executors/'+this.dataid;
-						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res.data.datas);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								// console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -381,7 +377,7 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/reportApprove/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -549,7 +545,6 @@
 			//查看
 			readAuth(){
 				this.detailgetData();
-				console.log(this.report);
             var url = this.po_url+"/show?fileid=" +this.report.FILEID
                         + '&userid=' +  this.userid
                         + '&username=' + this.username

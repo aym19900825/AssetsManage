@@ -510,7 +510,7 @@
 			getMenuId(){
 				var url = this.basic_url + '/api-user/menus/findAllMenu';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.selectData = res.data;
 				}).catch((wrong) => {
 					this.$message({

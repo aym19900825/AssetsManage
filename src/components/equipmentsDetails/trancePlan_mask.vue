@@ -550,7 +550,7 @@
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-						// console.log(res);
+						// 
 						if(opt == 'new'){
 							this.dataInfo.DEPTID = res.data.deptId;
 							this.dataInfo.ENTERBY = res.data.id;
@@ -633,7 +633,6 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				console.log(this.dataInfo);
 				this.dataInfo = this.detailData;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -808,7 +807,6 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//console.log('到底了', this.page.currentPage)
 				}
 			},
 			requestData(index) {

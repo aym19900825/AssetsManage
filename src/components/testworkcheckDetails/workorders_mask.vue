@@ -1474,7 +1474,7 @@
 				this.$axios.get(url, {
 						
 				}).then((res) => {
-					console.log(res);
+					
 					//成功后给出提示信息并隐藏按钮
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -1755,7 +1755,7 @@
 				};
 				var url = this.basic_url +"/api-apps/app/workorder/operate/subproject";
 				this.$axios.post(url,data).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '生成成功',
@@ -1770,7 +1770,7 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1995,7 +1995,7 @@
 
 						// }).then((res) => {
 						// 	this.workorderreportid = res.data.datas.id;
-						// 	console.log(res);
+						// 	
 						// 	console.log()
 						// 	var obj = {
 						// 		REPORTNUM:res.data.datas.reportnum,
@@ -2165,7 +2165,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -2173,7 +2173,7 @@
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
 						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res);
+							
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
@@ -2199,7 +2199,7 @@
 					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
 					// console.log(this.workorderForm);
 					this.$axios.post(url,this.workorderForm).then((res) => {
-						// console.log(res);
+						// 
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

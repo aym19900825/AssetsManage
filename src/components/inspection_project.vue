@@ -269,7 +269,6 @@
 			// 		row.CHANGEBY=res.data.nickname;
 			// 		var date=new Date();
 			// 		row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-			// 		//console.log(row);
 					
 			// 	}).catch((err)=>{
 			// 		this.$message({
@@ -323,7 +322,6 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/productType?DEPTID=' + this.formInline.DEPTID, {
 					params: data
 				}).then((res) => {
-					// console.log();
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -378,7 +376,6 @@
                 	var departName = res.data.deptName;
 					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
 					this.$axios.get(currenturl, {}).then((res) => {
-						// console.log(this.departmentId);
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {
 							this.nameFlag = false;
@@ -390,7 +387,6 @@
 							});
 							this.formInline.DEPTID = this.departmentId;
 						}
-						console.log(this.formInline.DEPTID);
 						this.requestData();
 					}).catch(error => {
 					})

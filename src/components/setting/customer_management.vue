@@ -80,7 +80,7 @@
 					<el-form :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="8">
-								<el-form-item label="组织机构代码" prop="CODE" label-width="190px">
+								<el-form-item label="统一社会信用代码" prop="CODE" label-width="190px">
 									<el-input v-model="searchList.CODE">
 									</el-input>
 								</el-form-item>
@@ -135,8 +135,8 @@
 							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<!-- <el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1"> -->
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<!-- <el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1"> -->
+							<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
 									</p>
@@ -144,9 +144,11 @@
 							</el-table-column>
 							<el-table-column label="单位名称" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="联系地址" width="300" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>
-							<el-table-column label="类型" sortable prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+							<el-table-column label="类型" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
+							</el-table-column>
+							<el-table-column label="机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
@@ -211,17 +213,18 @@
 					label: '不活动'
 				}],
 				checkedName: [
-					'组织机构代码',
+					'统一社会信用代码',
 					'单位名称',
 					'联系地址',
 					'类型',
+					'机构',
 					'备注',
 					// '联系电话',
 					// '信息状态',
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
+						label: '统一社会信用代码',
 						prop: 'CODE'
 					},
 					{
@@ -234,7 +237,11 @@
 					},
 					{
 						label: '类型',
-						prop: 'TYPE'
+						prop: 'TYPEDesc'
+					},
+					{
+						label: '机构',
+						prop: 'DEPTIDDesc'
 					},
 					{
 						label: '备注',

@@ -32,10 +32,10 @@
 											</el-select> -->
 										</el-col>
 									</el-row>
-	                              <!-- <el-form label-width="100px"> -->
+									<!-- <el-form label-width="100px"> -->
 									<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="组织机构代码" prop="CODE" label-width="110px">
+											<el-form-item label="统一社会信用代码" prop="CODE" label-width="110px">
 												<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>

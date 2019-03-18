@@ -4,7 +4,7 @@
 			<el-form :model="searchList" label-width="70px">
 				<el-row :gutter="10">
 					<el-col :span="5">
-						<el-form-item label="组织机构代码" prop="CODE" label-width="100px">
+						<el-form-item label="统一社会信用代码" prop="CODE" label-width="100px">
 							<el-input v-model="searchList.CODE">
 							</el-input>
 						</el-form-item>
@@ -35,7 +35,7 @@
 				@selection-change="SelChange">
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
-				<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
+				<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
 				</el-table-column>
 				<el-table-column label="单位名称" sortable prop="NAME" >
 				</el-table-column>
@@ -234,7 +234,7 @@
 				var address=this.selUser[0].CONTACT_ADDRESS;//地址 
 				var	zipcode=this.selUser[0].ZIPCODE;//地址
 				var id=this.selUser[0].ID;
-				var code=this.selUser[0].CODE;//组织机构代码
+				var code=this.selUser[0].CODE;//统一社会信用代码
 				this.$emit('appendname',name);
 				this.$emit('appendadd',address);
 				this.$emit('appendzip',zipcode);
@@ -242,7 +242,7 @@
 				this.$emit('appendcode',code);
 			}else if(this.type="pname"){
 				var names=this.selUser[0].NAME;//生产单位名称
-				var codes=this.selUser[0].CODE;//组织机构代码
+				var codes=this.selUser[0].CODE;//统一社会信用代码
 				this.$emit('appendnames',names);
 				this.$emit('appendcodes',codes);
 			}else if(this.type="notivname"){

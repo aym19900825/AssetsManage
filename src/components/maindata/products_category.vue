@@ -166,7 +166,7 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vbuttons from '../common/buttons/btnGroup.vue'
-	import delButtons from '../common/buttons/del.vue'
+	import delButtons from '../common/buttons/delBtn.vue'
 	export default {
 		name: 'customer_management',
 		components: {

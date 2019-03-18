@@ -581,6 +581,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.testingForm.ID = res.data.datas.id;
+									this.testingForm.M_NUM = res.data.datas.M_NUM;
 								}else{
 									this.$message({
 										message: '保存成功',

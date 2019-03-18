@@ -16,6 +16,10 @@
 只能输入由数字和26个英文字母组成的字符串："^[A-Za-z0-9]+$"。 
 只能输入由数字、26个英文字母或者下划线组成的字符串："^\w+$"。 
 验证用户密码："^[a-zA-Z]\w{5,17}$"正确格式为：以字母开头，长度在6~18之间，只能包含字符、数字和下划线。 
+验证用户密码强："^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$"字母+数字+特殊字符
+验证用户密码中："^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$"字母+数字，字母+特殊字符，数字+特殊字符
+验证用户密码弱："^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$"纯数字，纯字母，纯特殊字符
+
 验证是否含有^%&',;=?$\"等字符："[^%&',;=?$\x22]+"。 
 只能输入汉字："^[\u4e00-\u9fa5]{0,}$"
 以英文字母开头，只能包含英文字母、数字、下划线："^[a-zA-Z][a-zA-Z0-9_]*$"。
@@ -154,7 +158,7 @@ const validators = {
 				callback(new Error('不支持特殊符号'));
 			} else {
 				if(!validators.LetterNumber(value)) {
-					callback(new Error('只支持英文、数字'));
+					callback(new Error('只支持英文、数字或下划线'));
 				} else {
 					callback();
 				}
@@ -368,15 +372,9 @@ const validators = {
 	isCheckOldpassword:function (rule, value, callback) {//原始密码
 		if (!value) {
 			return callback(new Error('密码不能为空'));
+		} else {
+			callback();
 		}
-		setTimeout(() => {
-			var regs = /^.{6,18}$/g
-			if (!regs.test(value)) {
-				callback(new Error('密码长度不能少于6个字符且不能大于18个字符'));
-			} else {
-				callback();
-			}
-		}, 500);
 	},
 
 	isValidatePass:function (rule, value, callback) {//新密码
@@ -384,14 +382,20 @@ const validators = {
 			callback(new Error('请输入密码'));
 		}
 		setTimeout(() => {
-			var regs = /^.{6,18}$/g
+			var regs = /^.{8,20}$/g
 			if (!regs.test(value)) {
-				callback(new Error('密码长度不能少于6个字符且不能大于18个字符'));
+				callback(new Error('密码长度不能少于8位且不能大于20位'));
 			} else {
-				callback();
+				const regsStrong = /^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*]+$)(?![\d!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$/;
+				const rsChecks = regsStrong.test(value);
+				if (!rsChecks) {
+					callback(new Error('密码需包含字母+数字+特殊字符'));
+				} else {
+					callback();
+				}
 			}
 		}, 500);
-    },
+	},
     
 };
 

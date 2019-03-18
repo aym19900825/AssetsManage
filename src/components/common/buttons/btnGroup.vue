@@ -15,7 +15,7 @@
 </template>
 <script>
 	import Config from '../../../config.js'
-	import delBtn from './del.vue'
+	import delBtn from './delBtn.vue'
 	import delDataBtn from './delDatabase.vue'
 	export default {
 		name: 'btnGroup',

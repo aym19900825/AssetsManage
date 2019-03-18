@@ -171,7 +171,7 @@
 				rules: {
 					code: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: this.Validators.isEnglish, trigger: 'blur'}
+						{ trigger: 'blur', validator: this.Validators.isWorknumber}
 					],
 					name: [
 						{ required: true, message: '必填',trigger: 'blur'},

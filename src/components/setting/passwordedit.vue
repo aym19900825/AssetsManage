@@ -30,7 +30,7 @@
 			<div class="ibox-content" :style="{height: fullHeight}">
 				<el-collapse v-model="activeNames">
 					<el-collapse-item title="修改密码" name="1">
-						<el-form :model="passwordedit" inline-message status-icon :rules="rules2" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
+						<el-form :model="passwordedit" inline-message status-icon :rules="rules" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
 							  <el-form-item label="当前用户" prop="username">
 							    <el-input v-model.number="passwordedit.username" disabled></el-input>
 							  </el-form-item>
@@ -120,17 +120,17 @@ export default {
 				newpassword: '',//新密码
 				checkPass: ''//确认新密码
 			},
-	        rules2: {
+			rules: {
 				oldpassword: [
-					{required: true,trigger: 'blur',message: '必填'},
-					{validator: this.Validators.isCheckOldpassword, trigger: 'blur'},
+					{required: true, trigger: 'blur', message: '必填'},
+					// {validator: this.Validators.isCheckOldpassword, trigger: 'blur'},
 				],
 				newpassword: [
-					{required: true,trigger: 'blur',message: '必填'},
+					{required: true, trigger: 'blur', message: '必填'},
 					{validator: this.Validators.isValidatePass, trigger: 'blur'},
 				],
 				checkPass: [
-					{required: true,trigger: 'blur',message: '必填'},
+					{required: true, trigger: 'blur', message: '必填'},
 					{validator: this.Validators.isValidatePass, trigger: 'blur'},
 				]
 			},

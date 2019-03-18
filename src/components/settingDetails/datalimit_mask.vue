@@ -7,10 +7,10 @@
 	  			</el-select>
 				<el-tree class="tree" ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
 				</el-tree>
-				<div slot="footer" class="el-dialog__footer">
-			       <el-button type="primary" @click="determine()" >确 定</el-button>
-			       <el-button @click="cancel()">取 消</el-button>
-			    </div>
+			</div>
+			<div slot="footer">
+				<el-button type="primary" @click="determine()" >确 定</el-button>
+				<el-button @click="cancel()">取 消</el-button>
 			</div>
 		</el-dialog>
 	</div>

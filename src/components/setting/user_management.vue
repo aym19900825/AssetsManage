@@ -173,14 +173,14 @@
 				</el-tree>
 				<el-tree ref="testproduct" :data="testingproductData" v-show="testingproductData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resouretestingproduct" >
 				</el-tree>
-				<span slot="footer" class="dialog-footer">
+			</div>
+			<div slot="footer">
 					<el-button type="primary" @click="Accessconfirm" >确 定</el-button>
 					<el-button @click="resetTree">取 消</el-button>
-				</span>
-			</div>
+				</div>
 		</el-dialog>
 		<!-- 查看权限 -->
-		<el-dialog :modal-append-to-body="false" title="权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="应用模块权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
 			<!--设置产品类别和产品-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >
@@ -191,7 +191,7 @@
 		<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	  <!--数据限制-->
-		<datarestrictmask ref="datarestrictmask" ></datarestrictmask>
+		<datarestrictmask  @request="requestData" ref="datarestrictmask" ></datarestrictmask>
 	</div>
 </template>
 <script>
@@ -260,7 +260,7 @@
 					children: "children",
 					label: "fullname"
 				},
-				permissionsData:[],//权限查看
+				permissionsData:[],//应用模块权限查看
 				resourepermissions:{
 					children: "children",
 					label: "name"
@@ -496,9 +496,9 @@
 		    	}else if(item.name=="报表"){
 			     	this.reportdata();
 		    	}else if(item.name=="数据配置"){
-				 		this.configuration();
-					}else if(item.name=="权限查看"){
-						this.Checkpermissions();
+				 	this.configuration();
+					}else if(item.name=="应用模块权限查看"){
+				 	this.Checkpermissions();
 					}else if(item.name=="数据限制"){
 						this.datarestrict();
 					}
@@ -520,7 +520,7 @@
 					this.$refs.datarestrictmask.visible(this.selUser[0].id);
 				}
 			},
-			//权限查看
+			//应用模块权限查看
 			Checkpermissions(){
 				if(this.selUser.length == 0) {
 					this.$message({

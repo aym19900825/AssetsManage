@@ -763,6 +763,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.dataInfo.ID = res.data.datas.id;
+									this.dataInfo.PMNUM = res.data.datas.PMNUM;
 								}else{
 									if(opt == 'save'){
 										this.show = false;

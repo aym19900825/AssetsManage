@@ -19,8 +19,6 @@
 
 				<el-table-column label="应用名称" width="160" sortable prop="appName">									
 				</el-table-column>
-				<el-table-column label="对象名称" width="160" sortable prop="objectid">
-				</el-table-column>
 				<el-table-column label="处理类名" width="200" sortable prop="handleclass">									
 				</el-table-column>
 				<el-table-column label="sql"  align="left" sortable prop="sqlstr">		
@@ -178,15 +176,33 @@ requestData() {
 					} else {
 						this.loadSign = true
                     }
-                    console.log(res);
 					this.categoryList = res.data.data;
 					this.loading = false;
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}
+				var url = this.basic_url + '/api-user/users/findDataRestrictByuserId/'+this.userid;
+					this.$axios.get(url, {}).then((res) => {
+						var check=res.data;
+						// this.$refs.table.toggleRowSelection(res.data);
+						this.$nextTick(()=>{
+								if(this.categoryList!==undefined&&check!==undefined){
+									 this.categoryList.forEach((v,i)=>{
+										 check.forEach((_v,i)=>{
+											 if(_v!=null){
+												 if(v.id==_v){
+													 this.$refs.table.toggleRowSelection(v,true);
+												 }
+											 }
+										 })
+									 })
+								}
+						})
+					})
+
 				}).catch((wrong) => {
 					this.$message({
-						message: '网络错误，请重试1',
+						message: '网络错误，请重试',
 						type: 'error'
 					});
 				})
@@ -211,10 +227,16 @@ requestData() {
 				this.resetBasisInfo();//调用resetBasisInfo函数
 					var url = this.basic_url + '/api-user/dataRestrict/saveUserRestrict/'+this.userid+'/'+ids;
 				this.$axios.get(url, {}).then((res) => {
-         console.log(res);
+					if(res.data.resp_code == 0) {
+								this.$message({
+									message: '操作成功',
+									type: 'success'
+								});
+								this.$emit('request');
+						}
 				}).catch((wrong) => {
 					this.$message({
-						message: '网络错误，请重试1',
+						message: '网络错误，请重试',
 						type: 'error'
 					});
 				})
@@ -225,7 +247,8 @@ requestData() {
         this.dialogapp = false;//关闭弹出框
         this.categoryList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 20;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
+				this.$emit('request');
     },
     handleClose(done) {
         this.$confirm('确认关闭？')

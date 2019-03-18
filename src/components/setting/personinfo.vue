@@ -721,7 +721,7 @@
 							personinfo.roleId = '';
 							personinfo.roles = [];
 						}
-			            this.$axios.put(url, this.personinfo).then((res) => {
+							this.$axios.put(url, this.personinfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

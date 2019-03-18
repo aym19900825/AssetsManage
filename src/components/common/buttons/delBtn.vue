@@ -6,7 +6,7 @@
 <script>
 	import Config from '../../../config.js'
 	export default {
-		name: 'del',
+		name: 'delBtn',
 		props: {
 			delBtn: {},
 			delTable: {

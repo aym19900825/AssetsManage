@@ -21,24 +21,27 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="设备分类" name="1">
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="编码" prop="CLASSIFY_NUM">
-												<el-input v-model="CATEGORY.CLASSIFY_NUM" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="16">
-											<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION">
-												<el-input v-model="CATEGORY.CLASSIFY_DESCRIPTION" :disabled="noedit"></el-input>
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="6" class="pull-right">
+											<el-form-item label="设备编码">
+												<el-input v-model="CATEGORY.CLASSIFY_NUM" placeholder="自动生成" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="父级分类" prop="PARENTDesc">
-												<el-input v-model="CATEGORY.PARENTDesc" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addparclass"  :disabled="noedit"></el-button>
-												</el-input>
+												<el-form-item label="父级分类" prop="PARENTDesc">
+													<el-tooltip class="item" effect="dark" content="不选父级或清空已选的父级，可设此条数据为一级分类" placement="top">
+															<el-input v-model="CATEGORY.PARENTDesc" :disabled="true">
+																<el-button slot="prepend" icon="icon-close2" @click="addparclassReset" :disabled="noedit" title="清空"></el-button>
+																<el-button slot="append" icon="el-icon-search" @click="addparclass" :disabled="noedit"></el-button>
+															</el-input>
+													</el-tooltip>
+												</el-form-item>
+										</el-col>
+										<el-col :span="16">
+											<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION">
+												<el-input v-model="CATEGORY.CLASSIFY_DESCRIPTION" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -55,7 +58,7 @@
 												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
+										<el-col :span="8">
 											<el-form-item label="机构" prop="DEPTIDDesc">
 												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
@@ -89,7 +92,7 @@
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
 				<span slot="footer">
-			       <el-button type="primary" @click="queding" >确 定</el-button>
+			       <el-button type="primary" @click="queding">确 定</el-button>
 			       <el-button @click="resetBasisInfo">取 消</el-button>
 			    </span>
 			</el-dialog>
@@ -155,18 +158,12 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2'], //手风琴数量
-				//				labelPosition: 'top', //表格
+				//labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					CLASSIFY_NUM: [{
-						required: false, trigger: 'change', validator: this.Validators.isWorknumber
-					}],
+					//设备分类描述
 					CLASSIFY_DESCRIPTION: [
-						{required: true,trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isSpecificKey}
-					],
-                    PARENT: [
 						{required: true,trigger: 'blur', message: '必填'},
 						{trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
@@ -220,6 +217,10 @@
 					this.treeData = this.transformTree(this.resourceData);
 				});
 			},
+			addparclassReset(){//置空父级分类
+				this.CATEGORY.PARENT ='0';
+				this.CATEGORY.PARENTDesc ='';
+			},
 			queding() {
 				this.getCheckedNodes();
 				if(this.checkedNodes == ''){
@@ -246,17 +247,17 @@
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-           		 this.i++;
-            		if(this.i%2==0){
-                	if(checked){
-                    	this.$refs.tree.setCheckedNodes([]);
-                    	this.$refs.tree.setCheckedNodes([data]);
-                    	//交叉点击节点
-               		 }else{
-                     this.$refs.tree.setCheckedNodes([]);
-                    	//点击已经选中的节点，置空
-                	}
-            	}
+						this.i++;
+						if(this.i%2==0){
+							if(checked){
+									this.$refs.tree.setCheckedNodes([]);
+									this.$refs.tree.setCheckedNodes([data]);
+									//交叉点击节点
+								}else{
+									this.$refs.tree.setCheckedNodes([]);
+									//点击已经选中的节点，置空
+							}
+					}
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
@@ -317,7 +318,6 @@
 				// this.statusshow1 = false;
 				// this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
 					this.CATEGORY.CHANGEBY = res.data.id;
 					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
@@ -418,7 +418,7 @@
 					}
 				}).catch((err) => {
 					this.$message({
-						message: '网络错误，请重试444',
+						message: '网络错误，请重试',
 						type: 'error'
 					});
 				});
@@ -470,7 +470,7 @@
 									type: 'success'
 								});
 								//重新加载数据
-								// this.$emit('request');
+								this.$emit('request');
 								this.$emit('reset');
 								this.visible();
 							}else{
@@ -492,7 +492,7 @@
 							}
 						}).catch((err) => {
 							this.$message({
-								message: '网络错误，请重试555',
+								message: '网络错误，请重试',
 								type: 'error'
 							});
 						});

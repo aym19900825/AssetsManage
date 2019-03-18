@@ -608,6 +608,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.dataInfo.ID = res.data.datas.id;
+									this.dataInfo.RECORDNUM = res.data.datas.RECORDNUM;
 								}else{
 									this.$emit('request');
 									this.resetForm();

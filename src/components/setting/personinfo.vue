@@ -523,10 +523,6 @@
 					};
 					this.personinfo.qualifications.push(obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 
 			},
@@ -606,10 +602,6 @@
 					}
 	    			this.getImgUrl();
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getImgUrl(){//用户头像
@@ -665,7 +657,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			getCheckedNodes() {//获取树菜单节点
@@ -726,10 +717,6 @@
 								});
 							} 
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 
 					} else {
@@ -904,10 +891,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 

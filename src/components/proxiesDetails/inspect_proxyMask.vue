@@ -1139,10 +1139,6 @@
 						});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 			},
 			sizeChange(val) {
@@ -1242,10 +1238,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -1266,10 +1258,6 @@
 					this.dataInfo.LEADER = 0;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
                	this.addtitle = true;
 				this.modifytitle = false;
@@ -1311,10 +1299,6 @@
 					let _obj = JSON.stringify(this.dataInfo);
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试3',
-						type: 'error'
-					});
 				});
 			},	
 			
@@ -1328,10 +1312,6 @@
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试4',
-						type: 'error'
-					});
 				});
 				this.detailgetData();
 				this.modifytitle = true;
@@ -1384,10 +1364,6 @@
 								}
 							}		
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -1767,10 +1743,6 @@
 									this.reset();
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 			        }else{
@@ -1828,10 +1800,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.maingroup = res.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				// this.dataInfo.PRODUCT_TYPE = '';
 				// this.dataInfo.P_NUM = '';
@@ -1857,10 +1825,6 @@
 						this.leaderdata.push(list[i]);
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});		
 			},
 			// setLeader(id){
@@ -2063,10 +2027,6 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                    this.username = res.data.username;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

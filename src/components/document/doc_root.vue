@@ -320,10 +320,6 @@
                         });
                     }
                 }).catch((err) => {
-                    this.$message({
-                        message: '网络错误，请重试',
-                        type: 'error'
-                    });
                 });
 			},
 			showAuth(row){
@@ -449,10 +445,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}).catch(() => {});
 			},
@@ -563,10 +555,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			loadNode(node, resolve, opt, param) {
@@ -698,31 +686,6 @@
 				const children = parent.data.children || parent.data;
 				const index = children.findIndex(d => d.id === data.id);
 				children.splice(index, 1);
-
-				// var url = this.file_url + '/file/deletePath/' + this.docId;
-				// this.$confirm('确定删除此文件夹吗？', '提示', {
-				// 	confirmButtonText: '确定',
-				// 	cancelButtonText: '取消',
-				// }).then(({ value }) => {
-				// 	this.$axios.delete(url, {}).then((res) => {
-				// 		if(res.data.code == 1) {
-				// 			this.$message({
-				// 				message: '删除成功',
-				// 				type: 'success'
-				// 			});
-				// 		}else{
-				// 			this.$message({
-				// 				message: res.data.message,
-				// 				type: 'error'
-				// 			});
-				// 		}
-				// 	}).catch((err) => {
-				// 		this.$message({
-				// 			message: '网络错误，请重试',
-				// 			type: 'error'
-				// 		});
-				// 	});
-				// }).catch(() => {});
 			},
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
@@ -772,10 +735,6 @@
 					}
 					this.buttons = resData;
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})
 		    },
 		    //树和表单之间拖拽改变宽度

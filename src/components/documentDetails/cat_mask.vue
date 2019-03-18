@@ -169,10 +169,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}else{
 					this.dataInfo.tb_keyword2List.splice(index,1);
@@ -210,10 +206,6 @@
 						this.dataInfo.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getToday(){
@@ -310,13 +302,12 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
+<<<<<<< HEAD
 						var middleWidth=5,
+=======
+>>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 						return false;
 					}
 				});

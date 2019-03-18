@@ -226,10 +226,6 @@ export default {
 							this.$emit('request')//重新加载数据
 						} 
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 
 				} else {

@@ -369,10 +369,6 @@
 	     			var date=new Date();
 					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				 }).catch((err) => {
-				 	this.$message({
-				 		message: '网络错误，请重试',
-				 		type: 'error'
-				 	});
 				});	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
 				this.show = true;
@@ -410,10 +406,6 @@
 					// let obj = JSON.parse(JSON.stringfy(this.adddeptForm));
         			// this.ADDDEPTFORM = JSON.parse(obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
                  this.show = true;
 			},
@@ -530,10 +522,6 @@
 								}
 							}		
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试1',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -593,7 +581,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.SelectDEPT_TYPE = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			getsys_depttype() {//获取机构类型
@@ -601,7 +588,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			
@@ -690,10 +676,6 @@
 //							 this.$refs["adddeptForm"].resetFields();//清空验证
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 					this.falg=true;
 		          } else {

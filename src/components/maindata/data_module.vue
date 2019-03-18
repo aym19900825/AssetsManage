@@ -22,26 +22,26 @@
 									<button class="btn mr5 btn-primarys">
 										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
 									</button>
-								<el-dropdown-menu slot="dropdown">
-    								<el-dropdown-item>
-    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
-    								</el-dropdown-item>
-    								
-    								<el-dropdown-item>
-										<el-upload
-										ref="upload"
-										class="upload"
-										:action="uploadUrl()"
-										:on-success="fileSuccess"
-										:limit=1
-										multiple
-										method:="post"
-										:file-list="fileList">
-											<i class="icon-upload-cloud"></i> 上传
-										</el-upload>
-    								</el-dropdown-item>
-						  		</el-dropdown-menu>
-							</el-dropdown>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item>
+											<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+										</el-dropdown-item>
+										
+										<el-dropdown-item>
+											<el-upload
+											ref="upload"
+											class="upload"
+											:action="uploadUrl()"
+											:on-success="fileSuccess"
+											:limit=1
+											multiple
+											method:="post"
+											:file-list="fileList">
+												<i class="icon-upload-cloud"></i> 上传
+											</el-upload>
+										</el-dropdown-item>
+									</el-dropdown-menu>
+								</el-dropdown>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -454,10 +454,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -506,10 +502,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -608,10 +600,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 				})
 			},
 			
@@ -654,10 +642,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.btn=res.data;
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})
 			}
 		},

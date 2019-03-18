@@ -434,10 +434,6 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                return res.data.roleId;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 			//修改检验工作处理到子组件
@@ -581,10 +577,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
                     }).catch(() => {
 
@@ -633,10 +625,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -794,10 +782,6 @@
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})
 
 		    },

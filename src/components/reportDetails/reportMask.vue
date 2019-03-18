@@ -113,10 +113,6 @@
 							this.$refs.reportpramchild.visible(res.data.datas,file);
 						}
 					}).catch((wrong) => {
-						this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 					})
 				}
 		  		
@@ -128,10 +124,6 @@
 					this.reportsList = res.data.datas;
 					this.innerVisible = true;
 				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 				})
 				
 			},

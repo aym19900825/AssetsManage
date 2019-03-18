@@ -358,12 +358,7 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 		    },
 		},
@@ -376,10 +371,6 @@
 				this.userParm.deptName = res.data.deptName;
 				this.requestData();
 			}).catch((err) => {
-				this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 			});
 			
 		},

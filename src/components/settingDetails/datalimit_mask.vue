@@ -107,10 +107,6 @@
 					});
 					this.dialogVisible = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			recursive(mData,arr){
@@ -166,10 +162,6 @@
 					this.$emit('request');
 					this.dialogVisible = false;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//取消

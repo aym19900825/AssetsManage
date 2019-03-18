@@ -561,10 +561,6 @@
 						this.docParm.deptid = res.data.deptId;
 						this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
 			},
 			//机构值
@@ -611,10 +607,6 @@
 				}).then((res) => {
 					this.pmRecordList = res.data.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试2',
-						type: 'error'
-					});
 				});
 			},
 			//点击按钮显示弹窗
@@ -772,10 +764,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试3',
-								type: 'error'
-							});
 						});
 						// this.falg=true;
 					} else {

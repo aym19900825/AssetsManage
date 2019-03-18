@@ -315,10 +315,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}else{
 					this.CATEGORY[TableName+'List'].splice(index,1);
@@ -370,10 +366,6 @@
 						this.category = JSON.parse(_obj);
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//点击添加按钮显示弹窗
@@ -428,10 +420,6 @@
 					},100);
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 			},
 			//这是查看
@@ -471,10 +459,6 @@
 						return;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//点击关闭按钮
@@ -571,10 +555,6 @@
 								this.falg = false;
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						// this.falg = true;
 					} else {
@@ -631,10 +611,6 @@
 						};
 						this.testing_filesForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
 					})
 	            } else {
 	                this.$message.warning("请先保存当前编辑项");
@@ -663,10 +639,6 @@
 								this.requestData_doclinks();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 			        } else {
 			            return false;
@@ -690,10 +662,6 @@
 							this.requestData_doclinks();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
                 }).catch(() => {
 

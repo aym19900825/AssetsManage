@@ -337,10 +337,6 @@ export default {
 					},0);
 				}
 			}).catch((wrong) => {
-				this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 			});
 				_this.$store.dispatch('setNavIdAct',item.id);
 				var data = {
@@ -358,10 +354,6 @@ export default {
 					this.$emit('childByValue',this.$store.state.selectedNav);
 				}
 			}).catch((wrong) => {
-				this.$message({
-					message: '网络错误，请刷新',
-					type: 'error'
-				});
 			});
 		},
 		//引入饼状图图表
@@ -398,10 +390,6 @@ export default {
 	        this.$axios.get(url, {}).then((res) => {
 	            this.applistdata = res.data;
 	        }).catch(error => {
-	           this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 	        })
         },
 	},
@@ -422,10 +410,6 @@ export default {
         	this.$store.dispatch('setRoleIdAct',res.data.id);
       		this.getFirstMenus(roleid);
       		}).catch(error => {
-            this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
        		})
 		}else{
 			var roleid=this.$store.state.roleid;
@@ -434,10 +418,6 @@ export default {
 	        this.$axios.get(url, {}).then((res) => {
 	            this.applistdata = res.data;
 	        }).catch(error => {
-	           this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 	        })
 		}
       	this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数

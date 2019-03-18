@@ -236,10 +236,6 @@
 					this.dialogVisible = true;
 					sessionStorage.setItem("prop", item);
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'warning'
-					});
 				});
 			},
 			dailogconfirm() { //小弹出框确认按钮事件
@@ -264,10 +260,6 @@
 					this.userList = res.data.data;
 					this.dialogVisibleuser = true;
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'warning'
-					});
 				});
 			},
 			//人员的确定

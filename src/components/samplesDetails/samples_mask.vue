@@ -681,10 +681,6 @@
 						this.gridDataList= res.data.data;
 					});
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
@@ -729,10 +725,6 @@
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 				this.reset();
 				this.addtitle = true;
@@ -752,10 +744,6 @@
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
@@ -764,10 +752,6 @@
 					res.data.CJDW = Number(res.data.CJDW);
 					this.samplesForm = res.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.viewtitle = false;
 				this.addtitle = false;
@@ -802,10 +786,6 @@
 					}
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
@@ -828,7 +808,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			//
@@ -984,10 +963,6 @@
 									this.$emit('request');
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 							this.show = false;
 							this.falg = true;
@@ -1036,10 +1011,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'error'
-							});
 						});
 						
 						}else{
@@ -1049,10 +1020,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: res.data.resp_msg,
-							type: 'error'
-						});
 					});
 			},
 			// loadMore (val) {
@@ -1177,16 +1144,8 @@
 							$('.el-table__body-wrapper table').find('.filing').remove();
 						}//滚动加载数据判断filing
 					}).catch((wrong) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					})
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				
 			},
@@ -1195,7 +1154,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					// this.Select_STATUS = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 

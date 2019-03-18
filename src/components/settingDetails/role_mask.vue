@@ -257,10 +257,6 @@
 					this.roleList = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.show = true;
 			},
@@ -328,10 +324,6 @@
 								this.$emit('request')
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
 						return false;

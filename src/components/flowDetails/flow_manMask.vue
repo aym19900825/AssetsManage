@@ -145,13 +145,12 @@
      						this.$refs.child.visible();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试123',
-								type: 'error'
-							});
 						});
 					} else {
+<<<<<<< HEAD
 						var middleWidth=5,
+=======
+>>>>>>> 68c242e29576121da2802ba918cd33cb8e1b67ad
 						this.show = false;
 						return false;
 					}

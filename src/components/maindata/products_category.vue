@@ -274,9 +274,6 @@
 				this.requestData();
 			},
 			handleSuccess(response, file, fileList){//上传文件列表
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			//机构值
 			getCompany() {
@@ -439,26 +436,24 @@
 					}
 				}else if(item.name=="删除"){
 					if(isshowbtn=='0'){
-					this.$message({
-						message: '您没有删除的权限',
-						type: 'warning'
-					});
-				}else{
-					this.deluserinfo();
+						this.$message({
+							message: '您没有删除的权限',
+							type: 'warning'
+						});
+					}else{
+						this.deluserinfo();
 					}
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
-		    	
+		    		this.download();
 		    	}else if(item.name=="配置关系"){
-		    	 this.Configuration();
+		    		this.Configuration();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
-				 this.Printing();
+				 	this.Printing();
 				}
-				
 		    },
 			//添加类别
 			openAddMgr() {
@@ -474,13 +469,13 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selUser.length > 1) {
+				}else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else {
 					this.CATEGORY = this.selUser[0];
 					this.$refs.categorymask.detail();
 				}
@@ -505,7 +500,7 @@
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else {
 					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
@@ -538,10 +533,10 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+							// this.$message({
+							// 	message: err.resp_msg,
+							// 	type: 'error'
+							// });
 						});
 					}).catch(() => {
 
@@ -645,11 +640,11 @@
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
+				}).catch((err) => {
+					// this.$message({
+					// 	message: err.resp_msg,
+					// 	type: 'error'
+					// });
 				})
 			},
 			formatter(row, column) {
@@ -688,11 +683,11 @@
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
-				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+				}).catch((err) => {
+					// this.$message({
+					// 	message: err.resp_msg,
+					// 	type: 'error'
+					// });
 				})
 			},
 			//根据机构设置按钮权限
@@ -700,11 +695,11 @@
 				var url = this.basic_url + '/api-user/users/findDeptAttr';
 				this.$axios.get(url, {}).then((res) => {
 					this.btn=res.data;
-				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+				}).catch((err) => {
+					// this.$message({
+					// 	message: err.resp_msg,
+					// 	type: 'error'
+					// });
 				})
 			}
 		},

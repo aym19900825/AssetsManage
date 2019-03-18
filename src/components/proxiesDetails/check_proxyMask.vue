@@ -1125,10 +1125,6 @@
 						});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 			},
 			sizeChange(val) {
@@ -1224,10 +1220,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}else{
 					this.dataInfo[TableName+'List'].splice(index,1);
@@ -1246,10 +1238,6 @@
 					this.dataInfo.TYPEDesc = '检测';
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试21',
-						type: 'error'
-					})
 				})
                	this.addtitle = true;
 				this.modifytitle = false;
@@ -1286,10 +1274,6 @@
 					let _obj = JSON.stringify(this.dataInfo);
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试3',
-						type: 'error'
-					});
 				});
 			},	
 			
@@ -1303,10 +1287,6 @@
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试4',
-						type: 'error'
-					});
 				});
 				this.detailgetData();
 				this.modifytitle = true;
@@ -1359,10 +1339,6 @@
 								}
 							}		
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试5',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -1684,10 +1660,6 @@
 									this.reset();
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 						this.falg = true;
@@ -1747,10 +1719,6 @@
 					this.$axios.get(url, {}).then((res) => {
 						this.maingroup = res.data;
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				this.dataInfo.PRODUCT_TYPE = '';
 				this.dataInfo.P_NUM = '';
@@ -1768,10 +1736,6 @@
 		   			this.$axios.get(url, {}).then((res) => {
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试8',
-							type: 'error'
-						});
 					});		
 			},
 			//获取负责人和接收人
@@ -1916,10 +1880,6 @@
 	            this.$axios.get(url, {}).then((res) => {//
 	                this.username = res.data.username;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试  3',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

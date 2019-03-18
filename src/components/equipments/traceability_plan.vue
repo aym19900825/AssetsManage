@@ -664,9 +664,6 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-<<<<<<< HEAD
-					this.buttons = res.data;
-=======
 					var resData = res.data;
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{
@@ -680,7 +677,6 @@
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
->>>>>>> 690dfbbdb5270f7ed89163137e3c0b377f186f3c
 				}).catch((wrong) => {
 				})
 		    },

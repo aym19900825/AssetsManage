@@ -107,12 +107,12 @@
 							<!-- 表格 Begin-->
 
 							<el-table ref="table" :header-cell-style="rowClass"
+									@sort-change='tableSortChange'
 									:data="categoryList"
 									border
 									stripe
 									:height="fullHeight"
 									style="width: 100%;"
-	    							:default-sort="{prop:'categoryList', order: 'descending'}"
 	    							@selection-change="SelChange"
 	    							v-loadmore="loadMore"
 									v-loading="loading"
@@ -121,26 +121,39 @@
 	    							element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<!-- <el-table-column label="序号"  type="index" width="155">
+									<template slot-scope="scope">
+										<span>{{page.currentPage*page.pageSize + scope.row.date }}<span>
+									</template>
+								</el-table-column> -->
+								<el-table-column
+									type="index"
+									label="序号"
+									width="50">
+									<template slot-scope="scope">
+										<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+									</template>
+								</el-table-column>
+								<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 	 								<template slot-scope="scope" >
 	 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
 	 								</template>
 								</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="版本" width="100" sortable='custom' prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- 表格 End-->
@@ -245,6 +258,7 @@
 					TYPE: '',
 					VERSION:'',
 					DEPTID: '',
+
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -265,6 +279,17 @@
 			}
 		},
 		methods: {
+			tableSortChange(column){
+				this.page.currentPage = 1;
+				if (column.order === 'descending') {
+					this.searchList.sortby = column.prop + '_orders';
+					this.searchList.order = 'desc'
+				} else {
+					this.searchList.sortby = column.prop + '_orders';
+					this.searchList.order = 'asc'
+				}
+				this.requestData();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -623,6 +648,9 @@
 					TYPE: this.searchList.TYPE,
 					VERSION:this.searchList.VERSION,
 					DEPTID: this.searchList.DEPTID,
+				}
+				if(!!this.searchList.sortby){
+					data[this.searchList.sortby] = this.searchList.order;
 				}
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {

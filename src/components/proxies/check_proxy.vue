@@ -104,7 +104,7 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick" empty-text="暂无数据权限，如需请联系上级管理员在系统设置-角色管理-数据配置中配置。">
 										</el-tree>
 									</div>
 								</div>
@@ -474,7 +474,6 @@
 			},
 			//修改
 			modify() {
-				console.log(111);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -488,7 +487,6 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
 					if(this.selUser[0].STATUS == 3 || this.selUser[0].STATUS == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
@@ -848,14 +846,12 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
@@ -912,6 +908,10 @@
 	}
 </script>
 
-<style scope>
-
+<style >
+ span.el-tree__empty-text {
+	width:200px;
+	top:100%;
+	color: #909399;
+}
 </style>

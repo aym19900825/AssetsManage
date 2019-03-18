@@ -155,7 +155,6 @@
         this.loading = true;
         var url = this.basic_url + '/api-user/depts/treeMap';
         this.$axios.get(url, {}).then((res) => {
-            console.log(res);
             let result=res.data
             for(let i=0;i<result.length;i++){
                 if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

@@ -227,7 +227,6 @@
 				this.dialogVisible3 = true;
 				var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.parentIds;
 				this.$axios.get(currenturl, {}).then((res) => {
-					// console.log(res.data);
 					this.categoryList = res.data;
 				}).catch(error => {
 				})

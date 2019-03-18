@@ -19,9 +19,31 @@
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
+								<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item>
+											<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+										</el-dropdown-item>
+										<el-dropdown-item>
+											<el-upload
+											ref="upload"
+											class="upload"
+											:action="uploadUrl()"
+											:on-success="fileSuccess"
+											:limit=1
+											multiple
+											method:="post"
+											:file-list="fileList">
+												<i class="icon-upload-cloud"></i> 上传
+											</el-upload>
+										</el-dropdown-item>
+									</el-dropdown-menu>
+								</el-dropdown>
 							</div>
 						</div>
-						
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
 							<div class="keep-open btn-group" title="列">
@@ -31,7 +53,7 @@
 										<i class="el-icon-arrow-down icon-arrow2-down"></i>
 									</span>
 									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
+										<el-checkbox-group v-model="checkedName">
 											<el-dropdown-item  v-for="(item,index) in tableHeader" :key="index">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
@@ -218,6 +240,7 @@
 				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
 				ismin: true,
+				fileList:[],//文件上传的接收数据
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				checkedName: [
 					'编号',
@@ -335,9 +358,7 @@
 				}
 				this.handleNodeClick();
 			},
-			test(){
-				console.log(this.checkedName.indexOf('账号')!=-1);
-			},
+			
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
@@ -559,6 +580,31 @@
                 	});
 				}
 			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/workplan/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
+          	
+			// 导入
+			download() {
+				var url = this.basic_url + '/api-apps/app/workplan/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
+			},
 			// 导出
 			exportData() {
            		var url = this.basic_url + '/api-apps/app/workplan/exportExc?access_token='+sessionStorage.getItem('access_token');
@@ -690,7 +736,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			SelChange(val) {
 				this.selUser = val;
@@ -741,7 +786,6 @@
 			getKey() {
 				var url = this.basic_url + '/api-user/users/findIdsByUserAndType/1';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 				}).catch((wrong) => {
@@ -772,8 +816,6 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				console.log(data);
-				console.log(this.resourceData);
 				for(var i = 0; i < this.resourceData.length; i++) {
 					if(data.name == this.resourceData[i].name) {
 						this.searchList.TYPE = this.resourceData[i].code;
@@ -809,14 +851,12 @@
 			  },
 			    //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

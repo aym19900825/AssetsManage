@@ -31,11 +31,6 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="" prop="objectid">
-												<el-input v-model="CATEGORY.objectid" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
 											<el-form-item label="处理类名" prop="handleclass">
 												<el-input v-model="CATEGORY.handleclass" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -83,7 +78,6 @@
 					return {
 						id: '',
 						appName: '',
-                        objectid: '',
                         sqlstr:'',
 						ENTERBY: '',
 						ENTERDATE: '',

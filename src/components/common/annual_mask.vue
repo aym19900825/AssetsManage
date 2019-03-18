@@ -93,7 +93,7 @@
 											 </el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="年度" prop="YEAR" label-width="85px">
+											<el-form-item label="年度" prop="YEAR" label-width="85px" v-show="addtitle">
 												<div class="block">
 												    <el-date-picker
 												      v-model="WORKPLAN.YEAR"
@@ -102,6 +102,18 @@
 												      value-format="yyyy"
 												      format="yyyy"
 												      :default-value="WORKPLAN.YEAR" style="width: 100%" :disabled="noedit">
+												    </el-date-picker>
+												</div>
+											</el-form-item>
+											<el-form-item label="年度" prop="YEAR" label-width="85px" v-show="!addtitle">
+												<div class="block">
+												    <el-date-picker
+												      v-model="WORKPLAN.YEAR"
+												      type="year"
+												      placeholder="选择年度"
+												      value-format="yyyy"
+												      format="yyyy"
+												      :default-value="WORKPLAN.YEAR" style="width: 100%" :disabled="edit">
 												    </el-date-picker>
 												</div>
 											</el-form-item>
@@ -670,7 +682,7 @@
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
-					<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
+					<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
 					</el-table-column>
 					<el-table-column label="单位名称" width="300" sortable prop="NAME">
 					</el-table-column>
@@ -1169,7 +1181,7 @@
 				if(date == undefined) {
 					return "";
 				}
-				return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//检测依据弹出框
             addbasis(){

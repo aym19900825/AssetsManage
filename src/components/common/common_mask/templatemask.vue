@@ -118,7 +118,6 @@
 		this.dialogtemplate = false;
 	},
   	visible(value) {
-		console.log(value);
 		//value[0]检测项目
 		this.datatype = value[2];
 		this.projectnums = value[0];
@@ -134,8 +133,6 @@
 		}else{
 			this.datamodulenums = '';
 		}
-		console.log(123456);
-		console.log(this.datamodulenums);
 		if(this.datatype == '1'){
 			this.requestinitData();
 		}else if(this.datatype == '2'){
@@ -205,11 +202,8 @@
 			DECRIPTION:this.searchList.DECRIPTION,
 			NUM:this.searchList.NUM
 		}
-		console.log(11111);
-		console.log(this.projectnums);
 		// var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums+'&NUM_where_not_in='+this.datamodulenums;
 		// var url = this.basic_url + '/api-apps/app/rawDataTem';//业务基础数据原始数据模板
-		console.log(url);
 		var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums;
 		this.$axios.get(url, {}).then((res) => {
 			this.page.totalCount = res.data.count;

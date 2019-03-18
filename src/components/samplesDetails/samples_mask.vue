@@ -58,7 +58,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="委托单位组织机构代码" prop="VENDOR" label-width="180px">
+											<el-form-item label="委托单位统一社会信用代码" prop="VENDOR" label-width="180px">
 												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,7 +72,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="生产单位组织机构代码" prop="PRODUCT_COMPANY" label-width="180px">
+											<el-form-item label="生产单位统一社会信用代码" prop="PRODUCT_COMPANY" label-width="180px">
 												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -553,7 +553,7 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			//委托单位组织机构代码
+			//委托单位统一社会信用代码
 			appendcode(value){
 				this.samplesForm.VENDOR=value;
 			},
@@ -566,7 +566,7 @@
 			appendnames(value){
 				this.samplesForm.P_NAME=value;
 			},
-			//生成单位组织机构代码
+			//生成单位统一社会信用代码
 			appendcodes(value){
 				this.samplesForm.PRODUCT_COMPANY=value;//委托单位编号
 			},
@@ -746,7 +746,6 @@
 				}).catch((err)=>{
 				})
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
-					// console.log(res.data);
 					for(var i=0;i<res.data.ITEM_LINEList.length;i++){
 						res.data.ITEM_LINEList[i].isEditing = false;
 					}

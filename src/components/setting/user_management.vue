@@ -190,6 +190,8 @@
 		<!--右侧内容显示 End-->
 		<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+	  <!--数据限制-->
+		<datarestrictmask  @request="requestData" ref="datarestrictmask" ></datarestrictmask>
 	</div>
 </template>
 <script>
@@ -199,14 +201,16 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import usermask from '../settingDetails/user_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import datarestrictmask from'../common/common_mask/datarestrictmask.vue'
 	export default {
 		name: 'user_management',
 		components: {
-			'vheader': vheader,
-			'navs_tabs': navs_tabs,
-			'navs_left': navs_left,
-			'usermask': usermask,
-			'reportmask':reportmask
+			 vheader,
+			 navs_tabs, 
+			 navs_left,
+			 usermask,
+			 reportmask,
+			 datarestrictmask,
 		},
 		data() {
 			return {
@@ -484,20 +488,39 @@
 		    	}else if(item.name=="不活动"){
 		    	 this.freezeAccount();
 		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    	 	this.deluserinfo();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+		    	 	this.physicsDel();
 		    	}else if(item.name=="重置密码"){
-		    	 this.resetPwd();
+		    	 	this.resetPwd();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 		    	}else if(item.name=="数据配置"){
-				 this.configuration();
-				}else if(item.name=="应用模块权限查看"){
-				 this.Checkpermissions();
+				 	this.configuration();
+					}else if(item.name=="应用模块权限查看"){
+				 	this.Checkpermissions();
+					}else if(item.name=="数据限制"){
+						this.datarestrict();
+					}
+			},
+			datarestrict(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要设置的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时设置多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.datarestrictmask.visible(this.selUser[0].id);
 				}
 			},
-			//权限查看
+			//应用模块权限查看
 			Checkpermissions(){
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -668,20 +691,18 @@
 			}
 			for(var c=0;c<products.length;c++){
 				if(products[c].type!="dept"&&products[c].type!="producttype"){
-                                        if(!!products[c].id){
-                                                    product.push(products[c].id); 
-                                        }
-
-					 // product.push(products[c].id); 
+					if(!!products[c].id){
+						product.push(products[c].id); 
+					}
 				}else if(products[c].type!="dept"&&products[c].type!="product"){
 					  productType.push(products[c].id);
 				}	
 			}
 			for(var c=0;c<testingproduct.length;c++){
 				if(testingproduct[c].type!="dept"&&testingproduct[c].type!="producttype"){
-                                        if(!!testingproduct[c].id){
+          if(!!testingproduct[c].id){
 					  checkProduct.push(testingproduct[c].id);
-                                        }
+          }
 				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
 					  checkProductType.push(testingproduct[c].id);
 				}	

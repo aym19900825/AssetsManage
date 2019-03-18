@@ -215,8 +215,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(2333333);
-					console.log(res.data);
 					this.selectData = res.data;
 				});
 			},

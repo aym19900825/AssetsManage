@@ -186,7 +186,6 @@ export default {
                 + '&recordid=' + this.docParm.recordid
                 + '&appname=' + this.docParm.appname
                 + '&appid=' + this.docParm.appid;
-            console.log(url);
             this.$axios.post(url, formData, config
             ).then((res)=>{
                 loading.close();

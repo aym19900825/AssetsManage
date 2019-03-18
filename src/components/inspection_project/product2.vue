@@ -293,7 +293,6 @@
 				var url = this.basic_url + '/api-apps/app/productType2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;
-					// console.log(res.data);
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
@@ -329,7 +328,6 @@
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					// console.log(res.data);
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){

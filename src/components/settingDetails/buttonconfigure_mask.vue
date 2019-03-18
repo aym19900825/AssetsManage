@@ -229,7 +229,6 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					// console.log(res.data);
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;

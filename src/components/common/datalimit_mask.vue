@@ -123,7 +123,6 @@
 				}
 			};
 			var validatePass3 = (rule, value, callback) => {
-				console.log(value)
 				if(value === '') {
 					callback(new Error('必填'));
 				} else {
@@ -275,12 +274,20 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				// console.log(this.user);
 				var url = this.basic_url + '/api-user/users/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
+<<<<<<< HEAD
 				}).catch((err) => {});
+=======
+				}).catch((err) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				});
+>>>>>>> 690dfbbdb5270f7ed89163137e3c0b377f186f3c
 			},
 			//点击关闭按钮
 			close() {
@@ -349,7 +356,6 @@
 						type: type
 					},
 				}).then((res) => {
-					// console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -385,7 +391,13 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
+<<<<<<< HEAD
 					}).catch(error =>{})
+=======
+					}).catch(error =>{
+				    console.log('请求失败');
+				})
+>>>>>>> 690dfbbdb5270f7ed89163137e3c0b377f186f3c
 			},
 		  	changeRole(event){
 		  	 	this.user.roleId=[]

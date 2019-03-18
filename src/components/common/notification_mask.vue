@@ -688,7 +688,6 @@
 				this.$refs.enterprisechild.visible(type,id,CJDW);
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
 			},
 			handleCheckChange(data, checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -710,7 +709,6 @@
 
 			//tabs
 			handleClick(tab, event) {
-//				console.log(tab, event);
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -719,9 +717,7 @@
 			},
 			//删除行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='secondList'){
 					TableName = 'WORK_NOTICE_CHECKBASIS';
 				}else{
@@ -736,7 +732,6 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0){
 								this.dataInfo[TableName+'List'].splice(index,1);
 								this.$message({
@@ -893,10 +888,8 @@
 			},
 			//上传文件 Begin
 			handleRemove(file, fileList) {
-//				console.log(file, fileList);
 			},
 			handlePreview(file) {
-//				console.log(file);
 			},
 			handleExceed(files, fileList) {
 				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
@@ -1153,7 +1146,6 @@
 			 },
 			 //检测依据列表
 			addbasis(value){
-				console.log(value);
 				this.dataInfo.S_NUM = value[0];
 				for(var i = 1;i<value.length;i++){
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.push(value[i]);

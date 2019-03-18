@@ -78,8 +78,6 @@
 
 								<el-table-column label="应用名称" width="160" sortable prop="appName" v-if="this.checkedName.indexOf('应用名称')!=-1">									
 								</el-table-column>
-								<el-table-column label="对象名称" width="160" sortable prop="objectid" v-if="this.checkedName.indexOf('对象名称')!=-1" align="center">
-								</el-table-column>
                                 <el-table-column label="处理类名" width="200" sortable prop="handleclass" v-if="this.checkedName.indexOf('处理类名')!=-1">									
 								</el-table-column>
 								<el-table-column label="sql"  align="left" sortable prop="sqlstr" v-if="this.checkedName.indexOf('sql')!=-1">		
@@ -133,18 +131,13 @@
 				permissions:'datarestrict',//appname
 				checkedName: [
 					'应用名称',
-					'对象名称',
 					'sql',
 					'处理类名',
 				],
 				tableHeader: [{
 						label: '应用名称',
 						prop: 'appname'
-					},{
-						label: '对象名称',
-						prop: 'objectdesc'
 					},
-					
 					{
 						label: 'sql',
 						prop: 'sqlstr'
@@ -192,7 +185,6 @@
 			
 			//表格滚动加载
 			loadMore() {
-				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -248,7 +240,6 @@
 			getMenuId(){
 				var url = this.basic_url + '/api-user/menus/findAllMenu';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {
@@ -294,7 +285,6 @@
 			},
 			//修改按钮配置
 			modify() {
-				console.log("aaaaa");
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -462,7 +452,6 @@
 					} else {
 						this.loadSign = true
                     }
-                    console.log(res);
 					this.categoryList = res.data.data;
 					this.loading = false;
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){

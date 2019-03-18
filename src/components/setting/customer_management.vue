@@ -16,7 +16,7 @@
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
 							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
-									<i :class="item.icon"></i>{{item.name}}
+								<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
@@ -77,10 +77,10 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form :model="searchList" label-width="70px">
+					<el-form :model="searchList" label-width="80px">
 						<el-row :gutter="10">
-							<el-col :span="8">
-								<el-form-item label="组织机构代码" prop="CODE" label-width="190px">
+							<el-col :span="6">
+								<el-form-item label="统一社会信用代码" prop="CODE" label-width="160px">
 									<el-input v-model="searchList.CODE">
 									</el-input>
 								</el-form-item>
@@ -103,12 +103,11 @@
 									</el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="2" style="padding-top: 3px">
-								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
+							<el-col :span="2" style="padding-top: 3px">
+								<el-select v-model="searchList.DEPTID" placeholder="请选择信息状态">
+									<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
 								</el-select>
-							</el-col> -->
+							</el-col>
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
@@ -135,8 +134,8 @@
 							  element-loading-background="rgba(255, 255, 255, 0.9)">
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
-							<!-- <el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1"> -->
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<!-- <el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1"> -->
+							<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
 									</p>
@@ -144,9 +143,11 @@
 							</el-table-column>
 							<el-table-column label="单位名称" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
-							<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
+							<el-table-column label="联系地址" width="300" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>
-							<el-table-column label="类型" sortable prop="TYPE" v-if="this.checkedName.indexOf('类型')!=-1">
+							<el-table-column label="类型" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
+							</el-table-column>
+							<el-table-column label="机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 							</el-table-column>
 							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
@@ -202,6 +203,7 @@
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],//文件上传的接收数据
 				commentArr:{},
+				selectData: [],
 				value: '',
 				options: [{
 					value: '1',
@@ -211,17 +213,18 @@
 					label: '不活动'
 				}],
 				checkedName: [
-					'组织机构代码',
+					'统一社会信用代码',
 					'单位名称',
 					'联系地址',
 					'类型',
+					'机构',
 					'备注',
 					// '联系电话',
 					// '信息状态',
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
+						label: '统一社会信用代码',
 						prop: 'CODE'
 					},
 					{
@@ -234,7 +237,11 @@
 					},
 					{
 						label: '类型',
-						prop: 'TYPE'
+						prop: 'TYPEDesc'
+					},
+					{
+						label: '机构',
+						prop: 'DEPTIDDesc'
 					},
 					{
 						label: '备注',
@@ -498,6 +505,19 @@
 
                 	});
 				}
+			},
+			//获取机构项
+			getMenuId(){
+				var url = this.basic_url + '/api-user/menus/findAllMenu';
+				this.$axios.get(url, {}).then((res) => {
+					// console.log(res);
+					this.selectData = res.data;
+				}).catch((wrong) => {
+					this.$message({
+						message: '网络错误，请重试',
+						type: 'error'
+					});
+				})	
 			},
 			//报表
 			reportdata(){

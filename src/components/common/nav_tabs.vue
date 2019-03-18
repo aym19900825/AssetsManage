@@ -154,7 +154,6 @@ export default {
         	};
         	var flag = false;
             this.tabs = [this.selectedTab];
-            console.log(this.selectedTab);
 				if(this.selectedTab.name!="首页"){
 					this.tabs.unshift(item);
 				}
@@ -189,7 +188,6 @@ export default {
     },
     mounted(){
       	this.showClick(this.$store.state.setClickedNav);
-      	// console.log(this.$store.state.setClickedNav);
 //   	this.showSelected(this.$store.state.setSelectedNav);
 
     },

@@ -34,7 +34,6 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="是否停用" prop="inactive">
-												<!--<el-input v-if="stopshow" v-model="roleList.inactive" :disabled="edit"></el-input>-->
 												<el-select v-if="roleList.name == '管理员'" v-model="roleList.inactive" placeholder="请选择" style="width: 100%" :disabled="edit">
 													<el-option v-for="item in stopoptions" :key="item.value" :label="item.label" :value="item.value">
 													</el-option>
@@ -54,52 +53,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<!--<el-row :gutter="30">
-										<el-col :span="8">
-											<el-form-item label="数据授权范围" prop="range">
-												<el-select placeholder="请选择" v-model="roleList.range" style="width: 100%" @change="selectValue">
-													<el-option v-for="item in dataoptions" :key="item.value" :label="item.label" :value="item.value">
-													</el-option>
-												</el-select>-->
-												<!-- 树 Begen-->
-												<!--<div class="lefttreebg">-->
-													<!-- <div class="left_tree_title clearfix">
-														<div class="pull-left pr20">数据授权范围</div>
-														<span class="pull-right navbar-minimalize minimalize-styl-2">
-															<i class="icon-doubleok icon-double-angle-left blue"></i>
-														</span>
-													</div> -->
-													<!--<div class="left_treebg" style="height: 400px;display:none;">
-														<div class="p15">
-															<el-tree ref="tree" class="filter-tree" :data="deptData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
-															</el-tree>
-														</div>
-													</div>
-												</div>-->
-												<!-- 树 End-->
-											<!--</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="角色授权" prop="roleright">-->
-												<!-- 树 Begen-->
-												<!--<div class="lefttreebg">-->
-													<!-- <div class="left_tree_title clearfix">
-														<div class="pull-left pr20">角色授权</div>
-														<span class="pull-right navbar-minimalize minimalize-styl-2">
-															<i class="icon-doubleok icon-double-angle-left blue"></i>
-														</span>
-													</div> -->
-													<!--<div class="left_treebg" style="height: 400px">
-														<div class="p15">
-															<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
-															</el-tree>
-														</div>
-													</div>
-												</div>-->
-												<!-- 树 End-->
-											<!--</el-form-item>
-										</el-col>
-									</el-row>-->
 								</el-collapse-item>
 							</el-collapse>
 						</div>
@@ -139,31 +92,7 @@
 					label: '否'
 				}],
 
-				dataoptions: [{
-					value: '1',
-					label: '所有数据'
-				}, {
-					value: '2',
-					label: '所在公司及以下数据'
-				}, {
-					value: '3',
-					label: '所在公司数据'
-				}, {
-					value: '4',
-					label: '所在部门及以下数据'
-				}, {
-					value: '5',
-					label: '所在部门数据'
-				}, {
-					value: '6',
-					label: '仅本人数据'
-				}, {
-					value: '7',
-					label: '按明细设置'
-				}, ],
 				edit: true, //禁填
-				'男': true,
-				'女': false,
 				stopshow: false,
 				stopselect: false,
 				show: false, //控制弹出框显示隐藏
@@ -187,6 +116,7 @@
 						{required: true, message: '必填' ,trigger: 'blur',},
 						{validator: this.Validators.isNickname, trigger: 'blur'},
 					],
+					inactive:[{ required: true, trigger: 'blur',  message: '请选择机构属性'}],
 					tips: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
 					range: [{ required: true, message: '请选择机构属性', trigger: 'chang'}]
 					
@@ -293,7 +223,7 @@
 				// this.roleList.code = randnum;
 				this.stopshow = true;
 				this.stopselect = false;
-				this.roleList.INACTIVE = '否';
+				this.roleList.inactive = '否';
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;

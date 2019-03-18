@@ -296,7 +296,7 @@
 													</el-table-column>
 													<el-table-column prop="c_date" label="资质有效期" sortable width="200px">
 														<template slot-scope="scope">
-															<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'">
+															<el-form-item :prop="'qualifications.'+scope.$index + '.c_date'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 																<el-date-picker v-if="scope.row.isEditing" size="small" v-model="scope.row.c_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: inherit;">
 																</el-date-picker>
 																<span v-else>{{scope.row.c_date}}</span>

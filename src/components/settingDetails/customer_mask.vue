@@ -32,10 +32,10 @@
 											</el-select> -->
 										</el-col>
 									</el-row>
-	                              <!-- <el-form label-width="100px"> -->
+									<!-- <el-form label-width="100px"> -->
 									<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="组织机构代码" prop="CODE" label-width="110px">
+											<el-form-item label="统一社会信用代码" prop="CODE" label-width="140px">
 												<el-input v-model="CUSTOMER.CODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -81,7 +81,7 @@
 									</el-row> -->
 									<el-row :gutter="30">
 										<el-col :span="16">
-											<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="110px">
+											<el-form-item label="联系地址" prop="CONTACT_ADDRESS" label-width="140px">
 												<el-input v-model="CUSTOMER.CONTACT_ADDRESS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -93,7 +93,7 @@
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO" label-width="110px">
+											<el-form-item label="备注" prop="MEMO" label-width="140px">
 												<el-input v-model="CUSTOMER.MEMO" type="textarea" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -483,8 +483,8 @@
 			//新建行
 			addfield(){
 				var obj = {
-                    STEP:'',
-                    CERTIFICATE_NUM:'',
+					STEP:'',
+					CERTIFICATE_NUM:'',
 					CERTIFICATE_NAME:'',
 					ACTIVE_DATE:'',
 					STATUS:'',
@@ -493,8 +493,8 @@
 					FILENAME: '',
 					FILEPATH: '',
 					isEditing: true
-                };
-                this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
+				};
+				this.CUSTOMER.CUSTOMER_QUALIFICATIONList.push(obj);
 			},
 			//新建行
 			addrela(){
@@ -648,7 +648,6 @@
 				this.statusshow2 = true;
 				this.getUser('detail');
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
-					console.log(res.data);
 					//资质
 					for(var i = 0;i<res.data.CUSTOMER_QUALIFICATIONList.length;i++){
 						res.data.CUSTOMER_QUALIFICATIONList[i].isEditing = false;

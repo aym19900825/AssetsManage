@@ -322,7 +322,6 @@
 						type: type
 					},
 				}).then((res) => {
-					console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});

@@ -175,7 +175,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
-									<el-form-item label="ERP" prop="erp_orgname" label-width="100px">
+									<el-form-item label="ERP机构" prop="erp_orgname" label-width="100px">
 										<el-input v-model="personinfo.erp_orgname" :disabled="false"></el-input>
 									</el-form-item>
 								</el-col>
@@ -441,7 +441,7 @@
 					zipcode:'',//邮编
 					ipaddress:'',//IP地址
 					macaddress:'',//MAC地址
-					erp_orgname:'',//ERP
+					erp_orgname:'',//ERP机构
 					education:'',//最高学历
 					//logintype: [],//登录方式
 					//rex:'',//传真号
@@ -657,7 +657,6 @@
 			getRole() {
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data.data);
 					this.selectData = res.data.data;
 				}).catch(error => {
 				})

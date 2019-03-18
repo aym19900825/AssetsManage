@@ -1799,8 +1799,6 @@
 			RVENDORSelect(){
 				var url = this.basic_url + '/api-user/depts/findByPid/'+this.dataInfo.R_VENDOR;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					console.log(this.maingroup);
 					this.maingroup = res.data;
 				}).catch((err) => {
 				});

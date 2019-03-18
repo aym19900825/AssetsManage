@@ -67,7 +67,7 @@
 						<el-table :data="userList" border stripe height="550" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
 							</el-table-column>
-							<el-table-column label="组织机构代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('组织机构代码')!=-1">
+							<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1">
 							</el-table-column>
 							<el-table-column label="单位名称" width="200" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
@@ -125,7 +125,7 @@
 			        deptId: ''
 		        },
 				checkedName: [
-					'组织机构代码',
+					'统一社会信用代码',
 					'单位名称',
 					'性别',
 					'联系电话',
@@ -134,7 +134,7 @@
 				],
 				tableHeader: [
 					{
-						label: '组织机构代码',
+						label: '统一社会信用代码',
 						prop: 'username'
 					},
 					{
@@ -340,7 +340,6 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-				// return this.$moment(date).format("YYYY-MM-DD HH:mm:ss");  
 			},
 			insert() {
 				this.users.push(this.user)

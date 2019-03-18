@@ -480,7 +480,6 @@
 			view(dataid) {
 				var url = this.basic_url + '/api-apps/app/checkPlan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.dataInfo = res.data;
 					this.dataInfo.tableList = this.dataInfo.CHECK_PLAN_LINEList;
 				}).catch((wrong) => {});
@@ -610,7 +609,6 @@
 				params: {}
 			}).then((res) => {
 				this.assets = res.data.data;
-				console.log(res.data.data);
 			}).catch((wrong) => {})
 		}
 	}

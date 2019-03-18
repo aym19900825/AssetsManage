@@ -319,7 +319,6 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0].STATE);
 					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
@@ -356,7 +355,6 @@
 			},
 			//查看
 			 view(data) {
-				 console.log(data.ID);
 				this.$refs.usesealmask.view(data.ID);
 			},
 			//高级查询
@@ -412,16 +410,8 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 					});
 				}
 			},
@@ -467,16 +457,8 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 					});
 				}
             },
@@ -534,10 +516,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 			formatter(row, column) {
@@ -550,21 +528,14 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 
 		    },

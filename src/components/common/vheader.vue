@@ -93,10 +93,6 @@ export default {
                     this.userid = res.data.id;
                     this.getImgUrl();
             }).catch((err) => {
-                this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
             });
         },
         getTodoNumber() {//获取当前用户待办任务数
@@ -108,10 +104,6 @@ export default {
                     this.$emit('getTodoNum',this.toDoNumber);
                 }
             }).catch(error => {
-                  this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
             });
         },
         getImgUrl(){
@@ -121,10 +113,6 @@ export default {
                     this.headImgUrl = res.data.icon;
                 }
             }).catch(error => {
-                  this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
             });
         },
        getITEM_Roles() {
@@ -140,10 +128,6 @@ export default {
                     let item = res.data[0];
                 }
             }).catch(error => {
-                  this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
             })
         },
 		 clickfun(e) {

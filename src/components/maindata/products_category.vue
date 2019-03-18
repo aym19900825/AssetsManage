@@ -107,12 +107,12 @@
 							<!-- 表格 Begin-->
 
 							<el-table ref="table" :header-cell-style="rowClass"
+									@sort-change='tableSortChange'
 									:data="categoryList"
 									border
 									stripe
 									:height="fullHeight"
 									style="width: 100%;"
-	    							:default-sort="{prop:'categoryList', order: 'descending'}"
 	    							@selection-change="SelChange"
 	    							v-loadmore="loadMore"
 									v-loading="loading"
@@ -121,26 +121,39 @@
 	    							element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<!-- <el-table-column label="序号"  type="index" width="155">
+									<template slot-scope="scope">
+										<span>{{page.currentPage*page.pageSize + scope.row.date }}<span>
+									</template>
+								</el-table-column> -->
+								<el-table-column
+									type="index"
+									label="序号"
+									width="50">
+									<template slot-scope="scope">
+										<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+									</template>
+								</el-table-column>
+								<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 	 								<template slot-scope="scope" >
 	 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
 	 								</template>
 								</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="版本" width="100" sortable='custom' prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<!-- 表格 End-->
@@ -245,6 +258,7 @@
 					TYPE: '',
 					VERSION:'',
 					DEPTID: '',
+
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -265,6 +279,17 @@
 			}
 		},
 		methods: {
+			tableSortChange(column){
+				this.page.currentPage = 1;
+				if (column.order === 'descending') {
+					this.searchList.sortby = column.prop + '_orders';
+					this.searchList.order = 'desc'
+				} else {
+					this.searchList.sortby = column.prop + '_orders';
+					this.searchList.order = 'asc'
+				}
+				this.requestData();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -274,9 +299,6 @@
 				this.requestData();
 			},
 			handleSuccess(response, file, fileList){//上传文件列表
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			//机构值
 			getCompany() {
@@ -292,7 +314,6 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -440,26 +461,24 @@
 					}
 				}else if(item.name=="删除"){
 					if(isshowbtn=='0'){
-					this.$message({
-						message: '您没有删除的权限',
-						type: 'warning'
-					});
-				}else{
-					this.deluserinfo();
+						this.$message({
+							message: '您没有删除的权限',
+							type: 'warning'
+						});
+					}else{
+						this.deluserinfo();
 					}
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
-		    	
+		    		this.download();
 		    	}else if(item.name=="配置关系"){
-		    	 this.Configuration();
+		    		this.Configuration();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
-				 this.Printing();
+				 	this.Printing();
 				}
-				
 		    },
 			//添加类别
 			openAddMgr() {
@@ -475,13 +494,13 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selUser.length > 1) {
+				}else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else {
 					this.CATEGORY = this.selUser[0];
 					this.$refs.categorymask.detail();
 				}
@@ -506,7 +525,7 @@
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else {
 					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
@@ -539,10 +558,10 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+							// this.$message({
+							// 	message: err.resp_msg,
+							// 	type: 'error'
+							// });
 						});
 					}).catch(() => {
 
@@ -629,6 +648,9 @@
 					VERSION:this.searchList.VERSION,
 					DEPTID: this.searchList.DEPTID,
 				}
+				if(!!this.searchList.sortby){
+					data[this.searchList.sortby] = this.searchList.order;
+				}
 				var url = this.basic_url + '/api-apps/app/productType';
 				this.$axios.get(url, {
 					params: data
@@ -646,11 +668,11 @@
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
+				}).catch((err) => {
+					// this.$message({
+					// 	message: err.resp_msg,
+					// 	type: 'error'
+					// });
 				})
 			},
 			formatter(row, column) {
@@ -663,7 +685,6 @@
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
@@ -690,11 +711,11 @@
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
-				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+				}).catch((err) => {
+					// this.$message({
+					// 	message: err.resp_msg,
+					// 	type: 'error'
+					// });
 				})
 			},
 			//根据机构设置按钮权限
@@ -702,11 +723,11 @@
 				var url = this.basic_url + '/api-user/users/findDeptAttr';
 				this.$axios.get(url, {}).then((res) => {
 					this.btn=res.data;
-				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+				}).catch((err) => {
+					// this.$message({
+					// 	message: err.resp_msg,
+					// 	type: 'error'
+					// });
 				})
 			}
 		},

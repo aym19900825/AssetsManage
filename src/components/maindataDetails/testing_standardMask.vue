@@ -391,10 +391,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					});
 				});
 			},
 			//添加点击按钮显示弹窗
@@ -519,10 +515,6 @@
 									this.$emit('request');	
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 		          	} else {
@@ -541,7 +533,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionSta/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -551,10 +542,6 @@
 						return;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			// 保存users/saveOrUpdate
@@ -605,10 +592,6 @@
 								}
 							}						
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 			        } else {

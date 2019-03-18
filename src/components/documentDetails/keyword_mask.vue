@@ -135,10 +135,6 @@
 						this.dataInfo.deptfullname = res.data.deptName;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getToday(){
@@ -228,13 +224,9 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
-						console.log('error submit!!');
+						var middleWidth=5;
 						return false;
 					}
 				});

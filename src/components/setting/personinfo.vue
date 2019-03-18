@@ -500,7 +500,6 @@
 				}
 			},
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			addfield1() {
@@ -524,10 +523,6 @@
 					};
 					this.personinfo.qualifications.push(obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 
 			},
@@ -599,7 +594,6 @@
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-	    			 // console.log(roles);
 	    			this.personinfo.roleId = this.personinfo.roleId.split(',');
 					var arr = [];
 					var roleId = this.personinfo.roleId;
@@ -608,10 +602,6 @@
 					}
 	    			this.getImgUrl();
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getImgUrl(){//用户头像
@@ -627,7 +617,7 @@
 				});
 			},
 	    	handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
+				
 			},
 			handleClicks(data,checked, indeterminate) {//获取机构勾选树菜单节点
 				this.getCheckboxData = data;
@@ -655,7 +645,7 @@
 				this.editSearch = 'dept';
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -667,7 +657,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			getCheckedNodes() {//获取树菜单节点
@@ -728,10 +717,6 @@
 								});
 							} 
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 
 					} else {
@@ -906,10 +891,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 

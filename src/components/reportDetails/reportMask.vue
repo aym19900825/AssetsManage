@@ -96,32 +96,23 @@
 					});
 					return;
 				} else {
-					console.log(this.selreport[0]);
 					var id=this.selreport[0].id;
 					var file=this.selreport[0].file;
 					this.appname=this.reportData.app;	
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
-					console.log(url);
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
 						if(res.data.datas==null){
 						  		var url=this.basic_url;
 								var pos = url.lastIndexOf(':');
 								url=url.substring(0,pos+1); 
-								console.log(url);
 						  		this.url=url+"5300";
 								 var url = this.url+"/ureport/preview?_u=mysql:" +file
-								 
              					window.open(url); 
 						}else{
-							console.log(res);
+							
 							this.$refs.reportpramchild.visible(res.data.datas,file);
 						}
 					}).catch((wrong) => {
-						this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 					})
 				}
 		  		
@@ -129,16 +120,10 @@
 			requestData() {
 				this.appname=this.reportData.app;
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
-				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.reportsList = res.data.datas;
 					this.innerVisible = true;
 				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 				})
 				
 			},

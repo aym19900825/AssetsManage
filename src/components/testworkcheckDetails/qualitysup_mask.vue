@@ -236,10 +236,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -258,19 +254,14 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/qualitySupApp/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			// 这里是修改
 			detail(dataid) {
-				console.log(dataid);
 				this.dataid=dataid;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -303,10 +294,6 @@
 						_this.$refs.docTable.getData();
 					},100);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
                 });
 			},
 			//这是查看
@@ -323,21 +310,17 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
 					}else{
 						var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/Executors/'+this.dataid;
-						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res.data.datas);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								// console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -372,7 +355,7 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -453,7 +436,6 @@
 			},
 			//当前责任人
 			viewpepole(){
-				console.log(this.dataid);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.qualitySupApp;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
@@ -516,10 +498,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {
@@ -594,10 +572,6 @@
 						this.deptid = res.data.deptId;
 						this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

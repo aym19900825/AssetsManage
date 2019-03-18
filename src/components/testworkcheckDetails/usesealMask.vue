@@ -342,10 +342,6 @@
 					var date = new Date();
 					this.USESEAL.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -363,7 +359,7 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/sealUse/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.USESEAL = res.data;
 					 for(var j=0;j<this.selectData.length;j++){
                     	if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
@@ -372,10 +368,6 @@
                		 }
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			// 这里是修改
@@ -398,10 +390,6 @@
 					var date = new Date();
 					this.USESEAL.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试2',
-						type: 'error'
-					});
                 });
                 // for(var j=0;j<this.selectData.length;j++){
                 //     if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
@@ -427,7 +415,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/sealUse/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 console.log(res);
+					 
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -611,7 +599,7 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/sealUse/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -739,10 +727,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试3',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {
@@ -802,16 +786,12 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				console.log(res);
+				
 	                    this.userid = res.data.id;
 						this.username = res.data.username;
 						this.deptid = res.data.deptId;
 						this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

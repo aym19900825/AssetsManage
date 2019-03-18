@@ -962,7 +962,7 @@
 		},
 		methods: {
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
+				
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -1020,7 +1020,6 @@
 			},
 			//取到分包方
 			deptdata(value){
-				console.log(value);
 				this.deptName.VENDOR = value[0];//id
 				this.deptName.VENDORDesc = value[1];//名称
 				this.deptName.depttype = value[2];//机构属性id
@@ -1028,8 +1027,6 @@
 			},
 			//选择分包方名称
 			// queding() {
-			// 	console.log(123456);
-			// 	console.log(this.checkedNodes);
 			// 	this.getCheckedNodes();
 			// 	this.dialogVisible = false;				
 			// 	this.deptindex.VENDOR = this.checkedNodes[0].id;
@@ -1105,7 +1102,6 @@
 				};	  
 				},
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -1129,10 +1125,6 @@
 						});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 			},
 			sizeChange(val) {
@@ -1203,9 +1195,7 @@
 			
 			//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='basisList'){
 					TableName = 'INSPECT_PROXY_BASIS';
 				}else if(listName =='projectList'){
@@ -1216,7 +1206,7 @@
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/inspectPro/' + TableName +'/' + row.ID;
 					this.$axios.delete(url, {}).then((res) => {
-						console.log(res);
+						
 						if(res.data.resp_code == 0){
 							this.dataInfo[TableName+'List'].splice(index,1);
 							this.$message({
@@ -1230,10 +1220,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}else{
 					this.dataInfo[TableName+'List'].splice(index,1);
@@ -1242,7 +1228,7 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
+					
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
 					// this.dataInfo.ORGID = res.data.deptName
@@ -1252,10 +1238,6 @@
 					this.dataInfo.TYPEDesc = '检测';
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试21',
-						type: 'error'
-					})
 				})
                	this.addtitle = true;
 				this.modifytitle = false;
@@ -1269,7 +1251,7 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
@@ -1286,17 +1268,12 @@
 					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
 					res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					res.data.LEADER = Number(res.data.LEADER);
-					console.log(typeof(res.data.MAINGROUP));
 					this.dataInfo = res.data;
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
         			this.datainfo = JSON.parse(_obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试3',
-						type: 'error'
-					});
 				});
 			},	
 			
@@ -1310,10 +1287,6 @@
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试4',
-						type: 'error'
-					});
 				});
 				this.detailgetData();
 				this.modifytitle = true;
@@ -1366,10 +1339,6 @@
 								}
 							}		
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试5',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -1401,7 +1370,6 @@
 					}else{
 						var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.datas);
 							var resullt=res.data.datas;
 							var users='';
 							var users='';
@@ -1584,7 +1552,6 @@
 							type: 'warning'
 						});
 					}else{
-						console.log(this.deptindex.S_NUM);
 						this.$refs.projectchild.projectlead(this.deptindex.S_NUM);
 						this.main = 'table';
 					}
@@ -1610,7 +1577,6 @@
 			},
 			testprojectprover(value){
 				this.deptindex.PROJ_VERSIONNUM = value;
-				console.log(this.deptindex.PROJ_VERSIONNUM);
 			},
 			//点击关闭按钮
 			close() {
@@ -1673,22 +1639,17 @@
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-						console.log(11);
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
-							console.log(22);
 							this.$message({
 								message: '检测依据和检测项目与要求和分包要求是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;
 			        	}else{
-							console.log(33);
 //							this.dataInfo.ITEM_STATUS=this.dataInfo.ITEM_STATUS==1;
 //							this.dataInfo.MESSSTATUS= this.dataInfo.MESSSTATUS==1;//信息状态
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
-							console.log(44);
 							this.$axios.post(url, this.dataInfo).then((res) => {
-								console.log(55);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
@@ -1699,10 +1660,6 @@
 									this.reset();
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 						this.falg = true;
@@ -1762,10 +1719,6 @@
 					this.$axios.get(url, {}).then((res) => {
 						this.maingroup = res.data;
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				this.dataInfo.PRODUCT_TYPE = '';
 				this.dataInfo.P_NUM = '';
@@ -1783,10 +1736,6 @@
 		   			this.$axios.get(url, {}).then((res) => {
 						this.leaderdata = res.data.data;
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试8',
-							type: 'error'
-						});
 					});		
 			},
 			//获取负责人和接收人
@@ -1856,7 +1805,6 @@
 							});
 						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
-									console.log(res.data.datas);
 									var resullt=res.data.datas;
 									var users='';
 									for(var i=0;i<resullt.length;i++){
@@ -1893,7 +1841,7 @@
 								}else{
 									this.$refs.approvalChild.visible();
 								}
-		    		});
+		    			});
 		    		}
 				});
 			},
@@ -1932,10 +1880,6 @@
 	            this.$axios.get(url, {}).then((res) => {//
 	                this.username = res.data.username;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试  3',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

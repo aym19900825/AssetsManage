@@ -217,7 +217,6 @@ export default {
 		            personinfo.sex = personinfo.sexName == '男' ? 1 : 0;
 		            personinfo.enabled = personinfo.enabledName == '启用' ? 1 : 0;
 		            this.$axios.put(url, this.personinfo).then((res) => {
-						console.log(res.data.resp_code);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -227,10 +226,6 @@ export default {
 							this.$emit('request')//重新加载数据
 						} 
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 
 				} else {

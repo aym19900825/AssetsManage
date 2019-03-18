@@ -139,20 +139,15 @@
 					if (valid) {
 					   var url = this.basic_url + '/api-flow/flow/model/create';
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.modelId);
 							this.modelId=res.data.modelId;
-							console.log(res);
+							
 							if(res.status ==200) {
      						this.$refs.child.visible();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试123',
-								type: 'error'
-							});
 						});
 					} else {
-						console.log('error submit!!');
+						var middleWidth=5;
 						this.show = false;
 						return false;
 					}

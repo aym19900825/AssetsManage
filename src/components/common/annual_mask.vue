@@ -1094,10 +1094,10 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+							// this.$message({
+							// 	message: '网络错误，请重试',
+							// 	type: 'error'
+							// });
 						});
 					}).catch(() => {
 
@@ -1391,15 +1391,14 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试1',
+					// 	type: 'error'
+					// });
 				})
 			},
             //tabs
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
             //检测依据弹出框
             basisleadbtn(){
@@ -1704,10 +1703,10 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'error'
+					// });
 				});
 			},
 			//点击添加，修改按钮显示弹窗
@@ -1807,10 +1806,10 @@
 						this.selectData = res.data;
 					});
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'error'
+					// });
 				});
 				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType?id='+this.WORKPLAN.PROP_UNIT;
@@ -1878,10 +1877,10 @@
 						this.selectData = res.data;
 					});
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'error'
+					// });
 				});
 			},
 			//点击关闭按钮
@@ -1938,8 +1937,6 @@
 								}else{
 									if(!this.isEditList){
 										// if(typeof(this.WORKPLAN.PROP_UNITDesc) != 'undefined') {
-										// 	console.log(4444445555);
-										// 	console.log(this.selectData);
 										// 	for(var j=0;j<this.selectData.length;j++){
 										// 		console.log(this.selectData[j].fullname);
 										// 		console.log(this.selectData[j].id);
@@ -1948,9 +1945,6 @@
 										// 			this.WORKPLAN.PROP_UNIT = this.selectData[j].id;
 										// 		}
 										// 	}
-										// 	console.log('======');
-										// 	console.log(this.WORKPLAN.PROP_UNIT);	
-										// 	console.log('======');	
 										// }
 										// this.WORKPLAN.PROP_UNIT = this.WORKPLAN.PROP_UNITDesc;
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;
@@ -1984,10 +1978,10 @@
                                                 });
                                             }
 										}).catch((err) => {
-											this.$message({
-												message: '网络错误，请重试',
-												type: 'error'
-											});
+											// this.$message({
+											// 	message: '网络错误，请重试',
+											// 	type: 'error'
+											// });
 										});
 										this.falg=true;
 									}else{

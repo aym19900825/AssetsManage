@@ -167,12 +167,7 @@ export default {
                     });
                 }
                 this.reset();
-            }).catch((err) => {
-                this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
-            });
+            }).catch((err) => {});
         },
         closeTag(item){
             if(item.filekeywordid != ''){

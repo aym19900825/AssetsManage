@@ -241,10 +241,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -293,17 +289,13 @@
 						_this.$refs.docTable.getData();
 					},100);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
                 });
                this.detailgetData();
 			},
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/reportOnhole/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -330,7 +322,7 @@
 				this.detailgetData();
 				// var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isStart/'+this.dataid;
 				// this.$axios.get(url, {}).then((res) => {
-				// 	 console.log(res);
+				// 	 
 				// 	if(res.data.resp_code==1){
 				// 		this.start=true;
 				// 		this.approval=false;
@@ -439,10 +431,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {
@@ -509,10 +497,6 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                    this.username = res.data.username;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

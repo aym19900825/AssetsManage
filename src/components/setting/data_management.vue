@@ -170,7 +170,6 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			tableControle(data){
@@ -269,10 +268,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -305,10 +300,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},

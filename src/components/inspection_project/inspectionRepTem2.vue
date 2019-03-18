@@ -196,13 +196,8 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
 					
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 			},
 			loadMore () {//表格滚动加载
@@ -285,7 +280,7 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
+					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -393,10 +388,6 @@
 							};
 							this.inspectionRepTem2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
-							this.$message({
-								message:'网络错误，请重试',
-								type:'error'
-							})
 						})
 		            } else {
 		                this.$message.warning("请先保存当前编辑项");
@@ -430,10 +421,6 @@
 							this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          } else {
 		            return false;
@@ -456,10 +443,6 @@
 							this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
                 }).catch(() => {
 

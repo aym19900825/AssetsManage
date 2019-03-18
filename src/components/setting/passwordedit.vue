@@ -155,10 +155,6 @@ export default {
 				this.passwordedit.username = res.data.username;
 				this.passwordedit.id = res.data.id;
 			}).catch((err) => {
-				this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 			});
     	},
     	

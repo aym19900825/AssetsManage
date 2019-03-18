@@ -426,7 +426,6 @@
 							params: data
 						}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
-							// console.log(res.data.resp_code);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -435,10 +434,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -488,10 +483,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -574,10 +565,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 			
@@ -598,14 +585,10 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
+					// 
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 
 			},
@@ -614,10 +597,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.btn=res.data;
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})
 			}
 		},

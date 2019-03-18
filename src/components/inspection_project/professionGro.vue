@@ -204,13 +204,9 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 			},
 			loadMore () {//表格滚动加载
@@ -233,7 +229,6 @@
 				this.$axios.get(currenturl, {}).then((res) => {
 					this.categoryList = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			sizeChange(val) {//页数
@@ -273,7 +268,7 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
+					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -302,7 +297,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					// console.log(res);
+					// 
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -385,10 +380,6 @@
 							};
 							this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
-							this.$message({
-								message:'网络错误，请重试',
-								type:'error'
-							})
 						})
 		            } else {
 		                this.$message.warning("请先保存当前编辑项");
@@ -423,10 +414,6 @@
 							this.viewfield_professionGro(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          } else {
 		            return false;
@@ -439,7 +426,6 @@
                     cancelButtonText: '取消',
                 }).then(({ value }) => {
                 	var url = this.basic_url + '/api-apps/app/professionGro/' + row.ID;
-                	// console.log(row.ID);
                     this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -450,10 +436,6 @@
 							this.viewfield_professionGro(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
                 }).catch(() => {
 

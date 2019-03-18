@@ -69,10 +69,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -104,10 +100,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -139,10 +131,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -173,10 +161,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -207,10 +191,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -228,15 +208,6 @@
 				}).catch((wrong) => {
 
 				})
-				// this.userList.forEach((item,index)=>{
-				//     var id = item.id;
-				//     this.$axios.get('/users/'+id+'/roles',data).then((res)=>{
-				//     this.userList.role = res.data.roles[0].name;
-				// }).catch((wrong) => {
-
-				// })
-				// })
-
 			},
 			formatter(row, column) {
 				return row.enabled;

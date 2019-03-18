@@ -235,10 +235,6 @@
 					var date = new Date();
 					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -276,16 +272,11 @@
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.show = true;
 			},
 			//这是查看
 			view() {
-				// console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -299,14 +290,10 @@
 			getBtnColor(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 				})	
 			},
 			//点击关闭按钮
@@ -374,10 +361,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {

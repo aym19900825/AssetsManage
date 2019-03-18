@@ -185,7 +185,7 @@
 				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.deptData = res.data;
 					this.treeData = this.transformTree(this.deptData);
 				});
@@ -257,10 +257,6 @@
 					this.roleList = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.show = true;
 			},
@@ -317,7 +313,7 @@
 					if(valid) {	
 						var url = this.basic_url + '/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
-							console.log(res);
+							
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -328,10 +324,6 @@
 								this.$emit('request')
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
 						return false;

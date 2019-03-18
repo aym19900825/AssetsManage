@@ -287,7 +287,6 @@
 				}
 			};
 			var validateDOCLINKS_NUM = (rule, value, callback) => {
-				// console.log(this.testing_projectForm.DOCLINKS_NUM);
 				if(this.testing_projectForm.DOCLINKS_NUM === '') {
 					callback(new Error('请选择作业指导书'));
 				} else {
@@ -297,7 +296,6 @@
 			 //金额验证
 				var price=(rule, value, callback) => {//生产单位名称 
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				// console.log(value);
 				if(value != '' && value!=undefined){
 					if(exp.test(value)==false){ 
 						callback(new Error('请输入数字'));
@@ -426,9 +424,7 @@
 			},
 			//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='tableList'){
 					TableName = 'QUALIFICATION';
 				}
@@ -441,7 +437,6 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == 0){
 								this.testing_projectForm[TableName+'List'].splice(index,1);
 								this.$message({
@@ -455,10 +450,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -586,10 +577,6 @@
 					var date = new Date();
 					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -615,10 +602,6 @@
 					let _obj = JSON.stringify(this.testing_projectForm);
         			this.TESTING_PROJECTFORM = JSON.parse(_obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -628,10 +611,6 @@
 					this.testing_projectForm = res.data;
 
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -652,10 +631,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.testing_projectForm = res.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				this.addtitle = false;
 				this.modifytitle = false;
@@ -668,15 +643,12 @@
 			},
 			//点击更新按钮
 			update(testing_projectForm) {
-				console.log(this.testing_projectForm);
 				var data = {
 					ID: this.testing_projectForm.ID,
 				}
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionPro/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					console.log(res);
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -686,10 +658,6 @@
 						return;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			modifyversion(testing_projectForm) {
@@ -718,10 +686,6 @@
 									this.$emit('reset');
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -766,7 +730,6 @@
 			save(testing_projectForm) {
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
-					// this.testing_projectForm.QUANTITY = _this.initcost;
 					if(valid) {
 						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
@@ -777,13 +740,11 @@
 								type: 'success'
 							});
 							this.$emit('reset');
-     						// this.$refs['testing_projectForm'].resetFields();
 							this.$emit('request');
 							this.visible();
 						}else{
 							this.show = true;
 							if(res.data.resp_code == 1) {
-								//res.data.resp_msg!=''后台返回提示信息
 								if( res.data.resp_msg!=''){
 								 	this.$message({
 										message: res.data.resp_msg,
@@ -799,11 +760,6 @@
 						}
 					//清空表单验证
 					}).catch((err) => {
-						this.show = true;
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				this.falg = true;
 			} else {
@@ -851,7 +807,6 @@
 						type: 'warning'
 					});
 				}else{
-					console.log(111111);
 					this.peoplegrid.C_NAME = this.selval[0].c_name;
 					this.dialogVisible = false;
 				}

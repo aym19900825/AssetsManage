@@ -28,7 +28,7 @@
 										<i class="el-icon-arrow-down icon-arrow2-down"></i>
 									</span>
 									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
+										<el-checkbox-group v-model="checkedName">
 											<el-dropdown-item  v-for="(item,index) in tableHeader" :key="index">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
@@ -373,9 +373,6 @@
 				}
 				this.handleNodeClick();
 			},
-			test(){
-				console.log(this.checkedName.indexOf('账号')!=-1);
-			},
 			loadMore() {
 				if(this.loadSign) {
 					this.loadSign = false
@@ -387,7 +384,6 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//console.log('到底了', this.page.currentPage)
 				}
 			},
 			sizeChange(val) {
@@ -438,10 +434,6 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                return res.data.roleId;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 			//修改检验工作处理到子组件
@@ -585,10 +577,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
                     }).catch(() => {
 
@@ -637,10 +625,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -680,7 +664,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					console.log(res);
+					
 					this.loading = false;
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){
@@ -783,7 +767,6 @@
 			},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
-			   console.log(childValue);
         		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
@@ -794,16 +777,11 @@
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
-				console.log(data);
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})
 
 		    },

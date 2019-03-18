@@ -108,10 +108,10 @@ export default {
 					this.$emit('childByValue',menu);
 				}
 			}).catch((wrong) => {
-				this.$message({
-					message: '网络错误，请重试左侧',
-					type: 'error'
-				});
+				// this.$message({
+				// 	message: '网络错误，请重试左侧',
+				// 	type: 'error'
+				// });
 			});
 		}
 	}

@@ -227,13 +227,9 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 			},
 			loadMore () {//表格滚动加载
@@ -279,7 +275,7 @@
 			// selectVal(ID){//点击父级筛选出子级数据
 			// 	var url = '/api/api-apps/app/productType2/' + ID;
 			// 	this.$axios.get(url, {}).then((res) => {
-			// 		console.log(res);
+			// 		
 			// 		this.page.totalCount = res.data.count;	
 			// 		//总的页数
 			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -312,7 +308,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					//console.log(res);
+					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -371,10 +367,6 @@
 						};
 						this.productType2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
-						this.$message({
-							message:'网络错误，请重试',
-							type:'error'
-						})
 					})
 	            } else {
 	                this.$message.warning("请先保存当前编辑项");
@@ -405,10 +397,6 @@
 							this.requestData_productType2();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          } else {
 		            return false;
@@ -431,10 +419,6 @@
 							this.requestData_productType2();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
                 }).catch(() => {
 
@@ -442,7 +426,6 @@
 			},
 			addchildRow(row) {//添加子项数据
 				this.$refs.product2child.addfield_product2(row.NUM);
-				//console.log();
 			},
 			viewchildRow(ID) {//查看子项数据
 				this.$refs.product2child.viewfield_product2(ID);

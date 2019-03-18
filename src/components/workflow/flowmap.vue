@@ -36,9 +36,9 @@ export default {
 	    	this.appname=this.approvingData.app;
 	    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
 	   	        this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
-						console.log(res);
+						
 							this.$message({
 								message:res.data.resp_msg,
 								type: 'warning'

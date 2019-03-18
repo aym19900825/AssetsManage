@@ -246,10 +246,6 @@
 					var date=new Date();
 					this.numbsetForm.createtime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
             	this.addtitle = true;
 				this.modifytitle = false;
@@ -271,10 +267,6 @@
 					var date=new Date();
 					this.numbsetForm.updatetime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
             	this.addtitle = false;
 				this.modifytitle = true;
@@ -298,8 +290,6 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-				// this.numbsetForm = item;
-				//console.log(this.numbsetForm);
 				this.show = true;				
 			},
 			//点击关闭按钮
@@ -357,10 +347,6 @@
 							this.show = false;
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          }else {
 						this.show = true;

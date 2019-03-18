@@ -223,8 +223,6 @@
 			
 			// 这里是修改
 			detail(item) {
-				console.log(23333);
-				console.log(item.hidden);
 				this.addtitle=false;
 				this.modifytitle=true;
 				if(item.hidden == '0'){
@@ -315,10 +313,6 @@
 								this.$refs["menu"].resetFields();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
 						this.$message({

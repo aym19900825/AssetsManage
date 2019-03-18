@@ -59,7 +59,6 @@
 
   methods: {
     handleClick(row) {
-        console.log(row);
     },
 	handleClose(done) {
 		this.$confirm('确认关闭？')
@@ -79,7 +78,6 @@
 		return this.$moment(date).format("YYYY-MM-DD");
     },
     handleClick(tab, event) {
-//		        console.log(tab, event);
     },
   	//表头居中
 	rowClass({ row, rowIndex}) {
@@ -146,10 +144,8 @@
     },
     //查看子任务单
 	requestData(dataid){
-        console.log(dataid);
 		var url = this.basic_url + '/api-apps/app/workorder/operate/queryWorkorder?ID='+dataid;
         this.$axios.get(url,{}).then((res) => {
-            console.log(res.data.datas);
             if(res.data.resp_code == 0) {
                 this.selectData = res.data.datas;
                 this.dialogProduct = true;
@@ -160,12 +156,8 @@
                 });
                 this.dialogProduct = false;
             }
-            console.log(res);
+            
         }).catch((err) => {
-            this.$message({
-                message: '网络错误，请重试',
-                type: 'error'
-            });
         });
 	},
   },

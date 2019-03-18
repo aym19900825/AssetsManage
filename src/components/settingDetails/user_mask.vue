@@ -637,7 +637,6 @@
 		},
 		methods: {
 			showUserRole(){
-				console.log(this.user.roleId);
 			},
 			resetTree(){
 				this.dialogVisible = false;
@@ -651,11 +650,9 @@
       		},
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			handleClick(tab, event) {
-				console.log(tab, event);
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -700,10 +697,6 @@
 					var date = new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -738,12 +731,7 @@
 						isEditing: true
 					};
 					this.user.qualifications.push(obj);
-					// console.log(typeof(this.user.qualifications));
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 
 			},
@@ -800,10 +788,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -862,10 +846,6 @@
 					var date = new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 				//				this.statusshow1 = true;
 				//				this.statusshow2 = false;
@@ -900,7 +880,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					console.log(res);
+					
 					this.user.changeby = res.data.nickname;
 					this.docParam = {
 						username: res.data.username,
@@ -911,10 +891,6 @@
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -943,10 +919,6 @@
 					}
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//这是查看
@@ -973,10 +945,6 @@
 					}
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//点击关闭按钮
@@ -1045,10 +1013,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 							user.roleId = user.roleId.split(',');
 							var roleId = this.user.roleId;
 							for(var i=0; i< roleId.length; i++){
@@ -1101,10 +1065,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
-					this.$message({
-							message: '有必填项未填写，请重新填写',
-							type: 'warning',
-						});
 				})
 			},
 

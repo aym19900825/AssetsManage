@@ -69,7 +69,7 @@
 				var arr = [];
 				var url = this.basic_url + '/api-user/depts/getTreeMapByRoleId/'+id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.depetData = res.data;
 					var depetData = res.data
 					// for(var a = 0; a < depetData.length; a++) {
@@ -107,14 +107,9 @@
 					});
 					this.dialogVisible = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			recursive(mData,arr){
-				console.log(mData.length);
 				var flag=true;
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
@@ -142,7 +137,6 @@
 			},
 			//显示勾选
 			setChecked(arr) {
-			   console.log(arr);
 				this.$refs.tree.setCheckedKeys(arr);
 			},
 			//确定
@@ -168,10 +162,6 @@
 					this.$emit('request');
 					this.dialogVisible = false;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//取消
@@ -180,11 +170,8 @@
 				this.$emit('request');
 			},
 			getdetail(id){
-				console.log(123456);
-				console.log(id)
 				var url = this.basic_url + '/api-user/roles/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.value=res.data.datascope;
 					if(res.data.datascope==2){
 						this.depet(id);

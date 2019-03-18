@@ -550,7 +550,7 @@
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
-						// console.log(res);
+						// 
 						if(opt == 'new'){
 							this.dataInfo.DEPTID = res.data.deptId;
 							this.dataInfo.ENTERBY = res.data.id;
@@ -561,10 +561,6 @@
 						this.docParm.deptid = res.data.deptId;
 						this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
 			},
 			//机构值
@@ -611,10 +607,6 @@
 				}).then((res) => {
 					this.pmRecordList = res.data.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试2',
-						type: 'error'
-					});
 				});
 			},
 			//点击按钮显示弹窗
@@ -641,7 +633,6 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				console.log(this.dataInfo);
 				this.dataInfo = this.detailData;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -773,10 +764,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试3',
-								type: 'error'
-							});
 						});
 						// this.falg=true;
 					} else {
@@ -820,7 +807,6 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//console.log('到底了', this.page.currentPage)
 				}
 			},
 			requestData(index) {

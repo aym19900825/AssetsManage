@@ -39,7 +39,6 @@
 
         },
         mounted: function () {
-            console.log(this.id);
             this.getUserName();
 
         },

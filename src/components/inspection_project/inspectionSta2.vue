@@ -210,13 +210,9 @@
 					row.RELEASETIME = this.$moment(date).format("YYYY-MM-DD");
 					row.STARTETIME = this.$moment(date).format("YYYY-MM-DD");
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 			},
 			loadMore () {//表格滚动加载
@@ -290,7 +286,6 @@
 				return index + 1;
 			},
 			viewfield_inspectionSta2(id,num){//点击父级筛选出子级数据
-				// console.log(ID);
 				if(id=='null'){
 					this.inspectionSta2Form.inspectionList = []; 
 					this.viewchildRow('null');
@@ -425,10 +420,6 @@
 							};
 							this.inspectionSta2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
-							this.$message({
-								message:'网络错误，请重试',
-								type:'error'
-							})
 						})
 		            } else {
 		                this.$message.warning("请先保存当前编辑项");
@@ -464,10 +455,6 @@
 							this.viewfield_inspectionSta2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          } else {
 		            return false;
@@ -490,10 +477,6 @@
 							this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
                 }).catch(() => {
 

@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import router from '../router'
 import axios  from 'axios' 
-import { Loading } from 'element-ui';
+// import { Loading } from 'element-ui';
+import { Message } from 'element-ui';
 
 // axios.defaults.headers.post['Content-Type'] = 'application/json';
 var loading;
@@ -11,11 +12,6 @@ axios.interceptors.request.use(
     if (token) {
         request.headers.Authorization = 'Bearer ' + token;
     }
-    // loading = Loading.service({
-    //   fullscreen: true,
-    //   text: '拼命加载中...',
-    //   // background: 'rgba(0, 0, 0, 0.8)'
-    // });
     return request;
   },
   err => {
@@ -28,22 +24,19 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
     var _this = this;
-    // setTimeout(function(){
-    //   loading.close();
-    // },500);
     return response;
   },
   error => {
-    // loading.close();
-    // router.push({ path: '/' });
     if (error && error.response) {
       switch (error.response.status) {
         case 401:
+          Message.error('未授权，请登录');
           router.push({ path: '/' });
+          break;
         case 403:
+          Message.error('拒绝访问');
           router.push({ path: '/' });
-        // case 404:
-        //   router.push({ path: '/' });
+          break;
       }
     }
     return Promise.reject(error.response.data);

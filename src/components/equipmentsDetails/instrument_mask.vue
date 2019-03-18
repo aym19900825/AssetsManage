@@ -750,7 +750,7 @@
 	            	// this.deptId = res.data.deptId;
 	            	this.dataInfo.CONFIG_UNIT = res.data.deptId;
 	            	this.dataInfo.CONFIG_UNITDes = res.data.deptName;
-	            	console.log(res.data.deptId)
+	            	
 	            	// var type = "2";
 					// var url = this.basic_url + '/api-user/depts/'+this.deptId;
 					// this.$axios.get(url, {
@@ -761,24 +761,18 @@
 					// 	this.selectData = res.data;
 					// });
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
 			},
 			getDetail(data){
-				// console.log('tableDetail');
 				this.view(data);
 			},
 			classByValue(childValue) {
 				// childValue就是子组件传过来的
-				// console.log('classByValue');
+				
 				this.selUser = childValue;
 			},
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值
-				// console.log('childvalue');
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
@@ -940,10 +934,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getToday(){
@@ -963,10 +953,6 @@
 				}).then((res) => {
 					this.pmRecordList = res.data.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 					
 			},
@@ -1167,10 +1153,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg=true;
 					} else {
@@ -1216,7 +1198,7 @@
 				this.$axios.get(this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT', {//要修改接口路径
 					params: data
 				}).then((res) => {
-					console.log(res);
+					
 					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

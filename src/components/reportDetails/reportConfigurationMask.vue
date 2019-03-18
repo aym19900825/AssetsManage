@@ -277,7 +277,6 @@
 				};	  
 			},
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -314,7 +313,7 @@
 			//点击按钮显示弹窗
 			visible() {
 				// this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-				// 	console.log(res);
+				// 	
 				// 	// this.dataInfo.DEPTID = res.data.deptId;
 				// 	this.dataInfo.createby = res.data.id;
 				// 	this.username=res.data.username;
@@ -346,10 +345,6 @@
 					this.dataInfo = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},	
 			
@@ -358,7 +353,6 @@
 				this.dataid=dataid;
 				// var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				// this.$axios.get(usersUrl, {}).then((res) => {
-				// 	console.log(res.data.id);
 				// 	// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 				// 	this.dataInfo.updateby = res.data.id;
 				// 	var date = new Date();
@@ -426,11 +420,8 @@
 			save() {
 				this.$refs.dataInfo.validate((valid) => {
 			        if (valid) {
-			        	console.log(this.dataInfo);
 							var url = this.basic_url + '/api-report/report/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
-								console.log(this.dataInfo);
-								console.log(res);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '保存成功',
@@ -441,10 +432,6 @@
 //									this.reset();
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						this.falg = true;
 			        }else{
@@ -493,8 +480,6 @@
 			getType(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_param_type';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(111);
-					console.log(res);
 					this.selectData = res.data;
 				}).catch(error => {
 					console.log('请求失败');

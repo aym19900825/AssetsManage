@@ -234,7 +234,6 @@
 			
 			//表格滚动加载
 			loadMore() {
-				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -290,14 +289,10 @@
 			getMenuId(){
 				var url = this.basic_url + '/api-user/menus/findAllMenu';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})	
 			},
 			//重置
@@ -409,10 +404,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -461,10 +452,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -515,10 +502,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 			

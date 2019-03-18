@@ -388,7 +388,6 @@
 			},
 			//tabs
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
 			searchSam(){
 				this.page.currentPage = 1;
@@ -449,10 +448,6 @@
 					this.page.totalCount = res.data.count;
 					this.sampleDialog = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getUser(){
@@ -477,10 +472,6 @@
 				        this.dataInfo.CHANGEDATE = this.getToday();
 						// this.dataInfo.DEPARTMENT = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getToday(){
@@ -536,10 +527,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}else{
 					this.dataInfo[listName].splice(index,1);
@@ -678,10 +665,6 @@
 									this.resetForm();
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 							this.falg=true;
 						}

@@ -346,7 +346,7 @@
 		},
 		methods: {
 			handleNodeClick(data) { //获取勾选树菜单节点
-				//console.log(data);
+				
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
@@ -369,10 +369,6 @@
 	     			var date=new Date();
 					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				 }).catch((err) => {
-				 	this.$message({
-				 		message: '网络错误，请重试',
-				 		type: 'error'
-				 	});
 				});	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
 				this.show = true;
@@ -410,10 +406,6 @@
 					// let obj = JSON.parse(JSON.stringfy(this.adddeptForm));
         			// this.ADDDEPTFORM = JSON.parse(obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
                  this.show = true;
 			},
@@ -436,7 +428,6 @@
 			},
 			SelChange(val) {
 				this.selUser = val;
-				console.log(val);
 			},
 			loadMore() {
 				if(this.loadSign) {
@@ -449,7 +440,6 @@
 						this.loadSign = true
 					}, 1000)
 					this.requestData()
-					//console.log('到底了', this.page.currentPage)
 				}
 			},
 			sizeChange(val) {
@@ -507,7 +497,6 @@
 					   }else{
 							var url = this.basic_url + '/api-user/depts/upgraded';
 							this.$axios.post(url, this.adddeptForm).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '修订成功',
@@ -519,7 +508,6 @@
 								}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
 									if( res.data.resp_msg!=''){
 									 	this.$message({
 											message: res.data.resp_msg,
@@ -534,10 +522,6 @@
 								}
 							}		
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试1',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -566,7 +550,6 @@
 				});
 			},
 			queding() {
-				console.log(this.checkedNodes);
 				this.getCheckedNodes();
 				if(this.checkedNodes == undefined){
 					this.$message({
@@ -598,7 +581,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.SelectDEPT_TYPE = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			getsys_depttype() {//获取机构类型
@@ -606,7 +588,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			
@@ -682,11 +663,7 @@
 				this.$refs.adddeptForm.validate((valid) => {
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
-//		          	 _this.adddeptForm.leader = _this.selData[0].id;
-		          
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
-
-					console.log(_this.adddeptForm);
 					this.$axios.post(url, _this.adddeptForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -699,10 +676,6 @@
 //							 this.$refs["adddeptForm"].resetFields();//清空验证
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 					this.falg=true;
 		          } else {

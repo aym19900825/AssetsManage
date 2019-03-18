@@ -172,10 +172,6 @@
 			this.REPORTList = res.data;
 			this.$refs.multipleTable.toggleAllSelection();
         }).catch((err) => {
-            this.$message({
-                message: '网络错误，请重试',
-                type: 'error'
-            });
 		});		
 		this.dialogProduct = true;
 	},
@@ -188,10 +184,6 @@
         this.$axios.get(url,{}).then((res) => {
             this.REPORTList = res.data;
         }).catch((err) => {
-            this.$message({
-                message: '网络错误，请重试',
-                type: 'error'
-            });
         });
 	},
 	proChange(val) {
@@ -231,7 +223,7 @@
 					"recordid":this.ID
 				}).then((res) => {
 					// this.workorderreportid = res.data.datas.id;
-					// console.log(res);
+					// 
 					// console.log()
 					// var obj = {
 					//     REPORTNUM:res.data.datas.reportnum,
@@ -252,10 +244,6 @@
 						this.$emit('reportdatavalue',reportvalue);
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.selMenu = [];
 				this.dialogProduct = false;

@@ -272,10 +272,6 @@
 					this.user = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//点击关闭按钮
@@ -307,7 +303,6 @@
 			// 保存users/saveOrUpdate
 			submitForm() {
 				this.dataInfo.fieldList.push(this.fieldList);
-				console.log(this.dataInfo);
 				this.show = false;
 			},
 			// 所属组织
@@ -316,8 +311,6 @@
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = 1;
-				console.log(this.page.currentPage);
-				console.log(this.page.pageSize);
 				var url = this.basic_url + '/api-user/depts/type';
 				this.$axios.get(url, {
 					params: {
@@ -364,7 +357,7 @@
 				this.$axios.get(url, {
 					
 				}).then((res) => {
-					console.log(res);
+					
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});

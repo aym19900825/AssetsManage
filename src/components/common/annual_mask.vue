@@ -93,7 +93,7 @@
 											 </el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="年度" prop="YEAR" label-width="85px">
+											<el-form-item label="年度" prop="YEAR" label-width="85px" v-show="addtitle">
 												<div class="block">
 												    <el-date-picker
 												      v-model="WORKPLAN.YEAR"
@@ -102,6 +102,18 @@
 												      value-format="yyyy"
 												      format="yyyy"
 												      :default-value="WORKPLAN.YEAR" style="width: 100%" :disabled="noedit">
+												    </el-date-picker>
+												</div>
+											</el-form-item>
+											<el-form-item label="年度" prop="YEAR" label-width="85px" v-show="!addtitle">
+												<div class="block">
+												    <el-date-picker
+												      v-model="WORKPLAN.YEAR"
+												      type="year"
+												      placeholder="选择年度"
+												      value-format="yyyy"
+												      format="yyyy"
+												      :default-value="WORKPLAN.YEAR" style="width: 100%" :disabled="edit">
 												    </el-date-picker>
 												</div>
 											</el-form-item>

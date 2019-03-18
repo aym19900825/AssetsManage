@@ -258,7 +258,7 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/qualitySupApp/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -270,7 +270,6 @@
 			},
 			// 这里是修改
 			detail(dataid) {
-				console.log(dataid);
 				this.dataid=dataid;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -323,21 +322,17 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
 					}else{
 						var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/Executors/'+this.dataid;
-						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res.data.datas);
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								// console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -372,7 +367,7 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -453,7 +448,6 @@
 			},
 			//当前责任人
 			viewpepole(){
-				console.log(this.dataid);
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.qualitySupApp;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);

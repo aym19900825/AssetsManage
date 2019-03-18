@@ -460,11 +460,9 @@
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			handleClick(tab, event) {
-				console.log(tab, event);
 			},
 			iconOperation(row, column, cell, event){
 		        if(column.property ==="iconOperation"){
@@ -520,9 +518,7 @@
 			},
 			//删除行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='tableList'){
 					TableName = 'CUSTOMER_QUALIFICATION';
 				}else{
@@ -537,7 +533,7 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
-							console.log(res);
+							
 							if(res.data.resp_code == 0){
 								this.CUSTOMER[TableName+'List'].splice(index,1);
 								this.$message({
@@ -685,7 +681,6 @@
 				this.noviews = false;//按钮
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
 					this.CUSTOMER = res.data;
-					//console.log(this.CUSTOMER.STATUS==1);
 					this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="1"? '活动' : '不活动';
 					this.show = true;
 				}).catch((err) => {

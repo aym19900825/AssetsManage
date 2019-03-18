@@ -509,7 +509,7 @@
 							});
 						});
 					} else {
-						console.log('error submit!!');
+						var middleWidth=5,
 						return false;
 					}
 				});

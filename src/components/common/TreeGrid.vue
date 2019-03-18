@@ -128,7 +128,6 @@
     methods: {
       //表头居中
       rowClass({ row, rowIndex}) {
-          // console.log(rowIndex) //表头行标号为0
           return 'text-align:center'
       },
     	//改变的值
@@ -137,7 +136,6 @@
 				//子给父传值
 				// childByValue是在父组件on监听的方法
         // 第二个参数this.childValuedata是需要传的值
-        console.log(this.selUser);
 				this.$emit('classByValue', this.selUser);
 			},
     // 显示行

@@ -1399,7 +1399,6 @@
 			},
             //tabs
 			handleClick(tab, event) {
-//		        console.log(tab, event);
 		    },
             //检测依据弹出框
             basisleadbtn(){
@@ -1938,8 +1937,6 @@
 								}else{
 									if(!this.isEditList){
 										// if(typeof(this.WORKPLAN.PROP_UNITDesc) != 'undefined') {
-										// 	console.log(4444445555);
-										// 	console.log(this.selectData);
 										// 	for(var j=0;j<this.selectData.length;j++){
 										// 		console.log(this.selectData[j].fullname);
 										// 		console.log(this.selectData[j].id);
@@ -1948,9 +1945,6 @@
 										// 			this.WORKPLAN.PROP_UNIT = this.selectData[j].id;
 										// 		}
 										// 	}
-										// 	console.log('======');
-										// 	console.log(this.WORKPLAN.PROP_UNIT);	
-										// 	console.log('======');	
 										// }
 										// this.WORKPLAN.PROP_UNIT = this.WORKPLAN.PROP_UNITDesc;
 										this.WORKPLAN.WORLPLANLINEList = this.worlplanlist;

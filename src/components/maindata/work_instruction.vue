@@ -426,7 +426,6 @@
 							params: data
 						}).then((res) => { //.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
-							// console.log(res.data.resp_code);
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -598,7 +597,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
+					// 
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

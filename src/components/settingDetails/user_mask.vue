@@ -637,7 +637,6 @@
 		},
 		methods: {
 			showUserRole(){
-				console.log(this.user.roleId);
 			},
 			resetTree(){
 				this.dialogVisible = false;
@@ -651,11 +650,9 @@
       		},
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
 			    return 'text-align:center'
 			},
 			handleClick(tab, event) {
-				console.log(tab, event);
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -738,7 +735,6 @@
 						isEditing: true
 					};
 					this.user.qualifications.push(obj);
-					// console.log(typeof(this.user.qualifications));
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -900,7 +896,7 @@
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 
 				this.$axios.get(usersUrl, {}).then((res) => {
-					console.log(res);
+					
 					this.user.changeby = res.data.nickname;
 					this.docParam = {
 						username: res.data.username,

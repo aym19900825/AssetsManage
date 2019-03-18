@@ -363,7 +363,7 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/sealUse/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.USESEAL = res.data;
 					 for(var j=0;j<this.selectData.length;j++){
                     	if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
@@ -427,7 +427,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/sealUse/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 console.log(res);
+					 
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -611,7 +611,7 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/sealUse/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -802,7 +802,7 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				console.log(res);
+				
 	                    this.userid = res.data.id;
 						this.username = res.data.username;
 						this.deptid = res.data.deptId;

@@ -27,7 +27,6 @@ export default {
     checkedChange(){
       this.$emit('tableControle',this.checkedName);
 
-      // console.log(this.checkedName.indexOf('账号') != -1);
     }  
   },
  

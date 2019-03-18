@@ -210,7 +210,7 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
 					this.$message({
@@ -290,7 +290,6 @@
 				return index + 1;
 			},
 			viewfield_inspectionPro2(id,num){//点击父级筛选出子级数据
-				// console.log(ID);
 				if(id=='null'){
 					this.inspectionPro2Form.inspectionList = [];
 					this.viewchildRow('null');
@@ -301,7 +300,7 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
+					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -405,8 +404,8 @@
 	                		var currentUser, currentDate;
 							this.currentUser=res.data.nickname;
 							var date=new Date();
-							// console.log(res.data.deptId);
-							// console.log(this.parentIds);
+							// ;
+							// 
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {

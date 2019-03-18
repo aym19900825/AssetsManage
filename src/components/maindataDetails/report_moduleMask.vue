@@ -397,8 +397,6 @@
 				this.$axios.get(this.basic_url+ '/api-apps/app/inspectionRepTem/operate/updateRelate', {
 					params: data
 				}).then((res) => {
-					// console.log(res);
-					console.log(res.data.resp_code);
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -447,9 +445,7 @@
 			// 保存users/saveOrUpdate
 			save(opt) {
 				this.$refs['CATEGORY'].validate((valid) => {
-					console.log('CATEGORY');
 					if(!valid && opt == 'docUpload'){
-						console.log('message');
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
 							type: 'warning'

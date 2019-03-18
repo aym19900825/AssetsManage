@@ -80,7 +80,6 @@ export default {
   },
   submitForm(formName)
   {
-   console.log("activityName...",this.form.activityName);
    this.$refs[formName].validate((valid,obj) => {
     if (valid) {
      this.submitFormAction();

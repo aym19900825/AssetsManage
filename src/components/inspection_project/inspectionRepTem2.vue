@@ -196,7 +196,6 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
 					
 				}).catch((err)=>{
 					this.$message({
@@ -285,7 +284,7 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					//console.log(res);
+					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

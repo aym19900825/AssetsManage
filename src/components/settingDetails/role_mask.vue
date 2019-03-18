@@ -185,7 +185,7 @@
 				let that = this;
 				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.deptData = res.data;
 					this.treeData = this.transformTree(this.deptData);
 				});
@@ -317,7 +317,7 @@
 					if(valid) {	
 						var url = this.basic_url + '/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
-							console.log(res);
+							
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

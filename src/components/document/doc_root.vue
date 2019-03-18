@@ -552,7 +552,6 @@
 				this.node = data;
 				this.parentNode = data.parent;
 				this.treeIdSel.indexOf(data.id)==-1?this.treeIdSel.push(data.id):this.treeIdSel.splice(this.treeIdSel.indexOf(data.id),1);
-				// console.log(this.treeIdSel);
 				// this.refreshLazyTree();
 				this.requestData();
 			},

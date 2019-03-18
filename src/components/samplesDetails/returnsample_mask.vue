@@ -473,7 +473,7 @@
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res);
+					
 					// this.samplesForm.DEPARTMENT=res.data.deptName;
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
@@ -598,7 +598,7 @@
 						var url = this.basic_url + '/api-apps/app/itemreturn/saveOrUpdate';
 						this.samplesForm.VERSION = this.samplesForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.samplesForm).then((res) => {
-							console.log(res);
+							
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({

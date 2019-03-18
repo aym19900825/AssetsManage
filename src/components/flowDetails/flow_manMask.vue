@@ -139,9 +139,8 @@
 					if (valid) {
 					   var url = this.basic_url + '/api-flow/flow/model/create';
 						this.$axios.get(url, {}).then((res) => {
-							console.log(res.data.modelId);
 							this.modelId=res.data.modelId;
-							console.log(res);
+							
 							if(res.status ==200) {
      						this.$refs.child.visible();
 							}
@@ -152,7 +151,7 @@
 							});
 						});
 					} else {
-						console.log('error submit!!');
+						var middleWidth=5,
 						this.show = false;
 						return false;
 					}

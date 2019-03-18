@@ -234,7 +234,6 @@
 			
 			//表格滚动加载
 			loadMore() {
-				//console.log(this.$refs.table.$el.offsetTop)
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
@@ -290,7 +289,7 @@
 			getMenuId(){
 				var url = this.basic_url + '/api-user/menus/findAllMenu';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {

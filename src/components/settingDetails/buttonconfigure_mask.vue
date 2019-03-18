@@ -285,7 +285,6 @@
 			},
 			//这是查看
 			view() {
-				// console.log(this.CATEGORY);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -299,7 +298,7 @@
 			getBtnColor(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {

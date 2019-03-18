@@ -235,7 +235,7 @@
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					//console.log(row);
+					
 					
 				}).catch((err)=>{
 					this.$message({
@@ -265,7 +265,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				console.log(this.parentIds);
+				
 				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet?DEPTID=' + this.parentIds, {
 					params: data
 				}).then((res) => {
@@ -326,7 +326,7 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionMet2/INSPECTION_PROJECT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					// 
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -408,7 +408,6 @@
 					})
 				} else {
 					var isEditingflag=false;
-					console.log(this.inspectionMet2Form.inspectionList);
 					for(var i=0;i<this.inspectionMet2Form.inspectionList.length; i++){
 						if (this.inspectionMet2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;

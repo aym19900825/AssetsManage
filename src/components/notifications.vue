@@ -330,7 +330,6 @@
 				row,
 				rowIndex
 			}) {
-				// console.log(rowIndex) //表头行标号为0
 				return 'text-align:center'
 			},
 			//机构值
@@ -446,7 +445,6 @@
 			},
 			//修改用戶
 			modify() {
-				// console.log(this.selUser);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -471,11 +469,11 @@
 					else if(this.selUser[0].STATE == 0) {
 						var url = this.basic_url + '/api-apps/app/workNot/flow/isExecute/' + this.selUser[0].ID;
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(res);
+							// 
 							if(res.data.resp_code == 0) {
 								var url = this.basic_url + '/api-apps/app/workNot/flow/isPromoterNode/' + this.selUser[0].ID;
 								this.$axios.get(url, {}).then((res) => {
-									// console.log(res);
+									// 
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selUser[0].ID);
 									} else {
@@ -499,8 +497,6 @@
 			},
 			//查看
 			view(id) {
-				 console.log(123456);
-				 console.log(id);
 				this.$refs.child.view(id);
 			},
 			//代办跳转
@@ -707,7 +703,7 @@
 			getKey() {
 				var url = this.basic_url + '/api-user/users/findIdsByUserAndType/2';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
+					
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 				}).catch((wrong) => {
@@ -813,14 +809,13 @@
 			  },
 			    //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
@@ -872,7 +867,6 @@
 		},
 		mounted() {
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
-			console.log(this.$route.query.bizId);
 			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}

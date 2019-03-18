@@ -229,7 +229,6 @@
 				var url = this.file_url + '/file/privilege';
 				this.$axios.post(url, data).then((res) => {
 					this.fileAuth = res.data;
-					console.log(this.fileAuth.fileread==0);
 				}).catch((wrong) => {})
 			},
 			tableControle(data) {//控制表格列显示隐藏
@@ -358,7 +357,6 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

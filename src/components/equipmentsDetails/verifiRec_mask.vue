@@ -624,7 +624,6 @@
 			},
 			saveAndUpdate(dataInfo) {
 				this.save(dataInfo);
-				console.log(this.falg);
 				if(this.falg){
 					this.show = false;
 				}

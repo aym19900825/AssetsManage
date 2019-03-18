@@ -223,8 +223,6 @@
 			
 			// 这里是修改
 			detail(item) {
-				console.log(23333);
-				console.log(item.hidden);
 				this.addtitle=false;
 				this.modifytitle=true;
 				if(item.hidden == '0'){

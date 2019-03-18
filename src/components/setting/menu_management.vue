@@ -228,7 +228,6 @@
 					var changeMenu = selData[0];
 					if(changeMenu.children == null){
 						var id = changeMenu.id;
-						console.log(id);
 						var url = this.basic_url + '/api-user/menus/physicsDel/' + id;
 						this.$confirm('确定删除此数据吗？', '提示', {
 							confirmButtonText: '确定',
@@ -266,7 +265,6 @@
 				}
 			},
 			getDetail(data){
-				console.log('tableDetail');
 				this.view(data);
 			},
 			//查看
@@ -291,10 +289,8 @@
 					return;
 				} else {
 					var changeMenu = selData[0];
-					// console.log(changeMenu.children.length);
 					if(changeMenu.children == null){
 						var id = changeMenu.id;
-						console.log(id);
 						var url = this.basic_url + '/api-user/menus/' + id;
 						this.$confirm('确定删除此数据吗？', '提示', {
 							confirmButtonText: '确定',
@@ -360,11 +356,9 @@
 			childByValue: function (childValue) {
 		        // childValue就是子组件传过来的
 		        this.selMenu = childValue
-		       console.log(childValue);
 		    },
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
-				console.log( childvalue);
 		    	 this.getbutton( childvalue);
 		    },
 			//请求页面的button接口
@@ -375,7 +369,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {})

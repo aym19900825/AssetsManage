@@ -601,7 +601,7 @@
 						var url = this.basic_url + '/api-apps/app/itemdisposition/saveOrUpdate';
 						this.samplesForm.VERSION = this.samplesForm.VERSION + 1;//修改时版本+1
 						this.$axios.post(url, this.samplesForm).then((res) => {
-							console.log(res);
+							
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({

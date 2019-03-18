@@ -59,12 +59,10 @@
   	},
   	//修改
   	detail(id){
-  		console.log(id);
   		var url=this.basic_url;
 		url = url.substring(0,21);
   		this.url=url+"5300";
   		this.src=this.url +'/reportFile/page/edit?id='+id;
-  		console.log(this.src);
   		this.modifytitle=true;
   		this.addtitle=false;
 		this.show= true;

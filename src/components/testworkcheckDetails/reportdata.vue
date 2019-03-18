@@ -231,7 +231,7 @@
 					"recordid":this.ID
 				}).then((res) => {
 					// this.workorderreportid = res.data.datas.id;
-					// console.log(res);
+					// 
 					// console.log()
 					// var obj = {
 					//     REPORTNUM:res.data.datas.reportnum,

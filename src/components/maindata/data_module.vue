@@ -590,7 +590,6 @@
 					DECRIPTION: this.searchList.DECRIPTION,
 					DEPTID: this.searchList.DEPTID,
 				}
-				// console.log(data);
 				var url = this.basic_url + '/api-apps/app/rawDataTem';
 				this.$axios.get(url, {
 					params: data
@@ -621,20 +620,18 @@
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-				// console.log(childValue);
 				this.$refs.navsTabs.showClick(childValue);
         		this.getbutton(childValue);
 			},
 			  //请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					console.log(res);
+					
 					var resData = res.data;
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{

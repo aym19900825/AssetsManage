@@ -670,7 +670,7 @@
 				<el-table :data="customerList" border stripe :header-cell-style="rowClass" height="400px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
-					<el-table-column label="组织机构代码" width="200" sortable prop="CODE">
+					<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
 					</el-table-column>
 					<el-table-column label="单位名称" width="300" sortable prop="NAME">
 					</el-table-column>

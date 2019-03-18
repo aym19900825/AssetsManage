@@ -203,10 +203,6 @@
 					//console.log(row);
 					
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 			},
 			loadMore () {//表格滚动加载
@@ -357,9 +353,8 @@
 						done();
 					})
 					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+						$('.v-modal').hide();
+					});
 			},
 			formatter(row, column) {
 				return row.enabled;
@@ -400,10 +395,6 @@
 							};
 							this.rawDataAssetForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
-							this.$message({
-								message:'网络错误，请重试',
-								type:'error'
-							})
 						})
 		            } else {
 		                this.$message.warning("请先保存当前编辑项");
@@ -438,10 +429,6 @@
 							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          } else {
 		            return false;
@@ -464,10 +451,6 @@
 							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
                 }).catch(() => {
 

@@ -537,10 +537,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
                     }).catch(() => {
 
@@ -585,10 +581,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
                     }).catch(() => {
 
@@ -751,10 +743,6 @@
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 		    },
 		    //树和表单之间拖拽改变宽度

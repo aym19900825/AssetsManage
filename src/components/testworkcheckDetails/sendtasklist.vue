@@ -198,10 +198,6 @@
 				this.dialogProduct = false;
 			}
 		}).catch((err) => {
-			this.$message({
-				message: '网络错误，请重试',
-				type: 'error'
-			});
 		});
 	},
 	proChange(val) {
@@ -238,10 +234,6 @@
 					this.$emit('refresh');
 				}
 			}).catch((err) => {
-				this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 			});
 			this.selMenu = [];
 			this.dialogProduct = false;

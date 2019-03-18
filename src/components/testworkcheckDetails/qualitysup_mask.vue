@@ -236,10 +236,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -262,10 +258,6 @@
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			// 这里是修改
@@ -303,10 +295,6 @@
 						_this.$refs.docTable.getData();
 					},100);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
                 });
 			},
 			//这是查看
@@ -516,10 +504,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {
@@ -594,10 +578,6 @@
 						this.deptid = res.data.deptId;
 						this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

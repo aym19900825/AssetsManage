@@ -332,10 +332,6 @@ export default {
 					$('.el-table__body-wrapper table').find('.filing').remove();
 				}//滚动加载数据判断filing
 			}).catch((wrong) => {
-				this.$message({
-					message: '网络错误，请重试1',
-					type: 'error'
-				});
 			})
 		},
 		//修改（编辑）
@@ -385,10 +381,6 @@ export default {
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			
@@ -424,10 +416,6 @@ export default {
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 		},
@@ -447,10 +435,6 @@ export default {
 			this.$axios.get(url, {params: data}).then((res) => {
 				this.buttons = res.data;
 			}).catch((wrong) => {
-				this.$message({
-					message: '网络错误，请重试',
-					type: 'error'
-				});
 			})
 		},
 	},

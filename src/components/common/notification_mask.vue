@@ -750,10 +750,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -811,10 +807,6 @@
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 				
 				this.addtitle = true;
@@ -840,10 +832,6 @@
 					this.dataInfo.CJDW=this.dataInfo.CJDWDesc;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},	
 			// 这里是修改
@@ -856,10 +844,6 @@
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
 				this.detailgetData();
 				this.addtitle = false;
@@ -1013,10 +997,6 @@
 						}
 						this.falg=true
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 						this.falg=false
 					});}
 					this.falg=true
@@ -1134,10 +1114,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 			},
 			//生成检测委托书
@@ -1157,10 +1133,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 			},
 			SelChange(val) {
@@ -1317,10 +1289,6 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                    this.username = res.data.username;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

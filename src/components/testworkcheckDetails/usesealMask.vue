@@ -342,10 +342,6 @@
 					var date = new Date();
 					this.USESEAL.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -372,10 +368,6 @@
                		 }
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			// 这里是修改
@@ -398,10 +390,6 @@
 					var date = new Date();
 					this.USESEAL.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试2',
-						type: 'error'
-					});
                 });
                 // for(var j=0;j<this.selectData.length;j++){
                 //     if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
@@ -739,10 +727,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试3',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {
@@ -808,10 +792,6 @@
 						this.deptid = res.data.deptId;
 						this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

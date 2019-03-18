@@ -580,10 +580,6 @@
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 					this.samplesForm.STATUSDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 				this.addtitle = true;
             	this.modifytitle = false;
@@ -599,10 +595,6 @@
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
 				this.viewtitle = false;
 				this.addtitle = false;
@@ -629,7 +621,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 
@@ -680,10 +671,6 @@
 								// this.$refs["samplesForm"].resetFields();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						
 					} else {
@@ -746,10 +733,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 			requestData2(index) {//高级查询字段
@@ -774,10 +757,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 			

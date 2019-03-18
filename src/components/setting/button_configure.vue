@@ -294,10 +294,6 @@
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				})	
 			},
 			//重置
@@ -409,10 +405,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -461,10 +453,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -515,10 +503,6 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 			

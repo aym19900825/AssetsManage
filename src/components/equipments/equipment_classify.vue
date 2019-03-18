@@ -334,10 +334,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试1',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -386,10 +382,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试1',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -493,10 +485,6 @@
 					this.categoryList = res.data.datas;
 					this.loading = false;//加载动画关闭
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试2',
-						type: 'error'
-					})
 				})
 			},
 
@@ -531,10 +519,6 @@
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 		    },
 		},

@@ -280,14 +280,7 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
-					// console.log(this.user);
-					// console.log(this.user.roles);
-				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
-				});
+				}).catch((err) => {});
 			},
 			//点击关闭按钮
 			close() {
@@ -336,12 +329,7 @@
 								//重新加载数据
 								this.$emit('request')
 							}
-						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
-						});
+						}).catch((err) => {});
 					} else {
 						return false;
 					}
@@ -397,20 +385,13 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-					// console.log(res.data.data);
-					// console.log(this.selectData);
-					}).catch(error =>{
-				    console.log('请求失败');
-				})
+					}).catch(error =>{})
 			},
 		  	changeRole(event){
-		  		// console.log(event);
-		  		// console.log(111);
 		  	 	this.user.roleId=[]
 		  	 	for (var i=0;i<event.length;i++){	
 		  	 		this.user.roleId.push(event[i])
 		  	 	}		  	 	
-		  	 	// console.log(this.user.roleId);
           	},
 			queding() {
 				this.getCheckedNodes();
@@ -424,16 +405,6 @@
 					this.user.deptName = this.checkedNodes[0].simplename;
 				}
 			},
-			// handleClose(done) {
-			// 	this.$confirm('确认关闭？')
-			// 		.then(_ => {
-			// 			done();
-			// 		})
-			// 	.catch(_ => {
-			// 		console.log('取消关闭');
-			// 		$('.v-modal').hide();
-			// 	});
-			// }
 		},
 		mounted() {
 			this.getRole();

@@ -146,13 +146,8 @@
      						this.$refs.child.visible();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试123',
-								type: 'error'
-							});
 						});
 					} else {
-						console.log('error submit!!');
 						this.show = false;
 						return false;
 					}

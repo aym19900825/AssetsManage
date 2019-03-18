@@ -455,10 +455,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -586,10 +582,6 @@
 					var date = new Date();
 					this.testing_projectForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -616,10 +608,6 @@
 					let _obj = JSON.stringify(this.testing_projectForm);
         			this.TESTING_PROJECTFORM = JSON.parse(_obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -629,10 +617,6 @@
 					this.testing_projectForm = res.data;
 
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -653,10 +637,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.testing_projectForm = res.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				});
 				this.addtitle = false;
 				this.modifytitle = false;
@@ -687,10 +667,6 @@
 						return;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			modifyversion(testing_projectForm) {
@@ -719,10 +695,6 @@
 									this.$emit('reset');
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 					} else {
@@ -800,11 +772,6 @@
 						}
 					//清空表单验证
 					}).catch((err) => {
-						this.show = true;
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				this.falg = true;
 			} else {

@@ -67,10 +67,10 @@ export default {
 						console.log(res.data);
 						resolve(res);
 					}).catch((wrong) => {
-						_this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
+						// _this.$message({
+						// 	message: '网络错误，请重试',
+						// 	type: 'error'
+						// });
 					});
 				});
 				return promise;

@@ -173,10 +173,6 @@
 			this.REPORTList = res.data;
 			this.$refs.multipleTable.toggleAllSelection();
         }).catch((err) => {
-            this.$message({
-                message: '网络错误，请重试',
-                type: 'error'
-            });
 		});		
 		this.dialogProduct = true;
 	},
@@ -190,10 +186,6 @@
 			console.log(res.data);
             this.REPORTList = res.data;
         }).catch((err) => {
-            this.$message({
-                message: '网络错误，请重试',
-                type: 'error'
-            });
         });
 	},
 	proChange(val) {
@@ -254,10 +246,6 @@
 						this.$emit('reportdatavalue',reportvalue);
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.selMenu = [];
 				this.dialogProduct = false;

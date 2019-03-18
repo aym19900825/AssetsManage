@@ -517,10 +517,6 @@
 					this.permissionsData=res.data;
 					this.permissions=true;
 				}).catch(error => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 				}
 			},
@@ -554,10 +550,6 @@
 						this.Access=true;	
 					}
 				}).catch(error => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 					
 				}
@@ -572,10 +564,6 @@
 							this.worksetChecked(arr);
 						});
 				}).catch(error => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 			},
 			getannual(id){
@@ -588,10 +576,6 @@
 							this.annualsetChecked(arr);
 						});
 				}).catch(error => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 			},
 			getproduct(id){
@@ -606,10 +590,6 @@
 						});
 					}
 				}).catch(error => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 			},
 		    gettestproduct(id){
@@ -624,10 +604,6 @@
 						});
 					}
 				}).catch(error => {
-					this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 				})
 			},
 			recursive(mData,arr){
@@ -742,10 +718,6 @@
 					this.requestData();
           this.resetTree();//置空数据                            
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//添加用戶
@@ -824,10 +796,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -876,10 +844,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -923,10 +887,6 @@
 									this.resetNewpwd();
 								}
 							}).catch((err) => {
-								this.$message({
-									message: '网络错误，请重试',
-									type: 'error'
-								});
 							});
 						}
 					});
@@ -966,10 +926,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -1001,10 +957,6 @@
 							this.requestData();
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -1073,10 +1025,6 @@
 					$('.el-table__body-wrapper table').find('.filing').remove();
 				}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
 				})
 			},
 
@@ -1147,10 +1095,6 @@
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.buttons = res.data;
 				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 				})
 		    },
 		    //树和表单之间拖拽改变宽度

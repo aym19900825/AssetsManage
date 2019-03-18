@@ -1220,10 +1220,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}else if(row.FILE_ORGCHECKED){
 					this.$message({
@@ -1506,10 +1502,6 @@
 					this.$axios.get(url, {}).then((res) => {
 						this.maingroup = res.data;
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				this.workorderForm.PRODUCT_TYPE = '';
 				this.workorderForm.P_NUM = '';
@@ -1643,10 +1635,6 @@
 					this.modulenum.FILEPATH_ORG = res.data.fileList[0].filepath;
 					this.modulenum.FILEID_ORG = res.data.fileList[0].fileid;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
    			//获取样品信息-样品状态
@@ -1655,7 +1643,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_STATUS = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			//获取样品信息-样品来源
@@ -1664,7 +1651,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_SOURCE = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			//获取样品信息-完成方式
@@ -1673,7 +1659,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_COMPLETE_MODE = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			//获取样品信息-样品接收状态
@@ -1682,7 +1667,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_RECEPT_STATUS = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			//获取样品信息-接收人、
@@ -1702,7 +1686,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_CHECK_STATUS = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
 			//获取样品信息-样品处置
@@ -1711,7 +1694,6 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.Select_ITEM_MANAGEMENT = res.data;
 				}).catch(error => {
-					console.log('请求失败');
 				})
 			},
            
@@ -1757,10 +1739,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 
@@ -1786,10 +1764,6 @@
 						this.showcreateagree = false;
 					}
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//启动流程
@@ -2083,10 +2057,6 @@
 					var date = new Date();
 					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.reset();
 				this.views = false
@@ -2149,10 +2119,6 @@
 					}
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},	
 			// 这里是修改
@@ -2173,10 +2139,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error',
-					});
 				});
 				this.detailgetData();
 				this.btnshow = true;//显示报告提交按钮
@@ -2251,10 +2213,6 @@
 							this.$emit('requests');
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 			          } else {
 			            return false;
@@ -2375,10 +2333,6 @@
 					this.deptid = res.data.deptId;
 					this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 			

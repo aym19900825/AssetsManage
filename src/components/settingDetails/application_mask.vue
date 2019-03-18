@@ -229,10 +229,6 @@
 					var date = new Date();
 					this.dataInfo.createTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -267,10 +263,6 @@
 					var date = new Date();
 					this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				var url=this.basic_url + '/api-apps/appcfg/'+ id;
 				this.$axios.get(url, {}).then((res) => {
@@ -291,10 +283,6 @@
 					
 				this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 					
 			},
@@ -400,10 +388,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
 						this.$message({
@@ -422,10 +406,6 @@
 					this.selectData = res.data.data;
 					
 				}).catch((wrong) => {
-					this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 				})	
 			},
 

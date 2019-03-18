@@ -128,7 +128,6 @@ export default {
 			this.$refs.keyword.requestData();
         },
         readAuth(row){
-            console.log(row);
             var url = this.po_url+"/show?filename=" +row.filename
                 + '&fileid=' +  row.fileid
                 + '&userid=' +  this.docParm.userid
@@ -222,12 +221,7 @@ export default {
                 'recordid': this.docParm.recordid,
             }).then((res) => {
                 this.doc = res.data.fileList;
-            }).catch((err) => {
-                this.$message({
-                    message: '网络错误，请重试',
-                    type: 'error'
-                });
-            });
+            }).catch((err) => {});
         },
         download(){
             var selFilesLen = this.selFiles.length;
@@ -277,12 +271,7 @@ export default {
                         });
                     }
                     this.getData();
-                }).catch((err) => {
-                    this.$message({
-                        message: '网络错误，请重试',
-                        type: 'error'
-                    });
-                });
+                }).catch((err) => {});
             }
         }
     },

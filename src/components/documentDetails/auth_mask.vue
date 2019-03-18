@@ -280,10 +280,6 @@
 							});
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 				}
 			},
@@ -344,10 +340,6 @@
 					this.deptid = res.data.deptId;
 					this.dataInfo.deptName = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			visible() {
@@ -503,10 +495,6 @@
 								this.$emit('request');
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
 						console.log('error submit!!');

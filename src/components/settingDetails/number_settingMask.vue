@@ -247,10 +247,6 @@
 					var date=new Date();
 					this.numbsetForm.createtime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
             	this.addtitle = true;
 				this.modifytitle = false;
@@ -273,10 +269,6 @@
 					var date=new Date();
 					this.numbsetForm.updatetime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
             	this.addtitle = false;
 				this.modifytitle = true;
@@ -359,10 +351,6 @@
 							this.show = false;
 						}
 					}).catch((err) => {
-						this.$message({
-							message: '网络错误，请重试',
-							type: 'error'
-						});
 					});
 		          }else {
 						this.show = true;

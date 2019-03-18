@@ -231,10 +231,6 @@
 					var date=new Date();
 					this.dictionarieForm.createTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				})
             	this.addtitle = true;
 				this.modifytitle = false;
@@ -268,10 +264,6 @@
 					var date=new Date();
 					this.dictionarieForm.updateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
-					this.$message({
-						message:'网络错误，请重试',
-						type:'error'
-					})
 				});
 				var url = this.basic_url + '/api-user/dicts/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -282,10 +274,6 @@
 					// console.log(this.dictionarieForm.subDicts);
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
             	
 			},
@@ -304,10 +292,6 @@
 					this.dictionarieForm = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//点击关闭按钮
@@ -363,10 +347,6 @@
 								this.show = false;
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					} else {
 						this.$message({
@@ -391,10 +371,6 @@
 					};
 					this.dictionarieForm.subDicts.push(obj);
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					})
 				})
 
 			// addfield1() {
@@ -454,10 +430,6 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 					}).catch(() => {
 

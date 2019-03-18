@@ -272,10 +272,6 @@
 					this.user = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			//点击关闭按钮

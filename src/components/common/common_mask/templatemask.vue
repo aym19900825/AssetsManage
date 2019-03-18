@@ -191,10 +191,10 @@
 			this.categoryList = newarr;
 			this.loading = false;
 		}).catch((wrong) => {
-			this.$message({
-				message: '网络错误，请重试',
-				type: 'error'
-			});
+			// this.$message({
+			// 	message: '网络错误，请重试',
+			// 	type: 'error'
+			// });
 		})
 	},
 	requestData(){
@@ -234,10 +234,10 @@
 			this.categoryList = newarr;
 			this.loading = false;
 		}).catch((wrong) => {
-			this.$message({
-				message: '网络错误，请重试',
-				type: 'error'
-			});
+			// this.$message({
+			// 	message: '网络错误，请重试',
+			// 	type: 'error'
+			// });
 		})
 	},
 	determine(){

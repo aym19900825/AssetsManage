@@ -1082,10 +1082,10 @@
 								});
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
+							// this.$message({
+							// 	message: '网络错误，请重试',
+							// 	type: 'error'
+							// });
 						});
 					}).catch(() => {
 
@@ -1379,10 +1379,10 @@
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
 				}).catch((wrong) => {
-					this.$message({
-						message: '网络错误，请重试1',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试1',
+					// 	type: 'error'
+					// });
 				})
 			},
             //tabs
@@ -1692,10 +1692,10 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'error'
+					// });
 				});
 			},
 			//点击添加，修改按钮显示弹窗
@@ -1795,10 +1795,10 @@
 						this.selectData = res.data;
 					});
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'error'
+					// });
 				});
 				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType?id='+this.WORKPLAN.PROP_UNIT;
@@ -1866,10 +1866,10 @@
 						this.selectData = res.data;
 					});
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
+					// this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'error'
+					// });
 				});
 			},
 			//点击关闭按钮
@@ -1972,10 +1972,10 @@
                                                 });
                                             }
 										}).catch((err) => {
-											this.$message({
-												message: '网络错误，请重试',
-												type: 'error'
-											});
+											// this.$message({
+											// 	message: '网络错误，请重试',
+											// 	type: 'error'
+											// });
 										});
 										this.falg=true;
 									}else{

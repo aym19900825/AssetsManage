@@ -294,10 +294,6 @@
 					var date = new Date();
 					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -318,10 +314,6 @@
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
                 });
                 this.show = true;
 			},	
@@ -336,10 +328,6 @@
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.detailgetData();
 				this.modifytitle = true;
@@ -359,10 +347,6 @@
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 				this.detailgetData();
 				this.modifytitle = false;
@@ -533,10 +517,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg = true;
 					} else {
@@ -578,10 +558,6 @@
                         });
                     }
                 }).catch((err) => {
-                    this.$message({
-                        message: '网络错误，请重试',
-                        type: 'error'
-                    });
                 });
             },
 			//时间格式化
@@ -607,10 +583,6 @@
 	            this.$axios.get(url, {}).then((res) => {//
 	                this.username = res.data.username;
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
         	},
 		},

@@ -762,10 +762,6 @@
 					// 	this.selectData = res.data;
 					// });
 	            }).catch((err) => {
-	                this.$message({
-	                    message: '网络错误，请重试',
-	                    type: 'error'
-	                });
 	            });
 			},
 			getDetail(data){
@@ -941,10 +937,6 @@
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 			},
 			getToday(){
@@ -964,10 +956,6 @@
 				}).then((res) => {
 					this.pmRecordList = res.data.data;
 				}).catch((err) => {
-					this.$message({
-						message: '网络错误，请重试',
-						type: 'error'
-					});
 				});
 					
 			},
@@ -1168,10 +1156,6 @@
 								}
 							}
 						}).catch((err) => {
-							this.$message({
-								message: '网络错误，请重试',
-								type: 'error'
-							});
 						});
 						this.falg=true;
 					} else {

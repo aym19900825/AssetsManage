@@ -128,7 +128,6 @@ export default {
 			this.$refs.keyword.requestData();
         },
         readAuth(row){
-            console.log(row);
             var url = this.po_url+"/show?filename=" +row.filename
                 + '&fileid=' +  row.fileid
                 + '&userid=' +  this.docParm.userid
@@ -187,7 +186,6 @@ export default {
                 + '&recordid=' + this.docParm.recordid
                 + '&appname=' + this.docParm.appname
                 + '&appid=' + this.docParm.appid;
-            console.log(url);
             this.$axios.post(url, formData, config
             ).then((res)=>{
                 loading.close();

@@ -31,7 +31,7 @@
 										<i class="el-icon-arrow-down icon-arrow2-down"></i>
 									</span>
 									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="test">
+										<el-checkbox-group v-model="checkedName">
 											<el-dropdown-item  v-for="(item,index) in tableHeader" :key="index">
 												<el-checkbox :label="item.label" name="type"></el-checkbox>
 											</el-dropdown-item>
@@ -335,9 +335,7 @@
 				}
 				this.handleNodeClick();
 			},
-			test(){
-				console.log(this.checkedName.indexOf('账号')!=-1);
-			},
+			
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
@@ -760,7 +758,6 @@
 			getKey() {
 				var url = this.basic_url + '/api-user/users/findIdsByUserAndType/1';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
 				}).catch((wrong) => {
@@ -795,8 +792,6 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				console.log(data);
-				console.log(this.resourceData);
 				for(var i = 0; i < this.resourceData.length; i++) {
 					if(data.name == this.resourceData[i].name) {
 						this.searchList.TYPE = this.resourceData[i].code;
@@ -832,14 +827,12 @@
 			  },
 			    //请求页面的button接口
 		    getbutton(childByValue){
-		    	console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res);
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {

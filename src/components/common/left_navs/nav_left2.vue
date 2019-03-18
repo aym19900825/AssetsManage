@@ -70,7 +70,6 @@ export default {
 	
 	methods: {
 		addClickNav(item){
-			console.log(123);
 			if(!sessionStorage.getItem('clickedNav')){
 				sessionStorage.setItem('clickedNav',JSON.stringify({arr:[]}));
 			}
@@ -103,7 +102,6 @@ export default {
 			}
 			var selectedNav = JSON.parse(sessionStorage.getItem('selectedNav'));//选中的
 			selectedNav = item;
-			console.log(selectedNav);
 			sessionStorage.setItem('selectedNav',JSON.stringify(selectedNav));
 			sessionStorage.setItem('clickedNav',JSON.stringify({arr:clickedNav}));
 		},

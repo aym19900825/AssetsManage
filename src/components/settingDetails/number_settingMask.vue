@@ -241,7 +241,6 @@
             },
             childMethods() {//添加内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res.data);
 					this.numbsetForm.createuser=res.data.id;
 					this.numbsetForm.createuserDesc=res.data.nickname;
 					var date=new Date();
@@ -267,7 +266,6 @@
             },
             detail() {//修改内容时从父组件带过来的
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					console.log(res.data);
 					this.numbsetForm.updateuser=res.data.id;
 					this.numbsetForm.updateuserDesc=res.data.nickname;
 					var date=new Date();

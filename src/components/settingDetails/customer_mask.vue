@@ -656,7 +656,6 @@
 				this.statusshow2 = true;
 				this.getUser('detail');
 				this.$axios.get(this.basic_url + '/api-apps/app/customer/' + dataid, {}).then((res) => {
-					// console.log(res.data);
 					//资质
 					for(var i = 0;i<res.data.CUSTOMER_QUALIFICATIONList.length;i++){
 						res.data.CUSTOMER_QUALIFICATIONList[i].isEditing = false;

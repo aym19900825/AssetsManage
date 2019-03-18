@@ -276,7 +276,6 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
 		};
-		console.log(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums);
         this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
         
         }).then((res) => {

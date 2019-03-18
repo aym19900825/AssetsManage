@@ -665,7 +665,6 @@
 			getRole() {
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res.data.data);
 					this.selectData = res.data.data;
 				}).catch(error => {
 					console.log('请求失败');

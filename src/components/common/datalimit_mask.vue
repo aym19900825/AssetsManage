@@ -123,7 +123,6 @@
 				}
 			};
 			var validatePass3 = (rule, value, callback) => {
-				console.log(value)
 				if(value === '') {
 					callback(new Error('必填'));
 				} else {
@@ -275,13 +274,10 @@
 			// 这里是修改
 			detail() {
 				this.show = true;
-				// console.log(this.user);
 				var url = this.basic_url + '/api-user/users/' + userid;
 				this.$axios.get(url, {}).then((res) => {
 					this.user = res.data;
 					this.show = true;
-					// console.log(this.user);
-					// console.log(this.user.roles);
 				}).catch((err) => {
 					this.$message({
 						message: '网络错误，请重试',
@@ -361,7 +357,6 @@
 						type: type
 					},
 				}).then((res) => {
-					// console.log(res.data.data);
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
@@ -397,20 +392,15 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data.data;
-					// console.log(res.data.data);
-					// console.log(this.selectData);
 					}).catch(error =>{
 				    console.log('请求失败');
 				})
 			},
 		  	changeRole(event){
-		  		// console.log(event);
-		  		// console.log(111);
 		  	 	this.user.roleId=[]
 		  	 	for (var i=0;i<event.length;i++){	
 		  	 		this.user.roleId.push(event[i])
 		  	 	}		  	 	
-		  	 	// console.log(this.user.roleId);
           	},
 			queding() {
 				this.getCheckedNodes();

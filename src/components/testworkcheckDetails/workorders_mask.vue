@@ -2101,7 +2101,6 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					//依据
 					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
 						res.data.WORKORDER_BASISList[i].isEditing = false;
@@ -2141,7 +2140,6 @@
 					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
 						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 					}
-					console.log(res.data);
 					if(res.data.IS_MAIN == '1'){//是主任务单
 						this.showcreatereoprt = true;//显示生成报告按钮
 					}else{//不是主任务单
@@ -2368,7 +2366,6 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-					console.log(res.data);
 					this.currentuserinfo = res.data;
 				 	this.userid = res.data.id;
 	        this.username = res.data.username;

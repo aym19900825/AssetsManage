@@ -45,11 +45,9 @@
 				this.show= true;
 			},
 		  	visible(file) {
-		  		console.log(file);
 		  		if(file!="undefined"&&file!="null"){
 		  			this.file=file;
 		  		}
-		  		console.log(this.file);
 		  		var url=this.basic_url;
 				url = url.substring(0,21);
 				var pos = url.lastIndexOf(':');

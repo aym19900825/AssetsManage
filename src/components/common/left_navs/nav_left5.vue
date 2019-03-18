@@ -82,7 +82,6 @@ export default {
 		},	
 	},
 	mounted() {
-		console.log(this.$store.state.menuid);
 		if(this.$store.state.menuid=="undefined"||this.$store.state.menuid=="null"){
 			  $('.navbar-default').hide();
 		     this.$emit('childByValue',this.$store.state.selectedNav);
@@ -96,14 +95,12 @@ export default {
 			};
 			var url = this.basic_url + '/api-user/menus/findSecondByRoleIdAndFisrtMenu';
 			this.$axios.get(url, {params: data}).then((res) => {
-				console.log(res);
 				if(res.data.length>0&&res.data!='undefined'){
 					if(this.$route.path!=this.$store.state.selectedNav.url){
 						this.$store.dispatch('setSelectedNavAct',res.data[0]);
 					}
 					$('.navbar-default').show();
 					this.leftNavs = res.data;
-					console.log(this.$store.state.selectedNav);
 					this.$emit('childByValue',this.$store.state.selectedNav);
 				}else{
 					$('.navbar-default').hide();

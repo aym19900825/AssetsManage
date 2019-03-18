@@ -1286,7 +1286,6 @@
 					res.data.R_VENDOR = Number(res.data.R_VENDOR);		
 					res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					res.data.LEADER = Number(res.data.LEADER);
-					console.log(res.data);
 					console.log(typeof(res.data.MAINGROUP));
 					this.dataInfo = res.data;
 					this.show = true;

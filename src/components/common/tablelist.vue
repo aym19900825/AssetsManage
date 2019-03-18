@@ -95,7 +95,6 @@
 					var id = changeUser.id;
 					var url = this.basic_url + '/api-user/users/' + id;
 					this.$axios.delete(url, {}).then((res) => {
-						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -165,7 +164,6 @@
 					var changeUser = selData[0];
 					var url = this.basic_url + '/api/api-user/users/updateEnabled?id=' + changeUser.id + '&enabled=true';
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res.data);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -227,7 +225,6 @@
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, data).then((res) => {
 					this.userList = res.data.data;
-					console.log(res.data.data);
 				}).catch((wrong) => {
 
 				})

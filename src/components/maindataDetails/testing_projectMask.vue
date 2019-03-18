@@ -607,7 +607,6 @@
 
 			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					console.log(res.data);
 					this.testing_projectForm.DEPARTMENT = '';
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();

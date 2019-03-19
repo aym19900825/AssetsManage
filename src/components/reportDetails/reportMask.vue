@@ -118,8 +118,10 @@
 		  		
 		  	},
 			requestData() {
+				console.log(this.reportData.app);
 				this.appname=this.reportData.app;
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
+				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
 					this.reportsList = res.data.datas;
 					this.innerVisible = true;

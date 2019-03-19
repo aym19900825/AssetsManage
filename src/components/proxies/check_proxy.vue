@@ -342,7 +342,7 @@
 					totalCount: 0
 				},
 				buttons:[],
-				inspectPro:'inspectPro'//appname
+				inspectPro2:'inspectPro2'//appname
 			}
 		},
 		methods: {
@@ -560,6 +560,29 @@
 					})
 				}
 			},
+			//打印
+			Printing(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要打印的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时打印多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					var url=this.basic_url;
+								var pos = url.lastIndexOf(':');
+								url=url.substring(0,pos+1); 
+						  	this.url=url+"5300";
+								var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&id="+this.selUser[0].ID;
+             		window.open(url);
+				}
+			},
 			getRouterData() {
       		// 只是改了query，其他都不变
 				  this.id = this.$route.query.bizId;
@@ -571,12 +594,12 @@
 				this.down = !this.down,
 					this.up = !this.up
 			},
-						//报表
+			//报表
 			reportdata(){
-				this.reportData.app=this.inspectPro;
+				this.reportData.app=this.inspectPro2;
 				this.$refs.reportChild.visible();
 			},
-//			// 删除
+      // 删除
 			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {

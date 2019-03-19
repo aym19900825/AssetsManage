@@ -227,7 +227,7 @@
 				rules: {
 					name: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: this.Validators.isEnglish, trigger: 'blur'},
+						{ validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 					description: [
 						{ required: true, message: '必填',trigger: 'blur'},
@@ -235,7 +235,7 @@
 					],
 					// leadname: [
 					// 	{ required: true, message: '必填',trigger: 'blur'},
-					// 	{ validator: this.Validators.isEnglish, trigger: 'blur'},
+					// 	{ validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					// ],
 				},
 				//tree

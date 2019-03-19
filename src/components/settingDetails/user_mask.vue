@@ -71,7 +71,7 @@
 												<el-input v-model="user.username" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8"  v-if= "addtitle">
+										<el-col :span="8" v-if="addtitle">
 											<!--<el-form-item label="密码" v-if="modify" label-width="100px">
 												<el-input type="password" v-model="user.password" :disabled="true">
 													<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
@@ -577,7 +577,10 @@
 					islogin: [{required: true,trigger: 'change',message: '必填'}], //登陆
 					mac_address: [{required: true,trigger: 'blur',message: '必填',}],
 					ip_address: [{required: true,trigger: 'blur',message: '必填',}],
-					nickname: [{required: true,trigger: 'blur',validator: this.Validators.isNickname}],
+					nickname: [
+						{required: true, trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isNickname}
+					],
 					worknumber: [
 						{required: true,trigger: 'blur',message: '必填'},
 						{validator: this.Validators.isWorknumber, trigger: 'blur'},//引用 isWorknumber

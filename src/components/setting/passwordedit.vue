@@ -40,8 +40,8 @@
 							  <el-form-item label="密码" prop="newpassword">
 							    <el-input type="password" v-model="passwordedit.newpassword" autocomplete="off"></el-input>
 							  </el-form-item>
-							  <el-form-item label="确认密码" prop="checkPass">
-							    <el-input type="password" v-model="passwordedit.checkPass" autocomplete="off"></el-input>
+							  <el-form-item label="确认密码" prop="checkPassword">
+							    <el-input type="password" v-model="passwordedit.checkPassword" autocomplete="off"></el-input>
 							  </el-form-item>
 						</el-form>
 					</el-collapse-item>
@@ -90,8 +90,8 @@ export default {
 		// 		} else if (!/^.{5,16}$/g.test(value)) {
 		// 			callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
 		// 		} else {
-		// 			if (this.passwordedit.checkPass !== '') {
-		// 				this.$refs.passwordedit.validateField('checkPass');
+		// 			if (this.passwordedit.checkPassword !== '') {
+		// 				this.$refs.passwordedit.validateField('checkPassword');
 		// 			}
 		// 			callback();
 		//         }
@@ -118,7 +118,7 @@ export default {
 				username: '',
 				oldpassword: '',//原始密码
 				newpassword: '',//新密码
-				checkPass: ''//确认新密码
+				checkPassword: ''//确认新密码
 			},
 			rules: {
 				oldpassword: [
@@ -129,7 +129,7 @@ export default {
 					{required: true, trigger: 'blur', message: '必填'},
 					{validator: this.Validators.isValidatePass, trigger: 'blur'},
 				],
-				checkPass: [
+				checkPassword: [
 					{required: true, trigger: 'blur', message: '必填'},
 					{validator: this.Validators.isValidatePass, trigger: 'blur'},
 				]
@@ -164,8 +164,8 @@ export default {
 		            var userid = this.passwordedit.id;
 		            var oldpassword = this.passwordedit.oldpassword;
 		            var newpassword= this.passwordedit.newpassword;
-		            var checkPass= this.passwordedit.checkPass;
-		            if (newpassword == checkPass) {
+		            var checkPassword= this.passwordedit.checkPassword;
+		            if (newpassword == checkPassword) {
 			            var url = this.basic_url + '/api-user/users/password';
 			            this.$axios.put(url, {
 		            		id: userid,

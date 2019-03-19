@@ -299,10 +299,7 @@
 						//return false;
 					
 						this.$axios.post(url, this.menutest).then((res) => {
-							
-							
 							if(res.data.resp_code == 0) {
-
 								this.$message({
 									message: '保存成功',
 									type: 'success',
@@ -330,20 +327,17 @@
 					this.resourceData = res.data.data;
 					this.dialogVisible = true;
 				});
-
 			},
 			//图标
 			getCss(){
 				this.show2 = true;
 			},
-
 			confirm() {
 				this.getCheckedNodes();
 				this.placetext = false;
 				this.dialogVisible = false;
 				this.menu.parentId = this.checkedNodes[0].id;
 				this.menu.pName = this.checkedNodes[0].name;
-
 			},
 		    childByValue: function (childValue) {
 		        // childValue就是子组件传过来的值

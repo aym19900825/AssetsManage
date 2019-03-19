@@ -372,7 +372,7 @@
 						this.dataInfo.DEPTID = res.data.deptId;
 						this.dataInfo.CHANGEBY = res.data.id;
 						var date = new Date();
-						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+						this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);
@@ -381,7 +381,7 @@
 						this.dataInfo.DEPTID = res.data.deptId;
 						this.dataInfo.ENTERBY = res.data.id;
 						var date = new Date();
-						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+						this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 						//深拷贝数据
 						let _obj = JSON.stringify(this.dataInfo);
 						this.DATAINFO = JSON.parse(_obj);

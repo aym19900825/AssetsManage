@@ -50,7 +50,12 @@
 							</div>
 							<div class="text item">
 								<el-form :model="productType2Form" status-icon inline-message ref="productType2Form" class="el-radio__table">
-								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}"
+										v-loadmore="loadMore"
+										v-loading="loading"
+										element-loading-text="加载中…"
+										element-loading-spinner="el-icon-loading"
+										element-loading-background="rgba(255, 255, 255, 0.9)">
 
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
@@ -133,7 +138,12 @@
 				</el-input>
 			</div>
 			<!--搜索框 End-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
+					v-loadmore="loadMore"
+					v-loading="loading"
+					element-loading-text="加载中…"
+					element-loading-spinner="el-icon-loading"
+					element-loading-background="rgba(255, 255, 255, 0.9)">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="类别编码" width="155" sortable prop="NUM">
@@ -202,7 +212,8 @@
 				catedata:'',//获取产品类别一条数据放到table行中
 				selData:[],
 				isEditing: '',
-				loadSign:true,//加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},//下拉加载
 				value: '',
 				options: [{
@@ -214,13 +225,13 @@
 				}],
 				searchData: {
 			        page: 1,
-			        limit: 20,//分页显示数
+			        limit: 10,//分页显示数
 			        enabled: '',//信息状态
 		        },
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 20,
+					pageSize: 10,
 					totalCount: 0
 				},
 				product2Id: 0,//获取子表产品ID
@@ -277,41 +288,59 @@
 			// 		})
 			// 	})
 			// },
-			loadMore () {//表格滚动加载
+			//表格滚动加载
+			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
 				if(this.loadSign) {					
 					if(up2down=='down'){
-						this.page.currentPage++
+						this.page.currentPage++;
 						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
 					}else{
-						this.page.currentPage--
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
 						if(this.page.currentPage < 1) {
-							this.page.currentPage=1
+							this.page.currentPage=1;
 							return false;
 						}
 					}
 					this.loadSign = false;
 					setTimeout(() => {
-						this.loadSign = true
+						this.loadSign = true;
 					}, 1000)
-					this.requestData()
+					this.requestData();
 				}
-			   // if (this.loadSign) {
-			   //   this.loadSign = false
-			   //   this.page.currentPage++
-			   //   if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			   //     return
-			   //   }
-			   //   setTimeout(() => {
-			   //     this.loadSign = true
-			   //   }, 1000)
-			   //   this.requestData()
-			   // }
-			 },
-			 addprobtn(row){//查找基础数据中的类别名称
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			addprobtn(row){//查找基础数据中的类别名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
 				var data = {
@@ -330,26 +359,18 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					this.categoryList = res.data.data;
 				}).catch((wrong) => {})
 			},
-			sizeChange(val) {//页数
-		      this.page.pageSize = val;
-		      this.requestData();
-		    },
-		    currentChange(val) {//当前页
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
@@ -394,6 +415,7 @@
 	            });
 			},
 			requestData(val) {//加载数据
+				this.loading = true;//加载动画打开
 				var _this = this;
 				var data = {
 					page: this.page.currentPage,
@@ -412,20 +434,24 @@
 					}else{
 						this.loadSign=true
 					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
+					// this.commentArr[this.page.currentPage]=res.data.data
+					// let newarr=[]
+					// for(var i = 1; i <= totalPage; i++){
 					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+					// 	if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								this.commentArr[i][j].isEditing = false;
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
+					// 		for(var j = 0; j < this.commentArr[i].length; j++){
+					// 			this.commentArr[i][j].isEditing = false;
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
 					
-					this.productType2Form.inspectionList = newarr;//滚动加载更多
+					this.productType2Form.inspectionList = res.data.data;//滚动加载更多
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
 
 					//默认主表第一条数据
 					if(this.productType2Form.inspectionList.length > 0){
@@ -457,8 +483,8 @@
 					if (this.productType2Form.inspectionList[i].isEditing==false){
 						isEditingflag=false;
 					}else{
-                        isEditingflag=true;
-                        break;
+						isEditingflag=true;
+						break;
 					}
 				}
 				if (isEditingflag==false){
@@ -473,21 +499,19 @@
 							"NUM": '',
 							"VERSION": '',
 							"DEPTID": '',
-						    "ENTERBY": this.currentUser,
-						    "ENTERDATE": this.currentDate,
+							"ENTERBY": this.currentUser,
+							"ENTERDATE": this.currentDate,
 							"isEditing": true,
 						};
 						this.productType2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
 					})
 	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+							this.$message.warning("请先保存当前编辑项");
 				}
-				
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['productType2Form'].validate((valid) => {
-					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
 					var url = this.basic_url + '/api-apps/app/productType2/saveOrUpdate';
 					var submitData = {
@@ -496,7 +520,7 @@
 					    "NUM": row.NUM,
 					    "VERSION": row.VERSION,
 					    "DEPTID": row.DEPTID,
-						"STATUS": row.STATUS,
+							"STATUS": row.STATUS,
 					    "ENTERBY": row.ENTERBY,
 					    "ENTERDATE": row.ENTERDATE,
 					}

@@ -340,7 +340,7 @@
 					this.USESEAL.DEPTID = res.data.deptId;
 					this.USESEAL.ENTERBY = res.data.id;
 					var date = new Date();
-					this.USESEAL.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.USESEAL.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.addtitle = true;
@@ -388,7 +388,7 @@
 					this.USESEAL.DEPTID = res.data.deptId;//传给后台机构id
 					this.USESEAL.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.USESEAL.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.USESEAL.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
                 });
                 // for(var j=0;j<this.selectData.length;j++){

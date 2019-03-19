@@ -164,7 +164,7 @@
             }
             this.deptList = result;
             this.loading = false;
-//					this.page.totalCount = res.data.count;
+//			this.page.totalCount = res.data.count;
         }).catch((wrong) => {})
     },
 	determine(){

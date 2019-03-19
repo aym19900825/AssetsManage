@@ -223,8 +223,7 @@
 					this.report.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
-					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-					
+					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.docParm = {
 						'model': 'new',
 						'appname': '报告归档',
@@ -254,7 +253,6 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/qualitySupApp/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -279,8 +277,7 @@
 					this.report.DEPTID = res.data.deptId;//传给后台机构id
 					this.report.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
-
+					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
@@ -331,9 +328,7 @@
 							}
 						});
 					}
-				});				
-				
-				
+				});	
 
 			},
 			//点击关闭按钮
@@ -355,7 +350,6 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -400,10 +394,10 @@
 		    				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
-										this.$message({
-											message:res.data.resp_msg,
-											type: 'warning'
-										});
+									this.$message({
+										message:res.data.resp_msg,
+										type: 'warning'
+									});
 								}else{
 									var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
@@ -526,12 +520,12 @@
 			},
 			//查看
 			readAuth(){
-				this.detailgetData();
+			this.detailgetData();
             var url = this.po_url+"/show?fileid=" +this.report.FILEID
-                        + '&userid=' +  this.userid
-                        + '&username=' + this.username
-                        + '&deptid=' + this.deptid
-                        + '&deptfullname=' + this.deptfullname
+				+ '&userid=' +  this.userid
+				+ '&username=' + this.username
+				+ '&deptid=' + this.deptid
+				+ '&deptfullname=' + this.deptfullname
              window.open(url); 
         	},
 			reset(){
@@ -567,10 +561,10 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-						this.userid = res.data.id;
-						this.username = res.data.username;
-						this.deptid = res.data.deptId;
-						this.deptfullname = res.data.deptName;
+					this.userid = res.data.id;
+					this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	            });
         	},

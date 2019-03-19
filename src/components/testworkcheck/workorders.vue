@@ -664,7 +664,6 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
-					
 					this.loading = false;
 					let result=res.data.datas;
 					for(let i=0;i<result.length;i++){

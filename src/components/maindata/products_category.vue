@@ -151,7 +151,6 @@
 			'v-buttons': vbuttons,
 			'del-btn': delButtons,
 			'v-table': vTable
-
 		},
 		data() {
 			return {

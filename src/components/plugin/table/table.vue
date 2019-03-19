@@ -9,6 +9,8 @@
       :height="fullHeight"
       style="width: 100%;"
 
+      v-loadmore="loadMore"
+
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
@@ -131,25 +133,26 @@ export default {
     },
     sizeChange(val) {
       this.page.pageSize = val;
-      // if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-      //   $('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-      //   sessionStorage.setItem('toBtm','true');
-      // }else{
-      //   sessionStorage.setItem('toBtm','false');
-      // }
+      if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+        $('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+        sessionStorage.setItem('toBtm','true');
+      }else{
+        sessionStorage.setItem('toBtm','false');
+      }
       this.requestData();
     },
     currentChange(val) {
       this.page.currentPage = val;
-      // if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-      //   $('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-      //   sessionStorage.setItem('toBtm','true');
-      // }else{
-      //   sessionStorage.setItem('toBtm','false');
-      // }
+      if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+        $('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+        sessionStorage.setItem('toBtm','true');
+      }else{
+        sessionStorage.setItem('toBtm','false');
+      }
       this.requestData();
     },
     requestData(opt){
+      this.loadding = true;
       var data = this.searchList;
       if(opt == 'init'){
         this.page.currentPage = 1;
@@ -160,8 +163,21 @@ export default {
       this.$axios.get(url, {
         params: data
       }).then((res) => {
+        this.page.totalCount = res.data.count;//页码赋值
+        //总的页数
+        let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
+        if(this.page.currentPage >= totalPage) {
+          this.loadSign = false;
+        } else {
+          this.loadSign = true;
+        }
         this.list = res.data.data;
         this.page.totalCount = res.data.count;
+
+        this.loading = false;//加载动画关闭
+        if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+          $('.el-table__body-wrapper table').find('.filing').remove();
+        }
       }).catch((wrong) => {})
     },
     loadMore(){

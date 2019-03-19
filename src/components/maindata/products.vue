@@ -103,6 +103,7 @@
 								   style="width: 100%;" 
 								   :default-sort="{prop:'productList', order: 'descending'}" 
 								   @selection-change="SelChange" 
+								   @sort-change="tableSortChange"
 								   v-loadmore="loadMore"
 								   v-loading="loading"  
 								   element-loading-text="加载中…"
@@ -110,23 +111,23 @@
 								   element-loading-background="rgba(255, 255, 255, 0.9)">
 								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
 								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<el-table-column label="编码" width="155" sortable="custom" prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PRO_NUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" sortable="custom" prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="版本" width="100" sortable="custom" prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable="custom" prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable="custom" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable="custom" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -621,6 +622,17 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			tableSortChange(column){
+				this.page.currentPage = 1;
+				if (column.order === 'descending') {
+					this.searchList.sortby = column.prop + '_orders';
+					this.searchList.order = 'desc'
+				} else {
+					this.searchList.sortby = column.prop + '_orders';
+					this.searchList.order = 'asc'
+				}
+				this.requestData();
+			},
 			requestData() {
 				this.loading = true;//加载动画打开
 				var data = {
@@ -631,6 +643,9 @@
 					VERSION: this.searchList.VERSION,
 					DEPTID: this.searchList.DEPTID,
 					// STATUS: this.searchList.STATUS,
+				}
+				if(!!this.searchList.sortby){
+					data[this.searchList.sortby] = this.searchList.order;
 				}
 				var url = this.basic_url + '/api-apps/app/product';
 				this.$axios.get(url, {

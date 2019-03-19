@@ -522,6 +522,29 @@
 					}
 				}
 			},
+				//打印
+			Printing(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要打印的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时打印多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					var url=this.basic_url;
+								var pos = url.lastIndexOf(':');
+								url=url.substring(0,pos+1); 
+						  	this.url=url+"5300";
+								var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&id="+this.selUser[0].ID;
+             		window.open(url);
+				}
+			},
 			//查看
 			 view(id) {
 				this.$refs.child.view(id);

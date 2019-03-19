@@ -18,14 +18,6 @@
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style"  @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <v-buttons
-									ref="btnGroup"
-									:appName="appName"
-									:selData="selUser"
-									:btns="buttons"
-									@requestData="requestData"
-									v-if="btnShow">
-								</v-buttons> -->
 								<del-btn :delTable="appName" 
 									:delBtn="delBtn" 
 									:delLen="2" 
@@ -34,9 +26,9 @@
 									v-if="JSON.stringify(delBtn) == '{}'">
 								</del-btn>
 								<el-dropdown size="small">
-										<button class="btn mr5 btn-primarys">
-											<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
-										</button>
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
 									<el-dropdown-menu slot="dropdown">
 										<el-dropdown-item>
 											<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
@@ -105,66 +97,32 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-
-							<el-table ref="table" :header-cell-style="rowClass"
-									@sort-change='tableSortChange'
-									:data="categoryList"
-									border
-									stripe
-									:height="fullHeight"
-									style="width: 100%;"
-	    							@selection-change="SelChange"
-	    							v-loadmore="loadMore"
-									v-loading="loading"
-									element-loading-text="加载中…"
-	    							element-loading-spinner="el-icon-loading"
-	    							element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<!-- <el-table-column label="序号"  type="index" width="155">
-									<template slot-scope="scope">
-										<span>{{page.currentPage*page.pageSize + scope.row.date }}<span>
-									</template>
-								</el-table-column> -->
-								<el-table-column
-									type="index"
-									label="序号"
-									width="50">
-									<template slot-scope="scope">
-										<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-									</template>
-								</el-table-column>
-								<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
-									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
-										</p>
-									</template>
-								</el-table-column>
-								<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="this.checkedName.indexOf('名称')!=-1">
-								</el-table-column>
-								<!--<el-table-column label="信息状态" width="155" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-	 								<template slot-scope="scope" >
-	 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
-	 								</template>
-								</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable='custom' prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
-								</el-table-column>
-								<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
-								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
-								</el-table-column>
-							</el-table>
-							<!-- 表格 End-->
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40, 100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<template slot-scope="list">
+									<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="checkedName.indexOf('编码')!=-1">
+										<template slot-scope="scope">
+											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="checkedName.indexOf('名称')!=-1">
+									</el-table-column>
+									<el-table-column label="版本" width="100" sortable='custom' v-if="checkedName.indexOf('版本')!=-1" prop="VERSION" align="right">
+									</el-table-column>
+									<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
+									</el-table-column>
+									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
+									</el-table-column>
+									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
+									</el-table-column>
+								</template>
+							</v-table>
 						</el-col>
 					</el-row>
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
+			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset"></categorymask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -180,6 +138,7 @@
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vbuttons from '../common/buttons/btnGroup.vue'
 	import delButtons from '../common/buttons/delBtn.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -190,7 +149,9 @@
 			'tableControle': tableControle,
 			'reportmask': reportmask,
 			'v-buttons': vbuttons,
-			'del-btn': delButtons
+			'del-btn': delButtons,
+			'v-table': vTable
+
 		},
 		data() {
 			return {
@@ -244,8 +205,6 @@
 						prop: 'CHANGEDATE'
 					}
 				],
-				selUser: [],
-				categoryList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -258,7 +217,6 @@
 					TYPE: '',
 					VERSION:'',
 					DEPTID: '',
-
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -268,35 +226,19 @@
 					categorymaskren: "subDepts",
 					label: "simplename"
 				},
-				page: { //分页显示
-					currentPage: 1,
-					pageSize: 20,
-					totalCount: 0
-				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
 				buttons:[],
+				selUser: []
 			}
 		},
 		methods: {
-			tableSortChange(column){
-				this.page.currentPage = 1;
-				if (column.order === 'descending') {
-					this.searchList.sortby = column.prop + '_orders';
-					this.searchList.order = 'desc'
-				} else {
-					this.searchList.sortby = column.prop + '_orders';
-					this.searchList.order = 'asc'
-				}
-				this.requestData();
-			},
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			setSelData(val){
+				this.selUser = val;
 			},
 			fileSuccess(){//上传成功后返回数据
 				this.page.currentPage = 1;
-				this.requestData();
+				this.requestData('init');
 			},
 			handleSuccess(response, file, fileList){//上传文件列表
 			},
@@ -312,88 +254,8 @@
 					this.selectData = res.data;
 				});
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
 			tableControle(data) {
 				this.checkedName = data;
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					} else {
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
 			},
 			//重置
 			resetbtn(){
@@ -403,13 +265,11 @@
 					VERSION:'',
 					DEPTID: '',
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			//搜索
 			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+				this.requestData('init');
 			},
 			//清空
 			reset() {
@@ -486,7 +346,50 @@
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
 			},
-			//修改类别
+			deluserinfo(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				}else {
+					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					var changeUser = selData;
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -558,10 +461,6 @@
 								this.requestData();
 							}
 						}).catch((err) => {
-							// this.$message({
-							// 	message: err.resp_msg,
-							// 	type: 'error'
-							// });
 						});
 					}).catch(() => {
 
@@ -624,9 +523,6 @@
 					path: '/inspection_project'
 				});
 			},
-			judge(data) {
-				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
-			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -635,55 +531,13 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) {
-				this.selUser = val;
-			},
-			requestData(index) {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					NUM:this.searchList.NUM,
-					TYPE: this.searchList.TYPE,
-					VERSION:this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
-				}
-				if(!!this.searchList.sortby){
-					data[this.searchList.sortby] = this.searchList.order;
-				}
-				var url = this.basic_url + '/api-apps/app/productType';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
-					this.categoryList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((err) => {
-					// this.$message({
-					// 	message: err.resp_msg,
-					// 	type: 'error'
-					// });
-				})
-			},
 			formatter(row, column) {
 				return row.enabled;
 			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
-			  //请求页面的button接口
 		    getbutton(childByValue){
 		    	var data = {
 					menuId: childByValue.id,
@@ -692,7 +546,6 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					var resData = res.data;
-					
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{
 						if(item.name == '导入'){
@@ -712,33 +565,21 @@
 					}
 					this.buttons = resData;
 				}).catch((err) => {
-					// this.$message({
-					// 	message: err.resp_msg,
-					// 	type: 'error'
-					// });
 				})
 			},
-			//根据机构设置按钮权限
 			getdept(){
 				var url = this.basic_url + '/api-user/users/findDeptAttr';
 				this.$axios.get(url, {}).then((res) => {
 					this.btn=res.data;
-				}).catch((err) => {
-					// this.$message({
-					// 	message: err.resp_msg,
-					// 	type: 'error'
-					// });
-				})
+				}).catch((err) => {})
+			},
+			requestData(opt){
+				this.$refs.table.requestData(opt);
 			}
 		},
 		mounted() {
-			this.requestData();
 			this.getCompany();
 			this.getdept();
 		}
 	}
 </script>
-
-<style scoped>
-
-</style>

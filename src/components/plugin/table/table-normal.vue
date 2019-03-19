@@ -7,14 +7,14 @@
       </el-table-column>
     </el-table>
     <el-pagination v-if="this.checkedName.length>0"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :current-page="page.currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="page.pageSize"
-            layout="total, sizes, prev, pager, next"
-            :total="page.totalCount">
-        </el-pagination>
+        @size-change="sizeChange"
+        @current-change="currentChange"
+        :current-page="page.currentPage"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="page.pageSize"
+        layout="total, sizes, prev, pager, next"
+        :total="page.totalCount">
+    </el-pagination>
   </div>
 </template>
 

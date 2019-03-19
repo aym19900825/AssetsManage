@@ -149,9 +149,9 @@
 						STATUS: '',
 						VERSION: '',
 						DEPARTMENT: '',
-						ENTERBY: '',
+						creatUser: '',
 						ENTERDATE: '',
-						CHANGEBY: '',
+						updateUser: '',
 						CHANGEDATE: ''
 					}
 				}
@@ -218,11 +218,11 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPTID = res.data.deptId;
-					this.CATEGORY.ENTERBY = res.data.id;
-					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
+					this.CATEGORY.deptid = res.data.deptId;
+					this.CATEGORY.creatUser = res.data.id;
+					// this.CATEGORY.creatUserDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.addtitle = true;
@@ -252,11 +252,10 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
-					this.CATEGORY.CHANGEBY = res.data.id;
-					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
+					this.CATEGORY.updateUser = res.data.id;
+					// this.CATEGORY.updateUserDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);
@@ -279,7 +278,6 @@
 			getBtnColor(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
 				this.$axios.get(url, {}).then((res) => {
-					// 
 					this.selectData = res.data;
 					
 				}).catch((wrong) => {

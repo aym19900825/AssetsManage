@@ -14,7 +14,6 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-
 </template>
 
 <script>
@@ -26,10 +25,8 @@ export default {
   methods:{
     checkedChange(){
       this.$emit('tableControle',this.checkedName);
-
     }  
-  },
- 
+  }
 }
 </script>
 <style scope>

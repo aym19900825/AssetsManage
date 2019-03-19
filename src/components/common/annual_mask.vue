@@ -1689,14 +1689,14 @@
 					if(opt=='new'){
 						this.WORKPLAN.DEPTID = res.data.deptId;
 						this.WORKPLAN.ENTERBY = res.data.id;
-	    				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+	    				this.WORKPLAN.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					}else{
 						this.WORKPLAN.DEPTID = res.data.deptId;//传给后台机构id
 						this.WORKPLAN.CHANGEBY = res.data.id;
 						// this.WORKPLAN.DEPARTMENT = res.data.deptName;
 	    				this.WORKPLAN.CHANGEBY = res.data.nickname;
 	    				var date = new Date();
-						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+						this.WORKPLAN.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					}
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
@@ -1713,7 +1713,7 @@
 			visible() {
 				this.assignshow = false;//下达 按钮
 				var myDate = new Date();
-				var date = this.$moment(date).format("YYYY-MM-DD");
+				var date = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				var year = myDate.getFullYear().toString();
 				this.WORKPLAN = {
 					'ID': '',

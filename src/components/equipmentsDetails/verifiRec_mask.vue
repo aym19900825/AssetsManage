@@ -30,9 +30,9 @@
 											</el-input>
 										</el-col>
 									</el-row>
-									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
+									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{width: item.width, display: item.displayType}" label-width="160px">
 
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" :placeholder="item.placeholder" style="width: 220px;" :disabled="noedit || item.disabled""></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" :placeholder="item.placeholder" style="width: 220px;" :disabled="noedit || item.disabled"></el-input>
 
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :placeholder="item.placeholder" :disabled="noedit"></el-input>
 
@@ -432,7 +432,7 @@
 			getToday(){
 				var date = new Date();
 				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				var rate = this.$moment(str).format("yyyy-MM-dd")
+				var rate = this.$moment(str).format("yyyy-MM-dd HH:mm:ss")
 				return rate;
 			},
 			selChange(val){
@@ -503,8 +503,7 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.dataInfo = data;
-				this.show = true;		
-
+				this.show = true;
 				this.docParm = {
 					'model': 'view',
 					'appname': '期间核查记录',
@@ -544,11 +543,8 @@
 					'DEPARTMENT': '',
 					'STATUS': '1'
 				}
-
 				//this.$refs['dataInfo'].resetFields();
 				this.show = false;
-
-
 			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {

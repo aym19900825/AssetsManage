@@ -219,8 +219,6 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				// var randnum = this.rand(1000, 9999);
-				// this.roleList.code = randnum;
 				this.stopshow = true;
 				this.stopselect = false;
 				this.roleList.inactive = '否';
@@ -313,7 +311,6 @@
 					if(valid) {	
 						var url = this.basic_url + '/api-user/roles/saveOrUpdate';
 						this.$axios.post(url, this.roleList).then((res) => {
-							
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',

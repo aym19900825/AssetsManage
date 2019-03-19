@@ -6,7 +6,7 @@
                     <el-row :gutter="20">
                         <el-col :span="11" class="pull-right pb10">
                             <el-input v-model="item.WONUM" :disabled="true">
-                                    <template slot="prepend">子任务单编号</template>
+								<template slot="prepend">子任务单编号</template>
                             </el-input>
                         </el-col>
                     </el-row>

@@ -260,7 +260,7 @@
 					this.PRODUCT.DEPTID = res.data.deptId;
 					this.PRODUCT.ENTERBY = res.data.id;
 					var date = new Date();
-					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.PRODUCT.DEPARTMENT = '';
 					this.PRODUCT.VERSION = '1';
 					this.PRODUCT.STATUS = '活动';
@@ -283,10 +283,9 @@
 				this.statusshow2 = true;
 
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.PRODUCT.DEPTID = res.data.deptId;
 					this.PRODUCT.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.PRODUCT.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.PRODUCT);
         			this.product = JSON.parse(_obj);

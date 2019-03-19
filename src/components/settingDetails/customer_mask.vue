@@ -519,7 +519,7 @@
 					this.CUSTOMER.DEPTID = res.data.deptId;
 					if(opt == 'detail'){
 						var date = new Date();
-						this.CUSTOMER.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+						this.CUSTOMER.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					}
 					this.docParam = {
 						username: res.data.username,

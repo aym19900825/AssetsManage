@@ -49,7 +49,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									
 								</el-collapse-item>
 
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>

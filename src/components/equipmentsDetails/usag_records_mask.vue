@@ -477,7 +477,7 @@
 			getToday(){
 				var date = new Date();
 				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				var rate = this.$moment(str).format("yyyy-MM-dd")
+				var rate = this.$moment(str).format("yyyy-MM-dd HH:mm:ss")
 				return rate;
 			},
 			changeEdit(row){

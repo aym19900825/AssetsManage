@@ -223,8 +223,7 @@
 					this.report.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
-					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
-					
+					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.docParm = {
 						'model': 'new',
 						'appname': '报告归档',
@@ -277,7 +276,7 @@
 					this.report.DEPTID = res.data.deptId;//传给后台机构id
 					this.report.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;

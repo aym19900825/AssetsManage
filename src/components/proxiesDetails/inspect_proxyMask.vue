@@ -632,11 +632,9 @@
 													<el-input v-model="dataInfo.CHANGEDATE" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
-
 										</el-row>
 									</div>
 								</el-collapse-item>
-								
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
@@ -1252,7 +1250,7 @@
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.TYPE = '1';
 					this.dataInfo.TYPEDesc = '检验';
 					this.dataInfo.LEADER = 0;
@@ -1310,7 +1308,7 @@
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.detailgetData();

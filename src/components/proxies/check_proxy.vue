@@ -104,7 +104,7 @@
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
-										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick">
+										<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent"  :props="resourceProps" @node-click="handleNodeClick" empty-text="暂无数据权限，如需请联系上级管理员在系统设置-角色管理-数据配置中配置。">
 										</el-tree>
 									</div>
 								</div>
@@ -832,9 +832,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// 
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
 				})
 
@@ -885,6 +883,10 @@
 	}
 </script>
 
-<style scope>
-
+<style >
+ span.el-tree__empty-text {
+	width:200px;
+	top:100%;
+	color: #909399;
+}
 </style>

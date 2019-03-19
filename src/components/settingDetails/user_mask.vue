@@ -575,7 +575,8 @@
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
 					password: [
-                    	{ validator: validatePass, trigger: 'blur',required: true, }
+                    		{required: true,trigger: 'blur',message: '必填'},
+							{validator: this.Validators.isValidatePass, trigger: 'blur'},
                 	],
 					sex: [{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权

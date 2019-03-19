@@ -493,16 +493,10 @@
                     callback();
                 }
             };
-            var validatePass = (rule, value, callback) => {
-	            if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else if (!/^.{5,16}$/g.test(value)) {
-                    callback(new Error('密码长度不能少于5个字符且不能大于16个字符'));
-                }
-	            callback();
-		     };
 			return {
 				loading: false,
+				changeflag:false,//监听值的变化
+				wi:1,
 				basic_url: Config.dev_url,
 				file_url: Config.file_url,
 				user: {
@@ -512,6 +506,8 @@
 					traings: [],
 					qualifications: [],
 					ips: [],
+					deptName:'',
+					nickname:'',
 				},
 				options: [{
 						value: '高中',
@@ -553,8 +549,6 @@
 				show: false,
 				isok1: true,
 				isok2: false,
-				down: true,
-				up: false,
 				activeName: 'first', //tabs
 				activeNames: ['1', '2', '3', '4'], //手风琴数量
 				labelPosition: 'top', //表格
@@ -980,6 +974,7 @@
 
 			//保存users/saveOrUpdate
 			save(parameter) {
+				if(this.changeflag==true){
 				var _this = this;
 				this.$refs.user.validate((valid) => {
 					if(valid) {
@@ -1028,6 +1023,10 @@
 						});
 					}
 				})
+				}else{
+					this.show = false;
+				    this.$emit('request');
+				}
 			},
 			//所属组织
 			getCompany() {
@@ -1159,7 +1158,17 @@
 		mounted() {
 			this.getRole();
 		},
-
+		watch: {
+			user:{
+				handler:function(obj){
+					if(this.wi!=1){
+						this.changeflag=true;							
+					}
+					this.wi++; 
+				},
+				deep:true
+			}            
+		}
 	}
 </script>
 

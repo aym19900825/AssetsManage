@@ -21,14 +21,6 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="按钮配置" name="1">
-									<el-row class="pb10">
-										<el-col :span="3" class="pull-right">
-											<el-input v-model="CATEGORY.VERSION" :disabled="true">
-												<template slot="prepend">版本</template>
-											</el-input>
-										</el-col>
-									</el-row>
-
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="按钮名称" prop="name">
@@ -98,8 +90,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -169,7 +161,6 @@
 		data() {
 			return {
 				loading: false,
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
@@ -177,8 +168,6 @@
 				show2:false,
 				isok1: true,
 				isok2: false,
-				down: true,
-				up: false,
 				activeNames: ['1','2'], //手风琴数量
 				selectData: [],
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
@@ -327,8 +316,8 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
+			save(parameter) {
+				this.$refs.CATEGORY.validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-user/permissions/saveOrUpdate';
@@ -339,9 +328,13 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
+								if(parameter=="Update"){
+									this.show = false;
+									this.$emit('request');
+								}else{
+									this.show=true;
+									this.$emit('reset');
+								}
 								this.visible();
 							}else{
 								this.show = true;
@@ -362,38 +355,14 @@
 							}
 						}).catch((err) => {
 						});
-						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
-			},
-			
-			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
-				this.show = true;
-			},
-			//时间格式化
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
@@ -409,7 +378,7 @@
 		mounted() {
 			this.getBtnColor();
 		},
-		
+			
 	}
 </script>
 

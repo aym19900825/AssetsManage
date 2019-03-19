@@ -118,7 +118,6 @@
 													</el-button>
 												</form>
 											</div>
-									<!-- <el-form :label-position="labelPosition" :rules="rules"> -->
 										<el-table :header-cell-style="rowClass" :fit="true" :data="CUSTOMER.CUSTOMER_QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER.CUSTOMER_QUALIFICATIONList', order: 'descending'}">
 										    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 										      <template slot-scope="scope">
@@ -295,10 +294,9 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CUSTOMER')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CUSTOMER')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
-							<!--<el-button type="primary" class="btn-primarys" @click="submitForm('CUSTOMER')">提交</el-button>-->
 						</div>
 					</el-form>
 				</div>
@@ -313,72 +311,9 @@
 	export default {
 		name: 'customer_masks',
 		data() {
-          //   var validateName = (rule, value, callback) => {
-          //       if (value === '') {
-          //           callback(new Error('必填'));
-          //       }else {
-          //           callback();
-          //       }
-          //   };
-          //   var validatePerson = (rule, value, callback) => {
-          //       if (value === '') {
-          //           callback(new Error('必填'));
-          //       }else {
-          //           callback();
-          //       }
-          //   };
-            
-          //   var validateAddress = (rule, value, callback) => {
-          //       if (value === '') {
-          //           callback(new Error('请填写联系地址'));
-          //       }else {
-          //           callback();
-          //       }
-          //   };
-          //   var validatePhone = (rule, value, callback) => {
-          //       if (value === '') {
-		        //     callback(new Error('请填写联系电话'));
-		        // } else {
-			       //  var reg = /^1[34578]\d{9}$/;
-			       //  if(!reg.test(value)){
-			       //      callback(new Error('请输入有效的电话'));
-			       //  }else{
-			       //  	callback();
-			       //  }
-		        // }
-          //   };
-          //   var validateEmail = (rule, value, callback) => {
-          //       if (value === '') {
-		        //     callback(new Error('电子邮箱不能为空'));
-		        // } else {
-			       //  var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-			       //  if(!reg.test(value)){
-			       //      callback(new Error('请输入有效的邮箱'));
-			       //  }else{
-			       //  	callback();
-			       //  }
-		        // }
-          //   };
-          //   var validateZipcode = (rule, value, callback) => {
-          //       if (value === '') {
-		        //     callback(new Error('邮政编码不能为空'));
-		        // } else {
-			       //  var reg= /^[0-9]{6}$/;
-			       //  if(!reg.test(value)){
-			       //      callback(new Error('请输入有效的邮政编码'));
-			       //  }else{
-			       //  	callback();
-			       //  }
-		        // }
-          //   };
-          //   var validateName = (rule, value, callback) => {
-          //       if (value === '') {
-          //           callback(new Error('请填写单位名称'));
-          //       }else {
-          //           callback();
-          //       }
-          //   };
 			return {
+				changeflag:false,
+				wi:1,
 				file_url: Config.file_url,
 				basic_url: Config.dev_url,
 				personinfo:false,
@@ -398,8 +333,6 @@
 				statusshow1:true,
 				statusshow2:false,
 				edit: true, //禁填
-				// col_but1: true,
-				// col_but2: true,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -433,9 +366,6 @@
 					],
 					MEMO:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
 					ZIPCODE:[{required: false,trigger: 'blur',validator: this.Validators.isZipcode}],
-					// PERSON:[{required: true,trigger: 'blur',validator: validatePerson}],
-					// PHONE:[{required: true,trigger: 'blur',validator: validatePhone}],
-					// EMAIL:[{required: true,trigger: 'blur',validator: validateEmail}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -496,22 +426,20 @@
 			},
 			//新建行
 			addrela(){
-				// this.index = this.index + 1;
 				var obj = {
-					// STEP:this.index,
 					ID:'',
-                    CODE:'',
-                    PERSON:'',
-                    PHONE:'',
-                    FAX:'',
-                    EMAIL:'',
-                    STATUS:'',
-                    MEMO:'',
-                    ENTERBY:'',
-                    ENTERDATE:'',
-                    CHANGEBY:'',
-                    CHANGEDATE:'',
-                    DEPTID:'',
+					CODE:'',
+					PERSON:'',
+					PHONE:'',
+					FAX:'',
+					EMAIL:'',
+					STATUS:'',
+					MEMO:'',
+					ENTERBY:'',
+					ENTERDATE:'',
+					CHANGEBY:'',
+					CHANGEDATE:'',
+					DEPTID:'',
 					isEditing: true
                 };
                 this.CUSTOMER.CUSTOMER_PERSONList.push(obj);
@@ -631,6 +559,7 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+			  this.wi=1;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -675,20 +604,6 @@
 				});
 				this.show = true;				
 			},
-			//上传文件 Begin
-			handleRemove(file, fileList) {
-				console.log(file, fileList);
-			},
-			handlePreview(file) {
-				console.log(file);
-			},
-			handleExceed(files, fileList) {
-				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-			},
-			beforeRemove(file, fileList) {
-				return this.$confirm(`确定移除 ${ file.name }？`);
-			},
-			//上传文件 End
 			//点击关闭
 			close() {
 				this.show = false;
@@ -722,7 +637,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				this.$refs.CUSTOMER.validate((valid) => {
 		          if (valid) {
 					if(this.CUSTOMER.CUSTOMER_QUALIFICATIONList.length==0 || this.CUSTOMER.CUSTOMER_PERSONList.length == 0){
@@ -730,7 +645,6 @@
 							message: '资质信息及客户联系人必填',
 							type: 'warning',
 						});
-						this.falg = false;
 					}else{
 						this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
@@ -741,13 +655,16 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								// this.$refs["CUSTOMER"].resetFields();
+								if(parameter=="Update"){
+									this.show = false;
+								}else{
+									this.show = true;
+									this.$emit('request');
+								};
+						   this.$refs["CUSTOMER"].resetFields();
 							}
 						}).catch((err) => {
 						});
-						this.falg = true;
 					}
 		          } else {
 		            this.show = true;
@@ -755,23 +672,10 @@
 							message: '有必填项未填写，请重新填写',
 							type: 'warning',
 						});
-						this.falg = false;
 		          	}
-		        });
+						});
 			},
-			saveAndUpdate(){
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				this.$emit('request');
-			},
-			saveAndSubmit(){
-				this.save();
-				this.reset();
-				this.show = true;
-				this.$emit('request');
-			},
+			
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -851,7 +755,7 @@
 		},
 		mounted() {
 			this.getsys_depttype();//页面打开加载-机构类型
-		}
+		},
 	}
 </script>
 

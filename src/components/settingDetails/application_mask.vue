@@ -181,15 +181,12 @@
 				}
 			};
 			return {
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
 				show: false,
 				isok1: true,
 				isok2: false,
-				down: true,
-				up: false,
 				activeNames: ['1','2'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
@@ -256,17 +253,13 @@
 				this.statusshow2 = true;
 				
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					
-					// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-					this.dataInfo.updateUser = res.data.id;
-					// this.dataInfo.CHANGEBYDesc = res.data.nickname;
+				    this.dataInfo.updateUser = res.data.id;
 					var date = new Date();
 					this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				}).catch((err) => {
 				});
 				var url=this.basic_url + '/api-apps/appcfg/'+ id;
 				this.$axios.get(url, {}).then((res) => {
-					
 					this.dataInfo=res.data;
 					if(typeof(this.dataInfo.reportId) != 'undefind'&&this.dataInfo.reportId != null&&this.dataInfo.reportId.length > 0) {
 							this.dataInfo.reportId=[];
@@ -278,7 +271,6 @@
 						this.dataInfo.reportId = [];
 						this.dataInfo.reports = [];
 					}
-					
 					
 				this.show = true;
 				}).catch((err) => {
@@ -329,7 +321,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {
-				var _this = this;
+					var _this = this;
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
 						var dataInfo = _this.dataInfo;
@@ -394,23 +386,19 @@
 					}
 				});
 			},
-		
 			//报表参数类
 			getreport(){
 				var url = this.basic_url + '/api-report/report';
 				this.$axios.get(url, {}).then((res) => {
-					
 					this.selectData = res.data.data;
-					
 				}).catch((wrong) => {
 				})	
 			},
-
 		},
 		mounted() {
 			this.getreport();
 		},
-		
+			
 	}
 </script>
 

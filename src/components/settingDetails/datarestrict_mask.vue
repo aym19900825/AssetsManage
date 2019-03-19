@@ -49,8 +49,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -91,7 +91,6 @@
 		data() {
 			return {
 				loading: false,
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
@@ -99,8 +98,6 @@
 				show2:false,
 				isok1: true,
 				isok2: false,
-				down: true,
-				up: false,
 				activeNames: ['1','2'], //手风琴数量
 				applicationList:[],//应用
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
@@ -242,7 +239,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {				
+			save(parameter) {		
 					if(true) {						
 						var url = this.basic_url + '/api-user/dataRestrict/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
@@ -252,10 +249,13 @@
 									message: '保存成功',
 									type: 'success'
 								});
-								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+								if(parameter=="Update"){
+									this.show = false;
+								}else{
+									this.show = true;
+									this.$emit('request');
+								}
+								this.$refs["CATEGORY"].resetFields(); //清空表单验证
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -275,30 +275,15 @@
 							}
 						}).catch((err) => {
 						});
-						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
-					}				
+					}					
 			},
 			
-			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
-				this.show = true;
-			},
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -325,7 +310,6 @@
 		},
 		mounted() {
 		},
-		
 	}
 </script>
 

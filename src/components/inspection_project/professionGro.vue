@@ -15,7 +15,7 @@
 					</el-button>
 				</div>
 			</div>
-			<el-form :model="professionGroForm" ref="professionGroForm">
+			<el-form inline-message :model="professionGroForm" ref="professionGroForm">
 			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}"
 					v-loadmore="loadMore"
 					v-loading="loading"

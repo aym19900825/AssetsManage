@@ -77,7 +77,7 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form :model="searchList" label-width="80px">
+					<el-form inline-message :model="searchList" label-width="80px">
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="统一社会信用代码" prop="CODE" label-width="160px">

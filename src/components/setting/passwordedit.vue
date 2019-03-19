@@ -30,7 +30,7 @@
 			<div class="ibox-content" :style="{height: fullHeight}">
 				<el-collapse v-model="activeNames">
 					<el-collapse-item title="修改密码" name="1">
-						<el-form :model="passwordedit" inline-message status-icon :rules="rules" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
+						<el-form inline-message :model="passwordedit" status-icon :rules="rules" ref="passwordedit" label-width="100px" class="demo-ruleForm" :label-position="labelPosition">
 							  <el-form-item label="当前用户" prop="username">
 							    <el-input v-model.number="passwordedit.username" disabled></el-input>
 							  </el-form-item>

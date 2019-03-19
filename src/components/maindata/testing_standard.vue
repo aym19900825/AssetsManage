@@ -2,7 +2,7 @@
 	<div>
 		<div class="headerbg">
 			<vheader></vheader>
-			<navs_tabs  ref="navsTabs"></navs_tabs>
+			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
 			<!--左侧菜单内容显示 Begin-->
@@ -54,7 +54,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="70px">
+						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="标准编号" prop="S_NUM">

@@ -245,7 +245,7 @@
 													<font>选择</font>
 												</el-button>
 											</div>
-											<!-- <el-form :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
+											<!-- <el-form inline-message :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
 							            		<el-table-column prop="NUMBER" label="序号" sortable width="150" type="index"></el-table-column>
 												<el-table-column prop="WP_NUM" label="所属计划编号" sortable width="150">
@@ -442,7 +442,7 @@
 			<el-dialog :modal-append-to-body="false" title="检测依据" :visible.sync="dialogVisible" width="80%" :before-close="handleClose1">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
-					<el-form :model="searchList" label-width="70px">
+					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="标准编号" prop="S_NUM">
@@ -535,7 +535,7 @@
 			<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose2">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
-					<el-form :model="searchList" label-width="70px">
+					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="项目编号" prop="P_NUM">

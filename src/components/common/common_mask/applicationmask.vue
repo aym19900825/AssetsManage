@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="所属类别" height="360px" :visible.sync="dialogapp" width="80%" :before-close="handleClose">
-			<el-form :model="searchList" label-width="45px">
+		<el-dialog :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogapp" width="80%" :before-close="handleClose">
+			<el-form inline-message :model="searchList" label-width="45px">
 				<el-row :gutter="10">
 					<el-col :span="5">
 						<el-form-item label="编码" prop="NUM">

@@ -15,7 +15,7 @@
 				</el-button>
 			</div>
 		</div>
-		<el-form :model="rawDataTem2Form" ref="rawDataTem2Form">
+		<el-form inline-message :model="rawDataTem2Form" ref="rawDataTem2Form">
 		  <el-table :data="rawDataTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'rawDataTem2Form.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
 				v-loading="loading"

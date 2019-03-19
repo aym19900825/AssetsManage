@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<div class="content-accordion">
 						<el-collapse v-model="activeNames">
-							<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
+							<el-form inline-message :model="testingForm" :rules="rules" ref="testingForm" label-width="100px" status-icon>
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="3" class="pull-right">

@@ -31,7 +31,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row :gutter="10">
                                 <el-col :span="7">
 									<el-form-item label="工作任务单编号" prop="WONUM" label-width="110px">

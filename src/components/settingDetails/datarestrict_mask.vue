@@ -16,7 +16,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="CATEGORY" inline-message :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+					<el-form inline-message :model="CATEGORY" :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="数据限制配置" name="1">
@@ -61,7 +61,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import appmask from '../common/common_mask/applicationmask.vue'//所属类别
+	import appmask from '../common/common_mask/applicationmask.vue'//产品类别
 	export default {
 		name: 'masks',
 		components: {

@@ -32,7 +32,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务通知书编号" prop="N_CODE" label-width="140px">

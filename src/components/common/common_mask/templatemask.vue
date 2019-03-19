@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="原始数据模版" :visible.sync="dialogtemplate" width="80%">
-			<el-form :model="searchList" label-width="70px">
+			<el-form inline-message :model="searchList" label-width="70px">
 				<el-row :gutter="10">
 					<el-col :span="5">
 						<el-form-item label="模板描述" prop="DECRIPTION">

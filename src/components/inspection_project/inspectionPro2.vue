@@ -17,7 +17,7 @@
 					<font>新建</font>
 				</el-button>
 			</div>
-			<el-form :model="inspectionPro2Form" status-icon inline-message ref="inspectionPro2Form" class="el-radio__table">
+			<el-form inline-message :model="inspectionPro2Form" status-icon ref="inspectionPro2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" 
 					v-loadmore="loadMore"
 					v-loading="loading"
@@ -442,7 +442,7 @@
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
-								"S_NUM": this.parentId,//所属类别编号
+								"S_NUM": this.parentId,//产品类别编号
 								"P_NUM": '',
 								"P_NAME": '',
 								"UNITCOST": '',

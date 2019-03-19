@@ -15,7 +15,7 @@
 				</el-button>
 			</div>
 		</div>
-		<el-form :model="rawDataAssetForm" ref="rawDataAssetForm">
+		<el-form inline-message :model="rawDataAssetForm" ref="rawDataAssetForm">
 		  <el-table :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'rawDataAssetForm.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
 				v-loading="loading"

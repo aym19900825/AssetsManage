@@ -16,7 +16,12 @@
 			</div>
 		</div>
 		<el-form :model="inspectionMet2Form" ref="inspectionMet2Form">
-		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}" v-loadmore="loadMore">
+		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 			
 		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
@@ -184,7 +189,8 @@
 					dialogVisible3: false, //对话框
 					selData:[],
 				isEditing: '',
-				loadSign:true,//加载
+				loadSign: true, //鼠标滚动加载数据
+				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},//下拉加载
 				value: '',
 				options2:[{//检验检测方法类别
@@ -234,25 +240,62 @@
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					row.CHANGEBY=res.data.nickname;
 					var date=new Date();
-					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-					
-					
+					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 				})
 			},
-			loadMore () {//表格滚动加载
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.viewfield_inspectionMet2(this.selParentId,this.parentId);
-			   }
-			 },
+			//表格滚动加载
+		loadMore() {
+			let up2down = sessionStorage.getItem('up2down');
+			if(this.loadSign) {					
+				if(up2down=='down'){
+					this.page.currentPage++;
+					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+						return false;
+					}
+					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+						sessionStorage.setItem('toBtm','true');
+					}
+				}else{
+					sessionStorage.setItem('toBtm','false');
+					this.page.currentPage--;
+					if(this.page.currentPage < 1) {
+						this.page.currentPage=1;
+						return false;
+					}
+				}
+				this.loadSign = false;
+				setTimeout(() => {
+					this.loadSign = true;
+				}, 1000)
+				this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+			}
+		},
+		//改变页数
+		sizeChange(val) {
+			this.page.pageSize = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+		},
+		//当前页数
+		currentChange(val) {
+			this.page.currentPage = val;
+			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+				sessionStorage.setItem('toBtm','true');
+			}else{
+				sessionStorage.setItem('toBtm','false');
+			}
+			this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+		},
 			 // /api-apps/app/inspection_method?DEPTID=' + this.parentIds;
 			 addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -285,14 +328,6 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
-			sizeChange(val) {//页数
-		      this.page.pageSize = val;
-		      this.viewfield_inspectionMet2(this.selParentId,this.parentId);
-		    },
-		    currentChange(val) {//当前页
-		      this.page.currentPage = val;
-		      this.viewfield_inspectionMet2(this.selParentId,this.parentId);
-		    },
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -442,21 +477,20 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionMet2Form'].validate((valid) => {
-					row.VERSION = row.VERSION + 1;//修改保存后版本号+1
 		          if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionMet2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"P_NUM": row.P_NUM,
-					    "M_NUM": row.M_NUM,
+						"M_NUM": row.M_NUM,
 						"M_NAME": row.M_NAME,
 						"M_ENAME": row.M_ENAME,
 						"M_TYPE": row.M_TYPE,
 						"STATUS": row.STATUS,
-					    "VERSION": row.VERSION,
-					    "DEPTID": row.DEPTID,
+						"VERSION": row.VERSION,
+						"DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
-					    "ENTERDATE": row.CHANGEDATE,
+						"ENTERDATE": row.CHANGEDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -492,9 +526,8 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
-
-            	});
+					}).catch(() => {
+					});
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false

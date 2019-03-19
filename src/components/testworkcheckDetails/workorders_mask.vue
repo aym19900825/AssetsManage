@@ -2049,13 +2049,13 @@
 			//点击添加，修改按钮显示弹窗
 			visible() {
 				var date = new Date();
-				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.workorderForm.DEPTID = res.data.deptId;
 					this.workorderForm.ENTERBY = res.data.id;
 					this.username=res.data.username;
 					var date = new Date();
-					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.reset();
@@ -2126,7 +2126,7 @@
 	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
 					this.workorderForm.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.workorderForm.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd");
+					this.workorderForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
 					
 					this.docParm.recordid = dataid;
 					this.docParm.appname = '工作任务单_关联原始数据模板';
@@ -2376,5 +2376,4 @@
 		border: none;
 		cursor: pointer;
 	}
-
 </style>

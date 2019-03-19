@@ -6,7 +6,6 @@
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加数据限制</div>
 					<div class="mask_title" v-show="modifytitle">修改数据限制</div>
-					
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -21,7 +20,6 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="数据限制配置" name="1">
-
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="应用名称" prop="appName">
@@ -43,9 +41,7 @@
 											</el-form-item>
 										</el-col>										
 									</el-row>
-									
 								</el-collapse-item>
-								
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
@@ -128,7 +124,6 @@
 			 // 按钮图标childValue就是子组件传过来的值
 			childByValue: function (childValue) {
 		        this.sendchildValue = childValue;
-		      
 		    },
 			//获取导入表格勾选信息
 			SelChange(val) {
@@ -154,7 +149,7 @@
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.addtitle = true;
@@ -184,11 +179,10 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.CATEGORY.DEPTID = res.data.deptId;//传给后台机构id
 					this.CATEGORY.CHANGEBY = res.data.id;
 					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.CATEGORY);
         			this.category = JSON.parse(_obj);

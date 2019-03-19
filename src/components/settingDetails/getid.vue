@@ -12,13 +12,11 @@
 </template>
 <script>
     import {AjaxByAll} from '../../api/api'
-
     export default {
         data() {
             return {
                 name: null,
                 id:this.userId
-
             }
         },
         methods: {
@@ -26,14 +24,11 @@
                // alert(this.userId);
                 //通过用户id查找用户名称
                 AjaxByAll('get', '/rest/common/getData/sysOrgUserApiService?userId='+this.id, null).then(data => {
-
                     if (data.code === 200) {
                        this.name=data.data
                     }
                 });
             }
-
-
         },
         watch: {
 

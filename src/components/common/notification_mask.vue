@@ -800,14 +800,14 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
-					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD ");
+					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				})
 				
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
-				this.views = false; //
+				this.views = false;
 				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
@@ -837,7 +837,7 @@
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.detailgetData();

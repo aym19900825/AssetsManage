@@ -76,8 +76,8 @@
 				this.innerVisible = true;
 			},
 		  	visible() {
-					this.open();
-					this.requestData();
+				this.open();
+				this.requestData();
 		  	},
 		  	SelChange(val) {
 				this.selreport = val;

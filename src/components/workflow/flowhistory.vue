@@ -65,7 +65,7 @@ export default {
 		this.id=this.approvingData.id;
 	    this.appname=this.approvingData.app;
 	   	 var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
-	   	        this.$axios.get(url, {}).then((res) => {
+            this.$axios.get(url, {}).then((res) => {
 					
 					if(res.data.resp_code == 1) {
 						

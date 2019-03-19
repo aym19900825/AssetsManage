@@ -889,7 +889,7 @@
 						deptfullname: res.data.deptName,
 					};
 					var date = new Date();
-					this.user.changedate = this.$moment(date).format("yyyy-MM-dd hh:mm:ss");
+					this.user.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				var url = this.basic_url + '/api-user/users/' + dataid;

@@ -278,13 +278,13 @@
 			},
 			//点击按钮显示弹窗
 			visible() {
-				//				this.CATEGORY.NUM =  this.rand(1000,9999);
+				//this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPTID = res.data.deptId;
 					this.CATEGORY.ENTERBY = res.data.id;
 					// this.CATEGORY.ENTERBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.addtitle = true;
@@ -317,7 +317,7 @@
 					this.CATEGORY.CHANGEBY = res.data.id;
 					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
-					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
 					// let _obj = JSON.stringify(this.CATEGORY);
         			// this.category = JSON.parse(_obj);

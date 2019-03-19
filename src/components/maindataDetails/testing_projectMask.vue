@@ -597,7 +597,7 @@
 					this.testing_projectForm.DEPARTMENT = '';
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD");
+					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
 					let _obj = JSON.stringify(this.testing_projectForm);
         			this.TESTING_PROJECTFORM = JSON.parse(_obj);

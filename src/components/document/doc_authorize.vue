@@ -72,19 +72,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 -->
-							<el-table :data="samplesList" 
-									  border stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'samplesList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									   v-loading="loading"  
-								      element-loading-text="加载中…"
-    							      element-loading-spinner="el-icon-loading"
-    							      element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
-								</el-table-column>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="姓名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
 								<el-table-column label="关键字" sortable prop="keywordidDesc" v-if="this.checkedName.indexOf('关键字')!=-1">
@@ -124,9 +112,7 @@
 										<i :class="scope.row.fileduplicate==1?'el-icon-check':''"></i>
 									</template>
 								</el-table-column>
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -148,18 +134,21 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import authmask from'../documentDetails/auth_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
-			vheader,
-			navs_tabs,
-			navs_left,
-			tableControle,
-			authmask,
-			reportmask,
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'authmask': authmask,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'tbKeywordPrivilege2',
 				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
@@ -243,6 +232,9 @@
 			}
 		},
 		methods: {
+			setSelData(val){
+				this.selMenu = val;
+			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
@@ -278,30 +270,20 @@
 			     setTimeout(() => {
 			       this.loadSign = true
 			     }, 1000)
-			     this.requestData()
+			     this.requestData('init');
 			   }
 			 },
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			sizeChange(val) {//分页，总页数
-				this.page.pageSize = val;
-				this.requestData();
-			},
-			currentChange(val) {//分页，当前页
-				this.page.currentPage = val;
-				this.requestData();
-			},
 		   resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
 					username: '',
 				};
-				this.requestData();
+				this.requestData('init');
 			},
-			searchinfo(index) {//高级查询
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData();
+			searchinfo() {//高级查询
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -452,30 +434,8 @@
                 	});
 				}
 			},
-			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
-				this.selMenu = val;
-			},
-			requestData() {
-				this.loading = true;
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					username: this.searchList.username,
-					keywordidDesc: this.searchList.keywordidDesc
-				}
-				var url = this.basic_url + '/api-apps/app/tbKeywordPrivilege2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					this.samplesList = res.data.data;
-					this.loading = false;
-				}).catch((wrong) => {})
-				
-			},
-			
-			formatter(row, column) {
-				return row.enabled;
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 			//生产单位树
 			getKey() {
@@ -551,7 +511,6 @@
 		},
 		
 		mounted() {// 在页面挂载前就发起请求
-			this.requestData();
 			this.getKey();
 		},
 	}

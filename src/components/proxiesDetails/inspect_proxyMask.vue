@@ -273,9 +273,8 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入">		
-															</el-input>
-															<span v-else>{{scope.row.P_DESC}}</span>
+														<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
+														</el-input>		
 														</el-form-item>	
 													</template>
 												</el-table-column>

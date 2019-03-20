@@ -105,41 +105,18 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 -->
-							<el-table ref="table" :header-cell-style="rowClass" :data="samplesList" 
-									border 
-									stripe
-									:height="fullHeight" 
-									style="width: 100%;" 
-									:default-sort="{prop:'samplesList', order: 'descending'}" 
-									@selection-change="selChange"
-	    							v-loadmore="loadMore"
-									v-loading="loading"  
-								    element-loading-text="加载中…"
-    							    element-loading-spinner="el-icon-loading"
-    							    element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0">
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<el-table-column label="类别" sortable prop="categoryidDesc" v-if="checkedName.indexOf('类别')!=-1">
 								</el-table-column>
-								<el-table-column label="类别" sortable prop="categoryidDesc" v-if="this.checkedName.indexOf('类别')!=-1">
+								<el-table-column label="关键字" sortable prop="keywordname" v-if="checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
-								<el-table-column label="关键字" sortable prop="keywordname" v-if="this.checkedName.indexOf('关键字')!=-1">
+								<el-table-column label="用户名称" sortable prop="username" v-if="checkedName.indexOf('用户名称')!=-1">
 								</el-table-column>
-								<el-table-column label="用户名称" sortable prop="username" v-if="this.checkedName.indexOf('用户名称')!=-1">
+								<el-table-column label="用户部门" sortable prop="deptfullname" v-if="checkedName.indexOf('用户部门')!=-1">
 								</el-table-column>
-								<el-table-column label="用户部门" sortable prop="deptfullname" v-if="this.checkedName.indexOf('用户部门')!=-1">
+								<el-table-column label="创建时间" sortable prop="createtime" v-if="checkedName.indexOf('创建时间')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" sortable prop="createtime" v-if="this.checkedName.indexOf('创建时间')!=-1">
-								</el-table-column>
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-								 @size-change="sizeChange" 
-								 @current-change="currentChange" 
-								 :current-page="page.currentPage" 
-								 :page-sizes="[10, 20, 30, 40, 100]" 
-								 :page-size="page.pageSize" 
-								 layout="total, sizes, prev, pager, next" 
-								 :total="page.totalCount">
-							</el-pagination>
-							<!-- 表格 -->
+							</v-table>
 						</el-col>
 					</el-row>
 				</div>
@@ -159,18 +136,21 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import catmask from'../documentDetails/cat_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
-			vheader,
-			navs_tabs,
-			navs_left,
-			tableControle,
-			catmask,
-			reportmask,
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'catmask': catmask,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'tbKeyword2',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -229,81 +209,24 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-				return 'text-align:center'
+			setSelData(val){
+				this.selMenu = val;
 			},
 			fileSuccess(){//上传成功后返回数据
-				this.page.currentPage = 1;
-				this.requestData();
+				this.requestData('init');
 			},
 			handleSuccess(response, file, fileList){//上传文件列表
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//高级查询
-			 resetbtn(){
-			this.searchList = { //点击高级搜索后显示的内容
-			keywordname: '',
-			categoryidDesc: '',
-			};
-			this.requestData();
+			
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					keywordname: '',
+					categoryidDesc: '',
+				};
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -332,9 +255,7 @@
 			},
 			
 			searchinfo() {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+				this.requestData('init');
 			},
 			//添加样品管理
 			openAddMgr() {
@@ -518,37 +439,9 @@
             	}
             	xhr.send();
 			},
-			selChange(val) {
-				this.selMenu = val;
-			},
 			//Table默认加载数据
-			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					categoryidDesc: this.searchList.categoryidDesc,
-					keywordname: this.searchList.keywordname
-				};
-				var url = this.basic_url + '/api-apps/app/tbKeyword2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;//页码赋值
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
-					this.samplesList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				});
+			requestData(opt){
+				this.$refs.table.requestData(opt);
 			},
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
@@ -597,9 +490,6 @@
 				}).catch((wrong) => {
 				})
 		    },
-		},
-		mounted() {
-			this.requestData();
 		},
 	}
 </script>

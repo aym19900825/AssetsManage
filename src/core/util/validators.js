@@ -198,9 +198,9 @@ const validators = {
 			callback(new Error('不支持特殊符号'));
 		}
 		setTimeout(() => {
-			var regs = /^.{2,30}$/g
+			var regs = /^.{2,20}$/g
 			if (!regs.test(value)) {
-				callback(new Error('内容不少于2位且不能大于30位'));
+				callback(new Error('内容不少于2位且不能大于20位'));
 			} else {
 				if(validators.Numbers(value)) {
 					callback(new Error('不只支持全数字'));
@@ -235,7 +235,7 @@ const validators = {
 		}
 	},
 
-	isAddress:function (rule, value, callback) {//验证地址
+	isAddress:function (rule, value, callback) {//验证通信地址
 		if(!value){
 			callback();
 		}
@@ -272,13 +272,19 @@ const validators = {
 	isLinkURL:function (rule, value, callback) { //验证连接地址
 		if(!value) {
 			callback();
-		} else {
-			if(!validators.URL(value)) {
-				callback(new Error('输入有效的URL'));
-			} else {
-				callback();
-			}
 		}
+		setTimeout(() => {
+			var regs = /^.{4,200}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于4位且不能大于200位'));
+			} else {
+				if(!validators.URL(value)) {
+					callback(new Error('输入有效的URL'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
 	},
 
 	

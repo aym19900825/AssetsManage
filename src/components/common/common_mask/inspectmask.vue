@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="委托书编号" :visible.sync="dialoginspect" width="80%" >
-			<el-form :model="searchList">
+			<el-form inline-message :model="searchList">
 				<el-row :gutter="5">
 					<el-col :span="6">
 						<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">

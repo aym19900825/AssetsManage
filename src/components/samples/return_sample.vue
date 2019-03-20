@@ -57,7 +57,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="样品序号" prop="ITEM_STEP" label-width="85px">

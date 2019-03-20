@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
+					<el-form inline-message :model="adddeptForm" :rules="rules" ref="adddeptForm" label-width="100px" id="demo-adduserForm">
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="机构信息" name="1">

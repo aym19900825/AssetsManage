@@ -41,7 +41,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="用户名" prop="username" label-width="55px">
@@ -146,7 +146,7 @@
 		</div>
 		<usermask :user="user" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></usermask>
 		<el-dialog title="修改密码" :visible.sync="passdialog" width="30%" :before-close="resetNewpwd">
-			<el-form :model="userpassword" inline-message :rules="rules" ref="newPwdForm">
+			<el-form inline-message :model="userpassword" :rules="rules" ref="newPwdForm">
 	  			<el-form-item label="新密码" prop="Password" label-width="100px">
 					<el-input  type="password" v-model="userpassword.Password"></el-input>
 				</el-form-item>

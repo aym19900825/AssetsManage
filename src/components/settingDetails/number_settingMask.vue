@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="numbsetForm"  :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
+					<el-form inline-message :model="numbsetForm" :rules="rules" ref="numbsetForm" label-width="100px" status-icon>
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
@@ -200,7 +200,7 @@
 					// 	{ required: true, message: '必填', trigger: 'blur'},
 					// 	{ validator: this.Validators.isWorknumber, trigger: 'blur'}
 					// ],
-					// PREFIX:[{ required: false, trigger: 'blur', validator: this.Validators.isEnglish}],
+					// PREFIX:[{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],
           			// S_NUM:[
 					// 	{ required: true, message: '必填', trigger: 'blur'},
 					// 	{ validator: this.Validators.isInteger, trigger: 'blur'}

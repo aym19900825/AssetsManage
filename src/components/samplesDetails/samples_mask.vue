@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加接样</div>
-					<div class="mask_title" v-show="modifytitle">修改接样</div>
-					<div class="mask_title" v-show="viewtitle">查看接样</div>
+					<div class="mask_title" v-show="addtitle">添加样品</div>
+					<div class="mask_title" v-show="modifytitle">修改样品</div>
+					<div class="mask_title" v-show="viewtitle">查看样品</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -19,7 +19,7 @@
 				
 				<!--详情页弹出框 Begin-->
 				<div class="mask_content">
-					<el-form :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
+					<el-form inline-message :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
@@ -58,7 +58,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="委托单位统一社会信用代码" prop="VENDOR" label-width="180px">
+											<el-form-item label="委托单位统一社会信用代码" prop="VENDOR" label-width="220px">
 												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -72,8 +72,31 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="生产单位统一社会信用代码" prop="PRODUCT_COMPANY" label-width="180px">
+											<el-form-item label="生产单位统一社会信用代码" prop="PRODUCT_COMPANY" label-width="220px">
 												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8" >
+											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
+												<el-select clearable v-model="samplesForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="adddept">
+													<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" >
+											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -127,8 +150,8 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="110px">
-												<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button>
+												<el-input v-model="samplesForm.ACCEPT_PERSON" placeholder="当前人" :disabled="true">
+													<!-- <el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button> -->
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -175,29 +198,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row>
-										<el-col :span="8" >
-											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
-												<el-select clearable v-model="samplesForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="adddept">
-													<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8" >
-											<el-form-item label="所属类别" prop="PRODUCT_TYPE"  label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="所属名称" prop="PRODUCT" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
+									
 									<el-row>
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="110px">
@@ -446,10 +447,10 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendnames="appendnames" @appendcode="appendcode" @appendcodes="appendcodes"></enterprisemask>
 
-			<!-- 所属类别-弹出框子组件  -->
+			<!-- 产品类别-弹出框子组件  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 
-			<!-- 所属名称-弹出框子组件  -->
+			<!-- 产品名称-弹出框子组件  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
 		</div>
 	</div>
@@ -457,7 +458,7 @@
 
 <script>
 	import Config from '../../config.js'
-	import categorymask from '../common/common_mask/categorylistmask.vue'//所属类别
+	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	export default {
@@ -501,7 +502,7 @@
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',
 				dialogVisible: false, //对话框
-				dialogVisible2:false,//所属类别弹出框
+				dialogVisible2:false,//产品类别弹出框
 				dialogVisible3:false,//接样人、收样人弹出框
 				activeNames: ['1', '2','3'], //手风琴数量
 				labelPosition: 'right', //表单标题在上方
@@ -589,7 +590,7 @@
 				this.samplesForm.PRODUCT = '';
 				this.samplesForm.PRO_NUM = '';
 			},
-			addcategory(){//所属类别
+			addcategory(){//产品类别
 				if(this.samplesForm.CJDW == null || this.samplesForm.CJDW == '' || this.samplesForm.CJDW == undefined){
 					this.$message({
 						message: '请先选择承检单位',
@@ -599,18 +600,18 @@
 					this.$refs.categorychild.visible(this.samplesForm.CJDW);
 				}
 			},
-			//接到所属类别的值
+			//接到产品类别的值
 			categorydata(value){
 				this.samplesForm.P_NUM = value[0];
 				this.samplesForm.PRODUCT_TYPE  = value[1];
-				this.samplesForm.P_VERSION = value[2];//所属类别版本
+				this.samplesForm.P_VERSION = value[2];//产品类别版本
 				this.samplesForm.PRODUCT = '';
 				this.samplesForm.PRO_NUM = '';
 			},
 			addproduct(){//受检产品名称
 				if(this.samplesForm.P_NUM == null || this.samplesForm.P_NUM == '' || this.samplesForm.P_NUM == undefined){
 					this.$message({
-						message: '请先选择所属类别',
+						message: '请先选择产品类别',
 						type: 'warning'
 					});
 				}else{
@@ -660,8 +661,8 @@
 					CHANGEDATE: '',//修改时间
 					TYPE: '',//样品类别
 					CJDW:'',//承检单位
-					P_NUM:'',//所属类别编号
-					PRODUCT_TYPE:'',//所属类别
+					P_NUM:'',//产品类别编号
+					PRODUCT_TYPE:'',//产品类别
 					PRO_NUM:'',//产品编号
 					PRODUCT:'',//产品
 					STATUS: '1',//信息状态
@@ -1092,7 +1093,7 @@
 				// 	}
 				// }
 			},
-			//所属类别数据
+			//产品类别数据
 			requestData(index) {
 				this.loading = true;//加载动画打开
 				var data = {

@@ -15,7 +15,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="modelflow" inline-message :rules="rules" label-width="100px" ref="modelflow">
+					<el-form inline-message :model="modelflow" :rules="rules" label-width="100px" ref="modelflow">
 						<div class="accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="新建模型" name="1">

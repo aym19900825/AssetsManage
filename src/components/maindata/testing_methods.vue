@@ -54,7 +54,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row>
 								<el-col :span="5">
 									<el-form-item label="编码" prop="M_NUM">

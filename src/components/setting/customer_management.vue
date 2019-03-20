@@ -51,7 +51,7 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form :model="searchList" label-width="80px">
+					<el-form inline-message :model="searchList" label-width="80px">
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="统一社会信用代码" prop="CODE" label-width="160px">
@@ -109,13 +109,13 @@
 							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
 							</el-table-column>
 							<!-- <el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1"> -->
-							<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1">
+							<el-table-column label="统一社会信用代码" width="180" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
 									</p>
 								</template>
 							</el-table-column>
-							<el-table-column label="单位名称" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="单位名称" width="300" sortable prop="NAME" v-if="this.checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
 							<el-table-column label="联系地址" width="300" sortable prop="CONTACT_ADDRESS" v-if="this.checkedName.indexOf('联系地址')!=-1">
 							</el-table-column>

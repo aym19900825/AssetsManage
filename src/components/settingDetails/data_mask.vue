@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
@@ -227,7 +227,7 @@
 				rules: {
 					name: [
 						{ required: true, message: '必填',trigger: 'blur'},
-						{ validator: this.Validators.isEnglish, trigger: 'blur'},
+						{ validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 					description: [
 						{ required: true, message: '必填',trigger: 'blur'},
@@ -235,7 +235,7 @@
 					],
 					// leadname: [
 					// 	{ required: true, message: '必填',trigger: 'blur'},
-					// 	{ validator: this.Validators.isEnglish, trigger: 'blur'},
+					// 	{ validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					// ],
 				},
 				//tree

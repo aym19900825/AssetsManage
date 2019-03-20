@@ -32,7 +32,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务通知书编号" prop="N_CODE" label-width="140px">
@@ -106,63 +106,41 @@
 						<div id="middle"></div>
 						<el-col :span="19" id="right">
 							<!-- 表格 Begin-->
-							<el-table ref="table" :data="nitificationsList" 
-									  :header-cell-style="rowClass" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'nitificationsList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="this.checkedName.indexOf('工作任务通知书编号')!=-1">
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<el-table-column label="工作任务通知书编号" width="180" sortable prop="N_CODE" v-if="checkedName.indexOf('工作任务通知书编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.N_CODE}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="类型" width="140" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" width="140" sortable prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('下达日期')!=-1">
+								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="checkedName.indexOf('下达日期')!=-1">
 								</el-table-column>
-								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="this.checkedName.indexOf('任务号')!=-1">
+								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="checkedName.indexOf('任务号')!=-1">
 								</el-table-column>
-								<el-table-column label="受检产品名称" width="150" sortable prop="ITEM_NAME" v-if="this.checkedName.indexOf('受检产品名称')!=-1">
+								<el-table-column label="受检产品名称" width="150" sortable prop="ITEM_NAME" v-if="checkedName.indexOf('受检产品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="受检产品型号" width="120" sortable prop="ITEM_MODEL" v-if="this.checkedName.indexOf('受检产品型号')!=-1">
+								<el-table-column label="受检产品型号" width="120" sortable prop="ITEM_MODEL" v-if="checkedName.indexOf('受检产品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="受检企业" width="150" sortable prop="V_NAME" v-if="this.checkedName.indexOf('受检企业')!=-1">
+								<el-table-column label="受检企业" width="150" sortable prop="V_NAME" v-if="checkedName.indexOf('受检企业')!=-1">
 								</el-table-column>
-								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="this.checkedName.indexOf('承检单位')!=-1">
+								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
-								<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="this.checkedName.indexOf('抽样方案')!=-1">
+								<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="checkedName.indexOf('抽样方案')!=-1">
 								</el-table-column>
-								<el-table-column label="完成日期" width="130" prop="COMPDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('完成日期')!=-1">
+								<el-table-column label="完成日期" width="130" prop="COMPDATE" sortable :formatter="dateFormat" v-if="checkedName.indexOf('完成日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" width="130" prop="STATEDesc" sortable v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="状态" width="130" prop="STATEDesc" sortable v-if="checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="信息状态" width="120" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column> -->
-								<!--<el-table-column label="录入人" width="120" prop="ENTERBY" sortable v-if="this.checkedName.indexOf('录入人')!=-1">
-								</el-table-column>-->
-								<!--<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>-->
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格 End-->
 						</el-col>
 					</el-row>
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<notificationsmask @request="requestData" ref="child" v-bind:page=page></notificationsmask>
+			<notificationsmask @request="requestData" ref="child"></notificationsmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -176,19 +154,21 @@
 	import tableControle from './plugin/table-controle/controle.vue'
 	import notificationsmask from './common/notification_mask.vue'
 	import reportmask from'./reportDetails/reportMask.vue'
-
+	import vTable from './plugin/table/table.vue'
 	export default {
 		name: 'notifications',
 		components: {
-			vheader,
-			navs_tabs,
-			navs_left,
-			tableControle,
-			notificationsmask,
-			reportmask
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'notificationsmask': notificationsmask,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'workNot',
 				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -217,9 +197,6 @@
 					'抽样方案',
 					'完成日期',
 					'状态',
-					// '信息状态',
-					//					'录入人',
-					//					'录入时间'
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -265,18 +242,6 @@
 						label: '状态',
 						prop: 'STATEDesc'
 					},
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-					//					{
-					//						label: '录入人',
-					//						prop: 'ENTERBY'
-					//					},
-					//					{
-					//						label: '录入时间',
-					//						prop: 'ENTERDATE'
-					//					}
 				],
 
 				selUser: [],
@@ -316,6 +281,9 @@
 		},
 
 		methods: {
+			setSelData(val){
+				this.selUser = val;
+			},
 			//检验/检测方法类别
 			getType() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=type';
@@ -323,13 +291,6 @@
 					this.selectData = res.data;
 				}).catch(error => {
 				})
-			},
-			//表头居中
-			rowClass({
-				row,
-				rowIndex
-			}) {
-				return 'text-align:center'
 			},
 			//机构值
 			getCompany() {
@@ -343,60 +304,8 @@
 					this.selectDept = res.data;
 				});
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
 			tableControle(data) {
 				this.checkedName = data;
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
 			},
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
@@ -408,12 +317,10 @@
 					COMPDATE: '',
 					STATUS: ''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -635,7 +542,7 @@
 			},
 			// 打印
 			Printing() {
-					if(this.selUser.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要打印的数据',
 						type: 'warning'
@@ -656,10 +563,6 @@
              		window.open(url);
 				}
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.STATUS == "1" ? '活动' : '不活动'
-			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -668,44 +571,9 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) {
-				this.selUser = val;
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
-			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					N_CODE: this.searchList.N_CODE,
-					ITEM_NAME: this.searchList.ITEM_NAME,
-					CJDW: this.searchList.CJDW,
-					TYPE_wheres: this.searchList.TYPE,//精确查询类别
-					XD_DATE: this.searchList.XD_DATE,
-					COMPDATE: this.searchList.COMPDATE,
-					STATUS: this.searchList.STATUS,
-				}
-				var url = this.basic_url + '/api-apps/app/workNot';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.nitificationsList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-			},
-
-			// 机构树
 			getKey() {
 				var url = this.basic_url + '/api-user/users/findIdsByUserAndType/2';
 				this.$axios.get(url, {}).then((res) => {
@@ -715,7 +583,6 @@
 				}).catch((wrong) => {
 				});
 			},
-
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
 					data[i].name = data[i].name;
@@ -801,9 +668,6 @@
 				}
 				this.requestData();
 			},
-			formatter(row, column) {
-				return row.enabled;
-			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
@@ -858,7 +722,6 @@
 		},
 		beforeMount() {
 			// 在页面挂载前就发起请求
-			this.requestData();
 			this.getKey();
 			this.getType();
 			this.getCompany();

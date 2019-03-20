@@ -49,7 +49,7 @@
 								<!--搜索框 End-->
 							</div>
 							<div class="text item">
-								<el-form :model="productType2Form" status-icon inline-message ref="productType2Form" class="el-radio__table">
+								<el-form inline-message :model="productType2Form" status-icon ref="productType2Form" class="el-radio__table">
 								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}"
 										v-loadmore="loadMore"
 										v-loading="loading"

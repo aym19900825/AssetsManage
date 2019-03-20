@@ -57,7 +57,7 @@
 				</div>
 				<!-- 高级查询划出 Begin-->
 				<div v-show="search">
-					<el-form :model="searchList" label-width="70px">
+					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="溯源记录编号" prop="RECORDNUM" label-width="100px">

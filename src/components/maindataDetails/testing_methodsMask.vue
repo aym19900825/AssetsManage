@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<div class="content-accordion">
 						<el-collapse v-model="activeNames">
-							<el-form :model="testingForm" inline-message :rules="rules" ref="testingForm" label-width="100px" status-icon>
+							<el-form inline-message :model="testingForm" :rules="rules" ref="testingForm" label-width="100px" status-icon>
 								<el-collapse-item title="基础信息" name="1">
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="3" class="pull-right">
@@ -184,13 +184,13 @@
 					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 35, message: '长度在 5 到 35 个字符', trigger: 'blur' },
-						{validator: this.Validators.isChinese, trigger: 'blur'},
+						{ min: 5, max: 125, message: '长度在 5 到 125 个字符', trigger: 'blur' },
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 50, message: '长度在 5 到 15 个字符', trigger: 'blur' },
-						{validator: this.Validators.isEnglish, trigger: 'blur'},
+						{ min: 5, max: 255, message: '长度在 5 到 255 个字符', trigger: 'blur' },
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 					M_TYPE: [
 						{ required: true, message: '请填写', trigger: 'change' },

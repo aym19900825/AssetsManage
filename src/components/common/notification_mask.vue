@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" inline-message :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
+					<el-form inline-message :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
 						<div class="text-center" v-show="viewtitle">
 						<span v-if="this.dataInfo.STATE!=3">	
 						<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
@@ -378,7 +378,7 @@
 			</div>
 			<!-- 人员 -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose" title="用户信息">
-				<el-form :model="searchList">
+				<el-form inline-message :model="searchList">
 					<el-row :gutter="10">
 						<el-col :span="5">
 							<el-form-item label="用户名" prop="username" label-width="55px">

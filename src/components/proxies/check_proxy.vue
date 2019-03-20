@@ -41,7 +41,7 @@
 					</div>
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
@@ -113,21 +113,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table ref="table" :data="inspectList" 
-									  :header-cell-style="rowClass" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'inspectList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="检验委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
@@ -162,10 +148,7 @@
 								</el-table-column>
 								<el-table-column label="版本" width="80" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-							</el-table>
-							
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -185,22 +168,20 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/check_proxyMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
-
+	import vTable from '../plugin/table/table.vue'
 	export default {
-		name: 'user_management',
+		name: 'inspectPro2',
 		components: {
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
 			'inspectmask': inspectmask,
-			reportmask
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
-//		created() {
-//  		this.getRouterData()
-//		},
-
 		data() {
 			return {
+				appName: 'inspectPro2',
 				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false, //默认加载数据时显示loading动画
@@ -346,9 +327,8 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			setSelData(val){
+				this.selUser = val;
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (<span><i class={data.iconClass}></i><span  title={data.lable}>{data.lable}</span></span>)
@@ -374,57 +354,6 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-
-			//滚动加载更多
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					V_NAME:'',
@@ -435,12 +364,10 @@
 					ENTERBY: '',
 					STATUS: '',
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+				this.requestData('init');
 			},
 				//请求点击
 		    getbtn(item){
@@ -523,7 +450,7 @@
 				}
 			},
 			//查看
-			 view(id) {
+			view(id) {
 				this.$refs.child.view(id);
 			},
 			//中止
@@ -599,7 +526,7 @@
 				this.reportData.app=this.inspectPro2;
 				this.$refs.reportChild.visible();
 			},
-      // 删除
+			// 删除
 			delinfo() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -709,7 +636,6 @@
 					});
 				}
 			},
-//			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -718,58 +644,8 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
-
-			SelChange(val) {
-				this.selUser = val;
-			},
-			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-
-					V_NAME:this.searchList.V_NAME,
-					ITEM_NAME: this.searchList.ITEM_NAME,
-					REPORT_NUM: this.searchList.REPORT_NUM,
-					PROXYNUM: this.searchList.PROXYNUM,
-					COMPDATE: this.searchList.COMPDATE,
-					ENTERBY: this.searchList.ENTERBY,
-					STATUS: this.searchList.STATUS,
-					P_NUM: this.searchList.P_NUM,
-					PRO_NUM: this.searchList.PRO_NUM,
-					DEPTID: this.searchList.DEPTID
-				}
-				var url = this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					//					this.inspectList = res.data.data;
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					// this.commentArr[this.page.currentPage] = res.data.data
-					// let newarr = []
-					// for(var i = 1; i <= totalPage; i++) {
-
-					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
-					this.inspectList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 
 			//机构树
@@ -858,7 +734,6 @@
 					this.buttons = res.data;
 				}).catch((wrong) => {
 				})
-
 			},
 			//树和表单之间拖拽改变宽度
 			treeDrag(){
@@ -893,8 +768,6 @@
 			}
 		},
 		beforeMount() {
-			// 在页面挂载前就发起请求
-			this.requestData();
 			this.getKey();
 		},
 		mounted() {

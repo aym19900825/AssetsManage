@@ -17,13 +17,21 @@
 					<font>新建</font>
 				</el-button>
 			</div>
-			<el-form :model="inspectionPro2Form" status-icon inline-message ref="inspectionPro2Form" class="el-radio__table">
+			<el-form inline-message :model="inspectionPro2Form" status-icon ref="inspectionPro2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" 
 					v-loadmore="loadMore"
 					v-loading="loading"
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(255, 255, 255, 0.9)">
+			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+					
 			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -32,13 +40,6 @@
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
-			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
-					</el-form-item>
-			      </template>
-			    </el-table-column>
 
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
@@ -442,7 +443,7 @@
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
-								"S_NUM": this.parentId,//所属类别编号
+								"S_NUM": this.parentId,//产品类别编号
 								"P_NUM": '',
 								"P_NAME": '',
 								"UNITCOST": '',

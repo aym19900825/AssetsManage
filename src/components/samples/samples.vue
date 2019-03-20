@@ -129,21 +129,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table ref="table" :data="samplesList" 
-									  :header-cell-style="rowClass"
-									   border 
-									   stripe 
-									   :height="fullHeight" 
-									   style="width: 100%;" 
-									   :default-sort="{prop:'samplesList', order: 'descending'}" 
-									   @selection-change="SelChange" 
-									   v-loadmore="loadMore"
-									   v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="样品编号" sortable width="220px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.ITEMNUM}}
@@ -172,12 +158,7 @@
 								</el-table-column>
 								<el-table-column label="状态" sortable width="100px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" sortable width="140px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column>-->
-							</el-table>
-							
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -214,18 +195,21 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import samplesmask from'../samplesDetails/samples_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'samples',//接样
 		components: {
-			vheader,
-			navs_left,
-			navs_tabs,
-			tableControle,
-			samplesmask,
-			reportmask
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'samplesmask': samplesmask,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'item',
 				codeDialog: false,
 				codeUrl: 'http://192.168.1.126:9200/stripcode/image/25157709.jpg',
 				code_url: Config.code_url,
@@ -335,9 +319,8 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center';
+			setSelData(val){
+				this.selMenu = val;
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (<span><i class={data.iconClass}></i><span title={data.lable}>{data.lable}</span></span>);
@@ -363,67 +346,11 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-
-			
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
 			tableControle(data) {//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			searchinfo(index) {//高级查询
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {//高级查询
+				this.requestData('init');
 			},
 			//重置
 			resetbtn(){
@@ -435,7 +362,7 @@
 					TYPE: '',//样品类别
 					ACCEPT_DATE: '',//收样日期
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -490,13 +417,6 @@
 				this.selMenu = [];
 			},
 			printCode(){
-				// var oldstr = document.body.innerHTML;
-				// var newstr = '<img src="http://192.168.1.115:7902/stripcode/image/91325219.jpg" alt="条码"/>';
-				// document.body.innerHTML = $("#printdom").html();
-				// window.print();
-				// document.body.innerHTML = oldstr;
-				// $("img#barcode").printArea();  
-				// this.$print(this.$refs.printdom);
 				let routeUrl = this.$router.resolve({
 					name: '/print',
 					query:{
@@ -580,11 +500,8 @@
 								});
 								this.requestData();
 							}
-						}).catch((err) => {
-						});
-                    }).catch(() => {
-
-                	});
+						}).catch((err) => {});
+                    }).catch(() => {});
 				}
 			},
 			// 删除
@@ -651,53 +568,9 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
-
-			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
-				this.selMenu = val;
-			},
 			//Table默认加载数据
-			requestData(index) {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					ITEMNUM: this.searchList.ITEMNUM,//样品编号
-					V_NAME: this.searchList.V_NAME,//委托单位名称
-					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
-					ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
-					// P_NAME: this.searchList.P_NAME,//生产单位名称
-					TYPE: this.searchList.TYPE,//样品类别
-					ACCEPT_DATE: this.searchList.ACCEPT_DATE,//收样日期
-					P_NUM: this.searchList.P_NUM,
-					PRO_NUM: this.searchList.PRO_NUM,
-				}
-				if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
-					data.DEPTID = this.searchList.DEPTID;
-				};
-				var url = this.basic_url + '/api-apps/app/item';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.samplesList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-				
-			},
-			
-			formatter(row, column) {
-				return row.enabled;
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 			//生产单位树
 			getKey() {
@@ -818,12 +691,9 @@
 				}; 
 			}
 		},
-		
-		mounted() {// 在页面挂载前就发起请求
-			this.requestData();
+		mounted() {
 			this.getKey();
-			this.treeDrag();//调用树和表单之间拖拽改变宽度
-//			this.$refs.navleft.getleft();
+			this.treeDrag();
 		},
 	}
 </script>

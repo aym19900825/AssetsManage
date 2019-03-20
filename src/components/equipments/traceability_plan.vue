@@ -109,21 +109,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table ref="table" :header-cell-style="rowClass" 
-								:data="userList" 
-								border 
-								stripe 
-								:height="fullHeight" 
-								style="width: 100%;" 
-								:default-sort="{prop:'userList', order: 'descending'}" 
-								@selection-change="SelChange" 
-								v-loadmore="loadMore"
-								v-loading="loading"  
-								element-loading-text="加载中…"
-	    						element-loading-spinner="el-icon-loading"
-	    						element-loading-background="rgba(255, 255, 255, 0.9)">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-							</el-table-column>
+						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="溯源计划编号" width="200" sortable prop="PMNUM" v-if="this.checkedName.indexOf('溯源计划编号')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PMNUM}}
@@ -154,16 +140,7 @@
 							</el-table-column>
 							<el-table-column label="溯源完成日期" width="130" sortable prop="COMP_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源完成日期')!=-1">
 							</el-table-column>
-						</el-table>
-						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
+						</v-table>
 						<!-- 表格 End-->
 					</el-col>
 				</el-row>
@@ -184,18 +161,21 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import detailPage from '../equipmentsDetails/trancePlan_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'user_management',
 		components: {
-			vheader,
-			navs_left,
-			navs_tabs,
-			tableControle,
-			detailPage,
-			reportmask
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'detailPage': detailPage,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'pmPlan',
 				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -308,9 +288,8 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-				return 'text-align:center'
+			setSelData(val){
+				this.selUser = val;
 			},
 			tableControle(data){
 				this.checkedName = data;
@@ -325,7 +304,7 @@
 					COMP_DATE: '',
 					FREQUENCY: ''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -356,8 +335,7 @@
 				}
 			},
 			fileSuccess(){//上传成功后返回数据
-				this.page.currentPage = 1;
-				this.requestData();
+				this.requestData('init');
 			},
 			//添加用戶
 			openAddMgr() {
@@ -538,104 +516,12 @@
 				this.reportData.app=this.pmPlan;
 				this.$refs.reportChild.visible();
 			},
-			SelChange(val) {
-				this.selUser = val;
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
 			//Table默认加载数据
-			requestData(index) {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					A_NAME:  this.searchList.A_NAME,
-					PMNUM: this.searchList.PMNUM,
-					ASSETNUM: this.searchList.ASSETNUM,
-					PM_MECHANISM: this.searchList.PM_MECHANISM,
-					DESCRIPTION: this.searchList.DESCRIPTION,
-					COMP_DATE: this.searchList.COMP_DATE,
-					FREQUENCY: this.searchList.FREQUENCY,
-				}
-				var url = this.basic_url + '/api-apps/app/pmPlan';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.userList =  res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-				
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
-			
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
-			},
-			formatter(row, column) {
-				return row.enabled;
+			searchinfo() {
+				this.requestData('init');
 			},
 			//机构值
 			getCompany() {
@@ -683,7 +569,6 @@
 		    },
 		},
 		mounted(){
-			this.requestData();
 			this.getCompany();
              // 注册scroll事件并监听  
              let self = this;
@@ -693,7 +578,3 @@
         },
 	}
 </script>
-
-<style scoped>
-
-</style>

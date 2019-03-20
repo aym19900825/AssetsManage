@@ -117,21 +117,7 @@
 					<div id="middle"></div>
 					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
-						<el-table ref="table" :header-cell-style="rowClass" 
-							  :data="assetList" 
-							  border 
-							  stripe 
-							  :height="fullHeight" 
-							  style="width: 100%;" 
-							  :default-sort="{prop:'assetList', order: 'descending'}" 
-							  @selection-change="SelChange" 
-							  v-loadmore="loadMore"
-							  v-loading="loading"  
-							  element-loading-text="加载中…"
-							  element-loading-spinner="el-icon-loading"
-							  element-loading-background="rgba(255, 255, 255, 0.9)">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-							</el-table-column>
+						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ASSETNUM}}
@@ -162,16 +148,7 @@
 							</el-table-column>						
 							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
-						</el-table>
-						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
+						</v-table>
 						<!-- 表格 End-->
 					</el-col>
 				</el-row>
@@ -192,18 +169,21 @@
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'instruments',
 		components: {
-			vheader,
-			navs_tabs,
-			navs_left,
-			instrumentsmask,
-			tableControle,
-			reportmask
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'instrumentsmask': instrumentsmask,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'asset',
 				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -341,6 +321,9 @@
 			}
 		},
 		methods: {
+			setSelData(val){
+				this.selMenu = val;
+			},
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
 					$(".lefttree").removeClass("el-col-5");
@@ -359,17 +342,11 @@
 				}
 				this.ismin = !this.ismin;
 			},
-			//表头居中
-			rowClass({ row, rowIndex}) {
-				return 'text-align:center'
-			},
 			tableControle(data){
 				this.checkedName = data;
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {
+				this.requestData('init');
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
@@ -379,7 +356,7 @@
 			        STATE: '',
 			        OPTION_STATUS: ''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -424,7 +401,7 @@
 				}
 			},
 			//查看
-			 view(data) {
+			view(data) {
 				this.$refs.child.view(data);
 			},
 			//高级查询
@@ -531,7 +508,7 @@
 			},
 			fileSuccess(){//上传成功后返回数据
 				this.page.currentPage = 1;
-				this.requestData();
+				this.requestData('init');
 			},
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/asset/importExc?access_token='+sessionStorage.getItem('access_token');
@@ -592,40 +569,8 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			
-			SelChange(val) {
-				this.selUser = val;
-			},
-			requestData(index) {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					DESCRIPTION: this.searchList.DESCRIPTION,
-					VENDOR: this.searchList.VENDOR,
-					KEEPER: this.searchList.KEEPER,
-					STATE: this.searchList.STATE,
-					OPTION_STATUS:  this.searchList.OPTION_STATUS,
-				}
-				var url = this.basic_url + '/api-apps/app/asset';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.assetList =  res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-				
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 			//  机构树
 			getKey() {
@@ -650,68 +595,13 @@
 				}
 				return data;
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
 			handleNodeClick(data) {},
-			formatter(row, column) {
-				return row.enabled;
-			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
+				// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
-			  //请求页面的button接口
+			//请求页面的button接口
 		    getbutton(childByValue){
 		    	var data = {
 					menuId: childByValue.id,
@@ -771,13 +661,8 @@
 			},
 		},
 		mounted(){
-			this.requestData();
             this.getKey();
             this.treeDrag();//调用树和表单之间拖拽改变宽度
         },
 	}
 </script>
-
-<style scoped>
-
-</style>

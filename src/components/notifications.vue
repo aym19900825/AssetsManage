@@ -669,7 +669,7 @@
 				this.requestData();
 			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
+				// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			  },

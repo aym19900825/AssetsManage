@@ -48,7 +48,7 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" disabled>
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="special">
 										<el-col :span="4">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
@@ -102,22 +102,23 @@
 								<el-row>
 									<el-col :span="8" >
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="changeCJDW">
+											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special
+" style="width: 100%" @change="changeCJDW">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
-											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
+												   <el-button slot="append" :disabled="special" icon="el-icon-search" @click="addcategory"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
+												   <el-button slot="append" :disabled="special" icon="el-icon-search" @click="addproduct"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -125,7 +126,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -141,7 +142,7 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="true">
+											<el-input v-model="dataInfo.V_NAME" :disabled="special">
 												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
 											</el-input>
 										</el-form-item>
@@ -512,6 +513,7 @@
 				selUser: [],
 				edit: true, //禁填
 				noedit: false,
+				special:false,//特殊
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
@@ -796,6 +798,8 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.reset();
+				this.special=false;
+				this.noviews=true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
@@ -837,6 +841,13 @@
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
+					if(this.dataInfo.WP_NUM!=undefined||this.dataInfo.WP_NUM!=null){
+							this.special=true;
+							this.noviews=false;
+					}else{
+							this.special=false;
+							this.noviews=true;
+					}
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
 				}).catch((err) => {
@@ -860,6 +871,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.special=true;
 				this.detailgetData();
 				this.isEditing=false;
 				//判断启动流程和审批的按钮是否显示

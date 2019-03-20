@@ -45,21 +45,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table ref="table" :data="reportsList"
-							  border 
-							  stripe 
-							  :height="fullHeight" 
-							  style="width: 100%;" 
-							  :default-sort="{prop:'reportsList', order: 'descending'}" 
-							  @selection-change="SelChange" 
-							  v-loadmore="loadMore"
-							  v-loading="loading"  
-							  element-loading-text="加载中…"
-							  element-loading-spinner="el-icon-loading"
-							  element-loading-background="rgba(255, 255, 255, 0.9)">
-							<el-table-column type="selection" width="55" v-if="this.checkedName.length>0">
-							</el-table-column>
-							
+						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="报表名称" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}
@@ -70,17 +56,7 @@
 							</el-table-column>	
 							<el-table-column label="修改人" width="140" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column>
-						</el-table>
-						<!-- 表格 End-->
-						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
+						</v-table>
 					</el-col>
 				</el-row>
 			</div>
@@ -97,17 +73,20 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import iframemask from '../reportDetails/reportfileMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'report',
 		components: {
-			vheader,
-			navs_left,
-			navs_tabs,
-			tableControle,
-			iframemask
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'tableControle': tableControle,
+			'iframemask': iframemask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'reportFile',
 				commentArr: {},
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -154,6 +133,9 @@
 			}
 		},
 		methods: {
+			setSelData(val){
+				this.selUser = val;
+			},
 			tableControle(data){
 				this.checkedName = data;
 			},
@@ -161,12 +143,10 @@
 				this.searchList = { //点击高级搜索后显示的内容
 					typename: '',
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			searchinfo() {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -272,92 +252,11 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			
-			SelChange(val) {
-				this.selUser = val;
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
 			//Table默认加载数据
-			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-report/reportFile';
-				this.$axios.get(url, {params: data}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.reportsList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-				
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
-			formatter(row, column) {
-				return row.enabled;
-			},
-			childByValue:function(childValue) {
+			childByValue(childValue) {
         		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
@@ -374,9 +273,6 @@
 				}).catch((wrong) => {
 				})
 		    },
-		},
-		mounted() {
-			this.requestData();
 		},
 	}
 </script>

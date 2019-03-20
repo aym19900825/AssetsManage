@@ -42,8 +42,33 @@
 						</el-form>
 					</div>
 					<!-- 高级查询划出 End-->
-					<el-row :gutter="0">
-						<el-col :span="24">
+					<el-row  class="relative" id="pageDiv">
+						<!-- 左侧树菜单 Begin-->
+						<el-col :span="5" class="lefttree" id="left">
+							<div class="lefttreebg">
+								<div class="left_tree_title clearfix" @click="min3max()">
+									<div class="pull-left pr20" v-if="ismin">关键字类别及关键字</div>
+									<span class="pull-right navbar-minimalize minimalize-styl-2">
+										<i class="icon-doubleok icon-double-angle-left blue"></i>
+									</span>
+								</div>
+								<div class="left_treebg" :style="{height: fullHeight}">
+									<div class="p15" v-if="ismin">
+										<el-tree ref="tree" class="filter-tree" 
+												:data="resourceData" 
+												node-key="id" 
+												default-expand-all 
+												:indent="22" 
+												:render-content="renderContent"  
+												@node-click="handleNodeClick"
+												:props="resourceProps">
+										</el-tree>
+									</div>
+								</div>
+							</div>
+						</el-col>
+						<div id="middle"></div>
+						<el-col  :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<el-table :data="fileList" 
 									  border 
@@ -169,12 +194,12 @@
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {//树菜单数据
+				resourceProps: {
 					children: "subDepts",
 					label: "fullname"
 				},
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				treeData: [],
 				page: {
 					currentPage: 1,
@@ -197,6 +222,65 @@
 			}
 		},
 		methods: {
+			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
+				return (<span><i class={data.iconClass}></i><span  title={data.lable}>{data.lable}</span></span>)
+			},
+			//机构树
+			getTree() {
+				let that = this;
+				var url = this.file_url + '/file/categoryKeyWordTreeList';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data.categoryList;
+					if(this.resourceData!=null){
+						this.resourceData = this.transformTree(this.resourceData);
+					}
+				}).catch((wrong) => {
+				});
+			},
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].categoryname || data[i].keywordname;
+					data[i].lable = data[i].categoryname || data[i].keywordname;
+					if($.isArray(data[i].keywordList)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].keywordList)) {
+						data[i].subDepts = this.transformTree(data[i].keywordList);
+					}
+				}
+				return data;
+			},
+			handleNodeClick(data) {
+				if(!!data.categoryid){
+					this.searchList.categoryid = data.categoryid;
+					this.searchList.keywordid = data.id;
+					this.requestData();
+				}
+			},
+			// 点击节点
+			nodeClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				this.handleNodeClick();
+			},
+			expandClick: function(m) {
+				if(m.iconClass != 'icon-file-text') {
+					if(m.iconClass == 'icon-file-normal') {
+						m.iconClass = 'icon-file-open';
+					} else {
+						m.iconClass = 'icon-file-normal';
+					}
+				}
+				m.isFolder = !m.isFolder;
+			},
+
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="高级查询"){
@@ -288,43 +372,21 @@
 			requestData() {
 				this.loading = true;
 				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
 					userid: this.userParm.userid,
-					filename: this.searchList.filename
+					filename: this.searchList.filename,
 				}
-				var url = this.file_url + '/file/baseKeywordList';
+				if(!!this.searchList.categoryid){
+					data.categoryid = this.searchList.categoryid;
+					data.keywordid = this.searchList.keywordid;
+				}
+				var url = this.file_url + '/file/baseKeywordList?page='+this.page.currentPage+'&limit='+this.page.pageSize;
 				this.$axios.post(url, data).then((res) => {
 					this.page.totalCount = res.data.total;
 					this.fileList = res.data.vBaseKeywordFiles;
 					this.loading = false;
 				}).catch((wrong) => {})
 			},
-			transformTree(data) {
-				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)) {
-						data[i].iconClass = 'icon-file-normal';
-					} else {
-						data[i].iconClass = 'icon-file-text';
-					}
-					if($.isArray(data[i].subDepts)) {
-						data[i].children = this.transformTree(data[i].subDepts);
-					}
-				}
-				return data;
-				
-			},
-			handleNodeClick(data) {
-				if(data.type == '1') {
-					this.companyId = data.id;
-					this.deptId = '';
-				} else {
-					this.deptId = data.id;
-					this.companyId = '';
-				}
-				this.requestData();
-			},
+			
 
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
@@ -360,9 +422,42 @@
 					this.buttons = res.data;
 				}).catch((wrong) => {
 				})
-		    },
+			},
+			//树和表单之间拖拽改变宽度
+			treeDrag(){
+				var middleWidth=5,
+				left = document.getElementById("left"),
+				right =  document.getElementById("right"), 
+				middle =  document.getElementById("middle"); 
+				middle.style.left = left.clientWidth + 'px';
+				right.style.left = left.clientWidth + 5 + 'px';
+				middle.onmousedown = function(e) { 
+					var disX = (e || event).clientX; 
+					middle.left = middle.offsetLeft; 
+					document.onmousemove = function(e) { 
+						var iT = middle.left + ((e || event).clientX - disX); 
+						var e=e||window.event,tarnameb=e.target||e.srcElement; 
+						var maxT=document.body.clientWidth; 
+						iT < 0 && (iT = 0); 
+						iT > maxT/2 && (iT = maxT/2); 
+						middle.style.left = left.style.width = iT + "px"; 
+						right.style.width = maxT - iT -middleWidth -230 + "px"; 
+						right.style.left = iT+middleWidth+"px"; 
+						return false 
+					}; 
+					document.onmouseup = function() { 
+						document.onmousemove = null; 
+						document.onmouseup = null; 
+						middle.releaseCapture && middle.releaseCapture() 
+					}; 
+					middle.setCapture && middle.setCapture(); 
+					return false 
+				}; 
+			},
 		},
 		mounted() {// 在页面挂载前就发起请求
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
+			this.getTree();
 			var url = this.basic_url + '/api-user/users/currentMap';
 			this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 				this.userParm.userid = res.data.id;

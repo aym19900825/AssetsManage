@@ -129,5 +129,7 @@ export default {
 </script>
 
 <style>
-
+.div-submit {
+	margin-top: 20px;	
+}
 </style>

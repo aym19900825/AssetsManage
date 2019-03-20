@@ -312,7 +312,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="检验检测费用（元）" prop="CHECTCOST" label-width="110px">
+										<el-form-item label="检验检测费用(元)" prop="CHECTCOST" label-width="110px">
 											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
@@ -577,6 +577,7 @@
 					MEMO: [
 						{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
+					COMPDATE:[{required: true, trigger: 'blur', message: '必填'},]
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree

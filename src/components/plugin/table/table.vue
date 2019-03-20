@@ -159,7 +159,15 @@ export default {
       }
       data.page = this.page.currentPage;
       data.limit = this.page.pageSize;
-      var url = this.basic_url + '/api-apps/app/' + this.appName;
+      if(this.appName == 'inspectPro2'){
+        var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
+      }else if(this.appName == 'subcontrac'){
+        var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
+      }else if(this.appName == 'subcontrac2'){
+        var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=2';
+      }else{
+        var url = this.basic_url + '/api-apps/app/' + this.appName;
+      }
       this.$axios.get(url, {
         params: data
       }).then((res) => {

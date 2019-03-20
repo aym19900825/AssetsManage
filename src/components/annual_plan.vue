@@ -152,59 +152,34 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table ref="table" :header-cell-style="rowClass" 
-									  :data="userList" 
-									  border 
-									  stripe 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'userList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-									  element-loading-text="加载中…"
-    								  element-loading-spinner="el-icon-loading"
-    								  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="this.checkedName.indexOf('编号')!=-1">
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<el-table-column label="编号" sortable width="100px" prop="WP_NUM" v-if="checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.WP_NUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="描述" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('描述')!=-1">
+								<el-table-column label="描述" sortable width="200px" prop="DESCRIPTION" v-if="checkedName.indexOf('描述')!=-1">
 								</el-table-column>
-								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="this.checkedName.indexOf('年度')!=-1">
+								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="checkedName.indexOf('年度')!=-1">
 								</el-table-column>
-								<el-table-column label="类型" sortable  width="100px" prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" sortable  width="100px" prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="产品类别" sortable width="200px" prop="ITEMTYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
+								<el-table-column label="产品类别" sortable width="200px" prop="ITEMTYPE" v-if="checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="提出单位" sortable width="120px" prop="PROP_UNITDesc" v-if="this.checkedName.indexOf('提出单位')!=-1">
+								<el-table-column label="提出单位" sortable width="120px" prop="PROP_UNITDesc" v-if="checkedName.indexOf('提出单位')!=-1">
 								</el-table-column>
-								<el-table-column label="提报日期" sortable width="160px" prop="REPORTDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('提报日期')!=-1">
+								<el-table-column label="提报日期" sortable width="160px" prop="REPORTDATE" :formatter="dateFormat" v-if="checkedName.indexOf('提报日期')!=-1">
 								</el-table-column>
-								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="this.checkedName.indexOf('编辑状态')!=-1">
+								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="checkedName.indexOf('编辑状态')!=-1">
 								</el-table-column>
-								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUSDesc" v-if="checkedName.indexOf('执行状态')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" sortable width="160px" prop="ENTERDATE" v-if="this.checkedName.indexOf('录入时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="录入时间" sortable width="160px" prop="ENTERDATE" v-if="checkedName.indexOf('录入时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="修改时间" sortable width="160px" prop="ENTERDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="修改时间" sortable width="160px" prop="ENTERDATE" v-if="checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<!-- <el-table-column label="信息状态" sortable  width="380px" prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
-								</el-table-column> -->
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40,100]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					        </el-pagination>
-							<!-- 表格 -->
+							</v-table>
 						</el-col>
 					</el-row>
 				</div>
@@ -223,6 +198,7 @@
 	import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
 	import reportmask from'./reportDetails/reportMask.vue'
+	import vTable from './plugin/table/table.vue'
 	export default {
 		name: 'annual_plan',
 		components: {
@@ -231,10 +207,12 @@
 			'navs_left': navs_left,
 			'v-assetsTree': assetsTree,
 			'annualmask': annualmask,
-			reportmask
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'workplan',
 				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -340,564 +318,462 @@
 			}
 		},
 	methods: {
-		//表头居中
-		rowClass({ row, rowIndex}) {
-		    return 'text-align:center'
+		setSelData(val){
+			this.selUser = val;
 		},
 		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 			return(<span><i class={data.iconClass}></i><span>{node.label}</span></span>);
 		},
-			// 点击节点
-			nodeClick: function(m) {
-				if(m.iconClass != 'icon-file-text') {
-					if(m.iconClass == 'icon-file-normal') {
-						m.iconClass = 'icon-file-open';
-					} else {
-						m.iconClass = 'icon-file-normal';
-					}
-				}
-				this.handleNodeClick();
-			},
-			
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			searchinfo(index) {//高级查询
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
-			},
-		    resetbtn(){
-				this.searchList =  { //点击高级搜索后显示的内容
-					WP_NUM: '',
-					DESCRIPTION: '',
-					TYPE: '',
-					YEAR: '',
-					ENTERDATE:'',
-					ENTERBY:'',
-					STATUS:'',
-					LEADER_STATUS:''
-				};
-				this.requestData();
-			},
-			//请求点击
-		    getbtn(item){
-		    	if(item.name=="添加"){
-		         this.openAddMgr();
-		    	}else if(item.name=="修改"){
-		    	 this.modify();
-		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
-		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
-		    	}else if(item.name=="导出"){
-		    	 this.exportData();
-		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
-		    	}else if(item.name=="取消"){
-		    	 this.cancelbtn();
-		    	}else if(item.name=="报表"){
-			     this.reportdata();
-				}else if(item.name=="发布"){
-				 this.releasebtn();
-				}
-		    },
-			//添加
-			openAddMgr() {
-				// this.$refs.child.resetNew();
-				this.$refs.child.visible();
-			},
-			//修改
-			modify() {
-				if(this.selUser.length == 0) {
-					this.$message({
-						message: '请您选择要修改的数据',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selUser.length > 1) {
-					this.$message({
-						message: '不可同时修改多个数据',
-						type: 'warning'
-					});
-					return;
+		// 点击节点
+		nodeClick: function(m) {
+			if(m.iconClass != 'icon-file-text') {
+				if(m.iconClass == 'icon-file-normal') {
+					m.iconClass = 'icon-file-open';
 				} else {
-					this.$refs.child.detail(this.selUser[0].ID);
+					m.iconClass = 'icon-file-normal';
 				}
-			},
-			//查看
-			view(id) {
-				this.$refs.child.view(id);
-			},
-			//高级查询
-			modestsearch() {
-				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
-			},
-			// 删除
-			deluserinfo() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/workplan/deletes';
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-                    var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'warning'
-								});
-							}
-						}).catch((err) => {
-						});
-                    }).catch(() => {
-
-                	});
-				}
-			},
-			// 物理删除
-			physicsDel() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/workplan/physicsDel';
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-                    var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.delete(url, {params: data}).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'warning'
-								});
-							}
-						}).catch((err) => {
-						});
-                    }).catch(() => {
-
-                	});
-				}
-			},
-			fileSuccess(){//上传成功后返回数据
-				this.page.currentPage = 1;
-				this.requestData();
-			},
-			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/workplan/importExc?access_token='+sessionStorage.getItem('access_token');
-                return url;
-            },
-          	
-			// 导入
-			download() {
-				var url = this.basic_url + '/api-apps/app/workplan/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
-				var xhr = new XMLHttpRequest();
-					xhr.open('POST', url, true);
-					xhr.responseType = "blob";
-					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-					xhr.onload = function() {
-						if (this.status == 200) {
-							var blob = this.response;
-							var objecturl = URL.createObjectURL(blob);
-							window.location.href = objecturl;
-						}
-					}
-					xhr.send();
-			},
-			// 导出
-			exportData() {
-           		var url = this.basic_url + '/api-apps/app/workplan/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
-            	xhr.open('POST', url, true);
-            	xhr.responseType = "blob";
-            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            	xhr.onload = function() {
-                	if (this.status == 200) {
-						var filename = "workplan.xls";
-						var blob = this.response;
-						var link = document.createElement('a');
-						var objecturl = URL.createObjectURL(blob);
-						link.href = objecturl;
-						link.download = filename;
-						link.click();
-                	}
-            	}
-            	xhr.send();
-			},
-			//报表
-			reportdata(){
-				this.reportData.app=this.workplan;
-				this.$refs.reportChild.visible();
-			},
-			//发布
-			releasebtn(){
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要发布的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//releaseid为id的数组
-					var releaseid = [];
-					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
-						releaseid.push(changeUser[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = releaseid.toString(',');
-                    // var data = {
-					// 	ids: ids,
-					// }
-					var url = this.basic_url + '/api-apps/app/workplan/operate/release?ids='+ids;
-					
-					this.$confirm('确定发布此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.get(url, {}).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '发布成功',
-									type: 'success'
-								});
-								this.requestData();
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'warning'
-								});
-							}
-						}).catch((err) => {
-						});
-                    }).catch(() => {
-
-                	});
-				}
-			},
-			//取消
-			cancelbtn(){
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要取消的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//cancelid为id的数组
-					var cancelid = [];
-					var ids;
-					for (var i = 0; i < changeUser.length; i++) {
-						cancelid.push(changeUser[i].ID);
-					}
-					//ids为cancelid数组用逗号拼接的字符串
-					ids = cancelid.toString(',');
-                    // var data = {
-					// 	ids: ids,
-					// }
-					var url = this.basic_url + '/api-apps/app/workplan/operate/cancel?ids='+ids;
-					
-					this.$confirm('确定发布此数据吗？', '提示', {
-                        confirmButtonText: '确定',
-                        cancelButtonText: '取消',
-                    }).then(({ value }) => {
-                        this.$axios.get(url, {}).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '取消成功',
-									type: 'success'
-								});
-								this.requestData();
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'warning'
-								});
-							}
-						}).catch((err) => {
-						});
-                    }).catch(() => {
-
-                	});
-				}
-			},
-			
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-			},
-			SelChange(val) {
-				this.selUser = val;
-			},
-			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					WP_NUM: this.searchList.WP_NUM,
-					DESCRIPTION: this.searchList.DESCRIPTION,
-					TYPE: this.searchList.TYPE,
-					YEAR: this.searchList.YEAR,
-					ENTERDATE:this.searchList.ENTERDATE,
-					ENTERBY:this.searchList.ENTERBY,
-					STATUS:this.searchList.STATUS,
-					LEADER_STATUS:this.searchList.LEADER_STATUS,
-				}
-				var url = this.basic_url + '/api-apps/app/workplan';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;//页码赋值
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
-					var list = res.data.data || [];
-					for(var i=0;i<list.length;i++){
-						if(list[i].TYPE  == '1'){
-							list[i].TYPE  = '监督抽查';
-						}else if(list[i].TYPE  == '3'){
-							list[i].TYPE  = '质量抽查';
-						}
-					}
-					this.userList = list;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-			},
-			//树
-			getKey() {
-				var url = this.basic_url + '/api-user/users/findIdsByUserAndType/1';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				}).catch((wrong) => {
+			}
+			this.handleNodeClick();
+		},
+		
+		searchinfo(index) {//高级查询
+			this.requestData('init');
+		},
+		resetbtn(){
+			this.searchList =  { //点击高级搜索后显示的内容
+				WP_NUM: '',
+				DESCRIPTION: '',
+				TYPE: '',
+				YEAR: '',
+				ENTERDATE:'',
+				ENTERBY:'',
+				STATUS:'',
+				LEADER_STATUS:''
+			};
+			this.requestData('init');
+		},
+		//请求点击
+		getbtn(item){
+			if(item.name=="添加"){
+				this.openAddMgr();
+			}else if(item.name=="修改"){
+				this.modify();
+			}else if(item.name=="彻底删除"){
+				this.physicsDel();
+			}else if(item.name=="高级查询"){
+				this.modestsearch();
+			}else if(item.name=="导出"){
+				this.exportData();
+			}else if(item.name=="删除"){
+				this.deluserinfo();
+			}else if(item.name=="取消"){
+				this.cancelbtn();
+			}else if(item.name=="报表"){
+				this.reportdata();
+			}else if(item.name=="发布"){
+				this.releasebtn();
+			}
+		},
+		//添加
+		openAddMgr() {
+			// this.$refs.child.resetNew();
+			this.$refs.child.visible();
+		},
+		//修改
+		modify() {
+			if(this.selUser.length == 0) {
+				this.$message({
+					message: '请您选择要修改的数据',
+					type: 'warning'
 				});
-			},
-			transformTree(data){
-				for(var i=0; i<data.length; i++){
-					data[i].name = data[i].name;
-					if(!data[i].pid || $.isArray(data[i].subDepts)){
-						data[i].iconClass = 'icon-file-normal';
-					}else{
-						data[i].iconClass = 'icon-file-text';
-					}
-					if($.isArray(data[i].subDepts)){
-						data[i].children = this.transformTree(data[i].subDepts);
-					}
+				return;
+			} else if(this.selUser.length > 1) {
+				this.$message({
+					message: '不可同时修改多个数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				this.$refs.child.detail(this.selUser[0].ID);
+			}
+		},
+		//查看
+		view(id) {
+			this.$refs.child.view(id);
+		},
+		//高级查询
+		modestsearch() {
+			this.search = !this.search;
+			this.down = !this.down,
+			this.up = !this.up
+		},
+		// 删除
+		deluserinfo() {
+			var selData = this.selUser;
+			if(selData.length == 0) {
+				this.$message({
+					message: '请您选择要删除的数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				var url = this.basic_url + '/api-apps/app/workplan/deletes';
+				//changeUser为勾选的数据
+				var changeUser = selData;
+				//deleteid为id的数组
+				var deleteid = [];
+				var ids;
+				for (var i = 0; i < changeUser.length; i++) {
+					deleteid.push(changeUser[i].ID);
 				}
-				return data;
-			},
-			getTreeId(data){
-				if(data.type == '1'){
-					this.companyId = data.id;
-					this.deptId = '';
-				}else{
-					this.deptId = data.id;
-					this.companyId = '';
+				//ids为deleteid数组用逗号拼接的字符串
+				ids = deleteid.toString(',');
+				var data = {
+					ids: ids,
 				}
-				this.requestData();
-			},
-			handleNodeClick(data) {
-				for(var i = 0; i < this.resourceData.length; i++) {
-					if(data.name == this.resourceData[i].name) {
-						this.searchList.TYPE = this.resourceData[i].code;
-					}
-				}
-				this.requestData();
-			},
-			formatter(row, column) {
-				return row.enabled;
-			},
-			min3max() { //左侧菜单正常和变小切换
-				if($(".lefttree").hasClass("el-col-5")) {
-					$(".lefttree").removeClass("el-col-5");
-					$(".lefttree").addClass("el-col-1");
-					$(".leftcont").removeClass("el-col-19");
-					$(".leftcont").addClass("el-col-23");
-					$(".icon-doubleok").removeClass("icon-double-angle-left");
-					$(".icon-doubleok").addClass("icon-double-angle-right");
-				} else {
-					$(".lefttree").removeClass("el-col-1");
-					$(".lefttree").addClass("el-col-5");
-					$(".leftcont").removeClass("el-col-23");
-					$(".leftcont").addClass("el-col-19");
-					$(".icon-doubleok").removeClass("icon-double-angle-right");
-					$(".icon-doubleok").addClass("icon-double-angle-left");
-				}
-				this.ismin = !this.ismin;
-			},
-			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-				this.$refs.navsTabs.showClick(childValue);
-				this.getbutton(childValue);
-			  },
-			    //请求页面的button接口
-		    getbutton(childByValue){
-		    	var data = {
-					menuId: childByValue.id,
-					roleId: this.$store.state.roleid,
-				};
-				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
-				this.$axios.get(url, {params: data}).then((res) => {
-					this.buttons = res.data;
-					
-				}).catch((wrong) => {
-				})
+				this.$confirm('确定删除此数据吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.delete(url, {params: data}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+				}).catch(() => {
 
-		    },
-		    //树和表单之间拖拽改变宽度
-			treeDrag(){
-				var middleWidth=5,
-				left = document.getElementById("left"),
-				right =  document.getElementById("right"), 
-				middle =  document.getElementById("middle"); 
-				middle.style.left = left.clientWidth + 'px';
-				right.style.left = left.clientWidth + 5 + 'px';
-				middle.onmousedown = function(e) { 
-					var disX = (e || event).clientX; 
-					middle.left = middle.offsetLeft; 
-					document.onmousemove = function(e) { 
-						var iT = middle.left + ((e || event).clientX - disX); 
-						var e=e||window.event,tarnameb=e.target||e.srcElement; 
-						var maxT=document.body.clientWidth; 
-						iT < 0 && (iT = 0); 
-						iT > maxT/2 && (iT = maxT/2); 
-						middle.style.left = left.style.width = iT + "px"; 
-						right.style.width = maxT - iT -middleWidth -10 + "px"; 
-						right.style.left = iT+middleWidth+"px"; 
-						return false 
-					}; 
-					document.onmouseup = function() { 
-						document.onmousemove = null; 
-						document.onmouseup = null; 
-						middle.releaseCapture && middle.releaseCapture() 
-					}; 
-					middle.setCapture && middle.setCapture(); 
+				});
+			}
+		},
+		// 物理删除
+		physicsDel() {
+			var selData = this.selUser;
+			if(selData.length == 0) {
+				this.$message({
+					message: '请您选择要删除的数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				var url = this.basic_url + '/api-apps/app/workplan/physicsDel';
+				//changeUser为勾选的数据
+				var changeUser = selData;
+				//deleteid为id的数组
+				var deleteid = [];
+				var ids;
+				for (var i = 0; i < changeUser.length; i++) {
+					deleteid.push(changeUser[i].ID);
+				}
+				//ids为deleteid数组用逗号拼接的字符串
+				ids = deleteid.toString(',');
+				var data = {
+					ids: ids,
+				}
+				this.$confirm('确定删除此数据吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.delete(url, {params: data}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+				}).catch(() => {
+
+				});
+			}
+		},
+		fileSuccess(){//上传成功后返回数据
+			this.requestData('init');
+		},
+		uploadUrl(){
+			var url = this.basic_url +'/api-apps/app/workplan/importExc?access_token='+sessionStorage.getItem('access_token');
+			return url;
+		},
+		
+		// 导入
+		download() {
+			var url = this.basic_url + '/api-apps/app/workplan/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+			var xhr = new XMLHttpRequest();
+				xhr.open('POST', url, true);
+				xhr.responseType = "blob";
+				xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+				xhr.onload = function() {
+					if (this.status == 200) {
+						var blob = this.response;
+						var objecturl = URL.createObjectURL(blob);
+						window.location.href = objecturl;
+					}
+				}
+				xhr.send();
+		},
+		// 导出
+		exportData() {
+			var url = this.basic_url + '/api-apps/app/workplan/exportExc?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+			xhr.open('POST', url, true);
+			xhr.responseType = "blob";
+			xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+			xhr.onload = function() {
+				if (this.status == 200) {
+					var filename = "workplan.xls";
+					var blob = this.response;
+					var link = document.createElement('a');
+					var objecturl = URL.createObjectURL(blob);
+					link.href = objecturl;
+					link.download = filename;
+					link.click();
+				}
+			}
+			xhr.send();
+		},
+		//报表
+		reportdata(){
+			this.reportData.app=this.workplan;
+			this.$refs.reportChild.visible();
+		},
+		//发布
+		releasebtn(){
+			var selData = this.selUser;
+			if(selData.length == 0) {
+				this.$message({
+					message: '请您选择要发布的数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				//changeUser为勾选的数据
+				var changeUser = selData;
+				//releaseid为id的数组
+				var releaseid = [];
+				var ids;
+				for (var i = 0; i < changeUser.length; i++) {
+					releaseid.push(changeUser[i].ID);
+				}
+				//ids为deleteid数组用逗号拼接的字符串
+				ids = releaseid.toString(',');
+				// var data = {
+				// 	ids: ids,
+				// }
+				var url = this.basic_url + '/api-apps/app/workplan/operate/release?ids='+ids;
+				
+				this.$confirm('确定发布此数据吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '发布成功',
+								type: 'success'
+							});
+							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+				}).catch(() => {
+
+				});
+			}
+		},
+		//取消
+		cancelbtn(){
+			var selData = this.selUser;
+			if(selData.length == 0) {
+				this.$message({
+					message: '请您选择要取消的数据',
+					type: 'warning'
+				});
+				return;
+			} else {
+				//changeUser为勾选的数据
+				var changeUser = selData;
+				//cancelid为id的数组
+				var cancelid = [];
+				var ids;
+				for (var i = 0; i < changeUser.length; i++) {
+					cancelid.push(changeUser[i].ID);
+				}
+				//ids为cancelid数组用逗号拼接的字符串
+				ids = cancelid.toString(',');
+				// var data = {
+				// 	ids: ids,
+				// }
+				var url = this.basic_url + '/api-apps/app/workplan/operate/cancel?ids='+ids;
+				
+				this.$confirm('确定发布此数据吗？', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+				}).then(({ value }) => {
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '取消成功',
+								type: 'success'
+							});
+							this.requestData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+				}).catch(() => {
+
+				});
+			}
+		},
+		
+		//时间格式化  
+		dateFormat(row, column) {
+			var date = row[column.property];
+			if(date == undefined) {
+				return "";
+			}
+			return this.$moment(date).format("YYYY-MM-DD");
+		},
+		requestData(opt) {
+			this.$refs.table.requestData(opt);
+		},
+		//树
+		getKey() {
+			var url = this.basic_url + '/api-user/users/findIdsByUserAndType/1';
+			this.$axios.get(url, {}).then((res) => {
+				this.resourceData = res.data;
+				this.treeData = this.transformTree(this.resourceData);
+			}).catch((wrong) => {
+			});
+		},
+		transformTree(data){
+			for(var i=0; i<data.length; i++){
+				data[i].name = data[i].name;
+				if(!data[i].pid || $.isArray(data[i].subDepts)){
+					data[i].iconClass = 'icon-file-normal';
+				}else{
+					data[i].iconClass = 'icon-file-text';
+				}
+				if($.isArray(data[i].subDepts)){
+					data[i].children = this.transformTree(data[i].subDepts);
+				}
+			}
+			return data;
+		},
+		getTreeId(data){
+			if(data.type == '1'){
+				this.companyId = data.id;
+				this.deptId = '';
+			}else{
+				this.deptId = data.id;
+				this.companyId = '';
+			}
+			this.requestData();
+		},
+		handleNodeClick(data) {
+			for(var i = 0; i < this.resourceData.length; i++) {
+				if(data.name == this.resourceData[i].name) {
+					this.searchList.TYPE = this.resourceData[i].code;
+				}
+			}
+			this.requestData();
+		},
+		min3max() { //左侧菜单正常和变小切换
+			if($(".lefttree").hasClass("el-col-5")) {
+				$(".lefttree").removeClass("el-col-5");
+				$(".lefttree").addClass("el-col-1");
+				$(".leftcont").removeClass("el-col-19");
+				$(".leftcont").addClass("el-col-23");
+				$(".icon-doubleok").removeClass("icon-double-angle-left");
+				$(".icon-doubleok").addClass("icon-double-angle-right");
+			} else {
+				$(".lefttree").removeClass("el-col-1");
+				$(".lefttree").addClass("el-col-5");
+				$(".leftcont").removeClass("el-col-23");
+				$(".leftcont").addClass("el-col-19");
+				$(".icon-doubleok").removeClass("icon-double-angle-right");
+				$(".icon-doubleok").addClass("icon-double-angle-left");
+			}
+			this.ismin = !this.ismin;
+		},
+		childByValue:function(childValue) {
+			// childValue就是子组件传过来的值
+			this.$refs.navsTabs.showClick(childValue);
+			this.getbutton(childValue);
+			},
+			//请求页面的button接口
+		getbutton(childByValue){
+			var data = {
+				menuId: childByValue.id,
+				roleId: this.$store.state.roleid,
+			};
+			var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+			this.$axios.get(url, {params: data}).then((res) => {
+				this.buttons = res.data;
+				
+			}).catch((wrong) => {
+			})
+
+		},
+		//树和表单之间拖拽改变宽度
+		treeDrag(){
+			var middleWidth=5,
+			left = document.getElementById("left"),
+			right =  document.getElementById("right"), 
+			middle =  document.getElementById("middle"); 
+			middle.style.left = left.clientWidth + 'px';
+			right.style.left = left.clientWidth + 5 + 'px';
+			middle.onmousedown = function(e) { 
+				var disX = (e || event).clientX; 
+				middle.left = middle.offsetLeft; 
+				document.onmousemove = function(e) { 
+					var iT = middle.left + ((e || event).clientX - disX); 
+					var e=e||window.event,tarnameb=e.target||e.srcElement; 
+					var maxT=document.body.clientWidth; 
+					iT < 0 && (iT = 0); 
+					iT > maxT/2 && (iT = maxT/2); 
+					middle.style.left = left.style.width = iT + "px"; 
+					right.style.width = maxT - iT -middleWidth -10 + "px"; 
+					right.style.left = iT+middleWidth+"px"; 
 					return false 
 				}; 
-			}
+				document.onmouseup = function() { 
+					document.onmousemove = null; 
+					document.onmouseup = null; 
+					middle.releaseCapture && middle.releaseCapture() 
+				}; 
+				middle.setCapture && middle.setCapture(); 
+				return false 
+			}; 
+		}
 		},
 		mounted() {
 			this.getKey();
-			this.requestData();
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 		},
 	}

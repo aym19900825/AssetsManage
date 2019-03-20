@@ -584,7 +584,7 @@
         	},
 		},
 		mounted() {
-			get.getuser();
+			this.getuser();
 		},
 		
 	}

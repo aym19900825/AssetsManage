@@ -31,7 +31,6 @@
 					</el-form-item>
 			      </template>
 			    </el-table-column>
-					
 			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">

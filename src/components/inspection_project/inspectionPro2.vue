@@ -24,6 +24,14 @@
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(255, 255, 255, 0.9)">
+			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+					
 			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -32,13 +40,6 @@
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
-			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
-					</el-form-item>
-			      </template>
-			    </el-table-column>
 
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">

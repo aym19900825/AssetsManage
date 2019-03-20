@@ -23,13 +23,6 @@
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(255, 255, 255, 0.9)">
-			  	<el-table-column label="产品类别" width="80" prop="NUM">
-			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
-					</el-form-item>
-			      </template>
-			    </el-table-column>
 
 			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM" class="pl30">
 			      <template slot-scope="scope">
@@ -38,7 +31,15 @@
 					</el-form-item>
 			      </template>
 			    </el-table-column>
-
+					
+			  	<el-table-column label="产品类别" width="80" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+					
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">

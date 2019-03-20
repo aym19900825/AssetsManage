@@ -231,7 +231,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="ERP" prop="erp_orgname" label-width="100px">
+											<el-form-item label="ERP机构" prop="erp_orgname" label-width="100px">
 												<el-input v-model="user.erp_orgname" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -994,6 +994,7 @@
 								});
 							if(parameter=="Update"){
 									this.show = false;
+									this.$emit('request');
 								}else{
 									this.show = true;
 									this.$emit('request');

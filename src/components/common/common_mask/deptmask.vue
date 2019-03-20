@@ -153,7 +153,7 @@
 	},
 	requestData() {//高级查询字段
         this.loading = true;
-        var url = this.basic_url + '/api-user/depts/treeMap';
+        var url = this.basic_url + '/api-user/depts/treeMapAll';
         this.$axios.get(url, {}).then((res) => {
             let result=res.data
             for(let i=0;i<result.length;i++){

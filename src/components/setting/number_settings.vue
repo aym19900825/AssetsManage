@@ -6,7 +6,7 @@
 	</div>
 	<div class="contentbg">
 		<!--左侧菜单内容显示 Begin-->
-		<navs_left></navs_left>
+		<navs_left ref="navleft" v-on:childByValue="childvalue"></navs_left>
 		<!--左侧菜单内容显示 End-->
 
 		<!--右侧内容显示 Begin-->
@@ -83,6 +83,12 @@
 									</p>
 								</template>
 							</el-table-column>
+							<el-table-column label="应用名" width="100" sortable prop="markx" v-if="this.checkedName.indexOf('前缀')!=-1">
+							</el-table-column>
+							<el-table-column label="表名" width="100" sortable prop="marky" v-if="this.checkedName.indexOf('表名')!=-1">
+							</el-table-column>
+							<el-table-column label="描述" width="100" sortable prop="remarks" v-if="this.checkedName.indexOf('描述')!=-1">
+							</el-table-column>
 							<el-table-column label="前缀" width="100" sortable prop="prefix" v-if="this.checkedName.indexOf('前缀')!=-1">
 							</el-table-column>
 							<el-table-column label="初始化起始数" width="180" sortable align="right" prop="initnum" v-if="this.checkedName.indexOf('初始化起始数')!=-1">
@@ -151,6 +157,9 @@
 				checkedName: [//控制Table-列显示和隐藏
 					'是否初始化',
 					'初始化日期格式',
+					'应用名',
+					'表名',
+					'描述',
 					'前缀',
 					'初始化起始数',
 					'增加量',
@@ -167,6 +176,18 @@
 					{
 						label: '初始化日期格式',
 						prop: 'initformat'
+					},
+					{
+						label: '应用名',
+						prop: 'markx'
+					},
+					{
+						label: 'marky',
+						prop: 'prefix'
+					},
+					{
+						label: '描述',
+						prop: 'remarks'
 					},
 					{
 						label: '前缀',
@@ -376,22 +397,7 @@
                 	});
 				}
 			},
-			// 导入
-			importData() {
-				
-			},
-			// 导出
-			exportData() {
-				
-			},
-			// 打印
-			Printing() {
-				
-			},
-			judge(data) {
-				return data.STATUS == "1" ? '活动' : '不活动'
-
-			},
+			
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -403,8 +409,26 @@
 			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
 				this.selMenu = val;
 			},
+			//左侧菜单传来
+		    childvalue:function ( childvalue) {
+		    	 this.getbutton( childvalue);
+		    },
+			//请求页面的button接口
+		    getbutton(childvalue){
+		    	var data = {
+					menuId: childvalue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {})
+
+		    },
 			//Table默认加载数据
-			requestData(index) {//高级查询字段
+			requestData() {//高级查询字段
 				this.loading = true;
 				var data = {
 					page: this.page.currentPage,

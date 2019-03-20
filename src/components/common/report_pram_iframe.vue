@@ -2,7 +2,7 @@
 	<div>
 		<el-dialog :modal-append-to-body="false" title="报表参数" :visible.sync="innerVisible" width="60%">
 		<div >
-			<el-form :model="dataInfo" ref="dataInfo" label-width="100px" >
+			<el-form inline-message :model="dataInfo" ref="dataInfo" label-width="100px" >
 					<!-- 报表信息 -->
 						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required != 0" :rules="{required: true, message: '请填写', trigger: 'blur'}">
 							<el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">

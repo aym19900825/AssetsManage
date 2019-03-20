@@ -52,7 +52,7 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="角色名称" prop="name" label-width="70px">

@@ -33,7 +33,7 @@
 					<!-- <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone> -->
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search" class="pb10">
-						<el-form :model="searchList" label-width="70px">
+						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
 									<el-input v-model="searchList.appname">
@@ -126,7 +126,7 @@
 		<!-- <samplesmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask> -->
 		<!--右侧内容显示 End-->
 		<el-dialog :modal-append-to-body="false" title="文件夹" :visible.sync="dirDialog">
-			<el-form :model="dir" label-width="80px">
+			<el-form inline-message :model="dir" label-width="80px">
 				<el-form-item label="名称">
 					<el-input v-model="dir.dirName"></el-input>
 				</el-form-item>

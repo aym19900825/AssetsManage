@@ -43,7 +43,7 @@
 					</div>
 					<!-- 高级查询划出begin -->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="45px">
+						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="表名">

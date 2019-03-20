@@ -16,20 +16,13 @@
 					<font>新建</font>
 				</el-button>
 			</div>
-			<el-form :model="product2Form" status-icon inline-message ref="product2Form" class="el-radio__table">
+			<el-form inline-message :model="product2Form" status-icon ref="product2Form" class="el-radio__table">
 			  <el-table ref="singleTable" :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'product2Form.inspectionList', order: 'descending'}"
 					v-loadmore="loadMore"
 					v-loading="loading"
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(255, 255, 255, 0.9)">
-			  	<el-table-column label="所属类别" width="80" prop="NUM">
-			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
-					</el-form-item>
-			      </template>
-			    </el-table-column>
 
 			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM" class="pl30">
 			      <template slot-scope="scope">
@@ -38,7 +31,15 @@
 					</el-form-item>
 			      </template>
 			    </el-table-column>
-
+					
+			  	<el-table-column label="产品类别" width="80" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+					</el-form-item>
+			      </template>
+			    </el-table-column>
+					
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -434,7 +435,7 @@
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 						var obj = {
-							"NUM": this.parentId,//所属类别编号
+							"NUM": this.parentId,//产品类别编号
 							"PRO_NUM": '',
 							"PRO_NAME": '',
 							"STATUS": '',

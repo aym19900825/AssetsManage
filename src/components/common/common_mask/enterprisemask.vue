@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="客户单位列表" :visible.sync="dialogCustomer" width="80%">
-			<el-form :model="searchList" label-width="70px">
+			<el-form inline-message :model="searchList" label-width="70px">
 				<el-row :gutter="10">
 					<el-col :span="5">
 						<el-form-item label="统一社会信用代码" prop="CODE" label-width="100px">

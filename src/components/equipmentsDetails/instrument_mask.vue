@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="content-accordion">
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
@@ -118,7 +118,7 @@
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
 				<!-- 高级查询划出 Begin-->
 				<div class="clearfix">
-					<el-form :model="searchList" label-width="45px">
+					<el-form inline-message :model="searchList" label-width="45px">
 						<el-row :gutter="10">
 							<!-- <el-col :span="5">
 								<el-form-item label="编码" prop="CLASSIFY_NUM">

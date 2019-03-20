@@ -19,7 +19,7 @@
                     </div>
                 </div>
                 <div class="mask_content">
-					<el-form :model="dataInfo" :rules="rules" ref="dataInfo" class="demo-user">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" class="demo-user">
 						<div class="content-accordion">
 							<!-- 设备header信息 -->
 							<el-collapse v-model="activeNames">							
@@ -206,7 +206,7 @@
 			</div>
 			<el-dialog :modal-append-to-body="false" title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
 				<div class="pb10">
-					<el-form :model="searchList" label-width="70px">
+					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10" class="pb10">
 							<el-col :span="6">
 								<el-input v-model="searchList.DESCRIPTION">

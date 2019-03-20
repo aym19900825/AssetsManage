@@ -42,7 +42,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList" label-width="95px">
+						<el-form inline-message :model="searchList" label-width="95px">
 							<el-row :gutter="10">
 								<el-col :span="6">
 									<el-form-item label="应用名称" prop="appName">

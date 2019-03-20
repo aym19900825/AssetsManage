@@ -31,7 +31,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form :model="searchList">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
                                 <el-col :span="7">
 									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">

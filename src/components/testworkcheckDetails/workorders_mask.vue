@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
-					<el-form :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
+					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.workorderForm.STATE!=3">
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>

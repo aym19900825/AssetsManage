@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="所属名称" :visible.sync="dialogProduct" width="80%">
+		<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogProduct" width="80%">
 			<el-table ref="table" :header-cell-style="rowClass" :data="productList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
 			v-loading="loading"  
 			element-loading-text="加载中…"

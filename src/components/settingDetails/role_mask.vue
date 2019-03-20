@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
+					<el-form inline-message :model="roleList" :rules="rules" ref="roleList" label-width="110px" class="demo-user">
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">

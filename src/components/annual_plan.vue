@@ -656,7 +656,7 @@
 				// }
 				var url = this.basic_url + '/api-apps/app/workplan/operate/cancel?ids='+ids;
 				
-				this.$confirm('确定发布此数据吗？', '提示', {
+				this.$confirm('确定取消此数据吗？', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 				}).then(({ value }) => {

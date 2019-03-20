@@ -77,11 +77,11 @@
                             sessionStorage.setItem('refresh_token',res.data.refresh_token);
                             this.$router.push('/index')
                         }
-                  }).catch((wrong) => {
+                  }).catch((res) => {
                       this.$message({
-                                message: '用户名或密码错误',
-                                type: 'error'
-                            });
+                            message:res.resp_msg,
+                            type: 'warning'
+                        });
                   })
              }, 
              blur1(){

@@ -169,7 +169,7 @@ export default {
 				this.$store.dispatch('setMenuIdAct',item.parentId);//点击时重新给meunid赋值	
 			}else{
 				//如果只有一级菜单
-				this.$store.dispatch('setMenuIdAct','');
+				this.$store.dispatch('setMenuIdAct',item.id);
 			}
            
         },

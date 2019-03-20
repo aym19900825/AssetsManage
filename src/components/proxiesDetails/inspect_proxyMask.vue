@@ -799,18 +799,18 @@
             };
             //var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
             //金额验证
-            var price=(rule, value, callback) => {//生产单位名称 
-				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				if(value != '' && value!=undefined){
-					if(exp.test(value)==false){ 
-	                    callback(new Error('请输入数字'));
-	              }else{
-	                    callback();
-	                }
-				}else {
-					callback();
-				}
-           };
+        //     var price=(rule, value, callback) => {//生产单位名称 
+		// 		var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+		// 		if(value != '' && value!=undefined){
+		// 			if(exp.test(value)==false){ 
+	    //                 callback(new Error('请输入数字'));
+	    //           }else{
+	    //                 callback();
+	    //             }
+		// 		}else {
+		// 			callback();
+		// 		}
+        //    };
 			return {
 				approvingData:{},
 				loading: false,
@@ -945,9 +945,9 @@
 					MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
 					LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 //					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
-					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
-					ACTUALCOST:[{trigger: 'blur',validator:price}],
-					CONTRACTCOST:[{trigger: 'blur',  validator:price}],
+					CHECK_COST:[{required: false,trigger: 'change',validator:this.Validators.isPrices}],
+					ACTUALCOST:[{trigger: 'blur',validator:this.Validators.isPrices}],
+					CONTRACTCOST:[{trigger: 'blur',  validator:this.Validators.isPrices}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1064,10 +1064,8 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
-				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.CHECK_COST = num.join(".");
 			},
 			staPrice(){

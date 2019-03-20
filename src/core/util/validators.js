@@ -33,7 +33,7 @@ const validators = {
 	},
 
 	SpecificWord:function (str) {// 特殊字符
-		var specialKey = "[`~!#^&*()=|{}':;'\\[\\]<>?~！#……&*{}‘；']‘'"; 
+		var specialKey = "[`~!#^&*()=|{}':;'\\[\\]<>?~！#……&*{}‘']‘'"; 
 			for (var i = 0; i < str.length; i++) {
 				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
 					return false;
@@ -111,10 +111,31 @@ const validators = {
 		}
 	},
 
-	
+	isPrices:function (rule, value, callback) {//验证价格
+		if(!value) {
+			callback();
+		}
+		setTimeout(() => {
+			var regp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/
+			if (!regp.test(value)) {
+				callback(new Error('请输入数字'));
+			} else {
+				var regs = /^.{1,20}$/g
+				if(!regs.test(value)) {
+					callback(new Error('内容不少于1位且不能大于20位'));
+				} else {
+					if(!validators.SpecificWord(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						callback();
+					}
+				}
+			}
+		}, 500);
+	},
 
 	isWorknumber:function (rule, value, callback) {//验证工号内容最长30位
-	    if(!value) {
+		if(!value) {
 			callback();
 		}
 		setTimeout(() => {
@@ -345,8 +366,8 @@ const validators = {
 		}, 1000);
 	},
 
-	// 价格限两位小数
-	isPrice:function (rule, value, callback) {
+	// 带两位小数的数字
+	isPriceNum:function (rule, value, callback) {
 		if (!value) {
 			callback(new Error('不可以为空'));
 		}

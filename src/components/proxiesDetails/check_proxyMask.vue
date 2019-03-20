@@ -169,10 +169,10 @@
 								<el-collapse-item title="检测" name="3">
 									<el-row>
 									<el-col :span="8">
-												<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-													<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-													</el-date-picker>
-												</el-form-item>
+										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+											</el-date-picker>
+										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 												<el-form-item label="完成方式" prop="COMPMODE" label-width="110px">
@@ -577,9 +577,9 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-													<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
-												<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
-											</el-select>
+												<el-select clearable v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visableleader($event)" >
+													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>	
@@ -790,18 +790,18 @@
             };
             //var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
             //金额验证
-            var price=(rule, value, callback) => {//生产单位名称 
-				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				if(value != '' && value!=undefined){
-					if(exp.test(value)==false){ 
-	                    callback(new Error('请输入数字'));
-	              }else{
-	                    callback();
-	                }
-				}else {
-					callback();
-				}
-           };
+        //     var price=(rule, value, callback) => {//生产单位名称 
+		// 		var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+		// 		if(value != '' && value!=undefined){
+		// 			if(exp.test(value)==false){ 
+	    //                 callback(new Error('请输入数字'));
+	    //           }else{
+	    //                 callback();
+	    //             }
+		// 		}else {
+		// 			callback();
+		// 		}
+        //    };
 			return {
 				approvingData:{},
 				loading: false,
@@ -905,16 +905,22 @@
 				labelPosition: 'top', //表格
 				labelPositions: 'right',
 				rules: {
-					V_NAME: [{ required: true, validator: validateVname}],//名称
-					V_ADDRESS: [{ required: true,validator: validateVaddress}],//地址
-					V_ZIPCODE: [{ required: true,validator: validateVzipcode}],//邮编
-					V_PERSON: [{ required: true,validator: validateVperson}],//联系人姓名
-					V_PHONE: [{ required: true,validator: validateVphone}],//联系人电话
-					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//责任单位
+					V_NAME: [{ required: true, validator: this.Validators.isNickname}],//名称
+					V_ADDRESS: [{ required: true,validator: this.Validators.isAddress}],//地址
+					V_ZIPCODE: [{ required: true,validator: this.Validators.isZipcode}],//邮编
+					V_PERSON: [{ required: true,validator: this.Validators.isNickname}],//联系人姓名
+					V_PHONE: [{ required: true,validator: this.Validators.isPhone}],//联系人电话
+					R_VENDOR: [
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],//责任单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
 					P_NAME: [{ required: true,validator: validatePname}],//生产单位名称
 					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
+					ITEM_NAME: [
+						{ required: true, message: '必填', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],//样品名称
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'},{ type: 'number', message: '请输入数字'}],//数量
@@ -928,12 +934,12 @@
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-					MAINGROUP: [{ required: true, message: '必填', trigger: 'change' }],//主检组
-					LEADER: [{ required: true, message: '必填', trigger: 'blur' }],//主检负责人
-//					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
-					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
-					ACTUALCOST:[{trigger: 'blur',validator:price}],
-					CONTRACTCOST:[{trigger: 'blur',  validator:price}],
+					MAINGROUP: [{ required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//主检组
+					LEADER: [{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata}],//主检负责人
+					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
+					CHECK_COST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
+					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
+					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1054,10 +1060,8 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
-				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.CHECK_COST = num.join(".");
 			},
 			staPrice(){

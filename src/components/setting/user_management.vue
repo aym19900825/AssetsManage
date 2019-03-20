@@ -674,6 +674,8 @@
 			var product=[];
 			var checkProduct=[];
 			var checkProductType=[];
+			var deptIds=[];
+			var checkDeptIds=[];
 			var work=this.$refs.work.getCheckedNodes();
 			var annual=this.$refs.annual.getCheckedNodes();
 			var products=this.$refs.product.getCheckedNodes();
@@ -695,6 +697,8 @@
 					}
 				}else if(products[c].type!="dept"&&products[c].type!="product"){
 					  productType.push(products[c].id);
+				}else if(products[c].type="dept"){
+						deptIds.push(products[c].id)
 				}	
 			}
 			for(var c=0;c<testingproduct.length;c++){
@@ -704,6 +708,8 @@
           }
 				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
 					  checkProductType.push(testingproduct[c].id);
+				}else if(testingproduct[c].type="dept"){
+						checkDeptIds.push(testingproduct[c].id)
 				}	
 			}
 			pmType = pmType.join(',');
@@ -712,6 +718,8 @@
 			productType = productType.join(',');
 			checkProduct = checkProduct.join(',');
 			checkProductType = checkProductType.join(',');
+			deptIds=deptIds.join(',');
+			checkDeptIds=checkDeptIds.join(',');
  				var data = {
  					pmType:pmType,
 					taskType:taskType,
@@ -719,6 +727,8 @@
 					product:product,
 					checkProduct:checkProduct,
 					checkProductType:checkProductType,
+					deptIds:deptIds,
+					checkDeptIds:checkDeptIds,
           userId:this.selUser[0].id
 				}
 				var url = this.basic_url + '/api-user/users/setAuth';
@@ -728,6 +738,8 @@
 					product:product,
 					checkProduct:checkProduct,
 					checkProductType:checkProductType,
+					deptIds:deptIds,
+					checkDeptIds:checkDeptIds,
           userId:this.selUser[0].id}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({

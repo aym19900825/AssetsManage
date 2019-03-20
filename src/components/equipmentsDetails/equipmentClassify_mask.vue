@@ -165,7 +165,7 @@
 					//设备分类描述
 					CLASSIFY_DESCRIPTION: [
 						{required: true,trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isSpecificKey}
+						{trigger: 'blur', validator: this.Validators.isFillTips}
 					],
 				},
 				resourceProps: {

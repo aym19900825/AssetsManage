@@ -154,6 +154,11 @@ export default {
     requestData(opt){
       this.loadding = true;
       var data = this.searchList;
+      if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){
+        if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
+					data.DEPTID = this.searchList.DEPTID;
+				};
+      }
       if(opt == 'init'){
         this.page.currentPage = 1;
       }
@@ -165,6 +170,10 @@ export default {
         var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
       }else if(this.appName == 'subcontrac2'){
         var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=2';
+      }else if(this.appName == 'reportFile'){
+        var url =  this.basic_url + '/api-report/reportFile';
+      }else if(this.appName == 'report'){
+        var url =  this.basic_url + '/api-report/report';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

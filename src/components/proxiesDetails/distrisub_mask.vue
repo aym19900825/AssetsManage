@@ -579,7 +579,6 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                    this.username = res.data.username;
 	            }).catch((err) => {
-	               k
 	            });
         	},
 		},

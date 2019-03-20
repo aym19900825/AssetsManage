@@ -84,13 +84,19 @@ const validators = {
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
 		if(!value) {
 			callback();
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
-			} else {
-				callback();
-			}
 		}
+		setTimeout(() => {
+			var regs = /^.{1,120}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于1位且不能大于120位'));
+			} else {
+				if(!validators.SpecificWord(value)) {
+					callback(new Error('不支持特殊符号'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
 	},
 
 	isCompanyCode:function (rule, value, callback) { //统一社会信用代码
@@ -105,21 +111,70 @@ const validators = {
 		}
 	},
 
-	isUserName:function (rule, value, callback) { //验证用户名
-		if(!value) {
-			callback(new Error('不能为空'));
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
+	
+
+	isWorknumber:function (rule, value, callback) {//验证工号内容最长30位
+	    if(!value) {
+			callback();
+		}
+		setTimeout(() => {
+			var regs = /^.{4,30}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于4位且不能大于30位'));
 			} else {
-				var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
-				if( !targ.test(value)){
-					callback(new Error('只能由字母开头可含数字下划线'));
+				if(!validators.SpecificWord(value)) {
+					callback(new Error('不支持特殊符号'));
+				} else {
+					if(!validators.LetterNumber(value)) {
+						callback(new Error('只支持英文、数字或下划线'));
+					} else {
+						callback();
+					}
+				}
+			}
+		}, 500);
+	},
+
+	
+	isCodeNum:function (rule, value, callback) {// 验证编码号内容最长120位
+		if(!value){
+			callback();
+		}
+		setTimeout(() => {
+			var regs = /^.{4,120}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于4位且不能大于120位'));
+			} else {
+				if(!validators.SpecificWord(value)) {
+					callback(new Error('不支持特殊符号'));
 				} else {
 					callback();
 				}
 			}
+		}, 500);
+	},
+
+	isUserName:function (rule, value, callback) { //验证用户名
+		if(!value) {
+			callback(new Error('不能为空'));
 		}
+		setTimeout(() => {
+			var regs = /^.{3,30}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于3位且不能大于30位'));
+			} else {
+				if(!validators.SpecificWord(value)) {
+					callback(new Error('不支持特殊符号'));
+				} else {
+					var targ = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+					if( !targ.test(value)){
+						callback(new Error('只能由字母开头可含数字下划线'));
+					} else {
+						callback();
+					}
+				}
+			}
+		}, 500);		
 	},
 
 	isPhone:function (rule, value, callback) {//验证手机号
@@ -141,47 +196,19 @@ const validators = {
 	isNickname:function (rule, value, callback) {//验证人员姓名
 	   if(value && (!validators.SpecificWord(value))) {
 			callback(new Error('不支持特殊符号'));
-		} else {
-			if(validators.Numbers(value)) {
-				callback(new Error('不只支持全数字'));
-			} else {
-				callback();
-			}
 		}
-	},
-
-	isWorknumber:function (rule, value, callback) {//验证工号
-	    if(!value) {
-			callback();
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
+		setTimeout(() => {
+			var regs = /^.{2,20}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于2位且不能大于20位'));
 			} else {
-				if(!validators.LetterNumber(value)) {
-					callback(new Error('只支持英文、数字或下划线'));
+				if(validators.Numbers(value)) {
+					callback(new Error('不只支持全数字'));
 				} else {
 					callback();
 				}
 			}
-		}
-	},
-
-	
-	isCodeNum:function (rule, value, callback) {// 验证编码号
-		if(!value){
-			callback();
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
-			} else {
-				var reg = /^[0-9a-zA-Z()（）]+$/
-				if(!reg.test(value)) {
-					callback(new Error('仅支持数字、字母或括号'));
-				} else {
-					callback();
-				}
-			}
-		}
+		}, 500);
 	},
 
 	isIdnumber:function (rule, value, callback) { //验证身份证号
@@ -208,16 +235,22 @@ const validators = {
 		}
 	},
 
-	isFillTips:function (rule, value, callback) {//验证备注
-		if(!value) {
-			callback(new Error('不能为空'));
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
-			} else {
-				callback();
-			}
+	isAddress:function (rule, value, callback) {//验证通信地址
+		if(!value){
+			callback();
 		}
+		setTimeout(() => {
+			var regs = /^.{10,250}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于10位且不能大于250位'));
+			} else {
+				if(!validators.SpecificWord(value)) {
+					callback(new Error('不支持特殊符号'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
 	},
 
 	isZipcode:function (rule, value, callback) {//验证邮政编码
@@ -239,13 +272,38 @@ const validators = {
 	isLinkURL:function (rule, value, callback) { //验证连接地址
 		if(!value) {
 			callback();
-		} else {
-			if(!validators.URL(value)) {
-				callback(new Error('输入有效的URL'));
-			} else {
-				callback();
-			}
 		}
+		setTimeout(() => {
+			var regs = /^.{4,200}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于4位且不能大于200位'));
+			} else {
+				if(!validators.URL(value)) {
+					callback(new Error('输入有效的URL'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
+	},
+
+	
+	isFillTips:function (rule, value, callback) {//验证备注内容最长200位
+		if(!value) {
+			callback();
+		}
+		setTimeout(() => {
+			var regs = /^.{4,200}$/g
+			if (!regs.test(value)) {
+				callback(new Error('内容不少于4位且不能大于200位'));
+			} else {
+				if(!validators.SpecificWord(value)) {
+					callback(new Error('不支持特殊符号'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
 	},
 
 	// 验证是否整数
@@ -326,37 +384,29 @@ const validators = {
 	},
 
 
-	isChinese:function (rule, value, callback) { //仅限中文
-		if(!value) {
-			callback();
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
-			} else {
-				if(!validators.Mandarin(value)) {
-					callback(new Error('仅限中文'));
-				} else {
-					callback();
-				}
-			}
-		}
-	},
+	// isChinese:function (rule, value, callback) { //仅限中文
+	// 	if(!value) {
+	// 		callback();
+	// 	} else {
+	// 		if(!validators.SpecificWord(value)) {
+	// 			callback(new Error('不支持特殊符号'));
+	// 		} else {
+	// 			callback();
+	// 		}
+	// 	}
+	// },
 
-	isEnglish:function (rule, value, callback) { //仅限英语
-		if(!value) {
-			callback();
-		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不支持特殊符号'));
-			} else {
-				if(!validators.Englishs(value)) {
-					callback(new Error('仅限英文'));
-				} else {
-					callback();
-				}
-			}
-		}
-	},
+	// isEnglish:function (rule, value, callback) { //仅限英语
+	// 	if(!value) {
+	// 		callback();
+	// 	} else {
+	// 		if(!validators.SpecificWord(value)) {
+	// 			callback(new Error('不支持特殊符号'));
+	// 		} else {
+	// 			callback();
+	// 		}
+	// 	}
+	// },
 
 
 	isChoosedata:function (rule, value, callback) {//放大镜选择验证
@@ -372,9 +422,21 @@ const validators = {
 	isCheckOldpassword:function (rule, value, callback) {//原始密码
 		if (!value) {
 			return callback(new Error('密码不能为空'));
-		} else {
-			callback();
 		}
+		setTimeout(() => {
+			var regs = /^.{8,20}$/g
+			if (!regs.test(value)) {
+				callback(new Error('密码长度不能少于8位且不能大于20位'));
+			} else {
+				const regsStrong = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[~!@#$%^&*()_+`\-={}:";'<>?,.\/]).{8,20}$/;
+				const rsChecks = regsStrong.test(value);
+				if (!rsChecks) {
+					callback(new Error('密码需包含字母、数字、特殊符号'));
+				} else {
+					callback();
+				}
+			}
+		}, 500);
 	},
 
 	isValidatePass:function (rule, value, callback) {//新密码

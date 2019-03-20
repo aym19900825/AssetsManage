@@ -324,7 +324,7 @@
 					label: "fullname"
 				},
 				rules:{
-   					step: [{required:true,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
+   					step: [{required:false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
 					fullname: [
 						{required:true, trigger: 'blur', message: '必填'},
 						{validator: this.Validators.isNickname, trigger: 'blur'},

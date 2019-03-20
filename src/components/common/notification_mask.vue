@@ -312,7 +312,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="检验检测费用（元）" prop="CHECTCOST" label-width="110px">
+										<el-form-item label="检验检测费用(元)" prop="CHECTCOST" label-width="110px">
 											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
@@ -569,7 +569,7 @@
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
 					CHECTCOST:[{required: false,trigger: 'change',validator:price}], //检验检测费用
-					XD_DATE: [{type: 'string',required: true,message: '请选择',trigger: 'change'}],//下达日期
+					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [
 						{required: true,trigger: 'blur',message: '必填',	},
 						{trigger: 'blur',validator: this.Validators.isSpecificKey},
@@ -577,6 +577,7 @@
 					MEMO: [
 						{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
+					COMPDATE:[{required: true, trigger: 'blur', message: '必填'},]
 					// REMARKS: [{required: true,trigger: 'blur',message: '必填',}],
 				},
 				//tree

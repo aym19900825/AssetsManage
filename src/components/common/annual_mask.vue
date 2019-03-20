@@ -884,10 +884,13 @@
 				},
 				
 				rules: {
-					PROP_UNIT:[{required: true, trigger: 'change', validator: validateUnit}],//提出单位 
-					basisList:[{required: true, trigger: 'change', validator: validateBasislist}],//检测依据
-					DESCRIPTION:[{required: true, trigger: 'blur', validator: this.Validators.isFillTips}],//计划描述
-					TYPE:[{required: true, message: '请选择', trigger: 'change'}],//类别
+					PROP_UNIT:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//提出单位 
+       				ITEMTYPE:[{required: true, trigger: 'blur', message: '请选择',}],//产品类别
+					TYPE:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//类别
+					DESCRIPTION:[
+						{required: true, trigger: 'blur',message: '必填' },
+						{trigger: 'blur', validator: this.Validators.isFillTips}
+					],//计划描述
 					COMPACTOR:[//编制人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
@@ -900,16 +903,16 @@
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
 					],
-					CONTACT_ADDRESS:[{required: true,trigger:'blur',validator: validateAddress,}],
-					PHONE:[{required: true,trigger: 'blur',validator: validatePhone,}],
-					EMAIL:[{required: true,trigger: 'blur',validator:validateEmail,}],
-       				ITEMTYPE:[{required: true,validator: validateItemdata}],//产品类别
-       				YEAR: [{type: 'string',required: true,message: '请选择年度',trigger: 'change' }],//年度
-       				REPORTDATE: [{type: 'string',required: true,message: '请选择提报日期',trigger: 'change'}],//提报日期
+					CONTACT_ADDRESS:[{required: true, trigger:'blur', validator:this.Validators.isAddress,}],
+					PHONE:[{required: true, trigger: 'blur', validator: this.Validators.isPhone,}],
+					EMAIL:[{required: true, trigger: 'blur', validator:this.Validators.isEmail,}],
+       				YEAR: [{type: 'string', required: true, message: '请选择年度', trigger: 'change' }],//年度
+       				REPORTDATE: [{type: 'string', required: true, message: '请选择提报日期', trigger: 'change'}],//提报日期
        				//检测依据 
-					ITEM_NAME:[{required: true,message: '请填写',trigger: 'blur'}], //产品名称 
-					MODEL:[{required: true,message: '请填写',trigger: 'blur'}],
-					REMARKS:[{required: true,message: '请填写',trigger: 'blur'}],
+					ITEM_NAME:[{required: true, message: '请填写', trigger: 'blur'}], //产品名称 
+					MODEL:[{required: true, message: '请填写', trigger: 'blur'}],
+					REMARKS:[{required: true, message: '请填写', trigger: 'blur'}],
+					basisList:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//检测依据
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1229,7 +1232,7 @@
 				this.resetbtn();
 				this.dialogVisible2 = false;
 				this.page.currentPage = 1;//页码重新传值
-				this.page.pageSize = 10;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
 			//检测项目与要求弹出框
             addbasis2(){
@@ -1291,8 +1294,6 @@
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
-
-			
 
 			addproduct(item){//产品名称按钮
 				if(this.WORKPLAN.ITEMTYPE == null||this.WORKPLAN.ITEMTYPE == undefined || this.WORKPLAN.ITEMTYPE == ''){

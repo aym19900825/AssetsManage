@@ -524,6 +524,36 @@
 						var objecturl = URL.createObjectURL(blob);
 						window.location.href = objecturl;
 					}
+					//ids为cancelid数组用逗号拼接的字符串
+					ids = cancelid.toString(',');
+                    // var data = {
+					// 	ids: ids,
+					// }
+					var url = this.basic_url + '/api-apps/app/workplan/operate/cancel?ids='+ids;
+					
+					this.$confirm('确定取消此数据吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                    }).then(({ value }) => {
+                        this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '取消成功',
+									type: 'success'
+								});
+								this.requestData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+						});
+                    }).catch(() => {
+
+                	});
+
 				}
 				xhr.send();
 		},

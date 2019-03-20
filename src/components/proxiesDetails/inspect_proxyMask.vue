@@ -273,8 +273,8 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
-														</el-input>		
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
+                                                        	</el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -1663,6 +1663,7 @@
 				this.dataInfo.ITEM_QUALITY=value;
 			},
 			linedata(value){
+				console.log(value);
 				this.dataInfo.R_VENDOR = value[0];
 				this.dataInfo.R_VENDORDesc = value[1];
 				this.dataInfo.P_NUM = value[2];

@@ -32,7 +32,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
+												<el-input v-model="CATEGORY.NUM" placeholder="不填写会自动生成" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -114,28 +114,28 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
+			// var validateNum = (rule, value, callback) => {
+			// 	if(value != ""){
+		    //          if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
+		    //              callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
+		    //          }else{
+		    //              callback();
+		    //          }
+		    //      }else{
+		    //          callback();
+		    //      }
+			// };
+			// var validateType = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('请填写产品类别名称'));
+			// 	} else {
+			// 		if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
+		    //              callback(new Error("请规范填写名称"));
+		    //         }else{
+		    //             callback();
+		    //         }
+			// 	}
+			// };
 			return {
 				loading: false,
 				basic_url: Config.dev_url,
@@ -150,8 +150,8 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
-					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
+					NUM: [{required: false, trigger: 'blur', validator: this.Validators.isWorknumber,}],
+					TYPE: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey,}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

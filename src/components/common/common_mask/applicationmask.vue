@@ -202,7 +202,7 @@ requestData() {
 			var data = {
 				page: this.page.currentPage,
 				limit: this.page.pageSize,
-				name:this.searchList.name,
+				name: this.searchList.name,
 				description: this.searchList.description,
 			}
 			var url = this.basic_url + '/api-apps/appcfg';

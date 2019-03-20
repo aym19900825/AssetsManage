@@ -42,32 +42,6 @@
     								</el-dropdown-item>
 						  		</el-dropdown-menu>
 							</el-dropdown>
-							<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button>-->
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -91,24 +65,24 @@
 									</el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="5">
-								<el-form-item label="联系电话" prop="PHONE">
-									<el-input v-model="searchList.PHONE">
+							<el-col :span="5">
+								<el-form-item label="机构" prop="DEPTIDDesc">
+									<el-input v-model="searchList.DEPTIDDesc">
 									</el-input>
 								</el-form-item>
-							</el-col> -->
+							</el-col>
 							<el-col :span="5">
 								<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
 									<el-input v-model="searchList.CONTACT_ADDRESS">
 									</el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="2" style="padding-top: 3px">
+							<!-- <el-col :span="4" style="margin-bottom:5px">
 								<el-select v-model="searchList.DEPTID" placeholder="请选择信息状态">
 									<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
 								</el-select>
-							</el-col>
-							<el-col :span="4">
+							</el-col> -->
+							<el-col :span="3">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 							</el-col>
@@ -365,7 +339,8 @@
 					CODE: '',
 					PHONE: '',
 					CONTACT_ADDRESS: '',
-					STATUS: ''
+					STATUS: '',
+					DEPTIDDesc:'',
 				};
 				this.requestData();
 			},

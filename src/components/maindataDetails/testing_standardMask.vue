@@ -284,7 +284,7 @@
 					}
 				],
 				rules: {
-					S_NUM: [{required: false, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
+					S_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
 					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isNickname}],//中文名称
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					editDataInfoProp: [

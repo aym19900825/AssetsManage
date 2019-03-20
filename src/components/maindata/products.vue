@@ -94,44 +94,24 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<el-table ref="table" :header-cell-style="rowClass" 
-								   :data="productList" 
-								   line-center 
-								   border 
-								   stripe 
-								   :height="fullHeight" 
-								   style="width: 100%;" 
-								   :default-sort="{prop:'productList', order: 'descending'}" 
-								   @selection-change="SelChange" 
-								   @sort-change="tableSortChange"
-								   v-loadmore="loadMore"
-								   v-loading="loading"  
-								   element-loading-text="加载中…"
-								   element-loading-spinner="el-icon-loading"
-								   element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<el-table-column label="编码" width="155" sortable="custom" prop="PRO_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<el-table-column label="编码" width="155" sortable="custom" prop="PRO_NUM" v-if="checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PRO_NUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable="custom" prop="PRO_NAME" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="名称" sortable="custom" prop="PRO_NAME" v-if="checkedName.indexOf('名称')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="155" sortable prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>-->
-								<el-table-column label="版本" width="100" sortable="custom" prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="版本" width="100" sortable="custom" prop="VERSION" v-if="checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable="custom" prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" width="185" sortable="custom" prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable="custom" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable="custom" :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable="custom" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable="custom" :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格 End-->
 						</el-col>
 					</el-row>
@@ -152,18 +132,21 @@
 	import productmask from '../maindataDetails/product_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'customer_management',
 		components: {
-			vheader,
-			navs_left,
-			navs_tabs,
-			productmask,
-			tableControle,
-			reportmask
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'productmask': productmask,
+			'tableControle': tableControle,
+			'reportmask': reportmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'product',
 				btn:'',//根据机构按钮的权限
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -262,9 +245,8 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			setSelData(val){
+				this.selUser = val;
 			},
 			fileSuccess(){
 				this.page.currentPage = 1;
@@ -282,60 +264,8 @@
 					this.selectData = res.data;
 				});
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
 			tableControle(data) {
 				this.checkedName = data;
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
 			},
 			//请求点击
 		    getbtn(item){
@@ -405,13 +335,11 @@
 					VERSION: '',
 					DEPTID: ''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			//搜索
 			searchinfo() {
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.requestData();
+				this.requestData('init');
 			},
 			//清空
 			reset() {
@@ -616,61 +544,10 @@
 				this.reportData.app=this.product;
 				this.$refs.reportChild.visible();
 			},
-			judge(data) {
-				return data.STATUS == "1" ? '活动' : '不活动'
-			},
-			SelChange(val) {
-				this.selUser = val;
-			},
-			tableSortChange(column){
-				this.page.currentPage = 1;
-				if (column.order === 'descending') {
-					this.searchList.sortby = column.prop + '_orders';
-					this.searchList.order = 'desc'
-				} else {
-					this.searchList.sortby = column.prop + '_orders';
-					this.searchList.order = 'asc'
-				}
-				this.requestData();
-			},
 			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					PRO_NUM: this.searchList.PRO_NUM,
-					PRO_NAME: this.searchList.PRO_NAME,
-					VERSION: this.searchList.VERSION,
-					DEPTID: this.searchList.DEPTID,
-					// STATUS: this.searchList.STATUS,
-				}
-				if(!!this.searchList.sortby){
-					data[this.searchList.sortby] = this.searchList.order;
-				}
-				var url = this.basic_url + '/api-apps/app/product';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.productList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
+				this.$refs.table.requestData();
 			},
 			handleNodeClick(data) {},
-			formatter(row, column) {
-				return row.enabled;
-			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
@@ -713,7 +590,7 @@
 			}
 		},
 		mounted() {
-			this.requestData();
+			// this.requestData();
 			this.getCompany();
 			this.getdept();
 		},

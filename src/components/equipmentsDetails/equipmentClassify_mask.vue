@@ -125,28 +125,6 @@
 			page: Object,
 		},
 		data() {
-			// var validateNum = (rule, value, callback) => {
-			// 	if(value != ""){
-		 //             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		 //                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		 //             }else{
-		 //                 callback();
-		 //             }
-		 //         }else{
-		 //             callback();
-		 //         }
-			// };
-			// var validateType = (rule, value, callback) => {
-			// 	if(value === '') {
-			// 		callback(new Error('请填写产品类别名称'));
-			// 	} else {
-			// 		if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		 //                 callback(new Error("请规范填写名称"));
-		 //            }else{
-		 //                callback();
-		 //            }
-			// 	}
-			// };
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -447,6 +425,7 @@
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/assetClass/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
+							console.log(res);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({

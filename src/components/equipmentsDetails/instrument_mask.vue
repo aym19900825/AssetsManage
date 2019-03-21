@@ -104,15 +104,15 @@
 						</div>
 
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 						</div>
 					</el-form>
 				</div>
 				<!--底部-->
-			</div>
+			</div>saveAndUpdate
 
 			<!--设备分类 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
@@ -1148,32 +1148,28 @@
 										message: '保存成功',
 										type: 'success',
 									});
-									this.$emit('request');
-									this.reset();
+									if(opt=="Update"){
+										this.$emit('request');
+										this.reset();
+										this.show=false;
+									}else{
+										this.show=true;
+										this.$emit('request');
+										this.reset();
+									}
+									
 								}
 							}
 						}).catch((err) => {
 						});
-						this.falg=true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg=false;
 					}
 				});
-			},
-			saveAndUpdate(dataInfo) {
-				this.save(dataInfo);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			saveAndSubmit(dataInfo) {
-				this.save(dataInfo);
-				this.show = true;
 			},
 			searchinfo() {//点击高级搜索-搜索按钮后显示的内容
 				this.page.currentPage = 1;

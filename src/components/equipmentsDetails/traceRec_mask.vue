@@ -74,8 +74,8 @@
 						</div>
 
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 						</div>
@@ -123,19 +123,13 @@
 					RECORDNUM: [
 						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
-					// ASSETNUM: [
-					// 	{ required: true, message: '请输入设备编号', trigger: 'blur' },
-					// ],
-					// MODEL: [
-					// 	{ required: true, message: '请输入规格型号', trigger: 'blur' },
-					// ],
 					C_NUM: [
 						{ required: true, message: '必填', trigger: 'blur' },
 						{ trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
 					A_NAME: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isWorknumber},
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					PM_MODEL: [
 						{ required: true, message: '请选择', trigger: 'blur' },
@@ -145,19 +139,19 @@
 					],
 					R_CONCLUSION: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isWorknumber},
+						{ trigger: 'blur', validator: this.Validators.isFillTips},
 					],
 					A_KPI: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						{ trigger: 'blur', validator: this.Validators.isFillTips},
 					],
 					SORUCE: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						{ trigger: 'blur', validator: this.Validators.isFillTips},
 					],
 					R_DESC: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isWorknumber},
+						{ trigger: 'blur', validator: this.Validators.isFillTips},
 					],
 					C_PERSON: [
 						{ required: true, message: '必填', trigger: 'blur' },
@@ -175,11 +169,11 @@
 					],
 					S_MEMO: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						{ trigger: 'blur', validator: this.Validators.isFillTips},
 					],
 					DESCRIPTION: [
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						{ trigger: 'blur', validator: this.Validators.isFillTips},
 					],
 				},
 				basicInfo: [
@@ -598,6 +592,15 @@
 									message: '保存成功',
 									type: 'success',
 								});
+								if(opt=='Update'){
+									this.$emit('request');
+									this.resetForm();
+									this.show=false;
+								}else{
+									this.$emit('request');
+									this.resetForm();
+									this.show=true;
+								}
 								if(opt == 'docUpload'){
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
@@ -613,26 +616,14 @@
 							}
 						}).catch((err) => {
 						});
-						this.falg=true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg=false;
 					}
 				});
-			},
-			saveAndUpdate(dataInfo) {
-				this.save(dataInfo);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			saveAndSubmit(dataInfo) {
-				this.save(dataInfo);
-				this.show = true;
 			},
 		},
 		mounted() {

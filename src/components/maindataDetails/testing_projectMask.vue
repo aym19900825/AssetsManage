@@ -365,11 +365,6 @@
 						trigger: 'blur',
 						validator: validateQUALIFICATION,
 					}],
-					DOCLINKS_NUM: [{
-						required: true,
-						// trigger: 'blur',
-						validator: validateDOCLINKS_NUM,
-					}],
 					UNITCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				testing_projectForm:{},//检验/检测项目数据组

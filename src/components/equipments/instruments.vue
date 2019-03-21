@@ -322,7 +322,7 @@
 		},
 		methods: {
 			setSelData(val){
-				this.selMenu = val;
+				this.selUser = val;
 			},
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {

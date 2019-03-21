@@ -136,9 +136,9 @@
 								</el-table-column>
 								<el-table-column label="启用时间" width="100" sortable prop="STARTETIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用时间')!=-1">
 								</el-table-column>
-								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="版本" width="70" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
 								</el-table-column>
 								<el-table-column label="录入时间" width="100" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>

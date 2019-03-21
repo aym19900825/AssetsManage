@@ -291,13 +291,21 @@
 						fullname: this.searchDept.fullname
 					}
 				};
-				var url = this.basic_url + '/api-user/depts/tree';
+				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, data).then((res) => {
-					console.log(res.data);
-					this.deptList = res.data.data;
+					// console.log(res.data);
+					let result=res.data
+					for(let i=0;i<result.length;i++){
+						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
+							let subDepts=result[i].subDepts;
+							result[i].children=subDepts;
+						}	
+					}
+					this.deptList = result;
+					this.loading = false;
 				}).catch((wrong) => {
 					this.$message({
-						message: wrong.resp_msg,
+							message: wrong.resp_msg,
 							type: 'warning'
 						});
 				})
@@ -483,7 +491,6 @@
 				this.loading = true;
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
-					
 					let result=res.data
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){

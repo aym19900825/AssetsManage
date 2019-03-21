@@ -81,6 +81,14 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5">
+										<el-col :span="8">
+										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
+											<el-select clearable v-model="WORKPLAN.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special
+" style="width: 100%" @change="changeCJDW">
+												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+											</el-select>
+										</el-form-item>	
+										</el-col>
 										<el-col :span="6">
 											<el-form-item label="提报日期" prop="REPORTDATE"  label-width="85px">
 											<div class="block">

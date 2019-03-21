@@ -48,7 +48,7 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" disabled>
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="special">
 										<el-col :span="4">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
@@ -102,22 +102,23 @@
 								<el-row>
 									<el-col :span="8" >
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="changeCJDW">
+											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special
+" style="width: 100%" @change="changeCJDW">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
-											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
+												   <el-button slot="append" :disabled="special" icon="el-icon-search" @click="addcategory"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="true">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
+												   <el-button slot="append" :disabled="special" icon="el-icon-search" @click="addproduct"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -125,7 +126,7 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
@@ -141,7 +142,7 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="true">
+											<el-input v-model="dataInfo.V_NAME" :disabled="special">
 												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
 											</el-input>
 										</el-form-item>
@@ -312,7 +313,7 @@
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
-										<el-form-item label="检验检测费用(元)" prop="CHECTCOST" label-width="110px">
+										<el-form-item label="检验检测费用(元)" prop="CHECTCOST" label-width="130px">
 											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
 										</el-form-item>
 									</el-col>
@@ -366,8 +367,8 @@
 						</div>
 					</el-form>
 					<div class="content-footer" v-show="noviews">
-	                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
+	          <el-button type="primary" @click="save('Update')">保存</el-button>
+						<el-button type="success" v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 					<div class="content-footer" v-show="views">
@@ -471,18 +472,18 @@
 		},
 		data() {
 			//金额验证
-            var price=(rule, value, callback) => {
-				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				if(value != '' && value!=undefined){
-					if(exp.test(value)==false){ 
-	                    callback(new Error('请输入数字'));
-	              }else{
-	                    callback();
-	                }
-				}else {
-					callback();
-				}
-			};
+			// var price=(rule, value, callback) => {
+			// 	var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+			// 	if(value != '' && value!=undefined){
+			// 		if(exp.test(value)==false){ 
+			// 			callback(new Error('请输入数字'));
+			// 			}else{
+			// 				callback();
+			// 			}
+			// 	}else {
+			// 		callback();
+			// 	}
+			// };
 			return {
 				loading: false,
 				loadSign:true,//加载
@@ -512,6 +513,7 @@
 				selUser: [],
 				edit: true, //禁填
 				noedit: false,
+				special:false,//特殊
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
@@ -568,7 +570,7 @@
 					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
-					CHECTCOST:[{required: false,trigger: 'change',validator:price}], //检验检测费用
+					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
 					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [
 						{required: true,trigger: 'blur',message: '必填',	},
@@ -796,6 +798,8 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.reset();
+				this.special=false;
+				this.noviews=true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
@@ -837,6 +841,13 @@
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
+					if(this.dataInfo.WP_NUM!=undefined||this.dataInfo.WP_NUM!=null){
+							this.special=true;
+							this.noviews=false;
+					}else{
+							this.special=false;
+							this.noviews=true;
+					}
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
 				}).catch((err) => {
@@ -860,6 +871,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.special=true;
 				this.detailgetData();
 				this.isEditing=false;
 				//判断启动流程和审批的按钮是否显示
@@ -952,7 +964,7 @@
 			},
 			
 			// 保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
@@ -963,7 +975,7 @@
 						return false;
 			      }else{
 			         var oDate1 = new Date(this.dataInfo.XD_DATE); //下达日期
-    				 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
+    				 	 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
     				  if(oDate1.getTime() > oDate2.getTime()){ 
         						this.$message({
 								message: '完成时间不能早于下达时间',
@@ -985,15 +997,19 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							//重新加载数据
-							this.$emit('request');
-							this.reset();
+							if(parameter=="Update"){
+								this.show = false;
+								this.$emit('request');
+								this.reset();
+							}else{
+								this.show = true;
+								this.$emit('request');
+								this.reset();
+							}
 						}
-						this.falg=true
 					}).catch((err) => {
-						this.falg=false
+							this.show = true;
 					});}
-					this.falg=true
 					} else {
 						this.show=true;
 					 	this.$message({
@@ -1003,19 +1019,6 @@
 						this.falg=false
 					}
 				});
-			},
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				
-			},
-			//提交并保存
-			saveAndSubmit() {
-				this.save();
-				this.show = true;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

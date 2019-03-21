@@ -89,11 +89,8 @@
 					<el-row class="relative" id="pageDiv">
 						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
-								<div class="left_tree_title clearfix" @click="min3max()">
+								<div class="left_tree_title clearfix">
 									<div class="pull-left pr20" v-if="ismin">类型</div>
-									<span class="pull-right navbar-minimalize minimalize-styl-2">
-										<i class="icon-doubleok icon-double-angle-left blue"></i>
-									</span>
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
@@ -640,24 +637,7 @@
 				}
 				m.isFolder = !m.isFolder;
 			},
-			min3max() { //左侧菜单正常和变小切换
-				if($(".lefttree").hasClass("el-col-5")) {
-					$(".lefttree").removeClass("el-col-5");
-					$(".lefttree").addClass("el-col-1");
-					$(".leftcont").removeClass("el-col-19");
-					$(".leftcont").addClass("el-col-23");
-					$(".icon-doubleok").removeClass("icon-double-angle-left");
-					$(".icon-doubleok").addClass("icon-double-angle-right");
-				} else {
-					$(".lefttree").removeClass("el-col-1");
-					$(".lefttree").addClass("el-col-5");
-					$(".leftcont").removeClass("el-col-23");
-					$(".leftcont").addClass("el-col-19");
-					$(".icon-doubleok").removeClass("icon-double-angle-right");
-					$(".icon-doubleok").addClass("icon-double-angle-left");
-				}
-				this.ismin = !this.ismin;
-			},
+			
 			getTreeId(data) {
 				if(data.type == '1') {
 					this.companyId = data.id;

@@ -402,13 +402,13 @@
 						if (this.inspectionRepTem2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;
 						}else{
-	                        isEditingflag=true;
-	                        break;
+							isEditingflag=true;
+							break;
 						}
 					}
 					if (isEditingflag==false){
-	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate
+							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+							var currentUser, currentDate
 							this.currentUser=res.data.nickname;
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");

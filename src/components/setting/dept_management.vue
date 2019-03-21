@@ -140,7 +140,7 @@
 					},
 					{
 						text: '机构属性',
-						dataIndex: 'type',
+						dataIndex: 'typeName',
 						isShow:true,
 					},
 					{
@@ -288,17 +288,18 @@
 			searchinfo(index) {//高级查询
 				var data = {
 					params: {
-						page: 1,
-						limit: 10,
-						simplename: this.searchDept.simplename,
 						fullname: this.searchDept.fullname
 					}
 				};
-				var url = this.basic_url + '/api-user/depts';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, data).then((res) => {
+					console.log(res.data);
 					this.deptList = res.data.data;
 				}).catch((wrong) => {
-
+					this.$message({
+						message: wrong.resp_msg,
+							type: 'warning'
+						});
 				})
 			},
 			resetbtn(){

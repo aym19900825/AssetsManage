@@ -74,11 +74,8 @@
 					<el-row class="relative" id="pageDiv">
 						<el-col :span="5" class="lefttree" id="left">
 							<div class="lefttreebg">
-								<div class="left_tree_title clearfix" @click="min3max()">
+								<div class="left_tree_title clearfix">
 									<div class="pull-left pr20" v-if="ismin">组织机构</div>
-									<span class="pull-right navbar-minimalize minimalize-styl-2">
-										<i class="icon-doubleok icon-double-angle-left blue"></i>
-									</span>
 								</div>
 								<div class="left_treebg" :style="{height: fullHeight}">
 									<div class="p15" v-if="ismin">
@@ -120,7 +117,7 @@
 								</el-table-column>
 								<el-table-column label="手机号" sortable width="150px" prop="phone" v-if="this.checkedName.indexOf('手机号')!=-1">
 								</el-table-column>
-								<el-table-column label="员工号" sortable width="150px" prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
+								<el-table-column label="员工号" sortable prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
 								</el-table-column>
 								<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('用户有效期')!=-1">
 								</el-table-column>
@@ -674,6 +671,8 @@
 			var product=[];
 			var checkProduct=[];
 			var checkProductType=[];
+			var deptIds=[];
+			var checkDeptIds=[];
 			var work=this.$refs.work.getCheckedNodes();
 			var annual=this.$refs.annual.getCheckedNodes();
 			var products=this.$refs.product.getCheckedNodes();
@@ -695,6 +694,8 @@
 					}
 				}else if(products[c].type!="dept"&&products[c].type!="product"){
 					  productType.push(products[c].id);
+				}else if(products[c].type="dept"){
+						deptIds.push(products[c].id)
 				}	
 			}
 			for(var c=0;c<testingproduct.length;c++){
@@ -704,6 +705,8 @@
           }
 				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
 					  checkProductType.push(testingproduct[c].id);
+				}else if(testingproduct[c].type="dept"){
+						checkDeptIds.push(testingproduct[c].id)
 				}	
 			}
 			pmType = pmType.join(',');
@@ -712,6 +715,8 @@
 			productType = productType.join(',');
 			checkProduct = checkProduct.join(',');
 			checkProductType = checkProductType.join(',');
+			deptIds=deptIds.join(',');
+			checkDeptIds=checkDeptIds.join(',');
  				var data = {
  					pmType:pmType,
 					taskType:taskType,
@@ -719,6 +724,8 @@
 					product:product,
 					checkProduct:checkProduct,
 					checkProductType:checkProductType,
+					deptIds:deptIds,
+					checkDeptIds:checkDeptIds,
           userId:this.selUser[0].id
 				}
 				var url = this.basic_url + '/api-user/users/setAuth';
@@ -728,6 +735,8 @@
 					product:product,
 					checkProduct:checkProduct,
 					checkProductType:checkProductType,
+					deptIds:deptIds,
+					checkDeptIds:checkDeptIds,
           userId:this.selUser[0].id}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
@@ -1082,24 +1091,24 @@
 				this.requestData();
 			},
 
-			min3max() { //左侧菜单正常和变小切换
-				if($(".lefttree").hasClass("el-col-5")) {
-					$(".lefttree").removeClass("el-col-5");
-					$(".lefttree").addClass("el-col-1");
-					$(".leftcont").removeClass("el-col-19");
-					$(".leftcont").addClass("el-col-23");
-					$(".icon-doubleok").removeClass("icon-double-angle-left");
-					$(".icon-doubleok").addClass("icon-double-angle-right");
-				} else {
-					$(".lefttree").removeClass("el-col-1");
-					$(".lefttree").addClass("el-col-5");
-					$(".leftcont").removeClass("el-col-23");
-					$(".leftcont").addClass("el-col-19");
-					$(".icon-doubleok").removeClass("icon-double-angle-right");
-					$(".icon-doubleok").addClass("icon-double-angle-left");
-				}
-				this.ismin = !this.ismin;
-			},
+			// min3max() { //左侧菜单正常和变小切换
+			// 	if($(".lefttree").hasClass("el-col-5")) {
+			// 		$(".lefttree").removeClass("el-col-5");
+			// 		$(".lefttree").addClass("el-col-1");
+			// 		$(".leftcont").removeClass("el-col-19");
+			// 		$(".leftcont").addClass("el-col-23");
+			// 		$(".icon-doubleok").removeClass("icon-double-angle-left");
+			// 		$(".icon-doubleok").addClass("icon-double-angle-right");
+			// 	} else {
+			// 		$(".lefttree").removeClass("el-col-1");
+			// 		$(".lefttree").addClass("el-col-5");
+			// 		$(".leftcont").removeClass("el-col-23");
+			// 		$(".leftcont").addClass("el-col-19");
+			// 		$(".icon-doubleok").removeClass("icon-double-angle-right");
+			// 		$(".icon-doubleok").addClass("icon-double-angle-left");
+			// 	}
+			// 	this.ismin = !this.ismin;
+			// },
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsTabs.showClick(childValue);

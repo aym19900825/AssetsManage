@@ -123,10 +123,10 @@
 						{ required: true, message: '请选择', trigger: 'blur' },
 					],
 					WD: [
-						{ required: false, validator: this.Validators.isPrice, trigger: 'blur' }
+						{ required: false, validator: this.Validators.isPriceNum, trigger: 'blur' }
 					],
 					SD: [
-						{ required: false, validator: this.Validators.isPrice, trigger: 'blur' }
+						{ required: false, validator: this.Validators.isPriceNum, trigger: 'blur' }
 					],
 					C_SITE: [
 						{ required: true, message: '必填', trigger: 'blur'},
@@ -204,7 +204,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '温度',
+						label: '温度（℃）',
 						prop: 'WD',
 						width: '30%',
 						type: 'input',
@@ -212,7 +212,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '湿度',
+						label: '湿度（%rh）',
 						prop: 'SD',
 						width: '30%',
 						type: 'input',
@@ -366,8 +366,8 @@
 					'A_NAME': '',
 					'MODEL': '',
 					'C_DATE': '',
-					'WD': '',
-					'SD': '',
+					'WD': '',//温度
+					'SD': '',//湿度
 					'C_SITE': '',  //必填但是页面没有
 					'C_BASIS': '',  //必填但是页面没有
 					'C_KPI': '',
@@ -527,8 +527,8 @@
 					'A_NAME': '',
 					'MODEL': '',
 					'C_DATE': '',
-					'WD': '',
-					'SD': '',
+					'WD': '',//温度
+					'SD': '',//湿度
 					'C_SITE': '',  //必填但是页面没有
 					'C_BASIS': '',  //必填但是页面没有
 					'C_KPI': '',

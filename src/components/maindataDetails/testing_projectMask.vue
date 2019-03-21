@@ -294,18 +294,18 @@
 				}
 			};
 			 //金额验证
-				var price=(rule, value, callback) => {//生产单位名称 
-				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				if(value != '' && value!=undefined){
-					if(exp.test(value)==false){ 
-						callback(new Error('请输入数字'));
-					}else{
-						callback();
-						}
-				}else {
-					callback();
-				}
-           };
+			// var price=(rule, value, callback) => {//生产单位名称 
+			// 	var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+			// 	if(value != '' && value!=undefined){
+			// 		if(exp.test(value)==false){ 
+			// 			callback(new Error('请输入数字'));
+			// 		}else{
+			// 			callback();
+			// 			}
+			// 	}else {
+			// 		callback();
+			// 	}
+			// };
 			return {
 				testing_projectForm:{
 					CHANGEBY: '',
@@ -370,7 +370,7 @@
 						// trigger: 'blur',
 						validator: validateDOCLINKS_NUM,
 					}],
-					UNITCOST:[{required: false,trigger: 'change',validator:price}],
+					UNITCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				testing_projectForm:{},//检验/检测项目数据组
 				//tree
@@ -488,10 +488,8 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice() {
 				var money = document.getElementById("cost").value;
-				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.testing_projectForm.UNITCOST = num.join(".");
 			},
 			getCompany() { //文件查询接口，暂无通，待修改

@@ -945,9 +945,9 @@
     font-size: 0px;
     opacity: 0;
     filter: alpha(opacity=0);
-    width: 70px;
+    width: 100%;
     cursor: pointer;
-		height: 30px;
+		height: 160px;
 		left: 0px;
 		top: 0px;
  }

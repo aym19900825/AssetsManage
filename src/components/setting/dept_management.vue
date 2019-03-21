@@ -411,7 +411,7 @@
 				}
 			},
 			// 彻底删除
-			deluserinfo() {
+			physicsDel() {
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({

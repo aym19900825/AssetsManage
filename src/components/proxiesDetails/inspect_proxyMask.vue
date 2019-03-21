@@ -91,9 +91,9 @@
 								<el-collapse-item title="样品" name="2" >
 										<el-row>
 											<el-col :span="8">
-												<el-form-item label="是否接样" prop="ITEM_NAME" label-width="110px">
-													<el-radio-group v-model="dataInfo.ITEM_NAME" :disabled="noedit">
-														<el-radio label="是"></el-radio>
+												<el-form-item label="是否接样" prop="ISRECEIVE" label-width="110px">
+													<el-radio-group v-model="dataInfo.ISRECEIVE" :disabled="noedit">
+														<el-radio label="是" checked></el-radio>
 														<el-radio label="否"></el-radio>
 													</el-radio-group>
 												</el-form-item>

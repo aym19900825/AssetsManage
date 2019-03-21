@@ -367,8 +367,8 @@
 						</div>
 					</el-form>
 					<div class="content-footer" v-show="noviews">
-	                    <el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-						<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
+	          <el-button type="primary" @click="save('Update')">保存</el-button>
+						<el-button type="success" v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
 						<el-button @click='close'>取消</el-button>
 					</div>
 					<div class="content-footer" v-show="views">
@@ -964,7 +964,7 @@
 			},
 			
 			// 保存users/saveOrUpdate
-			save() {
+			save(parameter) {
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
 							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
@@ -975,7 +975,7 @@
 						return false;
 			      }else{
 			         var oDate1 = new Date(this.dataInfo.XD_DATE); //下达日期
-    				 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
+    				 	 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
     				  if(oDate1.getTime() > oDate2.getTime()){ 
         						this.$message({
 								message: '完成时间不能早于下达时间',
@@ -997,15 +997,19 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							//重新加载数据
-							this.$emit('request');
-							this.reset();
+							if(parameter=="Update"){
+								this.show = false;
+								this.$emit('request');
+								this.reset();
+							}else{
+								this.show = true;
+								this.$emit('request');
+								this.reset();
+							}
 						}
-						this.falg=true
 					}).catch((err) => {
-						this.falg=false
+							this.show = true;
 					});}
-					this.falg=true
 					} else {
 						this.show=true;
 					 	this.$message({
@@ -1015,19 +1019,6 @@
 						this.falg=false
 					}
 				});
-			},
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				
-			},
-			//提交并保存
-			saveAndSubmit() {
-				this.save();
-				this.show = true;
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

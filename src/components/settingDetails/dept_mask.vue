@@ -172,8 +172,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							    <el-button type="primary" @click="saveAndUpdate">保存</el-button>
-							    <el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
+							    <el-button type="primary" @click="save('Update')">保存</el-button>
+							    <el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
 								<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
 								<el-button @click="close">取消</el-button> 
@@ -301,6 +301,7 @@
 					totalCount: 0
 				},
 				dialogVisible: false, //对话框
+				noedit: false,
 				edit: true, //禁填
 				editSearch: '',
 				noedit:false,//表单内容
@@ -620,7 +621,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			//获取负责人数据
-			requestData(index) {
+			requestData() {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -658,48 +659,42 @@
 				}).catch((wrong) => {})
 			},
 			//保存
-			save() {
+			save(parameter) {
 				var _this = this;
 				this.$refs.adddeptForm.validate((valid) => {
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
 					this.$axios.post(url, _this.adddeptForm).then((res) => {
+						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
 								type: 'success'
 							});
-							//重新加载数据
-							this.$emit('request');
-//							 this.$refs["adddeptForm"].resetFields();//清空验证
+							if(parameter=="Update"){
+								console.log(parameter);
+								this.$emit('request');
+								this.show = false;
+							}else{
+								this.$emit('reset');
+								this.show = true;
+							}
+							this.$refs["adddeptForm"].resetFields();//清空验证							 
 						}
 					}).catch((err) => {
+						
 					});
-					this.falg=true;
 		          } else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 		        });
 				
-			},
-			saveAndUpdate(){
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				this.$emit('request');
-			},
-			saveAndSubmit(){
-				this.save();
-				this.$emit('reset');
-				this.$emit('request');
 			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')

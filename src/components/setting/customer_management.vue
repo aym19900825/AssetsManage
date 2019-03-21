@@ -66,7 +66,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="机构" prop="DEPTIDDesc">
+								<el-form-item label="创建机构" prop="DEPTIDDesc">
 									<el-input v-model="searchList.DEPTIDDesc">
 									</el-input>
 								</el-form-item>
@@ -121,7 +121,7 @@
 							</el-table-column>
 							<el-table-column label="类型" sortable prop="TYPEDesc" v-if="this.checkedName.indexOf('类型')!=-1">
 							</el-table-column>
-							<el-table-column label="机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+							<el-table-column label="创建机构" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('创建机构')!=-1">
 							</el-table-column>
 							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
@@ -191,7 +191,7 @@
 					'单位名称',
 					'联系地址',
 					'类型',
-					'机构',
+					'创建机构',
 					'备注',
 					// '联系电话',
 					// '信息状态',
@@ -214,7 +214,7 @@
 						prop: 'TYPEDesc'
 					},
 					{
-						label: '机构',
+						label: '创建机构',
 						prop: 'DEPTIDDesc'
 					},
 					{

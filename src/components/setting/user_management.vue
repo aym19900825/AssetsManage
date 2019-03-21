@@ -117,7 +117,7 @@
 								</el-table-column>
 								<el-table-column label="手机号" sortable width="150px" prop="phone" v-if="this.checkedName.indexOf('手机号')!=-1">
 								</el-table-column>
-								<el-table-column label="员工号" sortable width="150px" prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
+								<el-table-column label="员工号" sortable prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
 								</el-table-column>
 								<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('用户有效期')!=-1">
 								</el-table-column>

@@ -304,6 +304,7 @@
 				noedit: false,
 				edit: true, //禁填
 				editSearch: '',
+				noedit:false,//表单内容
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				show: false,
 				isok1: true,
@@ -592,7 +593,6 @@
 				})
 			},
 			
-
 			//点击关闭按钮
 			close() {
 				this.show = false;

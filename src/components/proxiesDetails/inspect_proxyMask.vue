@@ -89,7 +89,17 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="样品" name="2" >
-										<el-row >
+										<el-row>
+											<el-col :span="8">
+												<el-form-item label="是否接样" prop="ITEM_NAME" label-width="110px">
+													<el-radio-group v-model="dataInfo.ITEM_NAME" :disabled="noedit">
+														<el-radio label="是"></el-radio>
+														<el-radio label="否"></el-radio>
+													</el-radio-group>
+												</el-form-item>
+											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_NAME" :disabled="edit">
@@ -97,7 +107,6 @@
 													</el-input>
 												</el-form-item>
 											</el-col>
-										
 											<el-col :span="8">
 												<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="edit"></el-input>
@@ -110,7 +119,7 @@
 												</el-form-item>
 											</el-col>
 										</el-row>
-										<el-row >
+										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品信息状态" prop="ITEM_STATUSDesc" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="edit"></el-input>
@@ -122,13 +131,25 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8" >
-												<el-form-item label="承检单位" prop="R_VENDORDesc"  label-width="110px">
+												<el-form-item label="承检单位" prop="R_VENDORDesc" label-width="110px">
 													<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" >
+												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
+													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT" :disabled="true">
+													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -183,22 +204,6 @@
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
-											</div>
-											<div>
-												<el-row>
-												    <el-col :span="8" >
-														<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="80px">
-															<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-															</el-input>
-														</el-form-item>
-													</el-col>
-													<el-col :span="8">
-														<el-form-item label="产品名称" prop="PRODUCT" label-width="80px">
-															<el-input v-model="dataInfo.PRODUCT" :disabled="true">
-															</el-input>
-														</el-form-item>
-													</el-col>
-												</el-row>`
 											</div>
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
@@ -741,76 +746,76 @@
 			 testprojectmask
 		},
 		data() {
-			var validate = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('必填'));
-				} else {
-					callback();
-				}
-			};
-			var validateVname = (rule, value, callback) => {//名称
-                if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateVaddress = (rule, value, callback) => {//地址
-                if (this.dataInfo.V_ADDRESS === undefined || this.dataInfo.V_ADDRESS === '' || this.dataInfo.V_ADDRESS === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateVzipcode = (rule, value, callback) => {//邮编
-                if (this.dataInfo.V_ZIPCODE === undefined || this.dataInfo.V_ZIPCODE === '' || this.dataInfo.V_ZIPCODE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateVperson = (rule, value, callback) => {//联系人姓名
-                if (this.dataInfo.V_PERSON === undefined || this.dataInfo.V_PERSON === '' || this.dataInfo.V_PERSON === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateVphone = (rule, value, callback) => {//联系人电话
-                if (this.dataInfo.V_PHONE === undefined || this.dataInfo.V_PHONE === '' || this.dataInfo.V_PHONE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateItemname = (rule, value, callback) => {//样品名称
-                if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validatePname = (rule, value, callback) => {//生产单位名称
-                if (this.dataInfo.P_NAME === undefined || this.dataInfo.P_NAME === '' || this.dataInfo.P_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
+			// var validate = (rule, value, callback) => {
+			// 	if(value === '') {
+			// 		callback(new Error('必填'));
+			// 	} else {
+			// 		callback();
+			// 	}
+			// };
+			// var validateVname = (rule, value, callback) => {//名称
+            //     if (this.dataInfo.V_NAME === undefined || this.dataInfo.V_NAME === '' || this.dataInfo.V_NAME === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+			// var validateVaddress = (rule, value, callback) => {//地址
+            //     if (this.dataInfo.V_ADDRESS === undefined || this.dataInfo.V_ADDRESS === '' || this.dataInfo.V_ADDRESS === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+			// var validateVzipcode = (rule, value, callback) => {//邮编
+            //     if (this.dataInfo.V_ZIPCODE === undefined || this.dataInfo.V_ZIPCODE === '' || this.dataInfo.V_ZIPCODE === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+			// var validateVperson = (rule, value, callback) => {//联系人姓名
+            //     if (this.dataInfo.V_PERSON === undefined || this.dataInfo.V_PERSON === '' || this.dataInfo.V_PERSON === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+			// var validateVphone = (rule, value, callback) => {//联系人电话
+            //     if (this.dataInfo.V_PHONE === undefined || this.dataInfo.V_PHONE === '' || this.dataInfo.V_PHONE === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+			// var validateItemname = (rule, value, callback) => {//样品名称
+            //     if (this.dataInfo.ITEM_NAME === undefined || this.dataInfo.ITEM_NAME === '' || this.dataInfo.ITEM_NAME === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
+			// var validatePname = (rule, value, callback) => {//生产单位名称
+            //     if (this.dataInfo.P_NAME === undefined || this.dataInfo.P_NAME === '' || this.dataInfo.P_NAME === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
             //var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
             //金额验证
-            var price=(rule, value, callback) => {//生产单位名称 
-				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				if(value != '' && value!=undefined){
-					if(exp.test(value)==false){ 
-	                    callback(new Error('请输入数字'));
-	              }else{
-	                    callback();
-	                }
-				}else {
-					callback();
-				}
-           };
+        //     var price=(rule, value, callback) => {//生产单位名称 
+		// 		var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+		// 		if(value != '' && value!=undefined){
+		// 			if(exp.test(value)==false){ 
+	    //                 callback(new Error('请输入数字'));
+	    //           }else{
+	    //                 callback();
+	    //             }
+		// 		}else {
+		// 			callback();
+		// 		}
+        //    };
 			return {
 				approvingData:{},
 				loading: false,
@@ -919,16 +924,16 @@
 				labelPosition: 'top', //表格
 				labelPositions: 'right',
 				rules: {
-					V_NAME: [{ required: true, validator: validateVname}],//名称
-					V_ADDRESS: [{ required: true,validator: validateVaddress}],//地址
-					V_ZIPCODE: [{ required: true,validator: validateVzipcode}],//邮编
-					V_PERSON: [{ required: true,validator: validateVperson}],//联系人姓名
-					V_PHONE: [{ required: true,validator: validateVphone}],//联系人电话
-					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//责任单位
+					V_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//委托单位名称
+					V_ADDRESS: [{ required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
+					V_ZIPCODE: [{ required: true, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
+					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNikname}],//联系人姓名
+					V_PHONE: [{ required: true, trigger: 'blur', validator: this.Validators.isPhone}],//联系人电话
+					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
-					P_NAME: [{ required: true,validator: validatePname}],//生产单位名称
+					P_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
 					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
+					ITEM_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
 					ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'},{ type: 'number', message: '请输入数字'}],//数量
@@ -936,7 +941,10 @@
 					ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
-					REMARKS: [{ required: true, message: '必填', trigger: 'blur' }],//抽样方案/判定依据
+					REMARKS: [
+						{ required: true, message: '必填', trigger: 'blur'},
+						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+					],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
@@ -944,10 +952,11 @@
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 					MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
 					LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
-//					MEMO: [{ required: true, message: '必填', trigger: 'blur' }],//备注
-					CHECK_COST:[{required: false,trigger: 'change',validator:price}],
-					ACTUALCOST:[{trigger: 'blur',validator:price}],
-					CONTRACTCOST:[{trigger: 'blur',  validator:price}],
+					ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
+					MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
+					CHECK_COST:[{required: false,trigger: 'change',validator:this.Validators.isPrices}],
+					ACTUALCOST:[{trigger: 'blur',validator:this.Validators.isPrices}],
+					CONTRACTCOST:[{trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1064,10 +1073,8 @@
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;
-				// this.initcost = money;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-				// this.dataInfo.CHECTCOST="￥" + num.join(".");
 				this.dataInfo.CHECK_COST = num.join(".");
 			},
 			staPrice(){

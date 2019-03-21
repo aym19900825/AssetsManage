@@ -17,7 +17,7 @@
 	                </div>
 	            </div>
 	            <div class="mask_content">
-					<el-form :rules="rules" :model="dataInfo" ref="dataInfo" class="demo-user">
+					<el-form inline-message :rules="rules" :model="dataInfo" ref="dataInfo" class="demo-user">
 						<div class="content-accordion">
 							<!-- 设备header信息 -->
 							<el-collapse v-model="activeNames">
@@ -164,8 +164,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 						</div>
@@ -565,6 +565,15 @@
 									message: '保存成功',
 									type: 'success',
 								});
+								if(opt=="Update"){
+									this.$emit('request');
+									this.resetForm();
+									this.show=false;
+								}else{
+									this.$emit('request');
+									this.resetForm();
+									this.show=true;
+								}
 								if(opt == 'docUpload'){
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
@@ -585,22 +594,8 @@
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg=false;
 					}
 				});
-			},
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				this.$emit('request');
-			},
-			saveAndSubmit() {
-				this.save();
-				this.reset();
-				this.show = true;
-				this.$emit('request');
 			},
 		},
 		mounted() {

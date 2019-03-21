@@ -43,35 +43,37 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<!-- <el-col :span="8">
+										<el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
-										</el-col> -->
-										<el-col :span="8">
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="16">
 											<el-form-item label="委托单位名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="samplesForm.V_NAME" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="16">
+										<el-col :span="8">
 											<el-form-item label="委托单位统一社会信用代码" prop="VENDOR" label-width="220px">
 												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="16">
 											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
 												<el-input v-model="samplesForm.P_NAME" :disabled="noedit">
 													<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"  :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="16">
+										<el-col :span="8">
 											<el-form-item label="生产单位统一社会信用代码" prop="PRODUCT_COMPANY" label-width="220px">
 												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -137,7 +139,7 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="入库时间" prop="ACCEPTDATE" label-width="110px">
 												<div class="block">
 												    <el-date-picker
@@ -147,7 +149,7 @@
 												    </el-date-picker>
 												</div>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="110px">
 												<el-input v-model="samplesForm.ACCEPT_PERSON" placeholder="当前人" :disabled="true">
@@ -168,7 +170,7 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="接样人" prop="RECIP_PERSON" label-width="110px">
 												<el-input v-model="samplesForm.RECIP_PERSON" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getCatch" :disabled="noedit"></el-button>
@@ -185,8 +187,8 @@
 												    </el-date-picker>
 												</div>
 											</el-form-item>
-										</el-col>
-										<el-col :span="8">
+										</el-col> -->
+										<!-- <el-col :span="8">
 											<el-form-item label="状态日期" prop="STATUSDATE" label-width="110px">
 												<div class="block">
 												    <el-date-picker
@@ -196,7 +198,7 @@
 												    </el-date-picker>
 												</div>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 									</el-row>
 									
 									<el-row>
@@ -536,6 +538,7 @@
 					TYPE: [{ required:true, trigger:'blur', message:'必填'}],//类别
 					QUATITY: [{ required:true, trigger:'blur', validator: this.Validators.isInteger}],
 					ACCEPTDATE: [{required:true, message: '请选择', trigger:'change' }],
+					ACCEPT_PERSON: [{required:true, message: '必填', trigger:'blur' }],
 					ACCEPT_DATE: [{required:true, message: '请选择', trigger:'change' }],
 					RECIP_DATE: [{ required:true, message: '请选择', trigger:'change' }],
 					STATUSDATE: [{required:true, message: '请选择', trigger:'change' }],
@@ -633,7 +636,7 @@
 				this.samplesForm.PRO_VERSION = value[2];//产品版本
 			},
 			reset(){
-            	this.samplesForm = {
+				this.samplesForm = {
 					PROXYNUM: '',//委托书编号
 					ITEMNUM: '',//样品编号
 					VENDOR: '',//委托单位编号
@@ -648,7 +651,7 @@
 					MEMO: '',//备注
 					ACCEPTDATE: '',//入库时间
 					ACCEPT_PERSON: '',//收样人
-					ACCEPT_DATE: '',//收样日期
+					ACCEPT_DATE: '',//收样日期(缺省当前时间)
 					RECIP_PERSON: '',//接样人
 					RECIP_DATE: '',//接样日期
 					STATE: '1',//状态

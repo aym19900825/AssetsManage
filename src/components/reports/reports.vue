@@ -69,13 +69,17 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-							<el-table-column label="序号" sortable prop="id" v-if="checkedName.indexOf('序号')!=-1">
+							<!-- <el-table-column label="序号" sortable prop="id" v-if="checkedName.indexOf('序号')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.id}}
 									</p>
 								</template>
-							</el-table-column>
+							</el-table-column> -->
 							<el-table-column label="报表名称" width="200" sortable prop="code" v-if="checkedName.indexOf('报表名称')!=-1">
+								<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.code}}
+									</p>
+								</template>
 							</el-table-column>
 							<el-table-column label="报表文件" width="220" sortable prop="name" v-if="checkedName.indexOf('报表文件')!=-1">
 							</el-table-column>

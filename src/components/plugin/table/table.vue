@@ -91,9 +91,11 @@ export default {
         var maxIndex = 0;
         var clickIndex = 0;
         var selIndex = [];
+        var dataProp = (this.appName=='report'||this.appName=='reportFile'||this.appName=='flow' )?'id':'ID';
         for(var i=0; i<selData.length; i++){
           list.forEach(function(item, index){
-            if(item.ID == selData[i].ID){
+            
+            if(item[dataProp] == selData[i][dataProp]){
               selIndex.push(index);
               if(i==0){
                 minIndex = index;
@@ -103,7 +105,7 @@ export default {
                 maxIndex = index>maxIndex ? index:maxIndex; 
               }
             }
-            if(item.ID == row.ID){
+            if(item[dataProp] == row[dataProp]){
               clickIndex = index;
             }
           }); 
@@ -174,6 +176,10 @@ export default {
         var url =  this.basic_url + '/api-report/reportFile';
       }else if(this.appName == 'report'){
         var url =  this.basic_url + '/api-report/report';
+      }else if(this.appName == 'flow'){
+        var url =  this.basic_url + '/api-flow/flow/model';
+      }else if(this.appName == 'flowProcess'){
+        var url =  this.basic_url + '/api-flow/flow/process';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

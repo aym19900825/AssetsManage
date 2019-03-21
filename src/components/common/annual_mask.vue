@@ -83,8 +83,7 @@
 									<el-row :gutter="5">
 										<el-col :span="8">
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-											<el-select clearable v-model="WORKPLAN.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special
-" style="width: 100%" @change="changeCJDW">
+											<el-select clearable v-model="WORKPLAN.CJDW" filterable allow-create default-first-option placeholder="请选择"  style="width: 100%" >
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>	
@@ -892,7 +891,8 @@
 				},
 				
 				rules: {
-					PROP_UNIT:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//提出单位 
+					PROP_UNIT:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//提出单位
+					CJDW:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}], //承检单位
        				ITEMTYPE:[{required: true, trigger: 'blur', message: '请选择',}],//产品类别
 					TYPE:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//类别
 					DESCRIPTION:[

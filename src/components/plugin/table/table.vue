@@ -180,6 +180,15 @@ export default {
         var url =  this.basic_url + '/api-flow/flow/model';
       }else if(this.appName == 'flowProcess'){
         var url =  this.basic_url + '/api-flow/flow/process';
+      }else if(this.appName == 'appcfg'){
+        var url = this.basic_url + '/api-apps/' + this.appName;
+      }else if(this.appName == 'apppermissions'){
+        var url = this.basic_url + '/api-user/permissions';
+      }else if(this.appName == 'api-user'){
+        var url = this.basic_url + '/api-user/users';
+        // if(!!this.searchList.deptId  && this.searchList.deptId != 128){
+				// 	data.deptId = this.searchList.deptId;
+				// }
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

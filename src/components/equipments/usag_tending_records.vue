@@ -205,7 +205,7 @@
 		},
 		methods: {
 			setSelData(val){
-				this.selMenu = val;
+				this.selUser = val;
 			},
 			tableControle(data){
 				this.checkedName = data;

@@ -107,8 +107,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
@@ -287,6 +287,7 @@
 					S_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
 					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isNickname}],//中文名称
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//英文名称
+					STARTETIME:[{required: true, trigger: 'blur',message: '必填',}],
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},
 						{validator: this.Validators.isSpecificKey,trigger: 'blur'}
@@ -571,8 +572,16 @@
 										message: '保存成功',
 										type: 'success'
 									});
-									this.$emit('request');
-									this.$emit('reset');
+									if(opt=='Update'){
+										this.$emit('request');
+										this.$emit('reset');
+										this.show=false;
+									}else{
+										this.$emit('request');
+										this.$emit('reset');
+										this.show=true;
+									}
+									
 									this.visible();
 								}
 							}else{

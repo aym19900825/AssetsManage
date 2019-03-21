@@ -303,6 +303,7 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
 				editSearch: '',
+				noedit:false,//表单内容
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				show: false,
 				isok1: true,
@@ -584,14 +585,13 @@
 				})
 			},
 			getsys_depttype() {//获取机构类型
-				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=sys_depttype';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
 				}).catch(error => {
 				})
 			},
 			
-
 			//点击关闭按钮
 			close() {
 				this.show = false;

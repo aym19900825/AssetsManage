@@ -140,7 +140,7 @@
 					},
 					{
 						text: '机构属性',
-						dataIndex: 'type',
+						dataIndex: 'typeName',
 						isShow:true,
 					},
 					{
@@ -291,7 +291,7 @@
 						fullname: this.searchDept.fullname
 					}
 				};
-				var url = this.basic_url + '/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/depts/tree';
 				this.$axios.get(url, data).then((res) => {
 					console.log(res.data);
 					this.deptList = res.data.data;

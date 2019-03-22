@@ -11,25 +11,13 @@
 				<el-table :data="reportsList" border stripe style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange">
 					<el-table-column type="selection" width="55">
 					</el-table-column>
-					<el-table-column label="序号" width="120" sortable prop="id">
-					</el-table-column>
 					<el-table-column label="报表名称" width="180" sortable prop="code">
 					</el-table-column>
 					<el-table-column label="报表文件" width="200" sortable prop="name">
 					</el-table-column>
-					<!-- <el-table-column label="报表文件" width="200" sortable prop="file">
-					</el-table-column> -->
 					<el-table-column label="备注" width="200" sortable prop="remarks">
 					</el-table-column>
 					<el-table-column label="类型" width="160" sortable prop="type">
-					</el-table-column>						
-					<!-- <el-table-column label="录入人" width="140" sortable prop="createby">
-					</el-table-column>	 -->
-					<el-table-column label="录入时间" width="160" sortable prop="createdate">
-					</el-table-column>	
-					<!-- <el-table-column label="修改人" width="140" sortable prop="updateby">
-					</el-table-column> -->
-					<el-table-column label="修改日期" width="160" sortable prop="updatedate">
 					</el-table-column>	
 				<!-- 表格 End-->
 				</el-table>

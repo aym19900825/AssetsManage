@@ -178,7 +178,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="所属机构" prop="deptName" label-width="100px">
-												<el-input v-model="user.deptName" :disabled="edit" >
+												<el-input v-model="user.deptName" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -199,7 +199,7 @@
 										<el-col :span="8">
 											<el-form-item label="学历" prop="education" label-width="100px">
 												<el-select v-model="user.education" placeholder="请选择" style="width: 100%" :disabled="noedit">
-													<el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value">
+													<el-option v-for="(item,index) in educationData" :key="index" :value="item.id" :label="item.name">
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -463,13 +463,72 @@
 			</div>
 			<!--弹出-->
 
-			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
-				</el-tree>
-				<span slot="footer" class="dialog-footer">
-			       <el-button @click="resetTree">取 消</el-button>
+			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+				<div class="el-collapse-item pb10" aria-expanded="true" accordion>
+					<el-tabs v-model="activeName" @tab-click="depthandleClick">
+						<el-tab-pane label="所内机构" name="first">
+							<div class="scrollbar" style="height:380px;">
+								<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
+								</el-tree>
+							</div>
+						</el-tab-pane>
+						<el-tab-pane label="所外机构" name="second">
+							<div class="scrollbar" style="height:380px;">
+								<el-form inline-message :model="searchList" label-width="90px">
+									<el-row>
+										<el-col :span="6">
+											<el-form-item label="统一社会信用代码" prop="CODE" label-width="140px">
+												<el-input v-model="searchList.CODE">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="5">
+											<el-form-item label="单位名称" prop="NAME">
+												<el-input v-model="searchList.NAME">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="5">
+											<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
+												<el-input v-model="searchList.CONTACT_ADDRESS">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="2" class="text-center">
+											<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+										</el-col>
+									</el-row>
+								</el-form>
+								<el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="270px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
+									v-loadmore="loadMore"
+									v-loading="loading"  
+									element-loading-text="加载中…"
+									element-loading-spinner="el-icon-loading"
+									element-loading-background="rgba(255, 255, 255, 0.9)"
+									@selection-change="SelChange">
+									<el-table-column type="selection" width="55" fixed align="center">
+									</el-table-column>
+									<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
+									</el-table-column>
+									<el-table-column label="单位名称" sortable prop="NAME" >
+									</el-table-column>
+									<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
+									</el-table-column>
+									<el-table-column label="类型" sortable prop="TYPE">
+									</el-table-column>
+									<el-table-column label="备注" sortable prop="MEMO" >
+									</el-table-column>
+								</el-table>
+									<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+									</el-pagination>
+							</div>
+						</el-tab-pane>
+					</el-tabs>
+				</div>
+				<div slot="footer">
 			       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
-			    </span>
+			       <el-button @click="resetTree">取 消</el-button>
+			    </div>
 			</el-dialog>
 		</div>
 	</div>
@@ -509,40 +568,17 @@
 					deptName:'',
 					nickname:'',
 				},
-				options: [{
-						value: '高中',
-						label: '高中'
-					},
-					{
-						value: '高中以下',
-						label: '高中以下'
-					},
-					{
-						value: '中专/技校',
-						label: '中专/技校',
-					},
-					{
-						value: '大专',
-						label: '大专'
-					},
-					{
-						value: '本科',
-						label: '本科'
-					},
-					{
-						value: '硕士',
-						label: '硕士'
-					},
-					{
-						value: '博士',
-						label: '博士'
-					},
-					{
-						value: 'MBA/EMBA',
-						label: 'MBA/EMBA'
-					},
-				],
-
+				customerList: [],
+				searchList: {
+					NAME: '',
+					CODE: '',
+					CONTACT_ADDRESS: '',
+				},
+				// page: {
+				// 	currentPage: 1,
+				// 	pageSize: 20,
+				// 	totalCount: 0
+				// },
 				value: '',
 				editSearch: '',
 				edit: true, //禁填
@@ -569,8 +605,8 @@
 						{type: 'string', min: 4, max:20, message: '用户名不小于4位，不大于20位', trigger: 'blur'},
 					],
 					password: [
-                    		{required: true,trigger: 'blur',message: '必填'},
-							{validator: this.Validators.isValidatePass, trigger: 'blur'},
+						{required: true,trigger: 'blur',message: '必填'},
+						{validator: this.Validators.isValidatePass, trigger: 'blur'},
                 	],
 					sex: [{required: true,trigger: 'blur',message: '必填'}],
 					ispermit_authorization: [{required: true,trigger: 'change',message: '必填'}], //授权
@@ -616,8 +652,8 @@
 					children: "children",
 					label: "fullname"
 				},
-				
-				selectData: [], //
+				selectData: [], //角色
+				educationData: [], //最高学历
 				getCheckboxData: {},
 				addtitle:true,
 				modifytitle:false,
@@ -634,11 +670,21 @@
 			};
 		},
 		methods: {
+			//tabs
+			depthandleClick(tab, event) {
+				console.log(12222);
+				this.requestData();
+				this.getDept();
+				this.getCheckboxData=[];
+		    },
 			showUserRole(){
 			},
 			resetTree(){
 				this.dialogVisible = false;
 				this.resourceCheckedKey = [];
+				this.customerList = [];
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
 			editpassword(){//点击修改密码按钮跳转到修改密码页面
 		      	this.$router.push({path: '/passwordedit'})
@@ -650,13 +696,16 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
+			SelChange(val) {
+				this.selUser = val;
+				var _this = this;
+				
+			},
 			handleClick(tab, event) {
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
-
 					row.isEditing = !row.isEditing;
-
 				}
 			},
 			//清空
@@ -743,7 +792,6 @@
 				};
 				this.user.traings.push(obj);
 			},
-
 			addfield3() {
 				var obj = {
 					step: 1,
@@ -753,7 +801,6 @@
 				};
 				this.user.ips.push(obj);
 			},
-			
 			//刪除新建行
 			deleteRow(index, row, listName){
 				var TableName = '';
@@ -830,7 +877,6 @@
 					ips: [],
 				};
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-
 					this.user.createby = res.data.id;
 					this.user.createbyName = res.data.nickname;
 					this.user.enterby = res.data.id
@@ -845,8 +891,8 @@
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				})
-				//				this.statusshow1 = true;
-				//				this.statusshow2 = false;
+				// this.statusshow1 = true;
+				// this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -873,12 +919,9 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-
 				//	$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
-
 				this.$axios.get(usersUrl, {}).then((res) => {
-					
 					this.user.changeby = res.data.nickname;
 					this.docParam = {
 						username: res.data.username,
@@ -974,7 +1017,11 @@
 				$(".mask_div").css("height", "80%");
 				$(".mask_div").css("top", "100px");
 			},
-
+			searchinfo() {
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.requestData();
+			},
 			//保存users/saveOrUpdate
 			save(parameter) {
 				if(this.changeflag==true){
@@ -1034,7 +1081,7 @@
 			},
 			//所属组织
 			getCompany() {
-				this.editSearch = 'company';
+				// this.editSearch = 'company';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = '1';
@@ -1047,49 +1094,152 @@
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
-
 			},
 
-			//所属机构
+			//所内机构 
 			getDept() {
-				this.editSearch = 'dept';
+				// this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var url = this.basic_url + '/api-user/depts/treeMap';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
-					this.resourceCheckedKey.push(this.user.deptId);
+					// this.resourceCheckedKey.push(this.user.deptId);
 					this.dialogVisible = true;
 				});
 			},
 			//角色
 			getRole() {
-				this.editSearch = 'role';
+				// this.editSearch = 'role';
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 				})
 			},
-
-			dailogconfirm() { //小弹出框确认按钮事件
-				// this.checkedNodes =  this.$refs.tree.getCheckedNodes();
-				this.placetext = false;
-				if(this.editSearch == 'company') {
-					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.fullname;
-				} else {
-					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.fullname;
+			//最高学历
+			getEducation() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=EDUCATIONS';
+				this.$axios.get(url, {}).then((res) => {
+					this.educationData = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
+					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
 				}
-				this.dialogVisible = false;
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//所外机构Table默认加载数据
+			requestData(){
+				this.loading = true;//加载动画打开
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					NAME: this.searchList.NAME,
+					CODE: this.searchList.CODE,
+					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
+				};
+				var url = this.basic_url + '/api-apps/app/customer';//如果父组件没有传CJDW承检单位侧显示所有数据
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.customerList = res.data.data;
+					
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					// 	this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'erro'
+					// });
+				})
+			},
+			dailogconfirm() { //小弹出框确认按钮事件
+			console.log(this.selUser);
+			if(this.getCheckboxData==null&&this.selUser.length == 0){
+						this.$message({
+						message: '所内机构和所外机构，请至少选择一个',
+						type: 'erro'
+					});
+			}else if(this.getCheckboxData.length >0){
+				this.user.deptId = this.getCheckboxData.id;
+				this.user.deptName = this.getCheckboxData.fullname;
+			}else if(this.selUser.length >1){
+				this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+			}else{
+				this.user.deptName = this.selUser[0].NAME;//名称
+				this.user.deptId =  this.selUser[0].ID;
+			}
+				this.requestData();
 				this.resetTree();
 			},
 
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetTree();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
@@ -1132,10 +1282,10 @@
 					}
 				};
 				var url = this.file_url + '/file/uploadfile?userid=' + this.docParam.userid 
-						+ '&username=' + this.docParam.username
-						+ '&deptid=' + this.docParam.deptid
-						+ '&deptfullname=' + this.docParam.deptfullname
-						+ '&recordid=1&appname=客户管理&appid=2';
+					+ '&username=' + this.docParam.username
+					+ '&deptid=' + this.docParam.deptid
+					+ '&deptfullname=' + this.docParam.deptfullname
+					+ '&recordid=1&appname=客户管理&appid=2';
 				this.$axios.post(url, formData, config
 				).then((res)=>{
 					this.loading = false;
@@ -1161,12 +1311,14 @@
 		},
 		mounted() {
 			this.getRole();
+			this.getEducation();
+			this.requestData();
 		},
 		watch: {
 			user:{
 				handler:function(obj){
 					if(this.wi!=1){
-						this.changeflag=true;							
+						this.changeflag=true;
 					}
 					this.wi++; 
 				},

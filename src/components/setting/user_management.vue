@@ -602,6 +602,7 @@
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/1';
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.datas!=null){
+						console.log(res.data.datas);
 						this.productData = res.data.datas;
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
@@ -658,6 +659,7 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
+				console.log(arr);
 				this.$refs.product.setCheckedKeys(arr);
 			},
 			testproductsetChecked(arr){
@@ -728,6 +730,7 @@
 					checkDeptIds:checkDeptIds,
           userId:this.selUser[0].id
 				}
+				console.log(data);
 				var url = this.basic_url + '/api-user/users/setAuth';
 				this.$axios.post(url, {pmType:pmType,
 					taskType:taskType,

@@ -14,7 +14,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="isUploadBtn">
+								<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; position: relative;" v-show="isUploadBtn">
 									<button style="margin-right: 4px;" type="button" class="btn btn-green a-upload">
 										<i class="icon-add"></i>上传
 										<input id="excelFile" type="file" name="uploadFile" @change="upload" />

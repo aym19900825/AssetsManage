@@ -955,8 +955,8 @@
 					ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
 					MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 					CHECK_COST:[{required: false,trigger: 'change',validator:this.Validators.isPrices}],
-					ACTUALCOST:[{trigger: 'blur',validator:this.Validators.isPrices}],
-					CONTRACTCOST:[{trigger: 'blur', validator:this.Validators.isPrices}],
+					ACTUALCOST:[{required: false,trigger: 'blur',validator:this.Validators.isPrices}],
+					CONTRACTCOST:[{required: false,trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据

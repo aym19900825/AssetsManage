@@ -152,7 +152,7 @@
 										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="110px">
-												<el-input v-model="samplesForm.ACCEPT_PERSON" placeholder="当前人" :disabled="true">
+												<el-input v-model="samplesForm.ACCEPT_PERSON" placeholder="当前人" :disabled="noedit">
 													<!-- <el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button> -->
 												</el-input>
 											</el-form-item>
@@ -584,6 +584,7 @@
 					},
 				}).then((res) => {
 					this.selectDept = res.data;
+
 				});
 			},
 			//确定承检单位

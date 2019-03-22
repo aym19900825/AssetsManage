@@ -245,7 +245,7 @@
 						code:'',
 						fullname:'',
 						parent:'',
-						depttype:1,
+						depttype:'',
 						type:'',
 						inactive:'',
 						address:'',

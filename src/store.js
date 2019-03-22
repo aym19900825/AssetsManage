@@ -9,6 +9,7 @@ const state={//要设置的全局访问的state对象
    menuid:null,//一级菜单id
    menusid:null,//二级菜单id
    currentRolesname:null,//当前的角色name
+   currentcjdw:null,
    firstselectnav:{},//当只有一级菜单
    selectedNav:{
       css: 'icon-user',
@@ -51,6 +52,9 @@ const getters = {   //实时监听state值的变化(最新状态)
    getcurrentrolesname(state){
       return state.currentRolesname;
    },
+   getcurrentcjdw(state){
+      return state.currentcjdw;
+   },
 };
    //修改 state 用 vuex 的 mutation 
 const mutations = {
@@ -83,7 +87,9 @@ const mutations = {
    setcurrentrolesname(state,currentRolesname){
       state.currentRolesname=currentRolesname;
    },
-  
+   setcurrentcjdw(state,currentcjdw){
+      state.currentcjdw=currentcjdw;
+   },
 };
 
 //组件触发动作用 vuex 的 action
@@ -112,6 +118,9 @@ const actions = {
    },
    setcurrentrolesnameNavAct(context,currentRolesname){
       context.commit('setcurrentrolesname',currentRolesname);
+   },
+   setcurrentcjdwNavAct(context,currentcjdw){
+      context.commit('setcurrentcjdw',currentcjdw);
    },
 };
 

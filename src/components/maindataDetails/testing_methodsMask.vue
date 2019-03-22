@@ -97,9 +97,9 @@
 						</el-collapse>
 					</div>
 					<div class="content-footer" v-show="noviews">
-						<el-button type="primary" @click="saveAndUpdate('testingForm')">保存</el-button>
-						<el-button type="success" @click="saveAndSubmit('testingForm')" v-show="addtitle">保存并继续</el-button>
-						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testingForm')">修订</el-button>
+						<el-button type="primary" @click="save('Update')">保存</el-button>
+						<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
+						<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion()">修订</el-button>
 						<!-- <el-button v-if="modify" type="success" @click="update('testingForm')">启用</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -327,8 +327,8 @@
 					_this.$refs.docTable.getData();
 				},100);			
 			},
-			modifyversion (testingForm) {//点击修改后给当前创建人和创建日期赋值
-				this.$refs[testingForm].validate((valid) => {
+			modifyversion () {//点击修改后给当前创建人和创建日期赋值
+				this.$refs.testingForm.validate((valid) => {
 			        if (valid) {
 			          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据
 	 					var testingForm=JSON.stringify(this.testingForm); //获取新新的数据
@@ -561,6 +561,11 @@
 										message: '保存成功',
 										type: 'success'
 									});
+									if(opt=='Update'){
+										this.show=false;	
+									}else{
+										this.show=true;	
+									}
 									this.$emit('request');
 									this.$emit('reset');
 									this.visible();	

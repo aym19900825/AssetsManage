@@ -159,8 +159,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('testing_projectForm')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
@@ -226,32 +226,6 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		// props: {
-		// 	page: {
-		// 		type: Object,
-		// 	},
-		// 	testing_projectForm: {
-		// 		type: Object,
-		// 		default: function() {
-		// 			return {
-		// 				VERSION: '',
-		// 				STATUS: '',
-		// 				P_NUM: '',
-		// 				P_NAME: '',
-		// 				QUANTITY: '',
-		// 				QUALIFICATION: '',
-		// 				FIELD: '',
-		// 				CHILD_FIELD: '',
-		// 				DOCLINKS_NUM: '',
-		// 				DEPARTMENT: '',
-		// 				ENTERBY: '',
-		// 				ENTERDATE: '',
-		// 				CHANGEBY: '',
-		// 				CHANGEDATE: '',
-		// 			}
-		// 		}
-		// 	},
-		// },
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -324,7 +298,6 @@
 					VERSION: 1,
 					WORK_INSTRUCTIONList: []
 				},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				editSearch: '',
 				value: '',
@@ -719,7 +692,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(testing_projectForm) {
+			save(parameter) {
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
 					if(valid) {
@@ -731,6 +704,11 @@
 								message: '保存成功',
 								type: 'success'
 							});
+							if(parameter='Update'){
+								this.show=true;
+							}else{
+								this.show=false;
+							}
 							this.$emit('reset');
 							this.$emit('request');
 							this.visible();
@@ -753,28 +731,14 @@
 					//清空表单验证
 					}).catch((err) => {
 					});
-				this.falg = true;
 			} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
-			},
-			//保存
-			saveAndUpdate(testing_projectForm) {
-				this.save(testing_projectForm);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(testing_projectForm) {
-				this.save(testing_projectForm);
-				this.show = true;
 			},
 			getpepole(item) {
 				this.peoplegrid = item;

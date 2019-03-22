@@ -235,7 +235,6 @@
 					desc: ''
 				},
 				formLabelWidth: '120px',
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				options: [{
 					value: '1',
@@ -604,30 +603,16 @@
 							}						
 						}).catch((err) => {
 						});
-						this.falg = true;
 			        } else {
 			          	this.show = true;
 			          	this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 			        }
 				});
 			},
-			//保存
-			saveAndUpdate(dataInfo){
-				this.save(dataInfo);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(dataInfo){
-				this.save(dataInfo);
-				this.$emit('reset');
-				this.show = true;
-			},			handleClose(done) {
+			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();

@@ -56,7 +56,7 @@
 										<el-col :span="12">
 											<el-form-item label="名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getCustomer('vname')">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getinspect_cust()">
 													</el-button>
 												</el-input>
 											</el-form-item>
@@ -534,7 +534,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收比例(%)" prop="ACTUAL_PERCENT" label-width="110px">
-												<el-input v-model="dataInfo.ACTUAL_PERCENT" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.ACTUAL_PERCENT" :disabled="noedit" @onfocus ="defaultval()" @onblur="blurval()"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -681,7 +681,7 @@
 				<div slot="footer">
 			       <el-button type="primary" @click="addcusname">确 定</el-button>
 			       <el-button @click="resetBasisInfo2">取 消</el-button>
-			    </div>
+			  </div>
 			</el-dialog>
 			<!-- 客户联系人 End -->
 			<!-- 样品名称  -->
@@ -706,6 +706,8 @@
 			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
+			<!--委托单位名称 -->
+			<inspectcustommask ref="inscustom" ></inspectcustommask>
 		</div>
 	</div>
 </template>
@@ -714,6 +716,7 @@
 	// import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
+	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托单位
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
@@ -737,7 +740,8 @@
 			 categorymask,
 			 productmask,
 			 teststandardmask,
-			 testprojectmask
+			 testprojectmask,
+			 inspectcustommask,
 		},
 		data() {
             var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
@@ -924,6 +928,10 @@
 			};
 		},
 		methods: {
+			defaultval(){
+				
+			},
+
 			viewFile(row){
 				var url = this.po_url+'/show?fileid=' +  row.FILEID
 						+ '&userid=' +  this.docParm.userid
@@ -1205,7 +1213,7 @@
 				}).catch((err) => {
 				})
 				this.dataInfo.STATUS = 0;
-               	this.addtitle = true;
+        this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.views = false; //
@@ -1779,13 +1787,17 @@
 			// 		this.$set(this.dataInfo,'LEADER',id);
 			// 	})
 			// },
+			//
 			//获取负责人和接收人
 			getCustomer(type) {
-				if(type == 'vname'){
-					this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
-				}else{
+				// if(type == 'vname'){
+				// 	this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
+				// }else{
 					this.$refs.enterprisechild.visible(type);
-				}
+				// }
+			},
+			getinspect_cust(){
+         this.$refs.inscustom.visible();	
 			},
 			addname(){
 				var customid=this.customid;

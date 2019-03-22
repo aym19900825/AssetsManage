@@ -174,8 +174,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -530,7 +530,7 @@
 										this.$emit('request');
 									}
 									if(opt == 'update'){
-										this.show = true;
+										this.show = false;
 										this.visible();
 									}
 									this.resetData();
@@ -570,14 +570,6 @@
 				this.CATEGORY = {};
 			},
 			
-			//保存
-			saveAndUpdate() {
-				this.save('save');
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save('update');
-			},
 			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing

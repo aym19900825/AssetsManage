@@ -245,7 +245,7 @@
 						code:'',
 						fullname:'',
 						parent:'',
-						depttype:'',
+						depttype:1,
 						type:'',
 						inactive:'',
 						address:'',
@@ -277,7 +277,6 @@
 					value: '2',
 					label: '不活动'
 				}],
-
 				stopoptions: [{
 					value: '1',
 					label: '是'

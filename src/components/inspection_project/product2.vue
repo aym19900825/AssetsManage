@@ -32,13 +32,13 @@
 			      </template>
 			    </el-table-column>
 					
-			  	<el-table-column label="产品类别" width="80" prop="NUM">
+			  	<!-- <el-table-column label="所属产品类别" width="80" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
-					</el-form-item>
+							</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 					
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
@@ -420,8 +420,8 @@
 						if (this.product2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;
 						}else{
-	                        isEditingflag=true;
-	                        break;
+								isEditingflag=true;
+								break;
 						}
 					}
 				}else{
@@ -429,8 +429,8 @@
 				}
 				
 				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDatee;
+						this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+						var currentUser, currentDatee;
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -449,12 +449,12 @@
 					}).catch((err)=>{
 					})
 	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+								this.$message.warning("请先保存当前编辑项");
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['product2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/product2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
@@ -463,9 +463,9 @@
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
-					    "PRO_NUM": row.PRO_NUM,
-					    "VERSION": row.VERSION,
+						"ENTERDATE": row.ENTERDATE,
+						"PRO_NUM": row.PRO_NUM,
+						"VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {

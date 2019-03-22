@@ -769,6 +769,7 @@
 					VERSION:'1',
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
+					STATUS:'0',
 					ITEM_NAME:'',
 					VENDOR:'',
 					R_VENDOR:'',
@@ -1203,7 +1204,7 @@
 					this.show = true;
 				}).catch((err) => {
 				})
-				this.maxDialog();
+				this.dataInfo.STATUS = 0;
                	this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;

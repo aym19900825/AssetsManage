@@ -17,30 +17,6 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr">
-                                	<i class="icon-add"></i>添加
-                </button>
-								<button type="button" class="btn btn-blue button-margin" @click="editor">
-								    <i class="icon-edit"></i>编辑
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="delinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="delinfo">
-								    <i class="icon-trash"></i>彻底删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="release">
-							    	<i class="icon-upload-cloud"></i>发布
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-download-cloud"></i>导出
-								</button>
-								<button type="button" class="btn btn-primarys button-margin">
-							    	<i class="icon-print"></i>打印
-								</button> -->
-								<!--<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -225,7 +201,7 @@ export default {
 	    	if(item.name=="添加"){
 	         this.openAddMgr();
 	    	}else if(item.name=="修改"){
-	    	 this.modify();
+	    	 this.editor();
 	    	}else if(item.name=="彻底删除"){
 	    	 this.physicsDel();
 	    	}else if(item.name=="高级查询"){

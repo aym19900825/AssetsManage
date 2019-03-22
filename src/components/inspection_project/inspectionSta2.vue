@@ -334,8 +334,8 @@
 				this.selParentId = id;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2/' + id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
-					this.page.totalCount = res.data.count;	
+					// console.log(res.data);
+					this.page.totalCount = res.data.count;
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){

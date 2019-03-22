@@ -683,7 +683,10 @@
 							this.$refs["adddeptForm"].resetFields();//清空验证							 
 						}
 					}).catch((err) => {
-						
+						this.$message({
+							 message: err.resp_msg,
+							type: 'warning'
+						});
 					});
 		          } else {
 						this.show = true;

@@ -93,22 +93,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table ref="table" :data="customerList" 
-							  border 
-							  stripe 
-							  :header-cell-style="rowClass" 
-							  :height="fullHeight" 
-							  style="width: 100%;" 
-							  :default-sort="{prop:'customerList', order: 'descending'}" 
-							  @selection-change="SelChange" 
-							  v-loadmore="loadMore"
-							  v-loading="loading"  
-							  element-loading-text="加载中…"
-							  element-loading-spinner="el-icon-loading"
-							  element-loading-background="rgba(255, 255, 255, 0.9)">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-							</el-table-column>
-							<!-- <el-table-column label="统一社会信用代码" width="200" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1"> -->
+						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="统一社会信用代码" width="180" sortable prop="CODE" v-if="this.checkedName.indexOf('统一社会信用代码')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.CODE}}
@@ -125,20 +110,7 @@
 							</el-table-column>
 							<el-table-column label="备注" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
-							<!-- <el-table-column label="联系电话" sortable prop="PHONE" v-if="this.checkedName.indexOf('联系电话')!=-1">
-							</el-table-column> -->	
-							<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-							</el-table-column>-->
-						</el-table>
-						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
+						</v-table>
 						<!-- 表格 End-->
 					</el-col>
 				</el-row>
@@ -159,18 +131,21 @@
 	import customermask from '../settingDetails/customer_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'user_management',
 		components: {
-			vheader,
-			navs_left,
-			navs_tabs,
-			tableControle,
-			customermask,
-			reportmask
+			'vheader': vheader,
+			'navs_tabs': navs_tabs,
+			'navs_left': navs_left,
+			'customermask': customermask,
+			'reportmask': reportmask,
+			'tableControle': tableControle,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'customer',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
@@ -268,70 +243,14 @@
 		},
 
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    // console.log(rowIndex) //表头行标号为0
-			    return 'text-align:center'
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
+			setSelData(val){
+				this.selUser = val;
 			},
 			tableControle(data){
 				this.checkedName = data;
 			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {
+				this.requestData('init');
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
@@ -342,7 +261,7 @@
 					STATUS: '',
 					DEPTIDDesc:'',
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			 //请求点击
 		    getbtn(item){
@@ -565,10 +484,6 @@
 			beforeRemove(file, fileList) {
 				return this.$confirm(`确定移除 ${ file.name }？`);
 			},
-			//上传文件 End
-			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
-			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -577,44 +492,9 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) {
-				this.selUser = val;
-			},
 			//Table默认加载数据
-			requestData(index) {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					NAME: this.searchList.NAME,
-					CODE: this.searchList.CODE,
-					PHONE: this.searchList.PHONE,
-					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-					STATUS: this.searchList.STATUS
-				}
-				var url = this.basic_url + '/api-apps/app/customer';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}			
-					this.customerList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-			},
-			
-			formatter(row, column) {
-				return row.enabled;
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
@@ -645,11 +525,6 @@
 				}).catch((wrong) => {})
 
 		    },
-		},
-		mounted() {
-			this.requestData();
-			
-			
 		},
 	}
 </script>

@@ -66,28 +66,12 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格begin-->
-							<el-table ref="table" :data="dataList" 
-									  border 
-									  stripe  
-									  :header-cell-style="rowClass" 
-									  :height="fullHeight" 
-									  style="width: 100%; margin: 0 auto;" 
-									  :default-sort="{prop:'dataList', order: 'descending'}" 
-									  @selection-change="SelChange"
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-								  	  element-loading-text="加载中…"
-								  	  element-loading-spinner="el-icon-loading"
-								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column fixed type="selection" width="55" align="center">
-								</el-table-column>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="表名" sortable width="320" prop="name" v-if="this.checkedName.indexOf('表名')!=-1">
 								</el-table-column>
 								<el-table-column label="描述" sortable prop="description" v-if="this.checkedName.indexOf('描述')!=-1">
 								</el-table-column>
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40, 100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格end -->
 						</el-col>
 					</el-row>
@@ -106,6 +90,7 @@
 	import datamask from '../settingDetails/data_mask.vue'
 	import relamask from '../settingDetails/rela_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'data_management',
 		components: {
@@ -114,10 +99,12 @@
 			'navs_left': navs_left,
 			'datamask': datamask,
 			'relamask': relamask,
-			'tableControle':tableControle
+			'tableControle':tableControle,
+			'v-table':vTable
 		},
 		data() {
 			return {
+				appName: 'objectcfg',
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -168,24 +155,22 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			setSelData(val){
+				this.selUser = val;
 			},
+			
 			tableControle(data){
 				this.checkedName = data;
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {
+				this.requestData('init');
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
 					name:'',
 					description:''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -309,88 +294,10 @@
 			remove(index) {
 				this.users.splice(index, 1)
 			},
-			SelChange(val) {
-				this.selUser = val;
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
+			
 			//Table默认加载数据
-			requestData() {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					name: this.searchList.name,
-					description: this.searchList.description
-				}
-				var url = this.basic_url + '/apps-center/objectcfg';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;//页码赋值
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
-					this.dataList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {})
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 			//机构树
 			getKey() {
@@ -419,9 +326,6 @@
 			},
 			handleNodeClick(data) {
 			},
-			formatter(row, column) {
-				return row.enabled;
-			},
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
 		    	 this.getbutton( childvalue);
@@ -440,12 +344,7 @@
 		    },
 		},
 		mounted() {
-			this.requestData();
 			this.getKey();
 		},
 	}
 </script>
-
-<style scoped>
-
-</style>

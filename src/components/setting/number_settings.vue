@@ -62,21 +62,7 @@
 				<el-row :gutter="0">
 					<el-col :span="24">
 						<!-- 表格 Begin-->
-						<el-table ref="table" :data="numberList" 
-							  border 
-							  stripe 
-							  :header-cell-style="rowClass" 
-							  :height="fullHeight" 
-							  style="width: 100%;" 
-							  :default-sort="{prop:'numberList', order: 'descending'}" 
-							  @selection-change="SelChange"  
-							  v-loadmore="loadMore"
-							  v-loading="loading"  
-							  element-loading-text="加载中…"
-							  element-loading-spinner="el-icon-loading"
-							  element-loading-background="rgba(255, 255, 255, 0.9)">
-							<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-							</el-table-column>
+						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="序列号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.serialnum}}
@@ -105,16 +91,7 @@
 							</el-table-column>
 							<el-table-column label="保留位数" sortable align="right" prop="retain" v-if="this.checkedName.indexOf('保留位数')!=-1">
 							</el-table-column>
-						</el-table>
-						<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-				            @size-change="sizeChange"
-				            @current-change="currentChange"
-				            :current-page="page.currentPage"
-				            :page-sizes="[10, 20, 30, 40]"
-				            :page-size="page.pageSize"
-				            layout="total, sizes, prev, pager, next"
-				            :total="page.totalCount">
-				        </el-pagination>
+						</v-table>
 						<!-- 表格 End-->
 					</el-col>
 				</el-row>
@@ -132,20 +109,21 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import numbsetmask from '../settingDetails/number_settingMask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'number_settings',
 		components: {
-			vheader,
-			navs_left,
-			navs_tabs,
-			tableControle,
-			numbsetmask,
+			'vheader': vheader,
+			'navs_tabs': navs_tabs,
+			'navs_left': navs_left,
+			'numbsetmask': numbsetmask,
+			'tableControle': tableControle,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'serialnum',
 				basic_url: Config.dev_url,
-				loadSign: true, //鼠标滚动加载数据
-				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				options: [{
 					value: '1',
@@ -244,75 +222,20 @@
 		},
 
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
+			setSelData(val){
+				this.selMenu = val;
 			},
 			tableControle(data){//控制表格列显示隐藏
 				this.checkedName = data;
 			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			searchinfo(index) {//高级查询
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {//高级查询
+				this.requestData('init');
 			},
 			resetbtn(){
 				this.searchList = {
 					AUTOKEY: '',
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			openAddMgr() {//添加自动编号设置数据
 				this.numbsetForm = {
@@ -406,9 +329,6 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) {//选中值后赋值给一个自定义的数组：selMenu
-				this.selMenu = val;
-			},
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
 		    	 this.getbutton( childvalue);
@@ -428,37 +348,9 @@
 
 		    },
 			//Table默认加载数据
-			requestData() {//高级查询字段
-				this.loading = true;
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-user/serialnum';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}			
-					this.numberList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
+			requestData(opt) {//高级查询字段
+				this.$refs.table.requestData(opt);
 			},
-			
-		},
-		
-		mounted() {
-			this.requestData();
 		},
 	}
 </script>

@@ -88,21 +88,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<el-table ref="table" :data="userList" 
-									  border 
-									  stripe 
-									  :header-cell-style="rowClass" 
-									  :height="fullHeight" 
-									  style="width: 100%;" 
-									  :default-sort="{prop:'userList', order: 'descending'}" 
-									  @selection-change="SelChange" 
-									  v-loadmore="loadMore"
-									  v-loading="loading"  
-								  	  element-loading-text="加载中…"
-								  	  element-loading-spinner="el-icon-loading"
-								  	  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.username}}
@@ -129,12 +115,7 @@
 								</el-table-column>-->
 								<!-- <el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
 								</el-table-column> -->
-							</el-table>
-							<!-- <span class="demonstration">显示总数</span>" -->
-							<!-- <el-pagination background layout="prev, pager, next" :total="2" style="float:right;margin-top:10px;"> -->
-							<!-- </el-pagination style="float:right;margin-top:10px;"> -->
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
+							</v-table>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -199,18 +180,21 @@
 	import usermask from '../settingDetails/user_mask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import datarestrictmask from'../common/common_mask/datarestrictmask.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'user_management',
 		components: {
-			 vheader,
-			 navs_tabs, 
-			 navs_left,
-			 usermask,
-			 reportmask,
-			 datarestrictmask,
+			'vheader': vheader,
+			'navs_left': navs_left,
+			'navs_tabs': navs_tabs,
+			'usermask': usermask,
+			'reportmask': reportmask,
+			'datarestrictmask': datarestrictmask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'api-user',
 				reportData:{},//报表的数据
 				rules:{
 					newpassword: [
@@ -325,7 +309,7 @@
 				searchList: {
 					nickname: '',
 					username: '',
-					deptId: ''
+					companyId: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -347,6 +331,12 @@
 			}
 		},
 		methods: {
+			setSelData(val){
+				this.selUser = val;
+			},
+			tableControle(data) {
+				this.checkedName = data;
+			},
 			getCheckedKeys() { 
 				},
 			resetTree(){
@@ -359,11 +349,7 @@
 			resetNewpwd(){
 				this.passdialog = false;
 				this.requestData();
-				 this.$refs['newPwdForm'].resetFields();
-			},
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+				this.$refs['newPwdForm'].resetFields();
 			},
 			//机构值
 			getCompany() {
@@ -405,62 +391,8 @@
 				const property = column['property'];
 				return row[property] === value;
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {
+				this.requestData('init');
 			},
 			resetbtn(){
 				this.searchList = {
@@ -468,7 +400,7 @@
 					username: '',
 					deptId: ''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			
 		    //请求点击
@@ -602,6 +534,7 @@
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/1';
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.datas!=null){
+						console.log(res.data.datas);
 						this.productData = res.data.datas;
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
@@ -649,7 +582,7 @@
 						}
 						
 					}
-			return mData;		
+				return mData;		
 			},
 			worksetChecked(arr){
 				this.$refs.work.setCheckedKeys(arr);
@@ -658,6 +591,7 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
+				console.log(arr);
 				this.$refs.product.setCheckedKeys(arr);
 			},
 			testproductsetChecked(arr){
@@ -700,9 +634,9 @@
 			}
 			for(var c=0;c<testingproduct.length;c++){
 				if(testingproduct[c].type!="dept"&&testingproduct[c].type!="producttype"){
-          if(!!testingproduct[c].id){
-					  checkProduct.push(testingproduct[c].id);
-          }
+					if(!!testingproduct[c].id){
+						checkProduct.push(testingproduct[c].id);
+					}
 				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
 					  checkProductType.push(testingproduct[c].id);
 				}else if(testingproduct[c].type="dept"){
@@ -726,8 +660,9 @@
 					checkProductType:checkProductType,
 					deptIds:deptIds,
 					checkDeptIds:checkDeptIds,
-          userId:this.selUser[0].id
+					userId:this.selUser[0].id
 				}
+				console.log(data);
 				var url = this.basic_url + '/api-user/users/setAuth';
 				this.$axios.post(url, {pmType:pmType,
 					taskType:taskType,
@@ -737,15 +672,15 @@
 					checkProductType:checkProductType,
 					deptIds:deptIds,
 					checkDeptIds:checkDeptIds,
-          userId:this.selUser[0].id}).then((res) => {
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '操作成功',
-							type: 'success'
-						});
-					}
-					this.requestData();
-          this.resetTree();//置空数据                            
+					userId:this.selUser[0].id}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '操作成功',
+								type: 'success'
+							});
+						}
+						this.requestData();
+						this.resetTree();//置空数据                            
 				}).catch((err) => {
 				});
 			},
@@ -921,9 +856,9 @@
 					});
 				}else{
 					this.$message({
-									message:'新密码和确认新密码的值不一样请重新填写',
-									type: 'error'
-								});
+						message:'新密码和确认新密码的值不一样请重新填写',
+						type: 'error'
+					});
 				}
 			},
 
@@ -994,10 +929,6 @@
 				this.reportData.app=this.workorder;
 				this.$refs.reportChild.visible();
 			},
-			judge(data) {
-				//taxStatus 布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -1005,9 +936,9 @@
 						this.requestData();
 					})
 					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -1018,43 +949,8 @@
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
 
-			SelChange(val) {
-				this.selUser = val;
-			},
-			requestData() {
-				this.loading = true;
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					nickname: this.searchList.nickname,
-					username: this.searchList.username,
-//					searchKey: 'createTime',
-//					searchValue: this.searchList.createTime,
-					companyId: this.companyId,
-					// deptId: this.deptId
-				}
-				if(!!this.searchList.deptId  && this.searchList.deptId != 128){
-					data.deptId = this.searchList.deptId;
-				}
-				var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.userList = res.data.data;
-					this.loading = false;//加载动画关闭
-				if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-					$('.el-table__body-wrapper table').find('.filing').remove();
-				}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 
 			//机构树
@@ -1083,12 +979,14 @@
 			handleNodeClick(data) {
 				if(data.type == '1') {
 					this.companyId = data.id;
+					this.searchList.companyId = data.id;
 					this.deptId = '';
 				} else {
 					this.searchList.deptId = data.id;
 					this.companyId = '';
+					this.searchList.companyId = data.id;
 				}
-				this.requestData();
+				this.requestData('init');
 			},
 
 			// min3max() { //左侧菜单正常和变小切换
@@ -1158,17 +1056,11 @@
 				}; 
 			}
 		},
-		beforeMount() {
-			
-		},
 		mounted() {	
 			// 在页面挂载前就发起请求
-			this.requestData();
 			this.getKey();
 			this.getCompany();
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
-//			this.getbutton();
-//			this.$refs.navleft.getleft();
 		}
 	}
 </script>

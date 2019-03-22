@@ -465,7 +465,7 @@
 
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 				<div class="el-collapse-item pb10" aria-expanded="true" accordion>
-					<el-tabs v-model="activeName" @tab-click="handleClick">
+					<el-tabs v-model="activeName" @tab-click="depthandleClick">
 						<el-tab-pane label="所内机构" name="first">
 							<div class="scrollbar" style="height:380px;">
 								<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
@@ -674,7 +674,11 @@
 		},
 		methods: {
 			//tabs
-			handleClick(tab, event) {
+			depthandleClick(tab, event) {
+				console.log(12222);
+				this.requestData();
+				this.getDept();
+				this.getCheckboxData=[];
 		    },
 			showUserRole(){
 			},
@@ -698,10 +702,6 @@
 			SelChange(val) {
 				this.selUser = val;
 				var _this = this;
-				//处理分页时，分页记忆失去之前数据，500必须大于setSelectRow的时间
-				setTimeout(function(){
-					_this.changePageCoreRecordData();
-				},800);
 			},
 			handleClick(tab, event) {
 			},
@@ -1102,21 +1102,20 @@
 				});
 			},
 
-			//所内机构
+			//所内机构 
 			getDept() {
 				// this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/users/findUsersDeptofSta';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
-					this.resourceCheckedKey.push(this.user.deptId);
+					// this.resourceCheckedKey.push(this.user.deptId);
 					this.dialogVisible = true;
 				});
 			},
 			//角色
 			getRole() {
-				// this.editSearch = 'role';
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
@@ -1221,30 +1220,81 @@
 					// });
 				})
 			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//所外机构Table默认加载数据
+			requestData(){
+				this.loading = true;//加载动画打开
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					NAME: this.searchList.NAME,
+					CODE: this.searchList.CODE,
+					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
+				};
+				var url = this.basic_url + '/api-apps/app/customer';//如果父组件没有传CJDW承检单位侧显示所有数据
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.customerList = res.data.data;
+					
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					// 	this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'erro'
+					// });
+				})
+			},
 			dailogconfirm() { //小弹出框确认按钮事件
-				// this.checkedNodes =  this.$refs.tree.getCheckedNodes();
-				// this.placetext = false;
-				if(this.selUser.length == 0){
+			if(this.getCheckboxData==null&&this.selUser.length == 0){
+						this.$message({
+						message: '所内机构和所外机构，请至少选择一个',
+						type: 'erro'
+					});
+			}else if(this.getCheckboxData.length!=0&&this.getCheckboxData!=null){
+				this.user.deptId = this.getCheckboxData.id;
+				this.user.deptName = this.getCheckboxData.fullname;
+			}else if(this.getCheckboxData.length==undefined&&this.selUser.length >1){
 				this.$message({
-					message: '请选择数据',
-					type: 'warning'
-				});
-				}else if(this.selUser.length > 1){
-					this.$message({
 						message: '不可同时选择多条数据',
 						type: 'warning'
 					});
-				}else{
-					this.user.deptName = this.selUser[0].NAME;//名称
-				}
-				if(this.editSearch == 'company') {
-					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.fullname;
-				} else {
-					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.fullname;
-				}
-				// this.dialogVisible = false;
+			}else{
+				this.user.deptName = this.selUser[0].NAME;//名称
+				this.user.deptId =  this.selUser[0].ID;
+			}
 				this.requestData();
 				this.resetTree();
 			},

@@ -382,18 +382,26 @@ export default {
 		 	this.getFirstMenus(roleid);
 		},
         //一级菜单
-        getFirstMenus(roleid) {
-//      	sessionStorage.setItem('roleid',roleid);
- 			var roleid=this.$store.state.roleid;
-	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
-	        
-	        this.$axios.get(url, {}).then((res) => {
-	            this.applistdata = res.data;
-	        }).catch(error => {
-	        })
-        },
+		getFirstMenus(roleid) {
+				var roleid=this.$store.state.roleid;
+				var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
+				this.$axios.get(url, {}).then((res) => {
+						this.applistdata = res.data;
+				}).catch(error => {
+				})
+			},
+			//获取全局承建单位
+		getcjdw(){
+			var url = this.basic_url + '/api-user/users/findUsersDeptofSta';
+				this.$axios.get(url, {}).then((res) => {
+					this.$store.dispatch('setcurrentcjdwNavAct',res.data);
+				}).catch(error => {
+				});
+		}
 	},
 	mounted(){
+		//获取全局的承检单位
+		this.getcjdw();
 		//加载待办任务
 		this.requestData();
 		//一级菜单

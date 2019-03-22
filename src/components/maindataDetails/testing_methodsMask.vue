@@ -30,17 +30,20 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="编码" prop="M_NUM" >
+											<el-form-item label="编码" prop="M_NUM">
 												<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="中文名称" prop="M_NAME" >
+										<el-col :span="16">
+											<el-form-item label="中文名称" prop="M_NAME">
 												<el-input v-model="testingForm.M_NAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="英文名称" prop="M_ENAME" >
+									</el-row>
+									<el-row>
+										<el-col :span="8">&nbsp;</el-col>
+										<el-col :span="16">
+											<el-form-item label="英文名称" prop="M_ENAME">
 												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>

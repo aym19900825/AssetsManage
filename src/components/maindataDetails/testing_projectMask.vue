@@ -46,7 +46,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="P_NUM" label-width="100px">
-												<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit"></el-input>
+												<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit" placeholder="不填写可自动生成"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -58,7 +58,6 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="单价(元)" prop="UNITCOST" label-width="100px">
-												<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
 												<el-input v-model="testing_projectForm.UNITCOST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -126,7 +125,7 @@
 											<el-table-column fixed="right" label="操作" width="120">
 												<template slot-scope="scope">
 													<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
-	                                                 <i class="icon-trash red"></i>
+															<i class="icon-trash red"></i>
 													</el-button>
 												</template>
 											</el-table-column>
@@ -347,25 +346,25 @@
 				rules: { //需要验证的字段
 					P_NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						trigger: 'blur',
+						validator: this.Validators.isSpecificKey,
 					}],
 					P_NAME: [{
 						required: true,
 						trigger: 'blur',
-						validator: validateP_NAME,
+						validator: this.Validators.isSpecificKey,
 					}],
-					QUANTITY: [{
-						required: true,
+					FIELD: [{
+						required: false,
 						trigger: 'blur',
-						validator: validateQUANTITY,
+						validator: this.Validators.isSpecificKey,
 					}],
-					QUALIFICATION: [{
-						required: true,
+					CHILD_FIELD: [{
+						required: false,
 						trigger: 'blur',
-						validator: validateQUALIFICATION,
+						validator: this.Validators.isSpecificKey,
 					}],
-					UNITCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
+					UNITCOST:[{required: true, trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				testing_projectForm:{},//检验/检测项目数据组
 				//tree

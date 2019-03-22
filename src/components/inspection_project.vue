@@ -414,7 +414,7 @@
 				 }).catch((err) => {
 	            });
 			},
-			requestData(val) {//加载数据
+			requestData() {//加载数据
 				this.loading = true;//加载动画打开
 				var _this = this;
 				var data = {

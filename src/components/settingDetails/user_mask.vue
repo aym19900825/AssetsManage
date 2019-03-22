@@ -1104,13 +1104,9 @@
 
 			//所内机构 
 			getDept() {
-				// this.editSearch = 'dept';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/users/findUsersDeptofSta';
+				var url=this.basic_url+'/api-user/depts/treeMap'
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
-					// this.resourceCheckedKey.push(this.user.deptId);
 					this.dialogVisible = true;
 				});
 			},

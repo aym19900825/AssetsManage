@@ -64,6 +64,7 @@ export default {
             headImgUrl: '',
             username: '',
             nickname: '',
+            deptid: '',
             GetRolesname:'',
             GetRoles:[],//获取当前角色
         }
@@ -91,6 +92,7 @@ export default {
                     this.username = res.data.username;
                     this.nickname = res.data.nickname;
                     this.userid = res.data.id;
+                    this.deptid = res.data.deptid;
                     this.getImgUrl();
             }).catch((err) => {
             });

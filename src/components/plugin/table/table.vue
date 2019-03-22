@@ -180,6 +180,25 @@ export default {
         var url =  this.basic_url + '/api-flow/flow/model';
       }else if(this.appName == 'flowProcess'){
         var url =  this.basic_url + '/api-flow/flow/process';
+      }else if(this.appName == 'appcfg'){
+        var url = this.basic_url + '/api-apps/' + this.appName;
+      }else if(this.appName == 'apppermissions'){
+        var url = this.basic_url + '/api-user/permissions';
+      }else if(this.appName == 'api-user'){
+        var url = this.basic_url + '/api-user/users';
+        if(!!this.searchList.deptId  && this.searchList.deptId != 128){
+					data.deptId = this.searchList.deptId;
+				}
+      }else if(this.appName == 'dataRestrict'){
+        var url = this.basic_url + '/api-user/dataRestrict';
+      }else if(this.appName == 'appRoles'){
+        var url = this.basic_url + '/api-user/roles';
+      }else if(this.appName == 'objectcfg'){
+        var url = this.basic_url + '/apps-center/objectcfg';
+      }else if(this.appName == 'dicts'){
+         var url = this.basic_url + '/api-user/dicts';
+      }else if(this.appName == 'serialnum'){
+        var url = this.basic_url + '/api-user/serialnum';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

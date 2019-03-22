@@ -79,21 +79,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 							<!-- 表格begin -->
-							<el-table ref="table" :data="roleList" 
-								  border 
-								  stripe 
-								  :header-cell-style="rowClass" 
-								  :height="fullHeight" 
-								  style="width: 100%;" 
-								  :default-sort="{prop:'roleList', order: 'descending'}" 
-								  @selection-change="SelChange"
-								  v-loadmore="loadMore"
-								  v-loading="loading"  
-							  	  element-loading-text="加载中…"
-							  	  element-loading-spinner="el-icon-loading"
-							  	  element-loading-background="rgba(255, 255, 255, 0.9)">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
+							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.code}}</p>
@@ -105,16 +91,7 @@
 								</el-table-column>
 								<el-table-column label="备注" sortable prop="tips"  v-if="this.checkedName.indexOf('备注')!=-1">
 								</el-table-column>
-							</el-table>
-							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-					            @size-change="sizeChange"
-					            @current-change="currentChange"
-					            :current-page="page.currentPage"
-					            :page-sizes="[10, 20, 30, 40]"
-					            :page-size="page.pageSize"
-					            layout="total, sizes, prev, pager, next"
-					            :total="page.totalCount">
-					        </el-pagination>
+							</v-table>
 							<!-- 表格end -->
 						</div>
 					</div>
@@ -136,6 +113,7 @@
 	import rolemeunmask from '../settingDetails/rolemenu_mask.vue'
 	import datalimitmask from '../settingDetails/datalimit_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'user_management',
 		components: {//引用组件标签命名
@@ -146,9 +124,11 @@
 			'rolemeunmask': rolemeunmask,
 			'datalimitmask': datalimitmask,
 			'tableControle': tableControle,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'appRoles',
 				basic_url: Config.dev_url,
 				value:'',
 				loadSign: true, //鼠标滚动加载数据
@@ -208,31 +188,24 @@
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			setSelData(val){
+				this.selUser = val;
 			},
 			//控制列的显示隐藏调用函数
 			tableControle(data){
 				this.checkedName = data;
 			},
 			
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
+			searchinfo() {
+				this.requestData('init');
 			},
 			resetbtn(){
 				this.searchList = {//高级查询数据
 					name: '',
 					inactive:''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
-			judge(data) {//是否停用
-				return data.inactive=="1" ? '是' : '否'
-			},
-			
 			 //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
@@ -373,9 +346,7 @@
 							}
 						}).catch((err) => {
 						});
-					}).catch(() => {
-
-					});
+					}).catch(() => {});
 				}
 			},
 			// 彻底删除
@@ -435,91 +406,12 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
-			//表格勾选获取的一行的值
-			SelChange(val) {
-				this.selUser = val;
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
-			},
-			//改变页数
-			sizeChange(val) {
-				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//当前页数
-			currentChange(val) {
-				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
-				this.requestData();
-			},
-			//页面加载数据
-			requestData(index) {
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					name: this.searchList.name,
-					inactive: this.searchList.inactive
-				}
-				var url = this.basic_url + '/api-user/roles';
-				this.$axios.get(url, {
-						params: data
-					}).then((res) => {
-					this.page.totalCount = res.data.count;//页码赋值
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
-					this.roleList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {
-				})
-			},
+			judge(data) {//是否停用
+                return data.inactive=="1" ? '是' : '否'
+            },
 			//机构树
 			getKey() {
 				let that = this;
@@ -562,7 +454,6 @@
 		    },
 		},
 		mounted() {
-			this.requestData();
 			this.getKey();
 		},
 	}

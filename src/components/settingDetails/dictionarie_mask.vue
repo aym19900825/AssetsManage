@@ -90,7 +90,7 @@
 												</el-table-column>
 												<el-table-column prop="code" label="值代号" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'subDicts.'+scope.$index + '.code'">
+														<el-form-item :prop="'subDicts.'+scope.$index + '.code'" :rules="[{required: true, message: '不能为空', trigger: 'blur'},{trigger: 'blur', validator: Validators.isSpecificKey}]">
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.code" placeholder="请输入值名称的代号，一般用数字表示">
 															</el-input>
 															<span v-else>{{scope.row.code}}</span>
@@ -110,7 +110,6 @@
 								</div>
 							</el-collapse>
 						</div>
-
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -169,7 +168,7 @@
 				dialogVisible: false, //对话框
 				rules: {
 					code: [
-						{ required: true, message: '必填',trigger: 'blur'},
+						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isWorknumber}
 					],
 					name: [
@@ -336,6 +335,11 @@
 								this.$emit('request')
 								this.$refs["dictionarieForm"].resetFields();
 								this.show = false;
+							} else {
+								this.$message({//新加的异常后端返回提示消息
+									 message: res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
 						});

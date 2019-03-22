@@ -226,6 +226,9 @@ export default {
     },
   
 	methods: {
+		setSelData(val){
+			this.selUser = val;
+		},
 		//Table默认加载数据
 		requestData(opt) {
 			this.$refs.table.requestData(opt);

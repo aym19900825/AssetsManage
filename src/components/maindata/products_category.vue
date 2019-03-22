@@ -98,7 +98,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<template slot-scope="list">
+								<template>
 									<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="checkedName.indexOf('编码')!=-1">
 										<template slot-scope="scope">
 											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}

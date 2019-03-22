@@ -309,7 +309,6 @@
 				searchList: {
 					nickname: '',
 					username: '',
-					deptId: '',
 					companyId: ''
 				},
 				//tree
@@ -633,9 +632,9 @@
 			}
 			for(var c=0;c<testingproduct.length;c++){
 				if(testingproduct[c].type!="dept"&&testingproduct[c].type!="producttype"){
-          if(!!testingproduct[c].id){
-					  checkProduct.push(testingproduct[c].id);
-          }
+					if(!!testingproduct[c].id){
+						checkProduct.push(testingproduct[c].id);
+					}
 				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
 					  checkProductType.push(testingproduct[c].id);
 				}else if(testingproduct[c].type="dept"){
@@ -659,7 +658,7 @@
 					checkProductType:checkProductType,
 					deptIds:deptIds,
 					checkDeptIds:checkDeptIds,
-          userId:this.selUser[0].id
+					userId:this.selUser[0].id
 				}
 				var url = this.basic_url + '/api-user/users/setAuth';
 				this.$axios.post(url, {pmType:pmType,
@@ -670,15 +669,15 @@
 					checkProductType:checkProductType,
 					deptIds:deptIds,
 					checkDeptIds:checkDeptIds,
-          userId:this.selUser[0].id}).then((res) => {
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '操作成功',
-							type: 'success'
-						});
-					}
-					this.requestData();
-          this.resetTree();//置空数据                            
+					userId:this.selUser[0].id}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '操作成功',
+								type: 'success'
+							});
+						}
+						this.requestData();
+						this.resetTree();//置空数据                            
 				}).catch((err) => {
 				});
 			},

@@ -1100,7 +1100,7 @@
 				// this.editSearch = 'dept';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/depts/treeMap';
+				var url = this.basic_url + '/api-user/users/findUsersDeptofSta';
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
 					// this.resourceCheckedKey.push(this.user.deptId);
@@ -1277,10 +1277,10 @@
 						message: '所内机构和所外机构，请至少选择一个',
 						type: 'erro'
 					});
-			}else if(this.getCheckboxData.length >0){
+			}else if(this.getCheckboxData.length!=0&&this.getCheckboxData!=null){
 				this.user.deptId = this.getCheckboxData.id;
 				this.user.deptName = this.getCheckboxData.fullname;
-			}else if(this.selUser.length >1){
+			}else if(this.getCheckboxData.length==undefined&&this.selUser.length >1){
 				this.$message({
 						message: '不可同时选择多条数据',
 						type: 'warning'

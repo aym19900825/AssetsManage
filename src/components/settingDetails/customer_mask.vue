@@ -110,7 +110,7 @@
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
-												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right;margin-left: 10px;">
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: right; position: relative; margin-left: 10px;">
 													<el-button type="primary" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i>
 														<font>上传</font>
@@ -763,13 +763,15 @@
 	@import '../../assets/css/mask-modules.css';
 	.a-upload input{
 		position: absolute;
-		font-size: 5px;
+		font-size: 0px;
+		font-size: 24px \9;
 		right: 0px;
 		top: 0;
 		opacity: 0;
 		filter: alpha(opacity=0);
 		cursor: pointer;
-		width: 70px;
+		width: 100%;
+		height: 30px;
 		cursor: pointer;
 	}
 </style>

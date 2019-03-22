@@ -397,7 +397,7 @@
 					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					this.departmentId = res.data.deptId;
 					var departName = res.data.deptName;
-					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
+					var currenturl = this.basic_url + '/api-user/users/findUsersDeptofSta';
 					this.$axios.get(currenturl, {}).then((res) => {
 						this.Select_DEPTID = res.data;
 						if (this.departmentId == 128) {

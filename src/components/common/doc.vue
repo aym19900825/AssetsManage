@@ -1,7 +1,7 @@
 <template>
 <div>
     <div class="table-func">
-        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left;" v-show="docParm.model=='edit'">
+        <form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; position: relative;" v-show="docParm.model=='edit'">
             <el-button type="primary" size="mini" round class="a-upload">
                 <i class="el-icon-upload2"></i>
                 <font>上传</font>

@@ -694,7 +694,7 @@
 			// 保存users/saveOrUpdate
 			save(parameter) {
 				var _this = this;
-				this.$refs[testing_projectForm].validate((valid) => {
+				this.$refs.testing_projectForm.validate((valid) => {
 					if(valid) {
 						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
@@ -705,9 +705,9 @@
 								type: 'success'
 							});
 							if(parameter='Update'){
-								this.show=true;
-							}else{
 								this.show=false;
+							}else{
+								this.show=true;
 							}
 							this.$emit('reset');
 							this.$emit('request');

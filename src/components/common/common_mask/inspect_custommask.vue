@@ -117,10 +117,10 @@
 	close() {
 		this.dialogCustomer = false;
 	},
-  	visible() {
+	visible() {
 		this.requestData();
 		this.dialogCustomer = true;
-  	},
+	},
   	//表格滚动加载
 		loadMore() {
 			let up2down = sessionStorage.getItem('up2down');
@@ -186,8 +186,6 @@
 		};
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer';//如果父组件没有传CJDW承检单位侧显示所有数
 		this.$axios.get(url, {params: data}).then((res) => {
-			console.log(res);
-			console.log(this.$store.state.currentcjdw[0].id);
 			this.page.totalCount = res.data.count;	
 			//总的页数
 			let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -226,13 +224,52 @@
 				var name=this.selUser[0].customername;//名称
 				var address=this.selUser[0].customeraddress;//地址 
 				var id=this.selUser[0].ID;
+				var itemid=this.selUser[0].itemid;
+				var customarr=[];
+				customarr.push(this.selUser[0].customerid);//
+				customarr.push(this.selUser[0].customername);//委托单位
+				customarr.push(this.selUser[0].customeraddress);//地址
+				this.$emit('customarr',customarr);
+				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
+						customarr.push(falg);
+				}
 				// var code=this.selUser[0].CODE;//统一社会信用代码
-				this.$emit('customname',name);
-				this.$emit('customadd',address);
-				// this.$emit('customzip',zipcode);
-				// this.$emit('appendid',id);
-				// this.$emit('appendcode',code);
-			}
+				// this.$emit('customname',name);//传到主页面
+				// this.$emit('customadd',address);//传到主页面
+					if(this.selUser[0]!=null){
+							var vendor=[];
+							if(this.selUser[0].customercode!=null&&this.selUser[0].customercode!=undefined&&this.selUser[0].customercode!=''){
+									vendor.push(this.selUser[0].customercode);
+							}else{
+								vendor.push(this.selUser[0].customerid);
+							}
+							
+							this.$emit('vendor',vendor);
+					}
+					
+					if(this.selUser[0].itemid!=null||this.selUser[0].itemid!=undefined){
+							this.$axios.get(this.basic_url + '/api-apps/app/item/' + itemid, {}).then((res) => {
+								console.log(res);
+								var custarr = [];
+									custarr.push(res.data.P_NAME);//生产单位
+									custarr.push(res.data.DESCRIPTION);//样品名称
+									custarr.push(res.data.MODEL);//模型
+									custarr.push(res.data.QUATITY);//质量
+									custarr.push(res.data.PRODUCT);//产品名称
+									custarr.push(res.data.PRODUCT_TYPE);//产品类别
+									custarr.push(res.data.PRO_NUM);//产品编号
+									custarr.push(res.data.PRO_VERSION);//产品版本
+									custarr.push(res.data.P_NUM);//产品类别编号
+									custarr.push(res.data.P_VERSION);//产品类别版本
+									console.log(custarr);
+									this.$emit('custarr',custarr);
+							});
+					}else{
+								var custarr = [];
+								custarr.push('falg');
+								this.$emit('custarr',custarr);
+					}
+				
 			this.dialogCustomer = false;
 			// this.requestData();
 			// this.resetBasisInfo();//调用resetBasisInfo函数
@@ -297,6 +334,7 @@
 				this.$refs.table.toggleRowSelection(this.customerList[i], true);
 			}
 		}
+	},
 	},
     mounted() {
 		this.requestData();

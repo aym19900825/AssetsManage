@@ -49,7 +49,7 @@ export default {
 		            if(tabW>contentW){
 		            	var poor=tabW-contentW;
 		            	$('.page-tabs').offset({
-		                    left: -poor
+		                    left:poor
 		                });
 		            }
 				},0);				

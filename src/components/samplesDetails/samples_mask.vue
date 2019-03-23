@@ -580,6 +580,7 @@
 					},
 				}).then((res) => {
 					this.selectDept = res.data;
+
 				});
 			},
 			//确定承检单位

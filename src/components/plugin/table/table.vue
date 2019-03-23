@@ -27,9 +27,10 @@
       </el-table-column>
       <slot :list='list'></slot>
     </el-table>
+    <div class="pt10 text-right">
     <el-pagination
-        style="float: right;"
         @size-change="sizeChange"
+        background
         @current-change="currentChange"
         :current-page="page.currentPage"
         :page-sizes="[10, 20, 30, 40]"
@@ -37,6 +38,7 @@
         layout="total, sizes, prev, pager, next"
         :total="page.totalCount">
     </el-pagination>
+    </div>
   </div>
 </template>
 

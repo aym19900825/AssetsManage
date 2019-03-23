@@ -46,7 +46,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="P_NUM" label-width="100px">
-												<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit"></el-input>
+												<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit" placeholder="不填写可自动生成"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -58,7 +58,6 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="单价(元)" prop="UNITCOST" label-width="100px">
-												<!-- <el-input-number type="number" :precision="2" v-model.number="testing_projectForm.QUANTITY" :step="5" :max="100000" style="width: 100%;"></el-input-number> -->
 												<el-input v-model="testing_projectForm.UNITCOST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -126,7 +125,7 @@
 											<el-table-column fixed="right" label="操作" width="120">
 												<template slot-scope="scope">
 													<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
-	                                                 <i class="icon-trash red"></i>
+															<i class="icon-trash red"></i>
 													</el-button>
 												</template>
 											</el-table-column>
@@ -160,8 +159,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('testing_projectForm')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('testing_projectForm')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('testing_projectForm')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
@@ -227,32 +226,6 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		// props: {
-		// 	page: {
-		// 		type: Object,
-		// 	},
-		// 	testing_projectForm: {
-		// 		type: Object,
-		// 		default: function() {
-		// 			return {
-		// 				VERSION: '',
-		// 				STATUS: '',
-		// 				P_NUM: '',
-		// 				P_NAME: '',
-		// 				QUANTITY: '',
-		// 				QUALIFICATION: '',
-		// 				FIELD: '',
-		// 				CHILD_FIELD: '',
-		// 				DOCLINKS_NUM: '',
-		// 				DEPARTMENT: '',
-		// 				ENTERBY: '',
-		// 				ENTERDATE: '',
-		// 				CHANGEBY: '',
-		// 				CHANGEDATE: '',
-		// 			}
-		// 		}
-		// 	},
-		// },
 		data() {
 			var validateNum = (rule, value, callback) => {
 				if(value != ""){
@@ -325,7 +298,6 @@
 					VERSION: 1,
 					WORK_INSTRUCTIONList: []
 				},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				editSearch: '',
 				value: '',
@@ -347,25 +319,25 @@
 				rules: { //需要验证的字段
 					P_NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						trigger: 'blur',
+						validator: this.Validators.isSpecificKey,
 					}],
 					P_NAME: [{
 						required: true,
 						trigger: 'blur',
-						validator: validateP_NAME,
+						validator: this.Validators.isSpecificKey,
 					}],
-					QUANTITY: [{
-						required: true,
+					FIELD: [{
+						required: false,
 						trigger: 'blur',
-						validator: validateQUANTITY,
+						validator: this.Validators.isSpecificKey,
 					}],
-					QUALIFICATION: [{
-						required: true,
+					CHILD_FIELD: [{
+						required: false,
 						trigger: 'blur',
-						validator: validateQUALIFICATION,
+						validator: this.Validators.isSpecificKey,
 					}],
-					UNITCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],
+					UNITCOST:[{required: true, trigger: 'blur', validator:this.Validators.isPrices}],
 				},
 				testing_projectForm:{},//检验/检测项目数据组
 				//tree
@@ -720,7 +692,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(testing_projectForm) {
+			save(parameter) {
 				var _this = this;
 				this.$refs[testing_projectForm].validate((valid) => {
 					if(valid) {
@@ -732,6 +704,11 @@
 								message: '保存成功',
 								type: 'success'
 							});
+							if(parameter='Update'){
+								this.show=true;
+							}else{
+								this.show=false;
+							}
 							this.$emit('reset');
 							this.$emit('request');
 							this.visible();
@@ -754,28 +731,14 @@
 					//清空表单验证
 					}).catch((err) => {
 					});
-				this.falg = true;
 			} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
-			},
-			//保存
-			saveAndUpdate(testing_projectForm) {
-				this.save(testing_projectForm);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(testing_projectForm) {
-				this.save(testing_projectForm);
-				this.show = true;
 			},
 			getpepole(item) {
 				this.peoplegrid = item;

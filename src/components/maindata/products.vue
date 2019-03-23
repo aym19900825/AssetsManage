@@ -85,7 +85,7 @@
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -601,8 +601,6 @@
 input[type="text"], input[type="password"], textarea {
     height: 35px;
     padding: 0px 5px;
-    background-color: #FFFFFF;
-    border-radius: 0px;
     border-left:none;
     border: 1px solid #DFE5EA;
 }

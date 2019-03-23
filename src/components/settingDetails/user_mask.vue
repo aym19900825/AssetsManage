@@ -199,7 +199,7 @@
 										<el-col :span="8">
 											<el-form-item label="学历" prop="education" label-width="100px">
 												<el-select v-model="user.education" placeholder="请选择" style="width: 100%" :disabled="noedit">
-													<el-option v-for="(item,index) in options" :key="index" :label="item.label" :value="item.value">
+													<el-option v-for="(item,index) in educationData" :key="index" :value="item.id" :label="item.name">
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -465,7 +465,7 @@
 
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 				<div class="el-collapse-item pb10" aria-expanded="true" accordion>
-					<el-tabs v-model="activeName" @tab-click="handleClick">
+					<el-tabs v-model="activeName" @tab-click="depthandleClick">
 						<el-tab-pane label="所内机构" name="first">
 							<div class="scrollbar" style="height:380px;">
 								<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
@@ -526,8 +526,8 @@
 					</el-tabs>
 				</div>
 				<div slot="footer">
-			       <el-button @click="resetTree">取 消</el-button>
 			       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
+			       <el-button @click="resetTree">取 消</el-button>
 			    </div>
 			</el-dialog>
 		</div>
@@ -563,45 +563,15 @@
 					roleId: [],
 					roles: [],
 					traings: [],
+					sex: '0',
+					ispermit: '0',
+					islogin: '0',
 					qualifications: [],
 					ips: [],
 					deptName:'',
 					nickname:'',
 				},
 				customerList: [],
-				options: [{
-						value: '高中',
-						label: '高中'
-					},
-					{
-						value: '高中以下',
-						label: '高中以下'
-					},
-					{
-						value: '中专/技校',
-						label: '中专/技校',
-					},
-					{
-						value: '大专',
-						label: '大专'
-					},
-					{
-						value: '本科',
-						label: '本科'
-					},
-					{
-						value: '硕士',
-						label: '硕士'
-					},
-					{
-						value: '博士',
-						label: '博士'
-					},
-					{
-						value: 'MBA/EMBA',
-						label: 'MBA/EMBA'
-					},
-				],
 				searchList: {
 					NAME: '',
 					CODE: '',
@@ -685,7 +655,8 @@
 					children: "children",
 					label: "fullname"
 				},
-				selectData: [], //
+				selectData: [], //角色
+				educationData: [], //最高学历
 				getCheckboxData: {},
 				addtitle:true,
 				modifytitle:false,
@@ -703,13 +674,20 @@
 		},
 		methods: {
 			//tabs
-			handleClick(tab, event) {
+			depthandleClick(tab, event) {
+				console.log(12222);
+				this.requestData();
+				this.getDept();
+				this.getCheckboxData=[];
 		    },
 			showUserRole(){
 			},
 			resetTree(){
 				this.dialogVisible = false;
 				this.resourceCheckedKey = [];
+				this.customerList = [];
+				this.page.currentPage = 1;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
 			editpassword(){//点击修改密码按钮跳转到修改密码页面
 		      	this.$router.push({path: '/passwordedit'})
@@ -724,10 +702,6 @@
 			SelChange(val) {
 				this.selUser = val;
 				var _this = this;
-				//处理分页时，分页记忆失去之前数据，500必须大于setSelectRow的时间
-				setTimeout(function(){
-					_this.changePageCoreRecordData();
-				},800);
 			},
 			handleClick(tab, event) {
 			},
@@ -820,7 +794,6 @@
 				};
 				this.user.traings.push(obj);
 			},
-
 			addfield3() {
 				var obj = {
 					step: 1,
@@ -830,7 +803,6 @@
 				};
 				this.user.ips.push(obj);
 			},
-			
 			//刪除新建行
 			deleteRow(index, row, listName){
 				var TableName = '';
@@ -899,6 +871,10 @@
 					worknumber: '',
 					phone: '',
 					email: '',
+					sex: '1',
+					ispermit: '1',
+					islogin: '1',
+					education: '本科',
 					address: '',
 					tips: '',
 					enabled: true,
@@ -907,7 +883,6 @@
 					ips: [],
 				};
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-
 					this.user.createby = res.data.id;
 					this.user.createbyName = res.data.nickname;
 					this.user.enterby = res.data.id
@@ -922,8 +897,8 @@
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				})
-				//				this.statusshow1 = true;
-				//				this.statusshow2 = false;
+				// this.statusshow1 = true;
+				// this.statusshow2 = false;
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -950,12 +925,9 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-
 				//	$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
-
 				this.$axios.get(usersUrl, {}).then((res) => {
-					
 					this.user.changeby = res.data.nickname;
 					this.docParam = {
 						username: res.data.username,
@@ -1115,7 +1087,7 @@
 			},
 			//所属组织
 			getCompany() {
-				this.editSearch = 'company';
+				// this.editSearch = 'company';
 				var page = this.page.currentPage;
 				var limit = this.page.pageSize;
 				var type = '1';
@@ -1128,83 +1100,86 @@
 					this.resourceData = res.data;
 					this.dialogVisible = true;
 				});
-
 			},
 
-			//所属机构
+			//所内机构 
 			getDept() {
-				this.editSearch = 'dept';
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/depts/treeMap';
+				var url=this.basic_url+'/api-user/depts/treeMap'
 				this.$axios.get(url, {}).then((res) => {
 					this.resourceData = res.data;
-					this.resourceCheckedKey.push(this.user.deptId);
 					this.dialogVisible = true;
 				});
 			},
 			//角色
 			getRole() {
-				this.editSearch = 'role';
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 				}).catch(error => {
 				})
 			},
+			//最高学历
+			getEducation() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=EDUCATIONS';
+				this.$axios.get(url, {}).then((res) => {
+					this.educationData = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				})
+			},
 			//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.requestData();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
 				this.requestData();
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.requestData();
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.requestData();
-		},
-			//Table默认加载数据
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//所外机构Table默认加载数据
 			requestData(){
 				this.loading = true;//加载动画打开
 				var data = {
@@ -1215,7 +1190,6 @@
 					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 				};
 				var url = this.basic_url + '/api-apps/app/customer';//如果父组件没有传CJDW承检单位侧显示所有数据
-		        	url = !!this.CJDW ? url+'&DEPTID_wheres='+this.CJDW : url;//如果父组件有传CJDW承检单位侧显示查询条件
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1242,24 +1216,89 @@
 					// });
 				})
 			},
-			dailogconfirm() { //小弹出框确认按钮事件
-				// this.checkedNodes =  this.$refs.tree.getCheckedNodes();
-				this.placetext = false;
-				if(this.editSearch == 'company') {
-					this.user.companyId = this.getCheckboxData.id;
-					this.user.companyName = this.getCheckboxData.fullname;
-				} else {
-					this.user.deptId = this.getCheckboxData.id;
-					this.user.deptName = this.getCheckboxData.fullname;
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
 				}
-				this.dialogVisible = false;
+				this.requestData();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//所外机构Table默认加载数据
+			requestData(){
+				this.loading = true;//加载动画打开
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					NAME: this.searchList.NAME,
+					CODE: this.searchList.CODE,
+					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
+				};
+				var url = this.basic_url + '/api-apps/app/customer';//如果父组件没有传CJDW承检单位侧显示所有数据
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.customerList = res.data.data;
+					
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					// 	this.$message({
+					// 	message: '网络错误，请重试',
+					// 	type: 'erro'
+					// });
+				})
+			},
+			dailogconfirm() { //小弹出框确认按钮事件
+			if(this.getCheckboxData==null&&this.selUser.length == 0){
+						this.$message({
+						message: '所内机构和所外机构，请至少选择一个',
+						type: 'erro'
+					});
+			}else if(this.getCheckboxData.length!=0&&this.getCheckboxData!=null){
+				this.user.deptId = this.getCheckboxData.id;
+				this.user.deptName = this.getCheckboxData.fullname;
+			}else if(this.getCheckboxData.length==undefined&&this.selUser.length >1){
+				this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+			}else{
+				this.user.deptName = this.selUser[0].NAME;//名称
+				this.user.deptId =  this.selUser[0].ID;
+			}
+				this.requestData();
 				this.resetTree();
 			},
 
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						done();
+						this.resetTree();
 					})
 					.catch(_ => {
 				console.log('取消关闭');
@@ -1302,10 +1341,10 @@
 					}
 				};
 				var url = this.file_url + '/file/uploadfile?userid=' + this.docParam.userid 
-						+ '&username=' + this.docParam.username
-						+ '&deptid=' + this.docParam.deptid
-						+ '&deptfullname=' + this.docParam.deptfullname
-						+ '&recordid=1&appname=客户管理&appid=2';
+					+ '&username=' + this.docParam.username
+					+ '&deptid=' + this.docParam.deptid
+					+ '&deptfullname=' + this.docParam.deptfullname
+					+ '&recordid=1&appname=客户管理&appid=2';
 				this.$axios.post(url, formData, config
 				).then((res)=>{
 					this.loading = false;
@@ -1331,12 +1370,14 @@
 		},
 		mounted() {
 			this.getRole();
+			this.getEducation();
+			this.requestData();
 		},
 		watch: {
 			user:{
 				handler:function(obj){
 					if(this.wi!=1){
-						this.changeflag=true;							
+						this.changeflag=true;
 					}
 					this.wi++; 
 				},

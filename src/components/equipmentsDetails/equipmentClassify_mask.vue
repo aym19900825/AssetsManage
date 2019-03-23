@@ -78,8 +78,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('CATEGORY')">修订</el-button> -->
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
@@ -143,7 +143,7 @@
 					//设备分类描述
 					CLASSIFY_DESCRIPTION: [
 						{required: true,trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isFillTips}
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
 				},
 				resourceProps: {
@@ -416,8 +416,8 @@
 				$(".mask_div").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
-			save(CATEGORY) {
-				this.$refs[CATEGORY].validate((valid) => {
+			save(parameter) {
+				this.$refs.CATEGORY.validate((valid) => {
 					if(this.CATEGORY.PARENT == ''||this.CATEGORY.PARENT == undefined){
 						this.CATEGORY.PARENT = '0';
 					}
@@ -425,17 +425,21 @@
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						var url = this.basic_url + '/api-apps/app/assetClass/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
-							console.log(res);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
 									type: 'success'
 								});
+								if(parameter=='Update'){
+									this.show=false;
+								}else{
+									this.show=true;
+								}
 								//重新加载数据
-								this.$emit('request');
-								this.$emit('reset');
-								this.visible();
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -455,31 +459,16 @@
 							}
 						}).catch((err) => {
 						});
-						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
 			},
 			
-			//保存
-			saveAndUpdate(CATEGORY) {
-				this.save(CATEGORY);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(CATEGORY) {
-				this.save(CATEGORY);
-				// this.visible();
-				this.show = true;
-			},
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];

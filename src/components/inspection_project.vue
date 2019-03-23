@@ -50,7 +50,11 @@
 							</div>
 							<div class="text item">
 								<el-form inline-message :model="productType2Form" status-icon ref="productType2Form" class="el-radio__table">
-								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}"
+								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+										highlight-current-row
+										@current-change="handleCurrentChange"
+										style="width: 100%;"
+										:default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}"
 										v-loadmore="loadMore"
 										v-loading="loading"
 										element-loading-text="加载中…"
@@ -60,8 +64,9 @@
 								  	<el-table-column label="类别编号" sortable width="100" prop="NUM" class="pl30">
 								      <template slot-scope="scope">
 								        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'">
-								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" :disabled="true"></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.NUM)" v-else>{{scope.row.NUM}}</span>
-										</el-form-item>
+								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" :disabled="true"></el-input>
+													<span class="blue" v-else>{{scope.row.NUM}}</span>
+												</el-form-item>
 								      </template>
 								    </el-table-column>
 
@@ -71,7 +76,7 @@
 								        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TYPE" placeholder="请选择" :disabled="true">
 								        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 								        	</el-input><span v-else>{{scope.row.TYPE}}</span>
-										</el-form-item>
+												</el-form-item>
 								      </template>
 								    </el-table-column>
 
@@ -199,8 +204,8 @@
 		data() {
 			return {
 				basic_url: Config.dev_url,
-      			Select_DEPTID:[],//获取机构部门
-      			fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+					Select_DEPTID:[],//获取机构部门
+					fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				formInline: {//选择站点显示数据
 					DEPTID: '',//this.currentDept,
 				},
@@ -224,10 +229,10 @@
 					label: '不活动'
 				}],
 				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        enabled: '',//信息状态
-		        },
+					page: 1,
+					limit: 10,//分页显示数
+					enabled: '',//信息状态
+				},
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -248,6 +253,7 @@
 			    return 'text-align:center'
 			},
 			childMsd_product2(data){//赋值给子表产品ID
+				this.product2Id = data;
 				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
 			},
 			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
@@ -288,6 +294,7 @@
 			// 		})
 			// 	})
 			// },
+
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');
@@ -392,29 +399,30 @@
 			},
 			getDEPTID() {//获取机构部门数据
 				var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-                	this.departmentId = res.data.deptId;
-                	var departName = res.data.deptName;
-					var currenturl = this.basic_url + '/api-user/depts/findByPid/' + this.departmentId;
+					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					this.departmentId = res.data.deptId;
+					var departName = res.data.deptName;
+					var currenturl = this.basic_url + '/api-user/users/findUsersDeptofSta';
 					this.$axios.get(currenturl, {}).then((res) => {
 						this.Select_DEPTID = res.data;
-						if (this.departmentId == 128) {
-							this.nameFlag = false;
-							this.formInline.DEPTID = res.data[0].id;
-						} else {
-							this.Select_DEPTID.push({
-								id: this.departmentId,
-								fullname: departName
-							});
-							this.formInline.DEPTID = this.departmentId;
-						}
+						this.formInline.DEPTID = res.data[0].id
+						// if (this.departmentId == 128) {
+						// 	this.nameFlag = false;
+						// 	this.formInline.DEPTID = res.data[0].id;
+						// } else {
+						// 	this.Select_DEPTID.push({
+						// 		id: this.departmentId,
+						// 		fullname: departName
+						// 	});
+						// 	this.formInline.DEPTID = this.departmentId;
+						// }
 						this.requestData();
 					}).catch(error => {
 					})
 				 }).catch((err) => {
-	            });
+					});
 			},
-			requestData(val) {//加载数据
+			requestData() {//加载数据
 				this.loading = true;//加载动画打开
 				var _this = this;
 				var data = {
@@ -434,20 +442,17 @@
 					}else{
 						this.loadSign=true
 					}
-					// this.commentArr[this.page.currentPage]=res.data.data
-					// let newarr=[]
-					// for(var i = 1; i <= totalPage; i++){
-					
-					// 	if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-					// 		for(var j = 0; j < this.commentArr[i].length; j++){
-					// 			this.commentArr[i][j].isEditing = false;
-					// 			newarr.push(this.commentArr[i][j])
-					// 		}
-					// 	}
-					// }
-					
-					this.productType2Form.inspectionList = res.data.data;//滚动加载更多
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								this.commentArr[i][j].isEditing = false;
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}
+					this.productType2Form.inspectionList = newarr;//滚动加载更多
 					this.loading = false;//加载动画关闭
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
@@ -492,7 +497,7 @@
 							var currentUser, currentDate;
 						this.currentUser=res.data.nickname;
 						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+						this.currentDate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 						var obj = {
 							"TYPE": '',
 							"STATUS": '',
@@ -569,13 +574,20 @@
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},
-			viewchildRow(id,num) {//查看子项数据
-				this.$refs.product2child.viewfield_product2(id,num);
-			},
+			
+			handleCurrentChange(val) {//默认选中第一条
+				this.currentRow = val;
+				this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
+				// console.log(this.productType2Form.inspectionList[0].ID);
+				// console.log(val.ID);
+      },
+			// viewchildRow(id,num) {//查看子项数据
+			// 	this.$refs.product2child.viewfield_product2(id,num);
+			// },
 			// childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
-        		// this.$refs.navsTabs.showClick(childValue);
-      		// },
+				// childValue就是子组件传过来的值
+				// this.$refs.navsTabs.showClick(childValue);
+			// },
 		},
 		
 		mounted() {

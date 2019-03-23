@@ -99,7 +99,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import categorymask from '../settingDetails/application_Mask.vue'
+	import categorymask from '../settingDetails/application_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {

@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="80px" class="demo-user">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
@@ -31,22 +31,24 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="标准编号" prop="S_NUM">
-												<el-input v-model="dataInfo.S_NUM" :disabled="noedit" placeholder="编码不填写可自动生成"></el-input>
+												<el-input v-model="dataInfo.S_NUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8"><!--移上去显示数据 :content="dataInfo.S_NAME"-->
-											<el-tooltip class="item" effect="dark" placement="top">
+										<el-col :span="16"><!--移上去显示数据 :content="dataInfo.S_NAME"-->
+											<!-- <el-tooltip class="item" effect="dark" placement="top"> -->
 												<el-form-item label="标准名称" prop="S_NAME">
 													<el-input v-model="dataInfo.S_NAME" :disabled="noedit"></el-input>
 												</el-form-item>
-											</el-tooltip>
+											<!-- </el-tooltip> -->
 										</el-col>
-										<el-col :span="8">
+									</el-row>
+									<el-row>
+										<el-col :span="8">&nbsp;</el-col>
+										<el-col :span="16">
 											<el-form-item label="英文名称" prop="S_ENGNAME">
 												<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
 													<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
 												</el-input>
-												
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -233,7 +235,6 @@
 					desc: ''
 				},
 				formLabelWidth: '120px',
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				options: [{
 					value: '1',
@@ -284,15 +285,15 @@
 					}
 				],
 				rules: {
-					S_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isCodeNum}],//编号
-					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isNickname}],//中文名称
+					S_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//编号
+					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//中文名称
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//英文名称
-					STARTETIME:[{required: true, trigger: 'blur',message: '必填',}],
+					STARTETIME: [{required: true, trigger: 'blur',message: '必填',}],
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},
 						{validator: this.Validators.isSpecificKey,trigger: 'blur'}
 					],
-//					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
+					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
 					RELEASE_UNIT: [
 						{required: true,trigger: 'blur',message: '必填',},
 						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
@@ -602,30 +603,16 @@
 							}						
 						}).catch((err) => {
 						});
-						this.falg = true;
 			        } else {
 			          	this.show = true;
 			          	this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 			        }
 				});
 			},
-			//保存
-			saveAndUpdate(dataInfo){
-				this.save(dataInfo);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(dataInfo){
-				this.save(dataInfo);
-				this.$emit('reset');
-				this.show = true;
-			},			handleClose(done) {
+			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
 						done();

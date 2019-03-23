@@ -134,7 +134,6 @@
 					'appname': '',
 					'appid': 1
 				},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
@@ -467,28 +466,14 @@
 							}
 						}).catch((err) => {
 						});
-						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
-			},
-			//保存
-			saveAndUpdate(WORK_INSTRUCTION) {
-				this.save(WORK_INSTRUCTION);
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(WORK_INSTRUCTION) {
-				this.save(WORK_INSTRUCTION);
-				this.show = true;
 			},
 			//时间格式化
 			dateFormat(row, column) {

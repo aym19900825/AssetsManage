@@ -71,8 +71,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('CATEGORY')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('CATEGORY')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -121,7 +121,6 @@
 					'appname': '',
 					'appid': 1
 				},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				selUser: [],
 				edit: true, //禁填
@@ -131,7 +130,6 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2','3'], //手风琴数量
-				//				labelPosition: 'top', //表格
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
@@ -451,6 +449,14 @@
 									this.$emit('reset');
 									this.visible();
 								}
+								if(opt == 'Update'){
+									this.show=false;
+								}else{
+									this.show=true;
+								}
+									this.$emit('request');
+									this.$emit('reset');
+									this.visible();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
@@ -470,30 +476,14 @@
 							}
 						}).catch((err) => {
 						});
-						this.falg = true;
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
-			},
-			
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save();
-				// this.visible();
-				this.show = true;
 			},
 			//时间格式化
 			dateFormat(row, column) {

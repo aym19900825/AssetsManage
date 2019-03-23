@@ -32,7 +32,7 @@
 					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
-						<el-col :span="12">
+						<el-col :span="18">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
@@ -58,11 +58,11 @@
 												</p>
 											</template>
 										</el-table-column>
-										<el-table-column label="当前环节" sortable width="160px" prop="name">
+										<el-table-column label="当前环节" sortable prop="name">
 										</el-table-column>
 										<el-table-column label="应用" sortable width="160px" prop="appDesc">
 										</el-table-column>
-										<el-table-column label="任务状态" sortable width="100px" align="center" prop="state">
+										<el-table-column label="任务状态" sortable width="140px" align="center" prop="state">
 										</el-table-column>
 										<el-table-column label="创建时间" sortable width="160px" prop="createTime">
 										</el-table-column>
@@ -73,7 +73,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="6">
+						<!-- <el-col :span="6">
 							<div class="statisticsbg" style="height: 290px">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
@@ -114,7 +114,7 @@
 									</div>
 								</div>
 							</div>
-						</el-col>
+						</el-col> -->
 						<el-col :span="6">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
@@ -382,18 +382,26 @@ export default {
 		 	this.getFirstMenus(roleid);
 		},
         //一级菜单
-        getFirstMenus(roleid) {
-//      	sessionStorage.setItem('roleid',roleid);
- 			var roleid=this.$store.state.roleid;
-	        var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
-	        
-	        this.$axios.get(url, {}).then((res) => {
-	            this.applistdata = res.data;
-	        }).catch(error => {
-	        })
-        },
+		getFirstMenus(roleid) {
+				var roleid=this.$store.state.roleid;
+				var url = this.basic_url + '/api-user/menus/findFirstByRoleId/' + roleid;
+				this.$axios.get(url, {}).then((res) => {
+						this.applistdata = res.data;
+				}).catch(error => {
+				})
+			},
+			//获取全局承建单位
+		getcjdw(){
+			var url = this.basic_url + '/api-user/users/findUsersDeptofSta';
+				this.$axios.get(url, {}).then((res) => {
+					this.$store.dispatch('setcurrentcjdwNavAct',res.data);
+				}).catch(error => {
+				});
+		}
 	},
 	mounted(){
+		//获取全局的承检单位
+		this.getcjdw();
 		//加载待办任务
 		this.requestData();
 		//一级菜单

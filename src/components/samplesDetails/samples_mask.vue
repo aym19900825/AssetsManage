@@ -55,49 +55,47 @@
 										<el-col :span="16">
 											<el-form-item label="委托单位名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="samplesForm.V_NAME" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')" :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')" :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="委托单位统一社会信用代码" prop="VENDOR" label-width="220px">
-												<el-input v-model="samplesForm.VENDOR" :disabled="true"></el-input>
+												<el-input v-model="samplesForm.VENDOR" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="16">
 											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-												<el-input v-model="samplesForm.P_NAME" :disabled="noedit">
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"  :disabled="noedit"></el-button>
+												<el-input v-model="samplesForm.P_NAME" :disabled="noedit || (!!samplesForm.PROXYNUM)">
+													<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="生产单位统一社会信用代码" prop="PRODUCT_COMPANY" label-width="220px">
-												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.PRODUCT_COMPANY" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8" >
-											<el-form-item label="承检单位" prop="CJDW"  label-width="110px">
-												<el-select clearable v-model="samplesForm.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="adddept">
-													<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
+											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="110px">
+												<el-input v-model="samplesForm.CJDWDesc" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" >
 											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addcategory" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addproduct" :disabled="noedit||!!samplesForm.PROXYNUM"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -105,24 +103,24 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="110px">
-												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="型号" prop="MODEL" label-width="110px">
-												<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.MODEL" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
-												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit"></el-input-number>
+												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -151,8 +149,8 @@
 											</el-form-item>
 										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="110px">
-												<el-input v-model="samplesForm.ACCEPT_PERSON" placeholder="当前人" :disabled="true">
+											<el-form-item label="收样人" prop="ACCEPT_PERSONDesc" label-width="110px">
+												<el-input v-model="samplesForm.ACCEPT_PERSONDesc" placeholder="当前人" :disabled="true">
 													<!-- <el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button> -->
 												</el-input>
 											</el-form-item>
@@ -212,7 +210,7 @@
 								<el-collapse-item title="样品" name="2">								
 									<div class="table-func" v-show="!viewtitle">
 										<span><i class="red font16">*</i>此处是按样品数量生成的列表行</span>
-										<el-button type="success" size="mini" round @click="addfield">
+										<el-button type="success" size="mini" round @click="addfield" :disabled="modify&&(!!samplesForm.PROXYNUM)">
 											<i class="icon-start"></i>
 											<font>生成</font>
 										</el-button>
@@ -270,14 +268,14 @@
 									    </el-table-column> -->
 									
 
-									    <el-table-column prop="ENTERDATE" label="录入时间" sortable width="170px">
+									    <!-- <el-table-column prop="ENTERDATE" label="录入时间" sortable width="170px">
 									      <template slot-scope="scope">
 									      	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.ENTERDATE'" >
 									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" :disabled="true" value-format="yyyy-MM-dd"></el-date-picker>
 									        <span v-show="!scope.row.isEditing" >{{scope.row.ENTERDATE}}</span>
 									    	</el-form-item>
 									      </template>
-									    </el-table-column>
+									    </el-table-column> -->
 									  <!--  <el-table-column prop="CHANGEBY" label="修改人" sortable width="120px">
 									      <template slot-scope="scope">
 									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHANGEBY}}</span>
@@ -376,7 +374,7 @@
 					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 					</el-pagination>
 				<div slot="footer">
-	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
+	    			<el-button type="primary" @click="dailogconfirm">确 定</el-button>
 	    			<el-button @click="resetBasisInfo1">取 消</el-button>
 	  			</div>
 			</el-dialog>
@@ -526,28 +524,26 @@
 				tips:'1',
 				rules: { //定义需要校验数据的名称
 					// PROXYNUM: [{ required:true, trigger:'blur', message:'必填'}],//委托书编号
-					VENDOR: [{ required:true, trigger:'blur', message:'必填'}],//委托单位编号
+					VENDOR: [{ required:false, trigger:'blur', message:'必填'}],//委托单位编号
 					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托单位名称
 					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
 					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
 					DESCRIPTION: [{ required:true, trigger:'blur', message:'必填'}],//样品名称
 					PRODUCT_CODE: [
-						{ required:false, trigger:'blur', validator: this.Validators.isWorknumber},
+						{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
 					],//产品标识代码
 					SN: [{ required:true, message:'必填', trigger:'blur' }],
 					TYPE: [{ required:true, trigger:'blur', message:'必填'}],//类别
 					QUATITY: [{ required:true, trigger:'blur', validator: this.Validators.isInteger}],
 					ACCEPTDATE: [{required:true, message: '请选择', trigger:'change' }],
-					ACCEPT_PERSON: [{required:true, message: '必填', trigger:'blur' }],
 					ACCEPT_DATE: [{required:true, message: '请选择', trigger:'change' }],
 					RECIP_DATE: [{ required:true, message: '请选择', trigger:'change' }],
 					STATUSDATE: [{required:true, message: '请选择', trigger:'change' }],
-					CJDW: [{required:true, message: '请选择', trigger:'change' }],
 					PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
 					PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
-					MODEL: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//型号
-					OTHER: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//其它资料
-					MEMO: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//备注
+					MODEL: [{ required:true, trigger:'change', validator: this.Validators.isSpecificKey}],//型号
+					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其它资料
+					MEMO: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//备注
 				},
 				selectDept:[],//承检单位
 			};
@@ -700,8 +696,10 @@
 					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
 					this.samplesForm.P_NAME=this.selval[0].P_NAME;
 					this.samplesForm.PRODUCT_COMPANY=this.selval[0].PRODUCT_UNIT;
+					this.samplesForm.PRODUCT_TYPE=this.selval[0].PRODUCT_TYPE;
+					this.samplesForm.PRODUCT=this.selval[0].PRODUCT;
 					this.samplesForm.DESCRIPTION=this.selval[0].ITEM_NAME;
-					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;//产品标识代码
+					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;
 					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
 					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
 					this.resetBasisInfo1();
@@ -722,14 +720,17 @@
 			
 			
 			visible() {//添加内容时从父组件带过来的
-				this.samplesForm.ACCEPT_DATE =  '';//收样日期
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
+					this.samplesForm.ACCEPT_PERSON = res.data.id;
+					this.samplesForm.ACCEPT_PERSONDesc = res.data.username;
 					var date=new Date();
+					this.samplesForm.ACCEPT_DATE =  this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//收样日期
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-				})
+					this.samplesForm.CJDW = res.data.deptId;
+					this.samplesForm.CJDWDesc = res.data.deptName;
+				}).catch((err)=>{})
 				this.reset();
 				this.addtitle = true;
 				this.modifytitle = false;

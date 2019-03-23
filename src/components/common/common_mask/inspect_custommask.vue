@@ -41,7 +41,7 @@
 				</el-table-column>
 				<el-table-column label="联系地址" sortable prop="customeraddress">
 				</el-table-column>
-				<el-table-column label="接样编号" sortable prop="itemnum">
+				<el-table-column label="样品编号" sortable prop="itemnum">
 				</el-table-column>
 				<el-table-column label="接样日期" sortable prop="itemrecdate">
 				</el-table-column>
@@ -179,6 +179,7 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			DEPTID:this.$store.state.currentcjdw[0].id,
 			// NAME: this.searchList.NAME,
 			// CODE: this.searchList.CODE,
 			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,

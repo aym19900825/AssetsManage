@@ -41,7 +41,7 @@
 				</el-table-column>
 				<el-table-column label="联系地址" sortable prop="customeraddress">
 				</el-table-column>
-				<el-table-column label="接样编号" sortable prop="itemnum">
+				<el-table-column label="样品编号" sortable prop="itemnum">
 				</el-table-column>
 				<el-table-column label="接样日期" sortable prop="itemrecdate">
 				</el-table-column>
@@ -50,7 +50,7 @@
 				</el-pagination>
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
-			       <el-button @click="resetBasisInfo">取 消</el-button>
+			       <el-button @click="resetBasisInfo()">取 消</el-button>
 			    </div>
 			</el-dialog>
 	</div>
@@ -179,6 +179,7 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			DEPTID:this.$store.state.currentcjdw[0].id,
 			// NAME: this.searchList.NAME,
 			// CODE: this.searchList.CODE,
 			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
@@ -196,9 +197,9 @@
 				this.loadSign=true
 			}
 			this.customerList = res.data.data;
-			setTimeout(()=>{
-				this.setSelectRow();
-			}, 200)
+			// setTimeout(()=>{
+			// 	this.setSelectRow();
+			// }, 200)
 			this.loading = false;//加载动画关闭
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
@@ -222,34 +223,24 @@
 				type: 'warning'
 			});
 		}else{
-			if(this.type=="vname"){ //委托单位名称
-				var name=this.selUser[0].NAME;//名称
-				var address=this.selUser[0].CONTACT_ADDRESS;//地址 
-				var	zipcode=this.selUser[0].ZIPCODE;//地址
+				var name=this.selUser[0].customername;//名称
+				var address=this.selUser[0].customeraddress;//地址 
 				var id=this.selUser[0].ID;
-				var code=this.selUser[0].CODE;//统一社会信用代码
-				this.$emit('appendname',name);
-				this.$emit('appendadd',address);
-				this.$emit('appendzip',zipcode);
-				this.$emit('appendid',id);
-				this.$emit('appendcode',code);
-			}else if(this.type="pname"){
-				var names=this.selUser[0].NAME;//生产单位名称
-				var codes=this.selUser[0].CODE;//统一社会信用代码
-				this.$emit('appendnames',names);
-				this.$emit('appendcodes',codes);
-			}else if(this.type="notivname"){
-				var names=this.selUser[0].NAME;//生产单位
-				this.$emit('appendnames',names);
+				// var code=this.selUser[0].CODE;//统一社会信用代码
+				this.$emit('customname',name);
+				this.$emit('customadd',address);
+				// this.$emit('customzip',zipcode);
+				// this.$emit('appendid',id);
+				// this.$emit('appendcode',code);
 			}
-			// this.dialogCustomer = false;
-			this.requestData();
-			this.resetBasisInfo();//调用resetBasisInfo函数
+			this.dialogCustomer = false;
+			// this.requestData();
+			// this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},
     resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
         this.dialogCustomer = false;//关闭弹出框
-        this.customerList = [];//列表数据置空
+        // this.customerList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
         this.page.pageSize = 10;//页码重新传值
 	},
@@ -306,8 +297,7 @@
 				this.$refs.table.toggleRowSelection(this.customerList[i], true);
 			}
 		}
-	}
-  },
+	},
     mounted() {
 		this.requestData();
 	},

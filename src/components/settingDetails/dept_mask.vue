@@ -589,7 +589,7 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
-					 adddeptForm.depttype='1'
+					 adddeptForm.depttype='2'
 				}).catch(error => {
 				})
 			},

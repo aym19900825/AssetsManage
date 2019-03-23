@@ -18,7 +18,9 @@
 				</el-button>
 			</div>
 			<el-form inline-message :model="inspectionSta2Form" status-icon ref="inspectionSta2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}"
+			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+				highlight-current-row
+				style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"
@@ -28,8 +30,9 @@
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span>
-					</el-form-item>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="自动生成" disabled></el-input>
+								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span>
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 					
@@ -442,7 +445,7 @@
 							this.currentUser=res.data.nickname;
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD");
-							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
 								"PRO_NUM": this.parentId,//产品类别编号

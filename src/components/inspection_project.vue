@@ -52,7 +52,7 @@
 								<el-form inline-message :model="productType2Form" status-icon ref="productType2Form" class="el-radio__table">
 								  <el-table ref="singleTable" :data="productType2Form.inspectionList.filter(data => !search || data.TYPE.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
 										highlight-current-row
-										@current-change="handleCurrentChange"
+										@current-change="viewchildRow"
 										style="width: 100%;"
 										:default-sort="{prop:'productType2Form.inspectionList', order: 'descending'}"
 										v-loadmore="loadMore"
@@ -252,9 +252,9 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			childMsd_product2(data){//赋值给子表产品ID
-				this.product2Id = data;
-				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.id,data.num);
+			childMsd_product2(val){//赋值给子表产品ID
+				this.product2Id = val;
+				this.$refs.inspectionSta2child.viewfield_inspectionSta2(val.id,val.num);
 			},
 			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
 				this.inspectionSta2Id = data;
@@ -422,6 +422,10 @@
 				 }).catch((err) => {
 					});
 			},
+			viewchildRow(val) {//单击整体选中本条数据
+				this.currentRow = val;
+				this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
+      },
 			requestData() {//加载数据
 				this.loading = true;//加载动画打开
 				var _this = this;
@@ -460,7 +464,7 @@
 
 					//默认主表第一条数据
 					if(this.productType2Form.inspectionList.length > 0){
-						this.viewchildRow(this.productType2Form.inspectionList[0].ID,this.productType2Form.inspectionList[0].NUM);
+						this.viewchildRow(val.ID,val.NUM);
 					}else{
 						this.viewchildRow('null');
 					}
@@ -494,7 +498,7 @@
 				}
 				if (isEditingflag==false){
 						this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-							var currentUser, currentDate;
+						var currentUser, currentDate;
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -517,17 +521,17 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['productType2Form'].validate((valid) => {
-		          if (valid) {
+				if (valid) {
 					var url = this.basic_url + '/api-apps/app/productType2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"TYPE": row.TYPE,
-					    "NUM": row.NUM,
-					    "VERSION": row.VERSION,
-					    "DEPTID": row.DEPTID,
-							"STATUS": row.STATUS,
-					    "ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
+						"NUM": row.NUM,
+						"VERSION": row.VERSION,
+						"DEPTID": row.DEPTID,
+						"STATUS": row.STATUS,
+						"ENTERBY": row.ENTERBY,
+						"ENTERDATE": row.ENTERDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -540,18 +544,18 @@
 						}
 					}).catch((err) => {
 					});
-		          } else {
-		            return false;
-		          }
-		        });
+						} else {
+							return false;
+						}
+					});
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此数据吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/productType2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+					}).then(({ value }) => {
+						var url = this.basic_url + '/api-apps/app/productType2/' + row.ID;
+							this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -562,8 +566,8 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
-            	});
+						}).catch(() => {
+					});
 			},
 			
 			addproclass() { //小弹出框确认按钮事件
@@ -575,12 +579,7 @@
 				this.$emit('request');
 			},
 			
-			handleCurrentChange(val) {//默认选中第一条
-				this.currentRow = val;
-				this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
-				// console.log(this.productType2Form.inspectionList[0].ID);
-				// console.log(val.ID);
-      },
+			
 			// viewchildRow(id,num) {//查看子项数据
 			// 	this.$refs.product2child.viewfield_product2(id,num);
 			// },

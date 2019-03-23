@@ -32,7 +32,7 @@
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="自动生成" disabled></el-input>
 								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span>
-							</el-form-item>
+					</el-form-item>
 			      </template>
 			    </el-table-column>
 					
@@ -463,27 +463,27 @@
 							this.inspectionSta2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+							} else {
+									this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionSta2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionSta2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"PRO_NUM": row.PRO_NUM,
-					    "S_NUM": row.S_NUM,
+						"S_NUM": row.S_NUM,
 						"S_NAME": row.S_NAME,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"RELEASETIME": row.RELEASETIME,
 						"STARTETIME": row.STARTETIME,
 						"ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
-					    "VERSION": row.VERSION,
+						"ENTERDATE": row.ENTERDATE,
+						"VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -494,6 +494,11 @@
 							//重新加载数据
 							// this.requestData_inspectionSta2();
 							this.viewfield_inspectionSta2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});

@@ -504,6 +504,11 @@
 							//重新加载数据
 							// this.requestData_inspectionMet2();
 							this.viewfield_inspectionMet2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});

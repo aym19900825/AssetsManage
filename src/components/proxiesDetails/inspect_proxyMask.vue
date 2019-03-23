@@ -707,7 +707,7 @@
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 			<!--委托单位名称 -->
-			<inspectcustommask ref="inscustom" ></inspectcustommask>
+			<inspectcustommask ref="inscustom" @customname="customname" @customadd="customadd" ></inspectcustommask>
 		</div>
 	</div>
 </template>
@@ -1502,6 +1502,13 @@
 					}
 					this.dataInfo.INSPECT_PROXY_PROJECList = [];
 				}
+			},
+			//委托单位
+			customname(val){
+				this.dataInfo.V_NAME = val;	
+			},
+			customadd(val){
+				this.dataInfo.V_ADDRESS = val;	
 			},
 			//分包要求检验依据编号
 			testbasisnum(value){

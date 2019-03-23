@@ -222,7 +222,8 @@
 						"enterby":'',
 						"enterdate":'',
 						"changeby":'',
-						"changedate":''
+						"changedate":'',
+						"depttype":'1',
 					};
 			},
 			//请求页面的button接口

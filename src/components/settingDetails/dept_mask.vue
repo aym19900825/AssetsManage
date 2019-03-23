@@ -372,6 +372,7 @@
 				 }).catch((err) => {
 				});	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
+				this.adddeptForm.depttype='1';
 				this.show = true;
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -588,6 +589,7 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
+					 adddeptForm.depttype='1'
 				}).catch(error => {
 				})
 			},
@@ -664,6 +666,7 @@
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
+					console.log(_this.adddeptForm);
 					this.$axios.post(url, _this.adddeptForm).then((res) => {
 						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息

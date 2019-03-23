@@ -176,15 +176,15 @@
 	//Table默认加载数据
 	requestData(){	
 		this.loading = true;//加载动画打开
-		// var data = {
-			// page: this.page.currentPage,
-			// limit: this.page.pageSize,
+		var data = {
+			page: this.page.currentPage,
+			limit: this.page.pageSize,
 			// NAME: this.searchList.NAME,
 			// CODE: this.searchList.CODE,
 			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
-		// };
+		};
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer';//如果父组件没有传CJDW承检单位侧显示所有数
-		this.$axios.get(url, {}).then((res) => {
+		this.$axios.get(url, {params: data}).then((res) => {
 			console.log(res);
 			console.log(this.$store.state.currentcjdw[0].id);
 			this.page.totalCount = res.data.count;	

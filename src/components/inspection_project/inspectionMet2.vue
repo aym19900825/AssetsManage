@@ -16,7 +16,10 @@
 			</div>
 		</div>
 		<el-form inline-message :model="inspectionMet2Form" ref="inspectionMet2Form">
-		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}"
+		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+				highlight-current-row
+				style="width: 100%;"
+				:default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"

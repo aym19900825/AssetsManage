@@ -468,14 +468,14 @@
 					var submitData = {
 						"ID":row.ID,
 						"S_NUM": row.S_NUM,
-					    "P_NUM": row.P_NUM,
+						"P_NUM": row.P_NUM,
 						"P_NAME": row.P_NAME,
 						"UNITCOST":  row.UNITCOST,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
-					    "ENTERDATE": row.CHANGEDATE,
-					    "VERSION": row.VERSION,
+						"ENTERDATE": row.CHANGEDATE,
+						"VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -511,9 +511,9 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
+						}).catch(() => {
 
-            	});
+					});
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false

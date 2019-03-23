@@ -33,7 +33,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-select v-model="sampleType" placeholder="领样类型" :disabled="noedit" @change="getSampleList">
+											<el-select v-model="sampleType" placeholder="领样类型" disabled @change="getSampleList">
 												<el-option key="1" label="样品批次" value="sampleBatch"></el-option>
 												<el-option key="2" label="样品序号" value="sampleNum"></el-option>
 											</el-select>
@@ -53,21 +53,17 @@
 												<!-- <el-select v-model="samplesForm.TYPE" placeholder="请选择类别" style="width: 100%;" :disabled="noedit">
 													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select> -->
-												<el-input v-model="samplesForm.TYPE" :disabled="true"></el-input>
+												<el-input v-model="samplesForm.TYPE" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input v-model="samplesForm.ITEMNUM" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getsample" :disabled="noedit"></el-button>
-												</el-input>
+												<el-input v-model="samplesForm.ITEMNUM" @change="getCodeInfo"  ref="itemnum"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" v-if="sampleType=='sampleNum'">
 											<el-form-item label="样品序号" prop="ITEM_STEP">
-												<el-input v-model="samplesForm.ITEM_STEP" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
-												</el-input>
+												<el-input v-model="samplesForm.ITEM_STEP" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -75,12 +71,12 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="DESCRIPTION">
-												<el-input v-model="samplesForm.DESCRIPTION" :disabled="true"></el-input>
+												<el-input v-model="samplesForm.DESCRIPTION" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="型号" prop="MODEL">
-												<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.MODEL" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -88,26 +84,6 @@
 												<el-input-number v-model="samplesForm.QUALITY" :min="1" :max="maxNum" label="描述文字" :disabled="noedit" style="width: 100%"></el-input-number>
 											</el-form-item>
 										</el-col>
-										
-										<!-- <el-col :span="8">
-											<el-form-item label="状态日期" prop="STATUSDATE">
-												<el-input v-model="samplesForm.STATUSDATE" :disabled="true"></el-input>
-											</el-form-item>
-										</el-col> -->
-									</el-row>
-
-									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="收样人" prop="ACCEPT_PERSON">
-												<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col> -->
-										<!-- <el-col :span="8">
-											<el-form-item label="收样日期" prop="ACCEPT_DATE">
-												<el-date-picker v-model="samplesForm.ACCEPT_DATE" type="date" :disabled="noedit"placeholder="请选择收样日期" value-format="yyyy-MM-dd" style="width: 100%;">
-												</el-date-picker>
-											</el-form-item>
-										</el-col> -->
 									</el-row>
 
 									<el-row>
@@ -124,7 +100,6 @@
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
-										
 									</el-row>
 
 									<el-row>
@@ -464,6 +439,9 @@
 			};
 		},
 		methods: {
+			getCodeInfo(){
+
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -637,22 +615,21 @@
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.samplesForm.STATUSDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-				})
+				}).catch((err)=>{})
 				this.addtitle = true;
             	this.modifytitle = false;
             	this.modify=false;
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
+				this.$refs.itemnum.focus();
 			},
 			detail() { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-				})
+				}).catch((err)=>{})
 				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;

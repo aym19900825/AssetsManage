@@ -66,8 +66,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="样品类别" prop="TYPE">
-										<el-input v-model="searchList.TYPE"></el-input>
+									<el-form-item label="产品类别" prop="PRODUCT_TYPE">
+										<el-input v-model="searchList.PRODUCT_TYPE"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -135,7 +135,7 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="300px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="产品类别" sortable width="300px" prop="PRODUCT_TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位" sortable width="260px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
@@ -149,10 +149,10 @@
 								</el-table-column>
 								<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON" v-if="this.checkedName.indexOf('接样人')!=-1">
+								<!-- <el-table-column label="接样人" sortable width="140px" prop="RECIP_PERSON" v-if="this.checkedName.indexOf('接样人')!=-1">
 								</el-table-column>
 								<el-table-column label="接样日期" sortable width="140px" :formatter="dateFormat" prop="RECIP_DATE" v-if="this.checkedName.indexOf('接样日期')!=-1">
-								</el-table-column>
+								</el-table-column> -->
 								<el-table-column label="状态" sortable width="100px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</v-table>
@@ -173,11 +173,31 @@
 			:before-close="resetCode"
 			center>
 			<div id="printdom">
-				<img  id="barcode" :src="codeUrl" alt="条码" />
+				<el-form label-width="50px">
+					<el-row>
+						<el-form-item label="样品">
+							<el-radio-group>
+								<el-radio label="样品批次"></el-radio>
+								<el-radio label="样品序号"></el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-row>
+
+					<el-row>
+						<el-form-item label="条码">
+							<el-radio-group>
+								<el-radio label="条形码"></el-radio>
+								<el-radio label="二维码"></el-radio>
+							</el-radio-group>
+						</el-form-item>
+					</el-row>
+				</el-form>
+				<img  id="barcode" :src="codeUrl" alt="条码" v-show="codeUrl!=''"/>
 			</div>
 			<span slot="footer">
+				<el-button type="primary">生成条码</el-button>
 				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
-					<el-button type="primary">打印条码</el-button>
+					<el-button type="primary" v-show="codeUrl!=''">打印条码</el-button>
 				</router-link>
 			</span>
 		</el-dialog>
@@ -208,7 +228,7 @@
 			return {
 				appName: 'item',
 				codeDialog: false,
-				codeUrl: 'http://192.168.1.126:9200/stripcode/image/25157709.jpg',
+				codeUrl: '',
 				code_url: Config.code_url,
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -220,7 +240,7 @@
 				checkedName: [
 					'样品编号',
 					'样品名称',
-					'样品类别',
+					'产品类别',
 					'委托单位',
 					'生产单位',
 					'型号',
@@ -241,8 +261,8 @@
 						prop: 'DESCRIPTION'
 					},
 					{
-						label: '样品类别',
-						prop: 'TYPE'
+						label: '产品类别',
+						prop: 'PRODUCT_TYPE'
 					},
 					{
 						label: '委托单位',
@@ -399,14 +419,15 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
-					this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
-						if(res.data.resp_code == 0) {
-							this.codeDialog = true;
-							this.codeUrl = this.code_url + res.data.datas;
-						}
-					}).catch((err) => {
-					});
+					this.codeDialog = true;
+					// var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
+					// this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+					// 	if(res.data.resp_code == 0) {
+					// 		this.codeDialog = true;
+					// 		this.codeUrl = this.code_url + res.data.datas;
+					// 	}
+					// }).catch((err) => {
+					// });
 				}
 			},
 			resetCode(){

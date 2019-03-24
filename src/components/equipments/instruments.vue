@@ -574,7 +574,15 @@
 				}
 				return data;
 			},
-			handleNodeClick(data) {},
+			handleNodeClick(data) {
+				console.log(data);
+				for(var i = 0; i < this.resourceData.length; i++) {
+					if(data.CLASSIFY_DESCRIPTION == this.resourceData[i].CLASSIFY_DESCRIPTION) {
+						this.searchList.DESCRIPTION = this.resourceData[i].CLASSIFY_DESCRIPTION;
+					}
+				}
+				this.requestData();
+			},
 			childByValue:function(childValue) {
 				// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);

@@ -112,7 +112,20 @@
 											</el-col>
 										</el-row>
 										<el-row>
-											
+											<el-col :span="12" >
+												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="miancategory()"></el-button>
+													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="12">
+												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT" :disabled="special">
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="mianproduct()"></el-button>
+													</el-input>
+												</el-form-item>
+											</el-col>
 											<el-col :span="8">
 												<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special"></el-input>
@@ -142,18 +155,7 @@
 													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="special"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8" >
-												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
-													</el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT" :disabled="special">
-													</el-input>
-												</el-form-item>
-											</el-col>
+											
 										</el-row>
 										<el-row>
 											<el-col :span="10">
@@ -1214,6 +1216,7 @@
 					this.dataInfo.TYPE = '1';
 					this.dataInfo.TYPEDesc = '检验';
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
+					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.dataInfo.LEADER = 0;
 					this.show = true;
 				}).catch((err) => {
@@ -1372,7 +1375,16 @@
 					}
 				});
 			},
-			addcategory(val){//分包方名称
+			mianproduct(){
+				console.log(this.dataInfo.R_VENDOR);
+				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+			},
+			miancategory(){
+				console.log(this.dataInfo.R_VENDOR);
+				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+			},
+			//分包方名称
+			addcategory(val){
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){

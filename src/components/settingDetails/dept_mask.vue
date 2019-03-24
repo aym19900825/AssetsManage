@@ -583,12 +583,14 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
 				this.$axios.get(url, {}).then((res) => {
 					this.SelectDEPT_TYPE = res.data;
+					console.log(res.data);
 				}).catch(error => {
 				})
 			},
 			getsys_depttype() {//获取机构类型
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.Selectsys_depttype = res.data;
 					 adddeptForm.depttype='2'
 				}).catch(error => {

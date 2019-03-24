@@ -466,7 +466,7 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionPro2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionPro2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
@@ -489,21 +489,26 @@
 							//重新加载数据
 							// this.requestData_inspectionPro2();
 							this.viewfield_inspectionPro2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
-		          } else {
-		            return false;
-		          }
-		        });
+						} else {
+							return false;
+						}
+					});
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/inspectionPro2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+				}).then(({ value }) => {
+					var url = this.basic_url + '/api-apps/app/inspectionPro2/' + row.ID;
+						this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -538,7 +543,6 @@
 		
 		// mounted() {
 		// 	this.requestData_inspectionPro2();
-			
 		// },
 		
 

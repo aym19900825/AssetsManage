@@ -435,7 +435,7 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionRepTem2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionRepTem2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
@@ -457,6 +457,11 @@
 							//重新加载数据
 							// this.requestData_inspectionRepTem2();
 							this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});

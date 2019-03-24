@@ -461,6 +461,11 @@
 							//重新加载数据
 							// this.requestData_rawDataAsset();
 							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});

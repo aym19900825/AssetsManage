@@ -31,18 +31,19 @@
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input>
+								<!-- <span class="blue" v-else>{{scope.row.PRO_NUM}}</span> -->
 								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else>{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 					
-			  	<!-- <el-table-column label="所属产品类别" width="80" prop="NUM">
+			  	<el-table-column label="所属产品类别" width="80" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 					
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
@@ -171,11 +172,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-				departmentId: '',//当前用户机构号
-				categoryList:[],//获取产品数据
-				catedata:'',//获取产品类别一条数据放到table行中
-				dialogVisible3: false, //对话框
-				selData:[],
+					departmentId: '',//当前用户机构号
+					categoryList:[],//获取产品数据
+					catedata:'',//获取产品类别一条数据放到table行中
+					dialogVisible3: false, //对话框
+					selData:[],
 				isEditing: '',
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -189,10 +190,10 @@
 					label: '不活动'
 				}],
 				searchData: {
-					page: 1,
-					limit: 20,//分页显示数
-					enabled: '',//信息状态
-				},
+			        page: 1,
+			        limit: 10,//分页显示数
+			        enabled: '',//信息状态
+		        },
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -249,7 +250,7 @@
 				setTimeout(() => {
 					this.loadSign = true;
 				}, 1000)
-				// this.viewfield_product2(this.selParentId,this.parentId);
+				this.viewfield_product2(this.selParentId,this.parentId);
 			}
 		},
 		//改变页数
@@ -321,8 +322,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			viewfield_product2(id,num){//点击父级筛选出子级数据
-				console.log(id);
-				console.log(num);
+				this.loading = true;//加载动画打开
 				if(id=='null'){
 					console.log('viewfield_product2===null');
 					this.product2Form.inspectionList = [];
@@ -330,9 +330,9 @@
 					return false;
 					//todo  相关数据设置
 				}
-				this.selParentId = id;
 				this.parentId = num;
-				var url = this.basic_url + '/api-apps/app/productType2/' + this.selParentId;
+				this.selParentId = id;
+				var url = this.basic_url + '/api-apps/app/productType2/' + id;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -343,6 +343,7 @@
 						this.loadSign=true
 					}
 					this.product2Form.inspectionList=!!res.data.PRODUCT2List?res.data.PRODUCT2List:[];
+					this.loading = false;//加载动画关闭
 					
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
@@ -363,6 +364,46 @@
 				}).catch((wrong) => {})
 			},
 			
+			// requestData_product2(index) {//默认加载所有数据
+			// 	var _this = this;
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/product2';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;
+			// 		//总的页数
+			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage){
+			// 			 this.loadSign = false
+			// 		}else{
+			// 			this.loadSign=true
+			// 		}
+
+			// 		this.commentArr[this.page.currentPage]=res.data.data
+			// 		let newarr=[]
+
+			// 		for(var i = 1; i <= totalPage; i++){
+			// 			if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+			// 				for(var j = 0; j < this.commentArr[i].length; j++){
+			// 					this.commentArr[i][j].isEditing = false;
+			// 					//console.log("this.commentArr[i][j]++++++"+this.commentArr);
+			// 					newarr.push(this.commentArr[i][j])
+			// 				}
+			// 			}
+			// 		}
+
+			// 		this.product2Form.inspectionList = newarr;//滚动加载更多
+
+			// 		setTimeout(function(){
+			// 			_this.viewchildRow(_this.product2Form.inspectionList[0].ID,_this.product2Form.inspectionList[0].PRO_NUM);
+			// 		},0);
+
+			// 	}).catch((wrong) => {})
+			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -445,23 +486,27 @@
 								type: 'success'
 							});
 							//重新加载数据
-							// this.requestData_product2();
 							this.viewfield_product2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
-		          } else {
-		            return false;
-		          }
-		        });
+						} else {
+							return false;
+						}
+					});
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/product2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+					}).then(({ value }) => {
+						var url = this.basic_url + '/api-apps/app/product2/' + row.ID;
+							this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -472,9 +517,9 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
+						}).catch(() => {
 
-            	});
+					});
 			},
 			
 			addproclass() { //小弹出框确认按钮事件
@@ -491,7 +536,6 @@
 					num: PRO_NUM
 				};
 				this.$emit('parentMsd_product2', data);
-
 			},
 		},
 		

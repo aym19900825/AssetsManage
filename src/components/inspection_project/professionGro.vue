@@ -18,7 +18,6 @@
 			<el-form inline-message :model="professionGroForm" ref="professionGroForm">
 			  <el-table ref="table" :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 					highlight-current-row
-					@current-change="addproclass"
 					style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}"
 					v-loadmore="loadMore"
 					v-loading="loading"
@@ -84,8 +83,8 @@
 						</el-button>
 
 					 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
-				          添加
-				        </el-button>
+							添加
+						</el-button>
 				    </template>
 				 </el-table-column> -->
 				 <el-table-column prop="iconOperation" fixed="right" label="操作" width="80">
@@ -99,22 +98,20 @@
 					<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)">
 			        	<i class="icon-edit" title="修改"></i>
 					</el-button> -->
-
-			       
 			      </template>
 			    </el-table-column>
 			  </el-table>
 			</el-form>
 			<!-- 表格 Begin-->
 			<el-pagination background class="text-right pt10 pb10"
-	            @size-change="sizeChange"
-	            @current-change="currentChange"
-	            :current-page="page.currentPage"
-	            :page-sizes="[10, 20, 30, 40]"
-	            :page-size="page.pageSize"
-	            layout="total, sizes, prev, pager, next"
-	            :total="page.totalCount">
-	        </el-pagination>
+					@size-change="sizeChange"
+					@current-change="currentChange"
+					:current-page="page.currentPage"
+					:page-sizes="[10, 20, 30, 40]"
+					:page-size="page.pageSize"
+					layout="total, sizes, prev, pager, next"
+					:total="page.totalCount">
+			</el-pagination>
 			<!-- 表格 End-->
 		</div>
 
@@ -127,9 +124,14 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;"
+				:default-sort="{prop:'categoryList', order: 'descending'}"
+				v-loadmore="loadMore">
+				<!-- <el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column> -->
 				<el-table-column label="机构编号" width="125" sortable prop="id">
 				</el-table-column>
 				<el-table-column label="专业组名称" sortable prop="fullname">
@@ -498,10 +500,7 @@
 		
 		// mounted() {
 		// 	this.requestData_professionGro();
-			
 		// },
-		
-
 	}
 </script>
 

@@ -23,32 +23,32 @@
 				@current-change="viewchildRow"
 				style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}">
 					
-			  	<el-table-column label="编码" sortable width="100" prop="S_NUM">
+			  	<!-- <el-table-column label="编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请选择" disabled></el-input>
 								<span class="blue" v-else>{{scope.row.S_NUM}}</span>
-								<!-- <span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span> -->
 							</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
-					<el-table-column label="标准编号" width="80" prop="SS_NUM">
+					<el-table-column label="标准编号" width="140" prop="SS_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.SS_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" disabled></el-input>
-								<span v-else>{{scope.row.SS_NUM}}</span>
+								<span class="blue" v-else>{{scope.row.SS_NUM}}</span>
+								<!-- <span class="blue" @click="viewchildRow(scope.row.ID,scope.row.SS_NUM)" v-else>{{scope.row.SS_NUM}}</span> -->
 							</el-form-item>
 			      </template>
 			    </el-table-column>
 
-					<el-table-column label="所属产品" width="80" prop="PRO_NUM">
+					<!-- <el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			    <el-table-column label="标准名称" sortable prop="S_NAME">
 			      <template slot-scope="scope">

@@ -129,8 +129,8 @@
 				style="width: 100%;"
 				:default-sort="{prop:'categoryList', order: 'descending'}"
 				v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
+				<!-- <el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column> -->
 				<el-table-column label="报告编号" width="125" sortable prop="NUM">
 				</el-table-column>
 				<el-table-column label="报告描述" sortable prop="DECRIPTION">
@@ -272,7 +272,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionRepTem?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionRepTem', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

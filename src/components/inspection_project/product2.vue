@@ -33,13 +33,13 @@
 			      </template>
 			    </el-table-column>
 					
-			  	<el-table-column label="所属产品类别" width="80" prop="NUM">
+			  	<!-- <el-table-column label="所属产品类别" width="80" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 					
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
@@ -251,7 +251,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/product?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/product', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

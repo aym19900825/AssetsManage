@@ -32,13 +32,13 @@
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
+			  	<!-- <el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
@@ -285,7 +285,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

@@ -130,7 +130,7 @@
 							</el-table-column>
 							<el-table-column label="溯源周期" width="100" sortable prop="FREQUENCY" v-if="this.checkedName.indexOf('溯源周期')!=-1">
 							</el-table-column>
-							<el-table-column label="单位" width="60" sortable prop="FREQUENCYUNIT" v-if="this.checkedName.indexOf('单位')!=-1">
+							<el-table-column label="单位" width="80" sortable prop="FREQUENCYUNIT" v-if="this.checkedName.indexOf('单位')!=-1">
 							</el-table-column>
 							<el-table-column label="溯源机构" width="100" sortable prop="PM_MECHANISMDesc" v-if="this.checkedName.indexOf('溯源机构')!=-1">
 							</el-table-column>

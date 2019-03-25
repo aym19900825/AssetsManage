@@ -85,7 +85,7 @@
 							</el-table-column>
 							<!-- <el-table-column label="报表文件" width="230" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
 							</el-table-column> -->
-							<el-table-column label="备注" width="200" sortable prop="remarks" v-if="checkedName.indexOf('备注')!=-1">
+							<el-table-column label="备注" sortable prop="remarks" v-if="checkedName.indexOf('备注')!=-1">
 							</el-table-column>
 							<el-table-column label="类型" sortable width="140" prop="type" v-if="checkedName.indexOf('类型')!=-1">
 							</el-table-column>						

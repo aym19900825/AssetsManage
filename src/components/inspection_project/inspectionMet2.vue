@@ -147,8 +147,8 @@
 				style="width: 100%;"
 				:default-sort="{prop:'categoryList', order: 'descending'}"
 				v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
+				<!-- <el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column> -->
 				<el-table-column label="方法编号" width="125" sortable prop="M_NUM">
 				</el-table-column>
 				<el-table-column label="方法中文名称" sortable prop="M_NAME">
@@ -313,7 +313,7 @@
 					limit: this.page.pageSize,
 				};
 				
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionMet', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

@@ -17,7 +17,10 @@
 				</el-button>
 			</div>
 			<el-form inline-message :model="product2Form" status-icon ref="product2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'product2Form.inspectionList', order: 'descending'}"
+			  <el-table ref="singleTable" :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+					highlight-current-row
+					style="width: 100%;"
+					:default-sort="{prop:'product2Form.inspectionList', order: 'descending'}"
 					v-loadmore="loadMore"
 					v-loading="loading"
 					element-loading-text="加载中…"
@@ -27,18 +30,20 @@
 			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM" class="pl30">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else>{{scope.row.PRO_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input>
+								<!-- <span class="blue" v-else>{{scope.row.PRO_NUM}}</span> -->
+								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else>{{scope.row.PRO_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 					
-			  	<!-- <el-table-column label="所属产品类别" width="80" prop="NUM">
+			  	<el-table-column label="所属产品类别" width="80" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 					
 			    <el-table-column label="产品名称" sortable prop="PRO_NAME">
 			      <template slot-scope="scope">
@@ -318,7 +323,6 @@
 			},
 			viewfield_product2(id,num){//点击父级筛选出子级数据
 				this.loading = true;//加载动画打开
-				console.log(id);
 				if(id=='null'){
 					console.log('viewfield_product2===null');
 					this.product2Form.inspectionList = [];
@@ -441,7 +445,7 @@
 						var currentUser, currentDatee;
 						this.currentUser=res.data.nickname;
 						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+						this.currentDate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 						var obj = {
 							"NUM": this.parentId,//产品类别编号
 							"PRO_NUM": '',
@@ -482,23 +486,27 @@
 								type: 'success'
 							});
 							//重新加载数据
-							// this.requestData_product2();
 							this.viewfield_product2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
-		          } else {
-		            return false;
-		          }
-		        });
+						} else {
+							return false;
+						}
+					});
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/product2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+					}).then(({ value }) => {
+						var url = this.basic_url + '/api-apps/app/product2/' + row.ID;
+							this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -509,9 +517,9 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
+						}).catch(() => {
 
-            	});
+					});
 			},
 			
 			addproclass() { //小弹出框确认按钮事件
@@ -528,7 +536,6 @@
 					num: PRO_NUM
 				};
 				this.$emit('parentMsd_product2', data);
-
 			},
 		},
 		

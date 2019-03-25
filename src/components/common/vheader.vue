@@ -164,7 +164,7 @@ export default {
         appCenter(){
         	var item={
         		css: 'icon-user',
-                name: '代办任务',
+                name: '待办任务',
                 url: '/task'};
         	var flag = false;
 			for(var i = 0; i < this.$store.state.clickedNavs.length; i++){
@@ -285,8 +285,6 @@ a:hover .userimgs {border:2px solid #9153f1;}
     background-repeat: no-repeat;
     border-radius:6px;
 }
-
-
 
 .icon-order-down{
 	position: absolute;

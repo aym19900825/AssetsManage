@@ -84,9 +84,9 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate('WORK_INSTRUCTION')">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit('WORK_INSTRUCTION')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('WORK_INSTRUCTION')">修订</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion()">修订</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -307,8 +307,8 @@
 				},100);
 			},
 			//点击修订按钮
-			modifyversion(WORK_INSTRUCTION) {
-				this.$refs[WORK_INSTRUCTION].validate((valid) => {
+			modifyversion() {
+				this.$refs.WORK_INSTRUCTION.validate((valid) => {
 					if(valid) {
 						var work_instruction=JSON.stringify(this.work_instruction); 
 	 					var WORK_INSTRUCTION=JSON.stringify(this.WORK_INSTRUCTION);
@@ -431,19 +431,32 @@
 					}
 					if(valid) {
 						this.WORK_INSTRUCTION.STATUS = ((this.WORK_INSTRUCTION.STATUS == "1" || this.WORK_INSTRUCTION.STATUS == '活动') ? '1' : '0');
+						if(this.WORK_INSTRUCTION.ID!=null&&this.WORK_INSTRUCTION.ID!=undefined&&this.WORK_INSTRUCTION.ID!=''){
+							this.$confirm('提示是否需要修订版本？').then(_ => {
+								this.modifyversion();
+							}).catch(_ => {
+								this.close();
+							});	
+						}else{
 						var url = this.basic_url + '/api-apps/app/workIns/saveOrUpdate';
 						this.$axios.post(url, this.WORK_INSTRUCTION).then((res) => {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
 							if(res.data.resp_code == 0) {
+								
 								if(opt == 'docUpload'){
 									this.docParm.recordid = res.data.datas.id;
 									this.docParm.model = 'edit';
 									this.WORK_INSTRUCTION.ID = res.data.datas.id;
 									this.WORK_INSTRUCTION.NUM = res.data.datas.NUM;
 								}else{
+									this.$message({
+									message: '保存成功',
+									type: 'success'
+									});
+									if(opt=='Update'){
+										this.show=false;	
+									}else{
+										this.show=true;	
+									}
 									this.$emit('request');
 									this.$emit('reset');
 									this.visible();
@@ -466,6 +479,7 @@
 							}
 						}).catch((err) => {
 						});
+						}
 					} else {
 						this.show = true;
 						this.$message({

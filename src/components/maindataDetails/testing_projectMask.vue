@@ -161,7 +161,7 @@
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="save('Update')">保存</el-button>
 							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('testing_projectForm')">修订</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion()">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('testing_projectForm')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -563,9 +563,7 @@
 					this.testing_projectForm.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.testing_projectForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.testing_projectForm);
-        			this.TESTING_PROJECTFORM = JSON.parse(_obj);
+					
 				}).catch((err) => {
 				});
 				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
@@ -574,7 +572,9 @@
 						res.data.QUALIFICATIONList[i].isEditing = false;
 					}
 					this.testing_projectForm = res.data;
-
+					//深拷贝数据
+					let _obj = JSON.stringify(this.testing_projectForm);
+        	this.TESTING_PROJECTFORM = JSON.parse(_obj);
 				}).catch((err) => {
 				});
 				this.addtitle = false;
@@ -625,11 +625,11 @@
 				}).catch((err) => {
 				});
 			},
-			modifyversion(testing_projectForm) {
-				this.$refs[testing_projectForm].validate((valid) => {
+			modifyversion() {
+				this.$refs.testing_projectForm.validate((valid) => {
 					if(valid) {
 					var TESTING_PROJECTFORM=JSON.stringify(this.TESTING_PROJECTFORM); //接过来的数据
- 					var testing_projectForm=JSON.stringify(this.testing_projectForm); //获取新新的数据
+					 var testing_projectForm=JSON.stringify(this.testing_projectForm); //获取新新的数据
 					 	if(testing_projectForm==TESTING_PROJECTFORM){
 					  		this.$message({
 								message: '没有修改内容，不允许修订',
@@ -694,43 +694,51 @@
 			// 保存users/saveOrUpdate
 			save(parameter) {
 				var _this = this;
-				this.$refs[testing_projectForm].validate((valid) => {
+				this.$refs.testing_projectForm.validate((valid) => {
 					if(valid) {
-						this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || this.testing_projectForm.STATUS == '活动') ? '1' : '0');
-						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
-						this.$axios.post(url, _this.testing_projectForm).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							if(parameter='Update'){
-								this.show=true;
-							}else{
-								this.show=false;
-							}
-							this.$emit('reset');
-							this.$emit('request');
-							this.visible();
+						_this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || _this.testing_projectForm.STATUS == '活动') ? '1' : '0');
+						if(_this.testing_projectForm.ID!=null&&_this.testing_projectForm.ID!=undefined&&_this.testing_projectForm.ID!=''){
+							this.$confirm('提示是否需要修订版本？').then(_ => {
+								this.modifyversion();
+							}).catch(_ => {
+								this.close();
+							});	
 						}else{
-							this.show = true;
-							if(res.data.resp_code == 1) {
-								if( res.data.resp_msg!=''){
-								 	this.$message({
-										message: res.data.resp_msg,
-										type: 'warning'
-								 	});
+							var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
+							this.$axios.post(url, _this.testing_projectForm).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								if(parameter='Update'){
+									this.show=false;
 								}else{
-									this.$message({
-										message:'相同数据不可重复添加！',
-										type: 'warning'
-									});
+									this.show=true;
+								}
+								this.$emit('reset');
+								this.$emit('request');
+								this.visible();
+							}else{
+								this.show = true;
+								if(res.data.resp_code == 1) {
+									if( res.data.resp_msg!=''){
+										this.$message({
+											message: res.data.resp_msg,
+											type: 'warning'
+										});
+									}else{
+										this.$message({
+											message:'相同数据不可重复添加！',
+											type: 'warning'
+										});
+									}
 								}
 							}
-						}
-					//清空表单验证
-					}).catch((err) => {
-					});
+						//清空表单验证
+						}).catch((err) => {
+						});
+					}
 			} else {
 						this.show = true;
 						this.$message({

@@ -16,7 +16,9 @@
 				</div>
 			</div>
 			<el-form inline-message :model="professionGroForm" ref="professionGroForm">
-			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}"
+			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+					highlight-current-row
+					style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}"
 					v-loadmore="loadMore"
 					v-loading="loading"
 					element-loading-text="加载中…"
@@ -396,12 +398,12 @@
 						}
 					}
 					if (isEditingflag==false){
-	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate, currentDept;
+							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+								var currentUser, currentDate, currentDept;
 							this.currentUser=res.data.nickname;
 							this.currentDept=res.data.deptid;
 							var date=new Date();
-							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							this.currentDate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 							var obj = {
 								"P_NUM": this.parentId,
 								"PROF_NUM": '',
@@ -428,14 +430,14 @@
 					var submitData = {
 						"ID":row.ID,
 						"P_NUM": row.P_NUM,
-					    "PROF_NUM": row.PROF_NUM,
+						"PROF_NUM": row.PROF_NUM,
 						"PROF_GROUP": row.PROF_GROUP,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
-					    "VERSION": row.VERSION,
-					    "VERSION": row.VERSION,
+						"ENTERDATE": row.ENTERDATE,
+						"VERSION": row.VERSION,
+						"VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -446,6 +448,11 @@
 							//重新加载数据
 							// this.requestData_professionGro();
 							this.viewfield_professionGro(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -456,11 +463,11 @@
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此数据吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/professionGro/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+				}).then(({ value }) => {
+					var url = this.basic_url + '/api-apps/app/professionGro/' + row.ID;
+						this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -471,9 +478,9 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
+						}).catch(() => {
 
-            	});
+					});
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false

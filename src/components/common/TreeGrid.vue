@@ -66,12 +66,6 @@
         default: function () {
           return []
         }
-      },
-      loading: {
-        type: Boolean,
-        default: function () {
-          return []
-        }
       }, 
 // 这是数据源
       dataSource: {

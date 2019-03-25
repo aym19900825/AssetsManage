@@ -18,7 +18,9 @@
 				</el-button>
 			</div>
 			<el-form inline-message :model="inspectionSta2Form" status-icon ref="inspectionSta2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}"
+			  <el-table ref="singleTable" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+				highlight-current-row
+				style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"
@@ -28,7 +30,8 @@
 			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="自动生成" disabled></el-input>
+								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -442,7 +445,7 @@
 							this.currentUser=res.data.nickname;
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD");
-							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
 								"PRO_NUM": this.parentId,//产品类别编号
@@ -460,27 +463,27 @@
 							this.inspectionSta2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+							} else {
+									this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionSta2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionSta2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"PRO_NUM": row.PRO_NUM,
-					    "S_NUM": row.S_NUM,
+						"S_NUM": row.S_NUM,
 						"S_NAME": row.S_NAME,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"RELEASETIME": row.RELEASETIME,
 						"STARTETIME": row.STARTETIME,
 						"ENTERBY": row.ENTERBY,
-					    "ENTERDATE": row.ENTERDATE,
-					    "VERSION": row.VERSION,
+						"ENTERDATE": row.ENTERDATE,
+						"VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -491,6 +494,11 @@
 							//重新加载数据
 							// this.requestData_inspectionSta2();
 							this.viewfield_inspectionSta2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});

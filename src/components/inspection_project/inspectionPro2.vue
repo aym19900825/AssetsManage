@@ -18,7 +18,9 @@
 				</el-button>
 			</div>
 			<el-form inline-message :model="inspectionPro2Form" status-icon ref="inspectionPro2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250" highlight-current-row style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" 
+			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+					highlight-current-row
+					style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" 
 					v-loadmore="loadMore"
 					v-loading="loading"
 					element-loading-text="加载中…"
@@ -27,7 +29,8 @@
 			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input>
+								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -463,19 +466,19 @@
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionPro2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionPro2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
 						"S_NUM": row.S_NUM,
-					    "P_NUM": row.P_NUM,
+						"P_NUM": row.P_NUM,
 						"P_NAME": row.P_NAME,
 						"UNITCOST":  row.UNITCOST,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
-					    "ENTERDATE": row.CHANGEDATE,
-					    "VERSION": row.VERSION,
+						"ENTERDATE": row.CHANGEDATE,
+						"VERSION": row.VERSION,
 					}
 					this.$axios.post(url, submitData).then((res) => {
 						if(res.data.resp_code == 0) {
@@ -486,21 +489,26 @@
 							//重新加载数据
 							// this.requestData_inspectionPro2();
 							this.viewfield_inspectionPro2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
-		          } else {
-		            return false;
-		          }
-		        });
+						} else {
+							return false;
+						}
+					});
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/inspectionPro2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+				}).then(({ value }) => {
+					var url = this.basic_url + '/api-apps/app/inspectionPro2/' + row.ID;
+						this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -511,9 +519,9 @@
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
+						}).catch(() => {
 
-            	});
+					});
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false
@@ -535,7 +543,6 @@
 		
 		// mounted() {
 		// 	this.requestData_inspectionPro2();
-			
 		// },
 		
 

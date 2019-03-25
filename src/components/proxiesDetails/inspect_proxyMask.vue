@@ -31,6 +31,12 @@
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="委托单位" name="1">
 									<el-row :gutter="5" class="pb10">
+										<el-col :span="8" >
+											<el-form-item label="承检单位" prop="R_VENDORDesc" label-width="100px">
+												<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit"></el-input>
+												<template slot="prepend">承检单位</template>
+											</el-form-item>
+										</el-col>
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="dataInfo.VERSION" :disabled="edit">
 												<template slot="prepend">版本</template>
@@ -71,87 +77,85 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
-												<el-input v-model="dataInfo.V_PERSON" :disabled="edit">
+												<el-input v-model="dataInfo.V_PERSON" >
 													 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="电话" prop="V_PHONE" label-width="110px">
-												<el-input v-model="dataInfo.V_PHONE" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.V_PHONE" ></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
-												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.V_ZIPCODE" ></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="样品" name="2" >
+								<el-collapse-item title="样品" name="2"  >
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-													<el-input v-model="dataInfo.P_NAME" :disabled="edit" >
+													<el-input v-model="dataInfo.P_NAME" :disabled="special" >
 														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="12">
 												<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_NAME" :disabled="edit">
+													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
 														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample('inspect_proxy')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row>
-											
+											<el-col :span="12" >
+												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="miancategory()"></el-button>
+													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="12">
+												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT" :disabled="special">
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="mianproduct()"></el-button>
+													</el-input>
+												</el-form-item>
+											</el-col>
 											<el-col :span="8">
 												<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="edit"></el-input>
+													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="edit">
+													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="special">
 													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row>
 											<el-col :span="8">
-												<el-form-item label="样品信息状态" prop="ITEM_STATUSDesc" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="edit"></el-input>
+												<el-form-item label="样品状态" prop="ITEM_STATUSDesc" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="special" ></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="标识" prop="ITEM_ID" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_ID" :disabled="edit"></el-input>
+													<el-input v-model="dataInfo.ITEM_ID" :disabled="special"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8" >
-												<el-form-item label="承检单位" prop="R_VENDORDesc" label-width="110px">
-													<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col>
+											
 											<el-col :span="8">
 												<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="noedit"></el-input>
+													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="special"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8" >
-												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="true">
-													</el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT" :disabled="true">
-													</el-input>
-												</el-form-item>
-											</el-col>
+											
 										</el-row>
 										<el-row>
 											<el-col :span="10">
@@ -707,7 +711,7 @@
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 			<!--委托单位名称 -->
-			<inspectcustommask ref="inscustom" ></inspectcustommask>
+			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor" ></inspectcustommask>
 		</div>
 	</div>
 </template>
@@ -785,7 +789,9 @@
 					ITEM_METHOD:'',
 					ITEM_DISPOSITION:'',
 					P_NUM:'',
+					P_VERSION:'',
 					PRO_NUM:'',
+					PRO_VERSION:'',
 					PRODUCT_TYPE:'',
 					PRODUCT:'',
 					COMPDATE:'',
@@ -845,6 +851,7 @@
 				selval:[],
 				edit: true, //禁填
 				noedit: false,
+				special:false,
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
@@ -1208,6 +1215,8 @@
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.TYPE = '1';
 					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
+					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.dataInfo.LEADER = 0;
 					this.show = true;
 				}).catch((err) => {
@@ -1338,6 +1347,7 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
 				//判断启动流程和审批的按钮是否显示
@@ -1365,7 +1375,16 @@
 					}
 				});
 			},
-			addcategory(val){//分包方名称
+			mianproduct(){
+				console.log(this.dataInfo.R_VENDOR);
+				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+			},
+			miancategory(){
+				console.log(this.dataInfo.R_VENDOR);
+				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+			},
+			//分包方名称
+			addcategory(val){
 				this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.R_VENDOR == null || this.dataInfo.R_VENDOR == '' || this.dataInfo.R_VENDOR == undefined){
@@ -1503,6 +1522,47 @@
 					this.dataInfo.INSPECT_PROXY_PROJECList = [];
 				}
 			},
+			//委托单位
+			customarr(val){
+				this.customid=val[0];
+				this.dataInfo.V_NAME=val[1];
+				this.dataInfo.V_ADDRESS=val[2];
+				if(val[3]="falg"){
+					this.dataInfo.V_PERSON='';
+					this.dataInfo.V_PHONE='';
+					this.dataInfo.V_ZIPCODE='';
+					this.special=true;
+				}
+			},
+			custarr(val){
+				if(val[0]=='falg'){
+				this.dataInfo.P_NAME='';
+				this.dataInfo.ITEM_NAME='';
+				this.dataInfo.ITEM_MODEL='';
+				this.dataInfo.ITEM_QUALITY='';
+				this.dataInfo.ITEM_STATUSDesc='';
+				this.dataInfo.ITEM_ID='';
+				this.dataInfo.ITEM_SECRECY='';
+				this.dataInfo.PRODUCT_TYPE='';
+				this.dataInfo.PRODUCT='';
+				this.dataInfo.ITEM_METHOD='';
+				this.dataInfo.ITEM_DISPOSITION='';
+				}else{
+				this.dataInfo.P_NAME=val[0];
+				this.dataInfo.ITEM_NAME=val[1];
+				this.dataInfo.ITEM_MODEL=val[2];
+				this.dataInfo.ITEM_QUALITY=val[3];
+				this.dataInfo.PRODUCT=val[4];//产品名称
+				this.dataInfo.PRODUCT_TYPE=val[5];//产品类别
+				this.dataInfo.PRO_NUM=val[6];//产品编号
+				this.dataInfo.PRO_VERSION=val[7];//产品版本
+				this.dataInfo.P_NUM=val[8];//产品类别编号
+				this.dataInfo.P_VERSION=val[9];//产品类别版本
+				}
+			},
+			vendor(val){
+				this.dataInfo.VENDOR=val[0];
+			},
 			//分包要求检验依据编号
 			testbasisnum(value){
 				this.deptindex.S_NUM = value;
@@ -1620,7 +1680,6 @@
 				this.dataInfo.ITEM_QUALITY=value;
 			},
 			linedata(value){
-				console.log(value);
 				this.dataInfo.R_VENDOR = value[0];
 				this.dataInfo.R_VENDORDesc = value[1];
 				this.dataInfo.P_NUM = value[2];

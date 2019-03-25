@@ -712,16 +712,16 @@
 			}
 			return data;
 		},
-		getTreeId(data){
-			if(data.type == '1'){
-				this.companyId = data.id;
-				this.deptId = '';
-			}else{
-				this.deptId = data.id;
-				this.companyId = '';
-			}
-			this.requestData();
-		},
+		// getTreeId(data){
+		// 	if(data.type == '1'){
+		// 		this.companyId = data.id;
+		// 		this.deptId = '';
+		// 	}else{
+		// 		this.deptId = data.id;
+		// 		this.companyId = '';
+		// 	}
+		// 	this.requestData();
+		// },
 		handleNodeClick(data) {
 			for(var i = 0; i < this.resourceData.length; i++) {
 				if(data.name == this.resourceData[i].name) {

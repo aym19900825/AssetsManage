@@ -546,7 +546,14 @@
 						});
 					}
 					if (valid) {
-					    _this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
+						_this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
+						if(_this.testingForm.ID!=null&&_this.testingForm.ID!=undefined&&_this.testingForm.ID!=''){
+							this.$confirm('提示是否需要修订版本？').then(_ => {
+								this.modifyversion();
+							}).catch(_ => {
+								this.close();
+							});	
+						}else{
 						var url = this.basic_url + '/api-apps/app/inspectionMet/saveOrUpdate';
 						this.$axios.post(url,_this.testingForm).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -562,6 +569,7 @@
 										type: 'success'
 									});
 									if(opt=='Update'){
+										console.log(1111);
 										this.show=false;	
 									}else{
 										this.show=true;	
@@ -590,29 +598,17 @@
 						}).catch((err) => {
 							this.show = true;
 						});
-						this.falg = true;
+						}
 					} else {
 						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
 			},
-			//保存
-			saveAndUpdate(testingForm){
-				this.save('userSave');
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit(testingForm){
-				this.save('userSave');
-				this.show = true;
-			},
+			
 			handleClose(done) { //大弹出框确定关闭按钮
 				this.$confirm('确认关闭？')
 					.then(_ => {

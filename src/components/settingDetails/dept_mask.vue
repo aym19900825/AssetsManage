@@ -209,11 +209,11 @@
 								</el-table-column>
 								<el-table-column label="机构" sortable width="150px" prop="deptName">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="200px" prop="companyName">
+								<el-table-column label="公司" sortable width="250px" prop="companyName">
 								</el-table-column>
-								<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
-								</el-table-column>
-								<el-table-column label="创建时间" width="200px" prop="createTime" sortable :formatter="dateFormat">
+								<!-- <el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
+								</el-table-column> -->
+								<el-table-column label="创建时间" width="150px" prop="createTime" sortable :formatter="dateFormat">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -334,10 +334,11 @@
    					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
    					telephone: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
 					fax: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
-					email:[{required:false, trigger: 'blur', validator: this.Validators.isEmail,}],//邮箱
+					email:[{required:true, trigger: 'blur', validator: this.Validators.isEmail,}],//邮箱
 					code:[{required: false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构属性
-					address:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
-					zipcode:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//邮政编码
+					// address:[{required: true,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
+					address: [{required:true,trigger: 'blur',message: '请输入地址'}],//选择机构类型
+					zipcode:[{required:true,trigger: 'blur',message: '请输入邮编'}],//选择机构类型
 					telephone:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
 					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
 					email:[{required: false,trigger: 'blur',validator: this.Validators.isEmail}],//邮箱
@@ -582,14 +583,16 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
 				this.$axios.get(url, {}).then((res) => {
 					this.SelectDEPT_TYPE = res.data;
+					console.log(res.data);
 				}).catch(error => {
 				})
 			},
 			getsys_depttype() {//获取机构类型
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.Selectsys_depttype = res.data;
-					 adddeptForm.depttype='1'
+					 adddeptForm.depttype='2'
 				}).catch(error => {
 				})
 			},

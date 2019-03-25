@@ -111,7 +111,7 @@
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="save('Update')">保存</el-button>
 							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
-							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('dataInfo')">修订</el-button>
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion()">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('dataInfo')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -559,6 +559,13 @@
 					}
 					if (valid) {
 						this.dataInfo.STATUS = ((this.dataInfo.STATUS == "1"||this.dataInfo.STATUS == '活动') ? '1' : '0');
+						if(this.dataInfo.ID!=null&&this.dataInfo.ID!=undefined&&this.dataInfo.ID!=''){
+							this.$confirm('提示是否需要修订版本？').then(_ => {
+								this.modifyversion();
+							}).catch(_ => {
+								this.close();
+							});	
+						}else{
 						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
@@ -574,15 +581,12 @@
 										type: 'success'
 									});
 									if(opt=='Update'){
-										this.$emit('request');
-										this.$emit('reset');
 										this.show=false;
 									}else{
-										this.$emit('request');
-										this.$emit('reset');
 										this.show=true;
 									}
-									
+									this.$emit('request');
+									this.$emit('reset');
 									this.visible();
 								}
 							}else{
@@ -603,6 +607,7 @@
 							}						
 						}).catch((err) => {
 						});
+						}
 			        } else {
 			          	this.show = true;
 			          	this.$message({

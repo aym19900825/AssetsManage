@@ -81,7 +81,7 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="5">
-										<el-col :span="8">
+										<el-col :span="6">
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
 											<el-select clearable v-model="WORKPLAN.CJDW" filterable allow-create default-first-option placeholder="请选择"  style="width: 100%" >
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
@@ -143,7 +143,7 @@
 										</el-button> -->
 										<el-dropdown size="small" v-show="!viewtitle">
 											<el-button round type="primary" size="mini">
-												<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+												<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon-right"></i>
 											</el-button>
 
 											<el-dropdown-menu slot="dropdown">
@@ -216,12 +216,13 @@
 									    </el-table-column>
 									    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 									      <template slot-scope="scope">
-									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input><span v-else id="costshow">{{scope.row.CHECKCOST}}</span>
+									        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容" id="cost" @blur="toPrice(scope.row)"></el-input>
+												<span v-else id="costshow">{{scope.row.CHECKCOST}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column prop="REASION" label="项目提出理由" sortable width="220px">
 									      <template slot-scope="scope">
-									        		<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else>{{scope.row.REASION}}</span>
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else>{{scope.row.REASION}}</span>
 										  </template>
 									    </el-table-column>
 									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
@@ -266,7 +267,7 @@
 							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160"></el-table-column>
 							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350"></el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" sortable width="80"></el-table-column>
-							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="80"></el-table-column>
+							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="120"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 											      <template slot-scope="scope">
 											        <el-button
@@ -313,7 +314,7 @@
 											        	</el-input>
 											      </template>
 							            		</el-table-column>
-							            		<el-table-column prop="VERSION" label="版本" width="80"></el-table-column>
+							            		<el-table-column prop="VERSION" label="版本"></el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											        <el-button

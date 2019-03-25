@@ -290,9 +290,8 @@
 				var data = {
 					id: this.CATEGORY.ID,
 				}
-				this.$axios.get(this.basic_url+ '/api-apps/app/productType/operate/updateRelate', {
-					params: data
-				}).then((res) => {
+				var url=this.basic_url+ '/api-apps/app/productType/operate/updateRelate';
+				this.$axios.get(url, {params: data}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.$message({
 							message: '更新成功',
@@ -309,7 +308,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
-				this.$emit(reset);
+				this.$emit('reset');
 				this.$emit('request');//关闭弹框去掉勾选
 			},
 			open(){
@@ -342,7 +341,14 @@
 				this.$refs.CATEGORY.validate((valid) => {
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
-						var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
+						if(this.CATEGORY.ID!=null&&this.CATEGORY.ID!=undefined&&this.CATEGORY.ID!=''){
+							this.$confirm('提示是否需要修订版本？').then(_ => {
+								this.modifyversion();
+							}).catch(_ => {
+								this.close();
+							});	
+						}else{
+							var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -378,7 +384,8 @@
 							}
 						}).catch((err) => {
 						});
-						// this.falg = true;
+						}
+						
 					} else {
 						this.show = true;
 						this.$message({

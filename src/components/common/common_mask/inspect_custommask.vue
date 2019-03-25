@@ -41,7 +41,7 @@
 				</el-table-column>
 				<el-table-column label="联系地址" sortable prop="customeraddress">
 				</el-table-column>
-				<el-table-column label="接样编号" sortable prop="itemnum">
+				<el-table-column label="样品编号" sortable prop="itemnum">
 				</el-table-column>
 				<el-table-column label="接样日期" sortable prop="itemrecdate">
 				</el-table-column>
@@ -50,7 +50,7 @@
 				</el-pagination>
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
-			       <el-button @click="resetBasisInfo">取 消</el-button>
+			       <el-button @click="resetBasisInfo()">取 消</el-button>
 			    </div>
 			</el-dialog>
 	</div>
@@ -117,10 +117,10 @@
 	close() {
 		this.dialogCustomer = false;
 	},
-  	visible() {
+	visible() {
 		this.requestData();
 		this.dialogCustomer = true;
-  	},
+	},
   	//表格滚动加载
 		loadMore() {
 			let up2down = sessionStorage.getItem('up2down');
@@ -179,14 +179,13 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			DEPTID:this.$store.state.currentcjdw[0].id,
 			// NAME: this.searchList.NAME,
 			// CODE: this.searchList.CODE,
 			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer';//如果父组件没有传CJDW承检单位侧显示所有数
 		this.$axios.get(url, {params: data}).then((res) => {
-			console.log(res);
-			console.log(this.$store.state.currentcjdw[0].id);
 			this.page.totalCount = res.data.count;	
 			//总的页数
 			let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -196,9 +195,9 @@
 				this.loadSign=true
 			}
 			this.customerList = res.data.data;
-			setTimeout(()=>{
-				this.setSelectRow();
-			}, 200)
+			// setTimeout(()=>{
+			// 	this.setSelectRow();
+			// }, 200)
 			this.loading = false;//加载动画关闭
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
@@ -222,34 +221,61 @@
 				type: 'warning'
 			});
 		}else{
-			if(this.type=="vname"){ //委托单位名称
-				var name=this.selUser[0].NAME;//名称
-				var address=this.selUser[0].CONTACT_ADDRESS;//地址 
-				var	zipcode=this.selUser[0].ZIPCODE;//地址
+				var name=this.selUser[0].customername;//名称
+				var address=this.selUser[0].customeraddress;//地址 
 				var id=this.selUser[0].ID;
-				var code=this.selUser[0].CODE;//统一社会信用代码
-				this.$emit('appendname',name);
-				this.$emit('appendadd',address);
-				this.$emit('appendzip',zipcode);
-				this.$emit('appendid',id);
-				this.$emit('appendcode',code);
-			}else if(this.type="pname"){
-				var names=this.selUser[0].NAME;//生产单位名称
-				var codes=this.selUser[0].CODE;//统一社会信用代码
-				this.$emit('appendnames',names);
-				this.$emit('appendcodes',codes);
-			}else if(this.type="notivname"){
-				var names=this.selUser[0].NAME;//生产单位
-				this.$emit('appendnames',names);
-			}
-			// this.dialogCustomer = false;
-			this.requestData();
-			this.resetBasisInfo();//调用resetBasisInfo函数
+				var itemid=this.selUser[0].itemid;
+				var customarr=[];
+				customarr.push(this.selUser[0].customerid);//
+				customarr.push(this.selUser[0].customername);//委托单位
+				customarr.push(this.selUser[0].customeraddress);//地址
+				this.$emit('customarr',customarr);
+				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
+						customarr.push(falg);
+				}
+				// var code=this.selUser[0].CODE;//统一社会信用代码
+				// this.$emit('customname',name);//传到主页面
+				// this.$emit('customadd',address);//传到主页面
+					if(this.selUser[0]!=null){
+							var vendor=[];
+							if(this.selUser[0].customercode!=null&&this.selUser[0].customercode!=undefined&&this.selUser[0].customercode!=''){
+									vendor.push(this.selUser[0].customercode);
+							}else{
+								vendor.push(this.selUser[0].customerid);
+							}
+							
+							this.$emit('vendor',vendor);
+					}
+					
+					if(this.selUser[0].itemid!=null||this.selUser[0].itemid!=undefined){
+							this.$axios.get(this.basic_url + '/api-apps/app/item/' + itemid, {}).then((res) => {
+								var custarr = [];
+									custarr.push(res.data.P_NAME);//生产单位
+									custarr.push(res.data.DESCRIPTION);//样品名称
+									custarr.push(res.data.MODEL);//模型
+									custarr.push(res.data.QUATITY);//质量
+									custarr.push(res.data.PRODUCT);//产品名称
+									custarr.push(res.data.PRODUCT_TYPE);//产品类别
+									custarr.push(res.data.PRO_NUM);//产品编号
+									custarr.push(res.data.PRO_VERSION);//产品版本
+									custarr.push(res.data.P_NUM);//产品类别编号
+									custarr.push(res.data.P_VERSION);//产品类别版本
+									this.$emit('custarr',custarr);
+							});
+					}else{
+								var custarr = [];
+								custarr.push('falg');
+								this.$emit('custarr',custarr);
+					}
+				
+			this.dialogCustomer = false;
+			// this.requestData();
+			// this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},
     resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
         this.dialogCustomer = false;//关闭弹出框
-        this.customerList = [];//列表数据置空
+        // this.customerList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
         this.page.pageSize = 10;//页码重新传值
 	},
@@ -306,8 +332,8 @@
 				this.$refs.table.toggleRowSelection(this.customerList[i], true);
 			}
 		}
-	}
-  },
+	},
+	},
     mounted() {
 		this.requestData();
 	},

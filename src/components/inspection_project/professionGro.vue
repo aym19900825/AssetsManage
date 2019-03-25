@@ -28,15 +28,16 @@
 			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
 
-			  	<el-table-column label="专业组编号" width="160" prop="PROF_NUM">
+			  	<el-table-column label="机构编号" width="160" prop="PROF_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PROF_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.PROF_NUM}}</span>
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROF_NUM" placeholder="请选择" disabled></el-input>
+								<span v-else>{{scope.row.PROF_NUM}}</span>
 					</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -128,13 +129,11 @@
 			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="专业组编号" width="125" sortable prop="id">
-				</el-table-column>
-				<el-table-column label="所属编号" width="155" sortable prop="pid">
-				</el-table-column>
-				<el-table-column label="机构编码" width="185" sortable prop="code">
+				<el-table-column label="机构编号" width="125" sortable prop="id">
 				</el-table-column>
 				<el-table-column label="专业组名称" sortable prop="fullname">
+				</el-table-column>
+				<el-table-column label="上级机构" width="185" sortable prop="parent">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="version" align="right">
 				</el-table-column>
@@ -296,14 +295,15 @@
 				return index + 1;
 			},
 			viewfield_professionGro(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+				if(num==undefined||num==null||num==''){
 					this.professionGroForm.inspectionList = [];
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2/' + id;
+				var url = this.basic_url + '/api-apps/app/professionGro/INSPECTION_PROJECT2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
 					//
 					this.page.totalCount = res.data.count;	
@@ -314,7 +314,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.professionGroForm.inspectionList=res.data.PROFESSION_GROUPList;
+					this.professionGroForm.inspectionList=!!res.data.PROFESSION_GROUPList?res.data.PROFESSION_GROUPList:[];
 
 					for(var j = 0; j < this.professionGroForm.inspectionList.length; j++){
 						this.professionGroForm.inspectionList[j].isEditing = false;
@@ -418,14 +418,14 @@
 							this.professionGroForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+							} else {
+									this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['professionGroForm'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/professionGro/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
@@ -484,7 +484,7 @@
 			},
 			addproclass() { //小弹出框确认按钮事件
 				this.dialogVisible3 = false
-				this.catedata.PROF_NUM = this.selData[0].code;
+				this.catedata.PROF_NUM = this.selData[0].id;
 				this.catedata.PROF_GROUP = this.selData[0].fullname;
 				this.catedata.DEPTID = this.selData[0].DEPTID;
 				this.catedata.VERSION = this.selData[0].VERSION;

@@ -57,8 +57,8 @@
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="标准编号" prop="S_NUM">
-										<el-input v-model="searchList.S_NUM">
+									<el-form-item label="标准编号" prop="SS_NUM">
+										<el-input v-model="searchList.SS_NUM">
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -120,11 +120,12 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="标准编号" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
+								<el-table-column label="编码" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.S_NUM}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.S_NUM}}</p>
 									</template>
+								</el-table-column>
+								<el-table-column label="标准编号" width="120" sortable prop="SS_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
 								</el-table-column>
 								<el-table-column label="标准名称" width="220" sortable prop="S_NAME" v-if="this.checkedName.indexOf('标准名称')!=-1">
 								</el-table-column>
@@ -197,7 +198,7 @@
 				}],
 				commentArr: {},
 				checkedName: [
-					// '主键编号',
+					'编码',
 					'标准编号',
 					'标准名称',
 					'英文名称',
@@ -211,8 +212,12 @@
 				],
 				tableHeader: [
 					{
-						label: '标准编号',
+						label: '编码',
 						prop: 'S_NUM'
+					},
+					{
+						label: '标准编号',
+						prop: 'SS_NUM'
 					},
 					{
 						label: '标准名称',
@@ -267,6 +272,7 @@
 				statusshow2: true,
 				searchList: { //点击高级搜索后显示的内容
 					S_NUM: '',
+					SS_NUM: '',
 					S_NAME: '',
 					VERSION: '',
 					DEPTID: '',
@@ -322,6 +328,7 @@
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					S_NUM: '',
+					SS_NUM: '',
 					S_NAME: '',
 					VERSION: '',
 					DEPTID: '',
@@ -341,6 +348,7 @@
 					VERSION: '1',
 					STATUS: '活动',
 					S_NUM: '',
+					SS_NUM: '',
 					S_NAME: '',
 					S_ENGNAME: '',
 					RELEASETIME: '',

@@ -27,6 +27,11 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
+										<el-col :span="5" class="pull-right mr20">
+											<el-input v-model="WORK_INSTRUCTION.NUM" placeholder="自动生成" :disabled="edit">
+												<template slot="prepend">编号</template>
+											</el-input>
+										</el-col>
 									</el-row>
 
 									<el-row>
@@ -36,8 +41,8 @@
 											</el-form-item>
 										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="分发号" prop="NUM">
-												<el-input v-model="WORK_INSTRUCTION.NUM" :disabled="noedit"></el-input>
+											<el-form-item label="分发号" prop="WI_NUM">
+												<el-input v-model="WORK_INSTRUCTION.WI_NUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -109,6 +114,7 @@
 					return {
 						ID: '',
 						NUM: '',
+						WI_NUM: '',
 						DESCRIPTION: '',
 						STATUS: '',
 						VERSION: '',
@@ -149,7 +155,7 @@
 				rules: {
 					NUM: [{
 						required: false,
-						trigger: 'change',
+						trigger: 'blur',
 						validator: this.Validators.isCodeNum,
 					}],
 					DESCRIPTION: [

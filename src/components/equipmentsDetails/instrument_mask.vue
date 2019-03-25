@@ -1213,7 +1213,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.dataInfo.CONFIG_UNIT, {
+				this.$axios.get(this.basic_url + '/api-user/users', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

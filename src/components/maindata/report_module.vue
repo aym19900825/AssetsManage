@@ -57,8 +57,6 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
 								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}

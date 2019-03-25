@@ -104,7 +104,7 @@
 				checkedName: [
 					// '序号',
 					'机构名称',
-					'机构编码',
+					'机构编号',
 					'上级机构',
 					'机构类型',
 					'负责人',
@@ -124,8 +124,8 @@
 						isShow:true,
 					},
 					{
-						text: '机构编码',
-						dataIndex: 'code',
+						text: '机构编号',
+						dataIndex: 'id',
 						isShow:true,
 					},
 					{
@@ -205,7 +205,7 @@
 						"version":'1',
 						"status":'活动',
 						"step":'',
-						"code":'',
+						"id":'',
 						"fullname":'',
 						"parent":'',
 						"org_range":'2',

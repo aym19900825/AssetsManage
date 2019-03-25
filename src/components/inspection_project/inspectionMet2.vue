@@ -37,7 +37,7 @@
 		  	<el-table-column label="方法编号" width="160" prop="M_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NUM" :disabled="true" placeholder="自动生成"></el-input><span v-else>{{scope.row.M_NUM}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NUM" :disabled="true" placeholder="请选择"></el-input><span v-else>{{scope.row.M_NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -55,7 +55,7 @@
 		    <el-table-column label="方法英文名称" width="160" sortable prop="M_ENAME">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_ENAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_ENAME" :disabled="true" placeholder="自动生成"></el-input><span v-else>{{scope.row.M_ENAME}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_ENAME" :disabled="true" placeholder="请选择"></el-input><span v-else>{{scope.row.M_ENAME}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -63,7 +63,7 @@
 		    <el-table-column label="类别" sortable width="160" prop="M_TYPE">
 		    	<template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_TYPE" :disabled="true" placeholder="自动生成"></el-input><span v-else>{{scope.row.M_TYPE}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_TYPE" :disabled="true" placeholder="请选择"></el-input><span v-else>{{scope.row.M_TYPE}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -351,14 +351,15 @@
 				return index + 1;
 			},
 			viewfield_inspectionMet2(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+				if(num==undefined||num==null||num==''){
 					this.inspectionMet2Form.inspectionList = [];
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/inspectionMet2/INSPECTION_PROJECT2/' + id;
+				var url = this.basic_url + '/api-apps/app/inspectionMet2/INSPECTION_PROJECT2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
 					// 
 					this.page.totalCount = res.data.count;	
@@ -369,8 +370,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.inspectionMet2Form.inspectionList=res.data.INSPECTION_METHOD2List;
-
+					this.inspectionMet2Form.inspectionList=!!res.data.INSPECTION_METHOD2List?res.data.INSPECTION_METHOD2List:[];
 					for(var j = 0; j < this.inspectionMet2Form.inspectionList.length; j++){
 						this.inspectionMet2Form.inspectionList[j].isEditing = false;
 					}
@@ -519,11 +519,11 @@
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/inspectionMet2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+				}).then(({ value }) => {
+					var url = this.basic_url + '/api-apps/app/inspectionMet2/' + row.ID;
+						this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

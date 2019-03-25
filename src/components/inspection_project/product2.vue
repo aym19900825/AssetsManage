@@ -16,24 +16,20 @@
 					<font>新建</font>
 				</el-button>
 			</div>
-			<el-form inline-message :model="product2Form" status-icon ref="product2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+			<el-form inline-message :model="product2Form" ref="product2Form" class="el-radio__table">
+			  <el-table ref="table" :data="product2Form.inspectionList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
 					highlight-current-row
+					@current-change="viewchildRow"
 					style="width: 100%;"
-					:default-sort="{prop:'product2Form.inspectionList', order: 'descending'}"
-					v-loadmore="loadMore"
-					v-loading="loading"
-					element-loading-text="加载中…"
-					element-loading-spinner="el-icon-loading"
-					element-loading-background="rgba(255, 255, 255, 0.9)">
+					:default-sort="{prop:'product2Form.inspectionList', order: 'descending'}">
 
 			  	<el-table-column label="产品编号" sortable width="100" prop="PRO_NUM" class="pl30">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="自动生成" disabled></el-input>
-								<!-- <span class="blue" v-else>{{scope.row.PRO_NUM}}</span> -->
-								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else>{{scope.row.PRO_NUM}}</span>
-					</el-form-item>
+								<span class="blue" v-else>{{scope.row.PRO_NUM}}</span>
+								<!-- <span class="blue" @click="viewchildRow(scope.row.ID,scope.row.PRO_NUM)" v-else>{{scope.row.PRO_NUM}}</span> -->
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 					
@@ -94,8 +90,6 @@
 			        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 			          <i class="icon-trash red"></i>
 			        </el-button>
-			       
-
 				 	<!--  <el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
 			          添加
 			        </el-button> -->
@@ -200,11 +194,8 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-
 				parentId: 1,
 				selParentId: 1 //父类选中id
-
-				// childData: {}
 			}
 		},
 		methods: {
@@ -218,8 +209,6 @@
 					row.ENTERBY=res.data.nickname;
 					var date=new Date();
 					row.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					
-					
 				}).catch((err)=>{
 				})
 			},
@@ -246,33 +235,17 @@
 						return false;
 					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
 				this.viewfield_product2(this.selParentId,this.parentId);
 			}
 		},
 		//改变页数
 		sizeChange(val) {
 			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
 			this.viewfield_product2(this.selParentId,this.parentId);
 		},
 		//当前页数
 		currentChange(val) {
 			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
 			this.viewfield_product2(this.selParentId,this.parentId);
 		},
 			 addprobtn(row){//查找基础数据中的产品名称
@@ -323,8 +296,7 @@
 			},
 			viewfield_product2(id,num){//点击父级筛选出子级数据
 				this.loading = true;//加载动画打开
-				if(id=='null'){
-					console.log('viewfield_product2===null');
+				if(id=='null'||num=='null'){
 					this.product2Form.inspectionList = [];
 					this.viewchildRow('null');
 					return false;
@@ -332,7 +304,8 @@
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/productType2/' + id;
+				var url = this.basic_url + '/api-apps/app/productType2'
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
 					this.page.totalCount = res.data.count;
 					//总的页数
@@ -350,60 +323,20 @@
 					}//滚动加载数据判断filing
 
 					//默认主表第一条数据
-					if(this.product2Form.inspectionList.length > 0){
-						this.viewchildRow(this.product2Form.inspectionList[0].ID,this.product2Form.inspectionList[0].PRO_NUM);
-					}else{
+					if(!this.product2Form.inspectionList||this.product2Form.inspectionList.length == 0){
 						this.viewchildRow('null');
+						this.product2Form.inspectionList = [];
+					}else{
+						this.$refs.table.setCurrentRow(this.product2Form.inspectionList[0]);//默认选中第一条数据
+						var data=this.product2Form.inspectionList[0];
+						this.$emit('parentMsd_product2', data);
 					}
-					
 					for(var j = 0; j < this.product2Form.inspectionList.length; j++){
 						this.product2Form.inspectionList[j].isEditing = false;
 					}
-					this.$refs.singleTable.setCurrentRow(this.product2Form.inspectionList[0]);//默认选中第一条数据
-				
 				}).catch((wrong) => {})
 			},
 			
-			// requestData_product2(index) {//默认加载所有数据
-			// 	var _this = this;
-			// 	var data = {
-			// 		page: this.page.currentPage,
-			// 		limit: this.page.pageSize,
-			// 	}
-			// 	var url = this.basic_url + '/api-apps/app/product2';
-			// 	this.$axios.get(url, {
-			// 		params: data
-			// 	}).then((res) => {
-			// 		this.page.totalCount = res.data.count;
-			// 		//总的页数
-			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-			// 		if(this.page.currentPage >= totalPage){
-			// 			 this.loadSign = false
-			// 		}else{
-			// 			this.loadSign=true
-			// 		}
-
-			// 		this.commentArr[this.page.currentPage]=res.data.data
-			// 		let newarr=[]
-
-			// 		for(var i = 1; i <= totalPage; i++){
-			// 			if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-			// 				for(var j = 0; j < this.commentArr[i].length; j++){
-			// 					this.commentArr[i][j].isEditing = false;
-			// 					//console.log("this.commentArr[i][j]++++++"+this.commentArr);
-			// 					newarr.push(this.commentArr[i][j])
-			// 				}
-			// 			}
-			// 		}
-
-			// 		this.product2Form.inspectionList = newarr;//滚动加载更多
-
-			// 		setTimeout(function(){
-			// 			_this.viewchildRow(_this.product2Form.inspectionList[0].ID,_this.product2Form.inspectionList[0].PRO_NUM);
-			// 		},0);
-
-			// 	}).catch((wrong) => {})
-			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -460,8 +393,8 @@
 						this.product2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
 					})
-	            } else {
-								this.$message.warning("请先保存当前编辑项");
+					} else {
+						this.$message.warning("请先保存当前编辑项");
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
@@ -530,19 +463,18 @@
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},
-			viewchildRow(ID,PRO_NUM) {//查看子项数据
-				var data = {
-					id: ID,
-					num: PRO_NUM
-				};
+			viewchildRow(data) {//查看子项数
+				this.currentRow = data;
 				this.$emit('parentMsd_product2', data);
 			},
+			// viewchildRow(ID,PRO_NUM) {//查看子项数据
+			// 	var data = {
+			// 		id: ID,
+			// 		num: PRO_NUM
+			// 	};
+			// 	this.$emit('parentMsd_product2', data);
+			// },
 		},
-		
-		// mounted() {
-		// 	this.requestData_product2();
-			
-		// },
 		
 
 	}

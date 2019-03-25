@@ -24,7 +24,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" :disabled="noedit"></el-input>
+												<el-input v-model="CATEGORY.NUM" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">

@@ -46,7 +46,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="P_NUM" label-width="100px">
-												<el-input v-model="testing_projectForm.P_NUM" :disabled="noedit" placeholder="不填写可自动生成"></el-input>
+												<el-input v-model="testing_projectForm.P_NUM" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">

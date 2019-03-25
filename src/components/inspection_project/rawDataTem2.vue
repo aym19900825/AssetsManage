@@ -27,7 +27,7 @@
 		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -35,7 +35,7 @@
 		  	<el-table-column label="原始数据编号" width="160" prop="NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -310,14 +310,15 @@
 				return index + 1;
 			},
 			viewfield_rawDataTem2(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+				if(num==undefined||num==null||num==''){
 					this.rawDataTem2Form.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/rawDataTem2/INSPECTION_PROJECT2/' + id;
+				var url = this.basic_url + '/api-apps/app/rawDataTem2/INSPECTION_PROJECT2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
 					//
 					this.page.totalCount = res.data.count;	
@@ -328,8 +329,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.rawDataTem2Form.inspectionList=res.data.RAW_DATA_TEMPATE2List;
-
+					this.rawDataTem2Form.inspectionList=!!res.data.RAW_DATA_TEMPATE2List?res.data.RAW_DATA_TEMPATE2List:[];
 					for(var j = 0; j < this.rawDataTem2Form.inspectionList.length; j++){
 						this.rawDataTem2Form.inspectionList[j].isEditing = false;
 					}

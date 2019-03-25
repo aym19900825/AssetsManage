@@ -18,7 +18,7 @@
 				</el-button>
 			</div>
 			<el-form inline-message :model="inspectionPro2Form" status-icon ref="inspectionPro2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+			  <el-table ref="table" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
 					highlight-current-row
 					style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" 
 					v-loadmore="loadMore"
@@ -30,18 +30,19 @@
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input>
-								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
-					</el-form-item>
-			      </template>
-			    </el-table-column>
-			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
-			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
-					</el-form-item>
+								<span class="blue" v-else>{{scope.row.P_NUM}}</span>
+								<!-- <span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span> -->
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 
+			  	<!-- <el-table-column label="所属标准" width="80" prop="S_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column> -->
 
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
@@ -134,7 +135,7 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="项目编码" width="155" sortable prop="P_NUM">
@@ -326,7 +327,7 @@
 				return index + 1;
 			},
 			viewfield_inspectionPro2(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+				if(num==undefined||num==null||num==''){
 					this.inspectionPro2Form.inspectionList = [];
 					this.viewchildRow('null');
 					return false;
@@ -334,9 +335,9 @@
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + id;
+				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
-					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -345,62 +346,64 @@
 					}else{
 						this.loadSign=true
 					}
-					this.inspectionPro2Form.inspectionList=res.data.INSPECTION_PROJECT2List;
+					this.inspectionPro2Form.inspectionList=!!res.data.INSPECTION_PROJECT2List?res.data.INSPECTION_PROJECT2List:[];
 					
 					//默认主表第一条数据
-					if(this.inspectionPro2Form.inspectionList.length > 0){
-						this.viewchildRow(this.inspectionPro2Form.inspectionList[0].ID,this.inspectionPro2Form.inspectionList[0].P_NUM);
-					}else{
+					if(!this.inspectionPro2Form.inspectionList||this.inspectionPro2Form.inspectionList.length == 0){
 						this.viewchildRow('null');
+						this.inspectionPro2Form.inspectionList = [];
+					}else{
+						this.$refs.table.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
+						var data=this.inspectionPro2Form.inspectionList[0];
+						this.$emit('parentMsd_inspectionPro2', data);
 					}
-
+	
 					for(var j = 0; j < this.inspectionPro2Form.inspectionList.length; j++){
 						this.inspectionPro2Form.inspectionList[j].isEditing = false;
 					}
 
-					this.$refs.singleTable.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
 			
-			requestData_inspectionPro2(index) {//加载数据
-				var _this = this;
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/inspectionPro2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
+			// requestData_inspectionPro2(index) {//加载数据
+			// 	var _this = this;
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/inspectionPro2';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;	
+			// 		//总的页数
+			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage){
+			// 			 this.loadSign = false
+			// 		}else{
+			// 			this.loadSign=true
+			// 		}
+			// 		this.commentArr[this.page.currentPage]=res.data.data
+			// 		let newarr=[]
+			// 		for(var i = 1; i <= totalPage; i++){
 					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+			// 			if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								this.commentArr[i][j].isEditing = false;
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
+			// 				for(var j = 0; j < this.commentArr[i].length; j++){
+			// 					this.commentArr[i][j].isEditing = false;
+			// 					newarr.push(this.commentArr[i][j])
+			// 				}
+			// 			}
+			// 		}
 					
-					this.inspectionPro2Form.inspectionList = newarr;
+			// 		this.inspectionPro2Form.inspectionList = newarr;
 
-					setTimeout(function(){
-						_this.viewchildRow(_this.inspectionPro2Form.inspectionList[0].ID,_this.inspectionPro2Form.inspectionList[0].P_NUM);
-					},0);
+			// 		setTimeout(function(){
+			// 			_this.viewchildRow(_this.inspectionPro2Form.inspectionList[0].ID,_this.inspectionPro2Form.inspectionList[0].P_NUM);
+			// 		},0);
 					
-				}).catch((wrong) => {})
-			},
+			// 	}).catch((wrong) => {})
+			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -431,17 +434,15 @@
 						if (this.inspectionPro2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;
 						}else{
-	                        isEditingflag=true;   
-	                        break;
+							isEditingflag=true;   
+							break;
 						}
 					}
 					if (isEditingflag==false){
-	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate;
+							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+							var currentUser, currentDate;
 							this.currentUser=res.data.nickname;
 							var date=new Date();
-							// ;
-							// 
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
@@ -459,8 +460,8 @@
 							this.inspectionPro2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+						} else {
+								this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
@@ -532,18 +533,18 @@
 				this.catedata.VERSION = this.selData[0].VERSION;
 				this.$emit('request');
 			},
-			viewchildRow(ID,P_NUM) {//查看子项数据
-				var data = {
-					id: ID,
-					num: P_NUM
-				};
+			viewchildRow(data) {//查看子项数
+				this.currentRow = data;
 				this.$emit('parentMsd_inspectionPro2', data);
 			},
+			// viewchildRow(ID,P_NUM) {//查看子项数据
+			// 	var data = {
+			// 		id: ID,
+			// 		num: P_NUM
+			// 	};
+			// 	this.$emit('parentMsd_inspectionPro2', data);
+			// },
 		},
-		
-		// mounted() {
-		// 	this.requestData_inspectionPro2();
-		// },
 		
 
 	}

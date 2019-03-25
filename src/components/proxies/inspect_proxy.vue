@@ -464,11 +464,11 @@
 					return;
 				}else{
 					var url=this.basic_url;
-								var pos = url.lastIndexOf(':');
-								url=url.substring(0,pos+1); 
-						  	this.url=url+"5300";
-								var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&id="+this.selUser[0].ID;
-             		window.open(url);
+						var pos = url.lastIndexOf(':');
+						url=url.substring(0,pos+1); 
+						this.url=url+"5300";
+						var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&id="+this.selUser[0].ID;
+						window.open(url);
 				}
 			},
 			//查看
@@ -702,7 +702,7 @@
 			},
 
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
+				// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},

@@ -35,7 +35,7 @@
 		  	<el-table-column label="设备编号" width="210" prop="NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -43,7 +43,7 @@
 		    <el-table-column label="规格型号" width="160" sortable prop="MODEL">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.MODEL'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.MODEL}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.MODEL}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -313,14 +313,15 @@
 				return index + 1;
 			},
 			viewfield_rawDataAsset(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+				if(num==undefined||num==null||num==''){
 					this.rawDataAssetForm.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
 				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + id;
+				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
 					// 
 					this.page.totalCount = res.data.count;	
@@ -331,8 +332,7 @@
 					}else{
 						this.loadSign=true
 					}
-					this.rawDataAssetForm.inspectionList=res.data.RAW_DATA_ASSETList;
-					
+					this.rawDataAssetForm.inspectionList=!!res.data.RAW_DATA_ASSETList?res.data.RAW_DATA_ASSETList:[];
 					for(var j = 0; j < this.rawDataAssetForm.inspectionList.length; j++){
 						this.rawDataAssetForm.inspectionList[j].isEditing = false;
 					}
@@ -431,8 +431,8 @@
 							this.rawDataAssetForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+							} else {
+									this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
@@ -476,11 +476,11 @@
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/rawDataAsset/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+					}).then(({ value }) => {
+						var url = this.basic_url + '/api-apps/app/rawDataAsset/' + row.ID;
+							this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

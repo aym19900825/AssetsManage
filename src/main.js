@@ -48,7 +48,10 @@ Vue.directive('loadmore', {
 		const selectWrap = el.querySelector('.el-table__body-wrapper');
 		var scrollBeforeTop = 0;
 		var firstFlag = true;
-	    selectWrap.addEventListener('scroll', function() {
+	    selectWrap.addEventListener('scroll', function(e) {
+			if(this.scrollTop == scrollBeforeTop){
+				return false;
+			}
 			let toBtm = sessionStorage.getItem('toBtm');
 			if(toBtm=='true'){
 				if(firstFlag){

@@ -414,8 +414,8 @@
 						type: 'warning'
 					});
 					return;
-				} else {
-					this.testing_projectForm = this.selMenu[0]; 
+				 } else {
+				// 	this.testing_projectForm = this.selMenu[0]; 
 					this.$refs.child.detail(this.selMenu[0].ID); 
 				}
 			},

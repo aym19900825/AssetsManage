@@ -64,7 +64,7 @@
 										<el-input v-model="searchList.ITEM_STEP"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="6">
+								<!-- <el-col :span="6">
 									<el-form-item label="收回入库时间" prop="ACCEPT_DATE" label-width="100px">
 										<div class="block">
 										    <el-date-picker
@@ -74,7 +74,7 @@
 										    </el-date-picker>
 									  	</div>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="6">
 									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="85px">
 										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
@@ -134,22 +134,15 @@
 									</template>
 								</el-table-column>
 								<el-table-column label="样品序号" sortable width="100px" prop="ITEM_STEP" v-if="this.checkedName.indexOf('样品序号')!=-1">
+									<template slot-scope="scope">
+										<span v-text="scope.row.ITEM_STEP==-1?'':scope.row.ITEM_STEP"></span>
+									</template>
 								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="收回入库时间" width="150px" prop="ACCEPT_DATE" sortable v-if="this.checkedName.indexOf('收回入库时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="返样人" sortable width="120px" prop="ACCEPT_PERSONDesc" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>
-								<el-table-column label="样品承接人" sortable width="120px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
-								</el-table-column>
-								<el-table-column label="处理批准人" sortable width="120px" prop="APPR_PERSON" v-if="this.checkedName.indexOf('处理批准人')!=-1">
-								</el-table-column>
-								<el-table-column label="批准日期" sortable width="100px" prop="APPR_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
-								</el-table-column>
-								<el-table-column label="处理人" sortable width="120px" prop="DO_PERSON" v-if="this.checkedName.indexOf('处理人')!=-1">
-								</el-table-column>
-								<el-table-column label="处理日期" sortable width="100px" :formatter="dateFormat" prop="DO_DATE" v-if="this.checkedName.indexOf('处理日期')!=-1">
-								</el-table-column>
-								<el-table-column label="备注" sortable width="160px" prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
+								<el-table-column label="返样日期" sortable width="100px" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>

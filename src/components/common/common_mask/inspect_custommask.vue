@@ -249,7 +249,6 @@
 					
 					if(this.selUser[0].itemid!=null||this.selUser[0].itemid!=undefined){
 							this.$axios.get(this.basic_url + '/api-apps/app/item/' + itemid, {}).then((res) => {
-								console.log(res);
 								var custarr = [];
 									custarr.push(res.data.P_NAME);//生产单位
 									custarr.push(res.data.DESCRIPTION);//样品名称
@@ -261,7 +260,6 @@
 									custarr.push(res.data.PRO_VERSION);//产品版本
 									custarr.push(res.data.P_NUM);//产品类别编号
 									custarr.push(res.data.P_VERSION);//产品类别版本
-									console.log(custarr);
 									this.$emit('custarr',custarr);
 							});
 					}else{

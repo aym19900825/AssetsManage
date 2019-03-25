@@ -112,7 +112,7 @@
 					</el-form>
 				</div>
 				<!--底部-->
-			</div>saveAndUpdate
+			</div>
 
 			<!--设备分类 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
@@ -348,7 +348,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '设备价值',
+						label: '设备价值(元)',
 						prop: 'A_PRICE',
 						width: '30%',
 						type: 'input',
@@ -375,13 +375,13 @@
 						type: 'date',
 						displayType: 'inline-block'
 					},
-                    {
-						label: '使用日期',
-						prop: 'USEDATE',
-						width: '30%',
-						type: 'date',
-						displayType: 'inline-block'
-					},
+                    // {
+					// 	label: '使用日期',
+					// 	prop: 'USEDATE',
+					// 	width: '30%',
+					// 	type: 'date',
+					// 	displayType: 'inline-block'
+					// },
                     {
 						label: '技术指标',
 						prop: 'ASSET_KPI',
@@ -983,9 +983,10 @@
 			},
 			// 这里是修改
 			detail(dataid) {
+				console.log(this.detailData);
 				this.dataInfo = this.detailData;
-				this.dataInfo.CONFIG_UNIT = Number(this.dataInfo.CONFIG_UNIT);
-				this.handlePrice();
+				// this.dataInfo.CONFIG_UNIT = Number(this.dataInfo.CONFIG_UNIT);
+				// this.handlePrice();
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;

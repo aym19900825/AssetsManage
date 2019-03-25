@@ -533,7 +533,7 @@
 										this.show = false;
 										this.visible();
 									}
-									this.resetData();
+									this.emit('request');
 									this.$emit('reset');
 								}
 							}else{
@@ -552,17 +552,16 @@
 										});
 									}
 								}
-								this.falg = false;
 							}
 						}).catch((err) => {
 						});
 						// this.falg = true;
 					} else {
+						this.show = true;
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
 			},

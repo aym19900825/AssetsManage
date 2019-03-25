@@ -31,11 +31,6 @@
 						<el-collapse v-model="activeNames">
 							<el-collapse-item title="类型" name="1">
 								<el-row :gutter="20" class="pb10">
-									<!-- <el-col :span="5" class="pull-right">
-										<el-input v-model="dataInfo.STATUS=='1'?'活动':'不活动'" :disabled="true">
-											<template slot="prepend">信息状态</template>
-										</el-input>
-									</el-col> -->
 									<el-col :span="4" class="pull-right">
 										<el-input v-model="dataInfo.STATEDesc" :disabled="edit">
 											<template slot="prepend">状态</template>
@@ -48,14 +43,14 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="special">
-										<el-col :span="4">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''">
+										<el-col :span="4" v-if="!addtitle">
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
 										<el-col :span="4">
 											<el-radio label="2">监督抽查复查</el-radio>
 										</el-col>
-										<el-col :span="4">
+										<el-col :span="4" v-if="!addtitle">
 											<el-radio label="3">质量抽查</el-radio>
 										</el-col>
 										<el-col :span="4">
@@ -95,14 +90,14 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
-											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit || dataInfo.WP_NUM!=''"></el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
 									<el-col :span="8" >
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special
+											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4' || dataInfo.WP_NUM!=''
 " style="width: 100%" @change="changeCJDW">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
@@ -110,15 +105,15 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
-											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
-												   <el-button slot="append" :disabled="special" icon="el-icon-search" @click="addcategory"></el-button>
+											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special ||dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''">
+												   <el-button slot="append" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addcategory"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
-												   <el-button slot="append" :disabled="special" icon="el-icon-search" @click="addproduct"></el-button>
+											<el-input v-model="dataInfo.ITEM_NAME" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''">
+												   <el-button slot="append" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addproduct"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -126,13 +121,13 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special"></el-input>
+											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
 											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
-												<el-button :disabled="noedit" slot="append" icon="el-icon-search" @click="addperbtn('leader')"></el-button>
+												<el-button :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'" slot="append" icon="el-icon-search" @click="addperbtn('leader')"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -142,8 +137,8 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="special">
-												   <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
+											<el-input v-model="dataInfo.V_NAME" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''">
+												<el-button slot="append" :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -154,14 +149,14 @@
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
-											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit">
-												<el-button slot="append" icon="el-icon-search" @click="addperbtn('accept')" :disabled="noedit"></el-button>
+											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'">
+												<el-button slot="append" icon="el-icon-search" @click="addperbtn('accept')" :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 								</el-row>
 								<el-row>
-									<el-form-item label="抽样方案/判定依据" prop="SOLUTION" label-width="140px">
+									<el-form-item label="抽样方案" prop="SOLUTION" label-width="140px">
 										<el-input v-model="dataInfo.SOLUTION" :disabled="noedit"></el-input>
 									</el-form-item>
 								</el-row>
@@ -170,7 +165,7 @@
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="依据" name="first">
 										<div class="table-func table-funcb">
-											<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" v-show="noviews">
+											<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')">
 												<i class="icon-search"></i>
 												<font>选择</font>
 											</el-button>
@@ -209,20 +204,6 @@
 													<span>{{(scope.row.FILESIZE<0?scope.row.FILESIZE:0) + 'M'}}</span>
 												</template>
 											</el-table-column>
-											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column> -->
-											<!-- <el-table-column label="附件" sortable width="120px">
-												<template slot-scope="scope" v-if="!views">
-													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-														<el-button size="small" type="primary" v-if="!viewtitle">点击上传</el-button>
-													</el-upload>
-												</template>
-											</el-table-column> -->
 											<el-table-column fixed="right" label="操作" width="100">
 												<template slot-scope="scope">
 													<el-button @click="deleteRow(scope.$index,scope.row,'secondList')" type="text" size="small" v-if="!viewtitle">
@@ -237,7 +218,7 @@
 									</el-tab-pane>
 									<el-tab-pane label="检验检测项目" name="second">
 										<div class="table-func table-funcb">
-											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="noviews">
+											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')">
 												<i class="icon-search"></i>
 												<font>选择</font>
 											</el-button>
@@ -617,6 +598,7 @@
 			},
 			reset() {
 				this.dataInfo = {
+					WP_NUM: '',
 					N_CODE: '',
 					TYPE: '',
 					XD_DATE: '',
@@ -798,17 +780,15 @@
 			//点击按钮显示弹窗
 			visible() {
 				this.reset();
-				this.special=false;
 				this.noviews=true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
-					// this.dataInfo.ORGID = res.data.deptName
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				})
-				
+				this.special = false;
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;

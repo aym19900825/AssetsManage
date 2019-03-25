@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form inline-message :model="rawDataTem2Form" ref="rawDataTem2Form">
-		  <el-table :data="rawDataTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+		  <el-table ref="table" :data="rawDataTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
 				style="width: 100%;" :default-sort="{prop:'rawDataTem2Form.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
@@ -122,7 +122,12 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;"
+				:default-sort="{prop:'categoryList', order: 'descending'}"
+				v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="原始数据编号" width="125" sortable prop="NUM">
@@ -138,10 +143,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
-		       <el-button type="primary" @click="addproclass">确 定</el-button>
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+			<!-- <span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="addproclass">确 定</el-button>
+					<el-button @click="dialogVisible3 = false">取 消</el-button>
+			</span> -->
 		</el-dialog>
 		<!-- 原始数据模板 End -->
 </div>
@@ -490,13 +495,16 @@
 
             	});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.NUM = this.selData[0].NUM;
-				this.catedata.DECRIPTION = this.selData[0].DECRIPTION;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+				addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.NUM = val.NUM;
+					this.catedata.DECRIPTION = val.DECRIPTION;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 			// addchildRow(row) {
 			// 	this.$refs.rawDataAssetchild.addfield_rawDataAsset(row.NUM);

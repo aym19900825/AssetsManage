@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form inline-message :model="inspectionMet2Form" ref="inspectionMet2Form">
-		  <el-table :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+		  <el-table ref="table" :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
 				style="width: 100%;"
 				:default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}"
@@ -141,7 +141,12 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;"
+				:default-sort="{prop:'categoryList', order: 'descending'}"
+				v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="方法编号" width="125" sortable prop="M_NUM">
@@ -163,10 +168,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
-		       <el-button type="primary" @click="addproclass">确 定</el-button>
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+			<!-- <span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="addproclass">确 定</el-button>
+					<el-button @click="dialogVisible3 = false">取 消</el-button>
+			</span> -->
 		</el-dialog>
 		<!-- 检验/检测方法 End -->
 </div>
@@ -537,15 +542,18 @@
 					}).catch(() => {
 					});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.M_NUM = this.selData[0].M_NUM;
-				this.catedata.M_NAME = this.selData[0].M_NAME;
-				this.catedata.M_ENAME = this.selData[0].M_ENAME;
-				this.catedata.M_TYPE = this.selData[0].M_TYPE;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+				addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.M_NUM = val.M_NUM;
+					this.catedata.M_NAME = val.M_NAME;
+					this.catedata.M_ENAME = val.M_ENAME;
+					this.catedata.M_TYPE = val.M_TYPE;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 		},
 		

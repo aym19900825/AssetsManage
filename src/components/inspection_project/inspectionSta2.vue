@@ -20,27 +20,33 @@
 			<el-form inline-message :model="inspectionSta2Form" status-icon ref="inspectionSta2Form" class="el-radio__table">
 			  <el-table ref="table" :data="inspectionSta2Form.inspectionList.filter(data => !search || data.S_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
 				highlight-current-row
-				style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}"
-				v-loadmore="loadMore"
-				v-loading="loading"
-				element-loading-text="加载中…"
-				element-loading-spinner="el-icon-loading"
-				element-loading-background="rgba(255, 255, 255, 0.9)">
-			  	<el-table-column label="标准编码" sortable width="100" prop="S_NUM">
+				@current-change="viewchildRow"
+				style="width: 100%;" :default-sort="{prop:'inspectionSta2Form.inspectionList', order: 'descending'}">
+					
+			  	<el-table-column label="编码" sortable width="100" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请选择" disabled></el-input>
 								<span class="blue" v-else>{{scope.row.S_NUM}}</span>
 								<!-- <span class="blue" @click="viewchildRow(scope.row.ID,scope.row.S_NUM)" v-else>{{scope.row.S_NUM}}</span> -->
-					</el-form-item>
+							</el-form-item>
 			      </template>
 			    </el-table-column>
-					
-				<el-table-column label="所属产品" width="80" prop="PRO_NUM">
+
+					<el-table-column label="标准编号" width="80" prop="SS_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.SS_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" disabled></el-input>
+								<span v-else>{{scope.row.SS_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
-					</el-form-item>
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 
@@ -66,9 +72,15 @@
 			      </template>
 			    </el-table-column>
 
-				<el-table-column prop="STARTETIME" label="启用时间" sortable width="120" :formatter="dateFormat">
+					<el-table-column prop="STARTETIME" label="启用时间" sortable width="120" :formatter="dateFormat">
 			      <template slot-scope="scope">
 			       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STARTETIME" disabled></el-input><span v-else>{{scope.row.STARTETIME}}</span>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column prop="STOPTIME" label="停用时间" sortable width="120" :formatter="dateFormat">
+			      <template slot-scope="scope">
+			       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STOPTIME" disabled></el-input><span v-else>{{scope.row.STOPTIME}}</span>
 			      </template>
 			    </el-table-column>
 
@@ -132,10 +144,16 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.S_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.SS_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="360px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}"
+				v-loadmore="loadMore">
+				<!-- <el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column> -->
+				<el-table-column label="编码" width="155" sortable prop="S_NUM">
 				</el-table-column>
-				<el-table-column label="标准编码" width="155" sortable prop="S_NUM">
+				<el-table-column label="标准编号" width="155" sortable prop="SS_NUM">
 				</el-table-column>
 				<el-table-column label="标准名称" sortable prop="S_NAME">
 				</el-table-column>
@@ -150,10 +168,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
+			<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
 		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+		    </span> -->
 		</el-dialog>
 		<!-- 检验/检测标准 End -->
 </div>
@@ -174,11 +192,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-					departmentId: '',//当前用户机构号
-					categoryList:[],//获取产品数据
-					catedata:'',//获取产品类别一条数据放到table行中
-					dialogVisible3: false, //对话框
-					selData:[],
+				departmentId: '',//当前用户机构号
+				categoryList:[],//获取产品数据
+				catedata:'',//获取产品类别一条数据放到table行中
+				dialogVisible3: false, //对话框
+				selData:[],
 				isEditing: '',
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -192,15 +210,14 @@
 					label: '不活动'
 				}],
 				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        enabled: '',//信息状态
-		        },
+					page: 1,
+					limit: 20,//分页显示数
+					enabled: '',//信息状态
+				},
 				search: '',//搜索
-				
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 10,
+					pageSize: 20,
 					totalCount: 0
 				},
 				parentId: 1
@@ -213,68 +230,60 @@
 				}
 			},
 			
-			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
-				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
-					var date=new Date();
-					row.RELEASETIME = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					row.STARTETIME = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-				})
-			},
+		
 			//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.categoryList();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
-				this.viewfield_inspectionSta2(this.selParentId,this.parentId);
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionSta2(this.selParentId,this.parentId);
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionSta2(this.selParentId,this.parentId);
-		},
+				this.categoryList();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.categoryList();
+			},
+
 			 addprobtn(row){//查找基础数据中的检验/检测标准
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -305,11 +314,13 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
+
 			searchinfo(index) {
 				this.page.currentPage = 1;
-				this.page.pageSize = 10;
+				this.page.pageSize = 20;
 				this.viewfield_inspectionSta2(this.selParentId,this.parentId);
 			},
+			
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
 			},
@@ -331,8 +342,8 @@
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num.num;
-				this.selParentId =num.id;
+				this.parentId = num;
+				this.selParentId =id;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2'
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
@@ -411,16 +422,17 @@
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD");
 							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
 								"PRO_NUM": this.parentId,//产品类别编号
-								"S_NUM": '',
+								"S_NUM": '',//编码
+								"SS_NUM": '',//标准编号
 								"S_NAME": '',
 								"STATUS": '',
 								"VERSION": '',
 								"DEPTID": '',
-								"RELEASETIME": this.currentDate,
-								"STARTETIME": this.currentDate,
+								"RELEASETIME": '',
+								"STARTETIME": '',
+								"STOPTIME": '',
 								"ENTERBY": this.currentUser,
 								"ENTERDATE": this.currentDateTime,
 								"isEditing": true,
@@ -441,11 +453,13 @@
 						"ID":row.ID,
 						"PRO_NUM": row.PRO_NUM,
 						"S_NUM": row.S_NUM,
+						"SS_NUM": row.SS_NUM,
 						"S_NAME": row.S_NAME,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"RELEASETIME": row.RELEASETIME,
 						"STARTETIME": row.STARTETIME,
+						"STOPTIME": row.STOPTIME,
 						"ENTERBY": row.ENTERBY,
 						"ENTERDATE": row.ENTERDATE,
 						"VERSION": row.VERSION,
@@ -493,16 +507,23 @@
 
 					});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.S_NUM = this.selData[0].S_NUM;
-				this.catedata.S_NAME = this.selData[0].S_NAME;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.catedata.FILESIZE = this.selData[0].FILESIZE;
-				this.catedata.FILEID = this.selData[0].FILEID;
-				this.catedata.FILEPATH = this.selData[0].FILEPATH;
-				this.$emit('request');
+			addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.S_NUM = val.S_NUM;//编码
+					this.catedata.SS_NUM = val.SS_NUM;//标准编号
+					this.catedata.S_NAME = val.S_NAME;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.catedata.RELEASETIME = val.RELEASETIME;
+					this.catedata.STARTETIME = val.STARTETIME;
+					this.catedata.STOPTIME = val.STOPTIME;
+					this.catedata.FILESIZE = val.FILESIZE;
+					this.catedata.FILEID = val.FILEID;
+					this.catedata.FILEPATH = val.FILEPATH;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 			viewchildRow(data) {//查看子项数
 				this.currentRow = data;

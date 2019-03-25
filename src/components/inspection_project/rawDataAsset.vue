@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form inline-message :model="rawDataAssetForm" ref="rawDataAssetForm">
-		  <el-table :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+		  <el-table ref="table" :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
 				style="width: 100%;" :default-sort="{prop:'rawDataAssetForm.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
@@ -101,7 +101,7 @@
 		      <template slot-scope="scope">
 		        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 		        	<i class="icon-check" title="保存"></i>
-				</el-button>
+						</el-button>
 
 		        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 		          <i class="icon-trash red"></i>
@@ -125,7 +125,12 @@
 	<!-- 检测仪器 Begin -->
 		<el-dialog :modal-append-to-body="false" title="选择基础数据——检测仪器" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;"
+				:default-sort="{prop:'categoryList', order: 'descending'}"
+				v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="设备编号" width="165" sortable prop="ASSETNUM">
@@ -143,10 +148,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
+				<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
 		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+		    </span> -->
 		</el-dialog>
 		<!-- 检测仪器 End -->
 </div>
@@ -495,14 +500,17 @@
 
             	});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.NUM = this.selData[0].ASSETNUM;
-				this.catedata.MODEL = this.selData[0].MODEL;
-				this.catedata.DECRIPTION = this.selData[0].DESCRIPTION;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+			addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.NUM = val.ASSETNUM;
+					this.catedata.MODEL = val.MODEL;
+					this.catedata.DECRIPTION = val.DESCRIPTION;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 		},
 		

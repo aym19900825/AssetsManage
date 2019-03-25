@@ -16,8 +16,9 @@
 				</div>
 			</div>
 			<el-form inline-message :model="professionGroForm" ref="professionGroForm">
-			  <el-table :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+			  <el-table ref="table" :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 					highlight-current-row
+					@current-change="addproclass"
 					style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}"
 					v-loadmore="loadMore"
 					v-loading="loading"
@@ -126,7 +127,7 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.fullname.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="机构编号" width="125" sortable prop="id">
@@ -144,10 +145,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
-		       <el-button type="primary" @click="addproclass">确 定</el-button>
-		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+			<!-- <span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="addproclass">确 定</el-button>
+					<el-button @click="dialogVisible3 = false">取 消</el-button>
+			</span> -->
 		</el-dialog>
 		<!-- 专业组 End -->
 
@@ -482,13 +483,16 @@
 
 					});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.PROF_NUM = this.selData[0].id;
-				this.catedata.PROF_GROUP = this.selData[0].fullname;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+				addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.PROF_NUM = val.id;
+					this.catedata.PROF_GROUP = val.fullname;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 		},
 		

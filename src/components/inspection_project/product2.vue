@@ -96,7 +96,6 @@
 			      </template>
 			    </el-table-column>
 
-			   
 			  </el-table>
 			</el-form>
 			<!-- 表格分页 Begin-->
@@ -123,9 +122,13 @@
 		</div>
 		<!--搜索框 End-->
 		<!-- 第二层弹出的表格 Begin-->
-		<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" >
-			<el-table-column type="selection" fixed width="55" align="center">
-			</el-table-column>
+		<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
+			highlight-current-row
+			@current-change="addproclass"
+			style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}"
+			v-loadmore="loadMore">
+			<!-- <el-table-column type="selection" fixed width="55" align="center">
+			</el-table-column> -->
 			<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
 			</el-table-column>
 			<el-table-column label="产品名称" sortable prop="PRO_NAME">
@@ -141,10 +144,10 @@
 		</el-table>
 		
 		<!-- 表格 End-->
-		<span slot="footer" class="dialog-footer">
+		<!-- <span slot="footer" class="dialog-footer">
 	       <el-button type="primary" @click="addproclass">确 定</el-button>
 	       <el-button @click="dialogVisible3 = false">取 消</el-button>
-	    </span>
+	    </span> -->
 	</el-dialog>
 	<!-- 产品 End -->
 </div>
@@ -204,14 +207,7 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
-				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.ENTERBY=res.data.nickname;
-					var date=new Date();
-					row.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err)=>{
-				})
-			},
+		
 			//表格滚动加载
 		loadMore() {
 			let up2down = sessionStorage.getItem('up2down');
@@ -235,18 +231,18 @@
 						return false;
 					}
 				}
-				this.viewfield_product2(this.selParentId,this.parentId);
+				this.categoryList();
 			}
 		},
 		//改变页数
 		sizeChange(val) {
 			this.page.pageSize = val;
-			this.viewfield_product2(this.selParentId,this.parentId);
+			this.categoryList();
 		},
 		//当前页数
 		currentChange(val) {
 			this.page.currentPage = val;
-			this.viewfield_product2(this.selParentId,this.parentId);
+			this.categoryList();
 		},
 			 addprobtn(row){//查找基础数据中的产品名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -455,17 +451,20 @@
 					});
 			},
 			
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.PRO_NUM = this.selData[0].PRO_NUM;
-				this.catedata.PRO_NAME = this.selData[0].PRO_NAME;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+			addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.PRO_NUM = val.PRO_NUM;
+					this.catedata.PRO_NAME = val.PRO_NAME;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 			viewchildRow(data) {//查看子项数
 				this.currentRow = data;
-				this.$emit('parentMsd_product2', data);
+				this.$emit('parentMsd_product2', data);//给父组件传值
 			},
 			// viewchildRow(ID,PRO_NUM) {//查看子项数据
 			// 	var data = {

@@ -3,14 +3,11 @@
     <el-table :data="list" 
       ref="table" 
       @sort-change='tableSortChange'
-
       border
       stripe
       :height="fullHeight"
       style="width: 100%;"
-
       v-loadmore="loadMore"
-
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"

@@ -11,7 +11,7 @@
 		<!--右侧内容显示 Begin-->
 		<div class="wrapper wrapper-content wrapperall" :style="{height: fullHeight}">
 			<div class="ibox-content">
-				<!--部门名称 Begin-->
+				<!--所属机构 Begin-->
 				<el-row :gutter="0">
 					<el-col :span="24" class="text-center">
 						<div class="clearfix">
@@ -22,11 +22,11 @@
 								</el-button>
 							</div>
 						<el-form :inline="true" :model="formInline">
-							<el-form-item label="部门名称" prop="DEPTID">
-								<el-select v-model="formInline.DEPTID" placeholder="请选择部门" @change="requestData" :disabled="nameFlag">
+							<el-form-item label="所属机构" prop="DEPTID">
+								<el-select v-model="formInline.DEPTID" placeholder="请选择" @change="requestData" :disabled="nameFlag">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select>
-								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择部门" v-else disabled @change="requestData">
+								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择" v-else disabled @change="requestData">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select> -->
 							</el-form-item>
@@ -34,7 +34,7 @@
 						</div>
 					</el-col>
 				</el-row>
-				<!--部门名称 End-->
+				<!--所属机构 End-->
 
 				<el-row class="relative" id="pageDiv">
 					<el-col :span="6">
@@ -317,18 +317,18 @@
 					setTimeout(() => {
 						this.loadSign = true;
 					}, 1000)
-					this.requestData();
+					this.categoryList();
 				}
 			},
 			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
-				this.requestData();
+				this.categoryList();
 			},
 			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				this.requestData();
+				this.categoryList();
 			},
 			addprobtn(row){//查找基础数据中的类别名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -560,23 +560,23 @@
 			addproclass(val) { //小弹出框单击数据table行返回数据
 				this.currentRow = val;
 				if (val!=null) {
-				this.catedata.NUM = val.NUM;
-				this.catedata.TYPE = val.TYPE;
-				this.catedata.DEPTID = val.DEPTID;
-				this.catedata.VERSION = val.VERSION;
-				this.$emit('request');
-				this.dialogVisible3 = false;
+					this.catedata.NUM = val.NUM;
+					this.catedata.TYPE = val.TYPE;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false;
 				}
 			},
 			
-			// viewchildRow(id,num) {//单击整体选中本条数据
-			// 	this.currentRow = val;
-			// 	this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
-      // },
 			viewchildRow(val) {//查看子项数
 				this.currentRow = val;
 				this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
 			},
+			// viewchildRow(id,num) {//单击整体选中本条数据
+			// 	this.currentRow = val;
+			// 	this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
+      // },
 			// childByValue:function(childValue) {
 				// childValue就是子组件传过来的值
 				// this.$refs.navsTabs.showClick(childValue);

@@ -53,9 +53,9 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="委托单位名称" prop="V_NAME" label-width="110px">
-												<el-input v-model="samplesForm.V_NAME" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer('vname')" :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
+											<el-form-item label="委托单位名称" prop="V_NAMEDesc" label-width="110px">
+												<el-input v-model="samplesForm.V_NAMEDesc" :disabled="true">
+													<el-button slot="append" icon="el-icon-search" @click="getVname('V_NAME')" :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -67,9 +67,9 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-												<el-input v-model="samplesForm.P_NAME" :disabled="noedit || (!!samplesForm.PROXYNUM)">
-													<el-button slot="append" icon="el-icon-search" @click="getCustomer('pname')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
+											<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
+												<el-input v-model="samplesForm.P_NAMEDesc" :disabled="noedit || (!!samplesForm.PROXYNUM)">
+													<el-button slot="append" icon="el-icon-search"  @click="getVname('P_NAME')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -137,17 +137,6 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="入库时间" prop="ACCEPTDATE" label-width="110px">
-												<div class="block">
-												    <el-date-picker
-												      v-model="samplesForm.ACCEPTDATE"
-												      type="date"
-												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
-												    </el-date-picker>
-												</div>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="收样人" prop="ACCEPT_PERSONDesc" label-width="110px">
 												<el-input v-model="samplesForm.ACCEPT_PERSONDesc" placeholder="当前人" :disabled="true">
@@ -168,35 +157,6 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<!-- <el-col :span="8">
-											<el-form-item label="接样人" prop="RECIP_PERSON" label-width="110px">
-												<el-input v-model="samplesForm.RECIP_PERSON" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getCatch" :disabled="noedit"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="接样日期" prop="RECIP_DATE" label-width="110px">
-												<div class="block">
-												    <el-date-picker
-												       v-model="samplesForm.RECIP_DATE"
-												      type="date"
-												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
-												    </el-date-picker>
-												</div>
-											</el-form-item>
-										</el-col> -->
-										<!-- <el-col :span="8">
-											<el-form-item label="状态日期" prop="STATUSDATE" label-width="110px">
-												<div class="block">
-												    <el-date-picker
-												        v-model="samplesForm.STATUSDATE"
-												      type="date"
-												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
-												    </el-date-picker>
-												</div>
-											</el-form-item>
-										</el-col> -->
 									</el-row>
 									
 									<el-row>
@@ -214,10 +174,6 @@
 											<i class="icon-start"></i>
 											<font>生成</font>
 										</el-button>
-										<!-- <el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
-											<i class="icon-add"></i>
-											<font>新建行</font>
-										</el-button> -->
 									</div>
 									<el-table ref="table" :fit="true" max-height="260" :header-cell-style="rowClass" :data="samplesForm.ITEM_LINEList" row-key="ID" border stripe highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'samplesForm.ITEM_LINEList', order: 'descending'}">
 									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
@@ -246,11 +202,9 @@
 
 										<el-table-column prop="SN" label="单件码" sortable>
 									      <template slot-scope="scope">
-											  	<!-- <el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.SN'" :rules="{required:true, message: '不能为空', trigger:'blur'}"> -->
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SN" placeholder="请填写">
 													</el-input>
 													<span v-else>{{scope.row.SN}}</span>
-												<!-- </el-form-item> -->
 									      </template>
 									    </el-table-column>
 
@@ -260,36 +214,7 @@
 									      	<span v-else>{{scope.row.STATEDesc}}</span>
 										  </template>
 									    </el-table-column>
-									    
-									   <!--  <el-table-column prop="ENTERBY" label="录入人" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.ENTERBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.ENTERBY}}</span>
-									      </template>
-									    </el-table-column> -->
-									
-
-									    <!-- <el-table-column prop="ENTERDATE" label="录入时间" sortable width="170px">
-									      <template slot-scope="scope">
-									      	<el-form-item  label-width="0px" :prop="'ITEM_LINEList.'+scope.$index + '.ENTERDATE'" >
-									         <el-date-picker style="width: 90%" v-show="scope.row.isEditing" v-model="scope.row.ENTERDATE" type="date" :disabled="true" value-format="yyyy-MM-dd"></el-date-picker>
-									        <span v-show="!scope.row.isEditing" >{{scope.row.ENTERDATE}}</span>
-									    	</el-form-item>
-									      </template>
-									    </el-table-column> -->
-									  <!--  <el-table-column prop="CHANGEBY" label="修改人" sortable width="120px">
-									      <template slot-scope="scope">
-									        <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.CHANGEBY" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.CHANGEBY}}</span>
-									      </template>
-									    </el-table-column> -->
-									    <!-- <el-table-column fixed="right" label="操作" width="100px" v-if="!viewtitle">
-									      <template slot-scope="scope">
-									        <el-button @click = "deleteRow(scope.$index, samplesForm.ITEM_LINEList)" type="text" size="small">
-									          <i class="icon-trash red"></i>
-									        </el-button>
-									      </template>
-									    </el-table-column> -->
 									  </el-table>
-									  <!-- </el-form> -->
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row >
@@ -325,9 +250,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click='saveAndUpdate()'>保存</el-button>
-							<el-button type="success" v-show="addtitle" @click='saveAndSubmit()'>保存并继续</el-button>
-							<!-- <el-button type="primary" v-show="modifytitle" @click='generate()'>生成委托书</el-button> -->
+							<el-button type="primary" @click='saveAndUpdate'>保存</el-button>
+							<el-button type="success" v-show="addtitle" @click='saveAndSubmit'>保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
@@ -379,39 +303,6 @@
 	  			</div>
 			</el-dialog>
 			<!--委托书编号-弹出框 Begin-->
-
-			<!-- 类别-弹出框 Begin -->
-			<!-- <el-dialog :modal-append-to-body="false" title="类别" height="300px" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose2">
-				<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
-						v-loadmore="loadMore('type')"
-						v-loading="loading"
-						element-loading-text="加载中…"
-						element-loading-spinner="el-icon-loading"
-						element-loading-background="rgba(255, 255, 255, 0.9)">
-					<el-table-column type="selection" fixed width="55" align="center">
-					</el-table-column>
-					<el-table-column label="编码" width="155" sortable prop="NUM">
-					</el-table-column>
-					<el-table-column label="名称" sortable prop="TYPE">
-					</el-table-column>
-					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-					</el-table-column>
-					<el-table-column label="机构" width="185" sortable prop="DEPARTMENTDesc">
-					</el-table-column>
-					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<div slot="footer">
-			       <el-button type="primary" @click="addproclass">确 定</el-button>
-			       <el-button @click="resetBasisInfo2">取 消</el-button>
-			    </div>
-			</el-dialog> -->
-			<!-- 类别-弹出框 End -->
-
 			<!-- 收样人、接样人-弹出框 Begin -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible3" height="300px" width="80%" :before-close="handleClose3">
 				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
@@ -452,6 +343,7 @@
 
 			<!-- 产品名称-弹出框子组件  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
+			<deptmask ref="deptmask" @getSelData="setData"></deptmask>
 		</div>
 	</div>
 </template>
@@ -461,16 +353,19 @@
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
+	import deptmask from'../common/common_mask/deptCustomMask.vue'
 	export default {
 		name: 'samples_mask',
 		components: {
-			categorymask,
-			productmask,
-			enterprisemask,
+			'deptmask':deptmask,
+			'categorymask':categorymask,
+			'productmask':productmask,
+			'enterprisemask':enterprisemask,
 		},
 		data() {
 			
 			return {
+				vName: '',
 				commentArr:{},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -549,6 +444,38 @@
 			};
 		},
 		methods: {
+			setData(data){
+				console.log(data);
+				this.$forceUpdate();
+				if(this.vName == 'P_NAME'){
+					if(data.depttype == '2'){
+						this.samplesForm.P_NAME = data.id;
+						this.samplesForm.P_NAMEDesc = data.fullname;
+					}else{
+						this.samplesForm.PRODUCT_COMPANY = data.CODE;
+						this.samplesForm.P_NAME = data.ID;
+						this.samplesForm.P_NAMEDesc = data.NAME;
+					}
+				}else{
+					if(data.depttype == '2'){
+						this.samplesForm.V_NAME = data.id;
+						this.samplesForm.V_NAMEDesc = data.fullname;
+						this.samplesForm.P_NAME = data.id;
+						this.samplesForm.P_NAMEDesc = data.fullname;
+					}else{
+						this.samplesForm.VENDOR = data.CODE;
+						this.samplesForm.V_NAME = data.ID;
+						this.samplesForm.V_NAMEDesc = data.NAME;
+						this.samplesForm.PRODUCT_COMPANY = data.CODE;
+						this.samplesForm.P_NAME = data.ID;
+						this.samplesForm.P_NAMEDesc = data.NAME;
+					}
+				}
+			},
+			getVname(opt){
+				this.vName = opt;
+				this.$refs.deptmask.getData();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -912,10 +839,6 @@
 				}
 			},
 
-			// deleteRow(index, rows) {//Table-操作列中的删除行
-			// 	rows.splice(index, 11);
-			// },
-			
 			//点击关闭按钮
 			close() {
 				this.show = false;

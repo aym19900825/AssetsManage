@@ -176,15 +176,14 @@
 									<el-table :data="worlplanlist" :header-cell-style="rowClass"  row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;"  :default-sort="{prop:'worlplanlist', order: 'descending'}" v-loadmore="loadMore">
 									    <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope" >
-									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)">
-									      	</i>
-									      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="iconOperation(scope.row)">
-									      	</i>
+									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)"></i>
+									      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="iconOperation(scope.row)"></i>
 									      </template>
 									    </el-table-column>
-									    <el-table-column label="序号" sortable width="120px" prop="WP_LINENUM">
+									    <el-table-column label="序号" width="50px" prop="WP_LINENUM">
 									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input><span v-if="!scope.row.isEditing">{{scope.$index + 1}}</span>
+									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
+											<span v-if="!scope.row.isEditing">{{scope.$index + 1}}</span>
 									      </template>
 									    </el-table-column>
 										<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="200px">
@@ -254,7 +253,7 @@
 											</div>
 											<!-- <el-form inline-message :model="basisList" :rules="rules" ref="basisList" prop="basisList"> -->
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="NUMBER" label="序号" sortable width="150" type="index"></el-table-column>
+							            		<el-table-column prop="NUMBER" label="序号" width="50" type="index"></el-table-column>
 												<el-table-column prop="WP_NUM" label="所属计划编号" sortable width="150">
 							            			<!-- <template slot-scope="scope">
 											        	<span>{{scope.$index + 1}}</span>
@@ -295,7 +294,7 @@
 												</el-button>
 											</div>
 							            	<el-table :header-cell-style="rowClass" :data="proTestList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
-												<el-table-column prop="NUMBER" label="序号" width="150" type="index"></el-table-column>
+												<el-table-column prop="NUMBER" label="序号" width="50" type="index"></el-table-column>
 							            		<el-table-column prop="WP_NUM" label="所属计划编号" width="130">
 							            			<template slot-scope="scope">
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>

@@ -77,14 +77,14 @@
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="5">
-									<el-form-item label="收样人" prop="ACCEPT_PERSON" label-width="70px">
-										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
+									<el-form-item label="领样人" prop="GRANT_PERSON" label-width="70px">
+										<el-input v-model="searchList.GRANT_PERSON"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="收样日期" prop="ACCEPT_DATE" label-width="70px">
+									<el-form-item label="收样日期" prop="GRANT_DATE" label-width="70px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.ACCEPT_DATE" type="date" placeholder="请选择" style="width: 100%">
+									    	<el-date-picker v-model="searchList.GRANT_DATE" type="date" placeholder="请选择" style="width: 100%">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>
@@ -125,6 +125,9 @@
 									</template>
 								</el-table-column>
 								<el-table-column label="样品序号" sortable width="120px" prop="ITEM_STEP" v-if="this.checkedName.indexOf('样品序号')!=-1">
+									<template slot-scope="scope">
+										<span v-text="scope.row.ITEM_STEP==-1?'':scope.row.ITEM_STEP"></span>
+									</template>
 								</el-table-column>
 								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
@@ -134,11 +137,11 @@
 								</el-table-column>
 								<el-table-column label="数量" width="70px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="收样人" sortable width="100px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
+								<!-- <el-table-column label="收样人" sortable width="100px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
 								</el-table-column>
 								<el-table-column label="收样日期" sortable width="100px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
-								</el-table-column>
-								<el-table-column label="领样人" sortable width="100px" prop="GRANT_PERSON" v-if="this.checkedName.indexOf('领样人')!=-1">
+								</el-table-column> -->
+								<el-table-column label="领样人" sortable width="100px" prop="GRANT_PERSONDesc" v-if="this.checkedName.indexOf('领样人')!=-1">
 								</el-table-column>
 								<el-table-column label="领样日期" sortable width="100px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
 								</el-table-column>
@@ -257,9 +260,9 @@
 				searchList: {
 					ITEM_STEP: '',//样品序号
 					DESCRIPTION: '',//样品名称
-					ACCEPT_PERSON: '',//收样人
+					GRANT_PERSON: '',//收样人
 					TYPE: '',//样品类别
-					ACCEPT_DATE: '',//收样日期
+					GRANT_DATE: '',//收样日期
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -320,9 +323,9 @@
 				this.searchList = {
 					ITEM_STEP: '',//样品序号
 					DESCRIPTION: '',//样品名称
-					ACCEPT_PERSON: '',//收样人
+					GRANT_PERSON: '',//收样人
 					TYPE: '',//样品类别
-					ACCEPT_DATE: '',//收样日期
+					GRANT_DATE: '',//收样日期
 				};
 				this.requestData('init');
 			},

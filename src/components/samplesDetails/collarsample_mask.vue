@@ -477,6 +477,32 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			saveAndSubmit(){
 				this.save('save');
 			},
+			eventBind(){
+				window.onload = function(e){
+				var code = "";
+				var lastTime,nextTime;
+				var lastCode,nextCode;
+
+				document.onkeypress = function(e) {
+					console.log(e);
+					nextCode = e.which;
+					nextTime = new Date().getTime();
+
+					if(lastCode != null && lastTime != null && nextTime - lastTime <= 30) {
+						code += String.fromCharCode(lastCode); 
+					} else if(lastCode != null && lastTime != null && nextTime - lastTime > 100){
+						code = "";
+					}
+
+					lastCode = nextCode;
+					lastTime = nextTime;
+				}
+
+			}
+			}
+		},
+		mounted(){
+			this.eventBind();
 		}
 	}
 </script>

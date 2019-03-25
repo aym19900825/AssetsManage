@@ -119,24 +119,40 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
+											<el-form-item label="生产日期" prop="MANUFACTURE_DATE" label-width="110px">
+												<el-date-picker
+												      v-model="samplesForm.MANUFACTURE_DATE"
+												      type="date"
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
+												</el-date-picker>
 											</el-form-item>
 										</el-col>
-										<!-- <el-col :span="8">
-											<el-form-item label="类别" prop="TYPE" label-width="110px">
-												<el-input v-model="samplesForm.TYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getcategory" :disabled="noedit"></el-button>
-												</el-input>
+										<el-col :span="8">
+											<el-form-item label="抽样日期" prop="SAMPLE_DATE" label-width="110px">
+												<el-date-picker
+												      v-model="samplesForm.SAMPLE_DATE"
+												      type="date"
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
+												</el-date-picker>
 											</el-form-item>
-										</el-col> -->
-										<el-col :span="16">
-											<el-form-item label="其他资料" prop="OTHER" label-width="110px">
-												<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="抽样人" prop="SAMPLE_PERSON" label-width="110px">
+												<el-input v-model="samplesForm.SAMPLE_PERSON" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8">
+											<el-form-item label="抽样地点" prop="SAMPLE_PLACE" label-width="110px">
+												<el-input v-model="samplesForm.SAMPLE_PLACE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
+												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
+											</el-form-item>
+										</el-col>
 										<el-col :span="8">
 											<el-form-item label="收样人" prop="ACCEPT_PERSONDesc" label-width="110px">
 												<el-input v-model="samplesForm.ACCEPT_PERSONDesc" placeholder="当前人" :disabled="true">
@@ -144,6 +160,8 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="收样日期" prop="ACCEPT_DATE" label-width="110px">
 												<div class="block">
@@ -153,6 +171,11 @@
 												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
 												    </el-date-picker>
 												</div>
+											</el-form-item>
+										</el-col>
+										<el-col :span="16">
+											<el-form-item label="其他资料" prop="OTHER" label-width="110px">
+												<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

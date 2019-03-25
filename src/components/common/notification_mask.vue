@@ -598,6 +598,7 @@
 			},
 			reset() {
 				this.dataInfo = {
+					WP_NUM: '',
 					N_CODE: '',
 					TYPE: '',
 					XD_DATE: '',

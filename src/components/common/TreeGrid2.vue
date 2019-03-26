@@ -8,27 +8,33 @@
     :header-cell-style="rowClass" 
     :height="fullHeight" 
     @selection-change="SelChange">
+
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
-    <el-table-column v-for="(column, index) in columns" :width="column.width" :dataType="column.dataType" :key="column.dataIndex"
-      :label="column.text" :formatter="dateFormat" v-if="column.isShow && column.dataIndex != 'version'">
+
+    <el-table-column v-for="(column, index) in tableHeader" :key="column.dataIndex" :label="column.text" :width="column.width" v-if="column.isShow && column.dataIndex != 'version'">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
-        <span v-if="toggleIconShow(index,scope.row)" class="button is-outlined is-primary is-small" @click="toggle(scope.$index)">
+
+        <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
           <i v-if="!scope.row._expanded" class="el-icon-caret-right" aria-hidden="true"></i>
           <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
         </span>
+
         <span v-else-if="index===0" class="ms-tree-space"></span>
-        <span v-if="index===0" title="点击查看详情" class="blue" @click="view(scope.row)">{{scope.row[column.dataIndex]}}</span>  
+
+        <span v-if="index===0" title="点击查看详情" class="blue" @click="view(scope.row)">{{scope.row[column.dataIndex]}}</span>
+
         <span v-else>{{scope.row[column.dataIndex]}}</span>
+
       </template>
     </el-table-column>
 
-    <el-table-column v-for="(column, index) in columns" :width="column.width" :dataType="column.dataType" :key="column.dataIndex"
-      :label="column.text" :formatter="dateFormat" v-if="column.isShow && column.dataIndex == 'version'" align="right">
+    <el-table-column v-for="(column, index) in tableHeader" :width="column.width" :key="column.dataIndex"
+      :label="column.text" v-if="column.isShow && column.dataIndex == 'version'" align="right">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
-        <span v-if="toggleIconShow(index,scope.row)" class="button is-outlined is-primary is-small" @click="toggle(scope.$index)">
+        <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
           <i v-if="!scope.row._expanded" class="el-icon-caret-right" aria-hidden="true"></i>
           <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
         </span>
@@ -37,6 +43,7 @@
         <span v-else>{{scope.row[column.dataIndex]}}</span>          
       </template>
     </el-table-column>
+
   </el-table>
 </template>
 <script>
@@ -53,7 +60,7 @@
         }
       },
 // 这是相应的字段展示
-      columns: {
+      tableHeader: {
         type: Array,
         default: function () {
           return []
@@ -102,15 +109,22 @@
     computed: {
     // 格式化数据源
       data: function () {
-        console.log(123);
+        console.log(111);
+//    	for(let i=0;i<data.length;i++){
+//							if(data[i].parentId == "-1" || data[i].parentId == "null") {
+//							return data.isMenu = "目录"
+//						} else {
+//							return data.isMenu = "菜单"
+//						}
+//					}
         let me = this
         if (me.treeStructure) {
-          let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll);
-          return data;
+          let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll)
+          return data
           console.log(data);
-          console.log(789);
         }
-        return me.dataSource;
+        return me.dataSource
+        console.log(me.dataSource);
       }
     },
     methods: {
@@ -159,14 +173,6 @@
         }
         return false
       },
-      //时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-			},
     }
   }
 </script>

@@ -42,13 +42,22 @@
 			      </template>
 			    </el-table-column>
 
-					<!-- <el-table-column label="所属产品" width="80" prop="PRO_NUM">
+					<el-table-column label="所属产品类别" width="80" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input>
+								<span v-else>{{scope.row.NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column label="所属产品" width="80" prop="PRO_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			    <el-table-column label="标准名称" sortable prop="S_NAME">
 			      <template slot-scope="scope">
@@ -318,7 +327,7 @@
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
-				this.viewfield_inspectionSta2(this.selParentId,this.parentId);
+				this.viewfield_inspectionSta2(this.selParentId,this.pTypeId,this.parentId);
 			},
 			
 			judge(data) {//taxStatus 信息状态布尔值
@@ -335,15 +344,17 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionSta2(id,num){//点击父级筛选出子级数据
+			viewfield_inspectionSta2(id,num,pro_num){//点击父级筛选出子级数据
 				if(num==undefined||num==null||num==''){
 					this.inspectionSta2Form.inspectionList = []; 
 					this.viewchildRow('null');
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId =id;
+				console.log(id);
+				this.pTypeId = num;
+				this.parentId = pro_num;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2'
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
@@ -423,7 +434,8 @@
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD");
 							this.currentDateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 							var obj = {
-								"PRO_NUM": this.parentId,//产品类别编号
+								"NUM": this.pTypeId,//产品类别编号
+								"PRO_NUM": this.parentId,//产品编号
 								"S_NUM": '',//编码
 								"SS_NUM": '',//标准编号
 								"S_NAME": '',
@@ -451,6 +463,7 @@
 					var url = this.basic_url + '/api-apps/app/inspectionSta2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
+						"NUM": row.NUM,
 						"PRO_NUM": row.PRO_NUM,
 						"S_NUM": row.S_NUM,
 						"SS_NUM": row.SS_NUM,
@@ -472,7 +485,7 @@
 							});
 							//重新加载数据
 							// this.requestData_inspectionSta2();
-							this.viewfield_inspectionSta2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+							this.viewfield_inspectionSta2(this.selParentId,this.pTypeId,this.parentId);//重新加载父级选中的数据下所有子数据
 						} else {
 							this.$message({
 								message: res.data.resp_msg,
@@ -499,7 +512,12 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.viewfield_inspectionSta2(this.selParentId,this.parentId);
+							this.viewfield_inspectionSta2(this.selParentId,this.pTypeId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -558,6 +576,8 @@
 	position:absolute;
 	top: -35px;
 	right: 0px;
+	width: 100px;
+	text-align: right;
 }
 .el-card:hover .table-func  {display: block;}
 </style>

@@ -32,13 +32,30 @@
 			      </template>
 			    </el-table-column>
 
-			  	<!-- <el-table-column label="所属标准" width="80" prop="S_NUM">
+					<el-table-column label="所属产品类别" width="80" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input>
+								<span v-else>{{scope.row.NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column label="所属产品" width="80" prop="PRO_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column> -->
+			    </el-table-column>
 
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
@@ -311,7 +328,7 @@
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 30;
-				this.viewfield_inspectionPro2(this.selParentId,this.parentId);
+				this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -327,15 +344,17 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionPro2(id,num){//点击父级筛选出子级数据
+			viewfield_inspectionPro2(id,num,pro_num,s_num){//点击父级筛选出子级数据
 				if(num==undefined||num==null||num==''){
 					this.inspectionPro2Form.inspectionList = [];
 					this.viewchildRow('null');
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId = id;
+				this.pTypeId = num;
+				this.proId = pro_num;
+				this.parentId = s_num;
 				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2';
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
@@ -447,7 +466,9 @@
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
-								"S_NUM": this.parentId,//产品类别编号
+								"NUM": this.pTypeId,//产品类别编号
+								"PRO_NUM": this.proId,//产品编号
+								"S_NUM": this.parentId,//检验检测标准编号
 								"P_NUM": '',
 								"P_NAME": '',
 								"UNITCOST": '',
@@ -472,6 +493,8 @@
 					var url = this.basic_url + '/api-apps/app/inspectionPro2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
+						"NUM": row.NUM,
+						"PRO_NUM": row.PRO_NUM,
 						"S_NUM": row.S_NUM,
 						"P_NUM": row.P_NUM,
 						"P_NAME": row.P_NAME,
@@ -490,7 +513,7 @@
 							});
 							//重新加载数据
 							// this.requestData_inspectionPro2();
-							this.viewfield_inspectionPro2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+							this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);//重新加载父级选中的数据下所有子数据
 						} else {
 							this.$message({
 								message: res.data.resp_msg,
@@ -517,7 +540,12 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.viewfield_inspectionPro2(this.selParentId,this.parentId);
+							this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -571,6 +599,8 @@
 	position:absolute;
 	top: -35px;
 	right: 0px;
+	width: 100px;
+	text-align: right;
 }
 .el-card:hover .table-func  {display: block;}
 </style>

@@ -33,10 +33,10 @@
 		      </template>
 		    </el-table-column>
 
-		  	<el-table-column label="报告编号" width="160" prop="NUM">
+		  	<el-table-column label="报告编号" width="160" prop="RE_NUM">
 		      <template slot-scope="scope">
-		        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+		        <el-form-item :prop="'inspectionList.'+scope.$index + '.RE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.RE_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.RE_NUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -131,7 +131,7 @@
 				v-loadmore="loadMore">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
-				<el-table-column label="报告编号" width="125" sortable prop="NUM">
+				<el-table-column label="报告编号" width="125" sortable prop="RE_NUM">
 				</el-table-column>
 				<el-table-column label="报告描述" sortable prop="DECRIPTION">
 				</el-table-column>
@@ -240,7 +240,7 @@
 				setTimeout(() => {
 					this.loadSign = true;
 				}, 1000)
-				this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
+				this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 			}
 		},
 		//改变页数
@@ -252,7 +252,7 @@
 			}else{
 				sessionStorage.setItem('toBtm','false');
 			}
-			this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
+			this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 		},
 		//当前页数
 		currentChange(val) {
@@ -263,7 +263,7 @@
 			}else{
 				sessionStorage.setItem('toBtm','false');
 			}
-			this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
+			this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 		},
 			 addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -298,7 +298,7 @@
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
+				this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -311,17 +311,17 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			indexMethod(index) {
-				return index + 1;
-			},
-			viewfield_inspectionRepTem2(id,num){//点击父级筛选出子级数据
+			viewfield_inspectionRepTem2(id,num,pro_num,s_num,p_num){//点击父级筛选出子级数据
 				if(num==undefined||num==null||num==''){
 					this.inspectionRepTem2Form.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId = id;
+				this.pTypeId = num;
+				this.proId = pro_num;
+				this.staId = s_num;
+				this.parentId = p_num;
 				var url = this.basic_url + '/api-apps/app/inspectionRepTem2/INSPECTION_PROJECT2';
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
@@ -343,39 +343,38 @@
 
 				}).catch((wrong) => {})
 			},
-			requestData_inspectionRepTem2(index) {//加载数据
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/inspectionRepTem2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
+			// requestData_inspectionRepTem2(index) {//加载数据
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/inspectionRepTem2';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;	
+			// 		//总的页数
+			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage){
+			// 			 this.loadSign = false
+			// 		}else{
+			// 			this.loadSign=true
+			// 		}
+			// 		this.commentArr[this.page.currentPage]=res.data.data
+			// 		let newarr=[]
+			// 		for(var i = 1; i <= totalPage; i++){
 					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+			// 			if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								this.commentArr[i][j].isEditing = false;
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					
-					this.inspectionRepTem2Form.inspectionList = newarr;
-				}).catch((wrong) => {})
-			},
+			// 				for(var j = 0; j < this.commentArr[i].length; j++){
+			// 					this.commentArr[i][j].isEditing = false;
+			// 					newarr.push(this.commentArr[i][j])
+			// 				}
+			// 			}
+			// 		}
+			// 		this.inspectionRepTem2Form.inspectionList = newarr;
+			// 	}).catch((wrong) => {})
+			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -420,8 +419,11 @@
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var obj = {
-								"P_NUM": this.parentId,
-								"NUM": '',
+								"NUM": this.pTypeId,//产品类别编号
+								"PRO_NUM": this.proId,//产品编号
+								"S_NUM": this.staId,//检验检测标准编号
+								"P_NUM": this.parentId,//检验检测项目编号
+								"RE_NUM": '',//检验检测报告模板编号
 								"DECRIPTION": '',
 								"STATUS": '',
 								"VERSION": '',
@@ -444,8 +446,11 @@
 					var url = this.basic_url + '/api-apps/app/inspectionRepTem2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
-						"P_NUM": row.P_NUM,
-						"NUM": row.NUM,
+						"NUM": row.NUM,//产品类编号
+						"PRO_NUM": row.PRO_NUM,//产品编号
+						"S_NUM": row.S_NUM,//检验检测标准编号
+						"P_NUM": row.P_NUM,//检验检测项目编号
+						"RE_NUM": row.RE_NUM,//报告模板编号
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
 						"VERSION": row.VERSION,
@@ -461,7 +466,7 @@
 							});
 							//重新加载数据
 							// this.requestData_inspectionRepTem2();
-							this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+							this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);//重新加载父级选中的数据下所有子数据
 						} else {
 							this.$message({
 								message: res.data.resp_msg,
@@ -477,29 +482,33 @@
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/inspectionRepTem2/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+					}).then(({ value }) => {
+						var url = this.basic_url + '/api-apps/app/inspectionRepTem2/' + row.ID;
+							this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
 								type: 'success'
 							});
-							this.viewfield_inspectionRepTem2(this.selParentId,this.parentId);
+							this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
-                }).catch(() => {
-
-            	});
+				}).catch(() => {
+				});
 			},
 				addproclass(val) { //小弹出框确认按钮事件
 				this.currentRow = val;
 				if (val!=null) {
-					this.catedata.NUM = val.NUM;
+					this.catedata.RE_NUM = val.RE_NUM;//报告模板编号
 					this.catedata.DECRIPTION = val.DECRIPTION;
 					this.catedata.DEPTID = val.DEPTID;
 					this.catedata.VERSION = val.VERSION;

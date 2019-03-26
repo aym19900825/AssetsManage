@@ -298,8 +298,8 @@
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId = id;
+				this.parentId = num;
 				var url = this.basic_url + '/api-apps/app/productType2'
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
@@ -443,6 +443,11 @@
 								type: 'success'
 							});
 							this.viewfield_product2(this.selParentId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -496,6 +501,8 @@
 	position:absolute;
 	top: -35px;
 	left: 0px;
+	width: 100px;
+	text-align: left;
 }
 .el-card:hover .table-func  {display: block;}
 

@@ -15,9 +15,40 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style"  @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
+								<del-btn :delTable="appName" 
+									:delBtn="delBtn" 
+									:delLen="2" 
+									:delData="selUser" 
+									@refreshList="requestData"
+									v-if="JSON.stringify(delBtn) == '{}'">
+								</del-btn>
+								<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item>
+											<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+										</el-dropdown-item>
+										
+										<el-dropdown-item>
+											<el-upload
+											ref="upload"
+											class="upload"
+											:action="uploadUrl()"
+											:on-success="fileSuccess"
+											:limit=1
+											multiple
+											method:="post"
+											:file-list="fileList">
+												<i class="icon-upload-cloud"></i> 上传
+											</el-upload>
+										</el-dropdown-item>
+									</el-dropdown-menu>
+								</el-dropdown>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -31,15 +62,25 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form inline-message :model="searchList" label-width="70px">
+						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="模板描述" prop="DECRIPTION">
-										<el-input v-model="searchList.DECRIPTION"></el-input>
+									<el-form-item label="编码" prop="NUM">
+										<el-input v-model="searchList.NUM"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID" label-width="45px">
+									<el-form-item label="名称" prop="TYPE">
+										<el-input v-model="searchList.TYPE"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="版本" prop="VERSION">
+										<el-input v-model="searchList.VERSION"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="机构" prop="DEPTID">
 										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
@@ -57,27 +98,32 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="编码" width="155" sortable prop="RE_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
-									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.RE_NUM}}
-										</p>
-									</template>
-								</el-table-column>
-								<el-table-column label="模板描述" sortable prop="DECRIPTION" v-if="this.checkedName.indexOf('模板描述')!=-1">
-								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1" >
-								</el-table-column>
+								<template>
+									<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="checkedName.indexOf('编码')!=-1">
+										<template slot-scope="scope">
+											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="checkedName.indexOf('名称')!=-1">
+									</el-table-column>
+									<el-table-column label="版本" width="100" sortable='custom' v-if="checkedName.indexOf('版本')!=-1" prop="VERSION" align="right">
+									</el-table-column>
+									<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
+									</el-table-column>
+									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
+									</el-table-column>
+									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
+									</el-table-column>
+								</template>
 							</v-table>
-							<!-- 表格 End-->
 						</el-col>
 					</el-row>
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset" v-bind:page=page></categorymask>
-		<!--报表-->
+			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset"></categorymask>
+			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
@@ -87,9 +133,11 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import categorymask from '../maindataDetails/report_moduleMask.vue'
+	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
+	import vbuttons from '../common/buttons/btnGroup.vue'
+	import delButtons from '../common/buttons/delBtn.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'customer_management',
@@ -100,51 +148,62 @@
 			'categorymask': categorymask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
+			'v-buttons': vbuttons,
+			'del-btn': delButtons,
 			'v-table': vTable
 		},
 		data() {
 			return {
-				appName: 'inspectionRepTem',
-				btn:'',
+				appName: 'productType',
+				btnShow: false,
+				delBtn: {},
 				reportData:{},//报表的数据
+				// up2down:'down',
 				basic_url: Config.dev_url,
+				commentArr: {},
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
-				commentArr: {},
+				fileList:[],
 				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
-				
+				productType:'productType',//appname
 				checkedName: [
 					'编码',
-					'模板描述',
+					'名称',
+					'版本',
+					'机构',
+					// '信息状态',
 					'录入时间',
-					'机构'
+					'修改时间'
 				],
 				tableHeader: [{
 						label: '编码',
-						prop: 'RE_NUM'
+						prop: 'NUM'
 					},
 					{
-						label: '模板描述',
-						prop: 'DECRIPTION'
+						label: '名称',
+						prop: 'TYPE'
 					},
+					{
+						label: '版本',
+						prop: 'VERSION'
+					},
+					{
+						label: '机构',
+						prop: 'DEPARTMENTDesc'
+					},
+					// {
+					// 	label: '信息状态',
+					// 	prop: 'STATUS'
+					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '机构',
-						prop: 'DEPTIDDesc'
+						label: '修改时间',
+						prop: 'CHANGEDATE'
 					}
 				],
-				selUser: [],
-				categoryList: [],
 				search: false,
 				show: false,
 				down: true,
@@ -153,11 +212,10 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
+					NUM:'',
 					TYPE: '',
+					VERSION:'',
 					DEPTID: '',
-					// PHONE: '',
-					// CONTACT_ADDRESS: '',
-					// STATUS: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -167,19 +225,21 @@
 					categorymaskren: "subDepts",
 					label: "simplename"
 				},
-				page: { //分页显示
-					currentPage: 1,
-					pageSize: 20,
-					totalCount: 0
-				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
 				buttons:[],
+				selUser: []
 			}
 		},
 		methods: {
 			setSelData(val){
-				this.selMenu = val;
+				this.selUser = val;
+			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData('init');
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
 			},
 			//机构值
 			getCompany() {
@@ -196,13 +256,17 @@
 			tableControle(data) {
 				this.checkedName = data;
 			},
+			//重置
 			resetbtn(){
-				this.searchList =  { //点击高级搜索后显示的内容
+				this.searchList = {
+					NUM:'',
 					TYPE: '',
+					VERSION:'',
 					DEPTID: '',
 				};
 				this.requestData('init');
 			},
+			//搜索
 			searchinfo(index) {
 				this.requestData('init');
 			},
@@ -210,7 +274,7 @@
 			reset() {
 				this.CATEGORY = {
 					ID: '',
-					RE_NUM: '',
+					NUM: '',
 					TYPE: '',
 					STATUS: '活动',
 					VERSION: '1',
@@ -223,11 +287,10 @@
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
 				}
-
 			},
 			//请求点击
 		    getbtn(item){
-		    	var isshowbtn=this.btn;
+			var isshowbtn=this.btn;
 		    	if(item.name=="添加"){
 					if(isshowbtn=='0'){
                        this.$message({
@@ -257,23 +320,23 @@
 					}
 				}else if(item.name=="删除"){
 					if(isshowbtn=='0'){
-					this.$message({
-						message: '您没有删除的权限',
-						type: 'warning'
-					});
-				}else{
-					this.deluserinfo();
+						this.$message({
+							message: '您没有删除的权限',
+							type: 'warning'
+						});
+					}else{
+						this.deluserinfo();
 					}
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
-		    	}else if(item.name=="导出"){
-				this.exportData();
+		    		this.download();
+		    	}else if(item.name=="配置关系"){
+		    		this.Configuration();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
-				 this.Printing();
+				 	this.Printing();
 				}
 		    },
 			//添加类别
@@ -282,7 +345,50 @@
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
 			},
-			//修改类别
+			deluserinfo(){
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请您选择要删除的数据',
+						type: 'warning'
+					});
+					return;
+				}else {
+					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					var changeUser = selData;
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].ID);
+					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+						});
+					}).catch(() => {
+
+					});
+				}
+			},
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -290,13 +396,13 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selUser.length > 1) {
+				}else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
-				} else {
+				}else {
 					this.CATEGORY = this.selUser[0];
 					this.$refs.categorymask.detail();
 				}
@@ -312,8 +418,8 @@
 				this.down = !this.down,
 				this.up = !this.up
 			},
-			// 删除
-			deluserinfo() {
+			//彻底删除
+			physicsDel(){
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -321,8 +427,8 @@
 						type: 'warning'
 					});
 					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/inspectionRepTem/deletes';
+				}else {
+					var url = this.basic_url + '/api-apps/app/productType/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -360,55 +466,6 @@
 					});
 				}
 			},
-			// 彻底删除
-			physicsDel() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择要删除的数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					var url = this.basic_url + '/api-apps/app/inspectionRepTem/physicsDel';
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//deleteid为id的数组
-					var deleteid = [];
-					var ids;
-					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
-					}
-					//ids为deleteid数组用逗号拼接的字符串
-					ids = deleteid.toString(',');
-					var data = {
-						ids: ids,
-					}
-					this.$confirm('确定删除此数据吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-						this.$axios.delete(url, {
-							params: data
-						}).then((res) => { //.delete 传数据方法
-							//resp_code == 0是后台返回的请求成功的信息
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-								this.requestData();
-							}
-						}).catch((err) => {
-						});
-					}).catch(() => {
-
-					});
-				}
-			},
-			// 导入
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;
@@ -432,14 +489,14 @@
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/inspectionRepTem/exportExc?access_token='+sessionStorage.getItem('access_token');
+           		var url = this.basic_url + '/api-apps/app/productType/exportExc?access_token='+sessionStorage.getItem('access_token');
           		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
             	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
             	xhr.onload = function() {
                 	if (this.status == 200) {
-						var filename = "inspectionRepTem.xls";
+						var filename = "productType.xls";
 						var blob = this.response;
 						var link = document.createElement('a');
 						var objecturl = URL.createObjectURL(blob);
@@ -454,14 +511,16 @@
 			Printing() {
 
 			},
-			// 报表
+			//报表
 			reportdata(){
 				this.reportData.app=this.productType;
 				this.$refs.reportChild.visible();
 			},
-
-			judge(data) {
-				data.STATUS = data.STATUS == "1" ? '活动' : '不活动'
+			// 配置关系
+			Configuration() {
+				this.$router.push({
+					path: '/inspection_project'
+				});
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -471,24 +530,20 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			formatter(row, column) {
+				return row.enabled;
 			},
 			childByValue:function(childValue) {
-        		// childValue就是子组件传过来的值
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
-			  },
-			    //请求页面的button接口
+			},
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					
 					var resData = res.data;
 					var uploadIndex = 0;
 					var uploadBtn = resData.filter((item,index)=>{
@@ -497,30 +552,33 @@
 							return item;
 						}
 					});
+					var delBtn = resData.filter((item,index)=>{
+						if(item.name == '删除'){
+							return item;
+						}
+					});
+					this.delBtn = delBtn.length > 0? delBtn[0] : {};
 					if(uploadBtn.length > 0){
 						this.isUploadBtn = true;
 						resData.splice(uploadIndex, 1);
 					}
 					this.buttons = resData;
-				}).catch((wrong) => {
+				}).catch((err) => {
 				})
-
 			},
 			getdept(){
 				var url = this.basic_url + '/api-user/users/findDeptAttr';
 				this.$axios.get(url, {}).then((res) => {
 					this.btn=res.data;
-				}).catch((wrong) => {
-				})
+				}).catch((err) => {})
+			},
+			requestData(opt){
+				this.$refs.table.requestData(opt);
 			}
 		},
 		mounted() {
 			this.getCompany();
 			this.getdept();
-		},
+		}
 	}
 </script>
-
-<style scoped>
-
-</style>

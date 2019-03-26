@@ -252,7 +252,7 @@ export default {
     },
     eventBind(){
       var that = this;
-      document.onkeydown = function(e) {        //按下键盘      
+      document.onkeydown = function(e) { //按下键盘      
       switch (e.keyCode) {        
         case 16:           
           that.isshift = true;     
@@ -262,7 +262,7 @@ export default {
           break;     
         }     
       };    
-      document.onkeyup = function(e) {        //放弃键盘   
+      document.onkeyup = function(e) { //放弃键盘   
         switch (e.keyCode) {      
           case 16:           
             that.isshift = false;      

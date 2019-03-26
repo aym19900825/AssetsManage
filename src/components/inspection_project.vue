@@ -250,36 +250,36 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			childMsd_product2(data){//赋值给子表产品ID
+			childMsd_product2(data){//赋值给子组件检验/检测标准
 				this.product2Id = data;
 				if (!!data){
-				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.ID,data.PRO_NUM);
+				this.$refs.inspectionSta2child.viewfield_inspectionSta2(data.ID,data.NUM,data.PRO_NUM);
 				} else {
-					this.$refs.inspectionSta2child.viewfield_inspectionSta2(null,null);
+					this.$refs.inspectionSta2child.viewfield_inspectionSta2(null,null,null);
 				}
 			},
-			childMsd_inspectionSta2(data){//赋值给子表检验/检测标准ID
+			childMsd_inspectionSta2(data){//赋值给子组件检验/检测项目
 				this.inspectionSta2Id = data;
 				if (!!data){
-				this.$refs.inspectionPro2child.viewfield_inspectionPro2(data.ID,data.S_NUM);
+				this.$refs.inspectionPro2child.viewfield_inspectionPro2(data.ID,data.NUM,data.PRO_NUM,data.S_NUM);
 				} else {
-					this.$refs.inspectionPro2child.viewfield_inspectionPro2(null,null);
+					this.$refs.inspectionPro2child.viewfield_inspectionPro2(null,null,null,null);
 				}
 			},
-			childMsd_inspectionPro2(data){//赋值给子表检验/检测标准ID
+			childMsd_inspectionPro2(data){//赋值给子组件专业组、检验/检测方法、原始数据模板、检验/检测报告模板、检测仪器
 				this.inspectionPro2Id = data;
 				if (!!data){
-				this.$refs.professionGrochild.viewfield_professionGro(data.ID,data.P_NUM);
-				this.$refs.inspectionMet2child.viewfield_inspectionMet2(data.ID,data.P_NUM);
-				this.$refs.rawDataTem2child.viewfield_rawDataTem2(data.ID,data.P_NUM);
-				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(data.ID,data.P_NUM);
-				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(data.ID,data.P_NUM);
+				this.$refs.professionGrochild.viewfield_professionGro(data.ID,data.NUM,data.PRO_NUM,data.S_NUM,data.P_NUM);
+				this.$refs.inspectionMet2child.viewfield_inspectionMet2(data.ID,data.NUM,data.PRO_NUM,data.S_NUM,data.P_NUM);
+				this.$refs.rawDataTem2child.viewfield_rawDataTem2(data.ID,data.NUM,data.PRO_NUM,data.S_NUM,data.P_NUM);
+				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(data.ID,data.NUM,data.PRO_NUM,data.S_NUM,data.P_NUM);
+				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(data.ID,data.NUM,data.PRO_NUM,data.S_NUM,data.P_NUM);
 				} else {
-				this.$refs.professionGrochild.viewfield_professionGro(null,null);
-				this.$refs.inspectionMet2child.viewfield_inspectionMet2(null,null);
-				this.$refs.rawDataTem2child.viewfield_rawDataTem2(null,null);
-				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(null,null);
-				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(null,null);
+				this.$refs.professionGrochild.viewfield_professionGro(null,null,null,null,null);
+				this.$refs.inspectionMet2child.viewfield_inspectionMet2(null,null,null,null,null);
+				this.$refs.rawDataTem2child.viewfield_rawDataTem2(null,null,null,null,null);
+				this.$refs.inspectionRepTem2child.viewfield_inspectionRepTem2(null,null,null,null,null);
+				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(null,null,null,null,null);
 				}
 			},
 			
@@ -550,6 +550,11 @@
 								type: 'success'
 							});
 							this.requestData();
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -577,10 +582,6 @@
 			// 	this.currentRow = val;
 			// 	this.$refs.product2child.viewfield_product2(val.ID,val.NUM);
       // },
-			// childByValue:function(childValue) {
-				// childValue就是子组件传过来的值
-				// this.$refs.navsTabs.showClick(childValue);
-			// },
 		},
 		
 		mounted() {
@@ -606,10 +607,10 @@
 .table-func {
 	position:relative;
 	top: 0px;
-    right: 0px;
+	right: 0px;
 }
 .el-table .cell {
-    display: inline-block;
+	display: inline-block;
 	cursor: pointer;
 }
 .el-card.is-never-shadow {

@@ -279,7 +279,7 @@
 				setTimeout(() => {
 					this.loadSign = true;
 				}, 1000)
-				this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+				this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 			}
 		},
 		//改变页数
@@ -291,7 +291,7 @@
 			}else{
 				sessionStorage.setItem('toBtm','false');
 			}
-			this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+			this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 		},
 		//当前页数
 		currentChange(val) {
@@ -302,7 +302,7 @@
 			}else{
 				sessionStorage.setItem('toBtm','false');
 			}
-			this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+			this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 		},
 			 // /api-apps/app/inspection_method?DEPTID=' + this.parentIds;
 			 addprobtn(row){//查找基础数据中的检验/检测项目
@@ -339,7 +339,7 @@
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+				this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -352,21 +352,20 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			indexMethod(index) {
-				return index + 1;
-			},
-			viewfield_inspectionMet2(id,num){//点击父级筛选出子级数据
+			viewfield_inspectionMet2(id,num,pro_num,s_num,p_num){//点击父级筛选出子级数据
 				if(num==undefined||num==null||num==''){
 					this.inspectionMet2Form.inspectionList = [];
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId = id;
+				this.pTypeId = num;
+				this.proId = pro_num;
+				this.staId = s_num;
+				this.parentId = p_num;
 				var url = this.basic_url + '/api-apps/app/inspectionMet2/INSPECTION_PROJECT2';
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
-					// 
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -384,40 +383,7 @@
 
 				}).catch((wrong) => {})
 			},
-			requestData_inspectionMet2(index) {//加载数据
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/inspectionMet2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								this.commentArr[i][j].isEditing = false;
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					
-					this.inspectionMet2Form.inspectionList = newarr;
-				}).catch((wrong) => {})
-			},
+			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -451,20 +417,23 @@
 						if (this.inspectionMet2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;
 						}else{
-	                        isEditingflag=true;
-	                        break;
+							isEditingflag=true;
+							break;
 						}
 					}
 					
 					if (isEditingflag==false){
-	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate
+							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+							var currentUser, currentDate
 							this.currentUser=res.data.nickname;
 							var date=new Date();
-							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
+							this.currentDate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 							var obj = {
-								"P_NUM": this.parentId,
-								"M_NUM": '',
+								"NUM": this.pTypeId,//产品类别编号
+								"PRO_NUM": this.proId,//产品编号
+								"S_NUM": this.staId,//检验检测标准编号
+								"P_NUM": this.parentId,//检验检测项目编号
+								"M_NUM": '',//检验检测方法编号
 								"M_NAME": '',
 								"M_ENAME": '',
 								"M_TYPE": '',
@@ -478,19 +447,22 @@
 							this.inspectionMet2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+							} else {
+								this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
 			saveRow (row) {//Table-操作列中的保存行
 				this.$refs['inspectionMet2Form'].validate((valid) => {
-		          if (valid) {
+					if (valid) {
 					var url = this.basic_url + '/api-apps/app/inspectionMet2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
-						"P_NUM": row.P_NUM,
-						"M_NUM": row.M_NUM,
+						"NUM": row.NUM,//产品类编号
+						"PRO_NUM": row.PRO_NUM,//产品编号
+						"S_NUM": row.S_NUM,//检验检测标准编号
+						"P_NUM": row.P_NUM,//检验检测项目编号
+						"M_NUM": row.M_NUM,//检验检测方法编号
 						"M_NAME": row.M_NAME,
 						"M_ENAME": row.M_ENAME,
 						"M_TYPE": row.M_TYPE,
@@ -508,7 +480,7 @@
 							});
 							//重新加载数据
 							// this.requestData_inspectionMet2();
-							this.viewfield_inspectionMet2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+							this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);//重新加载父级选中的数据下所有子数据
 						} else {
 							this.$message({
 								message: res.data.resp_msg,
@@ -517,10 +489,10 @@
 						}
 					}).catch((err) => {
 					});
-		          } else {
-		            return false;
-		          }
-		        });
+						} else {
+							return false;
+						}
+					});
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
@@ -535,12 +507,17 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.viewfield_inspectionMet2(this.selParentId,this.parentId);
+							this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
-					}).catch(() => {
-					});
+				}).catch(() => {
+				});
 			},
 				addproclass(val) { //小弹出框确认按钮事件
 				this.currentRow = val;
@@ -560,8 +537,6 @@
 		// mounted() {
 			// this.requestData_inspectionMet2();
 		// },
-		
-
 	}
 </script>
 

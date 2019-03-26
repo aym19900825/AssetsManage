@@ -48,11 +48,11 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">&nbsp;</el-col>
-										<el-col :span="16">
+										<el-col :span="24">
 											<el-form-item label="英文名称" prop="S_ENGNAME">
-												<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
-													<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
+												<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit">
+												<!-- <el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')"> -->
+												<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -292,8 +292,8 @@
 				],
 				rules: {
 					SS_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//标准编号
-					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//中文名称
-					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//英文名称
+					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isChinese}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					STARTETIME: [{required: true, trigger: 'blur',message: '必填',}],
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},

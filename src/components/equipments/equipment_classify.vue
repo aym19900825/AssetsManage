@@ -8,6 +8,7 @@
 			<!--左侧菜单内容显示 Begin-->
 			<navs_left ref="navleft" v-on:childByValue="childByValue"></navs_left>
 			<!--左侧菜单内容显示 End-->
+
 			<!--右侧内容显示 Begin-->
 			<div class="wrapper wrapper-content">
 				<div class="ibox-content">
@@ -22,6 +23,7 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+
 							<div class="keep-open btn-group" title="列">
 								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 									<span class="el-dropdown-link">
@@ -37,6 +39,7 @@
 									</el-dropdown-menu>
 								</el-dropdown>
 							</div>
+							
 						</div>
 					</div>
 					<!--按钮操作行 End-->
@@ -94,8 +97,8 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../equipmentsDetails/equipmentClassify_mask.vue'
-    import tree_grid from '../common/TreeGrid.vue'//树表格
-    import reportmask from'../reportDetails/reportMask.vue'
+	import tree_grid from '../common/TreeGrid.vue'//树表格
+	import reportmask from'../reportDetails/reportMask.vue'
 	export default {
 		name: 'customer_management',
 		components: {
@@ -115,7 +118,6 @@
 					'编码',
 					'分类描述',
 					'父级分类',
-					// '信息状态',
 					'录入时间',
 					'修改时间'
 				],
@@ -384,8 +386,8 @@
 			},
 			SelChange(val) {
 				this.selUser = val;
-            },
-            min3max() { //左侧菜单正常和变小切换
+			},
+			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
 					$(".lefttree").removeClass("el-col-5");
 					$(".lefttree").addClass("el-col-1");
@@ -472,10 +474,10 @@
 				return row.enabled;
 			},
 			getDetail(data){
-			this.view(data);
+				this.view(data);
 			},
 			classByValue(childValue) {
-		  this.selUser = childValue;
+		  	this.selUser = childValue;
 			},
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值

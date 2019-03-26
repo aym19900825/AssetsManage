@@ -24,8 +24,8 @@
 								<el-collapse-item title="原始数据模板" name="1">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" placeholder="自动生成" :disabled="edit"></el-input>
+											<el-form-item label="编码" prop="PT_NUM">
+												<el-input v-model="CATEGORY.PT_NUM" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -198,7 +198,7 @@
 		// 		default: function() {
 		// 			return {
 		// 				ID: '',
-		// 				NUM: '',
+		// 				PT_NUM: '',
 		// 				DECRIPTION: '',
 		// 				STATUS: '',
 		// 				DEPARTMENT: '',
@@ -238,7 +238,7 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{
+					PT_NUM: [{
 						required: false,
 						trigger: 'blur',
 						validator: this.Validators.isCodeNum,
@@ -523,7 +523,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.id;
-									this.CATEGORY.NUM = res.data.datas.NUM;
+									this.CATEGORY.PT_NUM = res.data.datas.PT_NUM;
 								}else{
 									if(opt == 'save'){
 										this.show = false;

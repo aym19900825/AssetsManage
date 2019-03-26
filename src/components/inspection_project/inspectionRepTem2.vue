@@ -135,8 +135,6 @@
 				</el-table-column>
 				<el-table-column label="报告描述" sortable prop="DECRIPTION">
 				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
-				</el-table-column>
 				<el-table-column label="创建时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
@@ -206,10 +204,9 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.CHANGEBY=res.data.id;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					
 				}).catch((err)=>{
 				})
 			},
@@ -453,7 +450,6 @@
 						"RE_NUM": row.RE_NUM,//报告模板编号
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
-						"VERSION": row.VERSION,
 						"DEPTID": row.DEPTID,
 						"CHANGEBY": row.CHANGEBY,
 						"CHANGEDATE": row.CHANGEDATE,
@@ -511,7 +507,6 @@
 					this.catedata.RE_NUM = val.RE_NUM;//报告模板编号
 					this.catedata.DECRIPTION = val.DECRIPTION;
 					this.catedata.DEPTID = val.DEPTID;
-					this.catedata.VERSION = val.VERSION;
 					this.$emit('request');
 					this.dialogVisible3 = false
 				}

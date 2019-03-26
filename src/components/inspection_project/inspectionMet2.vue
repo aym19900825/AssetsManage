@@ -30,7 +30,7 @@
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" :disabled="true"></el-input><span v-else>{{scope.row.P_NUM}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -38,7 +38,7 @@
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NUM" :disabled="true" placeholder="请选择"></el-input><span v-else>{{scope.row.M_NUM}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -48,15 +48,15 @@
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_NAME" :disabled="true" placeholder="请选择">
 		        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 		        	</el-input><span v-else>{{scope.row.M_NAME}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
-		    <el-table-column label="方法英文名称" width="160" sortable prop="M_ENAME">
+		    <el-table-column label="方法英文名称" width="240" sortable prop="M_ENAME">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_ENAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_ENAME" :disabled="true" placeholder="请选择"></el-input><span v-else>{{scope.row.M_ENAME}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -64,7 +64,7 @@
 		    	<template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.M_TYPE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.M_TYPE" :disabled="true" placeholder="请选择"></el-input><span v-else>{{scope.row.M_TYPE}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -557,7 +557,7 @@
 .columns{
 	width:220px;
 	position: absolute;
-    right: 570px;
+    right: 500px;
     bottom: -40px;
     z-index: 88;
 }

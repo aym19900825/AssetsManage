@@ -53,13 +53,13 @@
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								<el-input v-model="searchList.code">
+									<template slot="prepend">报表名称</template>
 								</el-input>
 							</el-col>
 							<el-col :span="4">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="searchinfo" size="small">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -193,9 +193,7 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					code: '',
 				},
 				page: {//分页显示
 					currentPage: 1,
@@ -235,7 +233,7 @@
 			
 		    resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
-					typename: '',
+					code: '',
 				};
 				this.requestData('init');
 			},
@@ -261,13 +259,13 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
+					// console.log(this.selUser[0]);
 					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
 			//查看
 			view(dataid) {
-				console.log(dataid);
+				// console.log(dataid);
 			 	// this.reportsList =data;
 				this.$refs.child.view(dataid);
 			},
@@ -275,7 +273,7 @@
 			modestsearch() {
 				this.search = !this.search;
 				this.down = !this.down,
-					this.up = !this.up
+				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

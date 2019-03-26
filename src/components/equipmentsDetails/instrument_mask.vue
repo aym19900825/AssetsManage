@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="120px" class="demo-user">
 						<div class="content-accordion">
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
@@ -963,7 +963,6 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-
 				this.docParm = {
 					'model': 'new',
 					'appname': '仪器和计量器具',
@@ -971,7 +970,6 @@
 					'appid': 47
 				};
 				this.getUser('new');
-
 				this.getCompany();
 			},
 			// 这里是修改
@@ -1001,9 +999,7 @@
 					_this.docParm.appid = 47;
 					_this.$refs.docTable.getData();
 				},100);
-
 				this.show = true;
-
 				this.getCompany();
 			},
 			//这是查看

@@ -24,7 +24,7 @@
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(255, 255, 255, 0.9)">
-					<el-table-column label="所属产品类别" width="120" prop="NUM">
+					<!-- <el-table-column label="所属产品类别" width="120" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
@@ -46,15 +46,7 @@
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column>
-					
-					<el-table-column label="所属检验/检测标准号" width="120" prop="SS_NUM">
-			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.SS_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.SS_NUM}}</span>
-							</el-form-item>
-			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 			      <template slot-scope="scope">
@@ -242,7 +234,7 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.CHANGEBY=res.data.id;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -348,6 +340,7 @@
 						this.loadSign=true
 					}
 					this.professionGroForm.inspectionList=!!res.data.PROFESSION_GROUPList?res.data.PROFESSION_GROUPList:[];
+
 					for(var j = 0; j < this.professionGroForm.inspectionList.length; j++){
 						this.professionGroForm.inspectionList[j].isEditing = false;
 					}
@@ -430,7 +423,7 @@
 						"NUM": row.NUM,//产品类编号
 						"PRO_NUM": row.PRO_NUM,//产品编号
 						"S_NUM": row.S_NUM,//检验检测标准编码
-						"SS_NUM": row.SS_NUM,//检验检测标准编号
+						// "SS_NUM": row.SS_NUM,//检验检测标准编号
 						"P_NUM": row.P_NUM,//检验检测项目编号
 						"PROF_NUM": row.PROF_NUM,//专业组编号
 						"PROF_GROUP": row.PROF_GROUP,

@@ -24,19 +24,43 @@
 				element-loading-text="加载中…"
 				element-loading-spinner="el-icon-loading"
 				element-loading-background="rgba(255, 255, 255, 0.9)">
-		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
-		      <template slot-scope="scope">
-		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
-				</el-form-item>
-		      </template>
-		    </el-table-column>
+		  	<!-- <el-table-column label="所属产品类别" width="120" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column label="所属产品" width="120" prop="PRO_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column label="所属检验/检测标准" width="120" prop="S_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column> -->
+
+			  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
 
 		  	<el-table-column label="原始数据编号" width="160" prop="PT_NUM">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.PT_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PT_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.PT_NUM}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -46,19 +70,13 @@
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DECRIPTION" placeholder="请选择" disabled>
 		        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 		        	</el-input><span v-else>{{scope.row.DECRIPTION}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
 			<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 		      <template slot-scope="scope">
 		         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else>{{scope.row.STATUS}}</span>
-		      </template>
-		    </el-table-column> -->
-			
-			<!-- <el-table-column prop="VERSION" label="版本" sortable width="120">
-		      <template slot-scope="scope">
-		       	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input><span v-else>#r{{scope.row.VERSION}}</span>
 		      </template>
 		    </el-table-column> -->
 
@@ -81,8 +99,8 @@
 					</el-button>
 
 				 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
-			          添加
-			        </el-button>
+						添加
+					</el-button>
 			    </template>
 			 </el-table-column> -->
 				<!-- <el-button type="text" size="medium" @click.native.prevent="modifyversion(scope.row)">
@@ -92,7 +110,7 @@
 		      <template slot-scope="scope">
 		        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 		        	<i class="icon-check" title="保存"></i>
-				</el-button>
+						</el-button>
 
 		        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 		          <i class="icon-trash red"></i>
@@ -103,14 +121,14 @@
 		</el-form>
 		<!-- 表格 Begin-->
 		<el-pagination background class="text-right pt10 pb10"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :current-page="page.currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="page.pageSize"
-            layout="total, sizes, prev, pager, next"
-            :total="page.totalCount">
-        </el-pagination>
+				@size-change="sizeChange"
+				@current-change="currentChange"
+				:current-page="page.currentPage"
+				:page-sizes="[10, 20, 30, 40]"
+				:page-size="page.pageSize"
+				layout="total, sizes, prev, pager, next"
+				:total="page.totalCount">
+		</el-pagination>
 		<!-- 表格 End-->
 	</div>
 	<!-- 原始数据模板 Begin -->
@@ -133,8 +151,6 @@
 				<el-table-column label="原始数据编号" width="125" sortable prop="PT_NUM">
 				</el-table-column>
 				<el-table-column label="原始数据描述" sortable prop="DECRIPTION">
-				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
 				<el-table-column label="创建时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
@@ -198,7 +214,7 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.CHANGEBY=res.data.id;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -316,6 +332,7 @@
 				var url = this.basic_url + '/api-apps/app/rawDataTem2/INSPECTION_PROJECT2';
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -325,6 +342,7 @@
 						this.loadSign=true
 					}
 					this.rawDataTem2Form.inspectionList=!!res.data.RAW_DATA_TEMPATE2List?res.data.RAW_DATA_TEMPATE2List:[];
+
 					for(var j = 0; j < this.rawDataTem2Form.inspectionList.length; j++){
 						this.rawDataTem2Form.inspectionList[j].isEditing = false;
 					}
@@ -371,7 +389,7 @@
 					if (isEditingflag==false){
 							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 							var currentUser, currentDate
-							this.currentUser=res.data.nickname;
+							this.currentUser=res.data.id;
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var obj = {
@@ -382,7 +400,6 @@
 								"PT_NUM": '',//原始数据模板编号
 								"DECRIPTION": '',
 								"STATUS": '',
-								"VERSION": '',
 								"DEPTID": '',
 								"CHANGEBY": this.currentUser,
 								"CHANGEDATE": this.currentDate,
@@ -409,12 +426,12 @@
 						"PT_NUM": row.PT_NUM,//原始数据模板编号
 						"DECRIPTION": row.DECRIPTION,
 						"STATUS": row.STATUS,
-						"VERSION": row.VERSION,
 						"DEPTID": row.DEPTID,
 						"CHANGEBY": row.CHANGEBY,
 						"CHANGEDATE": row.CHANGEDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
+						console.log(submitData);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
@@ -468,7 +485,6 @@
 					this.catedata.PT_NUM = val.PT_NUM;
 					this.catedata.DECRIPTION = val.DECRIPTION;
 					this.catedata.DEPTID = val.DEPTID;
-					this.catedata.VERSION = val.VERSION;
 					this.$emit('request');
 					this.dialogVisible3 = false
 				}

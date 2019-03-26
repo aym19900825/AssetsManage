@@ -42,7 +42,7 @@
 			      </template>
 			    </el-table-column>
 
-					<el-table-column label="所属产品类别" width="80" prop="NUM">
+					<!-- <el-table-column label="所属产品类别" width="80" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input>
@@ -57,7 +57,7 @@
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
 							</el-form-item>
 			      </template>
-			    </el-table-column>
+			    </el-table-column> -->
 
 			    <el-table-column label="标准名称" sortable prop="S_NAME">
 			      <template slot-scope="scope">

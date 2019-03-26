@@ -205,8 +205,8 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					categorymaskren: "subDepts",
-					label: "simplename"
+					children: "children",
+					label: "TYPE"
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
@@ -322,12 +322,7 @@
 				 	this.Printing();
 				}
 		    },
-			//添加类别
-			openAddMgr() {
-				this.reset();
-				this.$refs.categorymask.open(); // 方法1
-				this.$refs.categorymask.visible();
-			},
+			// 删除
 			deluserinfo(){
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -338,7 +333,9 @@
 					return;
 				}else {
 					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					//changeUser为勾选的数据
 					var changeUser = selData;
+					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
@@ -357,7 +354,8 @@
 					}) => {
 						this.$axios.delete(url, {
 							params: data
-						}).then((res) => {
+						}).then((res) => {//.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -372,6 +370,13 @@
 					});
 				}
 			},
+			//添加类别
+			openAddMgr() {
+				this.reset();
+				this.$refs.categorymask.open(); // 方法1
+				this.$refs.categorymask.visible();
+			},
+			//修改类别
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -387,7 +392,7 @@
 					return;
 				}else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.categorymask.detail(this.selUser[0]);
 				}
 			},
 			//查看

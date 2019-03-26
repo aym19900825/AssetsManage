@@ -203,7 +203,7 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.CHANGEBY=res.data.id;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -444,7 +444,7 @@
 							"PRO_NUM": row.PRO_NUM,//产品编号
 							"S_NUM": row.S_NUM,//检验检测标准编号
 							"P_NUM": row.P_NUM,//检验检测项目编号
-							"PRO_NUM": row.PRO_NUM,
+							"ASSETNUM": row.ASSETNUM,
 							"MODEL": row.MODEL,
 							"DECRIPTION": row.DECRIPTION,
 							"STATUS": row.STATUS,

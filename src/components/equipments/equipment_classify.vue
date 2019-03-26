@@ -241,7 +241,6 @@
 				this.reset();
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
-				
 			},
 			//修改类别
 			modify() {
@@ -262,7 +261,6 @@
 					this.$refs.categorymask.detail(this.selUser[0]);
 				}
 			},
-
 			//查看
 			view(data) {
 			 	this.CATEGORY = data;

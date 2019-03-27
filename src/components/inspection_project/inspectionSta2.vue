@@ -352,7 +352,6 @@
 					//todo  相关数据设置
 				}
 				this.selParentId =id;
-				console.log(id);
 				this.pTypeId = num;
 				this.parentId = pro_num;
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2'

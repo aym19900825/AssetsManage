@@ -413,7 +413,7 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					// DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
+					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
 				}
 				var url = this.basic_url + '/api-apps/app/productType2';
 				this.$axios.get(url, {

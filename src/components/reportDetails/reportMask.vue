@@ -71,6 +71,7 @@
 				this.selreport = val;
 			},
 		  	runReport(){
+				var token = sessionStorage.getItem('access_token');
 		  		if(this.selreport.length == 0) {
 					this.$message({
 						message: '请您选择要运行多个报表',
@@ -86,15 +87,16 @@
 				} else {
 					var id=this.selreport[0].id;
 					var file=this.selreport[0].file;
-					this.appname=this.reportData.app;	
+					this.appname=this.reportData.app;
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
+				
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.datas==null){
 						  		var url=this.basic_url;
 								var pos = url.lastIndexOf(':');
 								url=url.substring(0,pos+1); 
 						  		this.url=url+"5300";
-								 var url = this.url+"/ureport/preview?_u=mysql:" +file
+								 var url = this.url+"/ureport/preview?_u=mysql:" +file+'&access_token='+token;
              					window.open(url); 
 						}else{
 							
@@ -109,7 +111,6 @@
 				console.log(this.reportData.app);
 				this.appname=this.reportData.app;
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
-				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
 					this.reportsList = res.data.datas;
 					this.innerVisible = true;

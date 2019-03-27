@@ -229,6 +229,7 @@
 				customarr.push(this.selUser[0].customerid);//
 				customarr.push(this.selUser[0].customername);//委托单位
 				customarr.push(this.selUser[0].customeraddress);//地址
+				customarr.push()
 				this.$emit('customarr',customarr);
 				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
 						customarr.push(falg);
@@ -246,7 +247,7 @@
 							
 							this.$emit('vendor',vendor);
 					}
-					
+					//样品模块赋值
 					if(this.selUser[0].itemid!=null||this.selUser[0].itemid!=undefined){
 							this.$axios.get(this.basic_url + '/api-apps/app/item/' + itemid, {}).then((res) => {
 								var custarr = [];

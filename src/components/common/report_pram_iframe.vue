@@ -213,6 +213,7 @@
 				}
 			},
 			determine(){
+				var token = sessionStorage.getItem('access_token');
 		  		var str=JSON.stringify(this.dataInfo);
 				for(var j=0;j<str.length;j++){
 					str=str.replace("\":\"",'=');
@@ -226,7 +227,7 @@
 					var pos = url.lastIndexOf(':');
 					url=url.substring(0,pos+1); 
 					this.url=url+"5300";
-				var url = this.url+"/ureport/preview?_u=mysql:"+this.file
+				var url = this.url+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
              window.open(url); 
 			},
 			getDept(item) {

@@ -90,7 +90,31 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
+<<<<<<< HEAD
+								<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" ></tree_grid>
+							<!-- <v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<template>
+									<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="checkedName.indexOf('编码')!=-1">
+										<template slot-scope="scope">
+											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="checkedName.indexOf('名称')!=-1">
+									</el-table-column>
+									<el-table-column label="版本" width="100" sortable='custom' v-if="checkedName.indexOf('版本')!=-1" prop="VERSION" align="right">
+									</el-table-column>
+									<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
+									</el-table-column>
+									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
+									</el-table-column>
+									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
+									</el-table-column>
+								</template>
+							</v-table> -->
+=======
 							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" ></tree_grid>
+>>>>>>> 23f2de525d787ccc6aa837866753133327c8ebe2
 						</el-col>
 					</el-row>
 				</div>

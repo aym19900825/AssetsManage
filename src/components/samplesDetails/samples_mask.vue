@@ -689,7 +689,7 @@
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
 					this.samplesForm.ACCEPT_PERSON = res.data.id;
-					this.samplesForm.ACCEPT_PERSONDesc = res.data.username;
+					this.samplesForm.ACCEPT_PERSONDesc = res.data.nickname;
 					var date=new Date();
 					this.samplesForm.ACCEPT_DATE =  this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//收样日期
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

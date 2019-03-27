@@ -25,12 +25,20 @@
 				</el-row>
 			</el-form>
 
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
-					  v-loadmore="loadMore"
-					  v-loading="loading"  
-					  element-loading-text="加载中…"
-					  element-loading-spinner="el-icon-loading"
-					  element-loading-background="rgba(255, 255, 255, 0.9)">
+			<el-table :header-cell-style="rowClass" 
+						:data="categoryList" 
+						border 
+						stripe 
+						height="300px" 
+						style="width: 100%;" 
+						:default-sort="{prop:'categoryList', order: 'descending'}"
+						@selection-change="SelChange"
+					    v-loadmore="loadMore"
+					    v-loading="loading"  
+					    element-loading-text="加载中…"
+					    element-loading-spinner="el-icon-loading"
+					    element-loading-background="rgba(255, 255, 255, 0.9)"
+						highlight-current-row>
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="编码" width="155" sortable prop="NUM">

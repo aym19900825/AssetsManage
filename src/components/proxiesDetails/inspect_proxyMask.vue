@@ -83,7 +83,7 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
-												<el-input v-model="dataInfo.V_PERSON" >
+												<el-input v-model="dataInfo.V_PERSON">
 													 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
@@ -904,7 +904,7 @@
 					V_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//委托单位名称
 					V_ADDRESS: [{ required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{ required: true, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
-					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNikname}],//联系人姓名
+					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{ required: true, trigger: 'blur', validator: this.Validators.isPhone}],//联系人电话
 					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号

@@ -332,7 +332,6 @@
 				var url = this.basic_url + '/api-apps/app/rawDataTem2/INSPECTION_PROJECT2';
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data);
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -431,7 +430,6 @@
 						"CHANGEDATE": row.CHANGEDATE,
 					}
 					this.$axios.post(url, submitData).then((res) => {
-						console.log(submitData);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',

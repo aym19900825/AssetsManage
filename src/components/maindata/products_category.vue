@@ -90,6 +90,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
+<<<<<<< HEAD
 								<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" ></tree_grid>
 							<!-- <v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<template>
@@ -111,6 +112,9 @@
 									</el-table-column>
 								</template>
 							</v-table> -->
+=======
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" ></tree_grid>
+>>>>>>> 23f2de525d787ccc6aa837866753133327c8ebe2
 						</el-col>
 					</el-row>
 				</div>
@@ -170,6 +174,7 @@
 				columns: [{
 						text: '编码',
 						dataIndex: 'NUM',
+						width:'200',
 						isShow:true,
 					},
 					{
@@ -180,11 +185,13 @@
 					{
 						text: '版本',
 						dataIndex: 'VERSION',
+						width:'100',
 						isShow:true,
 					},
 					{
 						text: '机构',
-						dataIndex: 'DEPARTMENTDesc',
+						dataIndex: 'DEPTIDDesc',
+						width:'140',
 						isShow:true,
 					},
 					// {
@@ -194,12 +201,13 @@
 					{
 						text: '录入时间',
 						dataIndex: 'ENTERDATE',
+						dataType: 'date',
 						isShow:true,
-						dataType:'data'
 					},
 					{
 						text: '修改时间',
 						dataIndex: 'CHANGEDATE',
+						dataType: 'date',
 						isShow:true,
 					}
 				],
@@ -221,8 +229,8 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					categorymaskren: "subDepts",
-					label: "simplename"
+					children: "children",
+					label: "TYPE"
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
@@ -338,12 +346,7 @@
 				 	this.Printing();
 				}
 		    },
-			//添加类别
-			openAddMgr() {
-				this.reset();
-				this.$refs.categorymask.open(); // 方法1
-				this.$refs.categorymask.visible();
-			},
+			// 删除
 			deluserinfo(){
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -354,7 +357,9 @@
 					return;
 				}else {
 					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					//changeUser为勾选的数据
 					var changeUser = selData;
+					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
@@ -373,7 +378,8 @@
 					}) => {
 						this.$axios.delete(url, {
 							params: data
-						}).then((res) => {
+						}).then((res) => {//.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -388,6 +394,13 @@
 					});
 				}
 			},
+			//添加类别
+			openAddMgr() {
+				this.reset();
+				this.$refs.categorymask.open(); // 方法1
+				this.$refs.categorymask.visible();
+			},
+			//修改类别
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -403,7 +416,7 @@
 					return;
 				}else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.categorymask.detail(this.selUser[0]);
 				}
 			},
 			//查看

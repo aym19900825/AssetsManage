@@ -405,29 +405,43 @@ const validators = {
 	},
 
 
-	// isChinese:function (rule, value, callback) { //仅限中文
-	// 	if(!value) {
-	// 		callback();
-	// 	} else {
-	// 		if(!validators.SpecificWord(value)) {
-	// 			callback(new Error('不支持特殊符号'));
-	// 		} else {
-	// 			callback();
-	// 		}
-	// 	}
-	// },
+	isChinese:function (rule, value, callback) { //中文名称
+		if(!value) {
+			callback();
+		} else {
+			setTimeout(() => {
+				var regs = /^.{1,200}$/g
+				if (!regs.test(value)) {
+					callback(new Error('内容不少于1位且不能大于200位'));
+				} else {
+					if(!validators.SpecificWord(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						callback();
+					}
+				}
+			}, 500);
+		}
+	},
 
-	// isEnglish:function (rule, value, callback) { //仅限英语
-	// 	if(!value) {
-	// 		callback();
-	// 	} else {
-	// 		if(!validators.SpecificWord(value)) {
-	// 			callback(new Error('不支持特殊符号'));
-	// 		} else {
-	// 			callback();
-	// 		}
-	// 	}
-	// },
+	isEnglish:function (rule, value, callback) { //英文名称
+		if(!value) {
+			callback();
+		} else {
+			setTimeout(() => {
+				var regs = /^.{1,1000}$/g
+				if (!regs.test(value)) {
+					callback(new Error('内容不少于1位且不能大于200位'));
+				} else {
+					if(!validators.SpecificWord(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						callback();
+					}
+				}
+			}, 500);
+		}
+	},
 
 
 	isChoosedata:function (rule, value, callback) {//放大镜选择验证

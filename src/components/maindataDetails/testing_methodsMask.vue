@@ -31,7 +31,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="编码" prop="M_NUM">
-												<el-input v-model="testingForm.M_NUM" :disabled="noedit"></el-input>
+												<el-input v-model="testingForm.M_NUM" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">

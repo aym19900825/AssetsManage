@@ -30,13 +30,13 @@
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
-								<el-input v-model="searchList.typename">
-									<template slot="prepend">类型名称</template>
+								<el-input v-model="searchList.name">
+									<template slot="prepend">报表文件名称</template>
 								</el-input>
 							</el-col>
 							<el-col :span="4">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin:4px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="searchinfo" size="small">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -46,7 +46,7 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-							<el-table-column label="报表名称" sortable prop="name" v-if="this.checkedName.indexOf('报表名称')!=-1">
+							<el-table-column label="报表文件名称" sortable prop="name" v-if="this.checkedName.indexOf('报表文件名称')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}
 									</p>
@@ -92,14 +92,14 @@
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
-					'报表名称',
+					'报表文件名称',
 					'录入人',
 					'修改人',
 				],
 				tableHeader: [
 					{
-						label: '报表名称',
-						prop: 'nickname'
+						label: '报表文件名称',
+						prop: 'name'
 					},
 					{
 						label: '录入人',
@@ -120,9 +120,7 @@
 				ismin:true,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					nickname: '',
-					enabled: '',
-					createTime: ''
+					name: '',
 				},
 				page: {//分页显示
 					currentPage: 1,
@@ -141,7 +139,7 @@
 			},
 		    resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
-					typename: '',
+					name: '',
 				};
 				this.requestData('init');
 			},

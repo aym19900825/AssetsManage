@@ -5,11 +5,13 @@
             <li class="current" ><router-link :to="{path:'/index'}">控制台</router-link></li>
         </ul>
         <div class="nav-head pull-right nav-right">
-	            <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30" >
-	            	<span class="lingdang" @click="appCenter">
-	            		<i class="icon-notice"></i>
-	            	</span>
-	            </el-badge>
+            <span @click="appCenter">
+                <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30">
+                    <a class="lingdang">
+                        <i class="icon-notice"></i>
+                    </a>
+                </el-badge>
+            </span>
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
                 <font class="roles pr10">{{username}}<br>{{GetRolesname}}</font>

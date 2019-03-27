@@ -32,7 +32,7 @@
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="6" class="pull-right"  v-if="sampleType=='sampleNum'">
+										<!-- <el-col :span="6" class="pull-right"  v-if="sampleType=='sampleNum'">
 											<el-input v-model="samplesForm.ITEM_STEP" :disabled="edit">
 												<template slot="prepend">样品序号</template>
 												<el-button slot="append" icon="el-icon-search" @click="addsamplenum" :disabled="noedit"></el-button>
@@ -43,7 +43,7 @@
 												<el-option key="1" label="样品批次" value="sampleBatch"></el-option>
 												<el-option key="2" label="样品序号" value="sampleNum"></el-option>
 											</el-select>
-										</el-col>
+										</el-col> -->
 									</el-row>
 
 									<el-row>
@@ -62,25 +62,10 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="1" :max="maxNum"  :disabled="noedit" label="描述文字" style="width: 100%"></el-input-number>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="收回入库时间" prop="ACCEPT_DATE">
-												<el-input v-model="samplesForm.ACCEPT_DATE" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="样品承接人" prop="ACCEPT_PERSON">
-												<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="处理批准人" prop="APPR_PERSON">
-												<el-input v-model="samplesForm.APPR_PERSON" :disabled="noedit"></el-input>
+											<el-form-item label="处理批准人" prop="APPR_PERSONDesc">
+												<el-input v-model="samplesForm.APPR_PERSONDesc" disabled>
+													<el-button slot="append" icon="el-icon-search" @click="getPerson" :disabled="noedit"></el-button>
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -89,11 +74,29 @@
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
+										<!-- <el-col :span="8">
+											<el-form-item label="数量" prop="QUALITY">
+												<el-input-number v-model="samplesForm.QUALITY" :min="1" :max="maxNum"  :disabled="noedit" label="描述文字" style="width: 100%"></el-input-number>
+											</el-form-item>
+										</el-col> -->
+										<!-- <el-col :span="8">
+											<el-form-item label="收回入库时间" prop="ACCEPT_DATE">
+												<el-input v-model="samplesForm.ACCEPT_DATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col> -->
+									</el-row>
+									<el-row>
+										<!-- <el-col :span="8">
+											<el-form-item label="样品承接人" prop="ACCEPT_PERSON">
+												<el-input v-model="samplesForm.ACCEPT_PERSON" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col> -->
+										
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="处理人" prop="DO_PERSON">
-												<el-input v-model="samplesForm.DO_PERSON" :disabled="noedit"></el-input>
+											<el-form-item label="处理人" prop="DO_PERSONDesc">
+												<el-input v-model="samplesForm.DO_PERSONDesc" disabled></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -116,7 +119,29 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="2" v-show="viewtitle">
+								<el-collapse-item title="样品" name="2" v-show="viewtitle">
+									<el-table :data="samplenumList" 
+											  :header-cell-style="rowClass" 
+											  border 
+											  stripe 
+											  height="400px" 
+											  style="width: 100%;"
+											  :default-sort="{prop:'samplesList', order: 'descending'}" 
+											  @selection-change="SelChange" v-loadmore="loadMore">
+										<el-table-column type="selection" width="55" fixed align="center">
+										</el-table-column>
+										<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
+										</el-table-column>
+										<el-table-column label="样品序号" sortable width="200px" prop="ITEM_STEP">
+										</el-table-column>
+										<el-table-column label="入库时间" sortable width="200px" prop="ITEM_STEP">
+										</el-table-column>
+										<el-table-column label="样品承接人" sortable width="200px" prop="ACCEPT_PERSON">
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+
+								<el-collapse-item title="其他" name="3" v-show="viewtitle">
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -164,7 +189,7 @@
 				</el-tree>
 				<span slot="footer" class="dialog-footer">
 			       <el-button @click="dialogVisible = false">取 消</el-button>
-			       <el-button type="primary" @click="dailogconfirm();" >确 定</el-button>
+			       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
 			    </span>
 			</el-dialog>
 			<!--点击委托书编号弹出框 Begin-->
@@ -172,14 +197,22 @@
 		<!-- 样品编号 Begin -->
 			<el-dialog :modal-append-to-body="false" title="样品编号" height="300px" :visible.sync="dialogsample" width="80%" :before-close="handleClose">
 				<!-- 第二层弹出的表格 Begin-->
-				<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+				<el-table :data="samplesList" 
+						  :header-cell-style="rowClass" 
+						  border 
+						  stripe 
+						  height="400px" 
+						  style="width: 100%;" 
+						  :default-sort="{prop:'samplesList', order: 'descending'}" 
+						  @selection-change="SelChange" 
+						  v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed align="center">
 					</el-table-column>
 					<el-table-column label="样品编号" sortable width="200px" prop="ITEMNUM">
 					</el-table-column>
 					<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION">
 					</el-table-column>
-					<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
+					<el-table-column label="产品类别" sortable width="200px" prop="TYPE">
 					</el-table-column>
 					<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
 					</el-table-column>
@@ -240,12 +273,13 @@
 			       <el-button type="primary" @click="addsamplenumbtn">确 定</el-button>
 			    </span>
 			</el-dialog>
-			<!-- 样品序号 End -->
+			<usermask :tit="userMakeTit" @getSelData="getUserData" ref="usermask" ></usermask>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import usermask from'../common/common_mask/currentUserMask.vue'
 	export default {
 		name: 'sampledisposal_mask',
 		props: {
@@ -274,6 +308,9 @@
 				}
 			}
 		},
+		components: {
+			'usermask': usermask
+		},
 		data() {
 			var validateItemid = (rule, value, callback) => {//样品编号
                 if (this.samplesForm.ITEMNUM === undefined || this.samplesForm.ITEMNUM === '' || this.samplesForm.ITEMNUM === null) {
@@ -283,6 +320,7 @@
                 }
             };
 			return {
+				userMakeTit: '处理批准人',
 				maxNum: 1,
 				sampleType: '',
 				loadSign: true, //加载
@@ -369,6 +407,14 @@
 			};
 		},
 		methods: {
+			getUserData(data){
+				this.$forceUpdate();
+				this.samplesForm.APPR_PERSON = data.id;
+				this.samplesForm.APPR_PERSONDesc = data.username;
+			},
+			getPerson(){
+				this.$refs.usermask.requestData(this.samplesForm.deptId);
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -412,7 +458,7 @@
 						type:'warning'
 					})
 				}else{
-					this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
+					this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//this.samplesForm.ITEMNUM = this.selUser[0].ITEMNUM;//样品编号
 					this.dialogsample = false;
 					this.requestData();
 				}
@@ -494,13 +540,15 @@
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					// this.samplesForm.DEPARTMENT=res.data.deptName;
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
+					this.samplesForm.DO_PERSON = res.data.id;
+					this.samplesForm.DO_PERSONDesc = res.data.username;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.samplesForm.APPR_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.samplesForm.ACCEPT_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					// this.samplesForm.STATUSDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.samplesForm.DO_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 				})
 				this.addtitle = true;

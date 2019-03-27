@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="100px" class="demo-user">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="120px" class="demo-user">
 						<div class="content-accordion">
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
@@ -36,28 +36,21 @@
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop !='A_PRICE' && item.prop !='TYPE' && item.prop !='ASSET_STATUS' && item.prop !='CONFIG_UNITDes' && item.prop !='ISPERIODIC'&& item.prop !='ASSET_NUMBER'" :disabled="noedit"></el-input>
-										
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='ASSET_STATUS' || item.prop =='CONFIG_UNITDes' || item.prop =='ISPERIODIC' || item.prop =='ASSET_NUMBER')" disabled></el-input>
 										<!--设备分类-->
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && (item.prop =='TYPE')" :disabled="true">
 											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addAsset"></el-button>
 										</el-input>
-
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 										</el-date-picker>
-
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
-
 										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
-
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input' && item.prop =='A_PRICE' " @blur="handlePrice" :disabled="noedit" id="cost"></el-input>
-										
 									</el-form-item>
 								</el-collapse-item>
 
@@ -970,7 +963,6 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
-
 				this.docParm = {
 					'model': 'new',
 					'appname': '仪器和计量器具',
@@ -978,7 +970,6 @@
 					'appid': 47
 				};
 				this.getUser('new');
-
 				this.getCompany();
 			},
 			// 这里是修改
@@ -1008,9 +999,7 @@
 					_this.docParm.appid = 47;
 					_this.$refs.docTable.getData();
 				},100);
-
 				this.show = true;
-
 				this.getCompany();
 			},
 			//这是查看
@@ -1214,7 +1203,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.dataInfo.CONFIG_UNIT, {
+				this.$axios.get(this.basic_url + '/api-user/users', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

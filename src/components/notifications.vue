@@ -120,7 +120,7 @@
 								</el-table-column>
 								<el-table-column label="受检产品型号" width="120" sortable prop="ITEM_MODEL" v-if="checkedName.indexOf('受检产品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="受检企业" width="150" sortable prop="V_NAME" v-if="checkedName.indexOf('受检企业')!=-1">
+								<el-table-column label="受检企业" width="300" sortable prop="V_NAME" v-if="checkedName.indexOf('受检企业')!=-1">
 								</el-table-column>
 								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>

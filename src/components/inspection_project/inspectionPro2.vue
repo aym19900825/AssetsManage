@@ -18,30 +18,44 @@
 				</el-button>
 			</div>
 			<el-form inline-message :model="inspectionPro2Form" status-icon ref="inspectionPro2Form" class="el-radio__table">
-			  <el-table ref="singleTable" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
+			  <el-table ref="table" :data="(Array.isArray(inspectionPro2Form.inspectionList)?inspectionPro2Form.inspectionList:[]).filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="250"
 					highlight-current-row
-					style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}" 
-					v-loadmore="loadMore"
-					v-loading="loading"
-					element-loading-text="加载中…"
-					element-loading-spinner="el-icon-loading"
-					element-loading-background="rgba(255, 255, 255, 0.9)">
+					@current-change="viewchildRow"
+					style="width: 100%;" :default-sort="{prop:'inspectionPro2Form.inspectionList', order: 'descending'}">
 			  	<el-table-column label="项目编号" sortable width="100" prop="P_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="自动生成" disabled></el-input>
-								<span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span>
-					</el-form-item>
+								<span class="blue" v-else>{{scope.row.P_NUM}}</span>
+								<!-- <span class="blue" @click="viewchildRow(scope.row.ID,scope.row.P_NUM)" v-else>{{scope.row.P_NUM}}</span> -->
+							</el-form-item>
 			      </template>
 			    </el-table-column>
+
+					<!-- <el-table-column label="所属产品类别" width="80" prop="NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" disabled></el-input>
+								<span v-else>{{scope.row.NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
+					<el-table-column label="所属产品" width="80" prop="PRO_NUM">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.PRO_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRO_NUM" disabled></el-input><span v-else>{{scope.row.PRO_NUM}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
 			  	<el-table-column label="所属标准" width="80" prop="S_NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input><span v-else>{{scope.row.S_NUM}}</span>
-					</el-form-item>
+							</el-form-item>
 			      </template>
-			    </el-table-column>
-
+			    </el-table-column> -->
 
 			    <el-table-column label="项目名称" sortable width="160" prop="P_NAME">
 			      <template slot-scope="scope">
@@ -49,7 +63,7 @@
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NAME" :disabled="true" placeholder="请选择">
 			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else>{{scope.row.P_NAME}}</span>
-					</el-form-item>
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 
@@ -58,7 +72,7 @@
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.UNITCOST'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" :disabled="true" placeholder="自动生成">
 			        	</el-input><span v-else>{{scope.row.UNITCOST}}</span>
-					</el-form-item>
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 
@@ -134,10 +148,17 @@
 			</div>
 			<!--搜索框 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
-				<el-table-column label="项目编码" width="155" sortable prop="P_NUM">
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" 
+				v-loadmore="loadMore"><!--@selection-change="SelChange"-->
+				<!-- <el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column> -->
+				<el-table-column label="项目编号" sortable width="155" prop="P_NUM">
+					<template slot-scope="scope">
+						<span class="blue">{{scope.row.P_NUM}}</span>
+					</template>
 				</el-table-column>
 				<el-table-column label="项目名称" sortable prop="P_NAME">
 				</el-table-column>
@@ -154,10 +175,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
+			<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
 		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+		    </span> -->
 		</el-dialog>
 		<!-- 检验/检测项目 End -->
 	</div>
@@ -216,66 +237,64 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.CHANGEBY=res.data.id;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					
-					
 				}).catch((err)=>{
 				})
 			},
 			//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.categoryList();
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
-				this.viewfield_inspectionPro2(this.selParentId,this.parentId);
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionPro2(this.selParentId,this.parentId);
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionPro2(this.selParentId,this.parentId);
-		},
+				this.categoryList();
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.categoryList();
+			},
 			addprobtn(row){//查找基础数据中的检验/检测项目
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -283,7 +302,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -309,7 +328,7 @@
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 30;
-				this.viewfield_inspectionPro2(this.selParentId,this.parentId);
+				this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -325,18 +344,20 @@
 			indexMethod(index) {
 				return index + 1;
 			},
-			viewfield_inspectionPro2(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+			viewfield_inspectionPro2(id,num,pro_num,s_num){//点击父级筛选出子级数据
+				if(num==undefined||num==null||num==''){
 					this.inspectionPro2Form.inspectionList = [];
 					this.viewchildRow('null');
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2/' + id;
+				this.pTypeId = num;
+				this.proId = pro_num;
+				this.parentId = s_num;
+				var url = this.basic_url + '/api-apps/app/inspectionPro2/INSPECTION_STANDARDS2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
-					//
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -345,62 +366,64 @@
 					}else{
 						this.loadSign=true
 					}
-					this.inspectionPro2Form.inspectionList=res.data.INSPECTION_PROJECT2List;
+					this.inspectionPro2Form.inspectionList=!!res.data.INSPECTION_PROJECT2List?res.data.INSPECTION_PROJECT2List:[];
 					
 					//默认主表第一条数据
-					if(this.inspectionPro2Form.inspectionList.length > 0){
-						this.viewchildRow(this.inspectionPro2Form.inspectionList[0].ID,this.inspectionPro2Form.inspectionList[0].P_NUM);
-					}else{
+					if(!this.inspectionPro2Form.inspectionList||this.inspectionPro2Form.inspectionList.length == 0){
 						this.viewchildRow('null');
+						this.inspectionPro2Form.inspectionList = [];
+					}else{
+						this.$refs.table.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
+						var data=this.inspectionPro2Form.inspectionList[0];
+						this.$emit('parentMsd_inspectionPro2', data);
 					}
-
+	
 					for(var j = 0; j < this.inspectionPro2Form.inspectionList.length; j++){
 						this.inspectionPro2Form.inspectionList[j].isEditing = false;
 					}
 
-					this.$refs.singleTable.setCurrentRow(this.inspectionPro2Form.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
 			
-			requestData_inspectionPro2(index) {//加载数据
-				var _this = this;
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/inspectionPro2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;	
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
+			// requestData_inspectionPro2(index) {//加载数据
+			// 	var _this = this;
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/inspectionPro2';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;	
+			// 		//总的页数
+			// 		let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage){
+			// 			 this.loadSign = false
+			// 		}else{
+			// 			this.loadSign=true
+			// 		}
+			// 		this.commentArr[this.page.currentPage]=res.data.data
+			// 		let newarr=[]
+			// 		for(var i = 1; i <= totalPage; i++){
 					
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+			// 			if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
 							
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								this.commentArr[i][j].isEditing = false;
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
+			// 				for(var j = 0; j < this.commentArr[i].length; j++){
+			// 					this.commentArr[i][j].isEditing = false;
+			// 					newarr.push(this.commentArr[i][j])
+			// 				}
+			// 			}
+			// 		}
 					
-					this.inspectionPro2Form.inspectionList = newarr;
+			// 		this.inspectionPro2Form.inspectionList = newarr;
 
-					setTimeout(function(){
-						_this.viewchildRow(_this.inspectionPro2Form.inspectionList[0].ID,_this.inspectionPro2Form.inspectionList[0].P_NUM);
-					},0);
+			// 		setTimeout(function(){
+			// 			_this.viewchildRow(_this.inspectionPro2Form.inspectionList[0].ID,_this.inspectionPro2Form.inspectionList[0].P_NUM);
+			// 		},0);
 					
-				}).catch((wrong) => {})
-			},
+			// 	}).catch((wrong) => {})
+			// },
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -431,21 +454,21 @@
 						if (this.inspectionPro2Form.inspectionList[i].isEditing==false){
 							isEditingflag=false;
 						}else{
-	                        isEditingflag=true;   
-	                        break;
+							isEditingflag=true;   
+							break;
 						}
 					}
 					if (isEditingflag==false){
-	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate;
+							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+							var currentUser, currentDate;
 							this.currentUser=res.data.nickname;
 							var date=new Date();
-							// ;
-							// 
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var index=this.$moment(date).format("YYYYMMDDHHmmss");
 							var obj = {
-								"S_NUM": this.parentId,//产品类别编号
+								"NUM": this.pTypeId,//产品类别编号
+								"PRO_NUM": this.proId,//产品编号
+								"S_NUM": this.parentId,//检验检测标准编号
 								"P_NUM": '',
 								"P_NAME": '',
 								"UNITCOST": '',
@@ -459,8 +482,8 @@
 							this.inspectionPro2Form.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+						} else {
+								this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
@@ -470,6 +493,8 @@
 					var url = this.basic_url + '/api-apps/app/inspectionPro2/saveOrUpdate';
 					var submitData = {
 						"ID":row.ID,
+						"NUM": row.NUM,
+						"PRO_NUM": row.PRO_NUM,
 						"S_NUM": row.S_NUM,
 						"P_NUM": row.P_NUM,
 						"P_NAME": row.P_NAME,
@@ -488,7 +513,7 @@
 							});
 							//重新加载数据
 							// this.requestData_inspectionPro2();
-							this.viewfield_inspectionPro2(this.selParentId,this.parentId);//重新加载父级选中的数据下所有子数据
+							this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);//重新加载父级选中的数据下所有子数据
 						} else {
 							this.$message({
 								message: res.data.resp_msg,
@@ -515,7 +540,12 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.viewfield_inspectionPro2(this.selParentId,this.parentId);
+							this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -523,27 +553,30 @@
 
 					});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.P_NUM = this.selData[0].P_NUM;
-				this.catedata.P_NAME = this.selData[0].P_NAME;
-				this.catedata.UNITCOST = this.selData[0].UNITCOST;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+			addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.P_NUM = val.P_NUM;
+					this.catedata.P_NAME = val.P_NAME;
+					this.catedata.UNITCOST = val.UNITCOST;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
-			viewchildRow(ID,P_NUM) {//查看子项数据
-				var data = {
-					id: ID,
-					num: P_NUM
-				};
+			viewchildRow(data) {//查看子项数
+				this.currentRow = data;
 				this.$emit('parentMsd_inspectionPro2', data);
 			},
+			// viewchildRow(ID,P_NUM) {//查看子项数据
+			// 	var data = {
+			// 		id: ID,
+			// 		num: P_NUM
+			// 	};
+			// 	this.$emit('parentMsd_inspectionPro2', data);
+			// },
 		},
-		
-		// mounted() {
-		// 	this.requestData_inspectionPro2();
-		// },
 		
 
 	}
@@ -566,6 +599,8 @@
 	position:absolute;
 	top: -35px;
 	right: 0px;
+	width: 100px;
+	text-align: right;
 }
 .el-card:hover .table-func  {display: block;}
 </style>

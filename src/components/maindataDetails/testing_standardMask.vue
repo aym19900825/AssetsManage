@@ -27,11 +27,16 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
+										<el-col :span="5" class="pull-right mr20">
+											<el-input v-model="dataInfo.S_NUM" placeholder="自动生成" :disabled="edit">
+												<template slot="prepend">编码</template>
+											</el-input>
+										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="标准编号" prop="S_NUM">
-												<el-input v-model="dataInfo.S_NUM" :disabled="noedit"></el-input>
+											<el-form-item label="标准编号" prop="SS_NUM">
+												<el-input v-model="dataInfo.SS_NUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16"><!--移上去显示数据 :content="dataInfo.S_NAME"-->
@@ -43,11 +48,11 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">&nbsp;</el-col>
-										<el-col :span="16">
+										<el-col :span="24">
 											<el-form-item label="英文名称" prop="S_ENGNAME">
-												<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')">
-													<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
+												<el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit">
+												<!-- <el-input v-model="dataInfo.S_ENGNAME" :disabled="noedit" @focus="editBox('S_ENGNAME')"> -->
+												<!-- <el-button slot="append" @click="dialogFormVisible = true" icon="icon-maximization"></el-button> -->
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -147,6 +152,7 @@
 					return {
 						ID:'',
 						S_NUM: '',
+						SS_NUM: '',
 						S_NAME: '',
 						S_ENGNAME: '',
 						RELEASETIME: '',
@@ -285,9 +291,9 @@
 					}
 				],
 				rules: {
-					S_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//编号
-					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//中文名称
-					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//英文名称
+					SS_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//标准编号
+					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isChinese}],//中文名称
+					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					STARTETIME: [{required: true, trigger: 'blur',message: '必填',}],
 					editDataInfoProp: [
 						{required: true,trigger: 'blur',message: '必填',},

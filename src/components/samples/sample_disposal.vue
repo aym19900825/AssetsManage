@@ -128,8 +128,6 @@
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column type="selection" width="55" fixed v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
 								<el-table-column label="样品编号" sortable width="220px" prop="ITEMNUM" v-if="this.checkedName.indexOf('样品编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ITEMNUM}}
@@ -167,7 +165,7 @@
 		<samplesmask :samplesForm="samplesForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></samplesmask>
 		<!--右侧内容显示 End-->
 		<!--报表-->
-    <reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+    	<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 	</div>
 </template>
@@ -189,7 +187,7 @@
 			'samplesmask': samplesmask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
-			'v-table': vTable
+			'v-table': vTable,
 		},
 		data() {
 			return {

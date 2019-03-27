@@ -304,15 +304,15 @@
 													</template>
 												</el-table-column>
 
-												<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+												<el-table-column prop="UNITCOST" label="单价" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求">
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入要求">
 														</el-input>
-														<span v-else>{{scope.row.STATUS}}</span>
+														<span v-else>{{scope.row.UNITCOST}}</span>
 													</el-form-item>
 													</template>
-												</el-table-column>-->
+												</el-table-column>
 
 												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 													<template slot-scope="scope">

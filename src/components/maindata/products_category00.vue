@@ -90,7 +90,28 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="classByValue" @getDetail="getDetail" ></tree_grid>
+								<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" ></tree_grid>
+							<!-- <v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<template>
+									<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="checkedName.indexOf('编码')!=-1">
+										<template slot-scope="scope">
+											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+											</p>
+										</template>
+									</el-table-column>
+									<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="checkedName.indexOf('名称')!=-1">
+									</el-table-column>
+									<el-table-column label="版本" width="100" sortable='custom' v-if="checkedName.indexOf('版本')!=-1" prop="VERSION" align="right">
+									</el-table-column>
+									<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
+									</el-table-column>
+									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
+									</el-table-column>
+									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
+									</el-table-column>
+								</template>
+							</v-table> -->
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" ></tree_grid>
 						</el-col>
 					</el-row>
 				</div>
@@ -108,6 +129,7 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
+	
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
@@ -214,7 +236,7 @@
 			}
 		},
 		methods: {
-			SelChange(val) {
+			setSelData(val){
 				this.selUser = val;
 			},
 			fileSuccess(){//上传成功后返回数据
@@ -374,12 +396,6 @@
 				this.reset();
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
-			},
-			getDetail(data){
-				this.view(data);
-			},
-			classByValue(childValue) {
-		  		this.selUser = childValue;
 			},
 			//修改类别
 			modify() {

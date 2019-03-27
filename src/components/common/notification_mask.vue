@@ -97,22 +97,26 @@
 								<el-row>
 									<el-col :span="8" >
 										<el-form-item label="承检单位" prop="CJDW" label-width="110px">
-											<el-select clearable v-model="dataInfo.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4' || dataInfo.WP_NUM!=''
-" style="width: 100%" @change="changeCJDW">
+											<el-select	v-model="dataInfo.CJDW" 
+														default-first-option 
+														placeholder="请选择" 
+														:disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4' || dataInfo.WP_NUM!=''" 
+														style="width: 100%"
+														@change="changeCJDW">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 											</el-select>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
-											<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special ||dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''">
+											<el-input v-model="dataInfo.PRODUCT_TYPE" disabled>
 												   <el-button slot="append" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addcategory"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_NAME" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''">
+											<el-input v-model="dataInfo.ITEM_NAME" disabled>
 												   <el-button slot="append" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addproduct"></el-button>
 											</el-input>
 										</el-form-item>
@@ -137,8 +141,8 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAME" label-width="140px">
-											<el-input v-model="dataInfo.V_NAME" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''">
-												<el-button slot="append" :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addCompany('notivname')" ></el-button>
+											<el-input v-model="dataInfo.V_NAME" disabled>
+												<el-button slot="append" :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -423,6 +427,7 @@
 			<teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask>
 			<!-- 检测项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
+			<deptmask ref="deptmask" @getSelData="setData"></deptmask>
 		</div>
 	</div>
 </template>
@@ -438,6 +443,7 @@
 	import vewPoplemask from '../workflow/vewPople.vue'//当前责任人
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检测依据
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
+	import deptmask from'../common/common_mask/deptCustomMask.vue'
 	export default {
 		name: 'masks',
 		components: {
@@ -577,6 +583,9 @@
 			};
 		},
 		methods: {
+			setData(data){
+				console.log(data);
+			},
 			viewFile(){
 				var url = this.po_url+'/show?fileid=' +  row.FILEID
 						+ '&userid=' +  this.docParm.userid
@@ -638,6 +647,7 @@
 			},
 			changeCJDW(){
 				this.getCompany();
+				this.getDeptPerson();
 				this.dataInfo.PRODUCT_TYPE = '';
 				this.dataInfo.P_NUM = '';
 				this.dataInfo.ITEM_NAME = '';
@@ -645,6 +655,31 @@
 				this.dataInfo.S_NUM = '';
 				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
+			},
+			getDept(){
+				this.$refs.deptmask.getData();
+			},
+			getDeptPerson() {//高级查询
+				var data = {
+					params: {
+						id: this.dataInfo.CJDW
+					}
+				};
+				var url = this.basic_url + '/api-user/depts/treeMap';
+				this.$axios.get(url, data).then((res) => {
+					if(res.data.length > 0){
+						var data  = res.data[0];
+						this.dataInfo.P_LEADERDesc = data.leaderName;
+						this.dataInfo.P_LEADERD = data.leader;
+						this.dataInfo.ACCEPT_PERSONDesc = data.leaderName;
+						this.dataInfo.ACCEPT_PERSON = data.leader;
+					}
+				}).catch((wrong) => {
+					this.$message({
+						message: wrong.resp_msg,
+						type: 'warning'
+					});
+				})
 			},
 			addcategory(){//产品类别
 				if(this.dataInfo.CJDW == null || this.dataInfo.CJDW == '' || this.dataInfo.CJDW == undefined){
@@ -1266,7 +1301,7 @@
 	                    this.username = res.data.username;
 	            }).catch((err) => {
 	            });
-        	},
+        	}
 		},
 		mounted() {
 			this.getCompany();

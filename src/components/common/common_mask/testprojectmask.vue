@@ -6,28 +6,28 @@
 			<div class="pb10">
 				<el-form inline-message :model="searchList" label-width="70px">
 					<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="项目编号" prop="P_NUM">
-									<el-input v-model="searchList.P_NUM"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="机构" prop="DEPTID">
-									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="项目名称" prop="P_NAME">
-									<el-input v-model="searchList.P_NAME"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="版本" prop="VERSION">
-									<el-input v-model="searchList.VERSION"></el-input>
-								</el-form-item>
-							</el-col>
+						<el-col :span="5">
+							<el-form-item label="项目编号" prop="P_NUM">
+								<el-input v-model="searchList.P_NUM"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="机构" prop="DEPTID">
+								<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+									<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="项目名称" prop="P_NAME">
+								<el-input v-model="searchList.P_NAME"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="版本" prop="VERSION">
+								<el-input v-model="searchList.VERSION"></el-input>
+							</el-form-item>
+						</el-col>
 						<!-- <el-col :span="3">
 							<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
 								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -195,8 +195,10 @@
 		}
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
-    },
+	},
+	//检验项目与要求弹出框的确定
     addbasis(){
+		console.log(this.selUser);
         var selData = this.selUser;
         if(selData.length == 0) {
             this.$message({
@@ -205,18 +207,19 @@
             });
             return;
         } else {
-            var changeUser = this.selUser;
+            // var changeUser = this.selUser;
             var list = [];
             //basisnum为依据编号的数组
             var basisnum = [];
 			var basisname = [];
 			var basisid = [];
 			var prover = [];//项目：版本
-            for (var i = 0; i < changeUser.length; i++) {
-                basisnum.push(changeUser[i].P_NUM);
-				basisname.push(changeUser[i].P_NAME);
-				basisid.push(changeUser[i].ID);
-				prover.push(changeUser[i].P_NUM+':'+changeUser[i].VERSION);
+			console.log(selData);
+            for (var i = 0; i < selData.length; i++) {
+                basisnum.push(selData[i].P_NUM);
+				basisname.push(selData[i].P_NAME);
+				basisid.push(selData[i].ID);
+				prover.push(selData[i].P_NUM+':'+selData[i].VERSION);
             }
             //basisnums为basisnum数组用逗号拼接的字符串
             var basisnums = basisnum.toString(',');

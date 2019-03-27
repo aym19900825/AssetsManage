@@ -19,36 +19,6 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                      			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-								    <i class="icon-upload-cloud"></i>导入
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-								    <i class="icon-download-cloud"></i>导出
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-								    <i class="icon-print"></i>打印
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -169,33 +139,50 @@
 		<el-dialog
 			title="条码"
 			:visible.sync="codeDialog"
-			width="30%"
+			width="80%"
 			:before-close="resetCode"
 			center>
 			<div id="printdom">
-				<el-form label-width="50px">
+				<el-form label-width="120px" :rules="rules" ref="codeForm">
 					<el-row>
-						<el-form-item label="样品">
-							<el-radio-group>
-								<el-radio label="样品批次"></el-radio>
-								<el-radio label="样品序号"></el-radio>
-							</el-radio-group>
-						</el-form-item>
+						<el-col :span="8">
+							<el-form-item label="样品类型" v-show="sampleTypeFlag && codeUrl==''">
+								<el-radio-group v-model="sampleType" @change="getSampleList">
+									<el-radio label="1">样品批次</el-radio>
+									<el-radio label="2">样品序号</el-radio>
+								</el-radio-group>
+							</el-form-item>
+						</el-col>
 					</el-row>
 
 					<el-row>
-						<el-form-item label="条码">
-							<el-radio-group>
-								<el-radio label="条形码"></el-radio>
-								<el-radio label="二维码"></el-radio>
-							</el-radio-group>
-						</el-form-item>
+						<el-col :span="8">
+							<el-form-item label="条码类型">
+								<el-radio-group v-model="codeType">
+									<el-radio label="1">条形码</el-radio>
+									<el-radio label="2">二维码</el-radio>
+								</el-radio-group>
+							</el-form-item>
+						</el-col>
 					</el-row>
 				</el-form>
+				<el-table
+					ref="singleTable"
+					:data="sampleList"
+					border
+					stripe
+					style="width: 100%;"
+					v-show="sampleType=='2'"
+					@selection-change="selSample">
+					<el-table-column type="selection" width="55"></el-table-column>
+					<el-table-column prop="ITEMNUM" label="样品编号" sortable  ></el-table-column>
+					<el-table-column prop="ITEM_STEP" label="样品序号" sortable ></el-table-column>
+					<el-table-column prop="STATEDesc" label="样品状态" sortable></el-table-column>
+				</el-table>
 				<img  id="barcode" :src="codeUrl" alt="条码" v-show="codeUrl!=''"/>
 			</div>
 			<span slot="footer">
-				<el-button type="primary">生成条码</el-button>
+				<el-button type="primary" @click="genCode">生成条码</el-button>
 				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
 					<el-button type="primary" v-show="codeUrl!=''">打印条码</el-button>
 				</router-link>
@@ -226,6 +213,13 @@
 		},
 		data() {
 			return {
+				rules:{
+					codeType: [
+						{ required: true, message: '请选择条码类型', trigger: 'change' }
+					],
+				},
+				sampleType: '1',
+				codeType: '2',
 				appName: 'item',
 				codeDialog: false,
 				codeUrl: '',
@@ -332,10 +326,63 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				sampleList: [],
+				sampleTypeFlag: false,
+				
 				item:'item'//appname
 			}
 		},
 		methods: {
+			selSample(val){
+				this.selSampleData = val;
+			},
+			genCode(){
+				if( this.sampleType=='2'&&this.selSampleData.length==0){
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				}
+				var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='
+						+this.selMenu[0].ITEMNUM
+						+'&SIMPLE_NAME='
+						+ this.selMenu[0].DESCRIPTION
+						+'&CODE_TYPE='
+						+ this.codeType;
+				if(this.sampleType=='2'){
+					url = url+ '&ITEM_STEP='+ this.selSampleData[0].ITEM_STEP;
+				}
+				this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
+					if(res.data.resp_code == 0) {
+						this.sampleTypeFlag = false;
+						this.codeDialog = true;
+						this.codeUrl = this.code_url + res.data.datas;
+						this.saveData();
+					}
+				}).catch((err) => {});
+			},
+			saveData(){
+				var url = this.basic_url + '/api-apps/app/item/operate/saveItemType'
+				this.$axios.post(url, {
+					itemType: this.sampleType,
+					itemNum: this.selMenu[0].ITEMNUM
+				}).then((res) => {
+					if(res.data.resp_code == 0) {
+						console.log('保存成功');
+					}
+				}).catch((err) => {});
+			},
+			getSampleList(){
+				this.selSampleData = [];
+				if(this.sampleList.length>0){
+					return false;
+				}
+				var dataid = this.selMenu[0].ID;
+				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
+					this.sampleList = res.data.ITEM_LINEList;
+				}).catch((err) => {});
+			},
 			setSelData(val){
 				this.selMenu = val;
 			},
@@ -419,20 +466,24 @@
 					});
 					return;
 				} else {
+					this.sampleTypeFlag = this.selMenu[0].ITEM_TYPE == ''? true : false;
+					if(this.selMenu[0].ITEM_TYPE =='2'){
+						this.getSampleList();
+						this.sampleType = '2';
+					}
 					this.codeDialog = true;
-					// var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='+this.selMenu[0].ITEMNUM+'&SIMPLE_NAME='+ this.selMenu[0].DESCRIPTION;
-					// this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
-					// 	if(res.data.resp_code == 0) {
-					// 		this.codeDialog = true;
-					// 		this.codeUrl = this.code_url + res.data.datas;
-					// 	}
-					// }).catch((err) => {
-					// });
 				}
 			},
 			resetCode(){
 				this.codeDialog = false;
+				this.sampleTypeFlag = false;
+				this.sampleType = '1';
+				this.codeType = '2';
 				this.selMenu = [];
+				this.selSampleData = [];
+				this.sampleList = [];
+				this.codeUrl = '';
+				this.requestData();
 			},
 			printCode(){
 				let routeUrl = this.$router.resolve({
@@ -463,6 +514,13 @@
 					});
 					return;
 				} else {
+					if(this.selMenu[0].ISRECEIVE=='1'){
+						this.$message({
+							message: '此样品已有领样单，不可修改！',
+							type: 'warning'
+						});
+						return;
+					}
 					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
@@ -491,6 +549,13 @@
 					});
 					return;
 				} else {
+					if(this.selMenu[0].ISRECEIVE=='1'){
+						this.$message({
+							message: '此样品已有领样单，不可删除！',
+							type: 'warning'
+						});
+						return;
+					}
 					var url = this.basic_url + '/api-apps/app/item/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;

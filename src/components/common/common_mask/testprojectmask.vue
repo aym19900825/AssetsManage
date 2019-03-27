@@ -195,8 +195,10 @@
 		}
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
-    },
+	},
+	//检验项目与要求弹出框的确定
     addbasis(){
+		console.log(this.selUser);
         var selData = this.selUser;
         if(selData.length == 0) {
             this.$message({
@@ -205,18 +207,19 @@
             });
             return;
         } else {
-            var changeUser = this.selUser;
+            // var changeUser = this.selUser;
             var list = [];
             //basisnum为依据编号的数组
             var basisnum = [];
 			var basisname = [];
 			var basisid = [];
 			var prover = [];//项目：版本
-            for (var i = 0; i < changeUser.length; i++) {
-                basisnum.push(changeUser[i].P_NUM);
-				basisname.push(changeUser[i].P_NAME);
-				basisid.push(changeUser[i].ID);
-				prover.push(changeUser[i].P_NUM+':'+changeUser[i].VERSION);
+			console.log(selData);
+            for (var i = 0; i < selData.length; i++) {
+                basisnum.push(selData[i].P_NUM);
+				basisname.push(selData[i].P_NAME);
+				basisid.push(selData[i].ID);
+				prover.push(selData[i].P_NUM+':'+selData[i].VERSION);
             }
             //basisnums为basisnum数组用逗号拼接的字符串
             var basisnums = basisnum.toString(',');

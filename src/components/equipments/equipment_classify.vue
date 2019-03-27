@@ -382,9 +382,9 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) {
-				this.selUser = val;
-			},
+			// SelChange(val) {
+			// 	this.selUser = val;
+			// },
 			min3max() { //左侧菜单正常和变小切换
 				if($(".lefttree").hasClass("el-col-5")) {
 					$(".lefttree").removeClass("el-col-5");
@@ -475,7 +475,7 @@
 				this.view(data);
 			},
 			classByValue(childValue) {
-		  	this.selUser = childValue;
+		  	   this.selUser = childValue;
 			},
 			childByValue(childValue) {
 				// childValue就是子组件传过来的值

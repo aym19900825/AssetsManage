@@ -123,7 +123,7 @@
 		this.NUM = NUM;
 		this.CJDW = CJDW;
 		this.dialogProduct = true;
-		this.requestData();
+		this.requestData(NUM,CJDW);
   	},
   	loadMore () {
 	   if (this.loadSign) {
@@ -135,15 +135,16 @@
 	     setTimeout(() => {
 	       this.loadSign = true
 	     }, 1000)
-	     this.requestData();
+	     this.requestData(NUM,CJDW);
 	   }
 	},
-	requestData(){
+	requestData(NUM,CJDW){
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 		};
 		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_wheres='+this.CJDW;
+		console.log(12345);
 		this.$axios.get(url, {
 			
 		}).then((res) => {
@@ -199,7 +200,6 @@
     },
   },
   mounted() {
-		// this.requestData();
 	},
 }
 </script>

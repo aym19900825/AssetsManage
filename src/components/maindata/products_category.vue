@@ -18,13 +18,6 @@
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style"  @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<del-btn :delTable="appName" 
-									:delBtn="delBtn" 
-									:delLen="2" 
-									:delData="selUser" 
-									@refreshList="requestData"
-									v-if="JSON.stringify(delBtn) == '{}'">
-								</del-btn>
 								<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
 										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
@@ -55,7 +48,7 @@
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh">
 								<i class="icon-refresh"></i>
 							</div>
-							<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
+							<tableControle :tableHeader="columns" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
 					<!--按钮操作行 End-->
@@ -97,26 +90,7 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							<!-- 表格 Begin-->
-							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<template>
-									<el-table-column label="编码" width="155" sortable='custom' prop="NUM" v-if="checkedName.indexOf('编码')!=-1">
-										<template slot-scope="scope">
-											<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
-											</p>
-										</template>
-									</el-table-column>
-									<el-table-column label="名称" sortable='custom' prop="TYPE" v-if="checkedName.indexOf('名称')!=-1">
-									</el-table-column>
-									<el-table-column label="版本" width="100" sortable='custom' v-if="checkedName.indexOf('版本')!=-1" prop="VERSION" align="right">
-									</el-table-column>
-									<el-table-column label="机构" width="185" sortable='custom' prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
-									</el-table-column>
-									<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
-									</el-table-column>
-									<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable='custom' :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
-									</el-table-column>
-								</template>
-							</v-table>
+							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="classByValue" @getDetail="getDetail" ></tree_grid>
 						</el-col>
 					</el-row>
 				</div>
@@ -134,11 +108,10 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
+	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
-	import vbuttons from '../common/buttons/btnGroup.vue'
-	import delButtons from '../common/buttons/delBtn.vue'
-	import vTable from '../plugin/table/table.vue'
+	
 	export default {
 		name: 'customer_management',
 		components: {
@@ -148,15 +121,12 @@
 			'categorymask': categorymask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
-			'v-buttons': vbuttons,
-			'del-btn': delButtons,
-			'v-table': vTable
+			'tree_grid':tree_grid,
 		},
 		data() {
 			return {
 				appName: 'productType',
 				btnShow: false,
-				delBtn: {},
 				reportData:{},//报表的数据
 				// up2down:'down',
 				basic_url: Config.dev_url,
@@ -165,6 +135,7 @@
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',
+				deptList:[],
 				productType:'productType',//appname
 				checkedName: [
 					'编码',
@@ -175,33 +146,44 @@
 					'录入时间',
 					'修改时间'
 				],
-				tableHeader: [{
-						label: '编码',
-						prop: 'NUM'
+				columns: [{
+						text: '编码',
+						dataIndex: 'NUM',
+						width:'200',
+						isShow:true,
 					},
 					{
-						label: '名称',
-						prop: 'TYPE'
+						text: '名称',
+						dataIndex: 'TYPE',
+						isShow:true,
 					},
 					{
-						label: '版本',
-						prop: 'VERSION'
+						text: '版本',
+						dataIndex: 'VERSION',
+						width:'100',
+						isShow:true,
 					},
 					{
-						label: '机构',
-						prop: 'DEPARTMENTDesc'
+						text: '机构',
+						dataIndex: 'DEPTIDDesc',
+						width:'140',
+						isShow:true,
 					},
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
 					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
+						text: '录入时间',
+						dataIndex: 'ENTERDATE',
+						dataType: 'date',
+						isShow:true,
 					},
 					{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
+						text: '修改时间',
+						dataIndex: 'CHANGEDATE',
+						dataType: 'date',
+						isShow:true,
 					}
 				],
 				search: false,
@@ -222,8 +204,8 @@
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				resourceProps: {
-					categorymaskren: "subDepts",
-					label: "simplename"
+					children: "children",
+					label: "TYPE"
 				},
 				CATEGORY: {},//修改子组件时传递数据
 				selectData: [],
@@ -232,7 +214,7 @@
 			}
 		},
 		methods: {
-			setSelData(val){
+			SelChange(val) {
 				this.selUser = val;
 			},
 			fileSuccess(){//上传成功后返回数据
@@ -339,12 +321,7 @@
 				 	this.Printing();
 				}
 		    },
-			//添加类别
-			openAddMgr() {
-				this.reset();
-				this.$refs.categorymask.open(); // 方法1
-				this.$refs.categorymask.visible();
-			},
+			// 删除
 			deluserinfo(){
 				var selData = this.selUser;
 				if(selData.length == 0) {
@@ -355,7 +332,9 @@
 					return;
 				}else {
 					var url = this.basic_url + '/api-apps/app/productType/deletes';
+					//changeUser为勾选的数据
 					var changeUser = selData;
+					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
@@ -374,7 +353,8 @@
 					}) => {
 						this.$axios.delete(url, {
 							params: data
-						}).then((res) => {
+						}).then((res) => {//.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -389,6 +369,19 @@
 					});
 				}
 			},
+			//添加类别
+			openAddMgr() {
+				this.reset();
+				this.$refs.categorymask.open(); // 方法1
+				this.$refs.categorymask.visible();
+			},
+			getDetail(data){
+				this.view(data);
+			},
+			classByValue(childValue) {
+		  		this.selUser = childValue;
+			},
+			//修改类别
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -404,7 +397,7 @@
 					return;
 				}else {
 					this.CATEGORY = this.selUser[0];
-					this.$refs.categorymask.detail();
+					this.$refs.categorymask.detail(this.selUser[0]);
 				}
 			},
 			//查看
@@ -572,13 +565,19 @@
 					this.btn=res.data;
 				}).catch((err) => {})
 			},
-			requestData(opt){
-				this.$refs.table.requestData(opt);
+			requestData(){
+				this.loading = true;
+				var url= this.basic_url +'/api-apps/app/productType/tree?tree_id=NUM&tree_pid=PARENT';
+				this.$axios.get(url, {}).then((res) => {
+					this.deptList = res.data.datas;
+					this.loading = false;
+				}).catch((wrong) => {})
 			}
 		},
 		mounted() {
 			this.getCompany();
 			this.getdept();
+			this.requestData();
 		}
 	}
 </script>

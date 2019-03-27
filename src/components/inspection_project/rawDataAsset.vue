@@ -16,7 +16,7 @@
 			</div>
 		</div>
 		<el-form inline-message :model="rawDataAssetForm" ref="rawDataAssetForm">
-		  <el-table :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
+		  <el-table ref="table" :data="rawDataAssetForm.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
 				style="width: 100%;" :default-sort="{prop:'rawDataAssetForm.inspectionList', order: 'descending'}"
 				v-loadmore="loadMore"
@@ -32,10 +32,10 @@
 		      </template>
 		    </el-table-column>
 
-		  	<el-table-column label="设备编号" width="210" prop="NUM">
+		  	<el-table-column label="设备编号" width="210" prop="ASSETNUM">
 		      <template slot-scope="scope">
-		        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUM" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.NUM}}</span>
+		        <el-form-item :prop="'inspectionList.'+scope.$index + '.ASSETNUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSETNUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.ASSETNUM}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -43,7 +43,7 @@
 		    <el-table-column label="规格型号" width="160" sortable prop="MODEL">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.MODEL'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="自动生成" disabled></el-input><span v-else>{{scope.row.MODEL}}</span>
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MODEL" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.MODEL}}</span>
 				</el-form-item>
 		      </template>
 		    </el-table-column>
@@ -101,7 +101,7 @@
 		      <template slot-scope="scope">
 		        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 		        	<i class="icon-check" title="保存"></i>
-				</el-button>
+						</el-button>
 
 		        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 		          <i class="icon-trash red"></i>
@@ -125,9 +125,14 @@
 	<!-- 检测仪器 Begin -->
 		<el-dialog :modal-append-to-body="false" title="选择基础数据——检测仪器" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-				<el-table-column type="selection" fixed width="55" align="center">
-				</el-table-column>
+			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px"
+				highlight-current-row
+				@current-change="addproclass"
+				style="width: 100%;"
+				:default-sort="{prop:'categoryList', order: 'descending'}"
+				v-loadmore="loadMore">
+				<!-- <el-table-column type="selection" fixed width="55" align="center">
+				</el-table-column> -->
 				<el-table-column label="设备编号" width="165" sortable prop="ASSETNUM">
 				</el-table-column>
 				<el-table-column label="规格型号" width="125" sortable prop="MODEL">
@@ -143,10 +148,10 @@
 			</el-table>
 			
 			<!-- 表格 End-->
-			<span slot="footer" class="dialog-footer">
+				<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
 		       <el-button @click="dialogVisible3 = false">取 消</el-button>
-		    </span>
+		    </span> -->
 		</el-dialog>
 		<!-- 检测仪器 End -->
 </div>
@@ -166,28 +171,21 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-					departmentId: '',//当前用户机构号
-					categoryList:[],//获取产品数据
-					catedata:'',//获取产品类别一条数据放到table行中
-					dialogVisible3: false, //对话框
-					selData:[],
+				departmentId: '',//当前用户机构号
+				categoryList:[],//获取产品数据
+				catedata:'',//获取产品类别一条数据放到table行中
+				dialogVisible3: false, //对话框
+				selData:[],
 				isEditing: '',
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},//下拉加载
 				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
 				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        enabled: '',//信息状态
-		        },
+					page: 1,
+					limit: 20,//分页显示数
+					enabled: '',//信息状态
+				},
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -205,7 +203,7 @@
 			},
 			modifyversion (row) {//点击修改后给当前修改人和修改时间赋值
 				 this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					row.CHANGEBY=res.data.nickname;
+					row.CHANGEBY=res.data.id;
 					var date=new Date();
 					row.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
@@ -238,7 +236,7 @@
 				setTimeout(() => {
 					this.loadSign = true;
 				}, 1000)
-				this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+				this.viewfield_rawDataAsset(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 			}
 		},
 		//改变页数
@@ -250,7 +248,7 @@
 			}else{
 				sessionStorage.setItem('toBtm','false');
 			}
-			this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+			this.viewfield_rawDataAsset(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 		},
 		//当前页数
 		currentChange(val) {
@@ -261,7 +259,7 @@
 			}else{
 				sessionStorage.setItem('toBtm','false');
 			}
-			this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+			this.viewfield_rawDataAsset(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 		},
 			 addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -270,7 +268,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/asset?DEPTID=' + this.parentIds, {
+				this.$axios.get(this.basic_url + '/api-apps/app/asset', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -296,7 +294,7 @@
 			searchinfo(index) {
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
-				this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+				this.viewfield_rawDataAsset(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 			},
 			judge(data) {//taxStatus 信息状态布尔值
 				return data.enabled ? '活动' : '不活动'
@@ -309,20 +307,20 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			indexMethod(index) {
-				return index + 1;
-			},
-			viewfield_rawDataAsset(id,num){//点击父级筛选出子级数据
-				if(id=='null'){
+			viewfield_rawDataAsset(id,num,pro_num,s_num,p_num){//点击父级筛选出子级数据
+				if(num==undefined||num==null||num==''){
 					this.rawDataAssetForm.inspectionList = []; 
 					return false;
 					//todo  相关数据设置
 				}
-				this.parentId = num;
 				this.selParentId = id;
-				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2/' + id;
+				this.pTypeId = num;
+				this.proId = pro_num;
+				this.staId = s_num;
+				this.parentId = p_num;
+				var url = this.basic_url + '/api-apps/app/rawDataAsset/INSPECTION_PROJECT2';
+				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {
-					// 
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
@@ -331,14 +329,11 @@
 					}else{
 						this.loadSign=true
 					}
-					this.rawDataAssetForm.inspectionList=res.data.RAW_DATA_ASSETList;
-					
+					this.rawDataAssetForm.inspectionList=!!res.data.RAW_DATA_ASSETList?res.data.RAW_DATA_ASSETList:[];
 					for(var j = 0; j < this.rawDataAssetForm.inspectionList.length; j++){
 						this.rawDataAssetForm.inspectionList[j].isEditing = false;
 					}
-
 					this.$refs.singleTable.setCurrentRow(this.rawDataAssetForm.inspectionList[0]);//默认选中第一条数据
-
 				}).catch((wrong) => {})
 			},
 			// requestData_rawDataAsset(index) {//加载数据
@@ -406,21 +401,24 @@
 						if (this.rawDataAssetForm.inspectionList[i].isEditing==false){
 							isEditingflag=false;
 						}else{
-	                        isEditingflag=true;
-	                        break;
+							isEditingflag=true;
+							break;
 						}
 					}
 					if (isEditingflag==false){
-	                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-	                		var currentUser, currentDate
+							this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+							var currentUser, currentDate
 							this.currentUser=res.data.nickname;
 							var date=new Date();
 							this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 							var obj = {
-								"P_NUM": this.parentId,
+								"NUM": this.pTypeId,//产品类别编号
+								"PRO_NUM": this.proId,//产品编号
+								"S_NUM": this.staId,//检验检测标准编号
+								"P_NUM": this.parentId,//检验检测项目编号
+								"ASSETNUM": '',//设备编号
 								"DECRIPTION": '',
 								"STATUS": '',
-								"NUM": '',
 								"MODEL": '',
 								"VERSION": '',
 								"DEPTID": '',
@@ -431,8 +429,8 @@
 							this.rawDataAssetForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 						}).catch((err)=>{
 						})
-		            } else {
-		                this.$message.warning("请先保存当前编辑项");
+							} else {
+									this.$message.warning("请先保存当前编辑项");
 					}
 				}
 			},
@@ -442,8 +440,11 @@
 						var url = this.basic_url + '/api-apps/app/rawDataAsset/saveOrUpdate';
 						var submitData = {
 							"ID":row.ID,
-							"P_NUM": row.P_NUM,
-							"NUM": row.NUM,
+							"NUM": row.NUM,//产品类编号
+							"PRO_NUM": row.PRO_NUM,//产品编号
+							"S_NUM": row.S_NUM,//检验检测标准编号
+							"P_NUM": row.P_NUM,//检验检测项目编号
+							"ASSETNUM": row.ASSETNUM,
 							"MODEL": row.MODEL,
 							"DECRIPTION": row.DECRIPTION,
 							"STATUS": row.STATUS,
@@ -460,7 +461,7 @@
 							});
 							//重新加载数据
 							// this.requestData_rawDataAsset();
-							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+							this.viewfield_rawDataAsset(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
 						} else {
 							this.$message({
 								message: res.data.resp_msg,
@@ -476,18 +477,23 @@
 			},
 			deleteRow(row) {//Table-操作列中的删除行
 				this.$confirm('确定删除此产品类型吗？', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                }).then(({ value }) => {
-                	var url = this.basic_url + '/api-apps/app/rawDataAsset/' + row.ID;
-                    this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+					}).then(({ value }) => {
+						var url = this.basic_url + '/api-apps/app/rawDataAsset/' + row.ID;
+							this.$axios.delete(url, {}).then((res) => {//.delete 传数据方法
 					//resp_code == 0 是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '删除成功',
 								type: 'success'
 							});
-							this.viewfield_rawDataAsset(this.selParentId,this.parentId);
+							this.viewfield_rawDataAsset(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
 						}
 					}).catch((err) => {
 					});
@@ -495,14 +501,17 @@
 
             	});
 			},
-			addproclass() { //小弹出框确认按钮事件
-				this.dialogVisible3 = false
-				this.catedata.NUM = this.selData[0].ASSETNUM;
-				this.catedata.MODEL = this.selData[0].MODEL;
-				this.catedata.DECRIPTION = this.selData[0].DESCRIPTION;
-				this.catedata.DEPTID = this.selData[0].DEPTID;
-				this.catedata.VERSION = this.selData[0].VERSION;
-				this.$emit('request');
+			addproclass(val) { //小弹出框确认按钮事件
+				this.currentRow = val;
+				if (val!=null) {
+					this.catedata.ASSETNUM = val.ASSETNUM;
+					this.catedata.MODEL = val.MODEL;
+					this.catedata.DECRIPTION = val.DESCRIPTION;
+					this.catedata.DEPTID = val.DEPTID;
+					this.catedata.VERSION = val.VERSION;
+					this.$emit('request');
+					this.dialogVisible3 = false
+				}
 			},
 		},
 		

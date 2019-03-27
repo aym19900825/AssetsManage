@@ -352,9 +352,10 @@
 					CUSTOMER_PERSONList:[]
 				},
 				rules: {
+					//统一社会信息代码
 					CODE:[
-						{required: true,message: '必填',trigger: 'blur'},
-						{validator: this.Validators.isWorknumber, trigger: 'blur'}
+						{required: true, message: '必填', trigger: 'blur'},
+						{validator: this.Validators.isCompanyCode, trigger: 'blur'}
 					],
 					NAME:[
 						{required: true,message: '必填',trigger: 'blur'},

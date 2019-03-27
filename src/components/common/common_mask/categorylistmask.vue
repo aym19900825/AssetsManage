@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog inline-message :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogCategory" inline-message width="80%" :before-close="handleClose">
+		<el-dialog inline-message :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
 			<el-form inline-message :model="searchList" label-width="45px">
 				<el-row :gutter="10">
 					<el-col :span="5">
@@ -221,6 +221,7 @@
 		})
 	},
 	determine(){
+		console.log(this.selUser[0]);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',

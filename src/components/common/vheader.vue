@@ -5,11 +5,13 @@
             <li class="current" ><router-link :to="{path:'/index'}">控制台</router-link></li>
         </ul>
         <div class="nav-head pull-right nav-right">
-	            <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30" >
-	            	<span class="lingdang" @click="appCenter">
-	            		<i class="icon-notice"></i>
-	            	</span>
-	            </el-badge>
+            <span @click="appCenter">
+                <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30">
+                    <a class="lingdang">
+                        <i class="icon-notice"></i>
+                    </a>
+                </el-badge>
+            </span>
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">
                 <font class="roles pr10">{{username}}<br>{{GetRolesname}}</font>
@@ -61,6 +63,8 @@ export default {
             file_url: Config.file_url,
             imgUrl: imgUrl,
             toDoNumber: 0,//获取待办任务数量
+            toDoDing: 0,//获取执行中数量
+            toDoFinish: 0,//获取已完成数量
             headImgUrl: '',
             username: '',
             nickname: '',
@@ -98,12 +102,34 @@ export default {
             });
         },
         getTodoNumber() {//获取当前用户待办任务数
-            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
+            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts?BizState=1';
             this.$axios.get(url, {}).then((res) => {
                 this.toDoNumber = res.data.datas;
                 var url = window.location.href;
                 if(url.indexOf('index') != -1){
                     this.$emit('getTodoNum',this.toDoNumber);
+                }
+            }).catch(error => {
+            });
+        },
+        getTodoDing() {//获取当前用户执行中
+            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts?BizState=2';
+            this.$axios.get(url, {}).then((res) => {
+                this.toDoDing = res.data.datas;
+                var url = window.location.href;
+                if(url.indexOf('index') != -1){
+                    this.$emit('getTodoDing',this.toDoDing);
+                }
+            }).catch(error => {
+            });
+        },
+        getTodoFinish() {//获取当前用户已完成
+            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts?BizState=3';
+            this.$axios.get(url, {}).then((res) => {
+                this.toDoFinish = res.data.datas;
+                var url = window.location.href;
+                if(url.indexOf('index') != -1){
+                    this.$emit('getTodoFinish',this.toDoFinish);
                 }
             }).catch(error => {
             });
@@ -182,7 +208,9 @@ export default {
     mounted(){
         this.getData();//调用getData
         this.getITEM_Roles();
-        this.getTodoNumber();
+        this.getTodoNumber();//待办工作
+        this.getTodoDing();//执行中
+        this.getTodoFinish();//已完成
     }
 }
 </script>

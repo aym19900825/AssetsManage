@@ -103,8 +103,8 @@ const validators = {
 		if(!value) {
 			callback();
 		} else {
-			if(!validators.SpecificWord(value)) {
-				callback(new Error('不是正确的统一社会信用代码'));
+			if(!validators.CompanyCode(value)) {
+				callback(new Error('不是有效的统一社会信用代码'));
 			} else {
 				callback();
 			}
@@ -219,9 +219,9 @@ const validators = {
 			callback(new Error('不支持特殊符号'));
 		}
 		setTimeout(() => {
-			var regs = /^.{2,20}$/g
+			var regs = /^.{2,30}$/g
 			if (!regs.test(value)) {
-				callback(new Error('内容不少于2位且不能大于20位'));
+				callback(new Error('内容不少于2位且不能大于30位'));
 			} else {
 				if(validators.Numbers(value)) {
 					callback(new Error('不只支持全数字'));
@@ -405,29 +405,43 @@ const validators = {
 	},
 
 
-	// isChinese:function (rule, value, callback) { //仅限中文
-	// 	if(!value) {
-	// 		callback();
-	// 	} else {
-	// 		if(!validators.SpecificWord(value)) {
-	// 			callback(new Error('不支持特殊符号'));
-	// 		} else {
-	// 			callback();
-	// 		}
-	// 	}
-	// },
+	isChinese:function (rule, value, callback) { //中文名称
+		if(!value) {
+			callback();
+		} else {
+			setTimeout(() => {
+				var regs = /^.{1,200}$/g
+				if (!regs.test(value)) {
+					callback(new Error('内容不少于1位且不能大于200位'));
+				} else {
+					if(!validators.SpecificWord(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						callback();
+					}
+				}
+			}, 500);
+		}
+	},
 
-	// isEnglish:function (rule, value, callback) { //仅限英语
-	// 	if(!value) {
-	// 		callback();
-	// 	} else {
-	// 		if(!validators.SpecificWord(value)) {
-	// 			callback(new Error('不支持特殊符号'));
-	// 		} else {
-	// 			callback();
-	// 		}
-	// 	}
-	// },
+	isEnglish:function (rule, value, callback) { //英文名称
+		if(!value) {
+			callback();
+		} else {
+			setTimeout(() => {
+				var regs = /^.{1,1000}$/g
+				if (!regs.test(value)) {
+					callback(new Error('内容不少于1位且不能大于200位'));
+				} else {
+					if(!validators.SpecificWord(value)) {
+						callback(new Error('不支持特殊符号'));
+					} else {
+						callback();
+					}
+				}
+			}, 500);
+		}
+	},
 
 
 	isChoosedata:function (rule, value, callback) {//放大镜选择验证

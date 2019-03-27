@@ -327,8 +327,7 @@
 				rules:{
    					step: [{required:false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
 					fullname: [
-						{required:true, trigger: 'blur', message: '必填'},
-						{validator: this.Validators.isNickname, trigger: 'blur'},
+						{required:true, trigger: 'blur', message: '必填',validator: this.Validators.isNickname}
 					],//机构名称
 					depttype: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
    					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
@@ -341,8 +340,9 @@
 					zipcode:[{required:true,trigger: 'blur',message: '请输入邮编'}],//选择机构类型
 					telephone:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
 					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
-					email:[{required: false,trigger: 'blur',validator: this.Validators.isEmail}],//邮箱
+					email:[{required: false,trigger: 'blur',message: '请输入邮箱'}],//邮箱
 					tips:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//备注
+					leaderName:[{required: true,trigger: 'blur',message: '请输入负责人'}],
 				}
 			}
 		},

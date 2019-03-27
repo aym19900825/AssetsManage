@@ -12,8 +12,8 @@
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
 								<!-- <button type="button" class="btn btn-green" @click="audit">
-                                	<i class="icon-add"></i>审核
-                      			</button> -->
+											<i class="icon-add"></i>审核
+								</button> -->
 								<button type="button" class="btn btn-primarys button-margin" >
 						    		<i class="icon-search"></i>高级查询
 								</button>

@@ -57,11 +57,9 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column type="selection" fixed width="55" v-if="this.checkedName.length>0" align="center">
-								</el-table-column>
-								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<el-table-column label="编码" width="155" sortable prop="RE_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.RE_NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -130,7 +128,7 @@
 				],
 				tableHeader: [{
 						label: '编码',
-						prop: 'NUM'
+						prop: 'RE_NUM'
 					},
 					{
 						label: '模板描述',
@@ -212,7 +210,7 @@
 			reset() {
 				this.CATEGORY = {
 					ID: '',
-					NUM: '',
+					RE_NUM: '',
 					TYPE: '',
 					STATUS: '活动',
 					VERSION: '1',

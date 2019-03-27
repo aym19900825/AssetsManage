@@ -62,14 +62,14 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="分发号" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
+								<el-table-column label="编码" width="155" sortable prop="NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="文件名称" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('文件名称')!=-1">
+								<el-table-column label="分发号" sortable prop="WI_NUM" v-if="this.checkedName.indexOf('分发号')!=-1">
 								</el-table-column>
+								<el-table-column label="文件名称" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('文件名称')!=-1">
 								</el-table-column>
 								<el-table-column label="版本" width="100" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 								</el-table-column>
@@ -123,6 +123,7 @@
 				commentArr: {},
 				value: '',
 				checkedName: [
+					'编码',
 					'分发号',
 					'文件名称',
 					'版本',
@@ -131,8 +132,12 @@
 					'机构'
 				],
 				tableHeader: [{
+						label: '编码',
+						prop: 'NUM',
+					},
+					{
 						label: '分发号',
-						prop: 'NUM'
+						prop: 'WI_NUM'
 					},
 					{
 						label: '文件名称',
@@ -223,6 +228,7 @@
 				this.WORK_INSTRUCTION = {
 					ID: '',
 					NUM: '',
+					WI_NUM: '',
 					DESCRIPTION: '',
 					STATUS: '活动',
 					VERSION: '1',

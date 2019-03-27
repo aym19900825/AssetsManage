@@ -9,14 +9,14 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="5">
-						<el-form-item label="模板描述" prop="NUM">
-							<el-input v-model="searchList.NUM"></el-input>
+						<el-form-item label="模板编号" prop="PT_NUM">
+							<el-input v-model="searchList.PT_NUM"></el-input>
 						</el-form-item>
 					</el-col>
 					
 					<el-col :span="4">
 						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -28,7 +28,7 @@
 			element-loading-background="rgba(255, 255, 255, 0.9)">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="编码" width="155" sortable prop="NUM">
+				<el-table-column label="编码" width="155" sortable prop="PT_NUM">
 				</el-table-column>
 				<el-table-column label="模板描述" sortable prop="DECRIPTION">
 				</el-table-column>							             
@@ -69,7 +69,7 @@
 			},
 		searchList: { //点击高级搜索后显示的内容
 				DECRIPTION: '',
-				NUM: '',
+				PT_NUM: '',
 		},
 		DEPTID:'',//当前选择的机构值
 		datamodule:[],//原始数据模板已选数据
@@ -110,7 +110,7 @@
 	resetbtn(){
 		this.searchList =  { //点击高级搜索后显示的内容
 			DECRIPTION: '',
-			NUM: '',
+			PT_NUM: '',
 		};
 	},
   	//点击关闭按钮
@@ -127,7 +127,7 @@
 			this.datamodule = value[1];
 			var datamodulenum = [];
 			for(var i = 0;i<this.datamodule.length;i++){
-				datamodulenum.push(this.datamodule[i].NUM);
+				datamodulenum.push(this.datamodule[i].PT_NUM);
 			}
 			this.datamodulenums = datamodulenum.toString(',');
 		}else{
@@ -162,7 +162,7 @@
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 			DECRIPTION:this.searchList.DECRIPTION,
-			NUM:this.searchList.NUM
+			PT_NUM:this.searchList.PT_NUM
 		}
 		var url = this.basic_url + '/api-apps/app/rawDataTem';//业务基础数据原始数据模板
 		this.$axios.get(url, {}).then((res) => {
@@ -200,7 +200,7 @@
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 			DECRIPTION:this.searchList.DECRIPTION,
-			NUM:this.searchList.NUM
+			PT_NUM:this.searchList.PT_NUM
 		}
 		// var url = this.basic_url + '/api-apps/app/rawDataTem2?P_NUM_where_in='+this.projectnums+'&NUM_where_not_in='+this.datamodulenums;
 		// var url = this.basic_url + '/api-apps/app/rawDataTem';//业务基础数据原始数据模板
@@ -248,7 +248,7 @@
 		}else{
 			var moduleObj = {
 				id: this.selUser[0].ID,
-				num: this.selUser[0].NUM,
+				num: this.selUser[0].PT_NUM,
 				desc: this.selUser[0].DECRIPTION
 			};
 			this.$emit('showModule',moduleObj);

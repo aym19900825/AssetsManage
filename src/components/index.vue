@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader @clickfun='getroId' ref="vheader"  @getTodoNum="getTodoNum"></vheader>
+		<vheader @clickfun='getroId' ref="vheader" @getTodoNum="getTodoNum" @getTodoDing="getTodoDing" @getTodoFinish="getTodoFinish"></vheader>
 		<navs_tabs ref='navsTabs'></navs_tabs>
 	</div>
 
@@ -32,7 +32,7 @@
 					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
-						<el-col :span="18">
+						<el-col :span="12">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
@@ -58,12 +58,12 @@
 												</p>
 											</template>
 										</el-table-column>
-										<el-table-column label="当前环节" sortable prop="name">
-										</el-table-column>
 										<el-table-column label="应用" sortable width="160px" prop="appDesc">
 										</el-table-column>
-										<el-table-column label="任务状态" sortable width="140px" align="center" prop="state">
+										<el-table-column label="当前环节" sortable prop="name">
 										</el-table-column>
+										<!-- <el-table-column label="任务状态" sortable width="140px" align="center" prop="state">
+										</el-table-column> -->
 										<el-table-column label="创建时间" sortable width="160px" prop="createTime">
 										</el-table-column>
 									</el-table>
@@ -73,7 +73,7 @@
 								</div>
 							</div>
 						</el-col>
-						<!-- <el-col :span="6">
+						<el-col :span="6">
 							<div class="statisticsbg" style="height: 290px">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
@@ -97,9 +97,9 @@
 										<p class="small_font">工作总计</p>
 										<div class="pt40">
 											<p class="middle_font pt40">
-												<span class="red">待办工作: 22</span>
-												<span class="textblue">执行中: 16</span>
-												<span class="green">已完成: 18</span>
+												<span class="red">待办工作: {{toDoNum}}</span>
+												<span class="textblue">执行中: {{toDoDing}}</span>
+												<span class="green">已完成: {{toDoFinish}}</span>
 											</p>
 										</div>
 									</div>
@@ -114,7 +114,7 @@
 									</div>
 								</div>
 							</div>
-						</el-col> -->
+						</el-col>
 						<el-col :span="6">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
@@ -177,7 +177,9 @@ export default {
 
     data() {
       return {
-      	toDoNum: 0,
+				toDoNum: 0,
+				toDoDing: 0,
+				toDoFinish: 0,
       	roleid:1,
       	basic_url: Config.dev_url,
       	loadSign: true, //鼠标滚动加载数据
@@ -201,6 +203,12 @@ export default {
 	methods: {
 		getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 			this.toDoNum = num;
+		},
+		getTodoDing(doingnum){//获取vheader子组件里面的getTodoDing函数值
+			this.toDoDing = doingnum;
+		},
+		getTodoFinish(finishnum){//获取vheader子组件里面的getTodoFinish函数值
+			this.toDoFinish = finishnum;
 		},
 		//表头居中
 		rowClass({ row, rowIndex}) {
@@ -406,10 +414,13 @@ export default {
 		this.requestData();
 		//一级菜单
 		this.initEchart();//调用饼状图图表函数名称
+		this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
+		this.getTodoDing();//打开页面就执行getTodoDing待办任务数函数
+		this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数
 		this.$refs.navsTabs.showClick({
-            css: 'icon-user',
-            name: '首页',
-            url: '/index'})
+			css: 'icon-user',
+			name: '首页',
+			url: '/index'})
 		//默认请求roid
 		if(this.$store.state.roleid==null||typeof(this.$store.state.roleid)==undefined){
 			var url = this.basic_url + '/api-user/roles/default';
@@ -427,8 +438,7 @@ export default {
 	            this.applistdata = res.data;
 	        }).catch(error => {
 	        })
-		}
-      	this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
+		};
 	},
 }
 

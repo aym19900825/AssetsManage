@@ -116,7 +116,10 @@ i, cite, em, var, address, dfn {
 .required_child {color: red; position:absolute; top: -30px; left: 0px;}
 
 
-
+.el-table__fixed-right::before, .el-table__fixed::before {
+	bottom: 10px;
+	background-color: transparent;
+}
 
 /*滚动条*/
 
@@ -128,7 +131,7 @@ i, cite, em, var, address, dfn {
     height: 10px;
     background-color: #F5F5F5;
 }
- 
+
 /*定义滚动条轨道 内阴影+圆角*/
 ::-webkit-scrollbar-track,#style-1::-webkit-scrollbar-track
 {

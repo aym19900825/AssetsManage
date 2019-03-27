@@ -51,7 +51,7 @@
 										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="编码" prop="PRO_NUM">
-												<el-input v-model="PRODUCT.PRO_NUM" :disabled="noedit"></el-input>
+												<el-input v-model="PRODUCT.PRO_NUM" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">

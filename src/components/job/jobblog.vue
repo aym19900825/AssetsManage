@@ -13,7 +13,7 @@
 			<div class="wrapper wrapper-content">
 				<el-row :gutter="10">
 					<el-col :span="24">
-						<iframe :src="this.url" id="flowIframe" width="100%" :height="fullHeight"  frameborder="0" scrolling="no" >
+						<iframe :src="url" id="flowIframe" width="100%" :height="fullHeight"  frameborder="0" scrolling="no" >
 				   		</iframe>
 				   	</el-col>
 				</el-row>
@@ -36,15 +36,18 @@
 		data() {
 			return{
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+				url:'',
 			}
 		},
 		methods: {
 			mounted() {
-			var url=this.basic_url;
-				url = url.substring(0,21);
-				var pos = url.lastIndexOf(':');
-				url=url.substring(0,pos+1); 
-		  		this.url=url+"8800/joblog";
+				this.$nextTick(function(){
+					var url=this.basic_url;
+					url = url.substring(0,21);
+					var pos = url.lastIndexOf(':');
+					url=url.substring(0,pos+1); 
+					this.url=url+"8800/joblog";
+				});	
 			},
 		}
 	}

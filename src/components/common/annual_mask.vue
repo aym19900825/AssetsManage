@@ -1014,13 +1014,13 @@
 				this.page.pageSize = 10;//页码重新传值
 			},
 			//提出单位
-			getCompany() {
-				var type = "2";
+			 getCompany() {
+			// 	var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
-					params: {
-						type: type
-					},
+					// params: {
+					// 	type: type
+					// },
 				}).then((res) => {
 					this.selectData = res.data;
 				});

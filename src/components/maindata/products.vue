@@ -320,6 +320,9 @@
 		    },
 			//时间格式化  
 			dateFormat(row, column) {
+				console.log(12345);
+				console.log(row);
+				console.log(column);
 				var date = row[column.property];
 				if(date == undefined) {
 					return "";

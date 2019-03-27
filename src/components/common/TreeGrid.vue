@@ -11,7 +11,7 @@
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column v-for="(column, index) in columns" :key="column.dataIndex"
-      :label="column.text" :width="column.width" v-if="column.isShow && column.dataIndex != 'version'">
+      :label="column.text" v-if="column.isShow && column.dataIndex != 'version'" :formatter="dateFormat">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
@@ -27,7 +27,7 @@
     </el-table-column>
 
     <el-table-column v-for="(column, index) in columns" :width="column.width" :key="column.dataIndex"
-      :label="column.text" v-if="column.isShow && column.dataIndex == 'version'" align="right">
+      :label="column.text" v-if="column.isShow && column.dataIndex == 'version'" align="right" :formatter="dateFormat" >
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span class="button is-outlined is-primary is-small" v-if="toggleIconShow(index,scope.row)" @click="toggle(scope.$index)">
@@ -39,6 +39,7 @@
         <span v-else>{{scope.row[column.dataIndex]}}</span>          
       </template>
     </el-table-column>
+    
   </el-table>
 </template>
 <script>
@@ -120,6 +121,14 @@
       }
     },
     methods: {
+      dateFormat(row, column) {
+        console.log(123);
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
       //表头居中
       rowClass({ row, rowIndex}) {
           return 'text-align:center'

@@ -49,20 +49,24 @@
 	},
 	//添加
   	visible() {
-  		var url=this.basic_url;
+		var url=this.basic_url;
+		var token = sessionStorage.getItem('access_token');
 		url = url.substring(0,21);
-  		this.url=url+"5300";
-  		this.src=this.url +'/reportFile/page/create';
+  	this.url=url+"5300";
+		this.src=this.url +'/reportFile/page/create?access_token='+token;
+		console.log(this.src);
 		this.modifytitle=false;
 		this.addtitle=true;
 		this.show= true;
   	},
   	//修改
   	detail(id){
-  		var url=this.basic_url;
+		var url=this.basic_url;
+		var token = sessionStorage.getItem('access_token');
 		url = url.substring(0,21);
   		this.url=url+"5300";
-  		this.src=this.url +'/reportFile/page/edit?id='+id;
+			this.src=this.url +'/reportFile/page/edit?id='+id+'&access_token='+token;
+			console.log(this.src);
   		this.modifytitle=true;
   		this.addtitle=false;
 		this.show= true;

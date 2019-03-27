@@ -399,7 +399,6 @@
 			},
 			//修改
 			modify() {
-				console.log(this.selUser[0].STATE);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',

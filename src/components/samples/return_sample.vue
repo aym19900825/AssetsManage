@@ -99,9 +99,9 @@
 								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="返样人" sortable width="120px" prop="ACCEPT_PERSONDesc" v-if="this.checkedName.indexOf('样品承接人')!=-1">
+								<el-table-column label="返样人" sortable width="120px" prop="RETURN_PERSONDesc" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>
-								<el-table-column label="返样日期" sortable width="100px" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
+								<el-table-column label="返样日期" sortable width="100px" prop="RETURN_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>

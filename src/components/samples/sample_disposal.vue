@@ -140,6 +140,9 @@
 									</template>
 								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
+									<template slot-scope="scope">
+										<span v-text="scope.row.QUALITY==-1?'1':scope.row.QUALITY"></span>
+									</template>
 								</el-table-column>
 								<el-table-column label="样品承接人" sortable width="120px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>

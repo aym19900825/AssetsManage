@@ -349,6 +349,7 @@
 						type:'warning'
 					})
 				}else{
+					this.samplenumList = [];
 					this.getSamlpeList();
 					this.resetSample();
 				}
@@ -539,6 +540,7 @@
 								message: '请选择处置样品',
 								type: 'warning'
 							});
+							return;
 						}
 						var url = this.basic_url + '/api-apps/appCustom/saveDisposition';
 						this.samplesForm.child = this.selData;

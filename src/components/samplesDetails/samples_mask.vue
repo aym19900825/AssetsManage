@@ -474,6 +474,7 @@
 						this.samplesForm.P_NAME = data.id;
 						this.samplesForm.P_NAMEDesc = data.fullname;
 						this.samplesForm.PRODUCE_TYPE = '2';
+						this.samplesForm.PRODUCT_COMPANY = '';
 					}else{
 						this.samplesForm.PRODUCT_COMPANY = data.CODE;
 						this.samplesForm.P_NAME = data.ID;
@@ -484,17 +485,26 @@
 					if(data.depttype == '2'){
 						this.samplesForm.V_NAME = data.id;
 						this.samplesForm.V_NAMEDesc = data.fullname;
-						this.samplesForm.P_NAME = data.id;
-						this.samplesForm.P_NAMEDesc = data.fullname;
 						this.samplesForm.DEPUTE_TYPE = '2';
+						this.samplesForm.VENDOR = '';
+						if(this.samplesForm.P_NAME==''){
+							this.samplesForm.P_NAME = data.id;
+							this.samplesForm.P_NAMEDesc = data.fullname;
+							this.samplesForm.PRODUCE_TYPE = '2';
+							this.samplesForm.PRODUCT_COMPANY = '';
+						}
 					}else{
 						this.samplesForm.VENDOR = data.CODE;
 						this.samplesForm.V_NAME = data.ID;
 						this.samplesForm.V_NAMEDesc = data.NAME;
-						this.samplesForm.PRODUCT_COMPANY = data.CODE;
-						this.samplesForm.P_NAME = data.ID;
-						this.samplesForm.P_NAMEDesc = data.NAME;
 						this.samplesForm.DEPUTE_TYPE = '1';
+
+						if(this.samplesForm.P_NAME==''){
+							this.samplesForm.P_NAME = data.ID;
+							this.samplesForm.P_NAMEDesc = data.NAME;
+							this.samplesForm.PRODUCT_COMPANY = data.CODE;
+							this.samplesForm.PRODUCE_TYPE = '1';
+						}
 					}
 				}
 			},

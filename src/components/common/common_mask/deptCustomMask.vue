@@ -45,6 +45,9 @@
 								</el-row>
 							</el-form>
 							<el-table ref="singleTable"
+								highlight-current-row
+								@current-change="selChange"
+
 								:data="list" 
 								line-center 
 								border 
@@ -57,7 +60,7 @@
 								element-loading-text="加载中…"
 								element-loading-spinner="el-icon-loading"
 								element-loading-background="rgba(255, 255, 255, 0.9)"
-								@selection-change="selChange">
+								>
 								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>
 								<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
@@ -148,8 +151,12 @@
 				this.getDept();
 				this.getCheckboxData=[];
 			},
-			selChange(val) {
-				this.selData = val;
+			selChange(row) {
+				this.selData = [];
+				this.selData.push(row);
+				this.$refs.singleTable.clearSelection();
+				this.$refs.singleTable.toggleRowSelection(row);
+		
 				this.$refs.tree.setCheckedNodes([]);
 				this.$refs.tree.setCheckedKeys([]);
 			},

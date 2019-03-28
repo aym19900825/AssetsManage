@@ -4,14 +4,16 @@
 			<el-table ref="singleTable" 
 				:header-cell-style="rowClass"
 				:data="productList" 
+
 				highlight-current-row
+				@current-change="SelChange"
+
 				line-center 
 				border 
 				stripe 
 				height="360px" 
 				style="width: 100%;" 
 				:default-sort="{prop:'productList', order: 'descending'}"
-				@selection-change="SelChange" 
 				v-loadmore="loadMore"
 				v-loading="loading"  
 				element-loading-text="加载中…"
@@ -80,8 +82,11 @@
 	rowClass({ row, rowIndex}) {
 	    return 'text-align:center'
 	},
-	SelChange(val) {
-		this.selUser = val;
+	SelChange(row) {
+		this.selUser = [];
+		this.selUser.push(row);
+		this.$refs.singleTable.clearSelection();
+        this.$refs.singleTable.toggleRowSelection(row);
 	},
   	sizeChange(val) {
 		this.page.pageSize = val;

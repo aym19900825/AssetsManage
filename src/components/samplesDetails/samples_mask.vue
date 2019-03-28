@@ -684,6 +684,7 @@
 					})
 				}else if(this.selval.length == 1){
 					var data = this.selval[0];
+					this.samplesForm.ITEMNUM = data.ITEMNUM;
 					this.samplesForm.PROXYNUM = data.PROXYNUM;
 					this.samplesForm.V_NAME = data.V_NAME;
 					this.samplesForm.V_NAMEDesc = data.V_NAMEDesc;

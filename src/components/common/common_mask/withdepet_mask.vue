@@ -23,6 +23,7 @@
                 </el-col>
             </el-row>
         </el-form>
+		<div v-show="none">
         <el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="270px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
             v-loadmore="loadMore"
             v-loading="loading"  
@@ -43,11 +44,13 @@
         </el-table>
             <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
             </el-pagination>
-    </div>
+    
 	    <div slot="footer">
             <el-button type="primary" @click="determine">确 定</el-button>
             <el-button @click="resetBasisInfo">取 消</el-button>
         </div>
+		</div>
+	</div>
     </el-dialog>
 </div>
 </template>
@@ -67,7 +70,9 @@
 		DEPTID:'',//当前选择的机构值
         customerList:[],
 		dialogcustom:false,
+		none:false,
 		dept:'',
+		deptname:'',
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -112,6 +117,9 @@
   	//点击关闭按钮
 	close() {
 		this.dialogcustom = false;
+		this.none=false;
+		this.searchName='';
+		this.dept='';
 	},
   	visible() {
 		this.dialogcustom= true;
@@ -171,10 +179,12 @@
 	//Table默认加载数据
 	
 	getdept(dept){
+		console.log(dept);
 		this.dept=dept;
 		this.requestData();
 	},
 	determine(){
+		var selectData=this.selectData;
 		var selData = this.selUser;
         if(selData.length == 0) {
             this.$message({
@@ -183,14 +193,23 @@
             });
             return;
         } else {
-            var list = [];
+			var deptname='';
+			console.log(selectData);
+			for(var i=0;i<selectData.length;i++){
+				if(this.dept==selectData[i].id){
+					this.deptname=selectData[i].fullname;
+				}
+			}
+			var list = [];
             for(var i = 0;i<selData.length;i++){
 				selData[i].ID = '';
-                list.push(selData[i]);
+				selData[i].deptname=this.deptname;
+				selData[i].dept=this.dept;
+				list.push(selData[i]);
 			}
-			console.log(1234567);
 			console.log(list);
-            this.$emit('withdepet',list);
+			this.$emit('withdepet',list);
+			
             this.resetBasisInfo();
         }
     },
@@ -215,7 +234,6 @@
 		var DEPTID=this.$store.state.currentcjdw[0].id;
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/pdTreeSearch?deptId='+this.dept+'&searchName='+this.searchList.searchName;
 		this.$axios.get(url,{}).then((res) => {
-			console.log(res.data.datas.data);
 			this.page.totalCount = res.data.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -226,6 +244,7 @@
 			}
 			this.customerList = res.data.datas.data;
 			this.loading = false;//加载动画关闭
+			this.none=true;
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
 			}//滚动加载数据判断filing
@@ -239,7 +258,8 @@
     getCompany() {
         var url = this.basic_url + '/api-user/depts/treeByType';
         this.$axios.get(url, {}).then((res) => {
-            this.selectData = res.data;
+			this.selectData = res.data;
+			console.log(res.data);
         });
     },
   },

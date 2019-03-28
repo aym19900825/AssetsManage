@@ -230,30 +230,30 @@
 		    	var isshowbtn=this.btn;
 		    	if(item.name=="添加"){
 					if(isshowbtn=='0'){
-                       this.$message({
-						message: '您没有添加的权限',
-						type: 'warning'
-					});
+						this.$message({
+							message: '您没有添加的权限',
+							type: 'warning'
+						});
 					}else{
-                       this.openAddMgr();
+						this.openAddMgr();
 					}
 		    	}else if(item.name=="修改"){
 					if(isshowbtn=='0'){
-                       this.$message({
-						message: '您没有修改的权限',
-						type: 'warning'
-					});
+						this.$message({
+							message: '您没有修改的权限',
+							type: 'warning'
+						});
 					}else{
-				        this.modify();
+						this.modify();
 					}
 		    	}else if(item.name=="彻底删除"){
 					if(isshowbtn=='0'){
-                       this.$message({
-						message: '您没有彻底删除的权限',
-						type: 'warning'
-					});
+						this.$message({
+							message: '您没有彻底删除的权限',
+							type: 'warning'
+						});
 					}else{
-      					this.physicsDel();
+						this.physicsDel();
 					}
 				}else if(item.name=="删除"){
 					if(isshowbtn=='0'){

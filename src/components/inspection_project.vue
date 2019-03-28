@@ -382,29 +382,15 @@
 				return index + 1;
 			},
 			getDEPTID() {//获取机构部门数据
-				var url = this.basic_url + '/api-user/users/currentMap';
-					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-					this.departmentId = res.data.deptId;
-					var departName = res.data.deptName;
-					var currenturl = this.basic_url + '/api-user/users/findUsersDeptofSta';
+				var currenturl = this.basic_url + '/api-user/users/findUsersDeptofSta';
 					this.$axios.get(currenturl, {}).then((res) => {
 						this.Select_DEPTID = res.data;
-						this.formInline.DEPTID = res.data[0].id
-						// if (this.departmentId == 128) {
-						// 	this.nameFlag = false;
-						// 	this.formInline.DEPTID = res.data[0].id;
-						// } else {
-						// 	this.Select_DEPTID.push({
-						// 		id: this.departmentId,
-						// 		fullname: departName
-						// 	});
-						// 	this.formInline.DEPTID = this.departmentId;
-						// }
+						this.formInline.DEPTID = res.data[0].id;
+
 						this.requestData();
 					}).catch(error => {
 					})
-				 }).catch((err) => {
-					});
+					
 			},
 			
 			requestData() {//加载数据
@@ -413,45 +399,52 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
-					DEPTID: this.formInline.DEPTID,//点击部门名称下拉菜单显示数据
+					DEPTID: this.formInline.DEPTID_GRO,//点击部门名称下拉菜单显示数据
 				}
-				var url = this.basic_url + '/api-apps/app/productType2';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
-					this.commentArr[this.page.currentPage]=res.data.data
-					let newarr=[]
-					for(var i = 1; i <= totalPage; i++){
-						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							for(var j = 0; j < this.commentArr[i].length; j++){
-								this.commentArr[i][j].isEditing = false;
-								newarr.push(this.commentArr[i][j])
+				var url = this.basic_url + '/api-user/depts/findSubStrsById/'+ this.formInline.DEPTID;
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				this.DEPTID_GRO = res.data
+					// console.log(this.formInline.DEPTID);
+				var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+ this.DEPTID_GRO;
+					this.$axios.get(url, {
+						params: data
+					}).then((res) => {
+						console.log(url);
+						this.page.totalCount = res.data.count;
+						//总的页数
+						let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+						if(this.page.currentPage >= totalPage){
+							this.loadSign = false
+						}else{
+							this.loadSign=true
+						}
+						this.commentArr[this.page.currentPage]=res.data.data
+						let newarr=[]
+						for(var i = 1; i <= totalPage; i++){
+							if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+								for(var j = 0; j < this.commentArr[i].length; j++){
+									this.commentArr[i][j].isEditing = false;
+									newarr.push(this.commentArr[i][j])
+								}
 							}
 						}
-					}
-					this.productType2Form.inspectionList = newarr;//滚动加载更多
-					
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
+						this.productType2Form.inspectionList = newarr;//滚动加载更多
+						
+						this.loading = false;//加载动画关闭
+						if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+							$('.el-table__body-wrapper table').find('.filing').remove();
+						}//滚动加载数据判断filing
 
-					//默认主表第一条数据
-					if(!this.productType2Form.inspectionList||this.productType2Form.inspectionList.length == 0){
-						this.viewchildRow('null');
-					}else{
-						this.$refs.table.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
-					}
-					
-				}).catch((wrong) => {})
+						//默认主表第一条数据
+						if(!this.productType2Form.inspectionList||this.productType2Form.inspectionList.length == 0){
+							this.viewchildRow('null');
+						}else{
+							this.$refs.table.setCurrentRow(this.productType2Form.inspectionList[0]);//默认选中第一条数据
+						}
+						
+					}).catch((wrong) => {})
+				}).catch((err) => {
+				});
 			},
 			
 			handleClose(done) {//关闭选择产品类别弹出框

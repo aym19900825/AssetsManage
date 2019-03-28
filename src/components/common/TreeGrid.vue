@@ -102,13 +102,10 @@
     computed: {
     // 格式化数据源
       data: function () {
-        console.log(123);
         let me = this
         if (me.treeStructure) {
           let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll);
           return data;
-          console.log(data);
-          console.log(789);
         }
         return me.dataSource;
       }
@@ -120,7 +117,6 @@
       },
     	//改变的值
     	SelChange(val) {
-        console.log(val);
 				// this.selUser = val;
 				//子给父传值
 				// childByValue是在父组件on监听的方法

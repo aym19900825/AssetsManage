@@ -701,6 +701,7 @@
 					this.findDeptId();
 				}).catch((err)=>{})
 				this.reset();
+				console.log(this.$store.state.currentcjdw);
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;

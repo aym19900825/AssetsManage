@@ -365,7 +365,8 @@
 				this.samplesList = [];
 			},
 			reset(){
-
+				this.samplenumList = [];
+				this.selData = [];
 			},
 			selChangeNum(val) {
 				this.selUser = val;

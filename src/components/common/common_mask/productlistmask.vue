@@ -184,7 +184,7 @@
 			} else {
 				this.loadSign = true
 			}
-			this.productList = res.ddateFormatata.data;
+			this.productList = res.data.data;
 			this.loading = false;
 		}).catch((wrong) => {})
 	},

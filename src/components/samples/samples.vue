@@ -466,7 +466,7 @@
 					});
 					return;
 				} else {
-					this.sampleTypeFlag = this.selMenu[0].ITEM_TYPE == ''? true : false;
+					this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
 					if(this.selMenu[0].ITEM_TYPE =='2'){
 						this.getSampleList();
 						this.sampleType = '2';

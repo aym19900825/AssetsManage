@@ -366,7 +366,6 @@
 						this.loadSign=true
 					}
 					this.inspectionSta2Form.inspectionList=!!res.data.INSPECTION_STANDARDS2List?res.data.INSPECTION_STANDARDS2List:[];
-					
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing
@@ -380,14 +379,11 @@
 						var data=this.inspectionSta2Form.inspectionList[0];
 						this.$emit('parentMsd_inspectionSta2', data);
 					}
-
 					for(var j = 0; j < this.inspectionSta2Form.inspectionList.length; j++){
 						this.inspectionSta2Form.inspectionList[j].isEditing = false;
 					}
-
 				}).catch((wrong) => {})
 			},
-			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;

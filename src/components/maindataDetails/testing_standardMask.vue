@@ -66,17 +66,23 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="启用时间" prop="STARTETIME">
-												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%"  :disabled="noedit">
+												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%" :disabled="noedit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
+											<el-form-item label="停用时间" prop="STOPTIME">
+												<el-date-picker v-model="dataInfo.STOPTIME" type="date" placeholder="永久" value-format="yyyy-MM-dd" style="width:100%" :disabled="noedit">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="发布单位" prop="RELEASE_UNIT">
 												<el-input v-model="dataInfo.RELEASE_UNIT" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="8" v-if="dept">
 											<el-form-item label="机构" prop="DEPTIDDesc">
 												<el-input v-model="dataInfo.DEPTIDDesc" :disabled="true"></el-input>
@@ -157,6 +163,7 @@
 						S_ENGNAME: '',
 						RELEASETIME: '',
 						STARTETIME: '',
+						STOPTIME: '',
 						VERSION:1,
 						RELEASE_UNIT: '',
 						DEPARTMENT: '',
@@ -557,6 +564,7 @@
 				this.$refs['dataInfo'].validate((valid) => {
 					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
 					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
+					this.dataInfo.STOPTIME = this.$moment(this.dataInfo.STOPTIME).format("YYYY-MM-DD HH:mm:ss");
 					if(!valid && opt == 'docUpload'){
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',

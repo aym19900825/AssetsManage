@@ -1,11 +1,24 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogProduct" width="80%">
-			<el-table ref="table" :header-cell-style="rowClass" :data="productList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'productList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
-			v-loading="loading"  
-			element-loading-text="加载中…"
-			element-loading-spinner="el-icon-loading"
-			element-loading-background="rgba(255, 255, 255, 0.9)">
+			<el-table ref="singleTable" 
+				:header-cell-style="rowClass"
+				:data="productList" 
+
+				highlight-current-row
+				@current-change="SelChange"
+
+				line-center 
+				border 
+				stripe 
+				height="360px" 
+				style="width: 100%;" 
+				:default-sort="{prop:'productList', order: 'descending'}"
+				v-loadmore="loadMore"
+				v-loading="loading"  
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
 				<el-table-column label="编码" width="155" sortable prop="PRO_NUM">
@@ -69,8 +82,11 @@
 	rowClass({ row, rowIndex}) {
 	    return 'text-align:center'
 	},
-	SelChange(val) {
-		this.selUser = val;
+	SelChange(row) {
+		this.selUser = [];
+		this.selUser.push(row);
+		this.$refs.singleTable.clearSelection();
+        this.$refs.singleTable.toggleRowSelection(row);
 	},
   	sizeChange(val) {
 		this.page.pageSize = val;

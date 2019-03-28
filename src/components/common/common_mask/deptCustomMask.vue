@@ -1,9 +1,9 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogShow" width="80%" :before-close="resetTree">
+		<el-dialog :modal-append-to-body="false" title="客户列表" :visible.sync="dialogShow" width="80%" :before-close="resetTree">
 			<div class="el-collapse-item pb10" aria-expanded="true" accordion>
 				<el-tabs v-model="activeName">
-					<el-tab-pane label="所内机构" name="first">
+					<el-tab-pane label="检验站" name="first">
 						<div class="scrollbar" style="height:380px;">
 							<el-tree ref="tree" 
 									:data="resourceData" 
@@ -17,7 +17,7 @@
 							</el-tree>
 						</div>
 					</el-tab-pane>
-					<el-tab-pane label="所外机构" name="second">
+					<el-tab-pane label="客户" name="second">
 						<div class="scrollbar" style="height:380px;">
 							<el-form inline-message :model="searchList" label-width="90px">
 								<el-row>
@@ -45,6 +45,9 @@
 								</el-row>
 							</el-form>
 							<el-table ref="singleTable"
+								highlight-current-row
+								@current-change="selChange"
+
 								:data="list" 
 								line-center 
 								border 
@@ -57,7 +60,7 @@
 								element-loading-text="加载中…"
 								element-loading-spinner="el-icon-loading"
 								element-loading-background="rgba(255, 255, 255, 0.9)"
-								@selection-change="selChange">
+								>
 								<el-table-column type="selection" width="55" fixed align="center">
 								</el-table-column>
 								<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
@@ -66,7 +69,7 @@
 								</el-table-column>
 								<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
 								</el-table-column>
-								<el-table-column label="类型" sortable prop="TYPE">
+								<el-table-column label="类型" sortable prop="TYPEDesc">
 								</el-table-column>
 								<el-table-column label="备注" sortable prop="MEMO" >
 								</el-table-column>
@@ -148,8 +151,12 @@
 				this.getDept();
 				this.getCheckboxData=[];
 			},
-			selChange(val) {
-				this.selData = val;
+			selChange(row) {
+				this.selData = [];
+				this.selData.push(row);
+				this.$refs.singleTable.clearSelection();
+				this.$refs.singleTable.toggleRowSelection(row);
+		
 				this.$refs.tree.setCheckedNodes([]);
 				this.$refs.tree.setCheckedKeys([]);
 			},
@@ -215,7 +222,7 @@
 					CODE: this.searchList.CODE,
 					CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 				};
-				var url = this.basic_url + '/api-apps/app/customer';//如果父组件没有传CJDW承检单位侧显示所有数据
+				var url = this.basic_url + '/api-apps/app/customer?TYPE_where_in=1,3';//如果父组件没有传CJDW承检单位侧显示所有数据
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -239,9 +246,15 @@
 				})
 			},
 			getDept() {
-				var url=this.basic_url+'/api-user/depts/treeMap'
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
+				var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=129&TYPE=dept';
+				var data = {
+					DEPTID: 129,
+					TYPE: 'dept'
+				};
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.resourceData = res.data.datas;
 					this.dialogVisible = true;
 				});
 			},

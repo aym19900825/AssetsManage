@@ -68,7 +68,7 @@
 									<el-row>
 										<el-col :span="16">
 											<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-												<el-input v-model="samplesForm.P_NAMEDesc" :disabled="noedit || (!!samplesForm.PROXYNUM)">
+												<el-input v-model="samplesForm.P_NAMEDesc" disabled>
 													<el-button slot="append" icon="el-icon-search"  @click="getVname('P_NAME')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
@@ -468,30 +468,43 @@
 		},
 		methods: {
 			setData(data){
-				console.log(data);
 				this.$forceUpdate();
 				if(this.vName == 'P_NAME'){
 					if(data.depttype == '2'){
 						this.samplesForm.P_NAME = data.id;
 						this.samplesForm.P_NAMEDesc = data.fullname;
+						this.samplesForm.PRODUCE_TYPE = '2';
+						this.samplesForm.PRODUCT_COMPANY = '';
 					}else{
 						this.samplesForm.PRODUCT_COMPANY = data.CODE;
 						this.samplesForm.P_NAME = data.ID;
 						this.samplesForm.P_NAMEDesc = data.NAME;
+						this.samplesForm.PRODUCE_TYPE = '1';
 					}
 				}else{
 					if(data.depttype == '2'){
 						this.samplesForm.V_NAME = data.id;
 						this.samplesForm.V_NAMEDesc = data.fullname;
-						this.samplesForm.P_NAME = data.id;
-						this.samplesForm.P_NAMEDesc = data.fullname;
+						this.samplesForm.DEPUTE_TYPE = '2';
+						this.samplesForm.VENDOR = '';
+						if(this.samplesForm.P_NAME==''){
+							this.samplesForm.P_NAME = data.id;
+							this.samplesForm.P_NAMEDesc = data.fullname;
+							this.samplesForm.PRODUCE_TYPE = '2';
+							this.samplesForm.PRODUCT_COMPANY = '';
+						}
 					}else{
 						this.samplesForm.VENDOR = data.CODE;
 						this.samplesForm.V_NAME = data.ID;
 						this.samplesForm.V_NAMEDesc = data.NAME;
-						this.samplesForm.PRODUCT_COMPANY = data.CODE;
-						this.samplesForm.P_NAME = data.ID;
-						this.samplesForm.P_NAMEDesc = data.NAME;
+						this.samplesForm.DEPUTE_TYPE = '1';
+
+						if(this.samplesForm.P_NAME==''){
+							this.samplesForm.P_NAME = data.ID;
+							this.samplesForm.P_NAMEDesc = data.NAME;
+							this.samplesForm.PRODUCT_COMPANY = data.CODE;
+							this.samplesForm.PRODUCE_TYPE = '1';
+						}
 					}
 				}
 			},
@@ -584,6 +597,7 @@
 			},
 			reset(){
 				this.samplesForm = {
+					ID: '',
 					PROXYNUM: '',//委托书编号
 					ITEMNUM: '',//样品编号
 					VENDOR: '',//委托单位编号
@@ -675,7 +689,7 @@
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
 					this.samplesForm.ACCEPT_PERSON = res.data.id;
-					this.samplesForm.ACCEPT_PERSONDesc = res.data.username;
+					this.samplesForm.ACCEPT_PERSONDesc = res.data.nickname;
 					var date=new Date();
 					this.samplesForm.ACCEPT_DATE =  this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//收样日期
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -894,7 +908,7 @@
 				$(".mask_div").css("top", "100px");
 			},
 			//点击提交按钮执行保存
-			save() {
+			save(opt) {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
 						if(this.samplesForm.ITEM_LINEList.length<=0){
@@ -911,8 +925,11 @@
 										message: '保存成功',
 										type: 'success'
 									});
-									//重新加载数据
-									this.$emit('request');
+									if(opt=='save'){
+										this.$emit('request');
+										this.show = false;
+									}
+									this.reset();
 								}
 							}).catch((err) => {
 							});
@@ -931,17 +948,11 @@
 			},
 			//保存
 			saveAndUpdate(){
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-				this.$emit('request');
+				this.save('save');
 			},
 			//保存并继续
 			saveAndSubmit(){
-				this.save();
-				this.reset();
-				this.$emit('request');
+				this.save('update');
 			},
 			//生成委托书
 			generate(){

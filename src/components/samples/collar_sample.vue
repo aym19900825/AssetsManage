@@ -129,18 +129,14 @@
 										<span v-text="scope.row.ITEM_STEP==-1?'':scope.row.ITEM_STEP"></span>
 									</template>
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
-								</el-table-column>
 								<el-table-column label="样品名称" sortable width="220px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
+								</el-table-column>
+								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
 								<el-table-column label="数量" width="70px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="收样人" sortable width="100px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
-								</el-table-column>
-								<el-table-column label="收样日期" sortable width="100px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
-								</el-table-column> -->
 								<el-table-column label="领样人" sortable width="100px" prop="GRANT_PERSONDesc" v-if="this.checkedName.indexOf('领样人')!=-1">
 								</el-table-column>
 								<el-table-column label="领样日期" sortable width="100px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
@@ -280,7 +276,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
-				itemgrant:'itemgrant'//appname
+				itemgrant:'itemgrant',//appname
 			}
 		},
 		methods: {
@@ -395,8 +391,15 @@
 					});
 					return;
 				} else {
+					if(this.selMenu[0].ISRETURN == '1'){
+						this.$message({
+							message: '此领样单已有返样记录，不可修改！',
+							type: 'warning'
+						});
+						return;
+					}
 					this.samplesForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0].ITEMNUM,this.selMenu[0].ITEM_STEP,this.selMenu[0].QUALITY);
 				}
 			},
 			//查看
@@ -426,6 +429,13 @@
 					});
 					return;
 				} else {
+					if(this.selMenu[0].ISRETURN == '1'){
+						this.$message({
+							message: '此领样单已有返样记录，不可删除！',
+							type: 'warning'
+						});
+						return;
+					}
 					var url = this.basic_url + '/api-apps/app/itemgrant/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;

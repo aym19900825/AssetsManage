@@ -3,19 +3,18 @@
 		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
 			
 				<el-tabs v-model="activeName" @tab-click="handleClick">
-	                <el-tab-pane label="检测项目与要求1234509876" name="first">
-	                    <el-table ref="table" :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
-							<el-table-column type="selection" width="55" fixed align="center">
-							</el-table-column>
-	                        <el-table-column prop="P_NUM" label="检测项目编号" sortable>
-	                        </el-table-column>
-	                        <el-table-column prop="P_DESC" label="检测项目名称" sortable>
-	                        </el-table-column>
-	                        <el-table-column prop="REMARKS" label="要求" sortable>
-	                        </el-table-column>
-	                        <el-table-column prop="VERSION" label="版本" sortable>
-	                        </el-table-column>
-	                    </el-table>
+							<el-tab-pane label="检测项目与要求" name="first">
+								<el-table ref="table" :data="workorderForm.WORKORDER_PROJECTList" row-key="ID" border @selection-change="proChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_PROJECTList', order: 'descending'}">
+							<el-table-column type="selection" width="55" fixed align="center"></el-table-column>
+											<el-table-column prop="P_NUM" label="检测项目编号" sortable>
+											</el-table-column>
+											<el-table-column prop="P_DESC" label="检测项目名称" sortable>
+											</el-table-column>
+											<el-table-column prop="REMARKS" label="要求" sortable>
+											</el-table-column>
+											<el-table-column prop="VERSION" label="版本" sortable>
+											</el-table-column>
+									</el-table>
 	                </el-tab-pane>
 	                <el-tab-pane label="分包项目" name="second">
 	                    <el-table ref="table" :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border @selection-change="conChange" height="260" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">

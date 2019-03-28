@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加领样</div>
-					<div class="mask_title" v-show="modifytitle">修改领样</div>
-					<div class="mask_title" v-show="viewtitle">查看领样</div>
+					<div class="mask_title" v-show="pageState=='new'">添加领样</div>
+					<div class="mask_title" v-show="pageState=='detail'">修改领样</div>
+					<div class="mask_title" v-show="pageState=='view'">查看领样</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -29,8 +29,8 @@
 										</el-col>
 										<el-col :span="6" class="pull-right">
 											<el-select v-model="samplesForm.ITEM_TYPE" placeholder="样品类型" disabled>
-												<el-option key="1" label="样品批次" value="sampleBatch"></el-option>
-												<el-option key="2" label="样品序号" value="sampleNum"></el-option>
+												<el-option key="1" label="样品批次" value="1"></el-option>
+												<el-option key="2" label="样品序号" value="2"></el-option>
 											</el-select>
 										</el-col>
 									</el-row>
@@ -43,12 +43,24 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input v-model="samplesForm.ITEMNUM" @change="getCodeInfo"  ref="itemnum" :disabled="noedit"></el-input>
+												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @input="getCodeInfo" ref="itemnum" :disabled="noedit"></el-input>
 											</el-form-item>
+											<!-- <input type="text" name="fname" id="idtest"/> -->
 										</el-col>
-										<el-col :span="8" v-if="samplesForm.ITEM_TYPE=='sampleNum'">
+										<el-col :span="8" v-if="samplesForm.ITEM_TYPE=='2'">
 											<el-form-item label="样品序号" prop="ITEM_STEPs">
-												<el-select v-model="samplesForm.ITEM_STEPs" multiple @remove-tag="removeStep" :disabled="noedit"></el-select>
+												<el-select v-model="ITEM_STEPs" 
+														   multiple 
+														   @input="getCodeInfo"
+														   @change="showQuality"
+														   :disabled="noedit">
+													<el-option
+														v-for="item in sampleList"
+														:key="item.item_step"
+														:label="item.item_step"
+														:value="item.item_step">
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -66,7 +78,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="0" :max="maxNum" label="描述文字" :disabled="noedit || samplesForm.ITEM_TYPE=='sampleNum'" style="width: 100%"></el-input-number>
+												<el-input-number v-model="samplesForm.QUALITY" :min="0" :max="maxNum" label="描述文字" :disabled="noedit || samplesForm.ITEM_TYPE=='2'" style="width: 100%"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -100,7 +112,7 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="3" v-show="views">
+								<el-collapse-item title="其他" name="3" v-show="pageState=='view'">
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
@@ -133,7 +145,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-if="!viewtitle">
+						<div class="content-footer" v-if="pageState != 'view'">
 							<el-button type="primary" @click="saveAndSubmit" >保存</el-button>
 							<el-button type="success" @click="saveAndUpdate">保存并继续</el-button>
 							<el-button @click="close">取消</el-button> 
@@ -196,7 +208,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				loading: false,//默认加载数据时显示loading动画
 				value: '',
 				selectData: [], //获取检验/检测方法类别
-				modify:false,//修订、修改人、修改日期
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				selMenu:[],
 				show: false,
@@ -208,10 +219,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				edit: true, //禁填
 				activeNames: ['1','2'], //手风琴数量
 				labelPosition: 'right', //表单标题在上方
-				addtitle: true,
-				modifytitle: false,
-				viewtitle: false, //查看弹出框title
-				views:false,
 				samples_itemlineForm:{//样品子表数据组
 					inspectionList: []
 				},
@@ -271,8 +278,21 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					pageSize: 20,
 					totalCount: 0
 				},
+				sampleList: [],
 				samplesList:[],//样品编号
+				firstItem: true,
+				beforeItemNum: '',
+				ITEM_STEPs: [],
+				lastTime: 0
 			};
+		},
+		watch:{
+			'samplesForm.ITEMNUM': {
+				handler(val,oldVal){
+					this.samplesForm.ITEMNUM = val;
+				},
+				deep: true
+			}
 		},
 		methods: {
 			getUserData(data){
@@ -280,56 +300,136 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.samplesForm.GRANT_PERSON = data.id;
 				this.samplesForm.GRANT_PERSONDesc = data.username;
 			},
-			removeStep(){
-				this.samplesForm.QUALITY--;
+			// removeStep(){
+			// 	this.samplesForm.QUALITY--;
+			// },
+			showQuality(){
+				this.samplesForm.QUALITY = this.ITEM_STEPs.length;
+			},
+			dealItemNum(data){
+				
 			},
 			getCodeInfo(){
 				if(this.samplesForm.ITEMNUM !== ''){
-					var data = {
-						ITEMNUM: this.samplesForm.ITEMNUM
-					};
-					this.$axios.get(this.basic_url + '/api-apps/app/item', {
+					var sample = {};
+					var str = this.samplesForm.ITEMNUM;
+					if(str.indexOf('{')!=-1){
+						var sampleObj = str.slice(str.indexOf('{'),str.length);
+							sample = JSON.parse(sampleObj);
+					}else{
+						sample.code = this.samplesForm.ITEMNUM;
+					}
+					
+					//记录第一次扫描编号
+					if(this.firstItem){
+						this.beforeItemNum = sample.code;
+						this.firstItem = false;
+					}
+					//判断两次扫码编号是否一致
+					if(this.beforeItemNum != sample.code){
+						this.$nextTick(()=> {
+							this.samplesForm.ITEMNUM = this.beforeItemNum;
+						});
+						this.$message({
+							message: '不是同一批次！',
+							type: 'warning'
+						});
+						return;
+					}
+					this.$nextTick(()=> {
+						this.samplesForm.ITEMNUM = sample.code;
+					});
+					//判断是不是已经添加
+					if(!!sample.step && !!this.ITEM_STEPs && this.ITEM_STEPs.indexOf(sample.step)!='-1'){
+						this.$message({
+							message: '已添加！',
+							type: 'warning'
+						});
+						return;
+					}
+					var url = this.basic_url + '/api-apps/appCustom/isRelateProxy';
+					var data ={
+						itemNum: sample.code,
+						app:'itemGrant',
+						ITEM_STEP: ''
+					}
+					
+					if(!!sample.step){
+						data.ITEM_STEP = sample.step;
+					}
+					this.$axios.get(url,{
 						params: data
 					}).then((res) => {
-						if(res.data.count>0){
-							var data = res.data.data[0];
-							this.maxNum = 5;
+						if(JSON.stringify(res.data)!='{}'){
+							var data = res.data;
+							if(data.REMAINQUALITY == 0){
+								this.$message({
+									message: '暂无可领样样品！',
+									type: 'warning'
+								});
+								return;
+							}
+							if(data.ITEM_TYPE == '1'){
+								this.samplesForm.QUALITY = 1;
+								this.maxNum = data.REMAINQUALITY;
+							}else{
+								if(this.sampleList.length == 0){
+									this.getSampleList(sample.code);
+								}
+								if(!!sample.step){
+									this.ITEM_STEPs.push(sample.step);
+									this.samplesForm.QUALITY = this.ITEM_STEPs.length;
+								}
+							}
 							this.$forceUpdate();
 							this.samplesForm.TYPE = data.PRODUCT_TYPE;
 							this.samplesForm.DESCRIPTION = data.DESCRIPTION;
 							this.samplesForm.ACCEPT_DATE = data.ACCEPT_DATE;
 							this.samplesForm.MODEL = data.MODEL;
-							this.samplesForm.ITEM_TYPE = 'sampleNum';
-							if(this.samplesForm.ITEM_TYPE == 'sampleBatch'){
-								this.samplesForm.QUALITY = 1;
-							}else{
-								if(!this.samplesForm.ITEM_STEPs){
-									this.samplesForm.ITEM_STEPs = [];
-								}
-								this.samplesForm.ITEM_STEPs.push('1');
-								this.samplesForm.QUALITY++;
-							}
+							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
 						}else{
+							this.$message({
+								message: '暂无可领样样品！',
+								type: 'warning'
+							});
 							this.$forceUpdate();
 							this.resetSamples();
 						}
-						
 					}).catch((wrong) => {})
 				}else{
 					this.$forceUpdate();
 					this.resetSamples();
 				}
 			},
+			getSampleList(id){
+				this.$axios.get(this.basic_url + '/api-apps/appCustom/getAddItem/' + id, {}).then((res) => {
+					this.sampleList = res.data;
+					if(this.pageState == 'detail'){
+						for(var i=0; i<this.ITEM_STEPs.length; i++){
+							this.sampleList.push({
+								item_step:this.ITEM_STEPs[i]
+							});
+						}
+					}
+					console.log(this.sampleList);
+				}).catch((err) => {});
+			},
 			resetSamples(){
+				this.ITEM_STEPs = [];
+				this.firstItem = true;
+				this.beforeItemNum = '';
+
+				this.sampleList = [];
+
 				this.samplesForm.TYPE = '';
 				this.samplesForm.DESCRIPTION = '';
 				this.samplesForm.ACCEPT_DATE = '';
 				this.samplesForm.MODEL = '';
-				this.samplesForm.ITEM_TYPE = 'sampleBatch';
+				this.samplesForm.ITEM_TYPE = '1';
 				this.samplesForm.QUALITY = 0;
-				if(this.samplesForm.ITEM_TYPE == 'sampleNum'){
-					this.samplesForm.ITEM_STEPs = [];
-				}
+				
+				this.maxNum = 1000;
+				this.lastTime = 0;
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
@@ -340,15 +440,11 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			},
 			//这是查看
 			view() {
-				this.addtitle = false;
-				this.modifytitle = false;
-				this.viewtitle = true;
-				this.views = true; //
-				this.noviews = false;
+				this.pageState = 'view';
 				this.edit = true;
 				this.noedit = true;
 				this.show=true;
-				this.samplesForm.ITEM_STEPs = !!this.samplesForm.ITEM_STEP?this.samplesForm.ITEM_STEP.split(','):[];
+				this.ITEM_STEPs = !!this.samplesForm.ITEM_STEP?this.samplesForm.ITEM_STEP.split(','):[];
 			},
 			childMethods() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -359,29 +455,47 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					this.samplesForm.STATUSDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.samplesForm.GRANT_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{})
-				this.addtitle = true;
-            	this.modifytitle = false;
-            	this.modify=false;
+				this.pageState = 'new';
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
 			},
-			detail() { //修改内容时从父组件带过来的
+			getMaxNum(itemnum,QUATITY){
+				var url = this.basic_url + '/api-apps/appCustom/isRelateProxy';
+				var data ={
+					itemNum: itemnum,
+					app:'itemGrant',
+					ITEM_STEP: ''
+				}
+		
+				this.$axios.get(url,{
+					params: data
+				}).then((res) => {
+					if(JSON.stringify(res.data)!='{}'){
+						var data = res.data;
+						this.maxNum = QUATITY + data.REMAINQUALITY;
+					}else{
+						this.maxNum = QUATITY;
+					}
+				}).catch((wrong) => {})
+			},
+			detail(ITEM_NUM, ITEM_STEP, QUATITY) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{})
-				this.viewtitle = false;
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.modify = true;
+				this.pageState = 'detail';
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;
 				this.$forceUpdate();
-				this.samplesForm.ITEM_STEPs = !!this.samplesForm.ITEM_STEP?this.samplesForm.ITEM_STEP:[];
-				console.log(this.samplesForm.ITEM_STEP);
+				if(ITEM_STEP!=-1){
+					this.ITEM_STEPs = ITEM_STEP.split(',');
+				}else{
+					this.getMaxNum(ITEM_NUM,QUATITY);
+				}
+				this.getSampleList(ITEM_NUM);
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -398,6 +512,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.resetSamples();
 				this.$emit('request');
 			},
 			toggle(e) {
@@ -420,7 +535,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "80%");
-
 			},
 			//点击提交按钮执行保存
 			save(opt) {
@@ -433,8 +547,8 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 							});
 							return;
 						}
-						if(this.samplesForm.ITEM_TYPE == 'sampleNum'){
-							this.samplesForm.ITEM_STEP = this.samplesForm.ITEM_STEPs.join(',');
+						if(this.samplesForm.ITEM_TYPE == '2'){
+							this.samplesForm.ITEM_STEP = this.ITEM_STEPs.join(',');
 						}
 						var url = this.basic_url + '/api-apps/app/itemgrant/saveOrUpdate';
 						this.$axios.post(url, this.samplesForm).then((res) => {
@@ -477,33 +591,22 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			saveAndSubmit(){
 				this.save('save');
 			},
-			eventBind(){
-				window.onload = function(e){
-				var code = "";
-				var lastTime,nextTime;
-				var lastCode,nextCode;
-
-				document.onkeypress = function(e) {
-					console.log(e);
-					nextCode = e.which;
-					nextTime = new Date().getTime();
-
-					if(lastCode != null && lastTime != null && nextTime - lastTime <= 30) {
-						code += String.fromCharCode(lastCode); 
-					} else if(lastCode != null && lastTime != null && nextTime - lastTime > 100){
-						code = "";
-					}
-
-					lastCode = nextCode;
-					lastTime = nextTime;
-				}
-
-			}
-			}
+// 			getnumcode(e){
+// 				var that = this;
+//     			var nextTime = new Date().getTime();
+// 				if(this.lastTime != 0 && nextTime - this.lastTime <= 30) {
+// 					console.log('扫码枪输入');
+// 					that.getCodeInfo();
+// 				}
+// 				if( nextTime - this.lastTime > 1000){
+// 					console.log('键盘输入');
+// 					if(e.keycode == 13){
+// 						that.getCodeInfo();
+// 					}
+// 				}
+//     			this.lastTime = nextTime;
+// 			}
 		},
-		mounted(){
-			this.eventBind();
-		}
 	}
 </script>
 

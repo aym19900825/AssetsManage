@@ -84,8 +84,9 @@
 		commentArr:{},
 		selUser: [],//接勾选的值
 		DEPTID:'',//当前选择的机构值
-        categoryList:[],
-        dialogCategory:false,
+		appname:'',//应用名称
+		categoryList:[],
+		dialogCategory:false,
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -113,8 +114,10 @@
 	    return 'text-align:center'
 	},
 	SelChange(row) {
+		console.log(row);
 		this.selUser = [];
 		this.selUser.push(row);
+		console.log(this.selUser);
 		this.$refs.singleTable.clearSelection();
         this.$refs.singleTable.toggleRowSelection(row);
 	},
@@ -138,11 +141,16 @@
 	close() {
 		this.dialogCategory = false;
 	},
-  	visible(DEPTID) {
-		this.DEPTID = DEPTID;
+	visible(DEPTID) {
+		console.log(DEPTID);
+	if(!!DEPTID.appname){
+		this.appname=DEPTID.appname;
+	}else{
+			this.DEPTID = DEPTID;
+	}
 		this.dialogCategory = true;
 		this.requestData();
-  	},
+	},
   	//表格滚动加载
 		loadMore() {
 			let up2down = sessionStorage.getItem('up2down');
@@ -211,8 +219,12 @@
 			NUM:this.searchList.NUM,
 			TYPE: this.searchList.TYPE,
 			VERSION:this.searchList.VERSION,
-		};
-		var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+this.allDepts;
+		}
+		if(!!this.appname){
+			var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
+		}else{
+			var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+this.allDepts;
+		}
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
@@ -232,7 +244,7 @@
 		}).catch((wrong) => {});
 	},
 	requestData(){
-		if(this.allDepts == ''){
+		if(this.allDepts == ''&&!this.appname){
 			this.deptsFlag = false;
 			var url = this.basic_url + '/api-user/depts/findSubStrsById/'+this.DEPTID;
 			this.$axios.get(url, {
@@ -241,6 +253,8 @@
 				this.deptsFlag = true;
 				this.getData();
 			}).catch((wrong) => {});
+		}else{
+			this.getData();
 		}
 	},
 	determine(){
@@ -269,8 +283,8 @@
         this.dialogCategory = false;//关闭弹出框
         this.categoryList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
-		this.page.pageSize = 20;//页码重新传值
-		this.allDepts = '';
+				this.page.pageSize = 20;//页码重新传值
+				this.allDepts = '';
     },
     handleClose(done) {
         this.$confirm('确认关闭？')

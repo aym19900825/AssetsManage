@@ -198,9 +198,14 @@ export default {
          var url = this.basic_url + '/api-user/dicts';
       }else if(this.appName == 'serialnum'){
         var url = this.basic_url + '/api-user/serialnum';
+      }else if(this.appName == 'loginlog'){
+        var url = this.basic_url + '/api-log/logs/loginlog';
+      }else if(this.appName == '/operlog'){
+        var url = this.basic_url + '/api-log/logs/operlog';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }
+      console.log(url);
       this.$axios.get(url, {
         params: data
       }).then((res) => {

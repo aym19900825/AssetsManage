@@ -67,6 +67,8 @@
 		DEPTID:'',//当前选择的机构值
 		CJDW:'',//机构编号
 		NUM:'',//产品类别编号
+		appname:'',//appname
+		NUM:'',//产品类别的编号
     }
   },
 
@@ -136,10 +138,21 @@
 		}).catch((wrong) => {})
 	},
   	visible(NUM,CJDW) {
-		this.NUM = NUM;
-		this.CJDW = CJDW;
-		this.dialogProduct = true;
-		this.requestData(NUM,CJDW);
+			console.log(NUM);
+			console.log(CJDW);
+			if(!!CJDW){
+				this.NUM = NUM;
+				this.CJDW = CJDW;
+				this.dialogProduct = true;
+				this.requestData(NUM,CJDW);
+			}else{
+				console.log(123);
+				this.appname=NUM.appname;
+				this.NUM=NUM.P_NUM;
+				this.dialogProduct = true;
+				this.requestData();
+			}
+		
   	},
   	loadMore () {
 	   if (this.loadSign) {
@@ -155,15 +168,21 @@
 	   }
 	},
 	requestData(NUM,CJDW){
+		console.log(this.NUM);
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 		};
-		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_wheres='+this.CJDW;
+		console.log(this.CJDW);
+		if(!!this.CJDW){
+			var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_wheres='+this.CJDW;
+		}else{
+			var url = this.basic_url + '/api-apps/app/product2?authfrom='+this.appname+'&authfliter=true&NUM_wheres='+this.NUM;
+		}
+		console.log(url);
 		console.log(12345);
-		this.$axios.get(url, {
-			
-		}).then((res) => {
+		this.$axios.get(url, {}).then((res) => {
+			console.log(res);
 			this.page.totalCount = res.data.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

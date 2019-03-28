@@ -156,9 +156,11 @@
         },
         standardList:[],
 		selectData:[],
-		pronum:'',
+		PRO_NUM :'',//产品编号
+		P_NUM:'',//产品类别编号 
+		pronum:'',//产品类别的编号
 		basisids:'',//存放勾选过的id逗号拼接的字符串
-		productnum:'',
+		productnum:'',//产品的编号
 		basistable:[],
     }
   },
@@ -218,19 +220,21 @@
   	//点击关闭按钮
 	close() {
 		this.resetBasisInfo();
-    },
+	},
+	//页面显示
     basislead(value){
-		this.productnum = value[0];//产品编号
-		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
-			this.basistable = value[1];//检测依据表格中已有的数据
-			var basissnum = [];
-			for(var i = 0;i<this.basistable.length;i++){
-				basissnum.push(this.basistable[i].S_NUM);
-			}
-			this.basissnums = basissnum.toString(',');
-		}else{
-			this.basissnums = '';
-		}
+		this.PRO_NUM = value.PRO_NUM;//产品编号
+		this.P_NUM = value.P_NUM;//产品类别编号
+		// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+		// 	this.basistable = value[1];//检测依据表格中已有的数据
+		// 	var basissnum = [];
+		// 	for(var i = 0;i<this.basistable.length;i++){
+		// 		basissnum.push(this.basistable[i].S_NUM);
+		// 	}
+		// 	this.basissnums = basissnum.toString(',');
+		// }else{
+		// 	this.basissnums = '';
+		// }
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
     },
@@ -250,23 +254,24 @@
 			var basisname = [];
 			var prover = [];
             for (var i = 0; i < changeUser.length; i++) {
+				console.log(changeUser[i].S_NUM);
                 basisnum.push(changeUser[i].S_NUM);
 				basisname.push(changeUser[i].S_NAME);	
 				prover.push(changeUser[i].S_NUM+':'+changeUser[i].VERSION);			
             }
 			//basisnums为basisnum数组用逗号拼接的字符串
-			var basisnums = basisnum.toString(',');
-			var basisnames = basisname.toString(',');
-			var provers = prover.toString(',');
-			list.push(basisnums);
+			// var basisnums = basisnum.toString(',');
+			// var basisnames = basisname.toString(',');
+			// var provers = prover.toString(',');
+			// list.push(basisnums);
             for(var i = 0;i<this.selUser.length;i++){
 				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
 			}
             this.$emit('testbasis',list);
-			this.$emit('testbasisnum',basisnums);
-			this.$emit('testbasisname',basisnames);
-			this.$emit('testbasisprover',provers);
+			// this.$emit('testbasisnum',basisnums);
+			// this.$emit('testbasisname',basisnames);
+			// this.$emit('testbasisprover',provers);
             this.resetBasisInfo();
 		}
 	},
@@ -308,10 +313,11 @@
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
 		};
-		var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
-        this.$axios.get(url, {
-            
-        }).then((res) => {
+		// var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
+		var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM;
+	   console.log(url);
+	   this.$axios.get(url, {}).then((res) => {
+			console.log(res);
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

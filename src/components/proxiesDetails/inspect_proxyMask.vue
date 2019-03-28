@@ -313,7 +313,7 @@
 
 												<el-table-column prop="UNITCOST" label="单价" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入要求">
 														</el-input>
 														<span v-else>{{scope.row.UNITCOST}}</span>
@@ -416,7 +416,7 @@
 
 												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_DESC'"  >
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button> -->
@@ -898,14 +898,13 @@
 				approval:false,
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
-				labelPosition: 'top', //表格
 				labelPositions: 'right',
 				rules: {
 					V_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//委托单位名称
 					V_ADDRESS: [{ required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{ required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
-					V_PHONE: [{ required: true, trigger: 'blur', validator: this.Validators.isPhone}],//联系人电话
+					V_PHONE: [{ required: true, trigger: 'blur', message: '必填',}],//联系人电话
 					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
 					P_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
@@ -942,10 +941,11 @@
 					children: "children",
 					label: "fullname"
 				},
+				appanme:'inspectPro',
 				dialogVisibleuser:false,
 				customid:"",
 				dataid:'',//修改和查看带过的id
-				inspectPro:'inspectPro',//appname
+				appname:'inspectPro',//appname
 				CUSTOMER_PERSONList:[],//
 				maingroup:[],//主检组
 				selectData:[],//承建单位
@@ -1413,11 +1413,14 @@
 			},
 			//产品
 			mianproduct(){
-				this.$refs.productchild.visible(this.dataInfo.P_NUM,this.dataInfo.R_VENDOR);
+				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM}
+				console.log(data);
+				this.$refs.productchild.visible(data);
 			},
 			//产品类别
 			miancategory(){
-				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+				var data={appname:this.appname}
+				this.$refs.categorychild.visible(data);
 			},
 		
 			//接到产品类别的值
@@ -1439,16 +1442,25 @@
 			},
 			
 			 //检验依据列表
-			addbasis(value){
-				if(this.main == 'main'){
-					this.dataInfo.S_NUM = value[0];
-					for(var i = 1;i<value.length;i++){
-						value[i].S_DESC = value[i].S_NAME;
-						value[i].S_DESC = value[i].S_NAME;
-						this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
-					}
-					this.dataInfo.INSPECT_PROXY_PROJECList = [];
+			addbasis(val){ 
+				console.log(val);
+				for(var i = 0;i<val.length;i++){
+						var List={
+								S_NUM: val[i].S_NUM,
+								S_DESC: val[i].S_NAME,
+								VERSION:val[i].VERSION,
+						};
+						this.dataInfo.INSPECT_PROXY_BASISList.push(List);
 				}
+				// if(this.main == 'main'){
+				// 	this.dataInfo.S_NUM = value[0];
+				// 	for(var i = 1;i<value.length;i++){
+				// 		value[i].S_DESC = value[i].S_NAME;
+				// 		value[i].S_DESC = value[i].S_NAME;
+				// 		this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
+				// 	}
+				// 	this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				// }
 			},
 			//委托单位
 			customarr(val){
@@ -1520,19 +1532,32 @@
 			//检验项目放大镜
 			basisleadbtn2(val){
 				this.deptindex = val;
+				console.log(val);
 				if(val == 'maintable'){
-					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
 							message: '请先选择检验依据列表数据',
 							type: 'warning'
 						});
 					}else{
-						this.sendchilddata.push(this.dataInfo.S_NUM);
-						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
-						this.$refs.projectchild.projectlead(this.sendchilddata);
-						this.main = 'main';
-						this.sendchilddata = [];
-					    this.deptindex = {};
+						// this.sendchilddata.push(this.dataInfo.S_NUM);
+						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
+						var arr=[];
+						console.log(this.dataInfo.INSPECT_PROXY_BASISList);
+						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
+							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
+						}
+						console.log(arr);
+						var data={
+							P_NUM:this.dataInfo.P_NUM,
+							PRO_NUM:this.dataInfo.PRO_NUM,
+							S_NUM:arr,//依据的编号
+						}
+						console.log(data);
+						this.$refs.projectchild.projectlead(data);
+						// this.main = 'main';
+						// this.sendchilddata = [];
+					  //   this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1551,8 +1576,9 @@
 			},
 			//检验依据放大镜
 			basisleadbtn(val){
-				console.log(val);
+				console.log(this.dataInfo.PRO_NUM);
 				this.deptindex = val;
+				//子表
 				if(val == 'maintable'){
 					if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
 						this.$message({
@@ -1560,7 +1586,12 @@
 							type: 'warning'
 						});
 					}else{
-						this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM);
+						var data={
+							P_NUM:this.dataInfo.P_NUM,
+							PRO_NUM:this.dataInfo.PRO_NUM,
+
+						}
+						this.$refs.standardchild.basislead(data);
 						this.main = 'main';
 					}
 				}else{

@@ -84,8 +84,9 @@
 		commentArr:{},
 		selUser: [],//接勾选的值
 		DEPTID:'',//当前选择的机构值
-        categoryList:[],
-        dialogCategory:false,
+		appname:'',//应用名称
+		categoryList:[],
+		dialogCategory:false,
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -112,8 +113,10 @@
 	    return 'text-align:center'
 	},
 	SelChange(row) {
+		console.log(row);
 		this.selUser = [];
 		this.selUser.push(row);
+		console.log(this.selUser);
 		this.$refs.singleTable.clearSelection();
         this.$refs.singleTable.toggleRowSelection(row);
 	},
@@ -134,11 +137,16 @@
 	close() {
 		this.dialogCategory = false;
 	},
-  	visible(DEPTID) {
-		this.DEPTID = DEPTID;
+	visible(DEPTID) {
+		console.log(DEPTID);
+	if(!!DEPTID.appname){
+		this.appname=DEPTID.appname;
+	}else{
+			this.DEPTID = DEPTID;
+	}
 		this.dialogCategory = true;
 		this.requestData();
-  	},
+	},
   	//表格滚动加载
 		loadMore() {
 			let up2down = sessionStorage.getItem('up2down');
@@ -200,8 +208,13 @@
 			NUM:this.searchList.NUM,
 			TYPE: this.searchList.TYPE,
 			VERSION:this.searchList.VERSION,
-		};
-		var url = this.basic_url + '/api-apps/app/productType2?DEPTID='+this.DEPTID;
+		}
+		if(!!this.appname){
+			var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
+		}else{
+			var url = this.basic_url + '/api-apps/app/productType2?DEPTID='+this.DEPTID;
+		}
+		console.log(url);
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
@@ -235,7 +248,7 @@
 		})
 	},
 	determine(){
-		console.log(this.selUser[0]);
+		console.log(this.selUser);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',

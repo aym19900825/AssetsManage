@@ -123,6 +123,9 @@
 		projectnum:'',//检测依据参数
 		projecttable:[],//已选的检测项目
 		projectpnums:'',//已选的检测项目拼接的字符串
+		PRO_NUM:'',//产品编号
+		P_NUM:'',//产品类别编号
+        S_NUM:'',//
     }
   },
   methods: {
@@ -182,17 +185,22 @@
 		this.dialogProduct = false;
     },
     projectlead(value){
-		this.projectnum = value[0];
-		if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
-			this.projecttable = value[1];
-			var projectpnum = [];
-			for(var i = 0;i<this.projecttable.length;i++){
-				projectpnum.push(this.projecttable[i].P_NUM);
-			}
-			this.projectpnums = projectpnum.toString(',');
-		}else{
-			this.projectpnums = '';
-		}
+		console.log(value);
+		this.PRO_NUM = value.PRO_NUM;//产品编号
+		this.P_NUM = value.P_NUM;//产品类别编号
+		this.S_NUM=value.S_NUM.toString(',');
+		console.log(this.S_NUM);
+		// this.projectnum = value[0];
+		// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+		// 	this.projecttable = value[1];
+		// 	var projectpnum = [];
+		// 	for(var i = 0;i<this.projecttable.length;i++){
+		// 		projectpnum.push(this.projecttable[i].P_NUM);
+		// 	}
+		// 	this.projectpnums = projectpnum.toString(',');
+		// }else{
+		// 	this.projectpnums = '';
+		// }
 		this.requestData();//渲染数据
 		this.dialogVisible = true;
 	},
@@ -279,9 +287,13 @@
             VERSION: this.searchList.VERSION,
             STATUS: this.searchList.STATUS,
 		};
-        this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums, {
-        
-        }).then((res) => {
+		// this.PRO_NUM = value.PRO_NUM;//产品编号
+		// this.P_NUM = value.P_NUM;//产品类别编号
+		// this.S_NUM=value.S_NUM.toString(',');
+	    // var url=this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums;
+		// var url=this.basic_url +'/api-apps/app/inspectionPro2?P_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums;
+		var url=this.basic_url +'/api-apps/app/inspectionPro2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_in='+this.S_NUM;
+		this.$axios.get(url,{}).then((res) => {
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

@@ -86,6 +86,10 @@ const flow_management  = r => require.ensure([], () => r(require('@/components/f
 const flow_process  = r => require.ensure([], () => r(require('@/components/flow/flow_process')), 'flow_process')//流程模型
 
 const printCode  = r => require.ensure([], () => r(require('@/components/samples/printCode')), 'printCode')//打印条码
+
+const loginlog  = r => require.ensure([], () => r(require('@/components/loginlog/loginlog')), 'loginlog')//打印条码
+const operlog  = r => require.ensure([], () => r(require('@/components/loginlog/operlog')), 'operlog')//打印条码
+
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -446,6 +450,16 @@ Vue.use(Router)
       path: '/printCode',
       name: 'printCode',
       component: printCode
+    },
+    {//登录日志
+      path: '/loginlog',
+      name: 'loginlog',
+      component: loginlog
+    },
+    {//操作日志
+      path: '/operlog',
+      name: 'operlog',
+      component: operlog
     },
 ];
 

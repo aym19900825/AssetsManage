@@ -113,7 +113,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
-												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
+												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -655,18 +655,23 @@
 						type:'warning'
 					})
 				}else if(this.selval.length == 1){
-					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
-					this.samplesForm.V_NAME=this.selval[0].V_NAME;
-					this.samplesForm.VENDOR=this.selval[0].VENDOR;
-					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
-					this.samplesForm.P_NAME=this.selval[0].P_NAME;
-					this.samplesForm.PRODUCT_COMPANY=this.selval[0].PRODUCT_UNIT;
-					this.samplesForm.PRODUCT_TYPE=this.selval[0].PRODUCT_TYPE;
-					this.samplesForm.PRODUCT=this.selval[0].PRODUCT;
-					this.samplesForm.DESCRIPTION=this.selval[0].ITEM_NAME;
-					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;
-					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
-					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
+					var data = this.selval[0];
+					this.samplesForm.PROXYNUM = data.PROXYNUM;
+					this.samplesForm.V_NAME = data.V_NAME;
+					this.samplesForm.VENDOR = data.VENDOR;
+					this.samplesForm.PROXYNUM = data.PROXYNUM;
+					this.samplesForm.P_NAME = data.P_NAME;
+					this.samplesForm.PRODUCT_COMPANY = data.PRODUCT_UNIT;
+					this.samplesForm.PRODUCT_TYPE = data.PRODUCT_TYPE;
+					this.samplesForm.PRODUCT = data.PRODUCT;
+					this.samplesForm.DESCRIPTION = data.ITEM_NAME;
+					this.samplesForm.PRODUCT_CODE = data.ITEM_ID;
+					this.samplesForm.MODEL = data.ITEM_MODEL;
+					this.samplesForm.QUATITY = data.ITEM_QUALITY;
+
+					this.samplesForm.DEPUTE_TYPE = data.DEPUTE_TYPE;
+					this.samplesForm.PRODUCE_TYPE = data.PRODUCE_TYPE;
+
 					this.resetBasisInfo1();
 				}else if(this.selval.length > 1){
 					this.$message({
@@ -693,10 +698,10 @@
 					var date=new Date();
 					this.samplesForm.ACCEPT_DATE =  this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//收样日期
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.samplesForm.CJDW = res.data.deptId;
-					this.samplesForm.CJDWDesc = res.data.deptName;
+					this.findDeptId();
 				}).catch((err)=>{})
 				this.reset();
+				console.log(this.$store.state.currentcjdw);
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -706,6 +711,14 @@
 				this.views = false;
             	this.edit = true;
 				this.noedit = false;
+			},
+			findDeptId(){
+				this.$axios.get(this.basic_url + '/api-user/users/findUsersDeptofSta',{}).then((res)=>{
+					var data = res.data[0];
+					this.$forceUpdate();
+					this.samplesForm.CJDW = data.id;
+					this.samplesForm.CJDWDesc = data.fullname;
+				}).catch((err)=>{})
 			},
 			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{

@@ -28,7 +28,7 @@
 			<el-table   ref="singleTable"
 						highlight-current-row
     					@current-change="SelChange"
-						
+						@selection-change="setSel"
 						:header-cell-style="rowClass" 
 						:data="categoryList" 
 						border 
@@ -97,6 +97,7 @@
 			VERSION:'',
 			DEPTID: '',
 		},
+		allDepts: []
     }
   },
 
@@ -120,6 +121,9 @@
 		this.$refs.singleTable.clearSelection();
         this.$refs.singleTable.toggleRowSelection(row);
 	},
+	setSel(val) {
+      	this.selUser = val;
+    },
   	
 	searchinfo() {
 		this.page.currentPage = 1;
@@ -200,7 +204,14 @@
 			this.requestData();
 		},
 	//Table默认加载数据
-	requestData(){
+	getAllDepts(){
+		var url = this.basic_url + '/api-user/depts/findSubStrsById/'+this.DEPTID;
+		this.$axios.get(url, {
+		}).then((res) => {
+			this.allDepts = res.data;
+		}).catch((wrong) => {})
+	},
+	getData(){
 		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
@@ -212,9 +223,8 @@
 		if(!!this.appname){
 			var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
 		}else{
-			var url = this.basic_url + '/api-apps/app/productType2?DEPTID='+this.DEPTID;
+			var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+this.allDepts;
 		}
-		console.log(url);
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {
@@ -226,29 +236,28 @@
 			} else {
 				this.loadSign = true
 			}
-			// this.commentArr[this.page.currentPage] = res.data.data
-			// let newarr = []
-			// for(var i = 1; i <= totalPage; i++) {
-			// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-			// 		for(var j = 0; j < this.commentArr[i].length; j++) {
-			// 			newarr.push(this.commentArr[i][j])
-			// 		}
-			// 	}
-			// }
 			this.categoryList = res.data.data;
 			this.loading = false;//加载动画关闭
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
-			}//滚动加载数据判断filing
-		}).catch((wrong) => {
-			// this.$message({
-			// 	message: '网络错误，请重试1',
-			// 	type: 'error'
-			// });
-		})
+			}
+		}).catch((wrong) => {});
+	},
+	requestData(){
+		if(this.allDepts == ''&&!this.appname){
+			this.deptsFlag = false;
+			var url = this.basic_url + '/api-user/depts/findSubStrsById/'+this.DEPTID;
+			this.$axios.get(url, {
+			}).then((res) => {
+				this.allDepts = res.data;
+				this.deptsFlag = true;
+				this.getData();
+			}).catch((wrong) => {});
+		}else{
+			this.getData();
+		}
 	},
 	determine(){
-		console.log(this.selUser);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',
@@ -260,7 +269,6 @@
 				type: 'warning'
 			});
 		}else{
-			// this.dialogCategory = false;
 			var proarr = [];
 			proarr.push(this.selUser[0].NUM);
 			proarr.push(this.selUser[0].TYPE);
@@ -275,7 +283,8 @@
         this.dialogCategory = false;//关闭弹出框
         this.categoryList = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 20;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
+				this.allDepts = '';
     },
     handleClose(done) {
         this.$confirm('确认关闭？')

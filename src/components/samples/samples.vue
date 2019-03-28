@@ -337,7 +337,7 @@
 				this.selSampleData = val;
 			},
 			genCode(){
-				if( this.sampleType=='2'&&this.selSampleData.length==0){
+				if(this.sampleType=='2'&&this.selSampleData.length==0){
 					this.$message({
 						message: '请您选择数据',
 						type: 'warning'
@@ -466,7 +466,7 @@
 					});
 					return;
 				} else {
-					this.sampleTypeFlag = this.selMenu[0].ITEM_TYPE == ''? true : false;
+					this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
 					if(this.selMenu[0].ITEM_TYPE =='2'){
 						this.getSampleList();
 						this.sampleType = '2';

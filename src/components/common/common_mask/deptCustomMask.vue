@@ -108,7 +108,7 @@
 					NAME: '',
 					CONTACT_ADDRESS: ''
 				},
-				activeName: 'first', //tabs
+				activeName: 'second', //tabs
 				list: [],
 				dialogShow: false,
 				resourceData: [],
@@ -143,7 +143,7 @@
 				this.list = [];
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 20;//页码重新传值
-				this.activeName = 'first';
+				this.activeName = 'second';
 			},
 			getData(){
 				this.dialogShow = true;

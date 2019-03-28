@@ -91,6 +91,11 @@
 										</el-table-column>
 										<el-table-column label="样品名称" sortable prop="DESCRIPTION">
 										</el-table-column>
+										<el-table-column label="数量" sortable prop="NUM">
+											<template slot-scope="scope">
+												<span v-text="!!scope.row.NUM?scope.row.NUM:1"></span>
+											</template>
+										</el-table-column>
 										<el-table-column label="委托书编号" sortable prop="PROXYNUM">
 										</el-table-column>
 										<el-table-column label="样品承接人" sortable prop="DO_PERSONDesc">

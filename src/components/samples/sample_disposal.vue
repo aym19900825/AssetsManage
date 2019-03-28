@@ -146,17 +146,15 @@
 								</el-table-column>
 								<el-table-column label="样品承接人" sortable width="120px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>
-								<el-table-column label="处理人" sortable width="100px" prop="DO_PERSON" v-if="this.checkedName.indexOf('处理人')!=-1">
+								<el-table-column label="处理人" sortable width="100px" prop="DO_PERSONDesc" v-if="this.checkedName.indexOf('处理人')!=-1">
 								</el-table-column>
 								<el-table-column label="处理日期" sortable width="100px" :formatter="dateFormat" prop="DO_DATE" v-if="this.checkedName.indexOf('处理日期')!=-1">
 								</el-table-column>
-								<el-table-column label="处理批准人" sortable width="120px" prop="APPR_PERSON" v-if="this.checkedName.indexOf('处理批准人')!=-1">
+								<el-table-column label="处理批准人" sortable width="120px" prop="APPR_PERSONDesc" v-if="this.checkedName.indexOf('处理批准人')!=-1">
 								</el-table-column>
 								<el-table-column label="批准日期" sortable width="100px" prop="APPR_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
 								<el-table-column label="备注" sortable width="160px" prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
-								</el-table-column>
-								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</v-table>
 						</el-col>

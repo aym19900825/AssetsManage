@@ -141,8 +141,6 @@
 								</el-table-column>
 								<el-table-column label="领样日期" sortable width="100px" :formatter="dateFormat" prop="GRANT_DATE" v-if="this.checkedName.indexOf('领样日期')!=-1">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="100px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1" >
-								</el-table-column>
 							</v-table>
 							<!-- 表格 -->
 						</el-col>

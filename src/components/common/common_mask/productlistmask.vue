@@ -8,6 +8,8 @@
 				highlight-current-row
 				@current-change="SelChange"
 
+				@selection-change="setSel"
+
 				line-center 
 				border 
 				stripe 
@@ -64,6 +66,7 @@
 			pageSize: 20,
 			totalCount: 0
 		},
+		allDepts: '',
 		DEPTID:'',//当前选择的机构值
 		CJDW:'',//机构编号
 		NUM:'',//产品类别编号
@@ -71,6 +74,9 @@
   },
 
   methods: {
+	setSel(val) {
+      	this.selUser = val;
+    },
   	dateFormat(row, column) {
 		var date = row[column.property];
 		if(date == undefined) {
@@ -139,8 +145,16 @@
 		this.NUM = NUM;
 		this.CJDW = CJDW;
 		this.dialogProduct = true;
-		this.requestData(NUM,CJDW);
-  	},
+		this.requestData();
+	  },
+	getAllDepts(){
+		var url = this.basic_url + '/api-user/depts/findSubStrsById/'+this.CJDW;
+		this.$axios.get(url, {
+		}).then((res) => {
+			this.allDepts = res.data;
+			this.getData();
+		}).catch((wrong) => {})
+	},
   	loadMore () {
 	   if (this.loadSign) {
 	     this.loadSign = false
@@ -151,18 +165,16 @@
 	     setTimeout(() => {
 	       this.loadSign = true
 	     }, 1000)
-	     this.requestData(NUM,CJDW);
+	     this.requestData();
 	   }
 	},
-	requestData(NUM,CJDW){
+	getData(){
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 		};
-		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_wheres='+this.CJDW;
-		console.log(12345);
+		var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_where_in='+this.allDepts;
 		this.$axios.get(url, {
-			
 		}).then((res) => {
 			this.page.totalCount = res.data.count;
 			//总的页数
@@ -172,18 +184,16 @@
 			} else {
 				this.loadSign = true
 			}
-			this.commentArr[this.page.currentPage] = res.data.data
-			let newarr = []
-			for(var i = 1; i <= totalPage; i++) {
-				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-					for(var j = 0; j < this.commentArr[i].length; j++) {
-						newarr.push(this.commentArr[i][j])
-					}
-				}
-			}
-			this.productList = newarr;
+			this.productList = res.ddateFormatata.data;
 			this.loading = false;
 		}).catch((wrong) => {})
+	},
+	requestData(){
+		if(this.allDepts == ''){
+			this.getAllDepts();
+		}else{
+			this.getData();
+		}
 	},
 	determine(){
 		if(this.selUser.length == 0){
@@ -197,7 +207,6 @@
 				type: 'warning'
 			});
 		}else{
-			// this.dialogProduct = false;
 			var proarr = [];
 			proarr.push(this.selUser[0].PRO_NUM);
 			proarr.push(this.selUser[0].PRO_NAME);
@@ -215,8 +224,6 @@
         this.page.pageSize = 20;//页码重新传值
     },
   },
-  mounted() {
-	},
 }
 </script>
 

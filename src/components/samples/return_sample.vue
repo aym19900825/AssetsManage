@@ -103,8 +103,6 @@
 								</el-table-column>
 								<el-table-column label="返样日期" sortable width="100px" prop="RETURN_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
-								</el-table-column>
 							</v-table>
 						</el-col>
 					</el-row>

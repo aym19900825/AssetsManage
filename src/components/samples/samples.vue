@@ -337,7 +337,7 @@
 				this.selSampleData = val;
 			},
 			genCode(){
-				if( this.sampleType=='2'&&this.selSampleData.length==0){
+				if(this.sampleType=='2'&&this.selSampleData.length==0){
 					this.$message({
 						message: '请您选择数据',
 						type: 'warning'

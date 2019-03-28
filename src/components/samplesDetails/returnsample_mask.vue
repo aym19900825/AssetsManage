@@ -438,6 +438,7 @@
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.samplesForm.PERSON_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.samplesForm.ACCEPT_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.samplesForm.RETURN_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
 				})
 				this.addtitle = true;

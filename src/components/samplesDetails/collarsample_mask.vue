@@ -43,7 +43,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @keydown.native="getnumcode($event)" ref="itemnum" :disabled="noedit"></el-input>
+												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @input="getCodeInfo" ref="itemnum" :disabled="noedit"></el-input>
 											</el-form-item>
 											<!-- <input type="text" name="fname" id="idtest"/> -->
 										</el-col>

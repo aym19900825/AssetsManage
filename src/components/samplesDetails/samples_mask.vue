@@ -68,7 +68,7 @@
 									<el-row>
 										<el-col :span="16">
 											<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-												<el-input v-model="samplesForm.P_NAMEDesc" :disabled="noedit || (!!samplesForm.PROXYNUM)">
+												<el-input v-model="samplesForm.P_NAMEDesc" disabled>
 													<el-button slot="append" icon="el-icon-search"  @click="getVname('P_NAME')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>

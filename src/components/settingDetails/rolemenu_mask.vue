@@ -82,7 +82,7 @@
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
 							arr.push(mData[a].id);
-							if(mData[a].children!=undefined){
+							if(mData[a].children!=undefined&&mData[a].children.length>0){
 								for(var b=0;b<mData[a].children.length;b++){
 									if(!mData[a].children[b].checked){
 									flag=false;

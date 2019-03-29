@@ -29,11 +29,11 @@
 												<template slot="prepend">信息状态</template>
 											</el-input>
 										</el-col>-->
+										
 										<el-col :span="4" class="pull-right">
 											<el-input  v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
-											<!-- <el-input v-for="(data,index) in Select_STATUS" :key="index" :value="data.code" :label="data.name"></el-input> -->
 										</el-col>
 										
 										<el-col :span="7" class="pull-right">
@@ -41,11 +41,17 @@
 												<template slot="prepend">样品编号</template>
 											</el-input>
 										</el-col>
+
+										<el-col :span="8" class="pull-right">
+											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="110px">
+												<el-input v-model="samplesForm.CJDWDesc" disabled></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="12">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
-												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
+												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit || (modifytitle && samplesForm.PROXYNUM!='')">
 													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -80,19 +86,14 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8" >
-											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="110px">
-												<el-input v-model="samplesForm.CJDWDesc" disabled></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8" >
+										<el-col :span="12" >
 											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addcategory" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<el-col :span="12">
 											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addproduct" :disabled="noedit||!!samplesForm.PROXYNUM"></el-button>
@@ -113,14 +114,14 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
-												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" style="width: 60%" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
+												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" @change="changeNum" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="生产日期/批" prop="MANUFACTURE_DATE" label-width="110px">
-												<el-input v-model="samplesForm.MANUFACTURE_DATE" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
+												<el-input  v-model="samplesForm.MANUFACTURE_DATE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -176,6 +177,33 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8">
+											<el-form-item label="企业确认样品日期" prop="SAMPLE_CONFIRMATION_DATE" label-width="110px">
+												<div class="block">
+												    <el-date-picker
+												      v-model="samplesForm.SAMPLE_CONFIRMATION_DATE"
+												      type="date"
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
+												    </el-date-picker>
+												</div>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="样品费用（万元）" prop="ITEM_CHARGE" label-width="110px">
+												<el-input v-model="samplesForm.ITEM_CHARGE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发票日期" prop="INVOICEDATE " label-width="110px">
+												<div class="block">
+												    <el-date-picker
+												      v-model="samplesForm.INVOICEDATE"
+												      type="date"
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
+												    </el-date-picker>
+												</div>
+											</el-form-item>
+										</el-col>
 									</el-row>
 									
 									<el-row>
@@ -189,7 +217,7 @@
 								<el-collapse-item title="样品" name="2">								
 									<div class="table-func" v-show="!viewtitle">
 										<span><i class="red font16">*</i>此处是按样品数量生成的列表行</span>
-										<el-button type="success" size="mini" round @click="addfield" :disabled="modify&&(!!samplesForm.PROXYNUM)">
+										<el-button type="success" size="mini" round @click="addfield" :disabled="noedit">
 											<i class="icon-start"></i>
 											<font>生成</font>
 										</el-button>
@@ -469,6 +497,10 @@
 			};
 		},
 		methods: {
+			changeNum(){
+				console.log('===========');
+				this.samplesForm.ITEM_LINEList = [];
+			},
 			setData(data){
 				this.$forceUpdate();
 				if(this.vName == 'P_NAME'){
@@ -657,18 +689,26 @@
 						type:'warning'
 					})
 				}else if(this.selval.length == 1){
-					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
-					this.samplesForm.V_NAME=this.selval[0].V_NAME;
-					this.samplesForm.VENDOR=this.selval[0].VENDOR;
-					this.samplesForm.PROXYNUM=this.selval[0].PROXYNUM;
-					this.samplesForm.P_NAME=this.selval[0].P_NAME;
-					this.samplesForm.PRODUCT_COMPANY=this.selval[0].PRODUCT_UNIT;
-					this.samplesForm.PRODUCT_TYPE=this.selval[0].PRODUCT_TYPE;
-					this.samplesForm.PRODUCT=this.selval[0].PRODUCT;
-					this.samplesForm.DESCRIPTION=this.selval[0].ITEM_NAME;
-					this.samplesForm.PRODUCT_CODE=this.selval[0].ITEM_ID;
-					this.samplesForm.MODEL=this.selval[0].ITEM_MODEL;
-					this.samplesForm.QUATITY=this.selval[0].ITEM_QUALITY;
+					var data = this.selval[0];
+					this.samplesForm.ITEMNUM = data.ITEMNUM;
+					this.samplesForm.PROXYNUM = data.PROXYNUM;
+					this.samplesForm.V_NAME = data.V_NAME;
+					this.samplesForm.V_NAMEDesc = data.V_NAMEDesc;
+					this.samplesForm.VENDOR = data.VENDOR;
+					this.samplesForm.PROXYNUM = data.PROXYNUM;
+					this.samplesForm.P_NAME = data.P_NAME;
+					this.samplesForm.P_NAMEDesc = data.P_NAMEDesc;
+					this.samplesForm.PRODUCT_COMPANY = data.PRODUCT_UNIT;
+					this.samplesForm.PRODUCT_TYPE = data.PRODUCT_TYPE;
+					this.samplesForm.PRODUCT = data.PRODUCT;
+					this.samplesForm.DESCRIPTION = data.ITEM_NAME;
+					this.samplesForm.PRODUCT_CODE = data.ITEM_ID;
+					this.samplesForm.MODEL = data.ITEM_MODEL;
+					this.samplesForm.QUATITY = data.ITEM_QUALITY;
+
+					this.samplesForm.DEPUTE_TYPE = data.DEPUTE_TYPE;
+					this.samplesForm.PRODUCE_TYPE = data.PRODUCE_TYPE;
+
 					this.resetBasisInfo1();
 				}else if(this.selval.length > 1){
 					this.$message({
@@ -695,10 +735,10 @@
 					var date=new Date();
 					this.samplesForm.ACCEPT_DATE =  this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//收样日期
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.samplesForm.CJDW = res.data.deptId;
-					this.samplesForm.CJDWDesc = res.data.deptName;
+					this.findDeptId();
 				}).catch((err)=>{})
 				this.reset();
+				console.log(this.$store.state.currentcjdw);
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -708,6 +748,14 @@
 				this.views = false;
             	this.edit = true;
 				this.noedit = false;
+			},
+			findDeptId(){
+				this.$axios.get(this.basic_url + '/api-user/users/findUsersDeptofSta',{}).then((res)=>{
+					var data = res.data[0];
+					this.$forceUpdate();
+					this.samplesForm.CJDW = data.id;
+					this.samplesForm.CJDWDesc = data.fullname;
+				}).catch((err)=>{})
 			},
 			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{

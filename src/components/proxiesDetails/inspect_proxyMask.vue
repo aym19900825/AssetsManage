@@ -51,7 +51,7 @@
 												<template slot="prepend">编号</template>
 											</el-input>
 										</el-col>
-											<el-col :span="4" class="pull-right">
+											<el-col :span="6" class="pull-right">
 											<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit">
 												<template slot="prepend">承检单位</template>
 											</el-input>
@@ -119,8 +119,8 @@
 											</el-row>
 										<el-row>
 											<el-col :span="12">
-												<el-form-item label="生产单位名称" prop="P_NAME" label-width="110px">
-													<el-input v-model="dataInfo.P_NAME" :disabled="special" >
+												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="special" >
 														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
@@ -160,7 +160,7 @@
 											
 											<el-col :span="8">
 												<el-form-item label="保密要求" prop="ITEM_SECRECY" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="special"></el-input>
+													<el-input v-model="dataInfo.ITEM_SECRECY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											
@@ -301,7 +301,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable>
+												<!-- <el-table-column prop="INSPECT_GROUP" label="专业组" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.INSPECT_GROUP'" >
 															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择" :disabled="noedit"  @visible-change="visablemaingroup($event)" >
@@ -309,11 +309,11 @@
 															</el-select>
 														</el-form-item>	
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 
 												<el-table-column prop="UNITCOST" label="单价" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入要求">
 														</el-input>
 														<span v-else>{{scope.row.UNITCOST}}</span>
@@ -371,11 +371,11 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
+												<el-table-column prop="V_NAMEDesc" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc">
 														</el-input>
-														<span v-else>{{scope.row.V_NAME}}</span>
+														<span v-else>{{scope.row.V_NAMEDesc}}</span>
 													</template>
 												</el-table-column>
 												<!-- <el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
@@ -385,7 +385,7 @@
 														<span v-else>{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column> -->
-												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
+												<!-- <el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-select  clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @visible-change="visablemaingroup($event)" >
@@ -393,7 +393,7 @@
 															</el-select>
 														</el-form-item>	
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -416,7 +416,7 @@
 
 												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_DESC'"  >
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button> -->
@@ -898,14 +898,13 @@
 				approval:false,
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
-				labelPosition: 'top', //表格
 				labelPositions: 'right',
 				rules: {
 					V_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//委托单位名称
 					V_ADDRESS: [{ required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
-					V_ZIPCODE: [{ required: true, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
+					V_ZIPCODE: [{ required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
-					V_PHONE: [{ required: true, trigger: 'blur', validator: this.Validators.isPhone}],//联系人电话
+					V_PHONE: [{ required: true, trigger: 'blur', message: '必填',}],//联系人电话
 					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
 					P_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
@@ -942,10 +941,11 @@
 					children: "children",
 					label: "fullname"
 				},
+				appanme:'inspectPro',
 				dialogVisibleuser:false,
 				customid:"",
 				dataid:'',//修改和查看带过的id
-				inspectPro:'inspectPro',//appname
+				appname:'inspectPro',//appname
 				CUSTOMER_PERSONList:[],//
 				maingroup:[],//主检组
 				selectData:[],//承建单位
@@ -964,16 +964,12 @@
 			getSummaries(param) {
         //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
         const { columns, data } = param;
-        console.log(param)
-        //console.log(data)
         const sums = [];
         columns.forEach((column, index) => {
-          //console.log(column)
-          //console.log(index)
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 4) {
+          } else if(index === 3) {
 						const values = data.map(item => Number(item[column.property]));
 						//验证每个value值是否是数字，如果是执行if
 						if (!values.every(value => isNaN(value))) {
@@ -1096,26 +1092,40 @@
 			},
 			reset() {					
 				this.dataInfo={
-					VERSION: '1',
-					STATE: '1',
+					MAINGROUP:'',//主检组
+					LEADER:'',//主检负责人
+					STATE: '1',//流程状态
 					STATEDesc:'草稿',
-					ITEM_NAME:'',//生产单位名称
-					VENDOR:'',
+					VERSION:'1',//版本
+					TYPE:'1',//检验
+					TYPEDesc:'检验',
+					STATUS:'0',
+					VENDOR:'',//委托单位编号
+					R_VENDOR:'',//承建单位
+					R_VENDORDesc:'',
+					V_PERSON:'',//委托单位联系人
+					ITEM_NAME:'',//样品名称
+					ITEM_MODEL:'',//样品型号
+					ITEM_QUALITY:'',//样品数量
+					ITEM_SECRECY:'',//样品保密要求
+					ITEM_METHOD:'委托方送样',//样品取样方式
+					ITEM_DISPOSITION:'',//样品检后处理
+					REPORT_NUM:'',//检验报告编号
+					P_NAMEDesc:'',//生产单位
+					P_NAME:'',//生产单位
 					P_NUM:'',
+					P_VERSION:'',
 					PRO_NUM:'',
-					ITEM_MODEL:'',
-					ITEM_QUALITY:'',
-					ITEM_SECRECY:'',
-					ITEM_METHOD:'委托方送样',
-					ITEM_DISPOSITION:'',
+					PRO_VERSION:'',
+					PRODUCT_TYPE:'',
+					PRODUCT:'',
+					PAYMENT_METHOD:'',//付款方式
 					COMPDATE:'',
-					COMPMODE:'正常',
+					COMPMODE:'',//完成方式
 					REMARKS:'',
-					V_NAME:'',
-					V_ADDRESS:'',
+					V_NAME:'',//委托单位名称
+					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
-					P_NAME:'',
-					LEADER:'',
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
@@ -1403,37 +1413,54 @@
 			},
 			//产品
 			mianproduct(){
-				this.$refs.productchild.visible(this.dataInfo.P_NUM,this.dataInfo.R_VENDOR);
+				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM}
+				console.log(data);
+				this.$refs.productchild.visible(data);
 			},
 			//产品类别
 			miancategory(){
-				this.$refs.categorychild.visible(this.dataInfo.R_VENDOR);
+				var data={appname:this.appname}
+				this.$refs.categorychild.visible(data);
 			},
 		
 			//接到产品类别的值
 			categorydata(val){
+				console.log(1234);
+				console.log(val[0]);
+				console.log(val[1]);
+				console.log(val[2]);
 				this.dataInfo.P_NUM=val[0];
 				this.dataInfo.PRODUCT_TYPE=val[1];
 				this.dataInfo.P_VERSION=val[2];
 			},
 			//接到产品的值
 			appenddata(val){
+				console.log(val);
 				this.dataInfo.PRO_NUM=val[0];
 				this.dataInfo.PRODUCT=val[1];
 				this.dataInfo.PRO_VERSION=val[2];
 			},
 			
 			 //检验依据列表
-			addbasis(value){
-				if(this.main == 'main'){
-					this.dataInfo.S_NUM = value[0];
-					for(var i = 1;i<value.length;i++){
-						value[i].S_DESC = value[i].S_NAME;
-						value[i].S_DESC = value[i].S_NAME;
-						this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
-					}
-					this.dataInfo.INSPECT_PROXY_PROJECList = [];
+			addbasis(val){ 
+				console.log(val);
+				for(var i = 0;i<val.length;i++){
+						var List={
+								S_NUM: val[i].S_NUM,
+								S_DESC: val[i].S_NAME,
+								VERSION:val[i].VERSION,
+						};
+						this.dataInfo.INSPECT_PROXY_BASISList.push(List);
 				}
+				// if(this.main == 'main'){
+				// 	this.dataInfo.S_NUM = value[0];
+				// 	for(var i = 1;i<value.length;i++){
+				// 		value[i].S_DESC = value[i].S_NAME;
+				// 		value[i].S_DESC = value[i].S_NAME;
+				// 		this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
+				// 	}
+				// 	this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				// }
 			},
 			//委托单位
 			customarr(val){
@@ -1505,19 +1532,32 @@
 			//检验项目放大镜
 			basisleadbtn2(val){
 				this.deptindex = val;
+				console.log(val);
 				if(val == 'maintable'){
-					if(this.dataInfo.S_NUM == null || this.dataInfo.S_NUM == '' || this.dataInfo.S_NUM == undefined){
+					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
 							message: '请先选择检验依据列表数据',
 							type: 'warning'
 						});
 					}else{
-						this.sendchilddata.push(this.dataInfo.S_NUM);
-						this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
-						this.$refs.projectchild.projectlead(this.sendchilddata);
-						this.main = 'main';
-						this.sendchilddata = [];
-					    this.deptindex = {};
+						// this.sendchilddata.push(this.dataInfo.S_NUM);
+						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
+						var arr=[];
+						console.log(this.dataInfo.INSPECT_PROXY_BASISList);
+						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
+							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
+						}
+						console.log(arr);
+						var data={
+							P_NUM:this.dataInfo.P_NUM,
+							PRO_NUM:this.dataInfo.PRO_NUM,
+							S_NUM:arr,//依据的编号
+						}
+						console.log(data);
+						this.$refs.projectchild.projectlead(data);
+						// this.main = 'main';
+						// this.sendchilddata = [];
+					  //   this.deptindex = {};
 					}
 				}else{
 					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
@@ -1531,6 +1571,38 @@
 						this.$refs.projectchild.projectlead(this.sendchilddata);
 						this.main = 'table';
 						this.sendchilddata = [];
+					}
+				}
+			},
+			//检验依据放大镜
+			basisleadbtn(val){
+				console.log(this.dataInfo.PRO_NUM);
+				this.deptindex = val;
+				//子表
+				if(val == 'maintable'){
+					if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
+						this.$message({
+							message: '请先选择产品名称',
+							type: 'warning'
+						});
+					}else{
+						var data={
+							P_NUM:this.dataInfo.P_NUM,
+							PRO_NUM:this.dataInfo.PRO_NUM,
+
+						}
+						this.$refs.standardchild.basislead(data);
+						this.main = 'main';
+					}
+				}else{
+					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
+						this.$message({
+							message: '请先选择产品名称',
+							type: 'warning'
+						});
+					}else{
+						this.$refs.standardchild.basislead(this.deptindex.PRO_NUM);
+						this.main = 'table';
 					}
 				}
 			},
@@ -1558,15 +1630,17 @@
 			},
 			//所外机构
 			  cusinspect(val){
+					console.log(val);
 					for(var i = 0;i<val.length;i++){
 						var List={
 								PROXY_CONTRACT_NUM: '',
 								PROXYNUM: '',
-								V_NAME:'',
+								V_NAME:this.$store.state.currentcjdw[0].id,//委托单位
+								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托单位
 								INSPECT_GROUP:'',
 								PROJECT_ID:'',
-								VENDOR: this.$store.state.currentcjdw[0].id,//承检单位
-								VENDORDesc:val[i].NAME,//承检单位名称
+								VENDOR: val[i].ID,//分包方名称
+								VENDORDesc:val[i].NAME,//分包方名称
 								DEPTTYPE:1,//机构属性id
 								DEPTTYPEDesc:'所外机构',//机构属性名称
 								PT_NUM:'',//产品类别编号
@@ -1592,15 +1666,17 @@
 				},
 				//所内机构
 				withdepet(val){
+					console.log(val);
 							for(var i = 0;i<val.length;i++){
 						var List={
 								PROXY_CONTRACT_NUM: '',
 								PROXYNUM: '',
-								V_NAME:'',
+							  V_NAME:this.$store.state.currentcjdw[0].id,//委托单位
+								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托单位
 								INSPECT_GROUP:'',
 								PROJECT_ID:'',
-								VENDOR: this.$store.state.currentcjdw[0].id,//承检单位
-								VENDORDesc:val[i].NAME,//承检单位名称
+								VENDOR:val[i].dept,//承检单位
+								VENDORDesc:val[i].deptname,//承检单位名称
 								DEPTTYPE:2,//机构属性id
 								DEPTTYPEDesc:'所内机构',//机构属性名称
 								PT_NUM:val[i].pt_num,//产品类别编号
@@ -1708,7 +1784,7 @@
 			},
 			//生成单位
 			appendnames(value){
-				this.dataInfo.P_NAME=value;
+				this.dataInfo.P_NAMEDesc=value;
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {
@@ -1735,7 +1811,6 @@
 							return false;
 			        	}else{
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
-							console.log(this.dataInfo);
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
 									this.$message({
@@ -1807,7 +1882,6 @@
 			RVENDORSelect(){
 				var url = this.basic_url + '/api-user/depts/findByPid/'+this.$store.state.currentcjdw[0].id;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.maingroup = res.data;
 				}).catch((err) => {
 				});
@@ -1823,7 +1897,6 @@
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
-				console.log(maingroupid);
 				if(!maingroupid){
 					return;
 				}

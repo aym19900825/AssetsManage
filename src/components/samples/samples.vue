@@ -169,6 +169,9 @@
 				<el-table
 					ref="singleTable"
 					:data="sampleList"
+					highlight-current-row
+					@current-change="selCurrentChange"
+
 					border
 					stripe
 					style="width: 100%;"
@@ -333,13 +336,26 @@
 			}
 		},
 		methods: {
+			selCurrentChange(row){
+				this.selSampleData = [];
+				this.selSampleData.push(row);
+				this.$refs.singleTable.clearSelection();
+       			this.$refs.singleTable.toggleRowSelection(row);
+			},
 			selSample(val){
 				this.selSampleData = val;
 			},
 			genCode(){
-				if( this.sampleType=='2'&&this.selSampleData.length==0){
+				if(this.sampleType=='2'&&this.selSampleData.length==0){
 					this.$message({
 						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				}
+				if(this.selSampleData.length>1){
+					this.$message({
+						message: '不可同时选择多条数据',
 						type: 'warning'
 					});
 					return;
@@ -466,7 +482,7 @@
 					});
 					return;
 				} else {
-					this.sampleTypeFlag = this.selMenu[0].ITEM_TYPE == ''? true : false;
+					this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
 					if(this.selMenu[0].ITEM_TYPE =='2'){
 						this.getSampleList();
 						this.sampleType = '2';

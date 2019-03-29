@@ -410,7 +410,7 @@
 			},
 			//请求点击
 		    getbtn(item){
-		    	if(item.name=="修改"){
+		    	if(item.name=="下达任务"){
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
 		    	 this.physicsDel();
@@ -433,17 +433,17 @@
 	            }).catch((err) => {
 	            });
         	},
-			//修改检验工作处理到子组件
+			//下达任务到子组件//之前的任务单修改页面
 			modify() {
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要修改的数据',
+						message: '请您选择要下达的任务',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selMenu.length > 1) {
 					this.$message({
-						message: '不可同时修改多条数据',
+						message: '不可同时下达多条子任务',
 						type: 'warning'
 					});
 					return;
@@ -486,11 +486,6 @@
 					}
 				}
 			},
-			//报表
-			reportdata(){
-				this.reportData.app=this.workorder;
-				this.$refs.reportChild.visible();
-			},
 			//下达任务
 			tasklist(){
 				if(this.selMenu.length == 0) {
@@ -509,6 +504,12 @@
 					this.$refs.task.visible(this.selMenu[0].ID);	
 				}
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
+			},
+			
 			getDetail(data){
 				this.view(data);
 			},

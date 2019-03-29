@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加工作任务单</div>
-					<div class="mask_title" v-show="modifytitle">修改工作任务单</div>
-					<div class="mask_title" v-show="viewtitle">查看工作任务单</div>
+					<div class="mask_title" v-show="addtitle">添加检验任务</div>
+					<div class="mask_title" v-show="modifytitle">下达任务</div>
+					<div class="mask_title" v-show="viewtitle">查看检验任务</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -21,8 +21,8 @@
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.workorderForm.STATE!=3">
-							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 接受此任务</el-button> -->
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -30,8 +30,12 @@
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<!-- 样品信息列表 Begin-->
+								<!-- 样品信息 Begin-->
 								<el-collapse-item title="样品信息" name="1">
+									<div v-if="this.workorderForm.STATE!=3" class="check-btn-right">
+										<el-button class="start" type="primary" round size="mini" @click="startup" v-show="start" ><i class="icon-check"></i> 接受此任务</el-button>
+										<el-button class="start" type="warning" round size="mini" @click="sendback" v-show="start" ><i class="icon-back"></i> 回退</el-button>
+									</div>
 									<el-row :gutter="20" class="pb10">
 										<!--<el-col :span="4" class="pull-right">
 											<el-input placeholder="活动" v-model="workorderForm.STATUS" :disabled="true" :formatter="judge">
@@ -100,7 +104,7 @@
 										<el-col :span="24">
 											<el-form-item label="样品名称" prop="ITEM_NAME">
 												<el-input v-model="workorderForm.ITEM_NAME" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" :disabled="edit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -114,7 +118,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="商标标识" prop="ITEM_TRADEMARK">
-												<el-input v-model="workorderForm.ITEM_TRADEMARK" :disabled="noedit"></el-input>
+												<el-input v-model="workorderForm.ITEM_TRADEMARK" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -126,13 +130,13 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="抽样日期" prop="CHECK_DATE">
-												<el-date-picker v-model="workorderForm.CHECK_DATE" type="date" placeholder="请选择抽样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="workorderForm.CHECK_DATE" type="date" placeholder="请选择抽样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="edit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="生产日期/批" prop="PRODUCT_DATE">
-												<el-input v-model="workorderForm.PRODUCT_DATE" :disabled="noedit"></el-input>
+												<el-input v-model="workorderForm.PRODUCT_DATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -145,13 +149,13 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="到站日期" prop="ARRIVAL_DATE">
-												<el-date-picker v-model="workorderForm.ARRIVAL_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="workorderForm.ARRIVAL_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="edit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品来源" prop="ITEM_SOURCE">
-												<el-select v-model="workorderForm.ITEM_SOURCE" style="width: 100%" :disabled="noedit">
+												<el-select v-model="workorderForm.ITEM_SOURCE" style="width: 100%" :disabled="edit">
 													<el-option v-for="(data,index) in Select_ITEM_SOURCE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -161,7 +165,7 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="ITEM_QUALITY">
-												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="noedit"></el-input-number>
+												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="edit"></el-input-number>
 											</el-form-item>
 										</el-col>
 										
@@ -181,14 +185,14 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<!-- 样品信息列表 End-->
+								<!-- 样品信息 End-->
 
 								<!-- 检测 Begin-->
 								<el-collapse-item title="检测" name="2">
 									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="抽样方案/判定依据" label-width="130px">
-												<el-input type="textarea" rows="5" v-model="workorderForm.CHECK_BASIS" :disabled="noedit"></el-input>
+												<el-input type="textarea" rows="5" v-model="workorderForm.CHECK_BASIS" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -430,35 +434,35 @@
 										<!--分包项目 Begin-->
 										<el-tab-pane label="分包项目" name="second">
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
-												<el-table-column prop="WONUM" label="承包方单位名称" sortable width="260px">
+												<el-table-column prop="VENDOR" label="承包方单位名称" sortable width="260px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR">
 														</el-input>
-														<span v-else>{{scope.row.WONUM}}</span>
+														<span v-else>{{scope.row.VENDOR}}</span>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="PROXY_CONTRACT_NUM" label="检验/检测标准依据" sortable width="240px">
+												<el-table-column prop="BASIS" label="检验/检测标准依据" sortable width="240px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS">
 														</el-input>
-														<span v-else>{{scope.row.PROXY_CONTRACT_NUM}}</span>
+														<span v-else>{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="PROXYNUM" label="项目名称" sortable width="200px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入">
 														</el-input>
 														<span v-else>{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="V_NAME" label="检验检测项目要求" sortable width="240px">
+												<el-table-column prop="REQUIRES" label="检验检测项目要求" sortable width="240px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入">
 														</el-input>
-														<span v-else>{{scope.row.V_NAME}}</span>
+														<span v-else>{{scope.row.REQUIRES}}</span>
 													</template>
 												</el-table-column>
 
@@ -493,7 +497,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="200px">
+												<el-table-column prop="COMPLETE_MODED" label="完成方式" sortable width="200px">
 													<template slot-scope="scope">
 															<el-radio-group v-if="scope.row.isEditing" v-model="scope.row.COMPLETE_MODE">
 																<el-radio label="加急" class="red"></el-radio>
@@ -510,10 +514,10 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column fixed="right" label="操作" width="120">
+												<el-table-column fixed="right" label="操作" width="160" align="center">
 													<template slot-scope="scope">
-														<el-button title="生成分包协议" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
-															<i class="icon-send red"></i>
+														<el-button type="primary" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
+															<i class="icon-send"></i>
 															生成分包协议
 														</el-button>
 													</template>
@@ -527,7 +531,7 @@
 									<el-row class="pt10">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="45px">
-												<el-input type="textarea" :row="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
+												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -599,13 +603,13 @@
 						</el-table-column>
 					</el-table>
 				</div> 
-					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					</el-pagination>
-					<span slot="footer" class="dialog-footer">
-				       <el-button type="primary" @click="addpersonname">确 定</el-button>
-				       <el-button @click="resetBasisInfo2">取 消</el-button>
-				    </span>   
-				</el-dialog>
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="addpersonname">确 定</el-button>
+					<el-button @click="resetBasisInfo2">取 消</el-button>
+				</span>   
+			</el-dialog>
 			<!--主检员 End-->
 			
 			<!--委托书编号-->
@@ -672,41 +676,6 @@
 			 reportdata
 		},
 		data() {
-			var validateProxynum = (rule, value, callback) => {//委托书编号
-                if (this.workorderForm.PROXYNUM === undefined || this.workorderForm.PROXYNUM === '' || this.workorderForm.PROXYNUM === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateProxyversion = (rule, value, callback) => {//委托书版本
-                if (this.workorderForm.PROXY_VERSION === undefined || this.workorderForm.PROXY_VERSION === '' || this.workorderForm.PROXY_VERSION === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateItemname = (rule, value, callback) => {//样品名称
-                if (this.workorderForm.ITEM_NAME === undefined || this.workorderForm.ITEM_NAME === '' || this.workorderForm.ITEM_NAME === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateItemname = (rule, value, callback) => {//规格型号
-                if (this.workorderForm.ITEM_MODEL === undefined || this.workorderForm.ITEM_MODEL === '' || this.workorderForm.ITEM_MODEL === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
-			var validateItemnum = (rule, value, callback) => {//样品编号
-                if (this.workorderForm.ITEMNUM === undefined || this.workorderForm.ITEMNUM === '' || this.workorderForm.ITEMNUM === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
 			return {
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
@@ -763,22 +732,52 @@
 				Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
 				fileList:[],//上传附件数据
 				rules: {
-					PROXYNUM: [{ required: true, validator: validateProxynum}],//委托书编号
-					PROXY_VERSION: [{ required: true, validator: validateProxyversion}],//委托书版本
-					WONUM: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					ITEM_NAME: [{ required: true,validator: validateItemname}],//样品名称
-					ITEM_MODEL: [{ required: true,validator: validateItemname}],//规格型号
-					ITEMNUM: [{ required: true,validator: validateItemnum}],//样品编号
+					PROXYNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//委托书编号
+					PROXY_VERSION: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//委托书版本
+					WONUM: [
+						{ required: true, message: '不能为空', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isWorknumber}
+					],//工作任务单编号
+					ITEM_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
+					ITEM_MODEL: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//规格型号
+					ITEMNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品编号
 					// ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					ITEM_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					ITEM_SOURCE: [{ required: true, message: '不能为空', trigger: 'change' }],
-					ITEM_QUALITY: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					CHECK_BASIS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					COMPLETE_DATE: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					COMPLETE_MODE: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					ITEM_RECEPT_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					ITEM_PROFESSIONAL_GROUP: [{ required: true, message: '不能为空', trigger: 'blur' }],
-					STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_STATUS: [
+						{ required: true, message: '不能为空', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					ITEM_SOURCE: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					ITEM_QUALITY: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					CHECK_BASIS: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					COMPLETE_DATE: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					COMPLETE_MODE: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					ITEM_RECEPT_STATUS: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					ITEM_PROFESSIONAL_GROUP: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					STATUS: [
+						{ required: true, message: '不能为空', trigger: 'change' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -939,7 +938,7 @@
 			    return 'text-align:center'
 			},
 			reset(){
-            	this.workorderForm = {
+				this.workorderForm = {
 					PROXYNUM: '',//委托书编号
 					PROXY_VERSION: '',//委托书版本
 					PARENT_NUM: '',//父任务单编号
@@ -1163,7 +1162,6 @@
 					});
 				}else{
 					this.$refs.categorychild.visible(this.workorderForm.CJDW);
-					
 				}
 			},
 			//接到产品类别的值
@@ -1247,7 +1245,7 @@
 				console.log(this.workorderForm.PROJ_NUM);
 			},
 			 //模版编号
-            templateNumber(item){
+			templateNumber(item){
 				console.log(this.workorderForm.WORKORDER_PROJECTList);
 				if((item.DATA_TYPE == '2')&&(this.workorderForm.WORKORDER_PROJECTList==''||this.workorderForm.WORKORDER_PROJECTList==null||this.workorderForm.WORKORDER_PROJECTList==undefined)){
 					this.$message({
@@ -1441,6 +1439,10 @@
 							});
 				    }
 				});
+			},
+			//回退按钮
+			sendback(){
+
 			},
 			//审批流程
 			approvals(){
@@ -2007,6 +2009,11 @@
 		height: 30px;
 		cursor: pointer;
 	}
+	.check-btn-right{
+		position: absolute;
+    right: 50px;
+    top: 10px;
+    z-index: 999;}
 	.upload-btn{
 		color: #fff;
 		background-color: #286090;

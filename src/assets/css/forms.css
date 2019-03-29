@@ -105,7 +105,10 @@ textarea:focus,button:focus,
 .btn-primarys {
     background:rgba(101,133,223,1);
 }
-
+.btn-gray {
+    background-color: #7a83ad;
+    border-color: #7a83ad;
+}
 .btn-yellow {
     background-color: #d4b237;
     border-color: #d4b237;

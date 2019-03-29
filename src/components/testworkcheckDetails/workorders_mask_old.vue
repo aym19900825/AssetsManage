@@ -97,31 +97,33 @@
 									</el-row> -->
 
 									<el-row>
-										<el-col :span="24">
+										<el-col :span="8">
 											<el-form-item label="样品名称" prop="ITEM_NAME">
 												<el-input v-model="workorderForm.ITEM_NAME" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-
-									<el-row>
 										<el-col :span="8">
 											<el-form-item label="规格型号" prop="ITEM_MODEL" >
 												<el-input v-model="workorderForm.ITEM_MODEL" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="商标标识" prop="ITEM_TRADEMARK">
-												<el-input v-model="workorderForm.ITEM_TRADEMARK" :disabled="noedit"></el-input>
+											<el-form-item label="样品状态" prop="ITEM_STATUSDesc">
+												<el-input v-model="workorderForm.ITEM_STATUSDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row>
+									<el-row >
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
 												<el-input v-model="workorderForm.ITEMNUM" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="商标标识" prop="ITEM_TRADEMARK">
+												<el-input v-model="workorderForm.ITEM_TRADEMARK" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -130,19 +132,15 @@
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
+									</el-row>
+
+									<el-row>
 										<el-col :span="8">
 											<el-form-item label="生产日期/批" prop="PRODUCT_DATE">
 												<el-input v-model="workorderForm.PRODUCT_DATE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
 
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="样品状态" prop="ITEM_STATUSDesc">
-												<el-input v-model="workorderForm.ITEM_STATUSDesc" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
 										<el-col :span="8">
 											<el-form-item label="到站日期" prop="ARRIVAL_DATE">
 												<el-date-picker v-model="workorderForm.ARRIVAL_DATE" type="date" placeholder="请选择到站日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
@@ -195,68 +193,76 @@
 								</el-collapse-item>
 								<!-- 检测 End-->
 
-								<!-- 检测要求与样品信息 Begin-->
-								<el-collapse-item title="检测要求与样品信息" name="4">
-									<div class="clearfix pt10">
-										<el-row>
-											<el-col :span="24">
+								<!-- 检测依据 Begin-->
+								<!-- <el-collapse-item title="检测依据" name="3">
+									
+								</el-collapse-item> -->
+								<!-- 检测依据 End -->
+
+								<!-- 检测项目与要求 Begin-->
+								<el-collapse-item title="检测项目与要求" name="4">
+					            	<div class="clearfix pt10">
+						            	<el-row>
+											<el-col :span="8">
 												<el-form-item label="委托方提供技术资料" label-width="140px">
 													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="24">
-												<el-form-item label="特殊要求" label-width="140px">
+											<!-- <el-col :span="8">
+												<el-form-item label="分包项目">
+													<el-input placeholder="请输入内容" v-model="workorderForm.SUB_PROJECT" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col> -->
+											<el-col :span="8">
+												<el-form-item label="特殊要求">
 													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
-										</el-row>
-										<el-row>
+										
 											<el-col :span="8">
-												<el-form-item label="样品接收人" label-width="140px">
+												<el-form-item label="样品接收人">
 													<el-input v-model="workorderForm.ITEM_RECCEPT_USERDesc" :disabled="true">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('ITEM_RECCEPT_USER')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
-												<el-form-item label="样品接收日期" label-width="140px">
+												<el-form-item label="样品接收日期">
 													<el-date-picker v-model="workorderForm.ITEM_RECEPT_DATE" type="date" placeholder="请选择样品接收日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
-											
-										</el-row>
-
-										<el-row>
 											<el-col :span="8">
-												<el-form-item label="完成日期" prop="COMPLETE_DATE" label-width="140px">
+												<el-form-item label="完成日期" prop="COMPLETE_DATE">
 													<el-date-picker v-model="workorderForm.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
+										
 											<el-col :span="8">
-												<el-form-item label="完成方式" label-width="120px">
+												<el-form-item label="完成方式">
 													<el-radio-group v-model="workorderForm.COMPLETE_MODE" :disabled="noedit">
 														<el-radio v-for="(data,index) in Select_COMPLETE_MODE" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
-												<el-form-item label="样品接收状态" label-width="120px">
+												<el-form-item label="样品接收状态">
 													<el-radio-group v-model="workorderForm.ITEM_RECEPT_STATUS" :disabled="noedit">
 														<el-radio v-for="(data,index) in Select_ITEM_RECEPT_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 													</el-radio-group>
 												</el-form-item>
 											</el-col>
-										</el-row>
-
-										<el-row>
 											<el-col :span="8">
 												<!-- <el-form-item label="样品承接人(专业组)" label-width="150px"> -->
 													<!-- <el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
 													</el-input> -->
-													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUPDesc" label-width="140px">
+													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUPDesc" label-width="150px">
 														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUPDesc" placeholder="请选择" style="width: 100%;" :disabled="noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
@@ -264,25 +270,43 @@
 											</el-col>
 										
 											<el-col :span="8">
-												<el-form-item label="样品承接日期" label-width="150px">
+												<el-form-item label="样品承接日期">
 													<el-date-picker v-model="workorderForm.UNDERTAKE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
+										</el-row>
+										<el-row>
 											<el-col :span="8">
-												<el-form-item label="样品状态" prop="ITEM_STATU" label-width="120px">
+												<el-form-item label="样品状态" prop="ITEM_STATU">
 													<el-input v-model="workorderForm.ITEM_STATU" :disabled="noedit"></el-input>
 													<!--<el-select v-model="workorderForm.ITEM_STATUS" style="width: 100%">
 														<el-option v-for="(data,index) in Select_ITEM_STATUS" :key="index" :value="data.code" :label="data.name"></el-option>
 													</el-select>-->
 												</el-form-item>
 											</el-col>
+											<el-col :span="8">
+												<el-form-item label="样品返回数量" label-width="150px">
+													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
+												</el-form-item>
+											</el-col>
+										
+											<el-col :span="8">
+												<el-form-item label="样品返回接收人">
+													<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
+														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
+													</el-select> -->
+													<el-input v-model="workorderForm.RETURN_ITEM_USERDesc" :disabled="edit">
+														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
+													</el-input>
+												</el-form-item>
+											</el-col>
 										</el-row>
-
 										<el-row>
 											<el-col :span="8">
-												<el-form-item label="样品返回数量" label-width="140px">
-													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
+												<el-form-item label="样品返回日期">
+													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													</el-date-picker>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -292,38 +316,18 @@
 													</el-radio-group>
 												</el-form-item>
 											</el-col>
-										</el-row>
-
-										<el-row>
-											<el-col :span="8">
-												<el-form-item label="样品返回接收人" label-width="140px">
-													<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
-														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-													</el-select> -->
-													<el-input v-model="workorderForm.RETURN_ITEM_USERDesc" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
-													</el-input>
-												</el-form-item>
-											</el-col>
-											<el-col :span="8">
-												<el-form-item label="样品返回日期" label-width="150px">
-													<el-date-picker v-model="workorderForm.RETURN_ITEM_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-													</el-date-picker>
-												</el-form-item>
-											</el-col>
 										
 											<el-col :span="8">
-												<el-form-item label="样品处置" label-width="120px">
+												<el-form-item label="样品处置">
 													<el-select v-model="workorderForm.ITEM_MANAGEMENT" style="width: 100%" :disabled="noedit">
 														<el-option v-for="(data,index) in Select_ITEM_MANAGEMENT" :key="index" :value="data.code" :label="data.name"></el-option>
 													</el-select>
 												</el-form-item>
 											</el-col>
 										</el-row>
-
 										<el-row>
 											<el-col :span="8">
-												<el-form-item label="样品承接人" label-width="140px">
+												<el-form-item label="样品承接人">
 													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USERDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="noedit"></el-button>
 													</el-input>
@@ -339,129 +343,456 @@
 										</el-row>
 									</div>
 								</el-collapse-item>
-								<!-- 检测要求与样品信息 End -->
-								
+								<!-- 检测项目与要求 End -->
+								<!-- 原始数据模板 Begin-->
+								<!-- <el-collapse-item title="原始数据模板" name="6">	
+					            	<div class="clearfix pt10">
+						            	<el-row >
+											<el-col :span="8">
+												<el-form-item label="报告模板">
+													<el-input placeholder="请输入内容" v-model="workorderForm.P_NUM" :disabled="noedit">
+														 <el-button slot="append" icon="el-icon-search" :disabled="noedit"></el-button>
+													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="是否寄出">
+													<el-switch v-model="workorderForm.SEND" :disabled="noedit"></el-switch>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="是否归档">
+													<el-switch v-model="workorderForm.FILE" :disabled="noedit"></el-switch>
+												</el-form-item>
+											</el-col>
+										</el-row>
+										<el-row >
+											<el-col :span="8">
+												<el-form-item label="寄出时间">
+													<el-date-picker v-model="workorderForm.SEND_DATE" type="date" placeholder="请选择寄出时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													</el-date-picker>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="归档时间">
+													<el-date-picker v-model="workorderForm.FILE_DATE" type="date" placeholder="请选择归档时间" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+													</el-date-picker>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8">
+												<el-form-item label="报告名称">
+													<el-input placeholder="请输入生成报告名称" v-model="reportname" :disabled="noedit">
+													</el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</div>
+								</el-collapse-item>-->
+								<!-- 原始数据模板 End -->
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-										<!--检测项目与要求 Begin-->
-										<el-tab-pane label="检测项目与要求" name="first">
+										<el-tab-pane label="检测依据" name="first">
+											<!-- <div class="table-func table-funcb">
+												<el-button type="primary" size="mini" round @click="basisleadbtn">
+													<i class="icon-search"></i>
+													<font>选择</font>
+												</el-button>
+											</div> -->
+
+											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
+
+											    <el-table-column label="标准编号" sortable width="160px" prop="S_NUM">
+											      <template slot-scope="scope">
+											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" >
+														  <el-button slot="append" icon="el-icon-search"></el-button>
+													</el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+											      </template>
+											    </el-table-column>
+
+											    <el-table-column label="标准名称" sortable prop="S_NAME">
+											      <template slot-scope="scope">
+											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+											      </template>
+											    </el-table-column>
+											    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
+											      <template slot-scope="scope">
+											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" ></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
+											      </template>
+											    </el-table-column>
+
+											     <!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge">
+											      <template slot-scope="scope">
+											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
+											      </template>
+											    </el-table-column> -->
+
+											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+											        <template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small">
+															<i class="icon-trash red"></i>
+														</el-button>
+														<el-button @click.native.prevent="viewFile(scope.row)" type="text" size="small">
+															<i class="icon-log red"></i>
+														</el-button>
+											        </template>
+											    </el-table-column>
+											  </el-table>
+										</el-tab-pane>
+										<el-tab-pane label="检测项目与要求" name="second">
 											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
 											</div> -->
-												<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
-												<el-table-column label="检验/检测依据" prop="S_NAME" sortable width="260px">
+							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+
+							            		<el-table-column prop="P_NUM" label="检测项目编号" sortable>
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入">	
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">	
 														</el-input>
-														<span v-else>{{scope.row.S_NAME}}</span>
+														<span v-else>{{scope.row.P_NUM}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="P_DESC" label="检测项目名称" sortable width="240px">
+												<el-table-column prop="P_DESC" label="检测项目名称" sortable>
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
 														</el-input>
 														<span v-else>{{scope.row.P_DESC}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="REMARKS" label="要求" sortable width="300px">
+							            		<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.REMARKS}}</span>
+														<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">	
+														</el-input>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="VERSION" label="版本" sortable>
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">	
+														</el-input>
+														<span v-else>{{scope.row.VERSION}}</span>
+													</template>
+												</el-table-column>
+											      <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+											      <template slot-scope="scope">
+											         <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small">
+											      		<i class="icon-trash red"></i>
+											        </el-button>
+											      </template>
+											    </el-table-column>
+							            	</el-table>
+										</el-tab-pane>
+										<el-tab-pane label="检验员信息" name="third">
+											<div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addfield3" v-show="!viewtitle">
+													<i class="icon-add"></i><font>新建行</font>
+												</el-button>
+											</div>
+							            	<el-table :data="workorderForm.WORKORDER_CHECKPERSONList" border stripe :fit="true" max-height="260" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'WORKORDER_CHECKPERSONList', order: 'descending'}">
+							            		<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+											      <template slot-scope="scope">
+											      	<i class="el-icon-check" v-show="scope.row.isEditing">
+											      	</i>
+											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+											      	</i>
+											      </template>
+											    </el-table-column>
+							            		<el-table-column label="人员姓名" sortable prop="NAME">
+											      <template slot-scope="scope">
+											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NAME">
+														  <el-button slot="append" icon="el-icon-search" @click="addperson(scope.row)" :disabled="noedit"></el-button>
+													</el-input>
+													<span v-else>{{scope.row.NAME}}</span>
+											      </template>
+											    </el-table-column>
+											    <el-table-column label="用户名" sortable prop="USERDesc">
+											      <template slot-scope="scope">
+											      	<el-input size="small" v-model="scope.row.USERDesc" disabled></el-input>
+											      </template>
+											    </el-table-column>
+												<el-table-column label="是否是负责人" sortable prop="ISMAINPERSON">
+											      <template slot-scope="scope">
+													<el-select v-model="scope.row.ISMAINPERSON" placeholder="请选择" :disabled="!scope.row.isEditing">
+														<el-option label="是" value="1">是</el-option>
+														<el-option label="否" value="2">否</el-option>
+													</el-select>
+											      </template>
+											    </el-table-column>
+											    <el-table-column label="机构" sortable prop="DEPARTMENT">
+											      <template slot-scope="scope">
+													<el-input size="small" v-model="scope.row.DEPARTMENT" disabled></el-input>
+											      </template>
+											    </el-table-column>
+											    <el-table-column label="电话" sortable prop="TELPHONE">
+											      <template slot-scope="scope">
+													<el-input size="small" v-model="scope.row.TELPHONE" disabled></el-input>
+											      </template>
+											    </el-table-column>
+							            		<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+											      <template slot-scope="scope">
+											        <el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'peopleList')" type="text" size="small">
+											       <i class="icon-trash red"></i>
+											        </el-button>
+											      </template>
+											    </el-table-column>
+							            	</el-table>
+										</el-tab-pane>
+										<el-tab-pane label="成果数据" name="fourth">
+											<div class="table-func table-funcb">
+												<el-button style="float:left;" type="success" size="mini" round @click="addfield4" v-show="!viewtitle">
+													<i class="icon-add"></i><font>新建行</font>
+												</el-button>
+												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
+													<el-button type="success" size="mini" round class="a-upload">
+														<i class="el-icon-upload2"></i><font>上传</font>
+														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
+													</el-button>
+												</form>
+											</div>
+											<el-row>
+												<el-col :span="24">
+													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+														  border 
+														  stripe 
+														  :fit="true" 
+														  max-height="260" 
+														  style="width: 100%;" 
+														  @cell-click="iconOperation" 
+														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+														<el-table-column prop="iconOperation" fixed width="50px">
+													      <template slot-scope="scope">
+													      	<i class="el-icon-check" v-show="scope.row.isEditing">
+													      	</i>
+													      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+													      	</i>
+													      </template>
+													    </el-table-column>
+														<el-table-column label="模板来源" sortable prop="DATA_TYPE">
+													      <template slot-scope="scope">
+													      	<el-select v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
+																<el-option label="基础数据选择" value="1"></el-option>
+																<el-option label="链条选择" value="2"></el-option>															
+															</el-select>
+													      	<!-- <span v-else>{{scope.row.DATA_TYPEDesc}}</span> -->
+													      </template>
+													    </el-table-column>
+														<el-table-column label="模板编号" sortable prop="D_NUM">
+													      <template slot-scope="scope">
+													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
+													      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
+													      	</el-input>
+													      	<span v-else>{{scope.row.D_NUM}}</span>
+													      </template>
+													    </el-table-column>
+													    <el-table-column label="模板描述" sortable prop="D_DESC">
+													      <template slot-scope="scope">
+													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC"></el-input>
+													      	<span v-else>{{scope.row.D_DESC}}</span>
+													      </template>
+													    </el-table-column>
+									            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
+															<template slot-scope="scope">
+															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
+																<!-- <span v-if="scope.row.FILESIZE_ORG == -1">0kb</span> -->
+															</template>
+														</el-table-column>
+														<el-table-column label="上传文件大小" prop="FILESIZE">
+															<template slot-scope="scope">
+															 	<el-checkbox v-if="!!scope.row.FILESIZE" v-model="scope.row.FILECHECKED">{{scope.row.FILESIZE+'M'}}</el-checkbox>
+															</template>
+														</el-table-column>
+														<el-table-column label="操作">
+															<template slot-scope="scope">
+															 	<el-button title="下载" @click="downLoadRow(scope.row)" type="text" size="small"> 
+																	<i class="icon-arrow-down-circle"></i>
+																</el-button>
+																<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
+																	<i class="icon-trash red"></i>
+																</el-button>
+																<el-button title="编辑" type="text" size="small">
+																	<i class="icon-pencil"></i>
+																</el-button>
+															</template>
+														</el-table-column>
+									            	</el-table>
+												</el-col>
+							            		<el-col :span="24" class="text-right pt10">
+													<el-button type="primary" size="small" round @click="getreport" v-show="showcreatereoprt">
+														<i class="icon-wordbook"></i><font> 生成报告</font>
+													</el-button>
+												</el-col>
+											</el-row>
+										</el-tab-pane>
+										<el-tab-pane label="检验检测设备" name="fifth">
+											<!-- <div class="table-func table-funcb">
+												<el-button type="success" size="mini" round @click="addequip">
+													<i class="icon-add"></i><font>新建行</font>
+												</el-button>
+											</div> -->
+											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+											      <template slot-scope="scope">
+											      	<i class="el-icon-check" v-show="scope.row.isEditing">
+											      	</i>
+											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+											      	</i>
+											      </template>
+											    </el-table-column>
+												<el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.WONUM" placeholder="自动生成">	</el-input>
+													</template>
+												</el-table-column>
+												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.ASSETNUM"></el-input>
+													</template>
+												</el-table-column>
+												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.DESCRIPTION"></el-input>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
+												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.INSPECT_GROUP" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.INSPECT_GROUP}}</span>
+														<el-input disabled  size="small" v-model="scope.row.MODEL"></el-input>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="LEADER" label="责任人" sortable width="100px">
+												<el-table-column prop="USE_PERSON" label="使用人" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.LEADER" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.LEADER}}</span>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON">
+														  	<el-button slot="append" icon="el-icon-search" @click="addperson(scope.row, 'WORKORDER_ASSETList')" :disabled="noedit"></el-button>
+														</el-input>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="ASSIST_PERSION" label="助手" sortable width="200px">
+												
+												
+												<el-table-column fixed="right" label="操作" width="120px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSIST_PERSION" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.ASSIST_PERSION}}</span>
-													</template>
-												</el-table-column>
-
-												<el-table-column prop="QUATITY" label="样品数量" sortable width="160px">
-													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.QUATITY}}</span>
-													</template>
-												</el-table-column>
-
-												<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="150px">
-													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_MODE" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.COMPLETE_MODE}}</span>
-													</template>
-												</el-table-column>
-
-												<el-table-column prop="COMPLETE_DATE" label="完成日期" sortable width="180px">
-													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.COMPLETE_DATE}}</span>
-													</template>
-												</el-table-column>
-
-												<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-													<template slot-scope="scope">
-															<el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small">
-															<i class="icon-trash red"></i>
-														</el-button>
+													  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'equipList')" type="text" size="small">
+														<i class="icon-trash red"></i>
+													  </el-button>
 													</template>
 												</el-table-column>
 											</el-table>
 										</el-tab-pane>
-										<!--检测项目与要求 End-->
-										<!--分包项目 Begin-->
-										<el-tab-pane label="分包项目" name="second">
+										<el-tab-pane label="检验报告" name="sixth">
+											<el-table :data="workorderForm.WORKORDER_REPORTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_REPORTList', order: 'descending'}">
+												<el-table-column prop="REPORTNUM" label="报告编号" sortable width="320px">
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNUM'"> -->
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNUM" placeholder="请输入">
+																<el-button slot="append" icon="el-icon-search"></el-button>
+															</el-input>
+															<span v-else>{{scope.row.REPORTNUM}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="REPORTNAME" label="报告名称" sortable>
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REPORTNAME" placeholder="请输入">	
+														</el-input>
+														<span v-else>{{scope.row.REPORTNAME}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
+												<el-table-column prop="FILEID" label="文件id" sortable :disabled="true">
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.REPORTNAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FILEID" placeholder="请输入">	
+														</el-input>
+														<span v-else>{{scope.row.FILEID}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
+												
+												<!-- <el-table-column prop="PREVIEW" label="预览" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.PREVIEW'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PREVIEW" placeholder="请输入">
+														</el-input>
+														<span v-else>{{scope.row.PREVIEW}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column> -->
+
+												<!-- <el-table-column prop="VERSION" label="版本" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_REPORTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
+														</el-input>
+														<span v-else>{{scope.row.VERSION}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column> -->
+												<el-table-column fixed="right" label="操作" width="150px">
+													<template slot-scope="scope">
+													  <el-button title="编辑" type="text" size="small">
+														<i class="icon-edit2"></i>
+													  </el-button>
+													  <el-button title="打印" type="text" size="small">
+														<i class="icon-print"></i>
+													  </el-button>
+													  <!-- <el-button title="下载" type="text" size="small">
+														<i class="icon-arrow-down-circle"></i>
+													  </el-button> -->
+													  <el-button title="查看" type="text" size="small" @click="lookoverreport(scope.row)">
+														<i class="icon-file-text"></i>
+													  </el-button>
+													  <el-button title="报告提交" type="text" size="small" @click="admirereport" v-if="btnshow">
+														<i class="icon-send"></i>
+													  </el-button>
+													  <!-- <el-button title="报告提交" type="text" size="small" @click="admirereport" v-if="btnshow&&(scope.row.ISCREATED==1)" >
+														<i class="icon-send"></i>
+													  </el-button> -->
+													</template>
+												</el-table-column>
+											</el-table>
+									    </el-tab-pane>
+										<el-tab-pane label="分包项目" name="seventh">
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
-												<el-table-column prop="WONUM" label="承包方单位名称" sortable width="260px">
+												<el-table-column prop="WONUM" label="工作任务单编号" sortable width="150px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WONUM">
 														</el-input>
 														<span v-else>{{scope.row.WONUM}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="PROXY_CONTRACT_NUM" label="检验/检测标准依据" sortable width="240px">
+												<el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXY_CONTRACT_NUM">
 														</el-input>
 														<span v-else>{{scope.row.PROXY_CONTRACT_NUM}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="PROXYNUM" label="项目名称" sortable width="200px">
+												<el-table-column prop="PROXYNUM" label="委托书编号" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入委托方名称">
 														</el-input>
 														<span v-else>{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="V_NAME" label="检验检测项目要求" sortable width="240px">
+												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
 														</el-input>
 														<span v-else>{{scope.row.V_NAME}}</span>
 													</template>
 												</el-table-column>
-
+												<el-table-column prop="DEPTTYPEDesc" label="机构属性" sortable width="120px">
+													<template slot-scope="scope">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="请输入委托方名称">
+														</el-input>
+														<span v-else>{{scope.row.DEPTTYPEDesc}}</span>
+													</template>
+												</el-table-column>
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
 														<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
@@ -469,69 +800,98 @@
 														</el-select>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="LEADER" label="责任人" sortable width="120px">
+												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.LEADER" placeholder="请选择">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
+															</el-button>
 														</el-input>
-														<span v-else>{{scope.row.LEADER}}</span>
+														<span v-else>{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="ASSIST_PERSION" label="助手" sortable width="120px">
+												<!-- <el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSIST_PERSION" placeholder="请选择">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
+															</el-button>
 														</el-input>
-														<span v-else>{{scope.row.ASSIST_PERSION}}</span>
+														<span v-else>{{scope.row.PRODUCT_TYPE}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
+												<el-table-column prop="PRODUCT" label="产品名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input>
-														<span v-else>{{scope.row.QUATITY}}</span>
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else>{{scope.row.PRODUCT}}</span>
 													</template>
 												</el-table-column>
-
-												<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="200px">
+												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
 													<template slot-scope="scope">
-															<el-radio-group v-if="scope.row.isEditing" v-model="scope.row.COMPLETE_MODE">
-																<el-radio label="加急" class="red"></el-radio>
-																<el-radio label="正常"></el-radio>
-															</el-radio-group>
-														<span v-else>{{scope.row.COMPLETE_MODE}}</span>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入分包方名称">
+															<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
+															</el-button>
+														</el-input>
+														<span v-else>{{scope.row.BASIS}}</span>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 
-												<el-table-column prop="COMPLETE_DATE" label="完成日期" sortable width="220px">
+												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请选择"></el-input>
-														<span v-else>{{scope.row.COMPLETE_DATE}}</span>
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+																<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
+																</el-button>
+															</el-input>
+														<span v-else>{{scope.row.P_REMARKS}}</span>
+														<!-- </el-form-item> -->
 													</template>
 												</el-table-column>
-
+												<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入内容"></el-input>
+														<span v-else>{{scope.row.REQUIRES}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
+												<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" > -->
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.Q_TYPE" placeholder="请输入内容"></el-input>
+														<span v-else>{{scope.row.Q_TYPE}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
+												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]" > -->
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<span v-else>{{scope.row.CHECKCOST}}</span>
+														<!-- </el-form-item> -->
+													</template>
+												</el-table-column>
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
-														<el-button title="生成分包协议" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
+														<el-button title="生成分包协议" type="text" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
 															<i class="icon-send red"></i>
-															生成分包协议
 														</el-button>
 													</template>
 												</el-table-column>
-
 											</el-table>
-										</el-tab-pane>
-										<!--分包项目 End-->
+									    </el-tab-pane>
 									</el-tabs>
-									<!-- 备注 Begin-->
-									<el-row class="pt10">
-										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO" label-width="45px">
-												<el-input type="textarea" :row="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<!-- 备注 End-->
+									<div class="pt10">
+										<el-row>
+											<el-col :span="24">
+												<el-form-item label="备注" prop="MEMO" label-width="45px">
+													<el-input type="textarea" :row="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
+										</el-row>
+									</div>
+
 								</div>
 								
 								<!-- 录入人信息 Begin-->

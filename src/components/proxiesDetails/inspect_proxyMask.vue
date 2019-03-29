@@ -58,7 +58,7 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="12">
+										<el-col :span="16">
 											<el-form-item label="名称" prop="V_NAME" label-width="110px">
 												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getinspect_cust()">
@@ -66,7 +66,7 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="12">
+										<el-col :span="8">
 											<el-form-item label="统一社会信用代码" prop="VENDOR" label-width="150px">
 												<el-input v-model="dataInfo.VENDOR" :disabled="edit"></el-input>
 											</el-form-item>
@@ -74,7 +74,7 @@
 										
 									</el-row>
 									<el-row>
-											<el-col :span="12">
+											<el-col :span="16">
 											<el-form-item label="地址" prop="V_ADDRESS" label-width="110px">
 												<el-input v-model="dataInfo.V_ADDRESS" :disabled="edit"></el-input>
 											</el-form-item>

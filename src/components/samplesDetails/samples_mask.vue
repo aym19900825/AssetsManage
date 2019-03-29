@@ -29,11 +29,11 @@
 												<template slot="prepend">信息状态</template>
 											</el-input>
 										</el-col>-->
+										
 										<el-col :span="4" class="pull-right">
 											<el-input  v-model="samplesForm.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
-											<!-- <el-input v-for="(data,index) in Select_STATUS" :key="index" :value="data.code" :label="data.name"></el-input> -->
 										</el-col>
 										
 										<el-col :span="7" class="pull-right">
@@ -41,11 +41,17 @@
 												<template slot="prepend">样品编号</template>
 											</el-input>
 										</el-col>
+
+										<el-col :span="8" class="pull-right">
+											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="110px">
+												<el-input v-model="samplesForm.CJDWDesc" disabled></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="12">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
-												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit">
+												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit || (modifytitle && samplesForm.PROXYNUM!='')">
 													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -80,19 +86,14 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8" >
-											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="110px">
-												<el-input v-model="samplesForm.CJDWDesc" disabled></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8" >
+										<el-col :span="12" >
 											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addcategory" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<el-col :span="12">
 											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
 												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addproduct" :disabled="noedit||!!samplesForm.PROXYNUM"></el-button>
@@ -113,18 +114,14 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
-												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
+												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" @change="changeNum" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="生产日期" prop="MANUFACTURE_DATE" label-width="110px">
-												<el-date-picker
-												      v-model="samplesForm.MANUFACTURE_DATE"
-												      type="date"
-												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="生产日期/批" prop="MANUFACTURE_DATE" label-width="110px">
+												<el-input  v-model="samplesForm.MANUFACTURE_DATE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -180,6 +177,33 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8">
+											<el-form-item label="企业确认样品日期" prop="SAMPLE_CONFIRMATION_DATE" label-width="110px">
+												<div class="block">
+												    <el-date-picker
+												      v-model="samplesForm.SAMPLE_CONFIRMATION_DATE"
+												      type="date"
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
+												    </el-date-picker>
+												</div>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="样品费用（万元）" prop="ITEM_CHARGE" label-width="110px">
+												<el-input v-model="samplesForm.ITEM_CHARGE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="发票日期" prop="INVOICEDATE " label-width="110px">
+												<div class="block">
+												    <el-date-picker
+												      v-model="samplesForm.INVOICEDATE"
+												      type="date"
+												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
+												    </el-date-picker>
+												</div>
+											</el-form-item>
+										</el-col>
 									</el-row>
 									
 									<el-row>
@@ -193,7 +217,7 @@
 								<el-collapse-item title="样品" name="2">								
 									<div class="table-func" v-show="!viewtitle">
 										<span><i class="red font16">*</i>此处是按样品数量生成的列表行</span>
-										<el-button type="success" size="mini" round @click="addfield" :disabled="modify&&(!!samplesForm.PROXYNUM)">
+										<el-button type="success" size="mini" round @click="addfield" :disabled="noedit">
 											<i class="icon-start"></i>
 											<font>生成</font>
 										</el-button>
@@ -446,7 +470,13 @@
 					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托单位名称
 					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
 					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
-					DESCRIPTION: [{ required:true, trigger:'blur', message:'必填'}],//样品名称
+					DESCRIPTION: [
+						{ required:true, trigger:'blur', message:'必填'},
+						{ trigger:'blur', validator: this.Validators.isSpecificKey}
+					],//样品名称
+					MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
+					SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
+					SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
 					PRODUCT_CODE: [
 						{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
 					],//产品标识代码
@@ -467,6 +497,10 @@
 			};
 		},
 		methods: {
+			changeNum(){
+				console.log('===========');
+				this.samplesForm.ITEM_LINEList = [];
+			},
 			setData(data){
 				this.$forceUpdate();
 				if(this.vName == 'P_NAME'){
@@ -656,11 +690,14 @@
 					})
 				}else if(this.selval.length == 1){
 					var data = this.selval[0];
+					this.samplesForm.ITEMNUM = data.ITEMNUM;
 					this.samplesForm.PROXYNUM = data.PROXYNUM;
 					this.samplesForm.V_NAME = data.V_NAME;
+					this.samplesForm.V_NAMEDesc = data.V_NAMEDesc;
 					this.samplesForm.VENDOR = data.VENDOR;
 					this.samplesForm.PROXYNUM = data.PROXYNUM;
 					this.samplesForm.P_NAME = data.P_NAME;
+					this.samplesForm.P_NAMEDesc = data.P_NAMEDesc;
 					this.samplesForm.PRODUCT_COMPANY = data.PRODUCT_UNIT;
 					this.samplesForm.PRODUCT_TYPE = data.PRODUCT_TYPE;
 					this.samplesForm.PRODUCT = data.PRODUCT;

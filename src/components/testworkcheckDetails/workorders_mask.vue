@@ -131,8 +131,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="生产日期/批" prop="PRODUCT_DATE">
-												<el-date-picker v-model="workorderForm.PRODUCT_DATE" type="date" placeholder="请选择生产日期/批" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
+												<el-input v-model="workorderForm.PRODUCT_DATE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 
@@ -933,8 +932,11 @@
 						<div class="content-footer" v-if="!viewtitle">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
+							<el-button @click="close">取消</el-button>
+						</div>
+						<div class="content-footer" v-show="views">
 							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>

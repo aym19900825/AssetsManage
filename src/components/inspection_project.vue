@@ -386,7 +386,6 @@
 					this.$axios.get(currenturl, {}).then((res) => {
 						this.Select_DEPTID = res.data;
 						this.formInline.DEPTID = res.data[0].id;
-
 						this.requestData();
 					}).catch(error => {
 					})
@@ -403,13 +402,12 @@
 				}
 				var url = this.basic_url + '/api-user/depts/findSubStrsById/'+ this.formInline.DEPTID;
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				this.DEPTID_GRO = res.data
+				this.DEPTID_GRO = res.data;
 					// console.log(this.formInline.DEPTID);
 				var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+ this.DEPTID_GRO;
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {
-						console.log(url);
 						this.page.totalCount = res.data.count;
 						//总的页数
 						let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

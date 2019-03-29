@@ -44,7 +44,6 @@
 				var arr=[];	
 				var url = this.basic_url + '/api-user/menus/' + id + '/menus';
 				this.$axios.get(url, {}).then((res) => {
-					
 					this.menuData = res.data;
 					// var menuData = res.data;//第一级
 					// for(var a = 0; a < menuData.length; a++){

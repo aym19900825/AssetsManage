@@ -1414,7 +1414,6 @@
 			//产品
 			mianproduct(){
 				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM}
-				console.log(data);
 				this.$refs.productchild.visible(data);
 			},
 			//产品类别
@@ -1425,10 +1424,7 @@
 		
 			//接到产品类别的值
 			categorydata(val){
-				console.log(1234);
-				console.log(val[0]);
-				console.log(val[1]);
-				console.log(val[2]);
+				console.log(val[0])
 				this.dataInfo.P_NUM=val[0];
 				this.dataInfo.PRODUCT_TYPE=val[1];
 				this.dataInfo.P_VERSION=val[2];

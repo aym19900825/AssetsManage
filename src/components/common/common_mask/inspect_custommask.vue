@@ -229,7 +229,7 @@
 				customarr.push(this.selUser[0].customerid);//
 				customarr.push(this.selUser[0].customername);//委托单位
 				customarr.push(this.selUser[0].customeraddress);//地址
-				customarr.push()
+				customarr.push(this.selUser[0].customerzipcode);//邮编
 				this.$emit('customarr',customarr);
 				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
 						customarr.push(falg);

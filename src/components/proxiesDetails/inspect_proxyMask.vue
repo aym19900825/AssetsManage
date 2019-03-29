@@ -519,9 +519,9 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-													<el-radio label="CNAS"></el-radio>
-												</el-radio-group>
+												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID"  :disabled="noedit">
+    											<el-checkbox label="CNAS"></el-checkbox>
+												</el-checkbox-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -941,7 +941,6 @@
 					children: "children",
 					label: "fullname"
 				},
-				appanme:'inspectPro',
 				dialogVisibleuser:false,
 				customid:"",
 				dataid:'',//修改和查看带过的id
@@ -951,12 +950,14 @@
 				selectData:[],//承建单位
 				leaderdata:[],//主检负责人
 				username:'',
-				catenum:'',//产品类别作为参数传值给依据
-				pronum:'',//产品作为参数传值给依据
+				catenum:'',//产品类别作为参数传值给依
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 				deptindex:{},//分包方名称
 				main:'',
 				sendchilddata:[],//检测依据子表已有的值
+				pnum:'',//用于主表接修改时的产品的类别的值
+				pronum:'',//用于主表接修改时的产品的值
+				inistinspectproxy:'',//用于存储检测依据的子表数据
 			};
 		},
 		methods: {
@@ -1413,64 +1414,52 @@
 			},
 			//产品
 			mianproduct(){
-				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM}
-				console.log(data);
+				this.pronum=this.dataInfo.PRO_NUM;
+				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM};
 				this.$refs.productchild.visible(data);
 			},
 			//产品类别
 			miancategory(){
-				var data={appname:this.appname}
+				this.pnum=this.dataInfo.P_NUM;
+				var data={appname:this.appname};
 				this.$refs.categorychild.visible(data);
 			},
 		
 			//接到产品类别的值
 			categorydata(val){
-				console.log(1234);
-				console.log(val[0]);
-				console.log(val[1]);
-				console.log(val[2]);
-				this.dataInfo.P_NUM=val[0];
-				this.dataInfo.PRODUCT_TYPE=val[1];
-				this.dataInfo.P_VERSION=val[2];
+				if(this.pnum!=val[0]){
+					this.dataInfo.PRO_NUM='';
+					this.dataInfo.PRODUCT='';
+					this.dataInfo.PRO_VERSION='';
+					this.dataInfo.INSPECT_PROXY_PROJECList=[];
+					this.dataInfo.INSPECT_PROXY_BASISList=[];
+					this.dataInfo.P_NUM=val[0];
+					this.dataInfo.PRODUCT_TYPE=val[1];
+					this.dataInfo.P_VERSION=val[2];
+				}
 			},
 			//接到产品的值
 			appenddata(val){
-				console.log(val);
-				this.dataInfo.PRO_NUM=val[0];
-				this.dataInfo.PRODUCT=val[1];
-				this.dataInfo.PRO_VERSION=val[2];
+				if(this.pronum!=val[0]){
+					this.dataInfo.INSPECT_PROXY_PROJECList=[];
+					this.dataInfo.INSPECT_PROXY_BASISList=[];
+					this.dataInfo.PRO_NUM=val[0];
+					this.dataInfo.PRODUCT=val[1];
+					this.dataInfo.PRO_VERSION=val[2];
+				}
 			},
 			
-			 //检验依据列表
-			addbasis(val){ 
-				console.log(val);
-				for(var i = 0;i<val.length;i++){
-						var List={
-								S_NUM: val[i].S_NUM,
-								S_DESC: val[i].S_NAME,
-								VERSION:val[i].VERSION,
-						};
-						this.dataInfo.INSPECT_PROXY_BASISList.push(List);
-				}
-				// if(this.main == 'main'){
-				// 	this.dataInfo.S_NUM = value[0];
-				// 	for(var i = 1;i<value.length;i++){
-				// 		value[i].S_DESC = value[i].S_NAME;
-				// 		value[i].S_DESC = value[i].S_NAME;
-				// 		this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
-				// 	}
-				// 	this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				// }
-			},
+			 
 			//委托单位
 			customarr(val){
 				this.customid=val[0];
 				this.dataInfo.V_NAME=val[1];
 				this.dataInfo.V_ADDRESS=val[2];
-				if(val[3]="falg"){
+				this.dataInfo.V_ZIPCODE=val[3];
+				console.log(val);
+				if(val[4]="falg"){
 					this.dataInfo.V_PERSON='';
 					this.dataInfo.V_PHONE='';
-					this.dataInfo.V_ZIPCODE='';
 					this.special=true;
 				}
 			},
@@ -1576,7 +1565,7 @@
 			},
 			//检验依据放大镜
 			basisleadbtn(val){
-				console.log(this.dataInfo.PRO_NUM);
+				this.inistinspectproxy=(this.dataInfo.INSPECT_PROXY_BASISList).join(',');
 				this.deptindex = val;
 				//子表
 				if(val == 'maintable'){
@@ -1605,6 +1594,29 @@
 						this.main = 'table';
 					}
 				}
+			},
+			//检验依据列表赋值
+			addbasis(val){
+				this.dataInfo.INSPECT_PROXY_BASISList=[];
+				this.dataInfo.INSPECT_PROXY_PROJECList=[];
+				for(var i = 0;i<val.length;i++){
+						var List={
+								S_NUM: val[i].S_NUM,
+								S_DESC: val[i].S_NAME,
+								VERSION:val[i].VERSION,
+						};
+						this.dataInfo.INSPECT_PROXY_BASISList.push(List);
+				}
+				// var basisList=this.dataInfo.INSPECT_PROXY_BASISList.join(',')
+				// if(this.main == 'main'){
+				// 	this.dataInfo.S_NUM = value[0];
+				// 	for(var i = 1;i<value.length;i++){
+				// 		value[i].S_DESC = value[i].S_NAME;
+				// 		value[i].S_DESC = value[i].S_NAME;
+				// 		this.dataInfo.INSPECT_PROXY_BASISList.push(value[i]);
+				// 	}
+				// 	this.dataInfo.INSPECT_PROXY_PROJECList = [];
+				// }
 			},
 			 //检验项目列表
 			addproject(value){
@@ -1838,16 +1850,7 @@
 			        }
 				});
 			},
-			handleClose1(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						this.resetBasisInfo1();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-					$('.v-modal').hide();
-				});
-			},
+
 			handleClose2(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -1911,24 +1914,16 @@
 				}).catch((err) => {
 				});		
 			},
-			// setLeader(id){
-			// 	this.$nextTick(() => {
-			// 		this.$set(this.dataInfo,'LEADER',id);
-			// 	})
-			// },
-			//
-			//获取负责人和接收人
+			
+			//生产单位
 			getCustomer(type) {
-				// if(type == 'vname'){
-				// 	this.$refs.enterprisechild.visible(type , this.dataInfo.appendid);
-				// }else{
 					this.$refs.enterprisechild.visible(type);
-				// }
 			},
 			//委托单位名称
 			getinspect_cust(){
          this.$refs.inscustom.visible();	
 			},
+			//姓名
 			addname(){
 				var customid=this.customid;
 				if(customid==""||customid=="undenfiend"){

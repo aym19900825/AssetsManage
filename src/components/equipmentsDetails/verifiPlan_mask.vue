@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 	            <div class="mask_title_div clearfix">
-	            	<div class="mask_title" v-show="addtitle">添加期间和核查计划</div>
-					<div class="mask_title" v-show="modifytitle">修改期间和核查计划</div>
-					<div class="mask_title" v-show="viewtitle">查看期间和核查计划</div>
+	            	<div class="mask_title" v-show="addtitle">添加期间核查计划</div>
+					<div class="mask_title" v-show="modifytitle">修改期间核查计划</div>
+					<div class="mask_title" v-show="viewtitle">查看期间核查计划</div>
 	                <div class="mask_anniu">
 	                    <span class="mask_span mask_max" @click='toggle'>
 	                        <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -384,23 +384,7 @@
                 };
                 this.dataInfo.tableList.push(obj);
 			},
-			//新建行
-			// addLine(){
-			// 	this.dataInfo.tableList.push({
-			// 		'ASS_ID': '',
-			// 		'ASSETNUM': '',
-			// 		'A_NAME': '',
-			// 		'MODEL': '',
-			// 		'PM_ZQ': 0,
-			// 		'PM_YXQ': '',
-			// 		'C_PLAN_DATE': '',
-			// 		'COMPDATE': '',
-			// 		'CHECKMEMO': '',
-			// 		'C_PLANNUM': this.dataInfo.C_PLANNUM,
-			// 		'STATUS': '1',
-			// 		'isEditing': true
-			// 	});
-			// },
+			
 			delLine(index, row){
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/checkPlanLine/' + row.ID;

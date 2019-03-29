@@ -420,7 +420,7 @@
 		    	 this.download();
 		    	}else if(item.name=="删除"){
 		    	 this.deluserinfo();
-		    	}else if(item.name=="生成子任务单"){
+		    	}else if(item.name=="下达任务"){
 		    	 this.tasklist();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
@@ -491,11 +491,11 @@
 				this.reportData.app=this.workorder;
 				this.$refs.reportChild.visible();
 			},
-			//生成子任务单
+			//下达任务
 			tasklist(){
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要生成子任务单的数据',
+						message: '请您选择要下达任务的数据',
 						type: 'warning'
 					});
 					return;

@@ -119,12 +119,8 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="生产日期" prop="MANUFACTURE_DATE" label-width="110px">
-												<el-date-picker
-												      v-model="samplesForm.MANUFACTURE_DATE"
-												      type="date"
-												      placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd" :disabled="noedit">
-												</el-date-picker>
+											<el-form-item label="生产日期/批" prop="MANUFACTURE_DATE" label-width="110px">
+												<el-input v-model="samplesForm.MANUFACTURE_DATE" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -446,7 +442,13 @@
 					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托单位名称
 					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
 					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
-					DESCRIPTION: [{ required:true, trigger:'blur', message:'必填'}],//样品名称
+					DESCRIPTION: [
+						{ required:true, trigger:'blur', message:'必填'},
+						{ trigger:'blur', validator: this.Validators.isSpecificKey}
+					],//样品名称
+					MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
+					SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
+					SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
 					PRODUCT_CODE: [
 						{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
 					],//产品标识代码

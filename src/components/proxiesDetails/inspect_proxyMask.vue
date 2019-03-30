@@ -100,7 +100,7 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="样品" name="2"  >
+								<el-collapse-item title="样品" name="2">
 									<el-row>
 											<el-col :span="12" >
 												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
@@ -128,7 +128,11 @@
 											<el-col :span="12">
 												<el-form-item label="样品名称" prop="ITEM_NAME" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
+<<<<<<< HEAD
 														<el-button slot="append" :disabled="special1" icon="el-icon-search"  @click="addsample('inspect_proxy')"></el-button>
+=======
+														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addsample('inspect_proxy')"></el-button>
+>>>>>>> cf0f39990a2b470987851b5f86d3b2966d2f2e9f
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -199,8 +203,8 @@
 									<el-col :span="8">
 										<el-form-item label="完成方式" prop="COMPMODE" label-width="110px">
 											<el-radio-group v-model="dataInfo.COMPMODE" :disabled="noedit">
-												<el-radio label="加急" class="red"></el-radio>
 												<el-radio label="正常"></el-radio>
+												<el-radio label="加急" class="red"></el-radio>
 											</el-radio-group>
 										</el-form-item>
 									</el-col>
@@ -519,12 +523,13 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID"  :disabled="noedit">
+												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
     											<el-checkbox label="CNAS"></el-checkbox>
 												</el-checkbox-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
+
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
@@ -602,7 +607,7 @@
 											</el-form-item>
 										</el-col> -->
 										<el-col :span="8">
-											<el-form-item label="合同编号" prop="CONTRACTNUM"  label-width="110px">
+											<el-form-item label="合同编号" prop="CONTRACTNUM" label-width="110px">
 												<el-input v-model="dataInfo.CONTRACTNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -901,20 +906,33 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
 				labelPositions: 'right',
 				rules: {
-					V_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//委托单位名称
+					V_NAME: [
+						{required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+					],//委托单位名称
 					V_ADDRESS: [{ required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{ required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
-					V_PHONE: [{ required: true, trigger: 'blur', message: '必填',}],//联系人电话
-					R_VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//承检单位
+					V_PHONE: [
+						{ required: true, trigger: 'blur', message: '必填'},
+						{ trigger: 'blur', validator: this.Validators.isPhones}
+					],//联系人电话
+					R_VENDORDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
-					P_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
+					P_NAMEDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
+					PRODUCT: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
 					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
+					ITEM_NAME: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
 					// ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
-					ITEM_MODEL: [{ required: true, message: '必填', trigger: 'blur' }],//型号
-					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'},{ type: 'number', message: '请输入数字'}],//数量
-//					ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
+					ITEM_MODEL: [
+						{required: true, message: '必填', trigger: 'blur' },
+						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+					],//型号
+					ITEM_QUALITY: [
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ type: 'number', message: '请输入数字'}
+					],//数量
+					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
@@ -924,16 +942,23 @@
 					],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
-					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur' },{ type: 'number', message: '请输入数字'}],//交委托方分数
-					REPORT_MODE: [{ required: true, message: '必填', trigger: 'change' }],//发送方式
+					REPORT_QUALITY: [
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ type: 'number', message: '请输入数字'}
+					],//交委托方分数
+					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
 					MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
 					LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 					// ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
 					MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
-					CHECK_COST:[{required: false,trigger: 'change',validator:this.Validators.isPrices}],
-					ACTUALCOST:[{required: false,trigger: 'blur',validator:this.Validators.isPrices}],
-					CONTRACTCOST:[{required: false,trigger: 'blur', validator:this.Validators.isPrices}],
+					CHECK_COST:[{required: false, trigger: 'change',validator:this.Validators.isPrices}],//合同收费(元)
+					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
+					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
+					ITEM_STATUSDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
+					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
+					ITEM_SECRECY: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//保密要求
+					CONTRACTNUM: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//合同编号
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -1743,7 +1768,7 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").height(document.body.clientHeight - 70);
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮

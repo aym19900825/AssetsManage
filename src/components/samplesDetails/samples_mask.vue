@@ -946,7 +946,7 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").height(document.body.clientHeight - 70);
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮

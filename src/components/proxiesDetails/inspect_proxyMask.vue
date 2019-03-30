@@ -59,8 +59,8 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="名称" prop="V_NAME" label-width="110px">
-												<el-input v-model="dataInfo.V_NAME" :disabled="edit" width="100%">
+											<el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
+												<el-input v-model="dataInfo.V_NAMEDesc" :disabled="edit" width="100%">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getinspect_cust()">
 													</el-button>
 												</el-input>
@@ -128,11 +128,7 @@
 											<el-col :span="12">
 												<el-form-item label="样品名称" prop="ITEM_NAME" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
-<<<<<<< HEAD
-														<el-button slot="append" :disabled="special1" icon="el-icon-search"  @click="addsample('inspect_proxy')"></el-button>
-=======
 														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addsample('inspect_proxy')"></el-button>
->>>>>>> cf0f39990a2b470987851b5f86d3b2966d2f2e9f
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -1481,8 +1477,8 @@
 			 
 			//委托单位
 			customarr(val){
-				this.dataInfo.customid=val[0];//
-				this.dataInfo.V_NAME=val[1];
+				this.dataInfo.V_NAME=val[0];
+				this.dataInfo.V_NAMEDesc=val[0];//
 				this.dataInfo.V_ADDRESS=val[2];
 				this.dataInfo.V_ZIPCODE=val[3];
 				if(val[4]="falg"){

@@ -210,6 +210,7 @@
 		})
 	},
 	determine(){
+		console.log(this.selUser[0]);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',
@@ -228,8 +229,8 @@
 				var itemid=this.selUser[0].itemid;
 				var itemnum=this.selUser[0].itemnum;
 				var customarr=[];
-				customarr.push(this.selUser[0].customerid);//
-				customarr.push(this.selUser[0].customername);//委托单位
+				customarr.push(this.selUser[0].customerid);//委托单位id
+				customarr.push(this.selUser[0].customername);//委托单位名称
 				customarr.push(this.selUser[0].customeraddress);//地址
 				customarr.push(this.selUser[0].customerzipcode);//邮编
 				this.$emit('customarr',customarr);

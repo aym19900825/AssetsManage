@@ -105,14 +105,14 @@
 											<el-col :span="12" >
 												<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT_TYPE" :disabled="special">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="miancategory()"></el-button>
+														<el-button slot="append" :disabled="special1" icon="el-icon-search"  @click="miancategory()"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="12">
 												<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
 													<el-input v-model="dataInfo.PRODUCT" :disabled="special">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="mianproduct()"></el-button>
+														<el-button slot="append" :disabled="special1" icon="el-icon-search"  @click="mianproduct()"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -121,14 +121,14 @@
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
 													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="special" >
-														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
+														<el-button slot="append" icon="el-icon-search" :disabled="special1" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="12">
-												<el-form-item label="名称" prop="ITEM_NAME" label-width="110px">
+												<el-form-item label="样品名称" prop="ITEM_NAME" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addsample('inspect_proxy')"></el-button>
+														<el-button slot="append" :disabled="special1" icon="el-icon-search"  @click="addsample('inspect_proxy')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -149,7 +149,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATUSDesc" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="special" ></el-input>
+													<el-input v-model="dataInfo.ITEM_STATUSDesc" :disabled="noedit" ></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -534,9 +534,9 @@
 										<el-col :span="8">
 											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
-													<el-radio label="自提"></el-radio>
+													<el-radio label="自取"></el-radio>
 													<el-radio label="邮寄"></el-radio>
-													<el-radio label="其他"></el-radio>
+													<el-radio label="其它"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
@@ -727,7 +727,7 @@
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 			<!--委托单位名称 -->
-			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor" ></inspectcustommask>
+			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor"></inspectcustommask>
 			<!--分包要求 所外机构-->
 			<custinspectmask ref="custinspectchild" @cusinspect="cusinspect"></custinspectmask>
 			<!--分包要求 所内机构-->
@@ -878,6 +878,7 @@
 				edit: true, //禁填
 				noedit: false,
 				special:false,
+				special1:true,//样品模块的放大按钮
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
@@ -1266,6 +1267,8 @@
 				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
+				this.special=true;
+				this.special1=false;
 			},
 			//
 			detailgetData() {
@@ -1416,6 +1419,7 @@
 			mianproduct(){
 				this.pronum=this.dataInfo.PRO_NUM;
 				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM};
+				console.log(data);
 				this.$refs.productchild.visible(data);
 			},
 			//产品类别
@@ -1452,11 +1456,10 @@
 			 
 			//委托单位
 			customarr(val){
-				this.customid=val[0];
+				this.dataInfo.customid=val[0];//
 				this.dataInfo.V_NAME=val[1];
 				this.dataInfo.V_ADDRESS=val[2];
 				this.dataInfo.V_ZIPCODE=val[3];
-				console.log(val);
 				if(val[4]="falg"){
 					this.dataInfo.V_PERSON='';
 					this.dataInfo.V_PHONE='';
@@ -1477,18 +1480,27 @@
 				this.dataInfo.PRODUCT='';
 				this.dataInfo.ITEM_METHOD='';
 				this.dataInfo.ITEM_DISPOSITION='';
+				this.special1=true;
+				this.special=false;
 				}else{
 				//样品有值的时候
 				this.dataInfo.P_NAME=val[0];//生产单位
-				this.dataInfo.ITEM_NAME=val[1];
-				this.dataInfo.ITEM_MODEL=val[2];
-				this.dataInfo.ITEM_QUALITY=val[3];
-				this.dataInfo.PRODUCT=val[4];//产品名称
-				this.dataInfo.PRODUCT_TYPE=val[5];//产品类别
-				this.dataInfo.PRO_NUM=val[6];//产品编号
-				this.dataInfo.PRO_VERSION=val[7];//产品版本
-				this.dataInfo.P_NUM=val[8];//产品类别编号
-				this.dataInfo.P_VERSION=val[9];//产品类别版本
+				this.dataInfo.ITEM_NAME=val[1];//样品名称
+				this.dataInfo.ITEM_ID=val[2];//样品id
+				this.dataInfo.ITEMNUM=val[3]//样品数量
+				this.dataInfo.ITEM_MODEL=val[4];//模型
+				this.dataInfo.ITEM_QUALITY=val[5];//质量
+				this.dataInfo.PRODUCT=val[6];//产品名称
+				this.dataInfo.ITEM_NAME=val[6];//样品名称
+				this.dataInfo.PRODUCT_TYPE=val[7];//产品类别
+				this.dataInfo.PRO_NUM=val[8];//产品编号
+				this.dataInfo.PRO_VERSION=val[9];//产品版本
+				this.dataInfo.P_NUM=val[10];//产品类别编号
+				this.dataInfo.P_VERSION=val[11];//产品类别版本
+				this.dataInfo.P_NAME=val[12];//生产单位名称id
+				this.dataInfo.P_NAMEDesc=val[13];//生产单位name
+				this.special1=true;
+				this.special=true;
 				}
 			},
 			vendor(val){

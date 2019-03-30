@@ -1946,6 +1946,7 @@
 			},
 			//姓名
 			addname(){
+				console.log(this.customid);
 				var customid=this.customid;
 				if(customid==""||customid=="undenfiend"){
 					this.$message({
@@ -2044,7 +2045,7 @@
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.inspectPro;
+				this.approvingData.app=this.appname;
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isEnd/'+this.dataid;
 	    		this.$axios.get(url, {}).then((res) => {
 	    			if(res.data.resp_code == 0) {
@@ -2080,20 +2081,20 @@
 			//流程历史
 			flowhistory(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.inspectPro;
+				this.approvingData.app=this.appname;
 //				this.$refs.flowhistoryChild.open();
 				this.$refs.flowhistoryChild.getdata(this.dataid);
 			},
 			//流程地图
 			flowmap(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.inspectPro;
+				this.approvingData.app=this.appname;
 				this.$refs.flowmapChild.getimage();
 			},
 			//当前责任人
 			viewpepole(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.inspectPro;
+				this.approvingData.app=this.appname;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
 			getCompany() {

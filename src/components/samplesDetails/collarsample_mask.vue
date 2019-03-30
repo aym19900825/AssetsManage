@@ -526,7 +526,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").height(document.body.clientHeight - 70);
 
 			},
 			//还原按钮

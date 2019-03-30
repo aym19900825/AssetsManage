@@ -230,7 +230,7 @@ element.style {
     bottom: 0px;
     background-color: #FFFFFF;
 }  
-.el-radio{
+.el-radio,.el-checkbox{
 	line-height: 40px !important;
 }
 .el-form-item {

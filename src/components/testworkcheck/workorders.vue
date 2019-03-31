@@ -405,10 +405,8 @@
 			},
 			//请求点击
 		    getbtn(item){
-		    	if(item.name=="修改"){
+		    	if(item.name=="下达任务"){
 		    	 	this.modify();
-		    	}else if(item.name=="下达任务"){
-		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
 		    	 	this.physicsDel();
 		    	}else if(item.name=="高级查询"){
@@ -419,9 +417,9 @@
 		    	 	this.deluserinfo();
 		    	}else if(item.name=="生成子任务单"){
 		    		this.tasklist();
-		    	 this.deluserinfo();
+		    	 	this.deluserinfo();
 		    	}else if(item.name=="下达任务"){
-		    	 this.tasklist();
+					this.tasklist();
 		    	}else if(item.name=="报表"){
 			    	this.reportdata();
 				}else{

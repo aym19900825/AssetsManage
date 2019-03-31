@@ -128,7 +128,6 @@
 											<el-col :span="12">
 												<el-form-item label="样品名称" prop="ITEM_NAME" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
-														<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addsample('inspect_proxy')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -136,12 +135,12 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special"></el-input>
+													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special1"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="special">
+													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="special1">
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -153,8 +152,8 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="标识" prop="ITEM_ID" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_ID" :disabled="noedit"></el-input>
+												<el-form-item label="标识" prop="ITEM_IDENT" label-width="110px">
+													<el-input v-model="dataInfo.ITEM_IDENT" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											
@@ -232,13 +231,22 @@
 
 												<el-table-column prop="S_DESC" label="标准内容" sortable>
 													<template slot-scope="scope">
+														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'" >
+															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入">
+                              </el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column>
+
+												<!-- <el-table-column prop="S_DESC" label="标准内容" sortable>
+													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_DESC" placeholder="请输入">	
 														</el-input>
 														<span v-else>{{scope.row.S_DESC}}</span>
 														</el-form-item>
 													</template>
-												</el-table-column>												
+												</el-table-column>												 -->
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -617,7 +625,7 @@
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
 												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @visible-change="visableleader($event)">
-													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.username"></el-option>
+													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.nickname"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -773,20 +781,20 @@
 			 withdepetmask,
 		},
 		data() {
-            var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-            // 金额验证
-            var price=(rule, value, callback) => {//生产单位名称 
+				var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+				// 金额验证
+				var price=(rule, value, callback) => {//生产单位名称 
 				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
 				if(value != '' && value!=undefined){
 					if(exp.test(value)==false){ 
-	                    callback(new Error('请输入数字'));
-	              }else{
-	                    callback();
-	                }
-				}else {
-					callback();
-				}
-           };
+											callback(new Error('请输入数字'));
+								}else{
+											callback();
+									}
+						}else {
+							callback();
+						}
+					};
 			return {
 				approvingData:{},
 				loading: false,
@@ -879,7 +887,7 @@
 				edit: true, //禁填
 				noedit: false,
 				special:false,
-				special1:true,//样品模块的放大按钮
+				special1:false,//样品模块的放大按钮
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,
@@ -903,23 +911,18 @@
 				labelPositions: 'right',
 				rules: {
 					V_NAME: [
-						{required: true, message: '必填', trigger: 'blur' },
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
-					],//委托单位名称
-					V_ADDRESS: [{ required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
-					V_ZIPCODE: [{ required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
-					V_PERSON: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
-					V_PHONE: [
-						{ required: true, trigger: 'blur', message: '必填'},
-						{ trigger: 'blur', validator: this.Validators.isPhones}
-					],//联系人电话
-					R_VENDORDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
+						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托单位名称
+					V_ADDRESS: [{required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
+					V_ZIPCODE: [{required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
+					V_PERSON: [{required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
+					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话
+					R_VENDORDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
-					P_NAMEDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
-					PRODUCT: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
+					P_NAMEDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
+					PRODUCT: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
 					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
-					// ITEM_ID: [{ required: true, message: '必填', trigger: 'blur' }],//标识
+					ITEM_NAME: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
+					// ITEM_IDENT: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [
 						{required: true, message: '必填', trigger: 'blur' },
 						{trigger: 'blur', validator:this.Validators.isSpecificKey}
@@ -1127,12 +1130,15 @@
 					R_VENDOR:'',//承建单位
 					R_VENDORDesc:'',
 					V_PERSON:'',//委托单位联系人
+					V_PHONE:'',//电话号码
 					ITEM_NAME:'',//样品名称
 					ITEM_MODEL:'',//样品型号
 					ITEM_QUALITY:'',//样品数量
 					ITEM_SECRECY:'',//样品保密要求
 					ITEM_METHOD:'委托方送样',//样品取样方式
-					ITEM_DISPOSITION:'',//样品检后处理
+					ITEM_DISPOSITION:'自提',//样品检后处理
+					REPORT_FOMAT:'认证中心',//标识
+					REPORT_MODE:'自取',//发送方式
 					REPORT_NUM:'',//检验报告编号
 					P_NAMEDesc:'',//生产单位
 					P_NAME:'',//生产单位
@@ -1144,7 +1150,7 @@
 					PRODUCT:'',
 					PAYMENT_METHOD:'',//付款方式
 					COMPDATE:'',
-					COMPMODE:'',//完成方式
+					COMPMODE:'正常',//完成方式
 					REMARKS:'',
 					V_NAME:'',//委托单位名称
 					V_ADDRESS:'',//委托单位地址
@@ -1438,14 +1444,19 @@
 			},
 			//产品
 			mianproduct(){
-				this.pronum=this.dataInfo.PRO_NUM;
-				var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM};
-				console.log(data);
-				this.$refs.productchild.visible(data);
+				if(!!this.dataInfo.P_NUM){
+					var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM};
+					this.$refs.productchild.visible(data);
+				}else{
+				    this.$message({
+							message: '请先选择产品类别',
+							type: 'warning'
+						});
+				}
+				
 			},
 			//产品类别
 			miancategory(){
-				this.pnum=this.dataInfo.P_NUM;
 				var data={appname:this.appname};
 				this.$refs.categorychild.visible(data);
 			},
@@ -1478,7 +1489,7 @@
 			//委托单位
 			customarr(val){
 				this.dataInfo.V_NAME=val[0];
-				this.dataInfo.V_NAMEDesc=val[0];//
+				this.dataInfo.V_NAMEDesc=val[1];//
 				this.dataInfo.V_ADDRESS=val[2];
 				this.dataInfo.V_ZIPCODE=val[3];
 				if(val[4]="falg"){
@@ -1501,8 +1512,8 @@
 				this.dataInfo.PRODUCT='';
 				this.dataInfo.ITEM_METHOD='';
 				this.dataInfo.ITEM_DISPOSITION='';
-				this.special1=true;
-				this.special=false;
+				this.special1=false;
+				this.special=true;
 				}else{
 				//样品有值的时候
 				this.dataInfo.P_NAME=val[0];//生产单位
@@ -1512,7 +1523,6 @@
 				this.dataInfo.ITEM_MODEL=val[4];//模型
 				this.dataInfo.ITEM_QUALITY=val[5];//质量
 				this.dataInfo.PRODUCT=val[6];//产品名称
-				this.dataInfo.ITEM_NAME=val[6];//样品名称
 				this.dataInfo.PRODUCT_TYPE=val[7];//产品类别
 				this.dataInfo.PRO_NUM=val[8];//产品编号
 				this.dataInfo.PRO_VERSION=val[9];//产品版本
@@ -1554,7 +1564,6 @@
 			//检验项目放大镜
 			basisleadbtn2(val){
 				this.deptindex = val;
-				console.log(val);
 				if(val == 'maintable'){
 					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
@@ -1565,17 +1574,21 @@
 						// this.sendchilddata.push(this.dataInfo.S_NUM);
 						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
 						var arr=[];
-						console.log(this.dataInfo.INSPECT_PROXY_BASISList);
+						var proxy=[];
+						var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
+						for(var j=0;j<proxylist.length;j++){
+								proxy.push(proxylist[j].P_NUM);
+						}
+						var proxypnum=proxy.join(',');
 						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
 							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
 						}
-						console.log(arr);
 						var data={
 							P_NUM:this.dataInfo.P_NUM,
 							PRO_NUM:this.dataInfo.PRO_NUM,
 							S_NUM:arr,//依据的编号
+							proxypnum:proxypnum
 						}
-						console.log(data);
 						this.$refs.projectchild.projectlead(data);
 						// this.main = 'main';
 						// this.sendchilddata = [];
@@ -1598,6 +1611,12 @@
 			},
 			//检验依据放大镜
 			basisleadbtn(val){
+				var snum=this.dataInfo.INSPECT_PROXY_BASISList;
+				var basislist=[];
+				for(var i=0;i<snum.length;i++){
+          	basislist.push(snum[i].S_NUM);
+				}
+				var basisnums=basislist.join(',');
 				this.inistinspectproxy=(this.dataInfo.INSPECT_PROXY_BASISList).join(',');
 				this.deptindex = val;
 				//子表
@@ -1611,7 +1630,7 @@
 						var data={
 							P_NUM:this.dataInfo.P_NUM,
 							PRO_NUM:this.dataInfo.PRO_NUM,
-
+							S_NUM:basisnums,
 						}
 						this.$refs.standardchild.basislead(data);
 						this.main = 'main';
@@ -1675,7 +1694,6 @@
 			},
 			//所外机构
 			  cusinspect(val){
-					console.log(val);
 					for(var i = 0;i<val.length;i++){
 						var List={
 								PROXY_CONTRACT_NUM: '',
@@ -1711,7 +1729,6 @@
 				},
 				//所内机构
 				withdepet(val){
-					console.log(val);
 							for(var i = 0;i<val.length;i++){
 						var List={
 								PROXY_CONTRACT_NUM: '',
@@ -1939,11 +1956,7 @@
 				this.dataInfo.LEADER = '';
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
 				this.$axios.get(url, {}).then((res) => {
-					this.leaderdata = [];
-					var list = res.data.data;
-					for(var i=0; i<list.length; i++){
-						this.leaderdata.push(list[i]);
-					}
+					this.leaderdata = res.data.data;
 				}).catch((err) => {
 				});		
 			},
@@ -1958,8 +1971,7 @@
 			},
 			//姓名
 			addname(){
-				console.log(this.customid);
-				var customid=this.customid;
+				var customid=this.dataInfo.V_NAME;//委托单位id
 				if(customid==""||customid=="undenfiend"){
 					this.$message({
 						message: '请先选委托单位名称',
@@ -1976,7 +1988,7 @@
 						page: this.page.currentPage,
 						limit: this.page.pageSize,
 					}
-					var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.customid;
+					var url = this.basic_url + '/api-apps/app/customer/CUSTOMER/'+ this.dataInfo.V_NAME;
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {

@@ -185,11 +185,10 @@
 		this.dialogProduct = false;
     },
     projectlead(value){
-		console.log(value);
 		this.PRO_NUM = value.PRO_NUM;//产品编号
 		this.P_NUM = value.P_NUM;//产品类别编号
 		this.S_NUM=value.S_NUM.toString(',');
-		console.log(this.S_NUM);
+		this.projectnum=value.proxypnum;
 		// this.projectnum = value[0];
 		// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
 		// 	this.projecttable = value[1];
@@ -206,7 +205,6 @@
 	},
 	//检验项目与要求弹出框的确定
     addbasis(){
-		console.log(this.selUser);
         var selData = this.selUser;
         if(selData.length == 0) {
             this.$message({
@@ -222,7 +220,6 @@
 			var basisname = [];
 			var basisid = [];
 			var prover = [];//项目：版本
-			console.log(selData);
             for (var i = 0; i < selData.length; i++) {
                 basisnum.push(selData[i].P_NUM);
 				basisname.push(selData[i].P_NAME);
@@ -292,7 +289,7 @@
 		// this.S_NUM=value.S_NUM.toString(',');
 	    // var url=this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums;
 		// var url=this.basic_url +'/api-apps/app/inspectionPro2?P_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums;
-		var url=this.basic_url +'/api-apps/app/inspectionPro2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_in='+this.S_NUM;
+		var url=this.basic_url +'/api-apps/app/inspectionPro2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_in='+this.S_NUM+'&P_NUM_where_not_in='+this.projectnum;
 		this.$axios.get(url,{}).then((res) => {
             this.page.totalCount = res.data.count;	
             //总的页数
@@ -344,10 +341,6 @@
 			console.log('取消关闭');
 			$('.v-modal').hide();
 		});
-    },
-    //上传文件 End
-    judge(data) {
-        return data.STATUS=="1" ? '活动' : '不活动'
     },
   },
   mounted() {

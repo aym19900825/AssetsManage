@@ -185,7 +185,8 @@
 			VERSION:this.searchList.VERSION,
 		};
         var DEPTID=this.$store.state.currentcjdw[0].id;
-        var url = this.basic_url + '/api-apps/app/customer?_WHERES=DEPTID='+DEPTID+'&_WHERE_IN=TYPE=2,3';
+		var url = this.basic_url + '/api-apps/app/customer?DEPTID_WHERES='+DEPTID+'&TYPE_WHERE_IN=2,3';
+		console.log(url);
 		this.$axios.get(url, {
 			params: data
 		}).then((res) => {

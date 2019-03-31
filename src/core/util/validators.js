@@ -200,7 +200,9 @@ const validators = {
 	
 
 	isPhones:function (rule, value, callback) {//验证座机和手机号
-		if(value && (!(/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$|^0\d{2,3}-?\d{7,8}$/).test(value))) {
+		if(value==''||value==undefined||value==null){
+			callback(new Error('请输入座机号或手机号'))	
+		}else if(value && (!(/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\d{8}$|^0\d{2,3}-?\d{7,8}$/).test(value))) {
 			callback(new Error('请输入有效的座机号或手机号'))
 		} else {
 			callback();

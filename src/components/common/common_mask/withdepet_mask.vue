@@ -1,7 +1,7 @@
 
 <template>
 <div>
-    <el-dialog :modal-append-to-body="false" title="客户" height="400px" :visible.sync="dialogcustom" width="80%" :before-close="handleClose">
+    <el-dialog :modal-append-to-body="false" title="分包" height="400px" :visible.sync="dialogcustom" width="80%" :before-close="handleClose">
     <div class="scrollbar" style="height:380px;">
         <el-form inline-message :model="searchList" label-width="90px">
             <el-row>
@@ -18,12 +18,12 @@
                         </el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="2" class="text-center">
+                <el-col :span="4" class="text-center">
                     <el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+					<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
                 </el-col>
             </el-row>
         </el-form>
-		<div v-show="none">
         <el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="270px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
             v-loadmore="loadMore"
             v-loading="loading"  
@@ -42,15 +42,21 @@
             <el-table-column label="产品类别名称" sortable prop="pt_name">
             </el-table-column>
         </el-table>
-            <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-            </el-pagination>
+           <el-pagination background class="text-right pt10"
+				@size-change="sizeChange"
+				@current-change="currentChange"
+				:current-page="page.currentPage"
+				:page-sizes="[10, 20, 30, 40]"
+				:page-size="page.pageSize"
+				layout="total, sizes, prev, pager, next"
+				:total="page.totalCount">
+			</el-pagination>
     
 	    <div slot="footer">
             <el-button type="primary" @click="determine">确 定</el-button>
             <el-button @click="resetBasisInfo">取 消</el-button>
         </div>
 		</div>
-	</div>
     </el-dialog>
 </div>
 </template>
@@ -70,7 +76,6 @@
 		DEPTID:'',//当前选择的机构值
         customerList:[],
 		dialogcustom:false,
-		none:false,
 		dept:'',
 		deptname:'',
 		page: {
@@ -86,6 +91,12 @@
   },
 
   methods: {
+	resetbtn(){
+			this.searchList =  { //点击高级搜索后显示的内容
+				searchName:'',
+			};
+			this.requestData();
+	},
   	dateFormat(row, column) {
 		var date = row[column.property];
 		if(date == undefined) {
@@ -106,18 +117,9 @@
 		this.page.pageSize = 20;
 		this.requestData();
 	},
-	resetbtn(){
-		this.searchList = {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
-		}
-	},
-	
   	//点击关闭按钮
 	close() {
 		this.dialogcustom = false;
-		this.none=false;
 		this.searchName='';
 		this.dept='';
 	},
@@ -179,7 +181,6 @@
 	//Table默认加载数据
 	
 	getdept(dept){
-		console.log(dept);
 		this.dept=dept;
 		this.requestData();
 	},
@@ -194,7 +195,6 @@
             return;
         } else {
 			var deptname='';
-			console.log(selectData);
 			for(var i=0;i<selectData.length;i++){
 				if(this.dept==selectData[i].id){
 					this.deptname=selectData[i].fullname;
@@ -207,7 +207,6 @@
 				selData[i].dept=this.dept;
 				list.push(selData[i]);
 			}
-			console.log(list);
 			this.$emit('withdepet',list);
 			
             this.resetBasisInfo();
@@ -244,7 +243,6 @@
 			}
 			this.customerList = res.data.datas.data;
 			this.loading = false;//加载动画关闭
-			this.none=true;
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
 			}//滚动加载数据判断filing
@@ -256,15 +254,21 @@
 		})	
 	},
     getCompany() {
-        var url = this.basic_url + '/api-user/depts/treeByType';
-        this.$axios.get(url, {}).then((res) => {
-			this.selectData = res.data;
-			console.log(res.data);
+		// var url = this.basic_url + '/api-user/depts/treeByType';
+		var data = {
+					DEPTID: 129,
+					TYPE: 'dept'
+				};
+		var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=129&TYPE=dept';
+        this.$axios.get(url, {params: data}).then((res) => {
+			console.log(res);
+			this.selectData = res.data.datas;
         });
     },
   },
   mounted() {
 		this.getCompany();
+		this.requestData();
 	},
 }
 </script>

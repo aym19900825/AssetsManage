@@ -673,13 +673,9 @@
 				this.dialogVisible = true;
 			},
 			proxydata(){
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-					this.deptid = res.data.deptId;
-					var url = this.basic_url + '/api-apps/app/inspectPro?DEPTID_wheres='+this.deptid;
-					this.$axios.get(url, {}).then((res) => {
-						this.gridDataList= res.data.data;
-					});
-				}).catch((err) => {
+				var url = this.basic_url + '/api-apps/appCustom/getInspectProxy';
+				this.$axios.get(url, {}).then((res) => {
+					this.gridDataList= res.data.data;
 				});
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
@@ -717,15 +713,12 @@
 					})
 				}
 			},
-
 			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisible = false;//关闭弹出框
 				this.gridDataList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 20;//页码重新传值
 			},
-			
-			
 			visible() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPTID = res.data.deptId;

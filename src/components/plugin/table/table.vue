@@ -199,9 +199,9 @@ export default {
       }else if(this.appName == 'serialnum'){
         var url = this.basic_url + '/api-user/serialnum';
       }else if(this.appName == 'loginlog'){
-        var url = this.basic_url + '/api-log/logs/loginlog';
+        var url = this.basic_url + '/api-log/logs/loginLog';
       }else if(this.appName == '/operlog'){
-        var url = this.basic_url + '/api-log/logs/operlog';
+        var url = this.basic_url + '/api-log/logs/operLog';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

@@ -240,6 +240,7 @@
 				customarr.push(this.selUser[0].customername);//委托单位名称
 				customarr.push(this.selUser[0].customeraddress);//地址
 				customarr.push(this.selUser[0].customerzipcode);//邮编
+				customarr.push(this.selUser[0].customercode);//信用代码
 				this.$emit('customarr',customarr);
 				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
 						customarr.push(falg);

@@ -120,25 +120,30 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="special" >
-														<el-button slot="append" icon="el-icon-search" :disabled="special1" @click="getCustomer('pname')"></el-button>
+													<el-input v-model="dataInfo.P_NAMEDesc" >
+														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="12">
 												<el-form-item label="样品名称" prop="ITEM_NAME" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special">
+													<el-input v-model="dataInfo.ITEM_NAME" :disabled="special1">
 													</el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row>
+											<el-col :span="11">
+												<el-form-item label="统一信用代码" prop="PRODUCT_UNIT" label-width="110px">
+													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
+												</el-form-item>
+											</el-col>
 											<el-col :span="8">
 												<el-form-item label="型号" prop="ITEM_MODEL" label-width="110px">
 													<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special1"></el-input>
 												</el-form-item>
 											</el-col>
-											<el-col :span="8">
+											<el-col :span="5">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
 													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="special1">
 													</el-input>
@@ -947,10 +952,10 @@
 					],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-					MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
-					LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
+					// MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
+					// LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 					// ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
-					MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
+					// MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 					CHECK_COST:[{required: false, trigger: 'change',validator:this.Validators.isPrices}],//合同收费(元)
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
@@ -1142,6 +1147,7 @@
 					REPORT_NUM:'',//检验报告编号
 					P_NAMEDesc:'',//生产单位
 					P_NAME:'',//生产单位
+					PRODUCT_UNIT:'',//生产单位的信用代码
 					P_NUM:'',
 					P_VERSION:'',
 					PRO_NUM:'',
@@ -1482,6 +1488,7 @@
 					this.dataInfo.PRO_NUM=val[0];
 					this.dataInfo.PRODUCT=val[1];
 					this.dataInfo.PRO_VERSION=val[2];
+					this.dataInfo.ITEM_NAME=val[1];
 				}
 			},
 			
@@ -1492,6 +1499,10 @@
 				this.dataInfo.V_NAMEDesc=val[1];//
 				this.dataInfo.V_ADDRESS=val[2];
 				this.dataInfo.V_ZIPCODE=val[3];
+				this.dataInfo.VENDOR=val[4];//委托单位的信用代码
+				this.dataInfo.P_NAME=val[0];
+				this.dataInfo.P_NAMEDesc=val[1];//生产单位
+				this.dataInfo.PRODUCT_UNIT=val[4];//生产单位的信用代码
 				if(val[4]="falg"){
 					this.dataInfo.V_PERSON='';
 					this.dataInfo.V_PHONE='';
@@ -1510,10 +1521,11 @@
 				this.dataInfo.ITEM_SECRECY='';
 				this.dataInfo.PRODUCT_TYPE='';
 				this.dataInfo.PRODUCT='';
-				this.dataInfo.ITEM_METHOD='';
-				this.dataInfo.ITEM_DISPOSITION='';
+				// this.dataInfo.ITEM_METHOD='';
+				// this.dataInfo.ITEM_DISPOSITION='';
 				this.special1=false;
 				this.special=true;
+
 				}else{
 				//样品有值的时候
 				this.dataInfo.P_NAME=val[0];//生产单位
@@ -1532,6 +1544,7 @@
 				this.dataInfo.P_NAMEDesc=val[13];//生产单位name
 				this.special1=true;
 				this.special=true;
+				this.special2=true;//样品名称
 				}
 			},
 			vendor(val){

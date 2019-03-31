@@ -121,10 +121,13 @@
 								</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
+								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="执行状态" sortable width="140px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
 								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="审核状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('审核状态')!=-1">
-								</el-table-column>
+							
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
@@ -155,6 +158,7 @@
 			</div>
 		</div>
 		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
+		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
 					<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
@@ -166,18 +170,21 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+	import assignmissionmask from '../proxiesDetails/assignmissionmask.vue'//下达任务的弹出
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 
 	export default {
 		name: 'inspectPro',
 		components: {
-			'vheader': vheader,
-			'navs_left': navs_left,
-			'navs_tabs': navs_tabs,
-			'inspectmask': inspectmask,
-			'reportmask': reportmask,
-			'v-table': vTable
+			vheader,
+			navs_left,
+			navs_tabs,
+			inspectmask,
+			assignmissionmask,
+			reportmask,
+			vTable,
+			
 		},
 		data() {
 			return {
@@ -216,7 +223,8 @@
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
-					'审核状态',
+					'状态',
+					'执行状态',
 					// '样品信息状态',
 					'检测依据',
 					'完成日期',
@@ -237,8 +245,12 @@
 						prop: 'V_NAME'
 					},
 					{
-						label: '审核状态',
+						label: '状态',
 						prop: 'STATEDesc'
+					},
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUS'
 					},
 					{
 						label: '生产单位名称',
@@ -256,6 +268,7 @@
 					// 	label: '样品信息状态',
 					// 	prop: 'ITEM_STATUS'
 					// },
+
 					{
 						label: '检测依据',
 						prop: 'REMARKS'
@@ -399,7 +412,6 @@
 						this.Printing();
 					}else if(item.name=="下达任务"){
 						this.build();
-						console.log(678);
 					}
 		    },
 			//添加
@@ -459,7 +471,6 @@
 			},
 			//下达任务
 			build(){
-				console.log(1234);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要下达任务的数据',
@@ -474,26 +485,12 @@
 					return;
 				}else if(this.selUser[0].STATE !=3) {
 					this.$message({
-						message: '此委托书暂不能下达任务，请确认【审核状态】是否通过!',
+						message: '此委托书暂不能下达任务，请确认【状态】是否通过!',
 						type: 'warning'
 					});
 					return;
-				 }else if(this.selUser[0].STATE == 3){
-					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+this.selUser[0].ID;
-					this.$axios.get(Url, {}).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '生成工作任务单成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-							message: '已经生成工作任务单，请勿重复生成',
-							type: 'warning'
-						});
-						}
-					}).catch((err) => {
-					});
+				 }else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},
 			//打印

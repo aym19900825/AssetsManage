@@ -572,6 +572,13 @@
 						});
 						return;
 					}
+					if(this.selMenu[0].PROXYNUM!=''){
+						this.$message({
+							message: '此样品已绑定委托书，不可删除！',
+							type: 'warning'
+						});
+						return;
+					}
 					var url = this.basic_url + '/api-apps/app/item/deletes';
 					//changeMenu为勾选的数据
 					var changeMenu = selData;

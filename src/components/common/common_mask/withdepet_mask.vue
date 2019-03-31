@@ -78,6 +78,7 @@
 		dialogcustom:false,
 		dept:'',
 		deptname:'',
+		defaultdept:'',//页面加载时的机构
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -123,6 +124,9 @@
 	},
   	visible() {
 		this.dialogcustom= true;
+		this.dept= this.defaultdept;
+		this.requestData();
+
   	},
   	//表格滚动加载
 		loadMore() {
@@ -277,6 +281,7 @@
 			console.log(res);
 			this.selectData = res.data.datas;
 			this.searchList.dept = res.data.datas[0].id;
+			this.defaultdept= res.data.datas[0].id;
         });
     },
   },

@@ -127,7 +127,6 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
-	import productmask from '../maindataDetails/product_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
@@ -137,7 +136,6 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
-			'productmask': productmask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
 			'v-table': vTable
@@ -153,13 +151,6 @@
 				fileList:[],//文件上传的接收数据
 				commentArr: {},
 				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
 				searchData: {
 					page: 1,
 					limit: 20, //分页显示数
@@ -318,9 +309,6 @@
 		    },
 			//时间格式化  
 			dateFormat(row, column) {
-				console.log(12345);
-				console.log(row);
-				console.log(column);
 				var date = row[column.property];
 				if(date == undefined) {
 					return "";

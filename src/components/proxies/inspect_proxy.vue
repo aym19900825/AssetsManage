@@ -44,7 +44,7 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+									<el-form-item label="委托单位名称" prop="V_NAMEDesc"  label-width="100px">
 										<el-input v-model="searchList.V_NAME"></el-input>
 									</el-form-item>
 								</el-col>
@@ -117,7 +117,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
@@ -536,14 +536,13 @@
 					return;
 				} else {
 					var url = this.basic_url + '/api-apps/app/inspectPro/operate/stop?ID='+this.selUser[0].ID;
-					this.$axios.get(url, {
-
-					}).then((res) => {
+					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '操作成功',
 								type: 'success'
 							});
+							this.requestData();
 						} else {
 							this.$message({
 								message: res.data.resp_msg,

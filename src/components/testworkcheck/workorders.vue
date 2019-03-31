@@ -407,7 +407,7 @@
 		    getbtn(item){
 		    	if(item.name=="修改"){
 		    	 	this.modify();
-		    	if(item.name=="下达任务"){
+		    	}else if(item.name=="下达任务"){
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
 		    	 	this.physicsDel();

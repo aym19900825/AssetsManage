@@ -760,7 +760,6 @@
 					],
 					COMPLETE_DATE: [
 						{ required: true, message: '不能为空', trigger: 'change' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
 					COMPLETE_MODE: [
 						{ required: true, message: '不能为空', trigger: 'change' },

@@ -95,21 +95,19 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="编码" width="155" sortable="custom" prop="PRO_NUM" v-if="checkedName.indexOf('编码')!=-1">
+								<el-table-column label="日志名称" width="155" sortable="logname" prop="logname" v-if="checkedName.indexOf('日志名称')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PRO_NUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable="custom" prop="PRO_NAME" v-if="checkedName.indexOf('名称')!=-1">
+								<el-table-column label="用户账号" sortable="custom" prop="username" v-if="checkedName.indexOf('用户账号')!=-1">
 								</el-table-column>
-								<el-table-column label="版本" width="100" sortable="custom" prop="VERSION" v-if="checkedName.indexOf('版本')!=-1" align="right">
+								<el-table-column label="登录ip" width="100" sortable="custom" prop="ip" v-if="checkedName.indexOf('登录ip')!=-1" align="right">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable="custom" prop="DEPTIDDesc" v-if="checkedName.indexOf('机构')!=-1">
+								<el-table-column label="登录开始时间" width="185" sortable="custom" prop="starttime" v-if="checkedName.indexOf('机构')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable="custom" :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable="custom" :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="登录截止时间" width="120" prop="ENTERDATE" sortable="endtime" :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -182,28 +180,28 @@
 					'修改时间'
 				],
 				tableHeader: [{
-						label: '编码',
-						prop: 'PRO_NUM'
+						label: '日志名称',
+						prop: 'logname'
 					},
 					{
-						label: '名称',
-						prop: 'PRO_NAME'
+						label: '用户账号',
+						prop: 'username'
 					},
 					{
-						label: '版本',
-						prop: 'VERSION'
+						label: '登录ip',
+						prop: 'ip'
 					},
 					{
-						label: '机构',
-						prop: 'DEPTIDDesc'
+						label: '登录开始时间',
+						prop: 'starttime'
 					},
 					// {
 					// 	label: '信息状态',
 					// 	prop: 'STATUS'
 					// },
 					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
+						label: '登录截止时间',
+						prop: 'endtime'
 					},
 					{
 						label: '修改时间',
@@ -547,8 +545,8 @@
 				this.reportData.app=this.product;
 				this.$refs.reportChild.visible();
 			},
-			requestData() {
-				this.$refs.table.requestData();
+			requestData(opt) {
+				this.$refs.table.requestData(opt);
 			},
 			handleNodeClick(data) {},
 			childByValue:function(childValue) {

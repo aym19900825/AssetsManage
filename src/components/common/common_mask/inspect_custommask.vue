@@ -46,8 +46,15 @@
 				<el-table-column label="接样日期" sortable prop="itemrecdate">
 				</el-table-column>
 			</el-table>
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
+				<el-pagination background class="text-right pt10"
+				@size-change="sizeChange"
+				@current-change="currentChange"
+				:current-page="page.currentPage"
+				:page-sizes="[10, 20, 30, 40]"
+				:page-size="page.pageSize"
+				layout="total, sizes, prev, pager, next"
+				:total="page.totalCount">
+			</el-pagination>
 				<div slot="footer">
 			       <el-button type="primary" @click="determine">确 定</el-button>
 			       <el-button @click="resetBasisInfo()">取 消</el-button>
@@ -210,6 +217,7 @@
 		})
 	},
 	determine(){
+		console.log(this.selUser[0]);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',
@@ -221,15 +229,18 @@
 				type: 'warning'
 			});
 		}else{
+
 				var name=this.selUser[0].customername;//名称
 				var address=this.selUser[0].customeraddress;//地址 
 				var id=this.selUser[0].ID;
 				var itemid=this.selUser[0].itemid;
+				var itemnum=this.selUser[0].itemnum;
 				var customarr=[];
-				customarr.push(this.selUser[0].customerid);//
-				customarr.push(this.selUser[0].customername);//委托单位
+				customarr.push(this.selUser[0].customerid);//委托单位id
+				customarr.push(this.selUser[0].customername);//委托单位名称
 				customarr.push(this.selUser[0].customeraddress);//地址
-				customarr.push()
+				customarr.push(this.selUser[0].customerzipcode);//邮编
+				customarr.push(this.selUser[0].customercode);//信用代码
 				this.$emit('customarr',customarr);
 				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
 						customarr.push(falg);
@@ -237,37 +248,44 @@
 				// var code=this.selUser[0].CODE;//统一社会信用代码
 				// this.$emit('customname',name);//传到主页面
 				// this.$emit('customadd',address);//传到主页面
-					if(this.selUser[0]!=null){
-							var vendor=[];
-							if(this.selUser[0].customercode!=null&&this.selUser[0].customercode!=undefined&&this.selUser[0].customercode!=''){
-									vendor.push(this.selUser[0].customercode);
-							}else{
-								vendor.push(this.selUser[0].customerid);
-							}
+					// if(this.selUser[0]!=null){
+					// 		var vendor=[];
+					// 		if(this.selUser[0].customercode!=null&&this.selUser[0].customercode!=undefined&&this.selUser[0].customercode!=''){
+					// 				vendor.push(this.selUser[0].customercode);
+					// 		}else{
+					// 			vendor.push(this.selUser[0].customerid);
+					// 		}
 							
-							this.$emit('vendor',vendor);
-					}
-					//样品模块赋值
-					if(this.selUser[0].itemid!=null||this.selUser[0].itemid!=undefined){
-							this.$axios.get(this.basic_url + '/api-apps/app/item/' + itemid, {}).then((res) => {
-								var custarr = [];
-									custarr.push(res.data.P_NAME);//生产单位
-									custarr.push(res.data.DESCRIPTION);//样品名称
-									custarr.push(res.data.MODEL);//模型
-									custarr.push(res.data.QUATITY);//质量
-									custarr.push(res.data.PRODUCT);//产品名称
-									custarr.push(res.data.PRODUCT_TYPE);//产品类别
-									custarr.push(res.data.PRO_NUM);//产品编号
-									custarr.push(res.data.PRO_VERSION);//产品版本
-									custarr.push(res.data.P_NUM);//产品类别编号
-									custarr.push(res.data.P_VERSION);//产品类别版本
-									this.$emit('custarr',custarr);
-							});
-					}else{
-								var custarr = [];
-								custarr.push('falg');
+					// 		this.$emit('vendor',vendor);
+					// }
+				//样品模块赋值
+				console.log(this.selUser[0].itemid);
+				if(this.selUser[0].itemid!=null&&this.selUser[0].itemid!=undefined&&this.selUser[0].itemid!=''){
+						var url=this.basic_url + '/api-apps/app/item/' + itemid;
+						this.$axios.get(url, {}).then((res) => {
+							var custarr = [];
+								custarr.push(res.data.P_NAME);//生产单位
+								custarr.push(res.data.DESCRIPTION);//样品名称
+								custarr.push(res.data.ID);//样品id
+								custarr.push(res.data.ITEMNUM);//样品数量
+								custarr.push(res.data.MODEL);//型号
+								custarr.push(res.data.QUATITY);//质量
+								custarr.push(res.data.PRODUCT);//产品名称
+								custarr.push(res.data.PRODUCT_TYPE);//产品类别
+								custarr.push(res.data.PRO_NUM);//产品编号
+								custarr.push(res.data.PRO_VERSION);//产品版本
+								custarr.push(res.data.P_NUM);//产品类别编号
+								custarr.push(res.data.P_VERSION);//产品类别版本
+								custarr.push(res.data.P_NAME);//生产单位名称id
+								custarr.push(res.data.P_NAMEDesc);//生产单位名称name
 								this.$emit('custarr',custarr);
-					}
+						});
+				}else{
+					console.log(this.selUser[0].itemid);
+							var custarr = [];
+							custarr.push('falg');
+							this.$emit('custarr',custarr);
+				}
 				
 			this.dialogCustomer = false;
 			// this.requestData();

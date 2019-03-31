@@ -19,7 +19,7 @@
 验证用户密码强："^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*_-()\/<>+={}]+$)(?![a-zA-z\d]+$)(?![a-zA-z!@#$%^&*_\/<>{}]+$)(?![\d!@#$%^&*_\/<>{}]+$)[a-zA-Z\d!@#$%^&*_\/<>{}]+$"字母+数字+特殊字符
 验证用户密码中："^(?![a-zA-z]+$)(?!\d+$)(?![!@#$%^&*]+$)[a-zA-Z\d!@#$%^&*]+$"字母+数字，字母+特殊字符，数字+特殊字符
 验证用户密码弱："^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$"纯数字，纯字母，纯特殊字符
-
+同时验证手机号码和固定电话号码：“/^((1[3456789]))\d{9}$|^0\d{2,3}-?\d{7,8}$”
 验证是否含有^%&',;=?$\"等字符："[^%&',;=?$\x22]+"。 
 只能输入汉字："^[\u4e00-\u9fa5]{0,}$"
 以英文字母开头，只能包含英文字母、数字、下划线："^[a-zA-Z][a-zA-Z0-9_]*$"。
@@ -73,12 +73,10 @@ const validators = {
 		return numbe.test(str);
 	},
 
-
 	CompanyCode:function (str) {// 统一社会信用代码 正则验证
 		const companycode = /[1-9A-GY]{1}[1239]{1}[1-5]{1}[0-9]{5}[0-9A-Z]{10}/;
 		return companycode.test(str);
 	},
-
 
 //---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
@@ -197,6 +195,15 @@ const validators = {
 			}
 		}, 500);		
 	},
+	
+
+	isPhones:function (rule, value, callback) {//验证座机和手机号
+		if(value && (!(/^((1[3456789]))\d{9}$|^0\d{2,3}-?\d{7,8}$/).test(value))) {
+			callback(new Error('请输入有效的座机号或手机号'))
+		} else {
+			callback();
+		}
+	},
 
 	isPhone:function (rule, value, callback) {//验证手机号
 		if(value && (!(/^1[3456789]\d{9}$/).test(value))) {
@@ -261,9 +268,9 @@ const validators = {
 			callback();
 		}
 		setTimeout(() => {
-			var regs = /^.{10,250}$/g
+			var regs = /^.{3,250}$/g
 			if (!regs.test(value)) {
-				callback(new Error('内容不少于10位且不能大于250位'));
+				callback(new Error('内容不少于3位且不能大于250位'));
 			} else {
 				if(!validators.SpecificWord(value)) {
 					callback(new Error('不支持特殊符号'));
@@ -284,7 +291,7 @@ const validators = {
 
 	isTelephone:function (rule, value, callback) {//验证电话号码/传真
 		if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
-			callback(new Error('请输入有效的电话/传真号，xxx-xxxxxxx'));
+			callback(new Error('请输入有效的固定电话格式'));
 		} else {
 			callback();
 		}

@@ -132,7 +132,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
-	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'
+	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'//下达任务
 	import reportmask from'../reportDetails/reportMask.vue'
 	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'
 	export default {
@@ -407,6 +407,8 @@
 		    getbtn(item){
 		    	if(item.name=="修改"){
 		    	 	this.modify();
+		    	if(item.name=="下达任务"){
+		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
 		    	 	this.physicsDel();
 		    	}else if(item.name=="高级查询"){
@@ -417,6 +419,9 @@
 		    	 	this.deluserinfo();
 		    	}else if(item.name=="生成子任务单"){
 		    		this.tasklist();
+		    	 this.deluserinfo();
+		    	}else if(item.name=="下达任务"){
+		    	 this.tasklist();
 		    	}else if(item.name=="报表"){
 			    	this.reportdata();
 				}else{
@@ -446,17 +451,17 @@
 	                return res.data.roleId;
 	            }).catch((err) => {});
         	},
-			//修改检验工作处理到子组件
+			//下达任务到子组件//之前的任务单修改页面
 			modify() {
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要修改的数据',
+						message: '请您选择要下达的任务',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selMenu.length > 1) {
 					this.$message({
-						message: '不可同时修改多条数据',
+						message: '不可同时下达多条子任务',
 						type: 'warning'
 					});
 					return;
@@ -499,16 +504,11 @@
 					}
 				}
 			},
-			//报表
-			reportdata(){
-				this.reportData.app=this.workorder;
-				this.$refs.reportChild.visible();
-			},
-			//生成子任务单
+			//下达任务
 			tasklist(){
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要生成子任务单的数据',
+						message: '请您选择要下达任务的数据',
 						type: 'warning'
 					});
 					return;
@@ -522,6 +522,12 @@
 					this.$refs.task.visible(this.selMenu[0].ID);	
 				}
 			},
+			//报表
+			reportdata(){
+				this.reportData.app=this.workorder;
+				this.$refs.reportChild.visible();
+			},
+			
 			getDetail(data){
 				this.view(data);
 			},

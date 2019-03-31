@@ -65,7 +65,7 @@
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" :disabled="true" placeholder="请输入内容">
 			        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 			        	</el-input><span v-else>{{scope.row.S_NAME}}</span>
-					</el-form-item>
+							</el-form-item>
 			      </template>
 			    </el-table-column>
 
@@ -121,8 +121,8 @@
 
 			        <!-- <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 			        	<i class="icon-check" title="保存"></i>
-					</el-button>
-				 	<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
+							</el-button>
+							<el-button type="primary" round size="mini" @click="addchildRow(scope.row)" v-else>
 			          添加
 			        </el-button> -->
 			      </template>
@@ -156,8 +156,7 @@
 			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.SS_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="360px"
 				highlight-current-row
 				@current-change="addproclass"
-				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}"
-				v-loadmore="loadMore">
+				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
 				<el-table-column label="编码" width="155" sortable prop="S_NUM">
@@ -165,6 +164,8 @@
 				<el-table-column label="标准编号" width="155" sortable prop="SS_NUM">
 				</el-table-column>
 				<el-table-column label="标准名称" sortable prop="S_NAME">
+				</el-table-column>
+				<el-table-column label="使用状态" sortable prop="ISUSESTATEDesc">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -434,6 +435,7 @@
 								"S_NUM": '',//编码
 								"SS_NUM": '',//标准编号
 								"S_NAME": '',
+								"ISUSESTATE": '',//使用状态
 								"STATUS": '',
 								"VERSION": '',
 								"DEPTID": '',
@@ -463,6 +465,7 @@
 						"S_NUM": row.S_NUM,
 						"SS_NUM": row.SS_NUM,
 						"S_NAME": row.S_NAME,
+						"ISUSESTATE": row.ISUSESTATE,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"RELEASETIME": row.RELEASETIME,
@@ -526,6 +529,7 @@
 					this.catedata.S_NUM = val.S_NUM;//编码
 					this.catedata.SS_NUM = val.SS_NUM;//标准编号
 					this.catedata.S_NAME = val.S_NAME;
+					this.catedata.ISUSESTATE = val.ISUSESTATE;
 					this.catedata.DEPTID = val.DEPTID;
 					this.catedata.VERSION = val.VERSION;
 					this.catedata.RELEASETIME = val.RELEASETIME;

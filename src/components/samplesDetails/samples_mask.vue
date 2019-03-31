@@ -470,7 +470,13 @@
 					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托单位名称
 					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
 					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
-					DESCRIPTION: [{ required:true, trigger:'blur', message:'必填'}],//样品名称
+					DESCRIPTION: [
+						{ required:true, trigger:'blur', message:'必填'},
+						{ trigger:'blur', validator: this.Validators.isSpecificKey}
+					],//样品名称
+					MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
+					SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
+					SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
 					PRODUCT_CODE: [
 						{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
 					],//产品标识代码
@@ -933,7 +939,7 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").height(document.body.clientHeight - 70);
 				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮

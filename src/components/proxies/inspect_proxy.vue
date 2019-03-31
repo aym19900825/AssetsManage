@@ -121,8 +121,13 @@
 								</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
+								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="执行状态" sortable width="140px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
 								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
+							
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
@@ -135,7 +140,7 @@
 								</el-table-column>
 								<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
 								</el-table-column>
-								<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
+								<el-table-column label="主检组" width="140px" prop="MAINGROUPDesc" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -153,6 +158,7 @@
 			</div>
 		</div>
 		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
+		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
 					<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
@@ -164,18 +170,21 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
+	import assignmissionmask from '../proxiesDetails/assignmissionmask.vue'//下达任务的弹出
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 
 	export default {
 		name: 'inspectPro',
 		components: {
-			'vheader': vheader,
-			'navs_left': navs_left,
-			'navs_tabs': navs_tabs,
-			'inspectmask': inspectmask,
-			'reportmask': reportmask,
-			'v-table': vTable
+			vheader,
+			navs_left,
+			navs_tabs,
+			inspectmask,
+			assignmissionmask,
+			reportmask,
+			vTable,
+			
 		},
 		data() {
 			return {
@@ -214,6 +223,8 @@
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
+					'状态',
+					'执行状态',
 					// '样品信息状态',
 					'检测依据',
 					'完成日期',
@@ -234,6 +245,14 @@
 						prop: 'V_NAME'
 					},
 					{
+						label: '状态',
+						prop: 'STATEDesc'
+					},
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUS'
+					},
+					{
 						label: '生产单位名称',
 						prop: 'P_NAME'
 					},
@@ -249,6 +268,7 @@
 					// 	label: '样品信息状态',
 					// 	prop: 'ITEM_STATUS'
 					// },
+
 					{
 						label: '检测依据',
 						prop: 'REMARKS'
@@ -267,7 +287,7 @@
 					},
 					{
 						label: '主检组',
-						prop: 'MAINGROUP'
+						prop: 'MAINGROUPDesc'
 					},
 					// {
 					// 	label: '信息状态',
@@ -379,8 +399,8 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
-				 this.download();
-				}else if(item.name=="导出"){
+				 		this.download();
+					}else if(item.name=="导出"){
 		    	 this.download();
 		    	}else if(item.name=="删除"){
 		    	 this.delinfo();
@@ -388,9 +408,11 @@
 		    	 this.breakoff();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
-				}else if(item.name=="打印"){
-				 this.Printing();
-				}
+					}else if(item.name=="打印"){
+						this.Printing();
+					}else if(item.name=="下达任务"){
+						this.build();
+					}
 		    },
 			//添加
 			openAddMgr() {
@@ -447,7 +469,31 @@
 					}
 				}
 			},
-				//打印
+			//下达任务
+			build(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要下达任务的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时下达任务多个数据',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selUser[0].STATE !=3) {
+					this.$message({
+						message: '此委托书暂不能下达任务，请确认【状态】是否通过!',
+						type: 'warning'
+					});
+					return;
+				 }else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+					this.$refs.assingn.view(this.selUser[0].ID);	
+				}
+			},
+			//打印
 			Printing(){
 				if(this.selUser.length == 0) {
 					this.$message({

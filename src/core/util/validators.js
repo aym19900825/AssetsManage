@@ -73,12 +73,10 @@ const validators = {
 		return numbe.test(str);
 	},
 
-
 	CompanyCode:function (str) {// 统一社会信用代码 正则验证
 		const companycode = /[1-9A-GY]{1}[1239]{1}[1-5]{1}[0-9]{5}[0-9A-Z]{10}/;
 		return companycode.test(str);
 	},
-
 
 //---------------------------------------------------------------------------------------------//
 	isSpecificKey:function (rule, value, callback) { //不允许特殊字符
@@ -270,9 +268,9 @@ const validators = {
 			callback();
 		}
 		setTimeout(() => {
-			var regs = /^.{10,250}$/g
+			var regs = /^.{3,250}$/g
 			if (!regs.test(value)) {
-				callback(new Error('内容不少于10位且不能大于250位'));
+				callback(new Error('内容不少于3位且不能大于250位'));
 			} else {
 				if(!validators.SpecificWord(value)) {
 					callback(new Error('不支持特殊符号'));

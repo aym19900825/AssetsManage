@@ -841,9 +841,9 @@
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
 					P_NAME:'',
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
-					CONTRACTCOST:'',//标准费用
+					CHECK_COST:0,//合同费用
+					ACTUALCOST:0,//实收费用
+					CONTRACTCOST:0,//标准费用
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
@@ -959,8 +959,8 @@
 					// LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 					// ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
 					// MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
-					CHECK_COST:[{required: false, trigger: 'blur',validator:this.Validators.isPrices}],//合同收费(元)
-					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
+					CHECK_COST:[{required: false, validator:this.Validators.isPrices}],//合同收费(元)
+					ACTUALCOST:[{required: false,  validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUSDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
 					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
@@ -1166,9 +1166,9 @@
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
 					ACTUAL_PERCENT:0,
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
-					CONTRACTCOST:'',//标准费用
+					CHECK_COST:0,//合同费用
+					ACTUALCOST:0,//实收费用
+					CONTRACTCOST:0,//标准费用
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
@@ -1749,7 +1749,7 @@
 								PROJ_VERSIONNUM:'',	//检测项目编号+版本
 								REQUIRE: '',
 								Q_TYPE: '',
-								CHECKCOST: '',
+								CHECKCOST: 0,
 								STATUS:'1',
 								isEditing: true
 						};
@@ -1784,7 +1784,7 @@
 								PROJ_VERSIONNUM:val[i].pro_version,	//检测项目编号+版本
 								REQUIRE: '',
 								Q_TYPE: '',
-								CHECKCOST: '',
+								CHECKCOST: 0,
 								STATUS:'1',
 								isEditing: true
 						};
@@ -1885,8 +1885,6 @@
 				}else{
 					this.dataInfo.PRODUCE_TYPE=2
 				}
-				console.log(112); 
-				console.log(value);
 				// this.dataInfo.P_NAMEDesc=value;
 			},
 			// 保存users/saveOrUpdate
@@ -1913,6 +1911,9 @@
 							});
 							return false;
 			        	}else{
+									if(this.dataInfo.CNAS_OR_CMA_ID){
+											this.dataInfo.CNAS_OR_CMA_ID=1;
+									}
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {

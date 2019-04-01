@@ -532,9 +532,10 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-    											<el-checkbox label="CNAS"></el-checkbox>
-												</el-checkbox-group>
+												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
+													<el-radio label="CNAS"></el-radio>
+													<el-radio label="CMA"></el-radio>
+												</el-radio-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -1910,6 +1911,7 @@
 							});
 							return false;
 			        	}else{
+								
 							var url = this.basic_url + '/api-apps/app/inspectPro2/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {

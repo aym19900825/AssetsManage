@@ -841,6 +841,9 @@
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
 					P_NAME:'',
+					CHECK_COST:'',//合同费用
+					ACTUALCOST:'',//实收费用
+					CONTRACTCOST:'',//标准费用
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
@@ -1163,6 +1166,9 @@
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
 					ACTUAL_PERCENT:0,
+					CHECK_COST:'',//合同费用
+					ACTUALCOST:'',//实收费用
+					CONTRACTCOST:'',//标准费用
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],

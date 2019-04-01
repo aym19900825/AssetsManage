@@ -558,6 +558,7 @@
 				}else{
 					this.dialogVisible = false;				
 					this.adddeptForm.pid = this.checkedNodes[0].id;
+					this.adddeptForm.parent = this.checkedNodes[0].fullname;
 					this.adddeptForm.pName = this.checkedNodes[0].fullname;
 				}				
 			},

@@ -24,7 +24,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检测项目与要求" name="first">
 											<div class="table-func table-funcb">
-												<el-button style="float:left;" type="success" size="mini" round @click="viewModule">
+												<el-button style="float:left;" type="success" size="mini" round @click="viewModule" v-show="!pageDisable">
 													<i class="icon-edit"></i><font>查看所有模板</font>
 												</el-button>
 											</div>
@@ -37,12 +37,12 @@
 												</el-table-column>
 												<el-table-column prop="UNIT" label="样品序号" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)">添加结果</el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable">添加结果</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
-														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择">
+														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable">
 															<el-option key="1" label="不合格" value="1"></el-option>
 															<el-option key="2" label="A类不合格" value="2"></el-option>
 															<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -51,14 +51,14 @@
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="模板" sortable>
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">	
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="pageDisable">	
 														</el-input>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable>
 													<template slot-scope="scope">
 														<div class="block">
-															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
+															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable">
 															</el-date-picker>
 														</div>
 													</template>
@@ -68,7 +68,7 @@
 										
 										<el-tab-pane label="检验检测设备" name="second">
 											<div class="table-func table-funcb">
-												<el-button style="float:left;" type="success" size="mini" round @click="addEquiptLine">
+												<el-button style="float:left;" type="success" size="mini" round @click="addEquiptLine" v-show="!pageDisable">
 													<i class="icon-add"></i><font>新建行</font>
 												</el-button>
 											</div>
@@ -76,7 +76,7 @@
 												<el-table-column label="设备编号" sortable prop="ASSETNUM">
 													<template slot-scope="scope">
 														<el-input size="small" v-model="scope.row.ASSETNUM" disabled>
-															<el-button slot="append" icon="el-icon-search" @click="chooseEquipt(scope.$index,scope.row)" :disabled="scope.row.ISUSE=='1'"></el-button>
+															<el-button slot="append" icon="el-icon-search" @click="chooseEquipt(scope.$index,scope.row)" :disabled="scope.row.ISUSE=='1' || pageDisable"></el-button>
 														</el-input>
 													</template>
 												</el-table-column>
@@ -84,19 +84,19 @@
 												</el-table-column>
 												<el-table-column prop="START_TIME" label="开始使用时间" sortable width="200px">
 													<template slot-scope="scope">
-														<el-date-picker v-model="scope.row.START_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'">
+														<el-date-picker v-model="scope.row.START_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'||pageDisable">
 														</el-date-picker>
 													</template>
 												</el-table-column>
 												<el-table-column prop="END_TIME" label="截止使用时间" sortable width="200px">
 													<template slot-scope="scope">
-														<el-date-picker v-model="scope.row.END_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'">
+														<el-date-picker v-model="scope.row.END_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'||pageDisable">
 														</el-date-picker>
 													</template>
 												</el-table-column>
 												<el-table-column label="操作">
 													<template slot-scope="scope">
-														<el-button title="删除" @click="delEquipt(scope.$index,scope.row)" type="text" size="small" v-if="scope.row.ISUSE=='0'">
+														<el-button title="删除" @click="delEquipt(scope.$index,scope.row)" type="text" size="small" v-if="scope.row.ISUSE=='0'||!pageDisable">
 															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -107,7 +107,7 @@
 										<el-tab-pane label="成果数据" name="three">
 											<div class="table-func table-funcb">
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
-													<el-button type="success" size="mini" round class="a-upload">
+													<el-button type="success" size="mini" round class="a-upload" v-show="!pageDisable">
 														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
@@ -123,27 +123,19 @@
 														  style="width: 100%;" 
 														  @cell-click="iconOperation" 
 														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-														<el-table-column prop="iconOperation" fixed width="50px">
+														<!-- <el-table-column prop="iconOperation" fixed width="50px">
 															<template slot-scope="scope">
 																<i class="el-icon-check" v-show="scope.row.isEditing"></i>
 																<i class="el-icon-edit" v-show="!scope.row.isEditing"></i>
 															</template>
-													    </el-table-column>
+													    </el-table-column> -->
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
-													      	<!-- <template slot-scope="scope">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
-																	<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
-																</el-input>
-													      	</template> -->
 													    </el-table-column>
 									            		<el-table-column label="文件名称" prop="FILESIZE_ORG">
-															<!-- <template slot-scope="scope">
-															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
-															</template> -->
 														</el-table-column>
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
-														<el-table-column label="操作">
+														<el-table-column label="操作" v-show="!pageDisable">
 															<template slot-scope="scope">
 															 	<el-button title="预览" @click="downLoadRow(scope.row)" type="text" size="small"> 
 																	<i class="icon-excel"></i>
@@ -164,7 +156,7 @@
 								</div>
 							</el-collapse>
 						</div>
-						<div class="content-footer">
+						<div class="content-footer" v-show="!pageDisable">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success">保存并继续</el-button>
 							<el-button @click='close'>取消</el-button>
@@ -312,7 +304,8 @@
 				sampleListVisible: false,
 				editEquptIndex: 1,
 				editStepIndex: 1,
-				detailId: 0
+				detailId: 0,
+				pageDisable: false
 			};
 		},
 		methods: {
@@ -375,7 +368,30 @@
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
-				}).catch((wrong) => {})
+					if(res.data.datas.STATE == '1'||res.data.datas.STATE == '2'){
+						this.pageDisable = false;
+					}else{
+						if(res.data.datas.STATE == '0'){
+							var url2 = this.basic_url +  '/api-apps/app/workorder/flow/Executors/25';
+							this.$axios.get(url2, {}).then((res) => {
+								if(res.data.resp_code == 0){
+									var resData =res.data.datas;
+									var userid = this.userid;
+									for (var i = 0; i < resData.length; i++) {
+										if(userid == resData[i].id){
+											this.pageDisable = false;
+										}else{
+											this.pageDisable = true;
+										}
+									}
+								}
+								
+							}).catch((wrong) => {});
+						}else{
+							this.pageDisable = true;
+						}
+					}
+				}).catch((wrong) => {});
 			},
 			downLoadRow(row){
 				if(row.FILECHECKED){

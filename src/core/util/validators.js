@@ -376,7 +376,7 @@ const validators = {
 	// 带两位小数的数字
 	isPriceNum:function (rule, value, callback) {
 		if (!value) {
-			callback(new Error('不可以为空'));
+			callback();
 		}
 		setTimeout(() => {
 			if(!validators.SpecificWord(value)) {

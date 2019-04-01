@@ -60,8 +60,8 @@
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="上级机构" prop="parent">
-												<el-input v-model="adddeptForm.parent" :disabled="edit">
+											<el-form-item label="上级机构" prop="pid">
+												<el-input v-model="adddeptForm.pid" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -92,7 +92,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="联系地址">
+											<el-form-item label="联系地址" prop="address">
 												<el-input v-model="adddeptForm.address" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -104,14 +104,14 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="30">
-										<el-col :span="8" v-show="!addtitle" >
+										<el-col :span="8" v-show="!addtitle" prop="leader">
 											<el-form-item label="负责人">
 												<el-input v-model="adddeptForm.leaderName" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8"  v-show="addtitle">
+										<el-col :span="8" v-show="addtitle" prop="leader">
 											<el-form-item label="负责人">
 												<el-input v-model="adddeptForm.leader" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
@@ -245,6 +245,7 @@
 						code:'',
 						fullname:'',
 						parent:'',
+						pid:'',
 						depttype:'',
 						type:'',
 						inactive:'',
@@ -337,10 +338,10 @@
 					code:[{required: false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构属性
 					// address:[{required: true,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
 					address: [{required:true,trigger: 'blur',message: '请输入地址'}],//选择机构类型
-					zipcode:[{required:true,trigger: 'blur',message: '请输入邮编'}],//选择机构类型
-					telephone:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
+					zipcode:[{required:false,trigger: 'blur',message: '请输入邮编'}],//选择机构类型
+					telephone:[{required: true,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
 					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
-					email:[{required: false,trigger: 'blur',message: '请输入邮箱'}],//邮箱
+					email:[{required: true, trigger: 'blur', message: '请输入邮箱'}],//邮箱
 					tips:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//备注
 					leaderName:[{required: true,trigger: 'blur',message: '请输入负责人'}],
 				}

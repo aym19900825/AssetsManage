@@ -200,9 +200,11 @@ export default {
         var url = this.basic_url + '/api-user/serialnum';
       }else if(this.appName == 'loginlog'){
         var url = this.basic_url + '/api-log/logs/loginLog';
-      }else if(this.appName == '/operlog'){
+      }else if(this.appName == 'operlog'){
         var url = this.basic_url + '/api-log/logs/operLog';
-      }else{
+      }else if(this.appName == 'productType'||this.appName == 'product'||this.appName == 'testing_standard'){//单独定义基础数据中的APPNAME数据显示本站室所有数据。
+        var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
+      }else {
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }
       console.log(url);

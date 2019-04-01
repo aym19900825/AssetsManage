@@ -130,7 +130,7 @@
 					},
 					{
 						text: '上级机构',
-						dataIndex: 'parent',
+						dataIndex: 'pName',
 						isShow:true,
 					},
 					{
@@ -145,7 +145,7 @@
 					},
 					{
 						text: '负责人',
-						dataIndex: 'leader',
+						dataIndex: 'leaderName',
 						isShow:true,
 					},
 					{
@@ -207,7 +207,6 @@
 						"step":'',
 						"id":'',
 						"fullname":'',
-						"parent":'',
 						"org_range":'2',
 						"type":'',
 						"inactive":'否',
@@ -500,6 +499,7 @@
 							result[i].children=subDepts;
 						}	
 					}
+					console.log(this.deptList);
 					this.deptList = result;
 					this.loading = false;
 //					this.page.totalCount = res.data.count;

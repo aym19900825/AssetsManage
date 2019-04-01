@@ -76,13 +76,13 @@
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
+								<!-- <el-col :span="5">
 									<el-form-item label="机构" prop="DEPTID">
 										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
@@ -162,16 +162,7 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 20, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
+				
 				checkedName: [
 					'编码',
 					'名称',
@@ -223,7 +214,6 @@
 					PRO_NUM: '',
 					PRO_NAME: '',
 					VERSION: '',
-					DEPTID: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -336,7 +326,6 @@
 					PRO_NUM: '',
 					PRO_NAME: '',
 					VERSION: '',
-					DEPTID: ''
 				};
 				this.requestData('init');
 			},
@@ -368,7 +357,6 @@
 			},
 			//修改用戶
 			modify() {
-
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',

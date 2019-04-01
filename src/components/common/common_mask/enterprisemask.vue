@@ -241,10 +241,16 @@
 				this.$emit('appendid',id);
 				this.$emit('appendcode',code);
 			}else if(this.type="pname"){
-				var names=this.selUser[0].NAME;//生产单位名称
-				var codes=this.selUser[0].CODE;//统一社会信用代码
+				console.log(this.selUser[0]);
+				var names=[];
+				names.push(this.selUser[0].NAME);
+				names.push(this.selUser[0].CODE);
+				names.push(this.selUser[0].ID);
+				names.push(this.selUser[0].TYPE);
+				// var names=this.selUser[0].NAME;//生产单位名称
+			  var codes=this.selUser[0].CODE;//统一社会信用代码
 				this.$emit('appendnames',names);
-				this.$emit('appendcodes',codes);
+				// this.$emit('appendcodes',codes);
 			}else if(this.type="notivname"){
 				var names=this.selUser[0].NAME;//生产单位
 				this.$emit('appendnames',names);

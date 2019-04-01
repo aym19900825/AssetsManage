@@ -1848,16 +1848,17 @@
 				this.RVENDORSelect();
 			},
 			//委托单位
-			appendname(value){		
-				this.dataInfo.V_NAME = value;//名称
-				if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
+			// appendname(value){
+			// 	console.log(value);		
+			// 	this.dataInfo.V_NAME = value;//名称
+			// 	if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
 
-				}else{//更新子表委托单位
-					for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
-						this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
-					}
-				}
-			},
+			// 	}else{//更新子表委托单位
+			// 		for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+			// 			this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
+			// 		}
+			// 	}
+			// },
 			appendadd(value){
 				this.dataInfo.V_ADDRESS=value;
 			},
@@ -1867,9 +1868,19 @@
 			appendid(value){
 				this.customid=value;
 			},
-			//生成单位
+			//生产单位名称
 			appendnames(value){
-				this.dataInfo.P_NAMEDesc=value;
+				this.dataInfo.P_NAMEDesc=value[0];
+				this.dataInfo.PRODUCT_UNIT=value[1];
+				this.dataInfo.P_NAME=value[2];
+				if(value[3]==1){
+					this.dataInfo.PRODUCE_TYPE=1
+				}else{
+					this.dataInfo.PRODUCE_TYPE=2
+				}
+				console.log(112); 
+				console.log(value);
+				// this.dataInfo.P_NAMEDesc=value;
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {

@@ -83,19 +83,19 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
-												<el-input v-model="dataInfo.V_PERSON">
+												<el-input v-model="dataInfo.V_PERSON" :disabled="noedit">
 													 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="电话" prop="V_PHONE" label-width="110px">
-												<el-input v-model="dataInfo.V_PHONE" ></el-input>
+												<el-input v-model="dataInfo.V_PHONE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
-												<el-input v-model="dataInfo.V_ZIPCODE" ></el-input>
+												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="noedit" ></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -120,7 +120,7 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" >
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit" >
 														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
@@ -217,7 +217,7 @@
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检验依据" name="first">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')">
+												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
@@ -274,7 +274,7 @@
 
 									    <el-tab-pane label="检验项目与要求" name="second">
 											<div class="table-func table-funcb">
-												<el-button type="primary" size="mini" round @click="basisleadbtn2('maintable')">
+												<el-button type="primary" size="mini" round @click="basisleadbtn2('maintable')"  v-show="!viewtitle">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
@@ -811,7 +811,7 @@
 					MAINGROUP:'',//主检组
 					LEADER:'',//主检负责人
 					STATE: '1',//流程状态
-					STATEDesc:'草稿',
+					STATEDesc:'编制',
 					VERSION:'1',//版本
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
@@ -1126,7 +1126,7 @@
 					MAINGROUP:'',//主检组
 					LEADER:'',//主检负责人
 					STATE: '1',//流程状态
-					STATEDesc:'草稿',
+					STATEDesc:'编制',
 					VERSION:'1',//版本
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
@@ -1148,6 +1148,7 @@
 					P_NAMEDesc:'',//生产单位
 					P_NAME:'',//生产单位
 					PRODUCT_UNIT:'',//生产单位的信用代码
+					ITEM_STATUSDesc:'',//样品状态
 					P_NUM:'',
 					P_VERSION:'',
 					PRO_NUM:'',
@@ -1416,6 +1417,7 @@
 				this.modifytitle = false;
 				this.addtitle = false;
 				this.viewtitle = true;
+				this.special1=true;
 				this.views = true; //
 				this.noviews = false;
 				this.edit = true;
@@ -1503,6 +1505,13 @@
 				this.dataInfo.P_NAME=val[0];
 				this.dataInfo.P_NAMEDesc=val[1];//生产单位
 				this.dataInfo.PRODUCT_UNIT=val[4];//生产单位的信用代码
+				if(val[5]==1){
+					this.dataInfo.PRODUCE_TYPE=1;
+					this.dataInfo.DEPUTE_TYPE=1;
+				}else{
+					this.dataInfo.PRODUCE_TYPE=2;
+					this.dataInfo.DEPUTE_TYPE=2;
+				}
 				if(val[4]="falg"){
 					this.dataInfo.V_PERSON='';
 					this.dataInfo.V_PHONE='';
@@ -1548,6 +1557,7 @@
 				}
 			},
 			vendor(val){
+				console.log(val);
 				this.dataInfo.VENDOR=val[0];
 				// DEPUTE_TYPE  委托单位类型（所内/所外）
 				if(!!val[0]){

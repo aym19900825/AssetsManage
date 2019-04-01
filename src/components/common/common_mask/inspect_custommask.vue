@@ -241,6 +241,7 @@
 				customarr.push(this.selUser[0].customeraddress);//地址
 				customarr.push(this.selUser[0].customerzipcode);//邮编
 				customarr.push(this.selUser[0].customercode);//信用代码
+				customarr.push(this.selUser[0].depttype);//所内（所外）
 				this.$emit('customarr',customarr);
 				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
 						customarr.push(falg);
@@ -248,16 +249,16 @@
 				// var code=this.selUser[0].CODE;//统一社会信用代码
 				// this.$emit('customname',name);//传到主页面
 				// this.$emit('customadd',address);//传到主页面
-					// if(this.selUser[0]!=null){
-					// 		var vendor=[];
-					// 		if(this.selUser[0].customercode!=null&&this.selUser[0].customercode!=undefined&&this.selUser[0].customercode!=''){
-					// 				vendor.push(this.selUser[0].customercode);
-					// 		}else{
-					// 			vendor.push(this.selUser[0].customerid);
-					// 		}
-							
-					// 		this.$emit('vendor',vendor);
-					// }
+				// if(this.selUser[0]!=null){
+				// 	var vendor=[];
+				// 	if(this.selUser[0].depttype==1){
+				// 		vendor.push(this.selUser[0].depttype);
+				// 		this.$emit('vendor',vendor);
+				// 	}else{
+				// 		vendor.push(this.selUser[0].depttype);
+				// 		this.$emit('vendor',vendor);
+				// 	}
+				// }
 				//样品模块赋值
 				console.log(this.selUser[0].itemid);
 				if(this.selUser[0].itemid!=null&&this.selUser[0].itemid!=undefined&&this.selUser[0].itemid!=''){

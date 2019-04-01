@@ -27,16 +27,16 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
-										<el-col :span="4" class="pull-right" v-if="modify" style="display: none;">
+										<!-- <el-col :span="4" class="pull-right" v-if="modify" style="display: none;">
 												<el-input v-model="adddeptForm.status==1?'活动':'不活动'" :disabled="edit" >
 													<template slot="prepend">信息状态</template>
 												</el-input>
-										</el-col>
-										<el-col :span="4" class="pull-right" v-else style="display: none;">
+										</el-col> -->
+										<!-- <el-col :span="4" class="pull-right" v-else style="display: none;">
 												<el-input v-model="adddeptForm.status" :disabled="edit" >
 													<template slot="prepend">信息状态</template>
 												</el-input>
-										</el-col>
+										</el-col> -->
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="8">
@@ -60,8 +60,8 @@
 									</el-row>
 									<el-row :gutter="30">
 										<el-col :span="8">
-											<el-form-item label="上级机构" prop="pid">
-												<el-input v-model="adddeptForm.pid" :disabled="edit">
+											<el-form-item label="上级机构" prop="pName">
+												<el-input v-model="adddeptForm.pName" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -104,16 +104,9 @@
 										</el-col>
 									</el-row>
 									<el-row :gutter="30">
-										<el-col :span="8" v-show="!addtitle" prop="leader">
+										<el-col :span="8">
 											<el-form-item label="负责人">
 												<el-input v-model="adddeptForm.leaderName" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8" v-show="addtitle" prop="leader">
-											<el-form-item label="负责人">
-												<el-input v-model="adddeptForm.leader" :disabled="edit">
 													<el-button slot="append" icon="el-icon-search" @click="getPerson"></el-button>
 												</el-input>
 											</el-form-item>
@@ -244,7 +237,7 @@
 						step:'',
 						code:'',
 						fullname:'',
-						parent:'',
+						pName:'',
 						pid:'',
 						depttype:'',
 						type:'',
@@ -252,11 +245,11 @@
 						address:'',
 						zipcode:'',
 						leader:'',
+						leaderName:'',
 						telephone:'',
 						fax:'',
 						email:'',
 						tips:'',
-						pid:'',
 						enterby:'',
 						enterdate:'',
 						changeby:'',
@@ -554,22 +547,21 @@
 				});
 			},
 			queding() {
-				this.getCheckedNodes();
+				console.log();
+				this.getCheckedNodes(this.checkedNodes);
 				if(this.checkedNodes == undefined){
 					this.$message({
 						message:'请选择数据',
 						type:'warning'
 					})
-				// }else if(this.checkedNodes.length > 1){
-				// 	this.$message({
-				// 		message:'不可选择多条数据',
-				// 		type:'warning'
-				// 	})
+				
 				}else{
-					this.placetext = false;
 					this.dialogVisible = false;				
 					this.adddeptForm.pid = this.checkedNodes[0].id;
+<<<<<<< HEAD
 					this.adddeptForm.parent = this.checkedNodes[0].fullname;
+=======
+>>>>>>> ba44c2f81936e9de15b77aba69ebddbb04747eca
 					this.adddeptForm.pName = this.checkedNodes[0].fullname;
 				}				
 			},

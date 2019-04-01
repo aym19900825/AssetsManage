@@ -499,6 +499,7 @@
 							result[i].children=subDepts;
 						}	
 					}
+					console.log(this.deptList);
 					this.deptList = result;
 					this.loading = false;
 //					this.page.totalCount = res.data.count;

@@ -121,7 +121,10 @@
 			<sendtasklist ref="task"  v-bind:page=page @refresh="refresh"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-			<workordersDeal ref="workDeal" ></workordersDeal>
+			<!--任务处理/Aiyamin-->
+			<workordersDeal ref="workDeal"></workordersDeal>
+			<!--分包协议/Heliping-->
+			<makeprotocolmask ref="protocolMask"></makeprotocolmask>
 		</div>
 	</div>
 </template>
@@ -131,10 +134,11 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
-	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
+	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'//之前的详情页
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'//下达任务
-	import reportmask from'../reportDetails/reportMask.vue'
-	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'
+	import reportmask from'../reportDetails/reportMask.vue'//报表
+	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'//任务处理
+	import makeprotocolmask from'../testworkcheckDetails/makeprotocol_mask.vue'//生成分包协议
 	export default {
 		name: 'workorders',
 		components: {
@@ -143,9 +147,10 @@
 			navs_tabs,
 			navs_left,
 			workorders_mask,
-			sendtasklist,
-			reportmask,
-			workordersDeal
+			sendtasklist,//下达任务
+			reportmask,//报表
+			workordersDeal,//任务处理
+			makeprotocolmask,//生成分包协议
 		},
 		data() {
 			return {
@@ -415,32 +420,48 @@
 		    	 	this.download();
 		    	}else if(item.name=="删除"){
 		    	 	this.deluserinfo();
-		    	}else if(item.name=="生成子任务单"){
-		    		this.tasklist();
-		    	 	this.deluserinfo();
-		    	}else if(item.name=="下达任务"){
-					this.tasklist();
+		    	}else if(item.name=="任务处理"){
+					this.workorderDeal();
+		    	}else if(item.name=="生成分包协议"){
+					this.makeProtocolMask();
 		    	}else if(item.name=="报表"){
 			    	this.reportdata();
-				}else{
-					this.workorderDeal();
 				}
 			},
+			//任务处理
 			workorderDeal(){
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要修改的数据',
+						message: '请选择要处理的任务',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selMenu.length > 1) {
 					this.$message({
-						message: '不可同时修改多条数据',
+						message: '不可同时处理多条任务',
 						type: 'warning'
 					});
 					return;
 				} else{
 					this.$refs.workDeal.showDialog(this.selMenu[0].ID);
+				}
+			},
+			//生成分包协议
+			makeProtocolMask(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请选择要处理的任务',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时处理多条任务',
+						type: 'warning'
+					});
+					return;
+				} else{
+					this.$refs.protocolMask.showDialog(this.selMenu[0].ID);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息
@@ -453,7 +474,7 @@
 			modify() {
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要下达的任务',
+						message: '请选择要下达的任务',
 						type: 'warning'
 					});
 					return;

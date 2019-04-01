@@ -2228,7 +2228,6 @@
 			close() {
 				this.show = false;
 				this.$emit('request');
-				//this.resetNew();
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

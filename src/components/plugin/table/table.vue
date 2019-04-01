@@ -93,7 +93,6 @@ export default {
         var dataProp = (this.appName=='report'||this.appName=='reportFile'||this.appName=='flow' )?'id':'ID';
         for(var i=0; i<selData.length; i++){
           list.forEach(function(item, index){
-            
             if(item[dataProp] == selData[i][dataProp]){
               selIndex.push(index);
               if(i==0){

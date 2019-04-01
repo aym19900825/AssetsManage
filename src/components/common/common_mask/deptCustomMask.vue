@@ -47,6 +47,7 @@
 							<el-table ref="singleTable"
 								highlight-current-row
 								@current-change="selChange"
+								@selection-change="setSel"
 
 								:data="list" 
 								line-center 
@@ -122,6 +123,9 @@
 		},
 		props: ['dialogTit'],
 		methods: {
+			setSel(val) {
+				this.selData = val;
+			},
 			handleClicks(data,checked, indeterminate) {
 				this.$refs.singleTable.clearSelection();
 				this.getCheckboxData = data;
@@ -141,9 +145,15 @@
 				this.dialogShow = false;
 				this.resourceCheckedKey = [];
 				this.list = [];
+				this.selData = [];
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 20;//页码重新传值
 				this.activeName = 'second';
+				this.searchList = {
+					CODE: '',
+					NAME: '',
+					CONTACT_ADDRESS: ''
+				};
 			},
 			getData(){
 				this.dialogShow = true;

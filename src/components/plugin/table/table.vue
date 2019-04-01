@@ -167,6 +167,8 @@ export default {
       data.limit = this.page.pageSize;
       if(this.appName == 'inspectPro2'){
         var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
+      }else if(this.appName == 'inspectPro'){
+        var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
       }else if(this.appName == 'subcontrac'){
         var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
       }else if(this.appName == 'subcontrac2'){

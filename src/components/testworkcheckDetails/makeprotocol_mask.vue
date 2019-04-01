@@ -108,11 +108,11 @@
 					}, {
 					PRODUCT_UNIT: '12987125',
 					VENDORDesc: '荷兰优质淡奶，奶香浓而不腻',
-					shopId: '10333'
+					PROJ_NUM: '10333'
 					}, {
 					PRODUCT_UNIT: '12987126',
 					VENDORDesc: '王小虎夫妻店',
-					shopId: '10333'
+					PROJ_NUM: '10333'
 				}],
 				WORKORDER_CONTRACTList:[],//分包项目
 				basic_url: Config.dev_url,

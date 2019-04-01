@@ -852,9 +852,9 @@
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
 					P_NAME:'',
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
-					CONTRACTCOST:'',//标准费用
+					CHECK_COST:0,//合同费用
+					ACTUALCOST:0,//实收费用
+					CONTRACTCOST:0,//标准费用
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
@@ -1177,9 +1177,9 @@
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
 					ACTUAL_PERCENT:0,
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
-					CONTRACTCOST:'',//标准费用
+					CHECK_COST:0,//合同费用
+					ACTUALCOST:0,//实收费用
+					CONTRACTCOST:0,//标准费用
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
@@ -1760,7 +1760,7 @@
 								PROJ_VERSIONNUM:'',	//检测项目编号+版本
 								REQUIRE: '',
 								Q_TYPE: '',
-								CHECKCOST: '',
+								CHECKCOST: 0,
 								STATUS:'1',
 								isEditing: true
 						};
@@ -1795,7 +1795,7 @@
 								PROJ_VERSIONNUM:val[i].pro_version,	//检测项目编号+版本
 								REQUIRE: '',
 								Q_TYPE: '',
-								CHECKCOST: '',
+								CHECKCOST: 0,
 								STATUS:'1',
 								isEditing: true
 						};
@@ -1896,8 +1896,6 @@
 				}else{
 					this.dataInfo.PRODUCE_TYPE=2
 				}
-				console.log(112); 
-				console.log(value);
 				// this.dataInfo.P_NAMEDesc=value;
 			},
 			// 保存users/saveOrUpdate
@@ -1924,6 +1922,9 @@
 							});
 							return false;
 			        	}else{
+									if(this.dataInfo.CNAS_OR_CMA_ID){
+											this.dataInfo.CNAS_OR_CMA_ID=1;
+									}
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {

@@ -118,7 +118,8 @@
 					children: "children",
 					label: "fullname"
 				},
-				getCheckboxData: []
+				getCheckboxData: [],
+				deptId: 0
 			}
 		},
 		props: ['dialogTit'],
@@ -155,8 +156,9 @@
 					CONTACT_ADDRESS: ''
 				};
 			},
-			getData(){
+			getData(id){
 				this.dialogShow = true;
+				this.deptId = id;
 				this.requestData();
 				this.getDept();
 				this.getCheckboxData=[];
@@ -256,9 +258,9 @@
 				})
 			},
 			getDept() {
-				var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=129&TYPE=dept';
+				var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer';
 				var data = {
-					DEPTID: 129,
+					DEPTID: this.deptId,
 					TYPE: 'dept'
 				};
 				this.$axios.get(url, {

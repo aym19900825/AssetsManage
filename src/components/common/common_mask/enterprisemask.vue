@@ -41,7 +41,7 @@
 				</el-table-column>
 				<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
 				</el-table-column>
-				<el-table-column label="类型" sortable prop="TYPE">
+				<el-table-column label="类型" sortable prop="TYPEDesc">
 				</el-table-column>
 				<el-table-column label="备注" sortable prop="MEMO" >
 				</el-table-column>

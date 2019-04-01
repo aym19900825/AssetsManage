@@ -58,7 +58,7 @@
 							</el-form-item>
 			      </template>
 			    </el-table-column> -->
-
+					
 			    <el-table-column label="标准名称" sortable prop="S_NAME">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -68,6 +68,15 @@
 							</el-form-item>
 			      </template>
 			    </el-table-column>
+
+					<!-- <el-table-column label="标准英文名称" sortable prop="S_ENGNAME">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.S_ENGNAME'">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_ENGNAME" :disabled="true" placeholder="请输入内容">
+			        	</el-input><span v-else>{{scope.row.S_ENGNAME}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column> -->
 
 				<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 			      <template slot-scope="scope">
@@ -164,6 +173,8 @@
 				<el-table-column label="标准编号" width="155" sortable prop="SS_NUM">
 				</el-table-column>
 				<el-table-column label="标准名称" sortable prop="S_NAME">
+				</el-table-column>
+				<el-table-column label="标准英文名称" sortable prop="S_ENGNAME">
 				</el-table-column>
 				<el-table-column label="使用状态" sortable prop="ISUSESTATEDesc">
 				</el-table-column>
@@ -434,7 +445,8 @@
 								"PRO_NUM": this.parentId,//产品编号
 								"S_NUM": '',//编码
 								"SS_NUM": '',//标准编号
-								"S_NAME": '',
+								"S_NAME": '',//标准中文名称
+								"S_ENGNAME": '',//标准英文名称
 								"ISUSESTATE": '',//使用状态
 								"STATUS": '',
 								"VERSION": '',
@@ -465,6 +477,7 @@
 						"S_NUM": row.S_NUM,
 						"SS_NUM": row.SS_NUM,
 						"S_NAME": row.S_NAME,
+						"S_ENGNAME": row.S_ENGNAME,
 						"ISUSESTATE": row.ISUSESTATE,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
@@ -529,6 +542,7 @@
 					this.catedata.S_NUM = val.S_NUM;//编码
 					this.catedata.SS_NUM = val.SS_NUM;//标准编号
 					this.catedata.S_NAME = val.S_NAME;
+					this.catedata.S_ENGNAME = val.S_ENGNAME;
 					this.catedata.ISUSESTATE = val.ISUSESTATE;
 					this.catedata.DEPTID = val.DEPTID;
 					this.catedata.VERSION = val.VERSION;

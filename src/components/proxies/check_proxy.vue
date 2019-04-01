@@ -84,7 +84,7 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-                                    <el-col :span="4">
+                <el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
@@ -111,7 +111,7 @@
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="检验委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
+								<el-table-column label="检测委托书编号" sortable width="160px" prop="PROXYNUM" v-if="this.checkedName.indexOf('检验委托书编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.PROXYNUM}}
 										</p>
@@ -169,12 +169,12 @@
 	export default {
 		name: 'inspectPro2',
 		components: {
-			'vheader': vheader,
-			'navs_left': navs_left,
-			'navs_tabs': navs_tabs,
-			'inspectmask': inspectmask,
-			'reportmask': reportmask,
-			'v-table': vTable
+			vheader,
+		  navs_left,
+		  navs_tabs,
+		  inspectmask,
+		  reportmask,
+			vTable
 		},
 		data() {
 			return {
@@ -225,7 +225,7 @@
 					'版本'
 				],
 				tableHeader: [{
-						label: '检验委托书编号',
+						label: '检测委托书编号',
 						prop: 'PROXYNUM'
 					},
 					{
@@ -369,7 +369,7 @@
 				//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+		        this.openAddMgr();
 		    	}else if(item.name=="修改"){
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
@@ -377,8 +377,8 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
-				 this.download();
-				}else if(item.name=="导出"){
+				 		this.download();
+					}else if(item.name=="导出"){
 		    	 this.download();
 		    	}else if(item.name=="删除"){
 		    	 this.delinfo();
@@ -386,8 +386,8 @@
 		    	 this.breakoff();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
-				}else if(item.name=="打印"){
-				 this.Printing();
+					}else if(item.name=="打印"){
+				 		this.Printing();
 				}
 		    },
 			//添加
@@ -420,10 +420,10 @@
 					}
 					//驳回
 					else if(this.selUser[0].STATUS == 0) {
-						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selUser[0].ID;
+						var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isExecute/' + this.selUser[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selUser[0].ID;
+								var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isPromoterNode/' + this.selUser[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selUser[0].ID);
@@ -465,7 +465,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectPro/operate/stop?ID='+this.selUser[0].ID;
+					var url = this.basic_url + '/api-apps/app/inspectPro2/operate/stop?ID='+this.selUser[0].ID;
 					this.$axios.get(url, {
 
 					}).then((res) => {
@@ -533,7 +533,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectPro/deletes';
+					var url = this.basic_url + '/api-apps/app/inspectPro2/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -588,7 +588,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/inspectPro/physicsDel';
+					var url = this.basic_url + '/api-apps/app/inspectPro2/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

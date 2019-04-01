@@ -721,7 +721,7 @@
 			<!-- 样品名称  -->
 			<sampletmask ref="samplechild" @showData="showData" @appenddes="appenddes" @appendmod="appendmod" @appendqua="appendqua" @linedata="linedata"></sampletmask>
 			<!--受检企业-->
-			<enterprisemask ref="enterprisechild" @appendname="appendname" @appendadd="appendadd" @appendzip="appendzip" @appendnames="appendnames" @appendid="appendid"></enterprisemask>
+			<enterprisemask ref="enterprisechild"  @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
 			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
@@ -1848,28 +1848,40 @@
 				this.RVENDORSelect();
 			},
 			//委托单位
-			appendname(value){		
-				this.dataInfo.V_NAME = value;//名称
-				if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
+			// appendname(value){
+			// 	console.log(value);		
+			// 	this.dataInfo.V_NAME = value;//名称
+			// 	if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
 
-				}else{//更新子表委托单位
-					for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
-						this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
-					}
-				}
-			},
-			appendadd(value){
-				this.dataInfo.V_ADDRESS=value;
-			},
-			appendzip(value){
-				this.dataInfo.V_ZIPCODE=value;
-			},
-			appendid(value){
-				this.customid=value;
-			},
-			//生成单位
+			// 	}else{//更新子表委托单位
+			// 		for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+			// 			this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
+			// 		}
+			// 	}
+			// },
+			// appendadd(value){
+				
+			// 	this.dataInfo.V_ADDRESS=value;
+			// },
+			// appendzip(value){
+			// 	this.dataInfo.V_ZIPCODE=value;
+			// },
+			// appendid(value){
+			// 	this.customid=value;
+			// },
+			//生产单位名称
 			appendnames(value){
-				this.dataInfo.P_NAMEDesc=value;
+				this.dataInfo.P_NAMEDesc=value[0];
+				this.dataInfo.PRODUCT_UNIT=value[1];
+				this.dataInfo.P_NAME=value[2];
+				if(value[3]==1){
+					this.dataInfo.PRODUCE_TYPE=1
+				}else{
+					this.dataInfo.PRODUCE_TYPE=2
+				}
+				console.log(112); 
+				console.log(value);
+				// this.dataInfo.P_NAMEDesc=value;
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {

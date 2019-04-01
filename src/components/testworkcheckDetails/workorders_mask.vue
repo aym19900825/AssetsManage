@@ -579,6 +579,7 @@
 							<el-button @click="close">取消</el-button>
 						</div>
 						<div class="content-footer" v-show="views">
+							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>

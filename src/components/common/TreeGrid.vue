@@ -10,6 +10,8 @@
     @selection-change="SelChange">
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
+    <el-table-column label="序号" type="index" width="55">
+    </el-table-column>
     <el-table-column v-for="(column, index) in columns" :width="column.width" :dataType="column.dataType" :key="column.dataIndex"
       :label="column.text" :formatter="dateFormat" v-if="column.isShow && column.dataIndex != 'version'">
       <template slot-scope="scope">

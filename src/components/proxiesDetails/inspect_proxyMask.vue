@@ -959,7 +959,7 @@
 					// LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 					// ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
 					// MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
-					CHECK_COST:[{required: false, trigger: 'change',validator:this.Validators.isPrices}],//合同收费(元)
+					CHECK_COST:[{required: false, trigger: 'blur',validator:this.Validators.isPrices}],//合同收费(元)
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUSDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态

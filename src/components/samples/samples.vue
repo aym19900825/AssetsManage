@@ -107,15 +107,15 @@
 								</el-table-column>
 								<el-table-column label="产品类别" sortable width="300px" prop="PRODUCT_TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="委托单位" sortable width="260px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="委托单位" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
-								<el-table-column label="生产单位" sortable width="200px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位')!=-1">
+								<el-table-column label="生产单位" sortable width="200px" prop="P_NAMEDesc" v-if="this.checkedName.indexOf('生产单位')!=-1">
 								</el-table-column>
 								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUATITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('收样人')!=-1">
+								<el-table-column label="收样人" sortable width="140px" prop="ACCEPT_PERSONDesc" v-if="this.checkedName.indexOf('收样人')!=-1">
 								</el-table-column>
 								<el-table-column label="收样日期" sortable width="140px" :formatter="dateFormat" prop="ACCEPT_DATE" v-if="this.checkedName.indexOf('收样日期')!=-1">
 								</el-table-column>

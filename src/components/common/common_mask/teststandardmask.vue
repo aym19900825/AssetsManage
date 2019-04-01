@@ -34,9 +34,10 @@
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="机构" prop="DEPTID">
-									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+									<el-input v-model="searchList.DEPTID" :disabled="true"></el-input>
+									<!-- <el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select>
+									</el-select> -->
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
@@ -93,6 +94,8 @@
 				<el-table-column label="标准编号" width="120" sortable prop="S_NUM">
 				</el-table-column>
 				<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
+				</el-table-column>
+				<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
 				</el-table-column>
 				<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
 				</el-table-column> -->
@@ -239,6 +242,7 @@
 		// 	this.basissnums = '';
 		// }
 		this.requestData();//渲染数据
+		this.searchList.DEPTID=this.$store.state.currentcjdw[0].fullname;
 		this.dialogVisible = true;
     },
     addbasis(){

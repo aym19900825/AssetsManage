@@ -121,6 +121,7 @@
 			<sendtasklist ref="task"  v-bind:page=page @refresh="refresh"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+			<workordersDeal ref="workDeal" ></workordersDeal>
 		</div>
 	</div>
 </template>
@@ -133,6 +134,7 @@
 	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'//下达任务
 	import reportmask from'../reportDetails/reportMask.vue'
+	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'
 	export default {
 		name: 'workorders',
 		components: {
@@ -142,7 +144,8 @@
 			navs_left,
 			workorders_mask,
 			sendtasklist,
-			reportmask
+			reportmask,
+			workordersDeal
 		},
 		data() {
 			return {
@@ -295,14 +298,6 @@
 						label: '委托书编号',
 						prop: 'PROXYNUM'
 					},
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
-					// {
-					// 	label: '录入人',
-					// 	prop: 'ENTERBY'
-					// },
 					{
 						label: '录入时间',
 						prop: 'ENTERDATE'
@@ -411,27 +406,48 @@
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="下达任务"){
-		    	 this.modify();
+		    	 	this.modify();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+		    	 	this.physicsDel();
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
+		    	 	this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    	 	this.deluserinfo();
+		    	}else if(item.name=="生成子任务单"){
+		    		this.tasklist();
+		    	 	this.deluserinfo();
 		    	}else if(item.name=="下达任务"){
-		    	 this.tasklist();
+					this.tasklist();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			    	this.reportdata();
+				}else{
+					this.workorderDeal();
+				}
+			},
+			workorderDeal(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时修改多条数据',
+						type: 'warning'
+					});
+					return;
+				} else{
+					this.$refs.workDeal.showDialog(this.selMenu[0].ID);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 	                return res.data.roleId;
-	            }).catch((err) => {
-	            });
+	            }).catch((err) => {});
         	},
 			//下达任务到子组件//之前的任务单修改页面
 			modify() {

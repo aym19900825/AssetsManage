@@ -509,10 +509,10 @@
 				})
 		    },
 		},
-		
 		mounted() {// 在页面挂载前就发起请求
 			this.getKey();
 		},
+		
 	}
 </script>
 

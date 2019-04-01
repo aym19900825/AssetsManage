@@ -306,9 +306,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			showQuality(){
 				this.samplesForm.QUALITY = this.ITEM_STEPs.length;
 			},
-			dealItemNum(data){
-				
-			},
 			getCodeInfo(){
 				if(this.samplesForm.ITEMNUM !== ''){
 					var sample = {};

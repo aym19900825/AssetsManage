@@ -308,26 +308,50 @@
 
 			<!--委托书编号-弹出框 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose1">
+				<div>
+					<el-form inline-message :model="proxy_search" label-width="70px">
+						<el-row :gutter="5">
+							<el-col :span="7">
+								<el-form-item label="委托书编号" prop="PROXYNUM">
+									<el-input v-model="proxy_search.PROXYNUM"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="7">
+								<el-form-item label="委托单位名称" prop="V_NAMEDesc">
+									<el-input v-model="proxy_search.V_NAMEDesc"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="5">
+								<el-form-item label="完成方式" prop="COMPMODE">
+									<el-input v-model="proxy_search.COMPMODE"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetProxy" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
 				<el-table ref="table" :data="gridDataList" height="400px" @selection-change="SelChange"
 					v-loadmore="loadMore('proxy')"
 					v-loading="loading"
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
 					element-loading-background="rgba(255, 255, 255, 0.9)">
-
 					<el-table-column type="selection" width="55" fixed >
 					</el-table-column>
 					<el-table-column label="检验委托书编号" sortable width="200px" prop="PROXYNUM" >
 					</el-table-column>
-					<el-table-column label="委托单位名称" sortable width="220px" prop="V_NAME">
+					<el-table-column label="委托单位名称" sortable width="220px" prop="V_NAMEDesc">
 					</el-table-column>
-					<el-table-column label="生产单位名称" sortable width="220px" prop="P_NAME">
+					<el-table-column label="生产单位名称" sortable width="220px" prop="P_NAMEDesc">
 					</el-table-column>
 					<el-table-column label="样品名称" sortable width="200px" prop="ITEM_NAME">
 					</el-table-column>
 					<el-table-column label="样品型号" sortable width="150px" prop="ITEM_MODEL">
 					</el-table-column>
-					<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS">
+					<el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUSDesc">
 					</el-table-column>
 					<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable>
 					</el-table-column>
@@ -337,12 +361,20 @@
 					</el-table-column>
 					<el-table-column label="检测报告编号" width="200px" prop="REPORT_NUM" sortable>
 					</el-table-column>
-					<el-table-column label="主检组" width="200px" prop="MAINGROUP" sortable >
+					<el-table-column label="主检组" width="200px" prop="MAINGROUPDesc" sortable >
 					</el-table-column>
 					<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 					</el-table-column>-->
 				</el-table>	
-					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					<el-pagination 
+						background 
+						class="text-right pt10" 
+						@size-change="sizeChange" 
+						@current-change="currentChange" 
+						:current-page="page.currentPage" 
+						:page-sizes="[10, 20, 30, 40]" 
+						layout="total, sizes, prev, pager, next" 
+						:total="page.totalCount">
 					</el-pagination>
 				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm">确 定</el-button>
@@ -372,7 +404,15 @@
 					</el-table-column>
 				</el-table>
 
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination 
+					background 
+					class="text-right pt10" 
+					@size-change="sizeChange" 
+					@current-change="currentChange" 
+					:current-page="page.currentPage" 
+					:page-sizes="[10, 20, 30, 40]" 
+					layout="total, sizes, prev, pager, next" 
+					:total="page.totalCount">
 				</el-pagination>
 
 				<div slot="footer">
@@ -412,6 +452,7 @@
 		data() {
 			
 			return {
+				proxy_search: {},
 				vName: '',
 				commentArr:{},
 				falg:false,//保存验证需要的
@@ -497,8 +538,18 @@
 			};
 		},
 		methods: {
+			searchinfo(){
+				this.page.currentPage = 1;
+				this.getProxy();
+			},
+			resetProxy(){
+				this.proxy_search = {
+					PROXYNUM: '',
+					V_NAMEDesc: '',
+					COMPMODE: '',
+				};
+			},
 			changeNum(){
-				console.log('===========');
 				this.samplesForm.ITEM_LINEList = [];
 			},
 			setData(data){
@@ -673,13 +724,19 @@
 				this.dialogVisible = true;
 			},
 			proxydata(){
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-					this.deptid = res.data.deptId;
-					var url = this.basic_url + '/api-apps/app/inspectPro?DEPTID_wheres='+this.deptid;
-					this.$axios.get(url, {}).then((res) => {
-						this.gridDataList= res.data.data;
-					});
-				}).catch((err) => {
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					PROXYNUM: this.proxy_search.PROXYNUM,
+					V_NAMEDesc: this.proxy_search.V_NAMEDesc,
+					COMPMODE: this.proxy_search.COMPMODE
+				};
+				var url = this.basic_url + '/api-apps/appCustom/getInspectProxy';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.gridDataList= res.data.data;
+					this.page.totalCount = res.data.count;
 				});
 			},
 			dailogconfirm(type) { //小弹出框确认按钮事件
@@ -717,15 +774,12 @@
 					})
 				}
 			},
-
 			resetBasisInfo1(){//点击确定或取消按钮时重置数据20190303
 				this.dialogVisible = false;//关闭弹出框
 				this.gridDataList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 20;//页码重新传值
 			},
-			
-			
 			visible() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.DEPTID = res.data.deptId;

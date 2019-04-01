@@ -7,7 +7,7 @@
             <el-row>
                 <el-col :span="5">
                     <el-form-item label="单位" prop="dept"  label-width="85px">
-                        <el-select clearable v-model="searchList.dept" placeholder="请选择" @change="getdept($event)">
+                        <el-select clearable v-model="searchList.dept" placeholder="请选择" filterable allow-create default-first-option  @change="getdept($event)">
                             <el-option v-for="data in selectData" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
                         </el-select>
                     </el-form-item>
@@ -78,6 +78,7 @@
 		dialogcustom:false,
 		dept:'',
 		deptname:'',
+		defaultdept:'',//页面加载时的机构
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -92,9 +93,7 @@
 
   methods: {
 	resetbtn(){
-			this.searchList =  { //点击高级搜索后显示的内容
-				searchName:'',
-			};
+			this.searchList.searchName();
 			this.requestData();
 	},
   	dateFormat(row, column) {
@@ -125,6 +124,9 @@
 	},
   	visible() {
 		this.dialogcustom= true;
+		this.dept= this.defaultdept;
+		this.requestData();
+
   	},
   	//表格滚动加载
 		loadMore() {
@@ -194,22 +196,31 @@
             });
             return;
         } else {
-			var deptname='';
-			for(var i=0;i<selectData.length;i++){
-				if(this.dept==selectData[i].id){
-					this.deptname=selectData[i].fullname;
+			if(!!this.dept){
+				console.log(this.dept);
+				var deptname='';
+				for(var i=0;i<selectData.length;i++){
+					if(this.dept==selectData[i].id){
+						this.deptname=selectData[i].fullname;
+					}
 				}
+				var list = [];
+				for(var i = 0;i<selData.length;i++){
+					selData[i].ID = '';
+					selData[i].deptname=this.deptname;
+					selData[i].dept=this.dept;
+					list.push(selData[i]);
+				}
+				this.$emit('withdepet',list);
+				
+				this.resetBasisInfo();
+			}else{
+				 this.$message({
+					message: '请选择分包单位',
+					type: 'warning'
+            });
 			}
-			var list = [];
-            for(var i = 0;i<selData.length;i++){
-				selData[i].ID = '';
-				selData[i].deptname=this.deptname;
-				selData[i].dept=this.dept;
-				list.push(selData[i]);
-			}
-			this.$emit('withdepet',list);
 			
-            this.resetBasisInfo();
         }
     },
     
@@ -230,10 +241,15 @@
 			});
 	},
 	requestData(){
+		var data = {
+			page: this.page.currentPage,
+			limit: this.page.pageSize,
+		};
 		var DEPTID=this.$store.state.currentcjdw[0].id;
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/pdTreeSearch?deptId='+this.dept+'&searchName='+this.searchList.searchName;
 		this.$axios.get(url,{}).then((res) => {
-			this.page.totalCount = res.data.count;
+			console.log(res);
+			this.page.totalCount = res.data.datas.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 			if(this.page.currentPage >= totalPage) {
@@ -242,6 +258,7 @@
 				this.loadSign = true
 			}
 			this.customerList = res.data.datas.data;
+			console.log(this.customerList);
 			this.loading = false;//加载动画关闭
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
@@ -256,13 +273,15 @@
     getCompany() {
 		// var url = this.basic_url + '/api-user/depts/treeByType';
 		var data = {
-					DEPTID: 129,
+					DEPTID: this.$store.state.currentcjdw[0].id,
 					TYPE: 'dept'
 				};
-		var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=129&TYPE=dept';
+		var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer';
         this.$axios.get(url, {params: data}).then((res) => {
 			console.log(res);
 			this.selectData = res.data.datas;
+			this.searchList.dept = res.data.datas[0].id;
+			this.defaultdept= res.data.datas[0].id;
         });
     },
   },

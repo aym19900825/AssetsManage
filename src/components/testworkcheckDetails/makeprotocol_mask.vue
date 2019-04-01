@@ -20,7 +20,7 @@
 							<el-collapse v-model="activeNames">
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">
-										<el-tab-pane label="分包项目" name="first">
+										<el-tab-pane label="分包方及项目" name="first">
 											<!-- 生成分包协议列表 Begin-->
 											<el-table :data="tableData" border stripe
 											highlight-current-row

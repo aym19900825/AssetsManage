@@ -124,4 +124,7 @@
 
 <style scoped>
   @import './login.css';
+  .el-checkbox, .el-radio {
+    line-height: 20px!important;
+  }
 </style>

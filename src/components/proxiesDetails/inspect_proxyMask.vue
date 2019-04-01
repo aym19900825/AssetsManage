@@ -566,17 +566,17 @@
 									<el-row>
 									  <el-col :span="8">
 											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
-												<el-input  v-model="dataInfo.CONTRACTCOST" id="stacost"  @blur="staPrice" disabled></el-input>
+												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice" disabled></el-input>
 											</el-form-item>
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -786,20 +786,31 @@
 			 withdepetmask,
 		},
 		data() {
-				var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-				// 金额验证
-				var price=(rule, value, callback) => {//生产单位名称 
-				var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				if(value != '' && value!=undefined){
-					if(exp.test(value)==false){ 
-											callback(new Error('请输入数字'));
-								}else{
-											callback();
-									}
-						}else {
-							callback();
-						}
-					};
+				// var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+				// // 金额验证
+				// var price=(rule, value, callback) => {//生产单位名称 
+				// var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
+				// if (!values) {
+				// 	callback();
+				// }
+				// setTimeout(() => { 
+				// 	if(exp.test(value)==false){ 
+				// 		callback(new Error('请输入数字'));
+				// 	}else{
+				// 		callback();
+				// 	}
+				// }, 500);
+				
+				// if(value != '' && value!=undefined){
+				// 	if(exp.test(value)==false){ 
+				// 		callback(new Error('请输入数字'));
+				// 	}else{
+				// 		callback();
+				// 	}
+				// 		}else {
+				// 			callback();
+				// 		}
+				// };
 			return {
 				approvingData:{},
 				loading: false,
@@ -959,7 +970,7 @@
 					// LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
 					// ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
 					// MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
-					CHECK_COST:[{required: false, trigger: 'blur',validator:this.Validators.isPrices}],//合同收费(元)
+					CHECK_COST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//合同收费(元)
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUSDesc: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
@@ -1006,14 +1017,14 @@
           } else if(index === 3) {
 						const values = data.map(item => Number(item[column.property]));
 						//验证每个value值是否是数字，如果是执行if
-						if (!values.every(value => isNaN(value))) {
-							sums[index] = values.reduce((prev, curr) => {
-								return prev + curr;
-							}, 0);
-							this.dataInfo.CONTRACTCOST = sums[index] += '';
-						} else {
-							sums[index] = ' ';
-						}
+							if (!values.every(value => isNaN(value))) {
+								sums[index] = values.reduce((prev, curr) => {
+									return prev + curr;
+								}, 0);
+								this.dataInfo.CONTRACTCOST = sums[index] += '';
+							} else {
+								sums[index] = ' ';
+							}
 					}
 				});
 					return sums;
@@ -1811,15 +1822,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "60px");
+				$(".mask_div").css("top", "-40px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("top", "100px");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
 			},
 			showData(data){
 				this.dataInfo.ITEM_NAME = data.appenddes;//名称

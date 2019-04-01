@@ -14,7 +14,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>
@@ -197,21 +197,23 @@ export default {
 			this.selUser = val;
 		},
 		//请求点击
-	    getbtn(item){
-	    	if(item.name=="添加"){
-	         this.openAddMgr();
-	    	}else if(item.name=="修改"){
-	    	 this.editor();
-	    	}else if(item.name=="彻底删除"){
-	    	 this.physicsDel();
-	    	}else if(item.name=="高级查询"){
-	    	 this.modestsearch();
-	    	}else if(item.name=="导入"){
-	    	 this.download();
-	    	}else if(item.name=="删除"){
+		getbtn(item){
+			if(item.name=="添加"){
+					this.openAddMgr();
+			}else if(item.name=="修改"){
+				this.editor();
+			}else if(item.name=="彻底删除"){
+				this.physicsDel();
+			}else if(item.name=="高级查询"){
+				this.modestsearch();
+			}else if(item.name=="导入"){
+				this.download();
+			}else if(item.name=="删除"){
 				this.deluserinfo();
+			}else if(item.name=="发布"){
+				this.release();
 			}
-	    },
+		},
 		//添加
 		openAddMgr() {
 			this.$refs.child.visible();
@@ -274,13 +276,13 @@ export default {
 		release(){
 			if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修改的流程',
+						message: '请您选择要发布的流程',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selUser.length > 1) {
 					this.$message({
-						message: '不可同时修改多个流程',
+						message: '不可同时发布多个流程',
 						type: 'warning'
 					});
 					return;

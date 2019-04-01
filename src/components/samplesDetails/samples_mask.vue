@@ -595,7 +595,7 @@
 			},
 			getVname(opt){
 				this.vName = opt;
-				this.$refs.deptmask.getData();
+				this.$refs.deptmask.getData(this.samplesForm.DEPTID);
 			},
 			//表头居中
 			rowClass({ row, rowIndex}) {

@@ -15,18 +15,29 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :label-position="labelPosition" label-width="110px">
 						<div class="content-accordion" id="information">
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 封面 Begin-->
 								<el-tab-pane label="封面" name="first">
-									
+										<el-row>
+											<el-col :span="24" class="">
+												<el-form inline-message :model="CATEGORY" ref="CATEGORY" :rules="rules" label-position="right">
+													<el-form-item label="请先选择报告模板" prop="RE_TYPE" label-width="160px">
+														<el-select clearable v-model="CATEGORY.RE_TYPE" placeholder="请选择" :disabled="noedit" style="width:300px;">
+															<el-option v-for="(data,index) in selectData" :key="index" :value="data.RE_NUM" :label="data.DECRIPTION"></el-option>
+														</el-select>
+													</el-form-item>
+												</el-form>
+											</el-col>
+
+										</el-row>
+										
+
 								</el-tab-pane>
 								<!-- 封面 End-->
 
 								<!-- 首页 Begin-->
 								<el-tab-pane label="首页" name="second">
-
 								
 								</el-tab-pane>
 								<!-- 首页 End-->
@@ -73,7 +84,7 @@
 								<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
 								<el-button @click='close'>取消</el-button>
 						</div>
-					</el-form>
+					
 				</div>
 			</div>
 		</div>
@@ -90,25 +101,12 @@
 		},
 		data() {
 			return {
-				tableData: [{
-					PRODUCT_UNIT: '12987122',
-					VENDORDesc: '好滋好味鸡蛋仔',
-					PROJ_NUM: '10333'
-					}, {
-					PRODUCT_UNIT: '12987123',
-					VENDORDesc: '江浙小吃、小吃零食',
-					PROJ_NUM: '10333'
-					}, {
-					PRODUCT_UNIT: '12987125',
-					VENDORDesc: '荷兰优质淡奶，奶香浓而不腻',
-					PROJ_NUM: '10333'
-					}, {
-					PRODUCT_UNIT: '12987126',
-					VENDORDesc: '王小虎夫妻店',
-					PROJ_NUM: '10333'
-				}],
-				WORKORDER_CONTRACTList:[],//分包项目
 				basic_url: Config.dev_url,
+				selectData: [],
+				
+				CATEGORY:{
+					RE_TYPE: '1027',
+				},
 				loadSign:true,//加载
 				firstBtn:false,
 				secondBtn:false,
@@ -122,14 +120,15 @@
 				isok2: false,
 				up: false,
 				noedit:false,
-				selMenu:[],
+				selUser:[],
 				activeName: 'first', //tabs
 				activeNames: ['1','2','3','4','5'],//手风琴数量
 				labelPosition: 'right', //表格
 				isEditing: true,
-				showcreateagree:true,//生成分包协议按钮
 				pageDisable: false,
-				
+				rules: {
+					RE_TYPE: [{ required: true, message: '请选择', trigger: 'change' }],//选择报告模板类型
+				},
 			};
 		},
 		methods: {
@@ -164,6 +163,15 @@
 					this.fifthBtn = true;
 				}
 			},
+			//报告模板类型
+			getReportType() {
+				// var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=RE_TYPE';
+				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+					this.selectData = res.data.data;
+				});
+			},
 			//清空表单
 			reset(){
 					this.workorderForm = {
@@ -172,7 +180,7 @@
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
-				this.selMenu = val;
+				this.selUser = val;
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -188,58 +196,10 @@
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
-					if(res.data.datas.STATE == '1'||res.data.datas.STATE == '2'){
-						this.pageDisable = false;
-					}else{
-						if(res.data.datas.STATE == '0'){
-							var url2 = this.basic_url +  '/api-apps/app/workorder/flow/Executors/25';
-							this.$axios.get(url2, {}).then((res) => {
-								if(res.data.resp_code == 0){
-									var resData =res.data.datas;
-									var userid = this.userid;
-									for (var i = 0; i < resData.length; i++) {
-										if(userid == resData[i].id){
-											this.pageDisable = false;
-										}else{
-											this.pageDisable = true;
-										}
-									}
-								}
-								
-							}).catch((wrong) => {});
-						}else{
-							this.pageDisable = true;
-						}
-					}
+					
 				}).catch((wrong) => {});
 			},
-			//生成分包协议
-			proagree(){
-				if(this.selMenu.length == 0) {
-					this.$message({
-						message: '请选择要生成的分包协议',
-						type: 'warning'
-					});
-					return;
-				} else{
-					var data = {
-						"WORKORDER_CONTRACTID":val.ID,
-					};
-					var selMenuId=this.selMenu[0].ID;
-					var url = this.basic_url +"/api-apps/app/workorder/operate/subproject";
-					this.$axios.post(url,data).then((res) => {
-						
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '生成成功',
-								type: 'success'
-							});
-							this.showcreateagree = false;
-						}
-					}).catch((err) => {
-					});
-				}
-			},
+			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
@@ -303,11 +263,10 @@
 				$(".mask_div").css("top", "0px");
 			},
 			
-			
 		},
 		
 		mounted() {
-
+			this.getReportType();
 		},
 	}
 </script>

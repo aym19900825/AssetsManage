@@ -154,9 +154,16 @@ export default {
             this.selFiles = val;
         },
         upload(e){
-            if((this.docParm.appid == 17 || this.docParm.appid == 13) && this.doc.length >= 1){
+            if( this.docParm.appid == 13 && this.doc.length >= 1){//appid==13原始数据模板文件上传
                 this.$message({
                     message: '只能上传一个文档！',
+                    type: 'error'
+                });
+                return;
+            }
+            if(this.docParm.appid == 17 && this.doc.length >= 2){//appid==17报告模板文件上传
+                this.$message({
+                    message: '只能上传两个文档！',
                     type: 'error'
                 });
                 return;

@@ -83,6 +83,7 @@ export default {
     singleTable(row){
       if(this.isctrl){
         this.$refs.table.toggleRowSelection(row);
+        console.log(row);
       }else if(this.isshift){
         var selData = this.selData;
         var list = this.list;
@@ -210,7 +211,7 @@ export default {
       }else {
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }
-      console.log(url);
+      // console.log(url);
       this.$axios.get(url, {
         params: data
       }).then((res) => {

@@ -549,7 +549,6 @@
 				});
 			},
 			queding() {
-				console.log();
 				this.getCheckedNodes(this.checkedNodes);
 				if(this.checkedNodes == undefined){
 					this.$message({
@@ -576,14 +575,12 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
 				this.$axios.get(url, {}).then((res) => {
 					this.SelectDEPT_TYPE = res.data;
-					console.log(res.data);
 				}).catch(error => {
 				})
 			},
 			getsys_depttype() {//获取机构类型
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.Selectsys_depttype = res.data;
 					 adddeptForm.depttype='2'
 				}).catch(error => {
@@ -662,9 +659,7 @@
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
-					console.log(_this.adddeptForm);
 					this.$axios.post(url, _this.adddeptForm).then((res) => {
-						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -672,7 +667,6 @@
 								type: 'success'
 							});
 							if(parameter=="Update"){
-								console.log(parameter);
 								this.$emit('request');
 								this.show = false;
 							}else{

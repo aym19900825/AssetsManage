@@ -268,7 +268,7 @@
 	}
 </script>
 
-<style scoped>
+<style>
 	@import '../../assets/css/mask-modules.css';
 
 	.demo-table-expand span {
@@ -282,7 +282,7 @@
 		color: #99a9bf;
 	}
 	.el-table__expanded-cell[class*=cell] {
-		padding: 10px 0px;
+		padding: 10px;
 	};
 	.demo-table-expand .el-form-item {
 		margin-right: 0;

@@ -281,9 +281,11 @@
 											</div>
 	                                        
 											<el-table ref="" :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true"
-												:summary-method="getSummaries" :show-summary="true" highlight-current-row="highlight-current-row"
+												:summary-method="getSummaries" :show-summary="true"
+												highlight-current-row
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
+
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 													<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -324,7 +326,7 @@
 													</template>
 												</el-table-column> -->
 
-												<el-table-column prop="UNITCOST" label="单价" sortable width="120px">
+												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入要求">
@@ -352,6 +354,7 @@
 												</el-table-column>
 											</el-table>
 									    </el-tab-pane>
+
 									    <el-tab-pane label="分包要求" name="third">
 									    	<div class="table-func table-funcb">
 												<!-- <el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
@@ -374,7 +377,8 @@
 											@cell-click="iconOperation" 
 											:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}"> -->
 											<el-table ref="IPO_table" :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true"
-												:summary-method="getSummaries" :show-summary="true" highlight-current-row="highlight-current-row"
+												:summary-method="getSummaries2" :show-summary="true"
+												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
@@ -477,6 +481,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
+
 												<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -494,7 +499,7 @@
 													</template>
 												</el-table-column>
 								
-												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
+												<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
 															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
@@ -502,7 +507,8 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
-														<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+
+												<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
@@ -519,7 +525,7 @@
 													</template>
 												</el-table-column>
 											</el-table>
-									    </el-tab-pane>
+										</el-tab-pane>
 									</el-tabs>
 								</div>
 								<el-collapse-item name="7">
@@ -720,8 +726,8 @@
 				</el-pagination>
 
 				<div slot="footer">
-			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="resetBasisInfo2">取 消</el-button>
+					<el-button type="primary" @click="addcusname">确 定</el-button>
+					<el-button @click="resetBasisInfo2">取 消</el-button>
 			  </div>
 			</el-dialog>
 			<!-- 客户联系人 End -->
@@ -1013,7 +1019,7 @@
 			};
 		},
 		methods: {
-			//各个项目的价格的和
+			//检验项目与要求单价列总和
 			getSummaries(param) {
         //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
         const { columns, data } = param;
@@ -1022,14 +1028,40 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 3) {
+          } else if(index === 3) {//计算第几列的减1
 						const values = data.map(item => Number(item[column.property]));
 						//验证每个value值是否是数字，如果是执行if
 							if (!values.every(value => isNaN(value))) {
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-								this.dataInfo.CONTRACTCOST = sums[index] += '';
+								this.ALLCOST = sums[index] += '元';
+							} else {
+								sums[index] = ' ';
+							}
+					}
+				});
+					return sums;
+			},
+			//分包要求检测费用列的总和
+			getSummaries2(param) {
+        //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '总价';
+            return;
+          } else if(index === 10) {//计算第几列的减1
+						const values = data.map(item => Number(item[column.property]));
+						//验证每个value值是否是数字，如果是执行if
+							if (!values.every(value => isNaN(value))) {
+								sums[index] = values.reduce((prev, curr) => {
+									return prev + curr;
+								}, 0);
+								console.log(this.ALLCOST);
+								this.INSPECTCOST = sums[index] += '元';
+								this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
 							} else {
 								sums[index] = ' ';
 							}

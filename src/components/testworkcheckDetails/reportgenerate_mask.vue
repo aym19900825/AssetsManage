@@ -17,67 +17,61 @@
 				<div class="mask_content">
 					<el-form inline-message :label-position="labelPosition" label-width="110px">
 						<div class="content-accordion" id="information">
-							<el-collapse v-model="activeNames">
-								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName">
-										<el-tab-pane label="分包方及项目" name="first">
-											<!-- 生成分包协议列表 Begin-->
-											<el-table :data="tableData" border stripe
-											highlight-current-row
-											@selection-change="SelChange"
-											style="width: 100%;">
-												<el-table-column type="expand">
-													<template slot-scope="props">
-														<!--明细表格 Begin-->
-														<el-table :data="WORKORDER_CONTRACTList" row-key="ID" border stripe highlight-current-row @selection-change="SelChange" style="width: 100%;">
-															<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
-																{{props.row.BASIS}}
-															</el-table-column>
-															<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
-																{{props.row.P_REMARKS}}
-															</el-table-column>
-															<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable>
-																{{props.row.REQUIRES}}
-															</el-table-column>
-															<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable>
-																{{props.row.Q_TYPE}}
-															</el-table-column>
-															<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
-																{{props.row.CHECKCOST}}
-															</el-table-column>
-														</el-table>
-														<!--明细表格 End-->
-													</template>
-												</el-table-column>
+							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+								<!-- 封面 Begin-->
+								<el-tab-pane label="封面" name="first">
+									
+								</el-tab-pane>
+								<!-- 封面 End-->
 
-												 <el-table-column type="selection" width="55">
-												 </el-table-column>
+								<!-- 首页 Begin-->
+								<el-tab-pane label="首页" name="second">
 
-												 <el-table-column type="index" label="序号" width="55">
-												 </el-table-column>
+								
+								</el-tab-pane>
+								<!-- 首页 End-->
 
-												<el-table-column label="统一信用代码" prop="PRODUCT_UNIT" sortable>
-												</el-table-column>
+								<!-- 检测清单 Begin-->
+								<el-tab-pane label="检测清单" name="third">
+									<div class="clearfix">
+										<el-form inline-message :label-position="labelPosition" label-width="110px">
+											<el-row>
+												<el-col :span="8"></el-col>
+											</el-row>
+										</el-form>
+									</div>
 
-												<el-table-column label="分包方名称" prop="VENDORDesc" sortable>
-												</el-table-column>
+									
+								</el-tab-pane>
+								<!-- 检测清单 End-->
 
-												<el-table-column label="描述" prop="PROJ_NUM" sortable>
-												</el-table-column>
-											</el-table>
-											<!-- 生成分包协议列表 End-->
-									    </el-tab-pane>
-									</el-tabs>
-								</div>
-							</el-collapse>
+								<!-- 内容页 Begin-->
+								<el-tab-pane label="内容页" name="fourth">
+									
+									
+								</el-tab-pane>
+								<!-- 内容页 End-->
+
+								<!-- 封底 Begin-->
+								<el-tab-pane label="封底" name="fifth">
+
+									
+								</el-tab-pane>
+								<!-- 封底 End-->
+								
+							</el-tabs>
+							
 						</div>
-						<div class="content-footer" v-show="!pageDisable">
-							<!-- <el-button type="primary" @click="submitForm">保存</el-button> -->
-							<el-button type="success" @click="proagree">
-								<i class="icon-send"></i>
-								生成协议
-							</el-button>
-							<el-button @click='close'>取消</el-button>
+						<div class="content-footer" v-show="firstBtn">
+								<!--首页按钮事件-->
+								<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
+								<!--检测清单按钮事件-->
+								<el-button type="primary" v-show="thirdBtn" @click="testListSubmit">保存</el-button>
+								<!--内容页按钮事件-->
+								<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
+								<!--封底按钮事件-->
+								<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
+								<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -116,6 +110,13 @@
 				WORKORDER_CONTRACTList:[],//分包项目
 				basic_url: Config.dev_url,
 				loadSign:true,//加载
+				firstBtn:false,
+				secondBtn:false,
+				thirdBtn:false,
+				fourthBtn:false,
+				fifthBtn:false,
+				btnShow:true,
+				btnClose:false,
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -123,7 +124,7 @@
 				noedit:false,
 				selMenu:[],
 				activeName: 'first', //tabs
-				activeNames: ['1','2'],//手风琴数量
+				activeNames: ['1','2','3','4','5'],//手风琴数量
 				labelPosition: 'right', //表格
 				isEditing: true,
 				showcreateagree:true,//生成分包协议按钮
@@ -132,8 +133,40 @@
 			};
 		},
 		methods: {
+			//TAbs页切换事件判断按钮显示
+			handleClick(tab, event) {
+				var activeName = event.target.getAttribute('id');//获取当前tabID名
+				if(activeName=='tab-first') {//判断按钮显示问题，封面都不显示
+					this.firstBtn = false;
+				}else if(activeName=='tab-second') {//判断按钮显示问题，首页显示保存和取消
+					this.firstBtn = true;
+					this.secondBtn = true;
+					this.thirdBtn = false;
+					this.fourthBtn = false;
+					this.fifthBtn = false;
+				}else if(activeName=='tab-third') {//判断按钮显示问题，检查清单显示保存和取消
+					this.firstBtn = true;
+					this.secondBtn = false;
+					this.thirdBtn = true;
+					this.fourthBtn = false;
+					this.fifthBtn = false;
+				}else if(activeName=='tab-fourth') {//判断按钮显示问题，内容页显示生成内容页文档和取消
+					this.firstBtn = true;
+					this.secondBtn = false;
+					this.thirdBtn = false;
+					this.fourthBtn = true;
+					this.fifthBtn = false;
+				}else if(activeName=='tab-fifth') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
+					this.firstBtn = true;
+					this.secondBtn = false;
+					this.thirdBtn = false;
+					this.fourthBtn = false;
+					this.fifthBtn = true;
+				}
+			},
+			//清空表单
 			reset(){
-            	this.workorderForm = {
+					this.workorderForm = {
 										
 				};
 			},
@@ -207,7 +240,7 @@
 					});
 				}
 			},
-			// 保存users/saveOrUpdate
+			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
@@ -225,10 +258,22 @@
 						}
 					}).catch((err) => {
 					});
-			          } else {
-			            return false;
-			          }
-			        });
+						} else {
+							return false;
+						}
+					});
+			},
+			//检测清单按钮事件
+			testListSubmit(){
+
+			},
+			//内容页按钮事件
+			filesSubmit(){
+
+			},
+			//封底按钮事件
+			reportSubmit(){
+
 			},
 			//点击关闭按钮
 			close() {
@@ -270,22 +315,5 @@
 <style>
 	@import '../../assets/css/mask-modules.css';
 
-	.demo-table-expand span {
-		line-height: 40px;
-	}
-	.demo-table-expand {
-		font-size: 0;
-	}
-	.demo-table-expand label {
-		width: 90px;
-		color: #99a9bf;
-	}
-	.el-table__expanded-cell[class*=cell] {
-		padding: 10px;
-	};
-	.demo-table-expand .el-form-item {
-		margin-right: 0;
-		margin-bottom: 0;
-		width: 100%;
-	}
+	.el-tabs__content { min-height: 680px;}
 </style>

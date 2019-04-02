@@ -77,8 +77,8 @@
 									</el-form-item>
 								</el-col -->
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATUS" label-width="70px">
-										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
+									<el-form-item label="状态" prop="STATE" label-width="70px">
+										<el-select clearable v-model="searchList.STATE" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -125,7 +125,7 @@
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATUS" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
+								<!-- <el-table-column label="样品信息状态" sortable width="200px" prop="ITEM_STATE" v-if="this.checkedName.indexOf('样品信息状态')!=-1">
 								</el-table-column> -->
 								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
 								</el-table-column>
@@ -137,7 +137,7 @@
 								</el-table-column>
 								<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
-								<!--<el-table-column label="信息状态" width="200px" prop="STATUS" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
+								<!--<el-table-column label="信息状态" width="200px" prop="STATE" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
 								<!--<el-table-column label="录入人" width="200px" prop="ENTERBY" sortable  v-if="this.checkedName.indexOf('录入人')!=-1">
 								</el-table-column>-->
@@ -246,7 +246,7 @@
 					},
 					// {
 					// 	label: '样品信息状态',
-					// 	prop: 'ITEM_STATUS'
+					// 	prop: 'ITEM_STATE'
 					// },
 					{
 						label: '检测依据',
@@ -270,7 +270,7 @@
 					},
 					// {
 					// 	label: '信息状态',
-					// 	prop: 'STATUS'
+					// 	prop: 'STATE'
 					// },
 					{
 						label: '录入人',
@@ -302,7 +302,7 @@
 					PROXYNUM: '',
 					COMPDATE: '',
 					ENTERBY: '',
-					STATUS: '',
+					STATE: '',
 					
 				},
 				//tree
@@ -359,7 +359,7 @@
 					PROXYNUM: '',
 					COMPDATE: '',
 					ENTERBY: '',
-					STATUS: '',
+					STATE: '',
 				};
 				this.requestData('init');
 			},
@@ -398,6 +398,7 @@
 			},
 			//修改
 			modify() {
+				console.log(this.selUser);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -411,7 +412,7 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATUS == 3 || this.selUser[0].STATUS == 2) {
+					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
@@ -419,11 +420,11 @@
 						this.$refs.child.view(this.selUser[0].ID);
 					}
 					//驳回
-					else if(this.selUser[0].STATUS == 0) {
-						var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isExecute/' + this.selUser[0].ID;
+					else if(this.selUser[0].STATE == 0) {
+						var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/' + this.selUser[0].ID;
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isPromoterNode/' + this.selUser[0].ID;
+								var url = this.basic_url + '/api-apps/app/inspectPro/flow/isPromoterNode/' + this.selUser[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
 										this.$refs.child.detail(this.selUser[0].ID);
@@ -540,7 +541,7 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						if(changeUser[i].STATUS!=1){
+						if(changeUser[i].STATE!=1){
 						 	this.$message({
 								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'

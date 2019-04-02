@@ -530,7 +530,7 @@
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
-										<el-col :span="6">
+										<el-col :span="8">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
 												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
 													<el-radio label="CNAS"></el-radio>
@@ -1310,7 +1310,7 @@
 			},
 			//
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
+			var url = this.basic_url +'/api-apps/app/inspectPro2/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){

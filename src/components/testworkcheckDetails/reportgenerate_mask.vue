@@ -4,7 +4,7 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title">生成分包协议</div>
+					<div class="mask_title">报告生成与编辑</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -15,7 +15,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :label-position="labelPosition" ref="workorderForm" label-width="110px">
+					<el-form inline-message :label-position="labelPosition" label-width="110px">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
@@ -96,7 +96,6 @@
 		},
 		data() {
 			return {
-				dialogVisible2:false,
 				tableData: [{
 					PRODUCT_UNIT: '12987122',
 					VENDORDesc: '好滋好味鸡蛋仔',

@@ -532,9 +532,10 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-    											<el-checkbox label="CNAS"></el-checkbox>
-												</el-checkbox-group>
+												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
+													<el-radio label="CNAS"></el-radio>
+													<el-radio label="CMA"></el-radio>
+												</el-radio-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -1808,15 +1809,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "60px");
+				$(".mask_div").css("top", "-40px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("top", "100px");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
 			},
 			showData(data){
 				this.dataInfo.ITEM_NAME = data.appenddes;//名称
@@ -1910,6 +1911,7 @@
 							});
 							return false;
 			        	}else{
+								
 							var url = this.basic_url + '/api-apps/app/inspectPro2/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {

@@ -175,9 +175,11 @@
 				</div>
 			</div>
 			<!-- 弹出 -->
-			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-				</el-tree>
+			<el-dialog :modal-append-to-body="false" title="上级机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<div class="scrollbar" style="height:400px;">
+					<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+					</el-tree>
+				</div>
 				<div slot="footer">
 			       <el-button type="primary" @click="queding();" >确 定</el-button>
 			       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -186,14 +188,14 @@
 
 			<!--负责人 Begin-->
 			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
-				<div class="content-accordion" id="information">
+				
 					<!-- <div class="mask_tab-head clearfix">
 						<div class="accordion_title">
 							<span class="accordion-toggle">选择负责人</span>
 						</div>
 					</div> -->
 					<!-- 第二层弹出的表格 -->
-						<el-table :data="userList" border stripe :height="fullHeight" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="userList" border stripe height="420px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed>
 								</el-table-column>
 								<el-table-column label="账号" sortable width="140px" prop="username">
@@ -202,7 +204,7 @@
 								</el-table-column>
 								<el-table-column label="机构" sortable width="150px" prop="deptName">
 								</el-table-column>
-								<el-table-column label="公司" sortable width="250px" prop="companyName">
+								<el-table-column label="公司" sortable prop="companyName">
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
 								</el-table-column> -->
@@ -212,7 +214,7 @@
 							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 							</el-pagination>
 						<!-- 表格 -->
-					</div>
+					
 					<div slot="footer">
 				       <el-button type="primary" @click="addleader">确 定</el-button>
 				       <el-button @click="dialogLeader = false">取 消</el-button>
@@ -605,15 +607,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "60px");
+				$(".mask_div").css("top", "-40px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("top", "100px");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
 			},
 			//获取负责人数据
 			requestData() {

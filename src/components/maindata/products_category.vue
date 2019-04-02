@@ -567,7 +567,7 @@
 			},
 			requestData(){
 				this.loading = true;
-				var url= this.basic_url +'/api-apps/app/productType/tree?tree_id=NUM&tree_pid=PARENT';
+				var url= this.basic_url +'/api-apps/appSelection/productType/treeForStation?tree_id=NUM&tree_pid=PARENT';
 				this.$axios.get(url, {}).then((res) => {
 					this.deptList = res.data.datas;
 					this.loading = false;

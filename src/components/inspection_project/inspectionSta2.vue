@@ -250,8 +250,6 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			
-		
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');

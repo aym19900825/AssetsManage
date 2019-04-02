@@ -118,15 +118,11 @@ const validators = {
 			if (!regp.test(value)) {
 				callback(new Error('请输入数字'));
 			} else {
-				var regs = /^.{1,20}$/g
+				var regs = /^.{1,21}$/g
 				if(!regs.test(value)) {
-					callback(new Error('内容不少于1位且不能大于20位'));
+					callback(new Error('内容不少于1位且不能大于16位'));
 				} else {
-					if(!validators.SpecificWord(value)) {
-						callback(new Error('不支持特殊符号'));
-					} else {
-						callback();
-					}
+					callback();
 				}
 			}
 		}, 500);

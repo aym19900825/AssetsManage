@@ -5,6 +5,30 @@
 				   :visible.sync="dialogVisible" 
 				   width="80%"
 				   :before-close="reset">
+			<div>
+				<el-form inline-message :model="searchList" label-width="70px">
+					<el-row :gutter="5">
+						<el-col :span="16">
+							<el-form-item label="检测项目" prop="project" label-width="140px">
+								<el-select v-model="searchList.project" 
+									multiple 
+									@change="getProject">
+									<el-option
+										v-for="item in projectList"
+										:key="item.S_NUM"
+										:label="item.P_DESC"
+										:value="item.S_NUM">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4">
+							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
 			<el-table ref="singleTable" 
 				:data="list" 
 				line-center 
@@ -50,9 +74,12 @@
 	export default {
 //	props:["approvingData"],//第一种方式
   name: 'product',
-  
+  props: ['projectList','pro_num','num'],
   data() {
     return {
+		searchList: {
+			project: []
+		},
 		dialogVisible: false,
 		basic_url: Config.dev_url,
 		file_url: Config.file_url,
@@ -78,6 +105,13 @@
   },
 
   methods: {
+	searchinfo(){
+		this.page.currentPage = 1;
+		this.requestData();
+	},
+	getProject(){
+		
+	},
 	selChange(row) {
 		this.selUser = [];
 		this.selUser.push(row);
@@ -123,6 +157,7 @@
 		this.dialogVisible = true;
 		this.deptId = id;
 		// this.getDocParm();
+		console.log(this.projectList);
 		this.requestData();
 	},
   	loadMore () {
@@ -140,12 +175,38 @@
 	},
 	requestData(){
 		this.loading = true;
-		var data = {
-			page: this.page.currentPage,
-			limit: this.page.pageSize,
-		};
-		var url = this.basic_url + '/api-apps/app/rawDataAsset';
-		this.$axios.get(url, {}).then((res) => {
+		var data = {};
+		var url = '';
+		if(this.searchList.project.length>0){
+			url = this.basic_url + '/api-apps/app/raw_data_asset2';
+			var project = this.searchList.project;
+			var projectList = this.projectList;
+			var sNum = [];
+			var pNum = [];
+			for (var i = 0; i < project.length; i++) {
+				for(var j=0; j<projectList.length; j++){
+					if(project[i] == projectList[j].S_NUM){
+						sNum.push(projectList[j].S_NUM)
+						pNum.push(projectList[j].P_NUM);
+					}
+				}
+			}
+			data = {
+				PRO_NUM_wheres: this.pro_num,
+				NUM_wheres: this.num,
+				S_NUM_wheres: sNum.join(','),
+				P_NUM_wheres: pNum.join(',')
+			}
+		}else{
+			data = {
+				page: this.page.currentPage,
+				limit: this.page.pageSize,
+			};
+			url = this.basic_url + '/api-apps/app/rawDataAsset';
+		}
+		this.$axios.get(url, {
+			params: data
+		}).then((res) => {
 			this.page.totalCount = res.data.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)

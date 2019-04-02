@@ -417,13 +417,10 @@
 		    	 	this.deluserinfo();
 		    	}else if(item.name=="生成子任务单"){
 		    		this.tasklist();
-		    	 	this.deluserinfo();
-		    	}else if(item.name=="下达任务"){
-					this.tasklist();
+		    	}else if(item.name=="任务处理"){
+					this.workorderDeal();
 		    	}else if(item.name=="报表"){
 			    	this.reportdata();
-				}else{
-					this.workorderDeal();
 				}
 			},
 			workorderDeal(){

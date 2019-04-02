@@ -448,7 +448,7 @@
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;
 					this.samplesForm.DO_PERSON = res.data.id;
-					this.samplesForm.DO_PERSONDesc = res.data.username;
+					this.samplesForm.DO_PERSONDesc = res.data.nickname;
 					var date=new Date();
 					this.samplesForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.samplesForm.APPR_DATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");

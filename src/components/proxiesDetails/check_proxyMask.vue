@@ -1163,9 +1163,9 @@
 					V_NAME:'',//委托单位名称
 					V_ADDRESS:'',//委托单位地址
 					V_ZIPCODE:'',
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
-					CONTRACTCOST:'',//标准费用
+					CHECK_COST:0,//合同费用
+					ACTUALCOST:0,//实收费用
+					CONTRACTCOST:0,//标准费用
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
@@ -1722,6 +1722,7 @@
 			//所外机构
 			  cusinspect(val){
 					for(var i = 0;i<val.length;i++){
+						for(var j = 0;j<val[i].length;j++){
 						var List={
 								PROXY_CONTRACT_NUM: '',
 								PROXYNUM: '',
@@ -1729,8 +1730,8 @@
 								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托单位
 								INSPECT_GROUP:'',
 								PROJECT_ID:'',
-								VENDOR: val[i].ID,//分包方名称
-								VENDORDesc:val[i].NAME,//分包方名称
+								VENDOR: val[i][j].ID,//分包方名称
+								VENDORDesc:val[i][j].NAME,//分包方名称
 								DEPTTYPE:1,//机构属性id
 								DEPTTYPEDesc:'所外机构',//机构属性名称
 								PT_NUM:'',//产品类别编号
@@ -1747,12 +1748,13 @@
 								PROJ_VERSIONNUM:'',	//检测项目编号+版本
 								REQUIRE: '',
 								Q_TYPE: '',
-								CHECKCOST: '',
+								CHECKCOST: 0,
 								STATUS:'1',
 								isEditing: true
 						};
 							this.dataInfo.CHECK_PROXY_CONTRACTList.push(List);
 						}
+					}
 				},
 				//所内机构
 				withdepet(val){

@@ -87,7 +87,7 @@
 								</el-col>
                                     <el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -125,6 +125,8 @@
 			<workordersDeal ref="workDeal"></workordersDeal>
 			<!--分包协议/Heliping-->
 			<makeprotocolmask ref="protocolMask"></makeprotocolmask>
+			<!--报告生成与编辑/Heliping-->
+			<reportgeneratemask ref="reportGenerationMask"></reportgeneratemask>
 		</div>
 	</div>
 </template>
@@ -139,6 +141,7 @@
 	import reportmask from'../reportDetails/reportMask.vue'//报表
 	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'//任务处理
 	import makeprotocolmask from'../testworkcheckDetails/makeprotocol_mask.vue'//生成分包协议
+	import reportgeneratemask from'../testworkcheckDetails/reportgenerate_mask.vue'//报告生成与编辑
 	export default {
 		name: 'workorders',
 		components: {
@@ -151,6 +154,7 @@
 			reportmask,//报表
 			workordersDeal,//任务处理
 			makeprotocolmask,//生成分包协议
+			reportgeneratemask,//报告生成与编辑
 		},
 		data() {
 			return {
@@ -424,6 +428,8 @@
 					this.workorderDeal();
 		    	}else if(item.name=="生成分包协议"){
 					this.makeProtocolMask();
+		    	}else if(item.name=="报告生成与编辑"){
+					this.reportGenerateMask();
 		    	}else if(item.name=="报表"){
 			    	this.reportdata();
 				}
@@ -462,6 +468,24 @@
 					return;
 				} else{
 					this.$refs.protocolMask.showDialog(this.selMenu[0].ID);
+				}
+			},
+			//报告生成与编辑
+			reportGenerateMask(){
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请选择要处理的任务',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时处理多条任务',
+						type: 'warning'
+					});
+					return;
+				} else{
+					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息

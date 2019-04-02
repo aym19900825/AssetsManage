@@ -209,7 +209,7 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="140px">
+										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="200px">
 											<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
 										</el-form-item>
 								</el-collapse-item>
@@ -236,7 +236,7 @@
 
 												<el-table-column prop="S_DESC" label="标准内容" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'" >
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" >
 															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入">
                               </el-input> 
 														</el-form-item>	
@@ -281,9 +281,11 @@
 											</div>
 	                                        
 											<el-table ref="" :data="dataInfo.INSPECT_PROXY_PROJECList" row-key="ID" border stripe :fit="true"
-												:summary-method="getSummaries" :show-summary="true" highlight-current-row="highlight-current-row"
+												:summary-method="getSummaries" :show-summary="true"
+												highlight-current-row
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
+
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 													<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -324,9 +326,9 @@
 													</template>
 												</el-table-column> -->
 
-												<el-table-column prop="UNITCOST" label="单价" sortable width="120px">
+												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" >
+														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入要求">
 														</el-input>
 														<span v-else>{{scope.row.UNITCOST}}</span>
@@ -352,6 +354,7 @@
 												</el-table-column>
 											</el-table>
 									    </el-tab-pane>
+
 									    <el-tab-pane label="分包要求" name="third">
 									    	<div class="table-func table-funcb">
 												<!-- <el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
@@ -374,7 +377,8 @@
 											@cell-click="iconOperation" 
 											:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}"> -->
 											<el-table ref="IPO_table" :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true"
-												:summary-method="getSummaries" :show-summary="true" highlight-current-row="highlight-current-row"
+												:summary-method="getSummaries2" :show-summary="false"
+												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
@@ -477,6 +481,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
+
 												<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.REQUIRES'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -494,15 +499,16 @@
 													</template>
 												</el-table-column>
 								
-												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
+												<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
-															<el-input v-if="scope.row.isEditing" id="testprice" @input="aaa(scope.row)" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row.CHECKCOST)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 															<span v-else>{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
-														<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
+
+												<!--<el-table-column prop="STATUS" label="信息状态" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.STATUS'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入要求"></el-input>
@@ -519,7 +525,7 @@
 													</template>
 												</el-table-column>
 											</el-table>
-									    </el-tab-pane>
+										</el-tab-pane>
 									</el-tabs>
 								</div>
 								<el-collapse-item name="7">
@@ -578,12 +584,12 @@
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @input="toPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @input="actualPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -720,8 +726,8 @@
 				</el-pagination>
 
 				<div slot="footer">
-			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="resetBasisInfo2">取 消</el-button>
+					<el-button type="primary" @click="addcusname">确 定</el-button>
+					<el-button @click="resetBasisInfo2">取 消</el-button>
 			  </div>
 			</el-dialog>
 			<!-- 客户联系人 End -->
@@ -1013,7 +1019,7 @@
 			};
 		},
 		methods: {
-			//各个项目的价格的和
+			//检验项目与要求单价列总和
 			getSummaries(param) {
         //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
         const { columns, data } = param;
@@ -1022,15 +1028,14 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 3) {
+          } else if(index === 3) {//计算第几列的减1
 						const values = data.map(item => Number(item[column.property]));
 						//验证每个value值是否是数字，如果是执行if
 							if (!values.every(value => isNaN(value))) {
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-
-								this.dataInfo.CONTRACTCOST = sums[index] += '';
+								this.ALLCOST = sums[index] += '元';
 							} else {
 								sums[index] = ' ';
 							}
@@ -1038,10 +1043,64 @@
 				});
 					return sums;
 			},
-			aaa(val){
-				console.log(val);
-				console.log(111);
+			//分包要求检测费用列的总和
+			getSummaries2(param) {
+        //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '总价';
+            return;
+          } else if(index === 10) {//计算第几列的减1
+						const values = data.map(item => Number(item[column.property]));
+						//验证每个value值是否是数字，如果是执行if
+							if (!values.every(value => isNaN(value))) {
+								sums[index] = values.reduce((prev, curr) => {
+									return prev + curr;
+								}, 0);
+								// var num = parseFloat(sums[index]);
+								// this.INSPECTCOST =this.number_format(num,2);
+								this.INSPECTCOST = sums[index] += '';
+								var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
+								this.dataInfo.CONTRACTCOST = this.number_format(total,2);
+							} else {
+								sums[index] = ' ';
+							}
+					}
+				});
+					return sums;
 			},
+		number_format(number, decimals, dec_point, thousands_sep) {
+		　　/*
+		　　 * 参数说明：
+		　　 * number：要格式化的数字
+		　　 * decimals：保留几位小数
+		　　 * dec_point：小数点符号
+		　　 * thousands_sep：千分位符号
+		　　 * */
+		　　 number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+		　　 var n = !isFinite(+number) ? 0 : +number,
+		　　 prec = !isFinite(+decimals) ? 2 : Math.abs(decimals),
+		　　 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+		　　 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+			　　s = '',
+			　　 toFixedFix = function(n, prec) {
+			　　　　var k = Math.pow(10, prec);
+			　　　　return '' + Math.ceil(n * k) / k;
+			　　};
+					s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+			　　 var re = /(-?\d+)(\d{3})/;
+			　　 while(re.test(s[0])) {
+			　　　　s[0] = s[0].replace(re, "$1" + sep + "$2");
+			　　}
+			　　if((s[1] || '').length < prec) {
+			　　 s[1] = s[1] || '';
+				　　s[1] += new Array(prec - s[1].length + 1).join('0');
+			　　}
+		　　　return s.join(dec);
+		},
+			
 			// 所内机构
 			withindept(){
 				this.$refs.withinspectchild.visible();
@@ -1065,7 +1124,7 @@
                     	//点击已经选中的节点，置空
                 	 }
             		}
-        	},
+      },
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1139,7 +1198,6 @@
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
-				console.log(123);
 				var money = document.getElementById("cost").value;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
@@ -1390,9 +1448,6 @@
 					if(valid) {
 						var DataInfo=JSON.stringify(this.DataInfo); 
 						var dataInfo=JSON.stringify(this.dataInfo);
-						console.log(DataInfo);
-						console.log(dataInfo);
-						 console.log(DataInfo==dataInfo);
 					 	if(DataInfo==dataInfo){
 					  	this.$message({
 								message: '没有修改内容，不允许修订！',
@@ -1616,7 +1671,7 @@
 			},
 			//检验项目放大镜
 			basisleadbtn2(val){
-				this.deptindex = val;
+				// this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
@@ -1626,39 +1681,26 @@
 					}else{
 						// this.sendchilddata.push(this.dataInfo.S_NUM);
 						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
-						var arr=[];
-						var proxy=[];
-						var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
-						for(var j=0;j<proxylist.length;j++){
-								proxy.push(proxylist[j].P_NUM);
-						}
-						var proxypnum=proxy.join(',');
-						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
-							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
-						}
-						var data={
-							P_NUM:this.dataInfo.P_NUM,
-							PRO_NUM:this.dataInfo.PRO_NUM,
-							S_NUM:arr,//依据的编号
-							proxypnum:proxypnum
-						}
-						this.$refs.projectchild.projectlead(data);
+						// var arr=[];
+						// var proxy=[];
+						// var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
+						// for(var j=0;j<proxylist.length;j++){
+						// 		proxy.push(proxylist[j].P_NUM);
+						// }
+						// var proxypnum=proxy.join(',');
+						// for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
+						// 	arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
+						// }
+						// var data={
+						// 	P_NUM:this.dataInfo.P_NUM,
+						// 	PRO_NUM:this.dataInfo.PRO_NUM,
+						// 	S_NUM:arr,//依据的编号
+						// 	proxypnum:proxypnum
+						// }
+						this.$refs.projectchild.projectlead();
 						// this.main = 'main';
 						// this.sendchilddata = [];
 					  //   this.deptindex = {};
-					}
-				}else{
-					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
-						this.$message({
-							message: '请先选择检验依据',
-							type: 'warning'
-						});
-					}else{
-						this.sendchilddata.push(this.deptindex.S_NUM);
-					
-						this.$refs.projectchild.projectlead(this.sendchilddata);
-						this.main = 'table';
-						this.sendchilddata = [];
 					}
 				}
 			},
@@ -1702,8 +1744,8 @@
 			},
 			//检验依据列表赋值
 			addbasis(val){
-				this.dataInfo.INSPECT_PROXY_BASISList=[];
-				this.dataInfo.INSPECT_PROXY_PROJECList=[];
+				// this.dataInfo.INSPECT_PROXY_BASISList=[];
+				// this.dataInfo.INSPECT_PROXY_PROJECList=[];
 				for(var i = 0;i<val.length;i++){
 						var List={
 								S_NUM: val[i].S_NUM,
@@ -1725,11 +1767,10 @@
 			},
 			 //检验项目列表
 			addproject(value){
-				if(this.main == 'main'){
+					console.log(value);
 					for(var i = 0;i<value.length;i++){
 						value[i].P_DESC = value[i].P_NAME;
 						this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
-					}
 				}
 			},
 			//检验要求与项目

@@ -721,6 +721,7 @@
 				return data;
 			},
 			handleNodeClick(data) {
+				console.log(data);
 				if(!!data.fullname) {
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';

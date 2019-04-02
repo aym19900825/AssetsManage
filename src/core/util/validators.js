@@ -110,22 +110,24 @@ const validators = {
 	},
 
 	isPrices:function (rule, value, callback) {//验证价格
-		if(!value) {
-			callback();
-		}
-		setTimeout(() => {
+		if(!!value) {
 			var regp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/
-			if (!regp.test(value)) {
-				callback(new Error('请输入数字'));
+		if (!regp.test(value)) {
+			callback(new Error('请输入数字'));
+		} else {
+			var regs = /^.{1,21}$/g
+			if(!regs.test(value)) {
+				callback(new Error('内容不少于1位且不能大于16位'));
 			} else {
-				var regs = /^.{1,21}$/g
-				if(!regs.test(value)) {
-					callback(new Error('内容不少于1位且不能大于16位'));
-				} else {
-					callback();
-				}
+				callback();
 			}
-		}, 500);
+		}
+		}else{
+			return 
+		}
+	
+		
+	
 	},
 
 	isWorknumber:function (rule, value, callback) {//验证工号内容最长30位

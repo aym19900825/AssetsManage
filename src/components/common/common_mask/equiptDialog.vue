@@ -24,7 +24,7 @@
 						</el-col>
 						<el-col :span="4">
 							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 						</el-col>
 					</el-row>
 				</el-form>
@@ -105,13 +105,19 @@
   },
 
   methods: {
-	searchinfo(){
-		this.page.currentPage = 1;
-		this.requestData();
-	},
-	getProject(){
-		
-	},
+		searchinfo(){
+			this.page.currentPage = 1;
+			this.requestData();
+		},
+		resetbtn(){
+				this.searchList =  { //点击高级搜索后显示的内容
+					project: [],//检测项目
+				};
+				this.requestData();
+			},
+		getProject(){
+			
+		},
 	selChange(row) {
 		this.selUser = [];
 		this.selUser.push(row);

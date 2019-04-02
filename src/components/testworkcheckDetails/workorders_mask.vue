@@ -1884,15 +1884,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "60px");
+				$(".mask_div").css("top", "-40px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("top", "100px");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
 			},
 			
 			//时间格式化  
@@ -1925,8 +1925,7 @@
 					}, 1000)
 					this.getuser();
 			    }
-			},	
-			
+			},
 			getuser(){
 				var data = {
 					page: this.page.currentPage,
@@ -1939,7 +1938,7 @@
 					});
 					return;
 				}
-				 //用户
+				//用户
 				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {
 					params: data
 				}).then((res) => {
@@ -1961,22 +1960,21 @@
 							}
 						}
 					}
-                    
 					this.userList = newarr;
 				}).catch((wrong) => {})	
 			},
+
 			getUser(){//获取当前用户信息
-	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-					this.currentuserinfo = res.data;
-				 	this.userid = res.data.id;
-	        this.username = res.data.username;
-					this.deptid = res.data.deptId;
-					this.deptfullname = res.data.deptName;
-	            }).catch((err) => {
-	            });
-        	},
-			
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				this.currentuserinfo = res.data;
+				this.userid = res.data.id;
+				this.username = res.data.username;
+				this.deptid = res.data.deptId;
+				this.deptfullname = res.data.deptName;
+					}).catch((err) => {
+					});
+			},
 		},
 		
 		mounted() {

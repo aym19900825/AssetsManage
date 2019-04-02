@@ -37,12 +37,12 @@
 												</el-table-column>
 												<el-table-column prop="UNIT" label="样品序号" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable">添加结果</el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
-														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable">
+														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
 															<el-option key="1" label="不合格" value="1"></el-option>
 															<el-option key="2" label="A类不合格" value="2"></el-option>
 															<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -58,7 +58,45 @@
 												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable>
 													<template slot-scope="scope">
 														<div class="block">
-															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable">
+															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
+															</el-date-picker>
+														</div>
+													</template>
+												</el-table-column>
+							            	</el-table>
+										</el-tab-pane>
+										<el-tab-pane label="分包项目与要求" name="second">
+							            	<el-table :data="workorderForm.WORKORDER_CONTRACTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+												<el-table-column prop="P_REMARKS" label="检测项目名称" sortable>
+												</el-table-column>
+							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable>
+												</el-table-column>
+												<el-table-column prop="UNIT" label="计量单位" sortable>
+												</el-table-column>
+												<el-table-column prop="UNIT" label="样品序号" sortable>
+													<template slot-scope="scope">
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
+													</template>
+												</el-table-column>
+												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
+													<template slot-scope="scope">
+														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
+															<el-option key="1" label="不合格" value="1"></el-option>
+															<el-option key="2" label="A类不合格" value="2"></el-option>
+															<el-option key="3" label="B类不合格" value="3"></el-option>
+														</el-select>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="VERSION" label="模板" sortable>
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="pageDisable">	
+														</el-input>
+													</template>
+												</el-table-column>
+												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable>
+													<template slot-scope="scope">
+														<div class="block">
+															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
 															</el-date-picker>
 														</div>
 													</template>
@@ -66,7 +104,7 @@
 							            	</el-table>
 										</el-tab-pane>
 										
-										<el-tab-pane label="检验检测设备" name="second">
+										<el-tab-pane label="检验检测设备" name="three">
 											<div class="table-func table-funcb">
 												<el-button style="float:left;" type="success" size="mini" round @click="addEquiptLine" v-show="!pageDisable">
 													<i class="icon-add"></i><font>新建行</font>
@@ -104,7 +142,7 @@
 											</el-table>
 										</el-tab-pane>
 
-										<el-tab-pane label="成果数据" name="three">
+										<el-tab-pane label="成果数据" name="four">
 											<div class="table-func table-funcb">
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
 													<el-button type="success" size="mini" round class="a-upload" v-show="!pageDisable">
@@ -123,12 +161,6 @@
 														  style="width: 100%;" 
 														  @cell-click="iconOperation" 
 														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-														<!-- <el-table-column prop="iconOperation" fixed width="50px">
-															<template slot-scope="scope">
-																<i class="el-icon-check" v-show="scope.row.isEditing"></i>
-																<i class="el-icon-edit" v-show="!scope.row.isEditing"></i>
-															</template>
-													    </el-table-column> -->
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 													    </el-table-column>
 									            		<el-table-column label="文件名称" prop="FILESIZE_ORG">
@@ -137,13 +169,13 @@
 														</el-table-column>
 														<el-table-column label="操作" v-show="!pageDisable">
 															<template slot-scope="scope">
-															 	<el-button title="预览" @click="downLoadRow(scope.row)" type="text" size="small"> 
+															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
 																	<i class="icon-excel"></i>
 																</el-button>
-																<el-button title="编辑" type="text" size="small">
+																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
 																	<i class="icon-pencil"></i>
 																</el-button>
-																<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
+																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
 																	<i class="icon-trash red"></i>
 																</el-button>
 															</template>
@@ -158,7 +190,7 @@
 						</div>
 						<div class="content-footer" v-show="!pageDisable">
 							<el-button type="primary" @click="submitForm">保存</el-button>
-							<el-button type="success">保存并继续</el-button>
+							<el-button type="success" @click="startup">提交审核</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
 					</el-form>
@@ -188,7 +220,7 @@
 			</div>
 		</el-dialog>
 		<dataTemplate ref="dataTemplate"></dataTemplate>
-		<equiptDialog ref="equiptDialog" @setData="setEquipt"></equiptDialog>
+		<equiptDialog ref="equiptDialog" @setData="setEquipt" :projectList="workorderForm.WORKORDER_PROJECTList" :pro_num="workorderForm.PRO_NUM" :num="workorderForm.P_NUM"></equiptDialog>
 	</div>
 </template>
 
@@ -304,11 +336,63 @@
 				sampleListVisible: false,
 				editEquptIndex: 1,
 				editStepIndex: 1,
+				stepType: '',
 				detailId: 0,
 				pageDisable: false
 			};
 		},
 		methods: {
+			startup(){
+				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.detailId;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 1) {
+						this.$message({
+							message:res.data.resp_msg,
+							type: 'warning'
+						});
+				    }else{
+				    	this.$message({
+							message:res.data.resp_msg,
+							type: 'success'
+						});
+				    }
+				});
+			},
+			readFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39';
+				 window.open(url); 
+			},
+			editFile(){
+
+			},
+			delFile(index,row){
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/workorder/WORKORDER_DATA_TEMPLATE/' + row.ID;
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.resp_code == 0){
+							this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(index,1);
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {});
+				}else{
+					this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(index,1);
+				}
+			},
 			delEquipt(index,row){
 
 			},
@@ -320,14 +404,23 @@
 			viewModule(){
 				this.$refs.dataTemplate.showData(this.deptid);
 			},
-			addRemark(index, row){
+			addRemark(index, row, opt){
 				this.editStepIndex = index;
 				this.sampleListVisible = true;
-				this.sampleNumList = row.WORKORDER_PROJECT_ITEMList;
+				this.stepType = opt;
+				if(opt == 'contract'){
+					this.sampleNumList = row.WORKORDER_CONTRACT_ITEMList;
+				}else{
+					this.sampleNumList = row.WORKORDER_PROJECT_ITEMList;
+				}
 			},
 			submitSample(){
 				var index = this.editStepIndex;
-				this.workorderForm.WORKORDER_PROJECTList[index].WORKORDER_PROJECT_ITEMList = this.sampleNumList;
+				if(this.stepType == 'contract'){
+					this.workorderForm.WORKORDER_CONTRACTList[index].WORKORDER_CONTRACT_ITEMList = this.sampleNumList;
+				}else{
+					this.workorderForm.WORKORDER_PROJECTList[index].WORKORDER_PROJECT_ITEMList = this.sampleNumList;
+				}
 				this.resetSample();
 			},
 			resetSample(){
@@ -368,7 +461,7 @@
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
-					if(res.data.datas.STATE == '1'||res.data.datas.STATE == '2'){
+					if(res.data.datas.STATE == '1'){
 						this.pageDisable = false;
 					}else{
 						if(res.data.datas.STATE == '0'){
@@ -490,6 +583,7 @@
 							FILEPATH: res.data.webUrl,
 							LIABLE_PERSONDesc: this.username,
 							LIABLE_PERSON: this.userid,
+							CONTRACTID: ''
 						};
 						this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
 					}
@@ -555,7 +649,11 @@
 					WORKORDER_REPORTList:[],//报告
 					WORKORDER_CONTRACTList:[],//分包项目					
 				};
-				pronums:[]//检测项目编号字符串
+				this.editEquptIndex = 1;
+				this.editStepIndex = 1;
+				this.detailId = 0;
+				this.pageDisable = false;
+				this.pronums = [];//检测项目编号字符串
 			},
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
@@ -800,6 +898,9 @@
 				this.$emit('request');
 				//this.resetNew();
 			},
+			reset(){
+
+			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();
@@ -812,15 +913,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 60);
-				$(".mask_div").css("top", "60px");
+				$(".mask_div").css("top", "-40px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("top", "100px");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
 			},
 			
 			//时间格式化  

@@ -497,7 +497,7 @@
 												<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
-															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<el-input v-if="scope.row.isEditing" id="testprice" @input="aaa(scope.row)" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 															<span v-else>{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
@@ -578,20 +578,12 @@
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-<<<<<<< HEAD
 												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @input="toPrice" :disabled="noedit"></el-input>
-=======
-												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
->>>>>>> 6c656b9bcbee924335797faa5af6695c4a3c979f
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-<<<<<<< HEAD
 												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @input="actualPrice" :disabled="noedit"></el-input>
-=======
-												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" @blur="actualPrice" :disabled="noedit"></el-input>
->>>>>>> 6c656b9bcbee924335797faa5af6695c4a3c979f
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -1037,6 +1029,7 @@
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
+
 								this.dataInfo.CONTRACTCOST = sums[index] += '';
 							} else {
 								sums[index] = ' ';
@@ -1044,7 +1037,11 @@
 					}
 				});
 					return sums;
-      },
+			},
+			aaa(val){
+				console.log(val);
+				console.log(111);
+			},
 			// 所内机构
 			withindept(){
 				this.$refs.withinspectchild.visible();

@@ -218,6 +218,7 @@
 				});
 			},
 			tableControle(data) {
+				console.log(data);
 				this.checkedName = data;
 			},
 			fileSuccess(){//上传成功后返回数据

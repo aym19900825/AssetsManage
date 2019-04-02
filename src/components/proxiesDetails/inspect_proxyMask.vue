@@ -578,20 +578,12 @@
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-<<<<<<< HEAD
-												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @input="toPrice" :disabled="noedit"></el-input>
-=======
 												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
->>>>>>> 6c656b9bcbee924335797faa5af6695c4a3c979f
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-<<<<<<< HEAD
-												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @input="actualPrice" :disabled="noedit"></el-input>
-=======
 												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" @blur="actualPrice" :disabled="noedit"></el-input>
->>>>>>> 6c656b9bcbee924335797faa5af6695c4a3c979f
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">

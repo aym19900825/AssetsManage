@@ -326,14 +326,14 @@
 													</template>
 												</el-table-column> -->
 
-												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px">
-													<template slot-scope="scope">
+												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
+													<!-- <template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" placeholder="请输入要求">
-														</el-input>
-														<span v-else>{{scope.row.UNITCOST}}</span>
-													</el-form-item>
-													</template>
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" @change="" placeholder="请输入要求">
+															</el-input>
+															<span v-else>{{scope.row.UNITCOST}}</span>
+														</el-form-item>
+													</template> -->
 												</el-table-column>
 
 												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
@@ -377,7 +377,7 @@
 											@cell-click="iconOperation" 
 											:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}"> -->
 											<el-table ref="IPO_table" :data="dataInfo.CHECK_PROXY_CONTRACTList" row-key="ID" border stripe :fit="true"
-												:summary-method="getSummaries2" :show-summary="false"
+												:summary-method="getSummaries2" :show-summary="true"
 												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
@@ -499,10 +499,10 @@
 													</template>
 												</el-table-column>
 								
-												<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="120px">
+												<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="160px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
-															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row.CHECKCOST)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
+															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
 															<span v-else>{{scope.row.CHECKCOST}}</span>
 														</el-form-item>
 													</template>
@@ -1019,6 +1019,11 @@
 			};
 		},
 		methods: {
+			priceFormate(row, column) {
+				var money = row.UNITCOST;
+				console.log(row.UNITCOST );
+				return row.UNITCOST =  this.toFixedPrice(money);
+			},
 			//检验项目与要求单价列总和
 			getSummaries(param) {
         //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
@@ -1029,13 +1034,24 @@
             sums[index] = '总价';
             return;
           } else if(index === 3) {//计算第几列的减1
-						const values = data.map(item => Number(item[column.property]));
+						const values = data.map(item => {
+							if(!!item[column.property]){
+								return Number(item[column.property].replace(/,/g,''));
+							}else{
+								return 0.00;
+							}
+						});
 						//验证每个value值是否是数字，如果是执行if
 							if (!values.every(value => isNaN(value))) {
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-								this.ALLCOST = sums[index] += '元';
+								sums[index] = this.toFixedPrice(sums[index]);
+								if(!!sums[index]){
+									this.ALLCOST = sums[index] += '元';
+								}else{
+									this.ALLCOST = '0.00元';
+								}
 							} else {
 								sums[index] = ' ';
 							}
@@ -1045,7 +1061,6 @@
 			},
 			//分包要求检测费用列的总和
 			getSummaries2(param) {
-        //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
         const { columns, data } = param;
         const sums = [];
         columns.forEach((column, index) => {
@@ -1053,20 +1068,30 @@
             sums[index] = '总价';
             return;
           } else if(index === 10) {//计算第几列的减1
-						const values = data.map(item => Number(item[column.property]));
-						//验证每个value值是否是数字，如果是执行if
-							if (!values.every(value => isNaN(value))) {
-								sums[index] = values.reduce((prev, curr) => {
-									return prev + curr;
-								}, 0);
-								// var num = parseFloat(sums[index]);
-								// this.INSPECTCOST =this.number_format(num,2);
-								this.INSPECTCOST = sums[index] += '';
-								var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
-								this.dataInfo.CONTRACTCOST = this.number_format(total,2);
-							} else {
-								sums[index] = ' ';
+						const values = data.map(item => {
+							if(!!item[column.property]){
+								return Number(item[column.property].replace(/,/g,''));
+							}else{
+								return 0.00;
 							}
+						});
+						//验证每个value值是否是数字，如果是执行if
+						if (!values.every(value => isNaN(value))) {
+							sums[index] = values.reduce((prev, curr) => {
+								return prev + curr;
+							}, 0);
+							sums[index] = this.toFixedPrice(sums[index]);
+							if(!!sums[index]){
+								this.INSPECTCOST = sums[index] += '元';
+							}else{
+								this.INSPECTCOST = '0.00元';
+							}
+							this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
+							var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
+								this.dataInfo.CONTRACTCOST = this.number_format(total,2);
+						} else {
+							sums[index] = ' ';
+						}
 					}
 				});
 					return sums;
@@ -1135,19 +1160,22 @@
 			//金额两位小数点千位分隔符，四舍五入
 			testPrice(item){
 				var money = item.CHECKCOST;
+				item.CHECKCOST = this.toFixedPrice(money);
+			},	
+			toFixedPrice(price){
+				var res = 0;
+				var money = price;
 				var re = /^[0-9]+.?[0-9]*$/;
-				if (!re.test(money)) {
-			　　　　item.CHECKCOST = 0;
-			　　　　return;
-			　　}
-				if(money == ''){
-					return;
-				}else{
+				if (!re.test(money)||money == '') {
+	　　　　 res = 0.00;
+	　　　　 return;
+		　　}else{
 					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
-					item.CHECKCOST = num.join(".");
+					res = num.join(".");
 				}
-			},	
+				return res;
+			},
 			dateFormat(row, column) {
 				var date = row[column.property];
 				if(date == undefined) {
@@ -1184,15 +1212,18 @@
 			   }
 			 },	
 			toNum(str) {
+				if(Object.prototype.toString.call(str)!="[object String]"){
+					str = str.toString();
+				}
 				return str.replace(/\,|\￥/g, "");
 			},
 			checkMoney(obj){
 				var tempValue=obj.value.replace(/(^s+)|(s+$)/g,'').replace('￥','');
 				if(!tempValue){return}
 				if(/^-?d+(.d+)?$/.test(tempValue)){
-				obj.value="￥"+parseFloat(tempValue).toFixed(2);
+					obj.value="￥"+parseFloat(tempValue).toFixed(2);
 				}else{
-				alert('请输入合法的货币值！');
+					alert('请输入合法的货币值！');
 				return
 				}
 			},
@@ -1384,18 +1415,14 @@
 					// 要求
 					for(var m = 0;m<res.data.INSPECT_PROXY_PROJECList.length;m++){
 						res.data.INSPECT_PROXY_PROJECList[m].isEditing = false;
+						res.data.INSPECT_PROXY_PROJECList[m].INSPECT_GROUP = Number(res.data.INSPECT_PROXY_PROJECList[m].INSPECT_GROUP);
 					}
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
+						res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
 					}		
-				
-					for(var i = 0;i<res.data.INSPECT_PROXY_PROJECList.length;i++){
-						res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP = Number(res.data.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP);
-					}
-					for(var i = 0;i<res.data.CHECK_PROXY_CONTRACTList.length;i++){
-						res.data.CHECK_PROXY_CONTRACTList[i].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[i].INSPECT_GROUP);
-					}
 				
 					res.data.LEADER = Number(res.data.LEADER);
 					this.getmaingroup(res.data.MAINGROUP);

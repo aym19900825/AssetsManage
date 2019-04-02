@@ -1021,7 +1021,6 @@
 		methods: {
 			priceFormate(row, column) {
 				var money = row.UNITCOST;
-				console.log(row.UNITCOST );
 				return row.UNITCOST =  this.toFixedPrice(money);
 			},
 			//检验项目与要求单价列总和
@@ -1086,7 +1085,9 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
+							this.$nextTick(()=>{
+								this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
+							});
 						} else {
 							sums[index] = ' ';
 						}
@@ -1197,7 +1198,6 @@
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
-				console.log(123);
 				var money = document.getElementById("cost").value;
 				var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 				num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
@@ -1444,9 +1444,6 @@
 					if(valid) {
 						var DataInfo=JSON.stringify(this.DataInfo); 
 						var dataInfo=JSON.stringify(this.dataInfo);
-						console.log(DataInfo);
-						console.log(dataInfo);
-						 console.log(DataInfo==dataInfo);
 					 	if(DataInfo==dataInfo){
 					  	this.$message({
 								message: '没有修改内容，不允许修订！',
@@ -1935,7 +1932,6 @@
 			},
 			//委托单位
 			// appendname(value){
-			// 	console.log(value);		
 			// 	this.dataInfo.V_NAME = value;//名称
 			// 	if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
 

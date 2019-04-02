@@ -209,7 +209,7 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="140px">
+										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="200px">
 											<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
 										</el-form-item>
 								</el-collapse-item>
@@ -236,8 +236,8 @@
 
 												<el-table-column prop="S_DESC" label="标准内容" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.S_DESC'" >
-															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入">
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" >
+															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入" :disabled="noedit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -310,7 +310,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
-															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -328,7 +328,7 @@
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
 													<!-- <template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.UNITCOST'" >
+														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" @change="" placeholder="请输入要求">
 															</el-input>
 															<span v-else>{{scope.row.UNITCOST}}</span>
@@ -381,8 +381,9 @@
 												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
-													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+												
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -490,6 +491,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
+
 												<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -584,12 +586,12 @@
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost" @blur="actualPrice" :disabled="noedit"></el-input>
+												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -1086,19 +1088,55 @@
 								this.INSPECTCOST = '0.00元';
 							}
 							// this.$nextTick(()=>{
+							// 	var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
+							// 	this.dataInfo.CONTRACTCOST = this.number_format(total,2);
+							// });
+							// this.$nextTick(()=>{
 							// 	this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
 							// });
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
 							this.$forceUpdate();
-							this.dataInfo.CONTRACTCOST = parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元',''));
+							console.log('========================');
+							console.log(this.dataInfo.CONTRACTCOST);
+							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
 						}
 					}
 				});
 					return sums;
-      },
+			},
+		number_format(number, decimals, dec_point, thousands_sep) {
+		　　/*
+		　　 * 参数说明：
+		　　 * number：要格式化的数字
+		　　 * decimals：保留几位小数
+		　　 * dec_point：小数点符号
+		　　 * thousands_sep：千分位符号
+		　　 * */
+		　　 number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+		　　 var n = !isFinite(+number) ? 0 : +number,
+		　　 prec = !isFinite(+decimals) ? 2 : Math.abs(decimals),
+		　　 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+		　　 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+			　　s = '',
+			　　 toFixedFix = function(n, prec) {
+			　　　　var k = Math.pow(10, prec);
+			　　　　return '' + Math.ceil(n * k) / k;
+			　　};
+					s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+			　　 var re = /(-?\d+)(\d{3})/;
+			　　 while(re.test(s[0])) {
+			　　　　s[0] = s[0].replace(re, "$1" + sep + "$2");
+			　　}
+			　　if((s[1] || '').length < prec) {
+			　　 s[1] = s[1] || '';
+				　　s[1] += new Array(prec - s[1].length + 1).join('0');
+			　　}
+		　　　return s.join(dec);
+		},
+			
 			// 所内机构
 			withindept(){
 				this.$refs.withinspectchild.visible();
@@ -1111,18 +1149,18 @@
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-				this.i++;
-				if(this.i%2==0){
-					if(checked){
-							this.$refs.tree.setCheckedNodes([]);
-							this.$refs.tree.setCheckedNodes([data]);
-							//交叉点击节点
-						}else{
-							this.$refs.tree.setCheckedNodes([]);
-							//点击已经选中的节点，置空
-						}
-				}
-			},
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+      },
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1393,7 +1431,10 @@
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-						res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						if(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST.indexOf(',')==-1){
+							res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						}
+						
 						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
 					}		
 				
@@ -1671,7 +1712,7 @@
 			},
 			//检验项目放大镜
 			basisleadbtn2(val){
-				this.deptindex = val;
+				// this.deptindex = val;
 				if(val == 'maintable'){
 					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
@@ -1681,39 +1722,26 @@
 					}else{
 						// this.sendchilddata.push(this.dataInfo.S_NUM);
 						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
-						var arr=[];
-						var proxy=[];
-						var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
-						for(var j=0;j<proxylist.length;j++){
-								proxy.push(proxylist[j].P_NUM);
-						}
-						var proxypnum=proxy.join(',');
-						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
-							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
-						}
-						var data={
-							P_NUM:this.dataInfo.P_NUM,
-							PRO_NUM:this.dataInfo.PRO_NUM,
-							S_NUM:arr,//依据的编号
-							proxypnum:proxypnum
-						}
-						this.$refs.projectchild.projectlead(data);
+						// var arr=[];
+						// var proxy=[];
+						// var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
+						// for(var j=0;j<proxylist.length;j++){
+						// 		proxy.push(proxylist[j].P_NUM);
+						// }
+						// var proxypnum=proxy.join(',');
+						// for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
+						// 	arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
+						// }
+						// var data={
+						// 	P_NUM:this.dataInfo.P_NUM,
+						// 	PRO_NUM:this.dataInfo.PRO_NUM,
+						// 	S_NUM:arr,//依据的编号
+						// 	proxypnum:proxypnum
+						// }
+						this.$refs.projectchild.projectlead();
 						// this.main = 'main';
 						// this.sendchilddata = [];
 					  //   this.deptindex = {};
-					}
-				}else{
-					if(this.deptindex.S_NUM == null || this.deptindex.S_NUM == '' || this.deptindex.S_NUM == undefined){
-						this.$message({
-							message: '请先选择检验依据',
-							type: 'warning'
-						});
-					}else{
-						this.sendchilddata.push(this.deptindex.S_NUM);
-					
-						this.$refs.projectchild.projectlead(this.sendchilddata);
-						this.main = 'table';
-						this.sendchilddata = [];
 					}
 				}
 			},
@@ -1757,8 +1785,8 @@
 			},
 			//检验依据列表赋值
 			addbasis(val){
-				this.dataInfo.INSPECT_PROXY_BASISList=[];
-				this.dataInfo.INSPECT_PROXY_PROJECList=[];
+				// this.dataInfo.INSPECT_PROXY_BASISList=[];
+				// this.dataInfo.INSPECT_PROXY_PROJECList=[];
 				for(var i = 0;i<val.length;i++){
 						var List={
 								S_NUM: val[i].S_NUM,
@@ -1780,11 +1808,10 @@
 			},
 			 //检验项目列表
 			addproject(value){
-				if(this.main == 'main'){
+					console.log(value);
 					for(var i = 0;i<value.length;i++){
 						value[i].P_DESC = value[i].P_NAME;
 						this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
-					}
 				}
 			},
 			//检验要求与项目

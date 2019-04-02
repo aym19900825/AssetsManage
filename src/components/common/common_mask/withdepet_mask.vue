@@ -197,7 +197,6 @@
             return;
         } else {
 			if(!!this.dept){
-				console.log(this.dept);
 				var deptname='';
 				for(var i=0;i<selectData.length;i++){
 					if(this.dept==selectData[i].id){
@@ -248,7 +247,6 @@
 		var DEPTID=this.$store.state.currentcjdw[0].id;
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/pdTreeSearch?deptId='+this.dept+'&searchName='+this.searchList.searchName;
 		this.$axios.get(url,{}).then((res) => {
-			console.log(res);
 			this.page.totalCount = res.data.datas.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
@@ -258,7 +256,6 @@
 				this.loadSign = true
 			}
 			this.customerList = res.data.datas.data;
-			console.log(this.customerList);
 			this.loading = false;//加载动画关闭
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();
@@ -278,7 +275,6 @@
 				};
 		var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer';
         this.$axios.get(url, {params: data}).then((res) => {
-			console.log(res);
 			this.selectData = res.data.datas;
 			this.searchList.dept = res.data.datas[0].id;
 			this.defaultdept= res.data.datas[0].id;

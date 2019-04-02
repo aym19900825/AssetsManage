@@ -1085,9 +1085,13 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							this.$nextTick(()=>{
-								this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
-							});
+							// this.$nextTick(()=>{
+							// 	this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
+							// });
+							var paramData1 = this.INSPECTCOST;
+							var paramData2 = this.ALLCOST;
+							this.$forceUpdate();
+							this.dataInfo.CONTRACTCOST = parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元',''));
 						} else {
 							sums[index] = ' ';
 						}
@@ -1107,18 +1111,18 @@
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-           		 this.i++;
-            		if(this.i%2==0){
-                	if(checked){
-                    	this.$refs.tree.setCheckedNodes([]);
-                    	this.$refs.tree.setCheckedNodes([data]);
-                    	//交叉点击节点
-               		 }else{
-                     this.$refs.tree.setCheckedNodes([]);
-                    	//点击已经选中的节点，置空
-                	 }
-            		}
-        	},
+				this.i++;
+				if(this.i%2==0){
+					if(checked){
+							this.$refs.tree.setCheckedNodes([]);
+							this.$refs.tree.setCheckedNodes([data]);
+							//交叉点击节点
+						}else{
+							this.$refs.tree.setCheckedNodes([]);
+							//点击已经选中的节点，置空
+						}
+				}
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'

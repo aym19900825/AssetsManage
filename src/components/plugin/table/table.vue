@@ -203,8 +203,10 @@ export default {
         var url = this.basic_url + '/api-log/logs/loginLog';
       }else if(this.appName == 'operlog'){
         var url = this.basic_url + '/api-log/logs/operLog';
-      }else if(this.appName == 'productType'||this.appName == 'product'||this.appName == 'inspectionSta'||this.appName == 'inspectionPro'||this.appName == 'inspectionMet'||this.appName == 'rawDataTem'||this.appName == 'inspectionRepTem'||this.appName == 'workIns'){//单独定义基础数据中的APPNAME数据显示本站室所有数据。
+      }else if(this.appName == 'productType'||this.appName == 'product'||this.appName == 'inspectionSta'||this.appName == 'inspectionPro'||this.appName == 'inspectionMet'||this.appName == 'rawDataTem'||this.appName == 'workIns'){//单独定义基础数据中的APPNAME数据显示本站室所有数据。
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
+      }else if(this.appName == 'inspectionRepTem') {//检验/检测报告模板
+        var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
       }else {
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

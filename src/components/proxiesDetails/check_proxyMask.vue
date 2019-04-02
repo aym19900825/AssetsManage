@@ -1255,8 +1255,8 @@
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
 					VERSION:'1',//版本
-					TYPE:'1',//检验
-					TYPEDesc:'检验',
+					TYPE:'2',//检验
+					TYPEDesc:'检测',
 					STATUS:'0',
 					VENDOR:'',//委托单位编号
 					R_VENDOR:'',//承建单位

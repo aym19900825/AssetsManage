@@ -1021,7 +1021,6 @@
 		methods: {
 			priceFormate(row, column) {
 				var money = row.UNITCOST;
-				console.log(row.UNITCOST );
 				return row.UNITCOST =  this.toFixedPrice(money);
 			},
 			//检验项目与要求单价列总和
@@ -1086,9 +1085,10 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
-							var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
+							this.$nextTick(()=>{
+								var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
 								this.dataInfo.CONTRACTCOST = this.number_format(total,2);
+							});
 						} else {
 							sums[index] = ' ';
 						}
@@ -1949,7 +1949,6 @@
 			},
 			//委托单位
 			// appendname(value){
-			// 	console.log(value);		
 			// 	this.dataInfo.V_NAME = value;//名称
 			// 	if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
 

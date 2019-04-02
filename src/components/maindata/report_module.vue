@@ -31,23 +31,23 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form inline-message :model="searchList" label-width="70px">
+						<el-form inline-message :model="searchList" label-width="120px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="模板描述" prop="DECRIPTION">
+									<el-form-item label="报告模板名称" prop="DECRIPTION">
 										<el-input v-model="searchList.DECRIPTION"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID" label-width="45px">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									<el-form-item label="报告模板类型" prop="RE_TYPE">
+										<el-select clearable v-model="searchList.RE_TYPE" filterable allow-create default-first-option placeholder="请选择">
+										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -63,12 +63,14 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="模板描述" sortable prop="DECRIPTION" v-if="this.checkedName.indexOf('模板描述')!=-1">
+								<el-table-column label="报告模板名称" sortable prop="DECRIPTION" v-if="this.checkedName.indexOf('报告模板名称')!=-1">
+								</el-table-column>
+								<el-table-column label="报告模板类型" sortable prop="RE_TYPEDesc" width="160" v-if="this.checkedName.indexOf('报告模板类型')!=-1">
 								</el-table-column>
 								<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
-								<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1" >
-								</el-table-column>
+								<!-- <el-table-column label="机构" width="185" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1" >
+								</el-table-column> -->
 							</v-table>
 							<!-- 表格 End-->
 						</el-col>
@@ -122,7 +124,8 @@
 				
 				checkedName: [
 					'编码',
-					'模板描述',
+					'报告模板名称',
+					'报告模板类型',
 					'录入时间',
 					'机构'
 				],
@@ -131,8 +134,12 @@
 						prop: 'RE_NUM'
 					},
 					{
-						label: '模板描述',
+						label: '报告模板名称',
 						prop: 'DECRIPTION'
+					},
+					{
+						label: '报告模板类型',
+						prop: 'RE_TYPE'
 					},
 					{
 						label: '录入时间',
@@ -154,7 +161,7 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					TYPE: '',
-					DEPTID: '',
+					RE_TYPE: '',
 					// PHONE: '',
 					// CONTACT_ADDRESS: '',
 					// STATUS: ''
@@ -179,18 +186,15 @@
 		},
 		methods: {
 			setSelData(val){
-				this.selMenu = val;
+				this.selUser = val;
 			},
-			//机构值
-			getCompany() {
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
+			//报告模板类型
+			getReportType() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=RE_TYPE';
+				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
+				}).catch(error => {
+						console.log('请求失败');
 				});
 			},
 			tableControle(data) {
@@ -199,7 +203,7 @@
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					TYPE: '',
-					DEPTID: '',
+					RE_TYPE: '',
 				};
 				this.requestData('init');
 			},
@@ -211,6 +215,7 @@
 				this.CATEGORY = {
 					ID: '',
 					RE_NUM: '',
+					RE_TYPE: '1',//给子表赋值，1代表检验类型2代表检验类型
 					TYPE: '',
 					STATUS: '活动',
 					VERSION: '1',
@@ -515,7 +520,7 @@
 			}
 		},
 		mounted() {
-			this.getCompany();
+			this.getReportType();
 			this.getdept();
 		},
 	}

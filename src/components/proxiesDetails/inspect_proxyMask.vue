@@ -237,7 +237,7 @@
 												<el-table-column prop="S_DESC" label="标准内容" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" >
-															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入">
+															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入" :disabled="noedit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -310,7 +310,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
-															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -381,8 +381,9 @@
 												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
-													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+												
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -490,6 +491,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column>
+
 												<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable width="220px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.Q_TYPE'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -1085,10 +1087,19 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							this.$nextTick(()=>{
-								var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
-								this.dataInfo.CONTRACTCOST = this.number_format(total,2);
-							});
+							// this.$nextTick(()=>{
+							// 	var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
+							// 	this.dataInfo.CONTRACTCOST = this.number_format(total,2);
+							// });
+							// this.$nextTick(()=>{
+							// 	this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
+							// });
+							var paramData1 = this.INSPECTCOST;
+							var paramData2 = this.ALLCOST;
+							this.$forceUpdate();
+							console.log('========================');
+							console.log(this.dataInfo.CONTRACTCOST);
+							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
 						}
@@ -1420,7 +1431,10 @@
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-						res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						if(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST.indexOf(',')==-1){
+							res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						}
+						
 						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
 					}		
 				

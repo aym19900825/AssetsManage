@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加检验委托书</div>
-					<div class="mask_title" v-show="modifytitle">修改检验委托书</div>
-					<div class="mask_title" v-show="viewtitle">查看检验委托书</div>
+					<div class="mask_title" v-show="addtitle">添加检测委托书</div>
+					<div class="mask_title" v-show="modifytitle">修改检测委托书</div>
+					<div class="mask_title" v-show="viewtitle">查看检测委托书</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -192,7 +192,7 @@
 										</el-row>
 								</el-collapse-item>
 
-								<el-collapse-item title="检验" name="3">
+								<el-collapse-item title="检测" name="3">
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
@@ -215,7 +215,7 @@
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-									    <el-tab-pane label="检验依据" name="first">
+									    <el-tab-pane label="检测依据" name="first">
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
 													<i class="icon-search"></i>
@@ -237,7 +237,7 @@
 												<el-table-column prop="S_DESC" label="标准内容" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" >
-															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入">
+															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入" :disabled="noedit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -272,7 +272,7 @@
 											</el-table>
 									    </el-tab-pane>
 
-									    <el-tab-pane label="检验项目与要求" name="second">
+									    <el-tab-pane label="检测项目与要求" name="second">
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2('maintable')"  v-show="!viewtitle">
 													<i class="icon-search"></i>
@@ -286,7 +286,7 @@
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
-												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
+												<el-table-column prop="P_NUM" label="检测项目编号" sortable width="120px">
 													<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">
@@ -297,7 +297,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="P_DESC" label="检验项目描述" sortable>
+												<el-table-column prop="P_DESC" label="检测项目描述" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
@@ -310,7 +310,7 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
-															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -381,8 +381,8 @@
 												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed label="" width="50px" v-if="!viewtitle">
-													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope"><i class="el-icon-check"  v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -470,7 +470,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
+												<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
@@ -499,7 +499,7 @@
 													</template>
 												</el-table-column>
 								
-												<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="160px">
+												<el-table-column prop="CHECKCOST" label="检测费用(元)" sortable width="160px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
 															<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
@@ -531,7 +531,7 @@
 								<el-collapse-item name="7">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
+											<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
@@ -545,9 +545,10 @@
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-    											<el-checkbox label="CNAS"></el-checkbox>
-												</el-checkbox-group>
+												<el-radio-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
+													<el-radio label="CNAS"></el-radio>
+													<el-radio label="CMA"></el-radio>
+												</el-radio-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -749,9 +750,9 @@
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
-			<!-- 检验依据  -->
+			<!-- 检测依据  -->
 			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
-			<!-- 检验项目  -->
+			<!-- 检测项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 			<!--委托单位名称 -->
 			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor"></inspectcustommask>
@@ -776,8 +777,8 @@
 	import deptmask from '../common/common_mask/deptmask.vue'//机构
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
-	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
-	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
+	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检测依据
+	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
 	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//所外机构
 	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//所内机构
 	export default {
@@ -837,8 +838,8 @@
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
 					VERSION:'1',//版本
-					TYPE:'1',//检验
-					TYPEDesc:'检验',
+					TYPE:'2',//检验
+					TYPEDesc:'检测',
 					STATUS:'0',
 					VENDOR:'',//委托单位编号
 					R_VENDOR:'',//承建单位
@@ -1386,8 +1387,8 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.TYPE = '1';
-					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.TYPE = '2';
+					this.dataInfo.TYPEDesc = '检测';
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;
@@ -1406,7 +1407,7 @@
 			},
 			//
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
+			var url = this.basic_url +'/api-apps/app/inspectPro2/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
@@ -1420,7 +1421,9 @@
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-						res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						if(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST.indexOf(',')==-1){
+							res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						}
 						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
 					}		
 				

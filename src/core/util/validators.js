@@ -129,7 +129,6 @@ const validators = {
 			}
 		}, 500);
 	},
-
 	isWorknumber:function (rule, value, callback) {//验证工号内容最长30位
 		if(!value) {
 			callback();

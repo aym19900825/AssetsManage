@@ -151,6 +151,7 @@
 								<el-table-column label="版本" width="80" prop="VERSION" sortable  v-if="this.checkedName.indexOf('版本')!=-1">
 								</el-table-column>
 							</v-table>
+							
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -586,7 +587,7 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						if(changeUser[i].STATUS!=1){
+						if(changeUser[i].STATE!=1){
 						 	this.$message({
 								message: '您的数据中有已启动的流程，所以不能删除',
 								type: 'error'
@@ -721,21 +722,20 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				console.log(data);
-				if(!!data.fullname) {
+				if(data.type=='dept') {
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.id;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
-				}else if(!!data.TYPE){
-					this.searchList.P_NUM = data.NUM;
+				}else if(data.type=='product'){
+					this.searchList.P_NUM = data.num;
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.DEPTID;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
-				}else if(!!data.PRO_NUM){
-					this.searchList.P_NUM = data.NUM;
-					this.searchList.PRO_NUM = data.PRO_NUM;
-					this.searchList.DEPTID = data.DEPTID;
+				}else if(data.type=='producttype'){
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = data.num;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';

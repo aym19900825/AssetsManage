@@ -117,10 +117,12 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
-								</el-table-column> -->
+								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+								<el-table-column label="执行状态" sortable width="140px" prop="LEADER_STATUSDesc" v-if="this.checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
 								<el-table-column label="样品名称" sortable width="140px" prop="ITEM_NAME" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
 								<el-table-column label="样品型号" sortable width="140px" prop="ITEM_MODEL" v-if="this.checkedName.indexOf('样品型号')!=-1">
@@ -135,7 +137,7 @@
 								</el-table-column>
 								<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
 								</el-table-column>
-								<el-table-column label="主检组" width="140px" prop="MAINGROUP" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
+								<el-table-column label="主检组" width="140px" prop="MAINGROUPDesc" sortable  v-if="this.checkedName.indexOf('主检组')!=-1">
 								</el-table-column>
 								<!--<el-table-column label="信息状态" width="200px" prop="STATE" sortable v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
@@ -230,7 +232,15 @@
 					},
 					{
 						label: '委托单位名称',
-						prop: 'V_NAME'
+						prop: 'V_NAMEDesc'
+					},
+					{
+						label: '状态',
+						prop: 'STATEDesc'
+					},
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUS'
 					},
 					{
 						label: '生产单位名称',
@@ -674,20 +684,20 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				if(!!data.fullname) {
+				if(data.type=='dept') {
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.id;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
-				}else if(!!data.TYPE){
-					this.searchList.P_NUM = data.NUM;
+				}else if(data.type=='product'){
+					this.searchList.P_NUM = data.num;
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.DEPTID;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
-				}else if(!!data.PRO_NUM){
-					this.searchList.P_NUM = data.NUM;
-					this.searchList.PRO_NUM = data.PRO_NUM;
-					this.searchList.DEPTID = data.DEPTID;
+				}else if(data.type=='producttype'){
+					this.searchList.P_NUM = '';
+					this.searchList.PRO_NUM = data.num;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';

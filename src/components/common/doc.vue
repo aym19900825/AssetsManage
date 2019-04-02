@@ -277,12 +277,17 @@ export default {
 }
 </script>
 
-<style scoped>  
+<style scoped>
+#file button {
+    position: relative;
+}
 .a-upload input{
     position: absolute;
-    font-size: 5px;
-    right: 115px;
+    font-size: 0px;
+    font-size: 20px \9;
+    right: 0px;
     top: 0;
+    height: 30px;
     opacity: 0;
     filter: alpha(opacity=0);
     cursor: pointer;

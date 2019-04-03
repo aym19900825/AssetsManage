@@ -358,10 +358,23 @@
 						return item;
 					}
 				});
+				var pmPlan;
+                var url = this.basic_url + '/api-apps/app/pmPlan?ASSETNUM' + selData[0].ASSETNUM+"&ENTERDATE_orders=desc";
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.code == 0){
+							 pmPlan=res.data.data[0];
+                                row.PM_ZQ = pmPlan.FREQUENCY;
+				                row.PM_YXQ = pmPlan.PM_PLANDATE;
+						}else{
+							this.$message({
+								message: "",
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+					});
 				row.A_NAME = selData[0].DESCRIPTION;
 				row.MODEL = selData[0].MODEL;
-				row.PM_ZQ = selData[0].FREQUENCY;
-				row.PM_YXQ = selData[0].PM_YXQ;
 			},
 			changeEdit(row){
 				row.isEditing = !row.isEditing;

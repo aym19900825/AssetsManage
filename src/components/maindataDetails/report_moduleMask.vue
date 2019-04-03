@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加检验/检测报告模板</div>
-					<div class="mask_title" v-show="modifytitle">修改检验/检测报告模板</div>
-					<div class="mask_title" v-show="viewtitle">查看检验/检测报告模板</div>
+					<div class="mask_title" v-show="addtitle">添加检验检测报告模板</div>
+					<div class="mask_title" v-show="modifytitle">修改检验检测报告模板</div>
+					<div class="mask_title" v-show="viewtitle">查看检验检测报告模板</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -17,29 +17,38 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="CATEGORY" :rules="rules" ref="CATEGORY" label-width="100px" class="demo-adduserForm">
+					<el-form inline-message :model="CATEGORY" :rules="rules" ref="CATEGORY" label-width="120px" class="demo-adduserForm">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="检验/检测报告模板" name="1">
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="4" class="pull-right">
+											<el-input v-model="CATEGORY.RE_NUM" placeholder="自动生成" :disabled="edit">
+												<template slot="prepend">编码</template>
+											</el-input>
+										</el-col>
+									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="编码" prop="RE_NUM">
-												<el-input v-model="CATEGORY.RE_NUM" placeholder="自动生成" :disabled="edit"></el-input>
+											<el-form-item label="报告模板类型" prop="RE_TYPE">
+												<el-select clearable v-model="CATEGORY.RE_TYPE" placeholder="请选择" :disabled="noedit">
+													<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="模板描述" prop="DECRIPTION">
+											<el-form-item label="报告模板名称" label-width="120px" prop="DECRIPTION">
 												<el-input v-model="CATEGORY.DECRIPTION" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row>
+									<!-- <el-row>
 										<el-col :span="8" v-if="dept">
 											<el-form-item label="机构" prop="DEPTIDDesc">
 												<el-input v-model="CATEGORY.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
+									</el-row> -->
 								</el-collapse-item>
 								<el-collapse-item title="文件" name="2">
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
@@ -96,6 +105,7 @@
 					return {
 						ID: '',
 						RE_NUM: '',
+						RE_TYPE: '',
 						DECRIPTION: '',
 						STATUS: '',
 						DEPARTMENT: '',
@@ -118,7 +128,6 @@
 					'username': '',
 					'deptid': 1,
 					'deptfullname': '',
-					'appname': '',
 					'appid': 1
 				},
 				basic_url: Config.dev_url,
@@ -132,16 +141,21 @@
 				activeNames: ['1','2','3'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
+				// code: '1',//报告模板类型
 				rules: {
 					RE_NUM: [{
 						required: false,
 						trigger: 'blur',
-						validator: this.Validators.isCodeNum,
+						validator: this.Validators.isWorknumber,
 					}],
+					RE_TYPE: [//报告模板类型
+						{required: true, message: '请选择', trigger: 'change'},
+					],
 					DECRIPTION: [
 						{required: true, message: '请填写', trigger: 'blur'},
 						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
+					
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -170,6 +184,15 @@
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
+			},
+			//报告模板类型
+			getReportType() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=RE_TYPE';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectData = res.data;
+				}).catch(error => {
+					console.log('请求失败');
+				});
 			},
 			//生成随机数函数
 			rand(min, max) {
@@ -217,7 +240,7 @@
 				
 				this.docParm = {
 					'model': 'new',
-					'appname': '检验检测项目_原始数据模板',
+					'appname': '检验检测项目_报告模板',
 					'recordid': 1,
 					'appid': 17
 				};
@@ -302,10 +325,9 @@
                 		var currentUser, currentDate
 						this.currentUser=res.data.nickname;
 						var date=new Date();
-						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
-						var index=this.$moment(date).format("YYYYMMDDHHmmss");
+						this.currentDate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 						var obj = {
-							"DOCLINKS": 'FLS' + index,
+							"DOCLINKS": '',
 							"DESCRIPTION": '',
 							"DOC_SIZE": '',
 							"ROUTE": '',
@@ -324,15 +346,15 @@
 				this.$refs['testing_filesForm'].validate((valid) => {
 		          	if (valid) {
 						var url = this.basic_url + '/api-apps/app/doclinks/saveOrUpdate';
-	//					var submitData = {
+						// var submitData = {
 //						"ID":row.ID,
 //					    "DOCLINKS": row.DOCLINKS,
 //						"DESCRIPTION": row.DESCRIPTION,
 //					    "DOC_SIZE": row.DOC_SIZE,
 //						"ROUTE": row.ROUTE,
-//						"ENTERBY": row.ENTERBY,
-//					    "ENTERDATE": row.ENTERDATE,
-//					}
+						// "CHANGEBY": row.CHANGEBY,
+					    // "CHANGEATE": row.CHANGEDATE,
+					// }
 						this.$axios.post(url, this.submitData).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -505,7 +527,7 @@
 			},
 		},
 		mounted() {
-			
+			this.getReportType();
 		},
 		
 	}

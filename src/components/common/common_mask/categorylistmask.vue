@@ -212,6 +212,7 @@
 		}).catch((wrong) => {})
 	},
 	getData(){
+		console.log(12345);
 		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
@@ -221,6 +222,7 @@
 			VERSION:this.searchList.VERSION,
 		}
 		if(!!this.appname){
+			console.log(2345678);
 			var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
 		}else{
 			var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+this.allDepts;

@@ -251,10 +251,11 @@
             // console.log(VENDORs);
             // var DEPTTYPEs = DEPTTYPEs.toString(',');
             // console.log(DEPTTYPEs)            
-            for(var i = 0;i<selData.length;i++){
-				selData[i].ID = '';
-                list.push(selData[i]);
-            }
+            // for(var i = 0;i<selData.length;i++){
+			// 	selData[i].ID = '';
+            //     list.push(selData[i]);
+			// }
+			list.push(selData);
             console.log(list);
             this.$emit('cusinspect',list);
             

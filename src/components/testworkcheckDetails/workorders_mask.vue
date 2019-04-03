@@ -741,15 +741,14 @@
 					],//工作任务单编号
 					ITEM_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
 					ITEM_MODEL: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//规格型号
-					ITEMNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品编号
+					ITEMNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//样品编号
 					// ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_STATUS: [
 						{ required: true, message: '不能为空', trigger: 'blur' },
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
 					ITEM_SOURCE: [
-						{ required: true, message: '不能为空', trigger: 'change' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+						{ required: false, trigger: 'change', validator: this.Validators.isSpecificKey},
 					],
 					ITEM_QUALITY: [
 						{ required: true, message: '不能为空', trigger: 'change' },
@@ -760,7 +759,7 @@
 						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
 					COMPLETE_DATE: [
-						{ required: true, message: '不能为空', trigger: 'change' },
+						{ required: false, message: '不能为空', trigger: 'change' },
 					],
 					COMPLETE_MODE: [
 						{ required: true, message: '不能为空', trigger: 'change' },

@@ -33,12 +33,14 @@ const validators = {
 	},
 
 	SpecificWord:function (str) {// 特殊字符
+		if( str!=null||str != undefined){
 		var specialKey = "[`~!#^&*()=|{}':;'\\[\\]<>?~！#……&*{}‘']‘'"; 
 			for (var i = 0; i < str.length; i++) {
 				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
 					return false;
 				}
 			}
+		}
 		return true;
 	},
 
@@ -127,7 +129,6 @@ const validators = {
 			}
 		}, 500);
 	},
-
 	isWorknumber:function (rule, value, callback) {//验证工号内容最长30位
 		if(!value) {
 			callback();

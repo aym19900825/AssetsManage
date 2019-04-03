@@ -105,6 +105,11 @@
   },
 
   methods: {
+	resetbtn(){
+		this.searchList = {
+			project: []
+		};
+	},
 	searchinfo(){
 		this.page.currentPage = 1;
 		this.requestData();

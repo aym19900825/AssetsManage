@@ -19,30 +19,6 @@
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<el-dropdown size="small">
-									<button class="btn mr5 btn-primarys">
-										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
-									</button>
-								<el-dropdown-menu slot="dropdown">
-    								<el-dropdown-item>
-    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
-    								</el-dropdown-item>
-    								
-    								<el-dropdown-item>
-										<el-upload
-										ref="upload"
-										class="upload"
-										:action="uploadUrl()"
-										:on-success="fileSuccess"
-										:limit=1
-										multiple
-										method:="post"
-										:file-list="fileList">
-											<i class="icon-upload-cloud"></i> 上传
-										</el-upload>
-    								</el-dropdown-item>
-						  		</el-dropdown-menu>
-							</el-dropdown>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -95,22 +71,12 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="日志名称" width="155"  prop="logname" v-if="checkedName.indexOf('日志名称')!=-1">
-									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.PRO_NUM}}
-										</p>
-									</template>
+								<el-table-column label="日志名称"  prop="logname" v-if="checkedName.indexOf('日志名称')!=-1">
 								</el-table-column>
-								<el-table-column label="用户账号" sortable prop="username" v-if="checkedName.indexOf('用户账号')!=-1">
+								<el-table-column label="用户账号" width="300" sortable prop="username" v-if="checkedName.indexOf('用户账号')!=-1">
 								</el-table-column>
-								<el-table-column label="登录ip" width="100" prop="ip" v-if="checkedName.indexOf('登录ip')!=-1">
+								<el-table-column label="登录ip" width="200" prop="ip" v-if="checkedName.indexOf('登录ip')!=-1">
 								</el-table-column>
-
-
-								<!-- <el-table-column label="登录开始时间" width="185" sortable="custom" prop="starttime" v-if="checkedName.indexOf('登录开始时间')!=-1">
-								</el-table-column>
-								<el-table-column label="登录截止时间" width="120" prop="ENTERDATE" sortable="endtime" :formatter="dateFormat" v-if="checkedName.indexOf('登录截止时间')!=-1">
-								</el-table-column> -->
 							</v-table>
 							<!-- 表格 End-->
 						</el-col>
@@ -119,7 +85,6 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<productmask :PRODUCT="PRODUCT" ref="child" @request="requestData" @reset="reset" v-bind:page=page></productmask>
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
@@ -164,13 +129,9 @@
 					deptId: ''
 				},
 				checkedName: [
-					'编码',
-					'名称',
-					'版本',
-					'机构',
-					// '信息状态',
-					'录入时间',
-					'修改时间'
+					'日志名称',
+					'用户账号',
+					'登录ip'
 				],
 				tableHeader: [{
 						label: '日志名称',

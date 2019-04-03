@@ -309,7 +309,7 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
+						deleteid.push(changeUser[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');

@@ -29,7 +29,10 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="所属菜单ID" prop="menuId">
-												<el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input>
+												<!-- <el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input> -->
+												<el-select v-model="CATEGORY.menuId" style="width: 100%":disabled="noedit">
+													<el-option v-for="item in selectData1" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -170,6 +173,7 @@
 				isok2: false,
 				activeNames: ['1','2'], //手风琴数量
 				selectData: [],
+				selectData1: [],
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
 					name: [{required: true, trigger: 'change', validator: this.Validators.isSpecificKey,}],
@@ -372,9 +376,18 @@
 				$('.v-modal').hide();
 			});
 			},
+			//获取按钮颜色
+			getMenuId(){
+				var url = this.basic_url + '/api-user/menus/findAllMenu';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectData1 = res.data;
+				}).catch((wrong) => {
+				})	
+			},
 		},
 		mounted() {
 			this.getBtnColor();
+			this.getMenuId();
 		},
 			
 	}

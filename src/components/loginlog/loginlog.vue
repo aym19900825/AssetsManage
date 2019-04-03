@@ -35,28 +35,21 @@
 						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="编码" prop="PRO_NUM">
-										<el-input v-model="searchList.PRO_NUM">
+									<el-form-item label="日志名称" prop="logname">
+										<el-input v-model="searchList.logname">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="名称" prop="PRO_NAME">
-										<el-input v-model="searchList.PRO_NAME">
+									<el-form-item label="用户账号" prop="username">
+										<el-input v-model="searchList.username">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION">
+									<el-form-item label="登录ip" prop="ip">
+										<el-input v-model="searchList.ip">
 										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -118,16 +111,6 @@
 				fileList:[],//文件上传的接收数据
 				commentArr: {},
 				value: '',
-				searchData: {
-					page: 1,
-					limit: 20, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					'日志名称',
 					'用户账号',
@@ -169,10 +152,9 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
-					PRO_NUM: '',
-					PRO_NAME: '',
-					VERSION: '',
-					DEPTID: ''
+					logname: '',
+					username: '',
+					ip: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

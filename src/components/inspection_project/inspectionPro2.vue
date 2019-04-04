@@ -151,10 +151,20 @@
 			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
 				highlight-current-row
 				@current-change="addproclass"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"
 				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}">
 				<!--@selection-change="SelChange"-->
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
 				<el-table-column label="项目编号" sortable width="155" prop="P_NUM">
 					<template slot-scope="scope">
 						<span class="blue">{{scope.row.P_NUM}}</span>
@@ -173,7 +183,18 @@
 				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
+			<div class="pt10 text-right">
+				<el-pagination
+						@size-change="sizeChange"
+						background
+						@current-change="currentChange"
+						:current-page="page.currentPage"
+						:page-sizes="[10, 20, 30, 40]"
+						:page-size="page.pageSize"
+						layout="total, sizes, prev, pager, next"
+						:total="page.totalCount">
+				</el-pagination>
+			</div>
 			<!-- 表格 End-->
 			<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
@@ -253,7 +274,7 @@
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
 						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
 							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 							sessionStorage.setItem('toBtm','true');
@@ -270,30 +291,30 @@
 					setTimeout(() => {
 						this.loadSign = true;
 					}, 1000)
-					this.categoryList();
+					this.addprobtn(this.catedata);
 				}
 			},
 			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.categoryList();
+				this.addprobtn(this.catedata);
 			},
 			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.categoryList();
+				this.addprobtn(this.catedata);
 			},
 			addprobtn(row){//查找基础数据中的检验/检测项目
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -325,14 +346,14 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 30;
-				this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			// searchinfo(index) {
+			// 	this.page.currentPage = 1;
+			// 	this.page.pageSize = 30;
+			// 	this.viewfield_inspectionPro2(this.selParentId,this.pTypeId,this.proId,this.parentId);
+			// },
+			// judge(data) {//taxStatus 信息状态布尔值
+			// 	return data.enabled ? '活动' : '不活动'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -341,11 +362,11 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			indexMethod(index) {
-				return index + 1;
-			},
+			// indexMethod(index) {
+			// 	return index + 1;
+			// },
 			viewfield_inspectionPro2(id,num,pro_num,s_num){//点击父级筛选出子级数据
-				if(num==undefined||num==null||num==''){
+				if(id==undefined||id==null||id==''||num==undefined||num==null||num==''){
 					this.inspectionPro2Form.inspectionList = [];
 					this.viewchildRow('null');
 					return false;

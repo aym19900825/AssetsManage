@@ -25,16 +25,16 @@
       <slot :list='list'></slot>
     </el-table>
     <div class="pt10 text-right">
-    <el-pagination
-        @size-change="sizeChange"
-        background
-        @current-change="currentChange"
-        :current-page="page.currentPage"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="page.pageSize"
-        layout="total, sizes, prev, pager, next"
-        :total="page.totalCount">
-    </el-pagination>
+      <el-pagination
+          @size-change="sizeChange"
+          background
+          @current-change="currentChange"
+          :current-page="page.currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="page.pageSize"
+          layout="total, sizes, prev, pager, next"
+          :total="page.totalCount">
+      </el-pagination>
     </div>
   </div>
 </template>

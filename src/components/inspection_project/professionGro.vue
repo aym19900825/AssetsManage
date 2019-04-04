@@ -16,13 +16,10 @@
 				</div>
 			</div>
 			<el-form inline-message :model="professionGroForm" ref="professionGroForm">
+				<!-- 表格 Begin-->
 			  <el-table ref="table" :data="professionGroForm.inspectionList.filter(data => !search || data.PROF_GROUP.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 					highlight-current-row
-					style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}"
-					v-loading="loading"
-					element-loading-text="加载中…"
-					element-loading-spinner="el-icon-loading"
-					element-loading-background="rgba(255, 255, 255, 0.9)">
+					style="width: 100%;" :default-sort="{prop:'professionGroForm.inspectionList', order: 'descending'}">
 					<!-- <el-table-column label="所属产品类别" width="120" prop="NUM">
 			      <template slot-scope="scope">
 			        <el-form-item :prop="'inspectionList.'+scope.$index + '.NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -124,16 +121,6 @@
 			    </el-table-column>
 			  </el-table>
 			</el-form>
-			<!-- 表格 Begin-->
-			<el-pagination background class="text-right pt10 pb10"
-					@size-change="sizeChange"
-					@current-change="currentChange"
-					:current-page="page.currentPage"
-					:page-sizes="[10, 20, 30, 40]"
-					:page-size="page.pageSize"
-					layout="total, sizes, prev, pager, next"
-					:total="page.totalCount">
-			</el-pagination>
 			<!-- 表格 End-->
 		</div>
 
@@ -150,10 +137,14 @@
 				highlight-current-row
 				@current-change="addproclass"
 				style="width: 100%;"
-				:default-sort="{prop:'categoryList', order: 'descending'}"
-				v-loadmore="loadMore">
+				:default-sort="{prop:'categoryList', order: 'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
 				<el-table-column label="机构编号" width="125" sortable prop="id">
 				</el-table-column>
 				<el-table-column label="专业组名称" sortable prop="fullname">
@@ -167,7 +158,6 @@
 				<el-table-column label="修改时间" width="120" prop="updateTime" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
 			<!-- 表格 End-->
 			<!-- <span slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="addproclass">确 定</el-button>
@@ -175,9 +165,9 @@
 			</span> -->
 		</el-dialog>
 		<!-- 专业组 End -->
-
 </div>
 </template>
+
 <script>
 	import Config from '../../config.js'
 	export default {
@@ -211,15 +201,10 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 20,//分页显示数
-					enabled: '',//信息状态
-				},
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
-					pageSize: 20,
+					pageSize: 200,
 					totalCount: 0
 				},
 				parentId: 1
@@ -239,58 +224,58 @@
 				}).catch((err)=>{
 				})
 			},
-		//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+			//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.addprobtn(this.catedata);
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
-				this.viewfield_professionGro(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_professionGro(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_professionGro(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-		},
+				this.addprobtn(this.catedata);
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.addprobtn(this.catedata);
+			},
 			addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -299,14 +284,6 @@
 					this.categoryList = res.data;
 				}).catch(error => {
 				})
-			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.viewfield_professionGro(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
 			},
 			//时间格式化  
 			dateFormat(row, column) {
@@ -317,7 +294,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			viewfield_professionGro(id,num,pro_num,s_num,p_num){//点击父级筛选出子级数据
-				if(num==undefined||num==null||num==''){
+				if(id==undefined||id==null||id==''||num==undefined||num==null||num==''){
 					this.professionGroForm.inspectionList = [];
 					return false;
 					//todo  相关数据设置
@@ -346,7 +323,6 @@
 					this.$refs.singleTable.setCurrentRow(this.professionGroForm.inspectionList[0]);//默认选中第一条数据
 				}).catch((wrong) => {})
 			},
-			
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selData = val;
@@ -477,8 +453,8 @@
 						}
 					}).catch((err) => {
 					});
-						}).catch(() => {
 
+					}).catch(() => {
 					});
 			},
 				addproclass(val) { //小弹出框确认按钮事件

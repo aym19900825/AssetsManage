@@ -142,10 +142,18 @@
 				height="400px"
 				highlight-current-row
 				@current-change="addproclass"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"
 				style="width: 100%;" :default-sort="{prop:'categoryList', order:'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
-				<el-table-column label="序号" type="index" width="55" align="center">
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
 				</el-table-column>
 				<el-table-column label="类别编码" width="155" sortable prop="NUM">
 				</el-table-column>
@@ -160,6 +168,18 @@
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
+			<div class="pt10 text-right">
+				<el-pagination
+						@size-change="sizeChange"
+						background
+						@current-change="currentChange"
+						:current-page="page.currentPage"
+						:page-sizes="[10, 20, 30, 40]"
+						:page-size="page.pageSize"
+						layout="total, sizes, prev, pager, next"
+						:total="page.totalCount">
+				</el-pagination>
+			</div>
 			<!-- 表格 End-->
 			<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
@@ -224,11 +244,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 10,//分页显示数
-					enabled: '',//信息状态
-				},
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -298,7 +313,7 @@
 							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
 							return false;
 						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
 						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
 							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
 							sessionStorage.setItem('toBtm','true');
@@ -315,19 +330,32 @@
 					setTimeout(() => {
 						this.loadSign = true;
 					}, 1000)
-					this.categoryList();
+					this.addprobtn(this.catedata);
 				}
 			},
 			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
-				this.categoryList();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.addprobtn(this.catedata);
 			},
 			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				this.categoryList();
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.addprobtn(this.catedata);;
 			},
+
 			addprobtn(row){//查找基础数据中的类别名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -360,14 +388,14 @@
 					this.categoryList = res.data.data;
 				}).catch((wrong) => {})
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.requestData();
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			// searchinfo(index) {
+			// 	this.page.currentPage = 1;
+			// 	this.page.pageSize = 20;
+			// 	this.requestData();
+			// },
+			// judge(data) {//taxStatus 信息状态布尔值
+			// 	return data.enabled ? '活动' : '不活动'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];

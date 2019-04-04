@@ -15,6 +15,8 @@
 				</el-button>
 			</div>
 		</div>
+		
+		<!-- 表格 Begin-->
 		<el-form inline-message :model="inspectionRepTem2Form" ref="inspectionRepTem2Form">
 		  <el-table ref="table" :data="inspectionRepTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
@@ -28,7 +30,7 @@
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.P_NUM}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -36,7 +38,7 @@
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.RE_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.RE_NUM" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.RE_NUM}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -46,7 +48,7 @@
 		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.DECRIPTION" placeholder="请选择" disabled>
 		        		<el-button slot="append" icon="icon-search" @click="addprobtn(scope.row)"></el-button>
 		        	</el-input><span v-else>{{scope.row.DECRIPTION}}</span>
-				</el-form-item>
+						</el-form-item>
 		      </template>
 		    </el-table-column>
 
@@ -92,25 +94,14 @@
 		      <template slot-scope="scope">
 		        <el-button type="text" id="Edit" size="medium" @click.native.prevent="saveRow(scope.row)" v-if="scope.row.isEditing">
 		        	<i class="icon-check" title="保存"></i>
-				</el-button>
+						</el-button>
 		        <el-button @click="deleteRow(scope.row)" type="text" size="medium" title="删除" v-else>
 		          <i class="icon-trash red"></i>
 		        </el-button>
 		      </template>
 		    </el-table-column>
-
 		  </el-table>
 		</el-form>
-		<!-- 表格 Begin-->
-			<el-pagination background class="text-right pt10 pb10"
-				@size-change="sizeChange"
-				@current-change="currentChange"
-				:current-page="page.currentPage"
-				:page-sizes="[10, 20, 30, 40]"
-				:page-size="page.pageSize"
-				layout="total, sizes, prev, pager, next"
-				:total="page.totalCount">
-			</el-pagination>
 		<!-- 表格 End-->
 	</div>
 	<!-- 检验/检测报告模板 Begin -->
@@ -126,9 +117,18 @@
 				highlight-current-row
 				@current-change="addproclass"
 				style="width: 100%;"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
 				:default-sort="{prop:'categoryList', order: 'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
 				<el-table-column label="报告编号" width="125" sortable prop="RE_NUM">
 				</el-table-column>
 				<el-table-column label="报告描述" sortable prop="DECRIPTION">
@@ -138,7 +138,18 @@
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
+			<div class="pt10 text-right">
+				<el-pagination
+						@size-change="sizeChange"
+						background
+						@current-change="currentChange"
+						:current-page="page.currentPage"
+						:page-sizes="[10, 20, 30, 40]"
+						:page-size="page.pageSize"
+						layout="total, sizes, prev, pager, next"
+						:total="page.totalCount">
+				</el-pagination>
+			</div>
 			<!-- 表格 End-->
 			<!-- <span slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="addproclass">确 定</el-button>
@@ -209,57 +220,57 @@
 				})
 			},
 			//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.addprobtn(this.catedata);
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
-				this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-		},
+				this.addprobtn(this.catedata);
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.addprobtn(this.catedata);
+			},
 			 addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -290,14 +301,14 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			// searchinfo(index) {
+			// 	this.page.currentPage = 1;
+			// 	this.page.pageSize = 10;
+			// 	this.viewfield_inspectionRepTem2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
+			// },
+			// judge(data) {//taxStatus 信息状态布尔值
+			// 	return data.enabled ? '活动' : '不活动'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -307,7 +318,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			viewfield_inspectionRepTem2(id,num,pro_num,s_num,p_num){//点击父级筛选出子级数据
-				if(num==undefined||num==null||num==''){
+				if(id==undefined||id==null||id==''||num==undefined||num==null||num==''){
 					this.inspectionRepTem2Form.inspectionList = []; 
 					return false;
 					//todo  相关数据设置

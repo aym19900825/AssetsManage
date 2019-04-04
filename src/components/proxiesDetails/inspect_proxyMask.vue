@@ -51,7 +51,7 @@
 												<template slot="prepend">编号</template>
 											</el-input>
 										</el-col>
-											<el-col :span="6" class="pull-right">
+										<el-col :span="6" class="pull-right">
 											<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit">
 												<template slot="prepend">承检单位</template>
 											</el-input>
@@ -61,7 +61,7 @@
 										<el-col :span="16">
 											<el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
 												<el-input v-model="dataInfo.V_NAMEDesc" :disabled="edit" width="100%">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getinspect_cust()">
+													<el-button slot="append" :disabled="noedit2" icon="el-icon-search" @click="getinspect_cust()">
 													</el-button>
 												</el-input>
 											</el-form-item>
@@ -83,19 +83,19 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
-												<el-input v-model="dataInfo.V_PERSON" :disabled="noedit">
-													 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addname"></el-button>
+												<el-input v-model="dataInfo.V_PERSON" :disabled="noedit2">
+													 <el-button slot="append" :disabled="noedit2" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="电话" prop="V_PHONE" label-width="110px">
-												<el-input v-model="dataInfo.V_PHONE" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.V_PHONE" :disabled="noedit2"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
-												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="noedit" ></el-input>
+												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="noedit2" ></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -120,8 +120,8 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit" >
-														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit1" >
+														<el-button slot="append" icon="el-icon-search" :disabled="noedit1" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -135,7 +135,7 @@
 										<el-row>
 											<el-col :span="11">
 												<el-form-item label="统一信用代码" prop="PRODUCT_UNIT" label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
+													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit1"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -285,6 +285,9 @@
 												highlight-current-row
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
+												</el-table-column>
 
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 													<template slot-scope="scope">
@@ -920,6 +923,7 @@
 				selval:[],
 				edit: true, //禁填
 				noedit: false,
+				noedit1:false,
 				special:false,
 				special1:false,//样品模块的放大按钮
 				editSearch: '', //判斷項目負責人和接收人
@@ -1034,7 +1038,7 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 3) {//计算第几列的减1
+          } else if(index === 4) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));
@@ -1097,8 +1101,6 @@
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
 							this.$forceUpdate();
-							console.log('========================');
-							console.log(this.dataInfo.CONTRACTCOST);
 							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
@@ -1412,6 +1414,7 @@
 				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
+				this.noedit1=false;
 				this.special=true;
 				this.special1=false;
 			},
@@ -1453,6 +1456,16 @@
 					}else{
 						res.data.LEADER = Number(res.data.LEADER);
 					}
+				 if(res.data.ISRECEIVE=='1'){//这是先有样品时判断能不能修改
+					 		this.special=true;
+							this.special1=true;
+							this.noedit1=true;
+					}else if(res.data.ISRECEIVE=='2'){//2，委托单位不能动；
+							this.noedit2=true
+							this.special=true;
+							this.special1=true;
+							this.noedit1=true;
+					}
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
 					this.show = true;
@@ -1482,6 +1495,8 @@
 				this.views = false; //
 				this.edit = true;
 				this.noedit = false;
+				this.noedit1=false;
+				this.noedit2 = false;
 			},
 			//点击修订按钮
 			modifyversion() {
@@ -1549,6 +1564,8 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.noedit1 = true;
+				this.noedit2 = true;
 				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
@@ -1661,7 +1678,7 @@
 				// this.dataInfo.ITEM_DISPOSITION='';
 				this.special1=false;
 				this.special=true;
-
+				this.dataInfo.ISRECEIVE=0;
 				}else{
 				//样品有值的时候
 				this.dataInfo.P_NAME=val[0];//生产单位
@@ -1681,6 +1698,7 @@
 				this.special1=true;
 				this.special=true;
 				this.special2=true;//样品名称
+				this.dataInfo.ISRECEIVE=1;
 				}
 			},
 			vendor(val){
@@ -1808,7 +1826,6 @@
 			},
 			 //检验项目列表
 			addproject(value){
-					console.log(value);
 					for(var i = 0;i<value.length;i++){
 						value[i].P_DESC = value[i].P_NAME;
 						this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);

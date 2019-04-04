@@ -155,6 +155,7 @@
 			</div>
 		</div>
 		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
+		<checkassignmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></checkassignmask>
 		<!--右侧内容显示 End-->
 					<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
@@ -168,6 +169,7 @@
 	import inspectmask from '../proxiesDetails/check_proxyMask.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
+	import checkassignmask from '../proxiesDetails/checkassignmask.vue'//下达任务的弹出
 	export default {
 		name: 'inspectPro2',
 		components: {
@@ -397,7 +399,9 @@
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
 					}else if(item.name=="打印"){
-				 		this.Printing();
+						this.Printing();
+					}else if(item.name=="下达任务"){
+						this.build();
 				}
 		    },
 			//添加
@@ -460,6 +464,36 @@
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
+			},
+				//下达任务
+			build(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要下达任务的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时下达任务多个数据',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selUser[0].STATE !=3) {
+					this.$message({
+						message: '此委托书暂不能下达任务，请确认【状态】是否通过!',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selUser[0].ISCREATED==1){
+					this.$message({
+						message: '已经生成任务单，无须在次生成',
+						type: 'warning'
+					});
+					return;
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+					this.$refs.assingn.view(this.selUser[0].ID);	
+				}
 			},
 			//中止
 			breakoff(){

@@ -61,7 +61,7 @@
 										<el-col :span="16">
 											<el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
 												<el-input v-model="dataInfo.V_NAMEDesc" :disabled="edit" width="100%">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getinspect_cust()">
+													<el-button slot="append" :disabled="noedit2" icon="el-icon-search" @click="getinspect_cust()">
 													</el-button>
 												</el-input>
 											</el-form-item>
@@ -83,19 +83,19 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="V_PERSON" label-width="110px">
-												<el-input v-model="dataInfo.V_PERSON" :disabled="noedit">
-													 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addname"></el-button>
+												<el-input v-model="dataInfo.V_PERSON" :disabled="noedit2">
+													 <el-button slot="append" :disabled="noedit2" icon="el-icon-search" @click="addname"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="电话" prop="V_PHONE" label-width="110px">
-												<el-input v-model="dataInfo.V_PHONE" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.V_PHONE" :disabled="noedit2"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
-												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="noedit" ></el-input>
+												<el-input v-model="dataInfo.V_ZIPCODE" :disabled="noedit2" ></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -120,8 +120,8 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit" >
-														<el-button slot="append" icon="el-icon-search" :disabled="noedit" @click="getCustomer('pname')"></el-button>
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit1" >
+														<el-button slot="append" icon="el-icon-search" :disabled="noedit1" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -135,7 +135,7 @@
 										<el-row>
 											<el-col :span="11">
 												<el-form-item label="统一信用代码" prop="PRODUCT_UNIT" label-width="110px">
-													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
+													<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit1"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -191,7 +191,6 @@
 											</el-col>
 										</el-row>
 								</el-collapse-item>
-
 								<el-collapse-item title="检测" name="3">
 									<el-row>
 									<el-col :span="8">
@@ -918,7 +917,7 @@
 				value: '',
 				selval:[],
 				edit: true, //禁填
-				noedit: false,
+				noedit:false,
 				special:false,
 				special1:false,//样品模块的放大按钮
 				editSearch: '', //判斷項目負責人和接收人
@@ -1003,7 +1002,7 @@
 				dialogVisibleuser:false,
 				customid:"",
 				dataid:'',//修改和查看带过的id
-				appname:'inspectPro',//appname
+				appname:'inspectPro2',//appname
 				CUSTOMER_PERSONList:[],//
 				maingroup:[],//主检组
 				selectData:[],//承建单位
@@ -1087,9 +1086,10 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
-							var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
-								this.dataInfo.CONTRACTCOST = this.number_format(total,2);
+							var paramData1 = this.INSPECTCOST;
+							var paramData2 = this.ALLCOST;
+							this.$forceUpdate();
+							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
 						}
@@ -1309,7 +1309,7 @@
 			//生成工作任务单
 			build(){
 				var dataid = this.dataInfo.ID;
-					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
+					var Url = this.basic_url + '/api-apps/app/inspectPro2/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
 					this.$axios.get(Url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -1351,7 +1351,7 @@
 					TableName = 'CHECK_PROXY_CONTRACT';
 				}
 				if(row.ID){
-					var url = this.basic_url + '/api-apps/app/inspectPro/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/api-apps/app/inspectPro2/' + TableName +'/' + row.ID;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -1402,6 +1402,7 @@
 				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
+				this.noedit1 = false;
 				this.special=true;
 				this.special1=false;
 			},
@@ -1442,6 +1443,16 @@
 					}else{
 						res.data.LEADER = Number(res.data.LEADER);
 					}
+					if(res.data.ISRECEIVE=='1'){//这是先有样品时判断能不能修改
+					 		this.special=true;
+							this.special1=true;
+							this.noedit1=true;
+					}else if(res.data.ISRECEIVE=='2'){//2，委托单位不能动；
+							this.noedit2=true
+							this.special=true;
+							this.special1=true;
+							this.noedit1=true;
+					}
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
 					this.show = true;
@@ -1471,6 +1482,8 @@
 				this.views = false; //
 				this.edit = true;
 				this.noedit = false;
+				this.noedit1=false;
+				this.noedit2 = false;
 			},
 			//点击修订按钮
 			modifyversion() {
@@ -1538,6 +1551,8 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.noedit1 = true;
+				this.noedit2 = true;
 				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
@@ -2208,7 +2223,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.appname;
-				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isEnd/'+this.dataid;
 	    		this.$axios.get(url, {}).then((res) => {
 	    			if(res.data.resp_code == 0) {
 						this.$message({
@@ -2216,7 +2231,7 @@
 							type: 'warning'
 						});
 	    			}else{
-	    				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isExecute/'+this.dataid;
+	    				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isExecute/'+this.dataid;
 	    				this.$axios.get(url, {}).then((res) => {
 			    			if(res.data.resp_code == 1) {
 								this.$message({
@@ -2224,7 +2239,7 @@
 									type: 'warning'
 								});
 							}else{
-								var url = this.basic_url + '/api-apps/app/inspectPro/flow/customFlowValidate/'+this.dataid;
+								var url = this.basic_url + '/api-apps/app/inspectPro2/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
 				    				if(res.data.resp_code == 1) {
 										this.$message({

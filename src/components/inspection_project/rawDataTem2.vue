@@ -19,7 +19,6 @@
 		  <el-table ref="table" :data="rawDataTem2Form.inspectionList.filter(data => !search || data.DECRIPTION.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
 				style="width: 100%;" :default-sort="{prop:'rawDataTem2Form.inspectionList', order: 'descending'}"
-				v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"
 				element-loading-spinner="el-icon-loading"
@@ -144,8 +143,7 @@
 				highlight-current-row
 				@current-change="addproclass"
 				style="width: 100%;"
-				:default-sort="{prop:'categoryList', order: 'descending'}"
-				v-loadmore="loadMore">
+				:default-sort="{prop:'categoryList', order: 'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
 				<el-table-column label="原始数据编号" width="125" sortable prop="PT_NUM">

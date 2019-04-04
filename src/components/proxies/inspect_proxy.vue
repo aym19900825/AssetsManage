@@ -490,7 +490,13 @@
 						type: 'warning'
 					});
 					return;
-				 }else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+				}else if(this.selUser[0].ISCREATED==1){
+					this.$message({
+						message: '已经生成任务单，无需再次生成',
+						type: 'warning'
+					});
+					return;
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
 					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},

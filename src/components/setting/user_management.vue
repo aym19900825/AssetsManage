@@ -147,9 +147,9 @@
 				<el-tree ref="annual" :data="annualData" v-show="annualData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureannual"  >
 				</el-tree>
 				<!--设置产品类别和产品-->
-				<el-tree ref="product" :data="productData" v-show="productData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct"  >
+				<el-tree ref="product" :data="productData" v-show="productData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resoureproduct" :check-strictly="true" >
 				</el-tree>
-				<el-tree ref="testproduct" :data="testingproductData" v-show="testingproductData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resouretestingproduct" >
+				<el-tree ref="testproduct" :data="testingproductData" v-show="testingproductData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resouretestingproduct" :check-strictly="true" >
 				</el-tree>
 			</div>
 			<div slot="footer">

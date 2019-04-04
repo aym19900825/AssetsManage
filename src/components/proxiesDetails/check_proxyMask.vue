@@ -752,7 +752,7 @@
 			<!-- 检测依据  -->
 			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检测项目  -->
-			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
+			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
 			<!--委托单位名称 -->
 			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor"></inspectcustommask>
 			<!--分包要求 所外机构-->
@@ -1812,25 +1812,15 @@
 			},
 			 //检验项目列表
 			addproject(value){
-					console.log(value);
+				console.log(value);
 					for(var i = 0;i<value.length;i++){
 						value[i].P_DESC = value[i].P_NAME;
+						value[i].QUATITY=0;
 						this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
+						console.log(this.dataInfo.INSPECT_PROXY_PROJECList);
 				}
 			},
-			//检验要求与项目
-			testprojectnum(value){
-				this.deptindex.PROJ_NUM = value;
-			},
-			testprojectname(value){
-				this.deptindex.P_REMARKS = value;
-			},
-			testprojectid(value){
-				this.deptindex.PROJECT_ID = value;
-			},
-			testprojectprover(value){
-				this.deptindex.PROJ_VERSIONNUM = value;
-			},
+		
 			//所外机构
 			  cusinspect(val){
 					for(var i = 0;i<val.length;i++){
@@ -1862,7 +1852,8 @@
 								Q_TYPE: '',
 								CHECKCOST: 0,
 								STATUS:'1',
-								isEditing: true
+								isEditing: true,
+								QUATITY:0
 						};
 							this.dataInfo.CHECK_PROXY_CONTRACTList.push(List);
 						}
@@ -1898,7 +1889,8 @@
 								Q_TYPE: '',
 								CHECKCOST: 0,
 								STATUS:'1',
-								isEditing: true
+								isEditing: true,
+								QUATITY:0
 						};
 							this.dataInfo.CHECK_PROXY_CONTRACTList.push(List);
 						}

@@ -4,9 +4,7 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加检验任务</div>
-					<div class="mask_title" v-show="modifytitle">下达任务</div>
-					<div class="mask_title" v-show="viewtitle">查看检验任务</div>
+					<div class="mask_title" v-show="viewtitle">下达任务</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -19,15 +17,6 @@
 				<div class="mask_content">
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
-						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.workorderForm.STATE!=3">
-								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 接受此任务</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
-							</span>
-							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息 Begin-->
@@ -1689,28 +1678,7 @@
                 this.workorderForm.WORKORDER_REPORTList.push(obj);
 				console.log(this.workorderForm.WORKORDER_REPORTList);
 			},
-			//点击添加，修改按钮显示弹窗
-			visible() {
-				var date = new Date();
-				this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.workorderForm.DEPTID = res.data.deptId;
-					this.workorderForm.ENTERBY = res.data.id;
-					this.username=res.data.username;
-					var date = new Date();
-					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err) => {
-				});
-				this.reset();
-				this.views = false
-				this.modify = false;
-				this.show = true;
-				this.addtitle = true;
-				this.modifytitle = false;
-				this.viewtitle=false;
-				this.edit = true;
-				this.noedit = false;
-			},
+		
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {

@@ -310,9 +310,6 @@
 		    },
 			//时间格式化  
 			dateFormat(row, column) {
-				console.log(12345);
-				console.log(row);
-				console.log(column);
 				var date = row[column.property];
 				if(date == undefined) {
 					return "";
@@ -482,9 +479,6 @@
 				}
 			},
 			handleSuccess(response, file, fileList){
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			// 导入
 			uploadUrl(){

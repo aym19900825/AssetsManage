@@ -30,7 +30,7 @@
 										<el-col :span="8">
 											<el-form-item label="所属菜单" prop="menuId">
 												<!-- <el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input> -->
-												<el-select v-model="CATEGORY.menuId" filterable style="width: 100%">
+												<el-select v-model="CATEGORY.menuId" filterable style="width: 100%" :disabled="noedit">
 													<el-option v-for="item in selectDataMenu" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -392,7 +392,7 @@
 <style scoped>
 	.el-table__body-wrapper 
 	{
-    overflow-y:scroll;
+    	overflow-y:scroll;
     }
 	@import '../../assets/css/mask-modules.css';
 </style>

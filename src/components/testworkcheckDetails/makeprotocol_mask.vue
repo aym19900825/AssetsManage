@@ -15,38 +15,42 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :label-position="labelPosition" ref="workorderForm" label-width="110px">
+					<el-form inline-message 
+							:model="workorderForm" 
+							:label-position="labelPosition" 
+							ref="workorderForm" 
+							label-width="110px">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">
 										<el-tab-pane label="分包方及项目" name="first">
 											<!-- 生成分包协议列表 Begin-->
-											<el-table :data="tableData" border stripe
+											<el-table :data="workorderForm.list" 
+											border 
+											stripe
 											highlight-current-row
-											@selection-change="SelChange"
+											@selection-change="selChange"
 											style="width: 100%;">
 												<el-table-column type="expand">
 													<template slot-scope="props">
-														<!--明细表格 Begin-->
-														<el-table :data="WORKORDER_CONTRACTList" row-key="ID" border stripe highlight-current-row @selection-change="SelChange" style="width: 100%;">
+														<el-table :data="props.row.CONTRACTLiST" 
+																  row-key="ID" 
+																  border 
+																  stripe 
+																  highlight-current-row 
+																  style="width: 100%;">
 															<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
-																{{props.row.BASIS}}
 															</el-table-column>
 															<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
-																{{props.row.P_REMARKS}}
 															</el-table-column>
-															<el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable>
-																{{props.row.REQUIRES}}
-															</el-table-column>
+															<!-- <el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable>
+															</el-table-column> -->
 															<el-table-column prop="Q_TYPE" label="对分包报告/证书的要求" sortable>
-																{{props.row.Q_TYPE}}
 															</el-table-column>
 															<el-table-column prop="CHECKCOST" label="检验费用" sortable width="120px">
-																{{props.row.CHECKCOST}}
 															</el-table-column>
 														</el-table>
-														<!--明细表格 End-->
 													</template>
 												</el-table-column>
 
@@ -56,14 +60,12 @@
 												 <el-table-column type="index" label="序号" width="55">
 												 </el-table-column>
 
-												<el-table-column label="统一信用代码" prop="PRODUCT_UNIT" sortable>
+												<el-table-column label="统一信用代码" prop="CODE" sortable>
 												</el-table-column>
 
-												<el-table-column label="分包方名称" prop="VENDORDesc" sortable>
+												<el-table-column label="分包方名称" prop="NAME" sortable>
 												</el-table-column>
 
-												<el-table-column label="描述" prop="PROJ_NUM" sortable>
-												</el-table-column>
 											</el-table>
 											<!-- 生成分包协议列表 End-->
 									    </el-tab-pane>
@@ -96,25 +98,6 @@
 		},
 		data() {
 			return {
-				dialogVisible2:false,
-				tableData: [{
-					PRODUCT_UNIT: '12987122',
-					VENDORDesc: '好滋好味鸡蛋仔',
-					PROJ_NUM: '10333'
-					}, {
-					PRODUCT_UNIT: '12987123',
-					VENDORDesc: '江浙小吃、小吃零食',
-					PROJ_NUM: '10333'
-					}, {
-					PRODUCT_UNIT: '12987125',
-					VENDORDesc: '荷兰优质淡奶，奶香浓而不腻',
-					PROJ_NUM: '10333'
-					}, {
-					PRODUCT_UNIT: '12987126',
-					VENDORDesc: '王小虎夫妻店',
-					PROJ_NUM: '10333'
-				}],
-				WORKORDER_CONTRACTList:[],//分包项目
 				basic_url: Config.dev_url,
 				loadSign:true,//加载
 				show: false,
@@ -129,17 +112,22 @@
 				isEditing: true,
 				showcreateagree:true,//生成分包协议按钮
 				pageDisable: false,
-				
+				workorderForm: {
+					list: []
+				}
 			};
 		},
 		methods: {
 			reset(){
             	this.workorderForm = {
-										
+					list: []					
 				};
+				this.pageDisable = false;
+				this.activeName = 'first';
+				this.selMenu = [];
 			},
 			//获取导入表格勾选信息
-			SelChange(val) {
+			selChange(val) {
 				this.selMenu = val;
 			},
 			iconOperation(row, column, cell, event) {
@@ -153,32 +141,9 @@
 				this.requestData();
 			},
 			requestData(){
-				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
+				var url = this.basic_url + '/api-apps/app/workorder/operate/queryContract?ID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
-					this.workorderForm = res.data.datas;
-					if(res.data.datas.STATE == '1'||res.data.datas.STATE == '2'){
-						this.pageDisable = false;
-					}else{
-						if(res.data.datas.STATE == '0'){
-							var url2 = this.basic_url +  '/api-apps/app/workorder/flow/Executors/25';
-							this.$axios.get(url2, {}).then((res) => {
-								if(res.data.resp_code == 0){
-									var resData =res.data.datas;
-									var userid = this.userid;
-									for (var i = 0; i < resData.length; i++) {
-										if(userid == resData[i].id){
-											this.pageDisable = false;
-										}else{
-											this.pageDisable = true;
-										}
-									}
-								}
-								
-							}).catch((wrong) => {});
-						}else{
-							this.pageDisable = true;
-						}
-					}
+					this.workorderForm.list = res.data.datas;
 				}).catch((wrong) => {});
 			},
 			//生成分包协议
@@ -190,19 +155,26 @@
 					});
 					return;
 				} else{
+					var subData = this.selMenu;
+					var list = subData.map((item)=>{
+						var obj = {
+							'CONTRACTID': item.CONTRACT,
+							'DEPTTYPE': item.DEPTTYPE
+						};
+						return obj;
+					});
 					var data = {
-						"WORKORDER_CONTRACTID":val.ID,
+						"CONTRACTList": list
 					};
-					var selMenuId=this.selMenu[0].ID;
 					var url = this.basic_url +"/api-apps/app/workorder/operate/subproject";
 					this.$axios.post(url,data).then((res) => {
-						
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '生成成功',
+								message: res.data.resp_msg,
 								type: 'success'
 							});
 							this.showcreateagree = false;
+							this.close();
 						}
 					}).catch((err) => {
 					});
@@ -234,6 +206,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.reset();
 				this.$emit('request');
 			},
 			toggle(e) {
@@ -258,13 +231,7 @@
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
 			},
-			
-			
-		},
-		
-		mounted() {
-
-		},
+		}
 	}
 </script>
 

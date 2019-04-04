@@ -105,19 +105,18 @@
   },
 
   methods: {
-		searchinfo(){
-			this.page.currentPage = 1;
-			this.requestData();
-		},
-		resetbtn(){
-				this.searchList =  { //点击高级搜索后显示的内容
-					project: [],//检测项目
-				};
-				this.requestData();
-			},
-		getProject(){
-			
-		},
+	resetbtn(){
+		this.searchList = {
+			project: []
+		};
+	},
+	searchinfo(){
+		this.page.currentPage = 1;
+		this.requestData();
+	},
+	getProject(){
+		
+	},
 	selChange(row) {
 		this.selUser = [];
 		this.selUser.push(row);

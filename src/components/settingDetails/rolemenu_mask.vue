@@ -2,7 +2,7 @@
 	<div>
 		<el-dialog :modal-append-to-body="false" title="应用模块权限配置" :visible.sync="dialogVisible" width="30%"  >
 			<div class="scrollbar" style="max-height: 400px;">
-				<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys" default-expand-all>
+				<el-tree ref="tree" :data="menuData" show-checkbox node-key="id"  :props="resourceProps" @check-change="handleCheckChange" @click="getCheckedKeys"  default-expand-all>
 				</el-tree>
 			</div>
 			<div slot="footer">

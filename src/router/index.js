@@ -20,6 +20,7 @@ const application_management = r => require.ensure([], () => r(require('@/compon
 const button_configure = r => require.ensure([], () => r(require('@/components/setting/button_configure')), 'button_configure')
 const customer_management = r => require.ensure([], () => r(require('@/components/setting/customer_management')), 'customer_management')
 const user_management = r => require.ensure([], () => r(require('@/components/setting/user_management')), 'user_management')
+const usergroup_management = r => require.ensure([], () => r(require('@/components/setting/usergroup_management')), 'usergroup_management')
 const dept_management = r => require.ensure([], () => r(require('@/components/setting/dept_management')), 'dept_management')
 const role_management = r => require.ensure([], () => r(require('@/components/setting/role_management')), 'role_management')
 const menu_management = r => require.ensure([], () => r(require('@/components/setting/menu_management')), 'menu_management')
@@ -300,6 +301,11 @@ Vue.use(Router)
       path: '/user_management',
       name: 'user_management',
       component: user_management
+    },
+    {//用户组管理
+     path: '/usergroup_management',
+     name: 'usergroup_management',
+     component: usergroup_management
     },
     {//安全管理
       path: '/safe_management',

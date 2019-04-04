@@ -486,7 +486,7 @@
 					return;
 				} else{
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
-					console.log(this.selMenu[0].ID);
+					// console.log(this.selMenu[0].ID);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息

@@ -63,17 +63,19 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-							<el-table-column label="序列号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
+							<!-- <el-table-column label="应用编号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
 								<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.serialnum}}
-									</p>
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.serialnum}}</p>
+								</template>
+							</el-table-column> -->
+							<el-table-column label="应用名" width="180" sortable prop="markx" v-if="this.checkedName.indexOf('前缀')!=-1">
+								<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.markx}}</p>
 								</template>
 							</el-table-column>
-							<el-table-column label="应用名" width="100" sortable prop="markx" v-if="this.checkedName.indexOf('前缀')!=-1">
+							<el-table-column label="表名" width="260" sortable prop="marky" v-if="this.checkedName.indexOf('表名')!=-1">
 							</el-table-column>
-							<el-table-column label="表名" width="100" sortable prop="marky" v-if="this.checkedName.indexOf('表名')!=-1">
-							</el-table-column>
-							<el-table-column label="描述" width="100" sortable prop="remarks" v-if="this.checkedName.indexOf('描述')!=-1">
+							<el-table-column label="描述" width="180" sortable prop="remarks" v-if="this.checkedName.indexOf('描述')!=-1">
 							</el-table-column>
 							<el-table-column label="前缀" width="100" sortable prop="prefix" v-if="this.checkedName.indexOf('前缀')!=-1">
 							</el-table-column>

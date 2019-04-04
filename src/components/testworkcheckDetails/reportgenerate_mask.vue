@@ -21,24 +21,134 @@
 								<el-tab-pane label="封面" name="first">
 										<el-row>
 											<el-col :span="24" class="">
-												<el-form inline-message :model="CATEGORY" ref="CATEGORY" :rules="rules" label-position="right">
+												<el-form inline-message :model="reportTemplate" ref="reportTemplate" :rules="rules" label-position="right">
 													<el-form-item label="请先选择报告模板" prop="RE_TYPE" label-width="160px">
-														<el-select clearable v-model="CATEGORY.RE_TYPE" placeholder="请选择" :disabled="noedit" style="width:300px;">
+														<el-select clearable v-model="reportTemplate.RE_TYPE" placeholder="请选择" :disabled="noedit" style="width:500px;">
 															<el-option v-for="(data,index) in selectData" :key="index" :value="data.RE_NUM" :label="data.DECRIPTION"></el-option>
 														</el-select>
 													</el-form-item>
 												</el-form>
 											</el-col>
-
 										</el-row>
-										
-
 								</el-tab-pane>
 								<!-- 封面 End-->
 
 								<!-- 首页 Begin-->
 								<el-tab-pane label="首页" name="second">
-								
+									<el-form inline-message :model="reportIndex" ref="reportIndex" :rules="rules" label-position="right">
+										<div class="text-center font20 pb10 pt20">国家铁路产品质量监督检验中心<br />检测报告首页</div>
+										<div class="pl30 pr30">
+											<table width="100%" border="1" cellspacing="0" cellpadding="0" class="reportTable">
+												<tr>
+													<td width="10%" rowspan="2">产品名称</td>
+													<td width="60%" rowspan="2">{{reportIndex.ITEM_NAME}}</td>
+													<td width="10%">型号规格</td>
+													<td width="20%">{{reportIndex.ITEM_MODEL}}</td>
+												</tr>
+												<tr>
+													<td>商标/标识</td>
+													<td>{{reportIndex.ITEM_TRADEMARK}}</td>
+												</tr>
+												<tr>
+													<td>委托单位</td>
+													<td colspan="3">{{reportIndex.ITEM_TRADEMARK}}</td>
+												</tr>
+												<tr>
+													<td>制造单位</td>
+													<td colspan="3">{{reportIndex.ITEM_TRADEMARK}}</td>
+												</tr>
+												<tr>
+													<td>检测类别</td>
+													<td>{{reportIndex.ITEM_TRADEMARK}}</td>
+													<td>样品来源</td>
+													<td>{{reportIndex.ITEM_SOURCE}}</td>
+												</tr>
+												<tr>
+													<td>抽样日期</td>
+													<td>{{reportIndex.CHECK_DATE}}</td>
+													<td>样品数量</td>
+													<td>{{reportIndex.ITEM_QUALITY}}</td>
+												</tr>
+												<tr>
+													<td>生产日期/批</td>
+													<td>{{reportIndex.PRODUCT_DATE}}</td>
+													<td>样品编号</td>
+													<td>{{reportIndex.ITEMNUM}}</td>
+												</tr>
+												<tr>
+													<td>样品到达日期</td>
+													<td>{{reportIndex.ARRIVAL_DATE}}</td>
+													<td>样品状态说明</td>
+													<td>{{reportIndex.ITEM_STATUS}}</td>
+												</tr>
+												<tr>
+													<td>抽样方案/判定依据</td>
+													<td colspan="3">{{reportIndex.CHECK_BASIS}}</td>
+												</tr>
+												<tr>
+													<td>检测依据（多条加、号拼接）</td>
+													<td colspan="3">{{reportIndex.S_NAME}}</td>
+												</tr>
+												<tr>
+													<td>检测项目（多条加、号拼接）</td>
+													<td colspan="3">
+														{{reportIndex.P_DESC}}
+													</td>
+												</tr>
+												<tr>
+													<td>检测主要仪器设备（多条加、号拼接）</td>
+													<td colspan="3">{{reportIndex.MAINASSET}}</td>
+												</tr>
+												<tr>
+													<td>检测地点</td>
+													<td>{{reportIndex.INSPECT_PLACE}}</td>
+													<td>检测日期</td>
+													<td>{{reportIndex.INSPECT_DATE}}</td>
+												</tr>
+												<tr>
+													<td>
+														<el-form-item label="" prop="INSPECT_RESULT_TYPE" label-width="0px">
+															<el-select v-model="reportIndex.INSPECT_RESULT_TYPE" placeholder="请选择检测结论/结果" style="width: 100%;" :disabled="noedit">
+																<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+																</el-option>
+															</el-select>
+														</el-form-item>
+													</td>
+													<td colspan="3">
+														<el-form-item label="" prop="INSPECT_RESULT" label-width="0px">
+															<el-input type="textarea" rows="5" placeholder="检测结论：是否符合XXX标准要求。" v-model="reportIndex.INSPECT_RESULT" :disabled="noedit"></el-input>
+														</el-form-item>
+
+														<el-form-item label="" prop="INSPECT_RESULT2" label-width="0px">
+															<el-input type="textarea" rows="5" placeholder="检测结果：综合判定结课。" v-model="reportIndex.INSPECT_RESULT2" :disabled="noedit"></el-input>
+														</el-form-item>
+
+														<el-form-item label="综合判定结课" prop="SYNTHETICAL" label-width="110px">
+															<el-radio-group v-model="reportIndex.SYNTHETICAL" :disabled="noedit">
+																<el-radio label="合格"></el-radio>
+																<el-radio label="不合格"></el-radio>
+															</el-radio-group>
+														</el-form-item>
+														<p class="text-right">（盖章）</p>
+													</td>
+												</tr>
+												<tr>
+													<td>备 注</td>
+													<td colspan="3">
+														<el-form-item label="" prop="REPORT_MEMO" label-width="0px">
+															<el-input type="textarea" rows="5" v-model="reportIndex.REPORT_MEMO" :disabled="noedit"></el-input>
+														</el-form-item>
+													</td>
+												</tr>
+											</table>
+											<el-row class="pt10 pb40">
+												<el-col :span="8">编制：</el-col>
+												<el-col :span="8">审核：</el-col>
+												<el-col :span="8">批准：</el-col>
+											</el-row>
+											<!-- <div class="clearfix pt10 pb20">注：下结论时，将“检测结论/检测结果”栏改为“检测结论”；不下结论时，将“检测结论/检测结果”栏改为“检测结果”。</div> -->
+										</div>
+									</el-form>
 								</el-tab-pane>
 								<!-- 首页 End-->
 
@@ -51,8 +161,6 @@
 											</el-row>
 										</el-form>
 									</div>
-
-									
 								</el-tab-pane>
 								<!-- 检测清单 End-->
 
@@ -103,10 +211,20 @@
 			return {
 				basic_url: Config.dev_url,
 				selectData: [],
-				
-				CATEGORY:{
+				reportTemplate:{
 					RE_TYPE: '1027',
 				},
+				reportIndex:{
+					INSPECT_RESULT: '',
+					WORKORDER_PROJECTList:[],//检测项目
+				},
+				options: [{
+					value: '检测结论',
+					label: '检测结论'
+				}, {
+					value: '检测结果',
+					label: '检测结果'
+				}],
 				loadSign:true,//加载
 				firstBtn:false,
 				secondBtn:false,
@@ -174,7 +292,7 @@
 			},
 			//清空表单
 			reset(){
-					this.workorderForm = {
+					this.reportIndex = {
 										
 				};
 			},
@@ -195,17 +313,17 @@
 			requestData(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
-					this.workorderForm = res.data.datas;
-					
+					this.reportIndex = res.data.datas;//报告首页
+					console.log(res.data.datas);
 				}).catch((wrong) => {});
 			},
 			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
-				this.$refs.workorderForm.validate((valid) => {
-		          if (valid) {
+				this.$refs.reportIndex.validate((valid) => {
+				if (valid) {
 					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
-					this.$axios.post(url,this.workorderForm).then((res) => {
+					this.$axios.post(url,this.reportIndex).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

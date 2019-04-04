@@ -45,7 +45,7 @@
 										<el-col :span="8">
 											<el-form-item label="按钮颜色" prop="style">
 												<el-select v-model="CATEGORY.style" :disabled="noedit" style="width: 100%">
-													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+													<el-option v-for="item in selectData" :key="item.id" :value="item.name" :label="item.name" :class="item.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>

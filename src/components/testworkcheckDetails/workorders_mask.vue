@@ -1483,7 +1483,7 @@
 			flowhistory(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workorder;
-//				this.$refs.flowhistoryChild.open();
+//			this.$refs.flowhistoryChild.open();
 				this.$refs.flowhistoryChild.getdata(this.dataid);
 			},
 			//流程地图
@@ -1504,7 +1504,7 @@
 			},
 			
 			addfield1(){//检测依据列表新建行
-            	var date=new Date();
+				var date=new Date();
 				this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				var index=this.$moment(date).format("YYYYMMDDHHmmss");
 				var obj = {

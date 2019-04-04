@@ -183,8 +183,7 @@
 			rand(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
 			},
-			handleNodeClick(data) {
-			},
+			
 			//父级分类
 			addparclass(){
 				this.dialogVisible = true;
@@ -218,7 +217,7 @@
 				this.dialogVisible = false;//关闭弹出框
 				this.resourceData = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
-				this.page.pageSize = 10;//页码重新传值
+				this.page.pageSize = 20;//页码重新传值
 			},
 			handleNodeClick(data) { //获取勾选树菜单节点
 				

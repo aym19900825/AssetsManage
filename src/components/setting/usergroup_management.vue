@@ -22,7 +22,6 @@
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-
 							<div class="keep-open btn-group" title="列">
 								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 									<span class="el-dropdown-link">
@@ -74,7 +73,7 @@
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="所属机构" width="125" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('部门id')!=-1">
+								<el-table-column label="所属机构" width="165" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('部门id')!=-1">
 								</el-table-column>
 							</v-table>
 						</el-col>

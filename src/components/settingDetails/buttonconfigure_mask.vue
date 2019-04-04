@@ -390,9 +390,5 @@
 </script>
 
 <style scoped>
-	.el-table__body-wrapper 
-	{
-    	overflow-y:scroll;
-    }
 	@import '../../assets/css/mask-modules.css';
 </style>

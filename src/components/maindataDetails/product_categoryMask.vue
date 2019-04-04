@@ -27,12 +27,22 @@
 												<template slot="prepend">版本</template>
 											</el-input>
 										</el-col>
+										<el-col :span="4" class="pull-right">
+											<el-form-item label="编码" prop="NUM">
+												<el-input v-model="CATEGORY.NUM" placeholder="自动生成" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="编码" prop="NUM">
-												<el-input v-model="CATEGORY.NUM" placeholder="自动生成" :disabled="edit"></el-input>
+											<el-form-item label="父级分类" prop="PARENTDesc">
+												<el-tooltip class="item" effect="dark" content="不选父级或清空已选的父级，可设此条数据为一级分类" placement="top">
+														<el-input v-model="CATEGORY.PARENTDesc" :disabled="true">
+															<el-button slot="prepend" icon="icon-close2" @click="addparclassReset" :disabled="noedit" title="清空"></el-button>
+															<el-button slot="append" icon="el-icon-search" @click="addparclass" :disabled="noedit"></el-button>
+														</el-input>
+												</el-tooltip>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -85,6 +95,15 @@
 					</el-form>
 				</div>
 			</div>
+			<!-- 弹出 -->
+			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				</el-tree>
+				<span slot="footer">
+			       <el-button type="primary" @click="queding">确 定</el-button>
+			       <el-button @click="resetBasisInfo">取 消</el-button>
+			    </span>
+			</el-dialog>
 		</div>
 	</div>
 </template>
@@ -153,8 +172,13 @@
 					NUM: [{required: false, trigger: 'blur', validator: this.Validators.isWorknumber,}],
 					TYPE: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey,}],
 				},
+				resourceProps: {
+					children: "children",
+					label: "TYPE"
+				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
 				category:{},//从父组件接过来的值
 				addtitle:true,
 				modifytitle:false,
@@ -170,9 +194,78 @@
 			};
 		},
 		methods: {
+			//产品父级分类
+			addparclass(){
+				this.dialogVisible = true;
+				let that = this;
+				var url = this.basic_url + '/api-apps/app/productType/tree?tree_id=NUM&tree_pid=PARENT';
+				this.$axios.get(url, {}).then((res) => {
+					this.resourceData = res.data.datas;
+					this.treeData = this.transformTree(this.resourceData);
+				});
+			},
+			//置空父级分类
+			addparclassReset(){
+				this.CATEGORY.PARENT ='0';
+				this.CATEGORY.PARENTDesc ='';
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
+			},
+			//弹出框确定按钮
+			queding() {
+				this.getCheckedNodes();
+				if(this.checkedNodes == ''){
+					this.$message({
+						message:'请选择数据',
+						type:'warning'
+					})
+				}else{					
+					this.placetext = false;
+					// this.dialogVisible = false;	
+					this.CATEGORY.PARENT = this.checkedNodes[0].NUM;
+					this.CATEGORY.PARENTDesc = this.checkedNodes[0].TYPE;
+					this.resetBasisInfo();//调用resetBasisInfo函数
+				}				
+			},
+			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+				this.dialogVisible = false;//关闭弹出框
+				this.resourceData = [];//列表数据置空
+			},
+			handleNodeClick(data) {//获取勾选树菜单节点
+			},
+			//获取勾选树菜单节点
+			handleClicks(data,checked, indeterminate) {
+			this.getCheckboxData = data;
+				this.i++;
+				if(this.i%2==0){
+					if(checked){
+							this.$refs.tree.setCheckedNodes([]);
+							this.$refs.tree.setCheckedNodes([data]);
+							//交叉点击节点
+						}else{
+							this.$refs.tree.setCheckedNodes([]);
+							//点击已经选中的节点，置空
+					}
+				}
+			},
+			transformTree(data) {
+				for(var i = 0; i < data.length; i++) {
+					data[i].name = data[i].fullname;
+					if(!data[i].pid || $.isArray(data[i].subDepts)) {
+						data[i].iconClass = 'icon-file-normal';
+					} else {
+						data[i].iconClass = 'icon-file-text';
+					}
+					if($.isArray(data[i].subDepts)) {
+						data[i].children = this.transformTree(data[i].subDepts);
+					}
+				}
+				return data;
+			},
+			getCheckedNodes() {
+				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			//添加显示弹窗
 			visible() {

@@ -21,8 +21,8 @@
 							<button type="button" class="btn btn-blue button-margin" @click="modify">
 							    <i class="icon-edit"></i>修改
 							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除000
+							<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
+							    <i class="icon-trash"></i>删除
 							</button>
 							<!-- <button type="button" class="btn btn-red button-margin" @click="physicsDel">
 							    <i class="icon-trash1"></i>彻底删除
@@ -281,7 +281,7 @@
 					});
 					return;
 				} else {
-					// console.log(this.selUser[0]);
+					console.log(this.selUser[0]);
 					this.CATEGORY = this.selUser[0];
 					this.$refs.btnconfigmask.detail();
 				}
@@ -300,7 +300,6 @@
 			// 删除
 			deluserinfo() {
 				var selData = this.selUser;
-				console.log(this.selData);
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -308,20 +307,20 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-user/permissions/' + this.selUser.id;
+					var url = this.basic_url + '/api-user/permissions/deletes';
 					//changeUser为勾选的数据
-					// var changeUser = this.selUser;
+					var changeUser = selData;
 					//deleteid为id的数组
-					// var deleteid = [];
-					// var ids;
-					// for(var i = 0; i < changeUser.length; i++) {
-					// 	deleteid.push(changeUser[i].id);
-					// }
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
+					}
 					//ids为deleteid数组用逗号拼接的字符串
-					// ids = deleteid.toString(',');
-					// var data = {
-					// 	ids: ids,
-					// }
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',

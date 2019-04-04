@@ -151,8 +151,8 @@
 			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
 				highlight-current-row
 				@current-change="addproclass"
-				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" 
-				v-loadmore="loadMore"><!--@selection-change="SelChange"-->
+				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}">
+				<!--@selection-change="SelChange"-->
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
 				<el-table-column label="项目编号" sortable width="155" prop="P_NUM">

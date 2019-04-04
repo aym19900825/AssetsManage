@@ -338,7 +338,7 @@
 				// console.log(this.formInline.DEPTID);
 				// var parentIds=this.formInline.DEPTID;//获取下拉列表中的所属机构ID
 				// debugger;
-				var url=this.basic_url + '/api-apps/app/productType';
+				var url=this.basic_url + '/api-apps/appSelection/productType/leafPageForStation?tree_id=NUM&tree_pid=PARENT';
 				this.$axios.get(url,{params: data}).then((res) => {
 					this.page.totalCount = res.data.count;
 					//总的页数

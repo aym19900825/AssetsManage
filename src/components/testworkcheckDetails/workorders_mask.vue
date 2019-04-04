@@ -526,6 +526,132 @@
 											</el-table>
 										</el-tab-pane>
 										<!--分包项目 End-->
+
+										<!--检验检测设备 Begin-->
+										<el-tab-pane label="检验检测设备" name="third">
+											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+											      <template slot-scope="scope">
+											      	<i class="el-icon-check" v-show="scope.row.isEditing">
+											      	</i>
+											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+											      	</i>
+											      </template>
+											    </el-table-column>
+												<!-- <el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.WONUM" placeholder="自动生成">	</el-input>
+													</template>
+												</el-table-column> -->
+												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.ASSETNUM"></el-input>
+													</template>
+												</el-table-column>
+												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.DESCRIPTION"></el-input>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
+													<template slot-scope="scope">
+														<el-input disabled  size="small" v-model="scope.row.MODEL"></el-input>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="USE_PERSON" label="使用人" sortable width="150px">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON">
+														  	<el-button slot="append" icon="el-icon-search" @click="addperson(scope.row, 'WORKORDER_ASSETList')" :disabled="noedit"></el-button>
+														</el-input>
+													</template>
+												</el-table-column>
+												
+												<el-table-column fixed="right" label="操作" width="120px">
+													<template slot-scope="scope">
+													  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'equipList')" type="text" size="small">
+														<i class="icon-trash red"></i>
+													  </el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+										</el-tab-pane>
+										<!--检验检测设备 End-->
+
+										<!--成果数据 Begin-->
+										<el-tab-pane label="成果数据" name="fourth">
+											<el-row>
+												<el-col :span="24">
+													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+														  border 
+														  stripe 
+														  :fit="true" 
+														  max-height="260" 
+														  style="width: 100%;" 
+														  @cell-click="iconOperation" 
+														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+														<el-table-column prop="iconOperation" fixed width="50px">
+													      <template slot-scope="scope">
+													      	<i class="el-icon-check" v-show="scope.row.isEditing">
+													      	</i>
+													      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
+													      	</i>
+													      </template>
+													    </el-table-column>
+														<el-table-column label="模板来源" sortable prop="DATA_TYPE">
+													      <template slot-scope="scope">
+													      	<el-select v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
+																<el-option label="基础数据选择" value="1"></el-option>
+																<el-option label="链条选择" value="2"></el-option>															
+															</el-select>
+													      	<!-- <span v-else>{{scope.row.DATA_TYPEDesc}}</span> -->
+													      </template>
+													    </el-table-column>
+														<el-table-column label="模板编号" sortable prop="D_NUM">
+													      <template slot-scope="scope">
+													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
+													      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
+													      	</el-input>
+													      	<span v-else>{{scope.row.D_NUM}}</span>
+													      </template>
+													    </el-table-column>
+													    <el-table-column label="模板描述" sortable prop="D_DESC">
+													      <template slot-scope="scope">
+													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC"></el-input>
+													      	<span v-else>{{scope.row.D_DESC}}</span>
+													      </template>
+													    </el-table-column>
+									            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
+															<template slot-scope="scope">
+															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
+																<!-- <span v-if="scope.row.FILESIZE_ORG == -1">0kb</span> -->
+															</template>
+														</el-table-column>
+														<el-table-column label="上传文件大小" prop="FILESIZE">
+															<template slot-scope="scope">
+															 	<el-checkbox v-if="!!scope.row.FILESIZE" v-model="scope.row.FILECHECKED">{{scope.row.FILESIZE+'M'}}</el-checkbox>
+															</template>
+														</el-table-column>
+														<el-table-column label="操作">
+															<template slot-scope="scope">
+															 	<el-button title="下载" @click="downLoadRow(scope.row)" type="text" size="small"> 
+																	<i class="icon-arrow-down-circle"></i>
+																</el-button>
+																<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
+																	<i class="icon-trash red"></i>
+																</el-button>
+																<el-button title="编辑" type="text" size="small">
+																	<i class="icon-pencil"></i>
+																</el-button>
+															</template>
+														</el-table-column>
+									            	</el-table>
+												</el-col>
+													
+											</el-row>
+										</el-tab-pane>
+										<!--成果数据 End-->
 									</el-tabs>
 									<!-- 备注 Begin-->
 									<el-row class="pt10">
@@ -1883,15 +2009,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "60px");
+				$(".mask_div").css("top", "-40px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "80%");
-				$(".mask_div").css("top", "100px");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
 			},
 			
 			//时间格式化  

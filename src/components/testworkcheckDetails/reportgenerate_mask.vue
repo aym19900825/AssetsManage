@@ -392,5 +392,5 @@
 <style>
 	@import '../../assets/css/mask-modules.css';
 
-	.el-tabs__content { min-height: 680px;}
+	/* .el-tabs__content { min-height: 680px;} */
 </style>

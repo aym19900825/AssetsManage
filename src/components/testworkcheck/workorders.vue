@@ -117,8 +117,10 @@
 					</el-row>
 					</div>
 				</div>
+			<!--工作任务单详情/Houling-->
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-			<sendtasklist ref="task"  v-bind:page=page @refresh="refresh"></sendtasklist>
+			<!--下达任务/Houling-->
+			<sendtasklist ref="task" v-bind:page=page @refresh="refresh"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 			<!--任务处理/Aiyamin-->
@@ -414,7 +416,7 @@
 			},
 			//请求点击
 		    getbtn(item){
-		    	if(item.name=="下达任务"){
+		    	if(item.name=="修改"){
 		    	 	this.modify();
 		    	}else if(item.name=="彻底删除"){
 		    	 	this.physicsDel();
@@ -426,6 +428,8 @@
 		    	 	this.deluserinfo();
 		    	}else if(item.name=="任务处理"){
 					this.workorderDeal();
+		    	}else if(item.name=="下达任务"){
+					this.tasklist();
 		    	}else if(item.name=="生成分包协议"){
 					this.makeProtocolMask();
 		    	}else if(item.name=="报告生成与编辑"){

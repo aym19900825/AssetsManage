@@ -375,6 +375,7 @@
 							return false;
 					  	}else{
 							var url = this.basic_url + '/api-apps/app/product/operate/upgraded';
+							console.log(this.PRODUCT);
 							this.$axios.post(url, this.PRODUCT).then((res) => {
 								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {

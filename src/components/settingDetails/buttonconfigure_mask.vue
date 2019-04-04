@@ -28,8 +28,11 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="所属菜单ID" prop="menuId">
-												<el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input>
+											<el-form-item label="所属菜单" prop="menuId">
+												<!-- <el-input v-model="CATEGORY.menuId" :disabled="noedit"></el-input> -->
+												<el-select v-model="CATEGORY.menuId" filterable style="width: 100%" :disabled="noedit">
+													<el-option v-for="item in selectDataMenu" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -45,7 +48,7 @@
 										<el-col :span="8">
 											<el-form-item label="按钮颜色" prop="style">
 												<el-select v-model="CATEGORY.style" :disabled="noedit" style="width: 100%">
-													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+													<el-option v-for="item in selectData" :key="item.id" :value="item.name" :label="item.name" :class="item.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -66,8 +69,8 @@
 								<el-collapse-item title="其它" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="createbydesc">
-												<el-input v-model="CATEGORY.createbydesc" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="creatUser">
+												<el-input v-model="CATEGORY.creatUser" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -76,8 +79,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="updatebydesc">
-												<el-input v-model="CATEGORY.updatebydesc" placeholder="当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="updateUser">
+												<el-input v-model="CATEGORY.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -142,17 +145,18 @@
 				type: Object,
 				default: function() {
 					return {
-						ID: '',
-						name: '',
-						menuId: '',
-						TYPE: '',
-						STATUS: '',
-						VERSION: '',
-						DEPARTMENT: '',
-						creatUser: '',
-						ENTERDATE: '',
-						updateUser: '',
-						CHANGEDATE: ''
+						id: '',
+						name: '',//按钮名称
+						menuId: '',//所属菜单
+						icon: '',//图标
+						style: '',//按钮颜色
+						deptid: '',//部门ID
+						sort: '',//排序
+						permission: '',//按钮事件名称
+						creatUser: '',//创建人
+						createTime: '',//创建时间
+						updateUser: '',//修改人
+						updateTime: ''//修改时间
 					}
 				}
 			},
@@ -170,6 +174,7 @@
 				isok2: false,
 				activeNames: ['1','2'], //手风琴数量
 				selectData: [],
+				selectDataMenu: [],//所属菜单
 				fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
 				rules: {
 					name: [{required: true, trigger: 'change', validator: this.Validators.isSpecificKey,}],
@@ -220,7 +225,6 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.deptid = res.data.deptId;
 					this.CATEGORY.creatUser = res.data.id;
-					// this.CATEGORY.creatUserDesc = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
@@ -253,12 +257,9 @@
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.updateUser = res.data.id;
-					// this.CATEGORY.updateUserDesc = res.data.nickname;
+					console.log(res.data.id);
 					var date = new Date();
-					this.CATEGORY.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					//深拷贝数据
-					let _obj = JSON.stringify(this.CATEGORY);
-        			this.category = JSON.parse(_obj);
+					this.CATEGORY.updateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.show = true;
@@ -279,7 +280,14 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BTNCOLOR';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
-					
+				}).catch((wrong) => {
+				})	
+			},
+			//所属菜单
+			getMenuId(){
+				var url = this.basic_url + '/api-user/menus/findAllMenu';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectDataMenu = res.data;
 				}).catch((wrong) => {
 				})	
 			},
@@ -375,6 +383,7 @@
 		},
 		mounted() {
 			this.getBtnColor();
+			this.getMenuId();
 		},
 			
 	}
@@ -383,7 +392,7 @@
 <style scoped>
 	.el-table__body-wrapper 
 	{
-    overflow-y:scroll;
+    	overflow-y:scroll;
     }
 	@import '../../assets/css/mask-modules.css';
 </style>

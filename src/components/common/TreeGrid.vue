@@ -2,9 +2,12 @@
   <el-table
     :data="data"
     style="width: 100%;"
+    ref="table"
     :row-style="showTr" 
     border 
     stripe 
+    highlight-current-row
+    @current-change="singleTable"
     :header-cell-style="rowClass" 
     :height="fullHeight" 
     @selection-change="SelChange">
@@ -99,6 +102,9 @@
     data () {
       return {
         fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
+        selData: [],
+        isshift: false,
+        isctrl: false,
       }
     },
     computed: {
@@ -113,26 +119,101 @@
       }
     },
     methods: {
+      singleTable(row){
+        if(this.isctrl){
+          this.$refs.table.toggleRowSelection(row);
+          console.log(this.$refs.table.toggleRowSelection(row));
+        }else if(this.isshift){
+          var selData = this.selData;
+          var list = this.list;
+          var minIndex = 0;
+          var maxIndex = 0;
+          var clickIndex = 0;
+          var selIndex = [];
+          var dataProp = (this.appName=='report'||this.appName=='reportFile'||this.appName=='flow' )?'id':'ID';
+          for(var i=0; i<selData.length; i++){
+            list.forEach(function(item, index){
+              if(item[dataProp] == selData[i][dataProp]){
+                selIndex.push(index);
+                if(i==0){
+                  minIndex = index;
+                  maxIndex = index;
+                }else{
+                  minIndex = index<minIndex ? index:minIndex; 
+                  maxIndex = index>maxIndex ? index:maxIndex; 
+                }
+              }
+              if(item[dataProp] == row[dataProp]){
+                clickIndex = index;
+              }
+            }); 
+          }
+          var min = 0;
+          var max = 0;
+          if(clickIndex < minIndex){
+            min = clickIndex;
+            max = maxIndex;
+          }else if(clickIndex > maxIndex){
+            min = minIndex;
+            max = clickIndex;
+          }else{
+            min = minIndex;
+            max = clickIndex;
+          }
+          selIndex.forEach((item)=>{
+            this.$refs.table.toggleRowSelection(list[item]);
+          });
+          for(var m=min; m<=max; m++){
+            this.$refs.table.toggleRowSelection(list[m]);
+          }
+        }else{
+          this.$refs.table.clearSelection();
+          this.$refs.table.toggleRowSelection(row);
+        }
+      },
+      eventBind(){
+        var that = this;
+        document.onkeydown = function(e) { //按下键盘      
+        switch (e.keyCode) {        
+          case 16:           
+            that.isshift = true;     
+            break;         
+          case 17:          
+            that.isctrl = true;        
+            break;     
+          }     
+        };    
+        document.onkeyup = function(e) { //放弃键盘   
+          switch (e.keyCode) {      
+            case 16:           
+              that.isshift = false;      
+              break;        
+            case 17:         
+              that.isctrl = false;     
+              break;       
+          }  
+        }   
+      },
       //表头居中
       rowClass({ row, rowIndex}) {
-          return 'text-align:center'
+        return 'text-align:center'
       },
     	//改变的值
     	SelChange(val) {
-				// this.selUser = val;
+				this.selData = val;
 				//子给父传值
 				// childByValue是在父组件on监听的方法
         // 第二个参数this.childValuedata是需要传的值
-				this.$emit('classByValue', val);
+        this.$emit('classByValue', val);
 			},
-    // 显示行
-       showTr: function (row, index) {
-        let show = (row.row._parent ? (row.row._parent._expanded && row.row._parent._show) : true)
-        row.row._show = show
-        return show ? '' : 'display:none;'
-      },
+      // 显示行
+      showTr: function (row, index) {
+        let show = (row.row._parent ? (row.row._parent._expanded && row.row._parent._show) : true)
+        row.row._show = show
+        return show ? '' : 'display:none;'
+      },
 
-    // 展开下级
+      // 展开下级
       toggle: function (trIndex) {
         let me = this
         let record = me.data[trIndex]
@@ -141,8 +222,7 @@
       view: function (data) {
          this.$emit('getDetail', data);
       },
-    
-    // 显示层级关系的空格和图标
+      // 显示层级关系的空格和图标
       spaceIconShow (index) {
         let me = this
         if (me.treeStructure && index === 0) {
@@ -150,7 +230,7 @@
         }
         return false
       },
-    // 点击展开和关闭的时候，图标的切换
+      // 点击展开和关闭的时候，图标的切换
       toggleIconShow (index, record) {
         let me = this
         if (me.treeStructure && index === 0 && record.children && record.children.length > 0) {
@@ -166,6 +246,9 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
+    },
+    mounted(){
+      this.eventBind();
     }
   }
 </script>

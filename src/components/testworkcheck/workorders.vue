@@ -486,6 +486,7 @@
 					return;
 				} else{
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
+					// console.log(this.selMenu[0].ID);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息
@@ -804,6 +805,7 @@
 			childvalue: function (childValue) {
 				// childValue就是子组件传过来的
 				this.selMenu = childValue;
+				console.log(this.selMenu);
 			},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {

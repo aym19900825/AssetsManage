@@ -24,9 +24,9 @@
 							<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
 							    <i class="icon-trash"></i>删除
 							</button>
-							<button type="button" class="btn btn-red button-margin" @click="physicsDel">
+							<!-- <button type="button" class="btn btn-red button-margin" @click="physicsDel">
 							    <i class="icon-trash1"></i>彻底删除
-							</button>
+							</button> -->
 							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
 					    		<i class="icon-arrow1-down" v-show="down"></i>
@@ -55,8 +55,8 @@
 								<el-col :span="6">
 									<el-form-item label="所属菜单" prop="menuIdDesc">
 										<!-- <el-input v-model="searchList.menuIdDesc"></el-input> -->
-										<el-select v-model="searchList.menuIdDesc" style="width: 100%">
-											<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
+										<el-select v-model="searchList.menuIdDesc" filterable style="width: 100%">
+											<el-option v-for="item in selectDataMenu" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
@@ -134,7 +134,7 @@
 				appName:'apppermissions',
 				reportData:{},//报表的数据
 				scroll_old:0,
-				selectData: [],
+				selectDataMenu: [],
 				// up2down:'down',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -218,13 +218,12 @@
 			tableControle(data) {
 				this.checkedName = data;
 			},
-			//获取按钮颜色
+			//所属菜单
 			getMenuId(){
 				var url = this.basic_url + '/api-user/menus/findAllMenu';
 				this.$axios.get(url, {}).then((res) => {
 					// 
-					this.selectData = res.data;
-					
+					this.selectDataMenu = res.data;
 				}).catch((wrong) => {
 				})	
 			},
@@ -244,13 +243,18 @@
 			reset() {
 				this.CATEGORY = {
 					id: '',
-					name: '',
-					menuIdDesc: '',
-					icon: '',
-					style: '',
-					sort: '',
-					createTime: '',
-					updateTime: '',
+					name: '',//按钮名称
+					// menuIdDesc: '',//所属菜单
+					menuId: '',//所属菜单
+					icon: '',//图标
+					style: '',//按钮颜色
+					sort: '',//排序
+					deptid: '',//部门ID
+					permission: '',//按钮事件名称
+					creatUser: '',//创建人
+					createTime: '',//创建时间
+					updateUser: '',//修改人
+					updateTime: '',//修改时间
 				};
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
@@ -277,6 +281,7 @@
 					});
 					return;
 				} else {
+					console.log(this.selUser[0]);
 					this.CATEGORY = this.selUser[0];
 					this.$refs.btnconfigmask.detail();
 				}
@@ -309,7 +314,7 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
+						deleteid.push(changeUser[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -357,13 +362,14 @@
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
+						deleteid.push(changeUser[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
 					var data = {
 						ids: ids,
 					}
+					console.log(data);
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',

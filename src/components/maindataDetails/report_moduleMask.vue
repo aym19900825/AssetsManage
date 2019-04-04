@@ -240,7 +240,7 @@
 				
 				this.docParm = {
 					'model': 'new',
-					'appname': '检验检测项目_原始数据模板',
+					'appname': '检验检测项目_报告模板',
 					'recordid': 1,
 					'appid': 17
 				};

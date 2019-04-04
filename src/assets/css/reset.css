@@ -199,8 +199,8 @@ h6 {
 }
 .title {line-height:35px;}
 
-
-
+/*报告模板生成表格样式*/
+.reportTable td { padding:10px;}
 /*Step*/
 .el-step__description { padding-right: 0 !important;}
 .el-step.is-vertical .el-step__title {margin-left: -5px;}

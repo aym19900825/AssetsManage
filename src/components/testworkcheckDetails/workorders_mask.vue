@@ -1483,7 +1483,7 @@
 			flowhistory(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.workorder;
-//				this.$refs.flowhistoryChild.open();
+//			this.$refs.flowhistoryChild.open();
 				this.$refs.flowhistoryChild.getdata(this.dataid);
 			},
 			//流程地图
@@ -1504,7 +1504,7 @@
 			},
 			
 			addfield1(){//检测依据列表新建行
-            	var date=new Date();
+				var date=new Date();
 				this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				var index=this.$moment(date).format("YYYYMMDDHHmmss");
 				var obj = {
@@ -1712,7 +1712,7 @@
 				this.noedit = false;
 			},
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
+				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据
 					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
@@ -1883,15 +1883,15 @@
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
 				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").css("top", "60px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
 				this.isok1 = true;
 				this.isok2 = false;
 				$(".mask_div").css("width", "80%");
-				$(".mask_div").css("height", "90%");
-				$(".mask_div").css("top", "0px");
+				$(".mask_div").css("height", "80%");
+				$(".mask_div").css("top", "100px");
 			},
 			
 			//时间格式化  
@@ -1924,7 +1924,8 @@
 					}, 1000)
 					this.getuser();
 			    }
-			},
+			},	
+			
 			getuser(){
 				var data = {
 					page: this.page.currentPage,
@@ -1937,7 +1938,7 @@
 					});
 					return;
 				}
-				//用户
+				 //用户
 				this.$axios.get(this.basic_url + '/api-user/users?deptId='+this.workorderForm.CJDW, {
 					params: data
 				}).then((res) => {
@@ -1959,21 +1960,22 @@
 							}
 						}
 					}
+                    
 					this.userList = newarr;
 				}).catch((wrong) => {})	
 			},
-
 			getUser(){//获取当前用户信息
-				var url = this.basic_url + '/api-user/users/currentMap';
-				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				this.currentuserinfo = res.data;
-				this.userid = res.data.id;
-				this.username = res.data.username;
-				this.deptid = res.data.deptId;
-				this.deptfullname = res.data.deptName;
-					}).catch((err) => {
-					});
-			},
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					this.currentuserinfo = res.data;
+				 	this.userid = res.data.id;
+	        this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
+	            }).catch((err) => {
+	            });
+        	},
+			
 		},
 		
 		mounted() {

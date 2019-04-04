@@ -332,7 +332,7 @@
                     nickname:''
                 };
             },
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
                 this.USESEAL.GHUSER = '1';//添加好放大镜后去掉
                 this.USESEAL.USER = '2';//添加好放大镜后去掉

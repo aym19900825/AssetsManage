@@ -241,7 +241,7 @@
 			rand(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;

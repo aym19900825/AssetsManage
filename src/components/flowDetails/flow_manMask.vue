@@ -99,7 +99,7 @@
 			};
 		},
 		methods: {
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.show = true;
 			},

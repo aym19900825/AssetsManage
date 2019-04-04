@@ -215,7 +215,7 @@
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				return str;
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.modify=false;
 				this.show = true;

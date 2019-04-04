@@ -449,7 +449,7 @@
 				this.dataInfo.MODEL = selData[0].MODEL;
 				this.dataInfo.ASSETNUM = selData[0].ASSETNUM;
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;

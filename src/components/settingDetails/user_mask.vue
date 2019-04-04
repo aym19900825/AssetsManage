@@ -735,7 +735,7 @@
 					ips: [],
 				}
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.reset();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
@@ -854,7 +854,7 @@
 				}
 			},
 			
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.user = {
 					companyName: '',

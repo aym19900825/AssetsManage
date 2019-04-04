@@ -453,8 +453,8 @@
 						}
 					}).catch((err) => {
 					});
-
 					}).catch(() => {
+
 					});
 			},
 				addproclass(val) { //小弹出框确认按钮事件

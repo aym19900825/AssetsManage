@@ -153,7 +153,7 @@
             		}
         	},
 
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible(pramList,file) {	
 				this.file=file;
 				for(var i=0;i<pramList.length;i++){

@@ -449,7 +449,7 @@
 													</template>
 												</el-table-column>
 
-                                                <el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
+                          <el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
 													<template slot-scope="scope">
                                                         <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.QUATITY'" >
 															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
@@ -1265,6 +1265,7 @@
 								message: '生成工作任务单成功',
 								type: 'success'
 							});
+							this.close();
 						}else{
 							this.$message({
 							message: '已经生成工作任务单，请勿重复生成',

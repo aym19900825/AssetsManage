@@ -119,7 +119,7 @@
 				</div>
 			<!--工作任务单详情/Houling-->
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-			<!--下达任务/Houling-->
+			<!--工作任务单详情/Houling-->
 			<sendtasklist ref="task" v-bind:page=page @refresh="refresh"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
@@ -554,6 +554,7 @@
 			},
 			//下达任务
 			tasklist(){
+				console.log(this.selMenu);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要下达任务的数据',
@@ -567,7 +568,7 @@
 					});
 					return;
 				} else {
-					this.$refs.task.visible(this.selMenu[0].ID);	
+					this.$refs.task.view(this.selMenu[0].ID);	
 				}
 			},
 			//报表

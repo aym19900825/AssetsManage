@@ -25,16 +25,16 @@
       <slot :list='list'></slot>
     </el-table>
     <div class="pt10 text-right">
-    <el-pagination
-        @size-change="sizeChange"
-        background
-        @current-change="currentChange"
-        :current-page="page.currentPage"
-        :page-sizes="[10, 20, 30, 40]"
-        :page-size="page.pageSize"
-        layout="total, sizes, prev, pager, next"
-        :total="page.totalCount">
-    </el-pagination>
+      <el-pagination
+          @size-change="sizeChange"
+          background
+          @current-change="currentChange"
+          :current-page="page.currentPage"
+          :page-sizes="[10, 20, 30, 40]"
+          :page-size="page.pageSize"
+          layout="total, sizes, prev, pager, next"
+          :total="page.totalCount">
+      </el-pagination>
     </div>
   </div>
 </template>
@@ -208,6 +208,8 @@ export default {
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
       }else if(this.appName == 'inspectionRepTem') {//检验/检测报告模板
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
+      }else if(this.appName == 'group'){
+        var url = this.basic_url + '/api-user/groups';
       }else {
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

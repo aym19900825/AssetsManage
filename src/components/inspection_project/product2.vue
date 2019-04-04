@@ -125,9 +125,19 @@
 		<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.PRO_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
 			highlight-current-row
 			@current-change="addproclass"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"
 			style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}">
 			<!-- <el-table-column type="selection" fixed width="55" align="center">
 			</el-table-column> -->
+			<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
 			<el-table-column label="产品编码" width="155" sortable prop="PRO_NUM">
 			</el-table-column>
 			<el-table-column label="产品名称" sortable prop="PRO_NAME">
@@ -141,7 +151,18 @@
 			<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 			</el-table-column>
 		</el-table>
-		
+		<div class="pt10 text-right">
+			<el-pagination
+					@size-change="sizeChange"
+					background
+					@current-change="currentChange"
+					:current-page="page.currentPage"
+					:page-sizes="[10, 20, 30, 40]"
+					:page-size="page.pageSize"
+					layout="total, sizes, prev, pager, next"
+					:total="page.totalCount">
+			</el-pagination>
+		</div>
 		<!-- 表格 End-->
 		<!-- <span slot="footer" class="dialog-footer">
 	       <el-button type="primary" @click="addproclass">确 定</el-button>
@@ -168,11 +189,11 @@
 					inspectionList: []
 				},
 				fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-					departmentId: '',//当前用户机构号
-					categoryList:[],//获取产品数据
-					catedata:'',//获取产品类别一条数据放到table行中
-					dialogVisible3: false, //对话框
-					selData:[],
+				departmentId: '',//当前用户机构号
+				categoryList:[],//获取产品数据
+				catedata:'',//获取产品类别一条数据放到table行中
+				dialogVisible3: false, //对话框
+				selData:[],
 				isEditing: '',
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -185,11 +206,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        enabled: '',//信息状态
-		        },
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -197,7 +213,7 @@
 					totalCount: 0
 				},
 				parentId: 1,
-				selParentId: 1 //父类选中id
+				// selParentId: 1, //父类选中id
 			}
 		},
 		methods: {
@@ -207,42 +223,58 @@
 				}
 			},
 		
-			//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+		//表格滚动加载
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.addprobtn(this.catedata);
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.categoryList();
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			this.categoryList();
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			this.categoryList();
-		},
+				this.addprobtn(this.catedata);
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.addprobtn(this.catedata);;
+			},
 			 addprobtn(row){//查找基础数据中的产品名称
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
@@ -273,14 +305,14 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
-			searchinfo(index) {//设置默认分页数
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.viewfield_product2(this.selParentId,this.parentId);
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			// searchinfo(index) {//设置默认分页数
+			// 	this.page.currentPage = 1;
+			// 	this.page.pageSize = 10;
+			// 	this.viewfield_product2(this.selParentId,this.parentId);
+			// },
+			// judge(data) {//taxStatus 信息状态布尔值
+			// 	return data.enabled ? '活动' : '不活动'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -290,8 +322,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			viewfield_product2(id,num){//点击父级筛选出子级数据
-				this.loading = true;//加载动画打开
-				if(id=='null'||num=='null'){
+				if(id==undefined||id==null||id==''||num==undefined||num==null||num==''){
 					this.product2Form.inspectionList = [];
 					this.viewchildRow('null');
 					return false;
@@ -311,7 +342,6 @@
 						this.loadSign=true
 					}
 					this.product2Form.inspectionList=!!res.data.PRODUCT2List?res.data.PRODUCT2List:[];
-					this.loading = false;//加载动画关闭
 					
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();

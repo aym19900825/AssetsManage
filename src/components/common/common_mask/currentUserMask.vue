@@ -66,7 +66,8 @@
 				},
 				searchList: {},
 				list: [],
-				dialogShow: false
+				dialogShow: false,
+				urlOpt: ''
 			}
 		},
 		props: ['dialogTit'],
@@ -136,11 +137,16 @@
 			//Table默认加载数据
 			requestData(opt) {
 				this.loading = true;//加载动画打开
+				this.urlOpt = opt;
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = this.basic_url + '/api-user/users?deptid_wheres='+opt;
+				if(opt == 'groups'){
+					var url = this.basic_url + '/api-user/users';
+				}else{
+					var url = this.basic_url + '/api-user/users?deptid_wheres='+opt;
+				}
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

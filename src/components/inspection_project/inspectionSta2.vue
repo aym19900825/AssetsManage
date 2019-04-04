@@ -165,20 +165,31 @@
 			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.SS_NUM.toLowerCase().includes(search.toLowerCase()))" border stripe height="360px"
 				highlight-current-row
 				@current-change="addproclass"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"
 				style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
+
 				<el-table-column label="编码" width="155" sortable prop="S_NUM">
 				</el-table-column>
 				<el-table-column label="标准编号" width="155" sortable prop="SS_NUM">
 				</el-table-column>
-				<el-table-column label="标准名称" sortable prop="S_NAME">
+				<el-table-column label="标准名称" width="255" sortable prop="S_NAME">
 				</el-table-column>
-				<el-table-column label="标准英文名称" sortable prop="S_ENGNAME">
+				<el-table-column label="标准英文名称" width="300" sortable prop="S_ENGNAME">
 				</el-table-column>
-				<el-table-column label="使用状态" sortable prop="ISUSESTATEDesc">
+				<el-table-column label="使用状态" width="100" sortable prop="ISUSESTATEDesc">
 				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				<el-table-column label="版本" sortable prop="VERSION" align="right">
 				</el-table-column>
 				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
 				</el-table-column>
@@ -187,7 +198,18 @@
 				<el-table-column label="修改时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
+			<div class="pt10 text-right">
+				<el-pagination
+						@size-change="sizeChange"
+						background
+						@current-change="currentChange"
+						:current-page="page.currentPage"
+						:page-sizes="[10, 20, 30, 40]"
+						:page-size="page.pageSize"
+						layout="total, sizes, prev, pager, next"
+						:total="page.totalCount">
+				</el-pagination>
+			</div>
 			<!-- 表格 End-->
 			<!-- <span slot="footer" class="dialog-footer">
 		       <el-button type="primary" @click="addproclass">确 定</el-button>
@@ -230,11 +252,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 20,//分页显示数
-					enabled: '',//信息状态
-				},
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -277,7 +294,7 @@
 					setTimeout(() => {
 						this.loadSign = true;
 					}, 1000)
-					this.categoryList();
+					this.addprobtn(this.catedata);
 				}
 			},
 			//改变页数
@@ -289,7 +306,7 @@
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.categoryList();
+				this.addprobtn(this.catedata);
 			},
 			//当前页数
 			currentChange(val) {
@@ -300,10 +317,10 @@
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.categoryList();
+				this.addprobtn(this.catedata);;
 			},
 
-			 addprobtn(row){//查找基础数据中的检验/检测标准
+			addprobtn(row){//查找基础数据中的检验/检测标准
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
 				var data = {
@@ -321,28 +338,28 @@
 					} else {
 						this.loadSign = true
 					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.categoryList = newarr;
+					// this.commentArr[this.page.currentPage] = res.data.data
+					// let newarr = []
+					// for(var i = 1; i <= totalPage; i++) {
+					// 	if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+					// 		for(var j = 0; j < this.commentArr[i].length; j++) {
+					// 			newarr.push(this.commentArr[i][j])
+					// 		}
+					// 	}
+					// }
+					this.categoryList = res.data.data;
 				}).catch((wrong) => {})
 			},
 
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
-				this.viewfield_inspectionSta2(this.selParentId,this.pTypeId,this.parentId);
-			},
+			// searchinfo(index) {
+			// 	this.page.currentPage = 1;
+			// 	this.page.pageSize = 20;
+			// 	this.viewfield_inspectionSta2(this.selParentId,this.pTypeId,this.parentId);
+			// },
 			
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			// judge(data) {//taxStatus 信息状态布尔值
+			// 	return data.enabled ? '活动' : '不活动'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -351,11 +368,11 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			indexMethod(index) {
-				return index + 1;
-			},
+			// indexMethod(index) {
+			// 	return index + 1;
+			// },
 			viewfield_inspectionSta2(id,num,pro_num){//点击父级筛选出子级数据
-				if(num==undefined||num==null||num==''){
+				if(id==undefined||id==null||id==''||num==undefined||num==null||num==''){
 					this.inspectionSta2Form.inspectionList = []; 
 					this.viewchildRow('null');
 					return false;
@@ -364,7 +381,7 @@
 				this.selParentId =id;
 				this.pTypeId = num;
 				this.parentId = pro_num;
-				Console.log(this.selParentId);
+				console.log(this.selParentId);
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2'
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {

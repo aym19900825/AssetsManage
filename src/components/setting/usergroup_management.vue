@@ -42,11 +42,17 @@
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
-						<el-form inline-message :model="searchDept" label-width="70px">
+						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="机构名称" prop="fullname" label-width="70px">
-										<el-input v-model="searchDept.fullname">
+									<el-form-item label="名称" prop="name" label-width="70px">
+										<el-input v-model="searchList.name">
+										</el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="编号" prop="num" label-width="70px">
+										<el-input v-model="searchList.num">
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -60,23 +66,27 @@
 					<!-- 高级查询划出 -->
 					<el-row :gutter="10">
 						<el-col :span="24">
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
-							<!-- <el-pagination background class="text-right pt10" v-if="this.checkedName.length>0"
-							   @size-change="sizeChange" 
-							   @current-change="currentChange" 
-							   :current-page="page.currentPage" 
-							   :page-sizes="[10, 20, 30, 40]"
-					           :page-size="page.pageSize" 
-					           layout="total, sizes, prev, pager, next"
-					           :total="page.totalCount">
-							</el-pagination> -->
+							<v-table ref="vtable" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+								<el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
+									<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.num}}
+										</p>
+									</template>
+								</el-table-column>
+								<el-table-column label="名称" sortable prop="name" v-if="this.checkedName.indexOf('名称')!=-1">
+								</el-table-column>
+								<el-table-column label="部门id" width="125" align="center" sortable prop="deptid" v-if="this.checkedName.indexOf('部门id')!=-1">
+								</el-table-column>
+								<el-table-column label="状态" width="100" sortable prop="del_flag" v-if="this.checkedName.indexOf('状态')!=-1">
+								</el-table-column>
+							</v-table>
 						</el-col>
 					</el-row>
 					</div>
 				</div>
 			<!--右侧内容显示 End-->
-			<deptmask :adddeptForm="adddeptForm" ref="child" @request="requestData" @reset="reset" @requestTree="getKey" v-bind:page=page></deptmask>
 		</div>
+		<usergroupmask ref="usergroupmask" :detailData="detailData" @request="requestData" @reset="reset"></usergroupmask>
 	</div>
 </template>
 
@@ -86,7 +96,8 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
-	import deptmask from '../settingDetails/dept_mask.vue'
+	import usergroup_mask from '../settingDetails/usergroup_mask.vue'
+	import vTable from '../plugin/table/table.vue'
 
 	export default {
 		name: 'dept_management',
@@ -94,8 +105,10 @@
 			'vheader': vheader,
 			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
-			'deptmask': deptmask,
+			'usergroup_mask': usergroup_mask,
 			'tree_grid':tree_grid,
+			'v-table': vTable,
+			'usergroupmask': usergroup_mask
 		},
 		data() {
 			return {
@@ -103,59 +116,32 @@
 				basic_url: Config.dev_url,
 				checkedName: [
 					// '序号',
-					'机构名称',
-					'机构编号',
-					'上级机构',
-					'机构类型',
-					'负责人',
-					'版本',
-					'备注',
+					'编号',
+					'名称',
+					'部门id',
+					'状态',
 				],
+				appName: 'group',
 				columns: [
-					// {
-					// 	text: '序号',
-					// 	dataIndex: 'step',
-					// 	isShow:true,
-					// },
 					{
-						text: '机构名称',
-						dataIndex: 'fullname',
+						text: '编号',
+						dataIndex: 'num',
 						width:'240',
 						isShow:true,
 					},
 					{
-						text: '机构编号',
-						dataIndex: 'id',
+						text: '名称',
+						dataIndex: 'name',
 						isShow:true,
 					},
 					{
-						text: '上级机构',
-						dataIndex: 'pName',
+						text: '部门id',
+						dataIndex: 'deptid',
 						isShow:true,
 					},
 					{
-						text: '机构类型',
-						dataIndex: 'depttypeName',
-						isShow:true,
-					},
-					{
-						text: '机构属性',
-						dataIndex: 'typeName',
-						isShow:true,
-					},
-					{
-						text: '负责人',
-						dataIndex: 'leaderName',
-						isShow:true,
-					},
-					{
-						text: '版本',
-						dataIndex: 'version',
-						isShow:true,
-					},
-					{
-						text: '备注',
-						dataIndex: 'tips',
+						text: '状态',
+						dataIndex: 'del_flag',
 						isShow:true,
 					},
 				],
@@ -176,53 +162,30 @@
 				down: true,
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				searchDept: {//高级查询
-					simplename:'',
-					fullname:''
+				searchList: { //点击高级搜索后显示的内容
+					name: '',
+					deptid:''
 				},
-				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
-				treeData: [],
-				selData: [],
-				adddeptForm: {},//修改子组件时传递数据
+				detailData: {},//修改子组件时传递数据
 				buttons:[],//按钮
 			}
 		},
 		methods: {
-			//表头居中
-			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+			setSelData(val){
+				this.selMenu = val;
 			},
 			//清空
 			reset(){
-				this.adddeptForm = {
-						"version":'1',
-						"status":'活动',
-						"step":'',
-						"id":'',
-						"fullname":'',
-						"org_range":'2',
-						"type":'',
-						"inactive":'否',
-						"address":'',
-						"zipcode":'',
-						"leader":'',
-						"telephone":'',
-						"fax":'',
-						"email":'',
-						"tips":'',
-						"pid":'',
-						"enterby":'',
-						"enterdate":'',
-						"changeby":'',
-						"changedate":'',
-						"depttype":'1',
+				this.detailData = {
+						"id":'1',
+						"name":'活动',
+						"num":'',
+						"deptid":0,
+						"createby":'',
+						"createdate":'',
+						"updateby":0,
+						"updatedate":'',
+						"del_flag":'',
 					};
 			},
 			//请求页面的button接口
@@ -286,35 +249,14 @@
 				this.requestData();
 			}, 
 			searchinfo(index) {//高级查询
-				var data = {
-					params: {
-						fullname: this.searchDept.fullname
-					}
-				};
-				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, data).then((res) => {
-					let result=res.data
-					for(let i=0;i<result.length;i++){
-						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
-							let subDepts=result[i].subDepts;
-							result[i].children=subDepts;
-						}	
-					}
-					this.deptList = result;
-					this.loading = false;
-				}).catch((wrong) => {
-					this.$message({
-							message: wrong.resp_msg,
-							type: 'warning'
-						});
-				})
+				this.requestData('init');
 			},
 			resetbtn(){
-				this.searchDept = {//高级查询
-					simplename:'',
-					fullname:''
+				this.searchList = {//高级查询
+					name:'',
+					num:''
 				};
-				this.requestData();
+				this.requestData('init');
 			},
 			 //请求点击
 		    getbtn(item){
@@ -333,7 +275,7 @@
 			//添加
 			openAddMgr() {
 				this.reset();
-				this.$refs.child.visible();
+				this.$refs.usergroupmask.visible();
 			},
 			//修改
 			modify() {
@@ -351,8 +293,8 @@
 					});
 					return;
 				} else {
-					this.adddeptForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.detailData = this.selMenu[0]; 
+					this.$refs.usergroupmask.detail(this.selMenu[0].id);
 				}
 			},
 			//高级查询
@@ -435,15 +377,11 @@
 						});
 					}else {
 						var url = this.basic_url + '/api-user/depts/physicsDel';
-						//changeMenu为勾选的数据
-	//					var changeMenu = selData[0];
-						//deleteid为id的数组
 						var deleteid = [];
 						var ids;
 						for(var i = 0; i < selData.length; i++) {
 							deleteid.push(selData[i].id);
 						}
-						//ids为deleteid数组用逗号拼接的字符串
 						ids = deleteid.toString(',');
 						var data = {
 							ids: ids,
@@ -473,77 +411,12 @@
 					}
 				}
 			},
-			
-			//时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
+			requestData(opt) {//高级查询字段
+				this.$refs.vtable.requestData(opt);
 			},
-			SelChange(val) {
-				this.selDept = val;
-			},
-
-			requestData() {//高级查询字段
-				this.loading = true;
-				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, {}).then((res) => {
-					let result=res.data
-					for(let i=0;i<result.length;i++){
-						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
-							let subDepts=result[i].subDepts;
-							result[i].children=subDepts;
-						}	
-					}
-					this.deptList = result;
-					this.loading = false;
-//					this.page.totalCount = res.data.count;
-				}).catch((wrong) => {})
-			},
-			//机构树
-			getKey() {
-				let that = this;
-				var url = this.basic_url + '/api-user/depts/tree';
-				this.$axios.get(url, {}).then((res) => {
-					this.resourceData = res.data;
-					this.treeData = this.transformTree(this.resourceData);
-				});
-			},
-			transformTree(data){//给树菜单添加图标
-				for(var i=0; i<data.length; i++){
-					data[i].name = data[i].fullname;
-					if(!data[i].pid || $.isArray(data[i].subDepts)){
-						data[i].iconClass = 'icon-file-normal';
-					}else{
-						data[i].iconClass = 'icon-file-text';
-					}
-					if($.isArray(data[i].subDepts)){
-						data[i].children = this.transformTree(data[i].subDepts);
-					}
-				}
-				return data;
-			},
-			getTreeId(data){
-				if(data.type == '1'){
-					this.companyId = data.id;
-					this.deptId = '';
-				}else{
-					this.deptId = data.id;
-					this.companyId = '';
-				}
-				this.requestData();
-			},
-			handleNodeClick(data) {
-			},
-			formatter(row, column) {
-				return row.enabled;
-			}
 		},
 		mounted() {
 			this.requestData();
-			this.getKey();
 		}
 	}
 </script>

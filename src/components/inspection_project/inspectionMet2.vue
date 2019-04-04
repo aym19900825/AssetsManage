@@ -15,15 +15,12 @@
 				</el-button>
 			</div>
 		</div>
+		<!-- 表格 Begin-->
 		<el-form inline-message :model="inspectionMet2Form" ref="inspectionMet2Form">
 		  <el-table ref="table" :data="inspectionMet2Form.inspectionList.filter(data => !search || data.M_NAME.toLowerCase().includes(search.toLowerCase()))" row-key="ID" border stripe height="280"
 				highlight-current-row
 				style="width: 100%;"
-				:default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}"
-				v-loading="loading"
-				element-loading-text="加载中…"
-				element-loading-spinner="el-icon-loading"
-				element-loading-background="rgba(255, 255, 255, 0.9)">
+				:default-sort="{prop:'inspectionMet2Form.inspectionList', order: 'descending'}">
 			
 		  	<el-table-column label="所属项目编号" width="120" prop="P_NUM">
 		      <template slot-scope="scope">
@@ -119,16 +116,6 @@
 
 		  </el-table>
 		</el-form>
-		<!-- 表格 Begin-->
-		<el-pagination background class="text-right pt10 pb10"
-            @size-change="sizeChange"
-            @current-change="currentChange"
-            :current-page="page.currentPage"
-            :page-sizes="[10, 20, 30, 40]"
-            :page-size="page.pageSize"
-            layout="total, sizes, prev, pager, next"
-            :total="page.totalCount">
-        </el-pagination>
 		<!-- 表格 End-->
 	</div>
 	<!-- 检验/检测方法 Begin -->
@@ -144,9 +131,18 @@
 				highlight-current-row
 				@current-change="addproclass"
 				style="width: 100%;"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
 				:default-sort="{prop:'categoryList', order: 'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
 				<el-table-column label="方法编号" width="125" sortable prop="M_NUM">
 				</el-table-column>
 				<el-table-column label="方法中文名称" sortable prop="M_NAME">
@@ -164,7 +160,18 @@
 				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
-			
+			<div class="pt10 text-right">
+				<el-pagination
+						@size-change="sizeChange"
+						background
+						@current-change="currentChange"
+						:current-page="page.currentPage"
+						:page-sizes="[10, 20, 30, 40]"
+						:page-size="page.pageSize"
+						layout="total, sizes, prev, pager, next"
+						:total="page.totalCount">
+				</el-pagination>
+			</div>
 			<!-- 表格 End-->
 			<!-- <span slot="footer" class="dialog-footer">
 					<el-button type="primary" @click="addproclass">确 定</el-button>
@@ -251,57 +258,57 @@
 				})
 			},
 			//表格滚动加载
-		loadMore() {
-			let up2down = sessionStorage.getItem('up2down');
-			if(this.loadSign) {					
-				if(up2down=='down'){
-					this.page.currentPage++;
-					if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-						this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-						return false;
+			loadMore() {
+				let up2down = sessionStorage.getItem('up2down');
+				if(this.loadSign) {					
+					if(up2down=='down'){
+						this.page.currentPage++;
+						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+							return false;
+						}
+						let append_height = window.innerHeight - this.$refs.table2.$el.offsetTop - 50;
+						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+							sessionStorage.setItem('toBtm','true');
+						}
+					}else{
+						sessionStorage.setItem('toBtm','false');
+						this.page.currentPage--;
+						if(this.page.currentPage < 1) {
+							this.page.currentPage=1;
+							return false;
+						}
 					}
-					let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-					if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-						$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-						sessionStorage.setItem('toBtm','true');
-					}
+					this.loadSign = false;
+					setTimeout(() => {
+						this.loadSign = true;
+					}, 1000)
+					this.addprobtn(this.catedata);
+				}
+			},
+			//改变页数
+			sizeChange(val) {
+				this.page.pageSize = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
 				}else{
 					sessionStorage.setItem('toBtm','false');
-					this.page.currentPage--;
-					if(this.page.currentPage < 1) {
-						this.page.currentPage=1;
-						return false;
-					}
 				}
-				this.loadSign = false;
-				setTimeout(() => {
-					this.loadSign = true;
-				}, 1000)
-				this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-			}
-		},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-		},
+				this.addprobtn(this.catedata);
+			},
+			//当前页数
+			currentChange(val) {
+				this.page.currentPage = val;
+				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table2').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.addprobtn(this.catedata);
+			},
 			 // /api-apps/app/inspection_method?DEPTID=' + this.parentIds;
 			 addprobtn(row){//查找基础数据中的检验/检测项目
 				this.catedata = row;//弹出框中选中的数据赋值给到table行中
@@ -334,14 +341,14 @@
 					this.categoryList = newarr;
 				}).catch((wrong) => {})
 			},
-			searchinfo(index) {
-				this.page.currentPage = 1;
-				this.page.pageSize = 10;
-				this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
-			},
-			judge(data) {//taxStatus 信息状态布尔值
-				return data.enabled ? '活动' : '不活动'
-			},
+			// searchinfo(index) {
+			// 	this.page.currentPage = 1;
+			// 	this.page.pageSize = 10;
+			// 	this.viewfield_inspectionMet2(this.selParentId,this.pTypeId,this.proId,this.staId,this.parentId);
+			// },
+			// judge(data) {//taxStatus 信息状态布尔值
+			// 	return data.enabled ? '活动' : '不活动'
+			// },
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -351,7 +358,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			viewfield_inspectionMet2(id,num,pro_num,s_num,p_num){//点击父级筛选出子级数据
-				if(num==undefined||num==null||num==''){
+				if(id==undefined||id==null||id==''||num==undefined||num==null||num==''){
 					this.inspectionMet2Form.inspectionList = [];
 					return false;
 					//todo  相关数据设置

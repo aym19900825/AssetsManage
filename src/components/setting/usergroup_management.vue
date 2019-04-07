@@ -67,17 +67,14 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<v-table ref="vtable" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
+								<!-- <el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
+								</el-table-column> -->
+								<el-table-column label="名称" sortable prop="name" v-if="this.checkedName.indexOf('名称')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.num}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="名称" sortable prop="name" v-if="this.checkedName.indexOf('名称')!=-1">
-								</el-table-column>
-								<el-table-column label="部门id" width="125" align="center" sortable prop="deptid" v-if="this.checkedName.indexOf('部门id')!=-1">
-								</el-table-column>
-								<el-table-column label="状态" width="100" sortable prop="del_flag" v-if="this.checkedName.indexOf('状态')!=-1">
+								<el-table-column label="所属机构" width="125" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('部门id')!=-1">
 								</el-table-column>
 							</v-table>
 						</el-col>
@@ -92,7 +89,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
@@ -106,7 +102,6 @@
 			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
 			'usergroup_mask': usergroup_mask,
-			'tree_grid':tree_grid,
 			'v-table': vTable,
 			'usergroupmask': usergroup_mask
 		},
@@ -261,16 +256,16 @@
 			 //请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+						this.openAddMgr();
 		    	}else if(item.name=="修改"){
 		    	 this.modify();
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="删除"){
-				 this.deluserinfo();
-				}else if(item.name=="彻底删除"){
-				 this.physicsDel();
-				}
+				 		this.deluserinfo();
+					}else if(item.name=="彻底删除"){
+				 		this.physicsDel();
+					}
 		    },
 			//添加
 			openAddMgr() {
@@ -296,6 +291,10 @@
 					this.detailData = this.selMenu[0]; 
 					this.$refs.usergroupmask.detail(this.selMenu[0].id);
 				}
+			},
+			//查看用戶
+			 view(id) {
+				this.$refs.usergroupmask.view(id);
 			},
 			//高级查询
 			modestsearch() {

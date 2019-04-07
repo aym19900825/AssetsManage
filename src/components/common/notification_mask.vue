@@ -812,7 +812,7 @@
 					this.dataInfo.WORK_NOTICE_CHECKBASISList.splice(index, 1);
 				}
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.reset();
 				this.noviews=true;

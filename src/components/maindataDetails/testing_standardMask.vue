@@ -408,7 +408,7 @@
 				}).catch((err)=>{
 				});
 			},
-			//添加点击按钮显示弹窗
+			//添加添加显示弹窗
 			visible() {
 				this.addtitle = true;
 				this.modifytitle = false;

@@ -310,7 +310,7 @@
 			deleteRow(index,rows) {//Table-操作列中的删除行
 				rows.splice(index,1);
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				// this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 				// 	

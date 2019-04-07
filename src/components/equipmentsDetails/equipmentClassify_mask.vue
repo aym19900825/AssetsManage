@@ -254,7 +254,7 @@
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				//this.CATEGORY.NUM =  this.rand(1000,9999);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {

@@ -140,7 +140,7 @@
 				this.show2 = false;
 			},
 
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.DEPTID = res.data.deptId;

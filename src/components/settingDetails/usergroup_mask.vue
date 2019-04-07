@@ -4,8 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="!modify">添加用户组</div>
-					<div class="mask_title" v-show="modify">修改用户组</div>
+					<div class="mask_title" v-show="addtitle">添加用户组</div>
+					<div class="mask_title" v-show="modifytitle">修改用户组</div>
+					<div class="mask_title" v-show="viewtitle">查看用户组</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click='toggle'>
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -113,7 +114,9 @@
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				dialogVisible: false, //对话框
-				modify: false,
+				addtitle: true, //添加弹出框titile
+				modifytitle: false, //修改弹出框titile
+				modify:false,
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
@@ -203,20 +206,25 @@
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				return str;
 			},
-			//点击按钮显示弹窗
+			//添加显示弹窗
 			visible() {
-				this.modify=false;
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
 				this.show = true;
 				this.getUser('new');
 			},
 			// 这里是修改
 			detail() {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+
 				this.dataInfo = this.detailData;
 				var id = this.detailData.id;
 				this.getData(id);
-				this.modify = true;
 				this.show = true;
-				this.getUser();
+				this.getUser('');
 			},
 			getData(id){
 				var url = this.basic_url + '/system-center/groups/' + id;
@@ -224,6 +232,21 @@
 				}).then((res) => {
 					this.dataInfo = res.data;
 				}).catch((wrong) => {})
+			},
+			//这是查看
+			view() {
+				this.modify = !false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+
+				this.dataInfo = this.detailData;
+				var id = this.detailData.id;
+				this.getData(id);
+				this.show = true;
+				this.getUser('');
 			},
 			//点击关闭按钮
 			close() {

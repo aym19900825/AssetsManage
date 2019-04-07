@@ -54,7 +54,6 @@
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="所属菜单" prop="menuIdDesc">
-										<!-- <el-input v-model="searchList.menuIdDesc"></el-input> -->
 										<el-select v-model="searchList.menuIdDesc" filterable style="width: 100%">
 											<el-option v-for="item in selectDataMenu" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
 										</el-select>

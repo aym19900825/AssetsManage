@@ -1,45 +1,52 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" 
-				   :title="dialogTit" 
-				   :visible.sync="dialogShow" 
-				   height="300px" 
-				   width="80%" 
-				   :before-close="reset">
+			:title="dialogTit" 
+			:visible.sync="dialogShow" 
+			height="300px" 
+			width="80%" 
+			:before-close="reset">
+			
 			<el-table ref="table" :data="list" 
-					border 
-					stripe 
-					height="300px" 
-					style="width: 100%;" 
-					:default-sort="{prop:'list', order: 'descending'}" 
-					@selection-change="selChange"
-					v-loadmore="loadMore"
-					v-loading="loading"
-					element-loading-text="加载中…"
-					element-loading-spinner="el-icon-loading"
-					element-loading-background="rgba(255, 255, 255, 0.9)">
+				border 
+				stripe 
+				height="300px" 
+				style="width: 100%;" 
+				:default-sort="{prop:'list', order: 'descending'}" 
+				@selection-change="selChange"
+				v-loadmore="loadMore"
+				v-loading="loading"
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)">
+
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
+				</el-table-column>
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
 				<el-table-column label="用户名" sortable width="140px" prop="username">
 				</el-table-column>
 				<el-table-column label="姓名" sortable width="200px" prop="nickname">
 				</el-table-column>
-				<el-table-column label="机构" sortable width="150px" prop="deptName">
+				<el-table-column label="所属机构" sortable width="150px" prop="deptName">
 				</el-table-column>
-				<el-table-column label="公司" sortable prop="companyName">
+				<el-table-column label="手机号" sortable prop="phone">
 				</el-table-column>
 				<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
 			<el-pagination background 
-						   class="text-right pt10" 
-						   @size-change="sizeChange" 
-						   @current-change="currentChange" 
-						   :current-page="page.currentPage" 
-						   :page-sizes="[10, 20, 30, 40]" 
-						   :page-size="page.pageSize" 
-						   layout="total, sizes, prev, pager, next" 
-						   :total="page.totalCount">
+				class="text-right pt10" 
+				@size-change="sizeChange" 
+				@current-change="currentChange" 
+				:current-page="page.currentPage" 
+				:page-sizes="[10, 20, 30, 40]" 
+				:page-size="page.pageSize" 
+				layout="total, sizes, prev, pager, next" 
+				:total="page.totalCount">
 			</el-pagination>
 			<div slot="footer">
 				<el-button type="primary" @click="submit">确 定</el-button>
@@ -167,20 +174,35 @@
 				}).catch((wrong) => {})
 			},
 			submit(){
-				if(this.selData.length == 0){
-					this.$message({
-						message: '请选择数据',
-						type: 'warning'
-					});
-				}else if(this.selData.length > 1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-				}else{
-					this.dialogShow = false;
-					this.$emit('getSelData',this.selData[0]);
-					this.reset();
+				console.log();
+				if(this.urlOpt == 'groups'){
+					if(this.selData.length == 0){
+						this.$message({
+							message: '请选择数据',
+							type: 'warning'
+						});
+					}else{
+						this.dialogShow = false;
+						this.$emit('getSelData',this.selData);
+						this.reset();
+					}
+				}
+				else {
+					if(this.selData.length == 0){
+						this.$message({
+							message: '请选择数据',
+							type: 'warning'
+						});
+					}else if(this.selData.length > 1){
+						this.$message({
+							message: '不可同时选择多条数据',
+							type: 'warning'
+						});
+					}else{
+						this.dialogShow = false;
+						this.$emit('getSelData',this.selData[0]);
+						this.reset();
+					}
 				}
 			},
     
@@ -193,7 +215,7 @@
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {
-						this.resetBasisInfo();
+						this.reset();
 					})
 					.catch(_ => {
 						$('.v-modal').hide();

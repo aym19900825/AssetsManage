@@ -158,28 +158,7 @@
 		},
 		
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
+			
 			return {
 				basic_url: Config.dev_url,
 				selUser: [],
@@ -321,7 +300,7 @@
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {
-					var _this = this;
+				var _this = this;
 				this.$refs.dataInfo.validate((valid) => {
 					if(valid) {
 						var dataInfo = _this.dataInfo;

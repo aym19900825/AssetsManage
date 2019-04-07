@@ -17,19 +17,26 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="dataInfo"  ref="dataInfo" label-width="100px">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" >
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
-									<el-row :gutter="5" class="pt10">
-										<el-col :span="6">
+									<el-row :gutter="30">
+										<el-col :span="6" class="pull-right pb10">
 											<el-form-item label="编号" prop="num">
-												<el-input v-model="dataInfo.num" disabled></el-input>
+												<el-input v-model="dataInfo.num" placeholder="自动生成" disabled></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="6">
-											<el-form-item label="名称" prop="name">
-												<el-input  v-model="dataInfo.name"></el-input>
+										<el-col :span="6" class="pull-right pb10">
+											<el-form-item label="所属机构">
+												<el-input v-model="dataInfo.deptName" disabled></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="12">
+											<el-form-item label="组名" prop="name" label-width="100px">
+												<el-input v-model="dataInfo.name"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -37,29 +44,39 @@
 								
 								<el-collapse-item title="用户列表" name="2" class="ml30">
 									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addKWord">
-											<i class="icon-add"></i>
-											<font>新建行</font>
+										<el-button type="primary" size="mini" round @click="chooseUser()">
+											<i class="icon-search"></i>
+											<font>选择</font>
 										</el-button>
 									</div>
+									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row style="width: 100% ;" max-height="260" :default-sort="{prop:'dataInfo.userList', order: 'descending'}">
+										<!-- <el-table-column prop="iconOperation" fixed width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeState(scope.row)"></i>
+												<i class="el-icon-edit" v-else @click="changeState(scope.row)"></i>
+											</template>
+										</el-table-column> -->
 
-									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
-										<el-table-column prop="iconOperation" fixed width="50px">
-											<template slot-scope="scope">
-												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeState(scope.row)">
-												</i>
-												<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="changeState(scope.row)">
-												</i>
-											</template>
+										<el-table-column label="用户ID" prop="userid" sortable>
+											<!-- <template slot-scope="scope">
+												<el-form-item :prop="'userList.'+scope.$index + '.userid'" :rules="[{required: true, message: '请选择', trigger: 'blur'}]">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.userid" disabled></el-input>
+													<span v-else>{{scope.row.userid}}</span>
+												</el-form-item>
+											</template> -->
 										</el-table-column>
-										<el-table-column label="用户姓名" sortable prop="userid">
-											<template slot-scope="scope">
-												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.userid">
-													<el-button slot="append" icon="el-icon-search" @click="chooseUser"></el-button>
-												</el-input>
-												<span v-if="!scope.row.isEditing">{{scope.row.userid}}</span>
-											</template>
+
+										<el-table-column label="用户姓名" prop="nickname" sortable>
+											<!-- <template slot-scope="scope">
+												<el-form-item :prop="'userList.'+scope.$index + '.nickname'" :rules="[{required: true, message: '请选择', trigger: 'blur'}]">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.nickname">
+														<el-button slot="append" icon="el-icon-search" @click="chooseUser"></el-button>
+													</el-input>
+													<span v-else>{{scope.row.nickname}}</span>
+												</el-form-item>
+											</template> -->
 										</el-table-column>
+
 										<el-table-column fixed="right" width="120" label="操作">
 											<template slot-scope="scope">
 												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
@@ -91,22 +108,25 @@
 	import usermask from'../common/common_mask/currentUserMask.vue'
 	export default {
 		name: 'masks',
-		props: ['detailData'],
+		// props: ['detailData'],
 		components: {
 			vchoose,
 			usermask
 		},
 		data() {
 			return {
+				basic_url: Config.dev_url,
 				dialogTit: '用户列表',
 				rules: {
-					// categoryname: [
-					// 	{ required: true, message: '请输入分类名称', trigger: 'blur' },
-					// ]
+					//组名
+					name: [
+						{ required: true, message: '请输入', trigger: 'blur' },
+						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
+					],
+					nickname: [
+						{ required: true, message: '请选择', trigger: 'blur' },
+					]
 				},
-
-				basic_url: Config.dev_url,
-
 				show: false,
 				isok1: true,
 				isok2: false,
@@ -117,26 +137,18 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify:false,
-				resourceData: [], //数组，我这里是通过接口获取数据，
-				resourceDialogisShow: false,
-				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					children: "subDepts",
-					label: "simplename"
-				},
 				selectData: [], 
 				getCheckboxData: {},
-
 				dataInfo: {
 					"id":'',
 					"name":'',
 					"num":'',
-					"deptid":0,
+					"deptid":'',
 					"createby":'',
 					"createdate":'',
-					"updateby":0,
+					"updateby":'',
 					"updatedate":'',
-					"del_flag":'',
+					"del_flag":0,
 					'userList': []
 				},
 				chooseParam: {},
@@ -145,7 +157,19 @@
 		},
 		methods: {
 			getUserData(val){
-				this.dataInfo.userList[this.editUserIndex].userid = val.id;
+				console.log(val);
+				for(var i=0;i<val.length;i++){
+					var userList={
+						id: '',
+						userid:val[i].id,
+						nickname:val[i].nickname,
+						isEditing: true,
+					};
+					this.dataInfo.userList.push(userList);
+				}
+				
+				// this.dataInfo.userList[this.editUserIndex].userid = val.id;
+				// this.dataInfo.userList[this.editUserIndex].nickname = val.nickname;
 			},
 			chooseUser(){
 				this.$refs.usermask.requestData('groups');
@@ -158,9 +182,14 @@
 			},
 			delKey(index,row){
 				if(row.id!=''){
-					var url = this.basic_url + '/api-user/groups/groups/delGroupUserById/' + row.id;
+					var url = this.basic_url + '/api-user/groups/delGroupUserById?id=' + row.id;
+
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
 							this.dataInfo.userList.splice(index,1);
 						}else{
 							this.$message({
@@ -177,15 +206,15 @@
 			changeState(data){
 				data.isEditing = !data.isEditing;
 			},
-			addKWord(){
-				this.dataInfo.userList.push({
-					'userid': '',
-					'groupid': this.dataInfo.id,
-					'isEditing': true,
-					'id': ''
-				});
-				this.editUserIndex = this.dataInfo.userList.length-1;
-			},
+			// addKWord(){
+			// 	this.dataInfo.userList.push({
+			// 		'userid': '',
+			// 		'groupid': this.dataInfo.id,
+			// 		'isEditing': true,
+			// 		'id': ''
+			// 	});
+			// 	this.editUserIndex = this.dataInfo.userList.length-1;
+			// },
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
@@ -215,34 +244,35 @@
 				this.getUser('new');
 			},
 			// 这里是修改
-			detail() {
+			detail(val) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
 
-				this.dataInfo = this.detailData;
+				this.detailData = val;
 				var id = this.detailData.id;
 				this.getData(id);
 				this.show = true;
 				this.getUser('');
 			},
 			getData(id){
-				var url = this.basic_url + '/system-center/groups/' + id;
+				var url = this.basic_url + '/api-user/groups/' + id;
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.dataInfo = res.data;
 				}).catch((wrong) => {})
 			},
 			//这是查看
-			view() {
-				this.modify = !false;
+			view(val) {
+				this.addtitle = false;
+				this.modifytitle = false;
 				this.viewtitle = true;
 				this.dept = true;
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 
-				this.dataInfo = this.detailData;
+				this.detailData = val;
 				var id = this.detailData.id;
 				this.getData(id);
 				this.show = true;
@@ -258,10 +288,10 @@
 					"id":'',
 					"name":'',
 					"num":'',
-					"deptid":0,
+					"deptid":'',
 					"createby":'',
 					"createdate":'',
-					"updateby":0,
+					"updateby":'',
 					"updatedate":'',
 					"del_flag":'',
 					"userList": []
@@ -293,7 +323,7 @@
 
 			submitForm() {
 				var _this = this;
-				var url = this.basic_url + '/system-center/groups/saveOrUpdate';
+				var url = this.basic_url + '/api-user/groups/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {

@@ -62,6 +62,10 @@
         },
         methods: {
             login() {
+                sessionStorage.clear();
+                this.$store.dispatch('setRoleIdAct',null);
+                this.$store.dispatch('setNavIdAct',null);
+                this.$store.dispatch('setcurrentrolesnameNavAct',null);
                 var url = this.basic_url + '/api-auth/oauth/token?grant_type=password&scope=app&client_id=webApp&client_secret=webApp&username=' 
                         + this.userinfo.username   
                         + '&password=' 

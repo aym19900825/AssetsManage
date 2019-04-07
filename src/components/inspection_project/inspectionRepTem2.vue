@@ -42,6 +42,14 @@
 		      </template>
 		    </el-table-column>
 
+				<!-- <el-table-column label="报告模板类型" width="160" prop="RE_TYPEDesc">
+		      <template slot-scope="scope">
+		        <el-form-item :prop="'inspectionList.'+scope.$index + '.RE_TYPEDesc'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+		        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.RE_TYPEDesc" placeholder="请选择" disabled></el-input><span v-else>{{scope.row.RE_TYPEDesc}}</span>
+						</el-form-item>
+		      </template>
+		    </el-table-column> -->
+
 		    <el-table-column label="报告模板描述" sortable prop="DECRIPTION">
 		      <template slot-scope="scope">
 		        <el-form-item :prop="'inspectionList.'+scope.$index + '.DECRIPTION'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
@@ -130,6 +138,8 @@
 					</template>
 				</el-table-column>
 				<el-table-column label="报告编号" width="125" sortable prop="RE_NUM">
+				</el-table-column>
+				<el-table-column label="报告模板类型" width="125" sortable prop="RE_TYPEDesc">
 				</el-table-column>
 				<el-table-column label="报告描述" sortable prop="DECRIPTION">
 				</el-table-column>
@@ -431,6 +441,8 @@
 								"P_NUM": this.parentId,//检验检测项目编号
 								"RE_NUM": '',//检验检测报告模板编号
 								"DECRIPTION": '',
+								"RE_TYPE": '',//模板类型
+								"RE_TYPEDesc": '',//模板类型
 								"STATUS": '',
 								"VERSION": '',
 								"DEPTID": '',
@@ -454,6 +466,7 @@
 						"ID":row.ID,
 						"NUM": row.NUM,//产品类编号
 						"PRO_NUM": row.PRO_NUM,//产品编号
+						"RE_TYPE": row.RE_TYPEDesc,//产品编号
 						"S_NUM": row.S_NUM,//检验检测标准编号
 						"P_NUM": row.P_NUM,//检验检测项目编号
 						"RE_NUM": row.RE_NUM,//报告模板编号
@@ -514,6 +527,7 @@
 				this.currentRow = val;
 				if (val!=null) {
 					this.catedata.RE_NUM = val.RE_NUM;//报告模板编号
+					this.catedata.RE_TYPEDesc = val.RE_TYPE;//报告模板类型
 					this.catedata.DECRIPTION = val.DECRIPTION;
 					this.catedata.DEPTID = val.DEPTID;
 					this.$emit('request');

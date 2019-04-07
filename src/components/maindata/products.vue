@@ -231,7 +231,7 @@
 				},
 				selectData: [],
 				buttons:[],
-				product:'product'//appname
+				// product:'product'//appname
 			}
 		},
 		methods: {

@@ -127,16 +127,6 @@
 					value: '0',
 					label: '不活动'
 				}],
-				searchData: {
-					page: 1,
-					limit: 10, //分页显示数
-					nickname: '',
-					enabled: '',
-					searchKey: '',
-					searchValue: '',
-					companyId: '',
-					deptId: ''
-				},
 				checkedName: [
 					'应用英文名称',
 					'应用名称',
@@ -152,63 +142,63 @@
 					'流程代办描述'
 				],
 				tableHeader: [{
-                        label: '应用英文名称',
-                        prop: 'code'
-                    },
-                    {
-                        label: '应用名称',
-                        prop: 'name'
-                    },
-                    {
-                        label: '处理类',
-                        prop: 'handleclass'
-                    },
-                    {
-                        label: '类型',
-                        prop: 'type'
-                    },
-                    {
-                        label: '应用描述',
-                        prop: 'description'
-                    },
-                    {
-                        label: '数据库表',
-                        prop: 'object_id'
-                    },
-                    {
-                        label: '模块',
-                        prop: 'module'
-                    },
-                    {
-                        label: '排序',
-                        prop: 'sort'
-                    },
-                    {
-                        label: '创建时间',
-                        prop: 'createTime'
-                    },
-                    {
-                        label: '变更时间',
-                        prop: 'updateTime'
-                    },
-                    {
-                        label: '流程',
-                        prop: 'flowkey'
-                    },
-                    {
-                        label: '流程代办单据号',
-                        prop: 'flow_todo_num'
-                    },
-                    {
-                        label: '流程代办描述',
-                        prop: '流程代办描述'
-                    },
+					label: '应用英文名称',
+					prop: 'code'
+				},
+				{
+					label: '应用名称',
+					prop: 'name'
+				},
+				{
+					label: '处理类',
+					prop: 'handleclass'
+				},
+				{
+					label: '类型',
+					 prop: 'type'
+				},
+				{
+					label: '应用描述',
+					prop: 'description'
+				},
+				{
+					label: '数据库表',
+					prop: 'object_id'
+				},
+				{
+						label: '模块',
+						prop: 'module'
+				},
+				{
+					label: '排序',
+					prop: 'sort'
+				},
+				{
+					label: '创建时间',
+					prop: 'createTime'
+				},
+				{
+					label: '变更时间',
+					prop: 'updateTime'
+				},
+				{
+					label: '流程',
+					prop: 'flowkey'
+				},
+				{
+					label: '流程代办单据号',
+					prop: 'flow_todo_num'
+				},
+				{
+					label: '流程代办描述',
+					prop: '流程代办描述'
+				},
 
-                    // {
-                    //  label: '信息状态',
-                    //  prop: 'STATUS'
-                    // },
-                ],
+				//{
+					//label: '信息状态',
+					//prop: 'STATUS'
+				//},
+				],
 				selUser: [],
 				applicationList: [],
 				search: false,

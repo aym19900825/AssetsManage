@@ -1,0 +1,326 @@
+<template>
+	<div>
+		<div class="mask" v-if="show"></div>
+		<div class="mask_divbg" v-if="show">
+			<div class="mask_div">
+				<div class="mask_title_div clearfix">
+					<div class="mask_title" v-show="addtitle">添加用户组</div>
+					<div class="mask_title" v-show="modifytitle">修改用户组</div>
+					<div class="mask_title" v-show="viewtitle">查看用户组</div>
+					<div class="mask_anniu">
+						<span class="mask_span mask_max" @click='toggle'>
+							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
+						</span>
+						<span class="mask_span" @click='close'>
+							<i class="icon-close1"></i>
+						</span>
+					</div>
+				</div>
+				<div class="mask_content">
+					<el-form inline-message :model="dataInfo"  ref="dataInfo" label-width="100px">
+						<div class="content-accordion" id="information">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="基本信息" name="1">
+									<el-row :gutter="5" class="pt10">
+										<el-col :span="6">
+											<el-form-item label="编号" prop="num">
+												<el-input v-model="dataInfo.num" disabled></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="6">
+											<el-form-item label="名称" prop="name">
+												<el-input  v-model="dataInfo.name"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								
+								<el-collapse-item title="用户列表" name="2" class="ml30">
+									<div class="table-func">
+										<el-button type="success" size="mini" round @click="addKWord">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+
+									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100% ;">
+										<el-table-column prop="iconOperation" fixed width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeState(scope.row)">
+												</i>
+												<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="changeState(scope.row)">
+												</i>
+											</template>
+										</el-table-column>
+										<el-table-column label="用户姓名" sortable prop="userid">
+											<template slot-scope="scope">
+												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.userid">
+													<el-button slot="append" icon="el-icon-search" @click="chooseUser"></el-button>
+												</el-input>
+												<span v-if="!scope.row.isEditing">{{scope.row.userid}}</span>
+											</template>
+										</el-table-column>
+										<el-table-column fixed="right" width="120" label="操作">
+											<template slot-scope="scope">
+												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
+													<i class="icon-trash red"></i>
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-collapse-item>
+							</el-collapse>
+						</div>
+						<div class="content-footer">
+							<el-button type="primary" @click='submitForm'>保存</el-button>
+							<el-button @click='close'>取消</el-button>
+						</div>
+					</el-form>
+				</div>
+				<!--底部-->
+			</div>
+		</div>
+		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
+		<usermask ref="usermask" @getSelData="getUserData" :dialogTit="dialogTit"></usermask>
+	</div>
+</template>
+
+<script>
+	import Config from '../../config.js'
+	import vchoose from '../common/dataChoose.vue'
+	import usermask from'../common/common_mask/currentUserMask.vue'
+	export default {
+		name: 'masks',
+		props: ['detailData'],
+		components: {
+			vchoose,
+			usermask
+		},
+		data() {
+			return {
+				dialogTit: '用户列表',
+				rules: {
+					// categoryname: [
+					// 	{ required: true, message: '请输入分类名称', trigger: 'blur' },
+					// ]
+				},
+
+				basic_url: Config.dev_url,
+
+				show: false,
+				isok1: true,
+				isok2: false,
+				down: true,
+				up: false,
+				activeNames: ['1', '2','3','4'], //手风琴数量
+				dialogVisible: false, //对话框
+				addtitle: true, //添加弹出框titile
+				modifytitle: false, //修改弹出框titile
+				modify:false,
+				resourceData: [], //数组，我这里是通过接口获取数据，
+				resourceDialogisShow: false,
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "subDepts",
+					label: "simplename"
+				},
+				selectData: [], 
+				getCheckboxData: {},
+
+				dataInfo: {
+					"id":'',
+					"name":'',
+					"num":'',
+					"deptid":0,
+					"createby":'',
+					"createdate":'',
+					"updateby":0,
+					"updatedate":'',
+					"del_flag":'',
+					'userList': []
+				},
+				chooseParam: {},
+				editUserIndex: 1
+			};
+		},
+		methods: {
+			getUserData(val){
+				this.dataInfo.userList[this.editUserIndex].userid = val.id;
+			},
+			chooseUser(){
+				this.$refs.usermask.requestData('groups');
+			},
+			getChoose(data){
+				var selData = data.data;
+				this.dataInfo.id = selData[0].id;
+				this.dataInfo.categoryname = selData[0].categoryname;
+				this.getData(this.dataInfo.id);
+			},
+			delKey(index,row){
+				if(row.id!=''){
+					var url = this.basic_url + '/api-user/groups/groups/delGroupUserById/' + row.id;
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.resp_code == 0){
+							this.dataInfo.userList.splice(index,1);
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+					});
+				}else{
+					this.dataInfo.userList.splice(index,1);
+				}
+			},
+			changeState(data){
+				data.isEditing = !data.isEditing;
+			},
+			addKWord(){
+				this.dataInfo.userList.push({
+					'userid': '',
+					'groupid': this.dataInfo.id,
+					'isEditing': true,
+					'id': ''
+				});
+				this.editUserIndex = this.dataInfo.userList.length-1;
+			},
+			getUser(opt){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+					if(opt == 'new'){
+						this.dataInfo.createby = res.data.id;
+						this.dataInfo.createdate =this.getToday();
+					}else{
+						this.dataInfo.updateby = res.data.id;
+						this.dataInfo.updatedate = this.getToday();
+					}
+				}).catch((err) => {
+				});
+			},
+			getToday(){
+				var date = new Date();
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				return str;
+			},
+			//添加显示弹窗
+			visible() {
+				this.addtitle = true;
+				this.modifytitle = false;
+				this.viewtitle = false;
+				this.show = true;
+				this.getUser('new');
+			},
+			// 这里是修改
+			detail() {
+				this.addtitle = false;
+				this.modifytitle = true;
+				this.viewtitle = false;
+
+				this.dataInfo = this.detailData;
+				var id = this.detailData.id;
+				this.getData(id);
+				this.show = true;
+				this.getUser('');
+			},
+			getData(id){
+				var url = this.basic_url + '/system-center/groups/' + id;
+				this.$axios.get(url, {
+				}).then((res) => {
+					this.dataInfo = res.data;
+				}).catch((wrong) => {})
+			},
+			//这是查看
+			view() {
+				this.modify = !false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+
+				this.dataInfo = this.detailData;
+				var id = this.detailData.id;
+				this.getData(id);
+				this.show = true;
+				this.getUser('');
+			},
+			//点击关闭按钮
+			close() {
+				this.resetForm();
+				this.$emit('request');
+			},
+			resetForm(){
+				this.dataInfo = {
+					"id":'',
+					"name":'',
+					"num":'',
+					"deptid":0,
+					"createby":'',
+					"createdate":'',
+					"updateby":0,
+					"updatedate":'',
+					"del_flag":'',
+					"userList": []
+				};
+				this.show = false;
+			},
+			toggle(e) { //大弹出框大小切换
+				if(this.isok1) {
+					this.maxDialog();
+				} else {
+					this.rebackDialog();
+				}
+			},
+			maxDialog(e) { //定义大弹出框一个默认大小
+				this.isok1 = false;
+				this.isok2 = true;
+				$(".mask_div").width(document.body.clientWidth);
+				$(".mask_div").height(document.body.clientHeight - 70);
+				$(".mask_div").css("top", "-40px");
+			},
+
+			rebackDialog() { //大弹出框还原成默认大小
+				this.isok1 = true;
+				this.isok2 = false;
+				$(".mask_div").css("width", "80%");
+				$(".mask_div").css("height", "90%");
+				$(".mask_div").css("top", "0px");
+			},
+
+			submitForm() {
+				var _this = this;
+				var url = this.basic_url + '/system-center/groups/saveOrUpdate';
+				this.$refs['dataInfo'].validate((valid) => {
+					if (valid) {
+						this.$axios.post(url, _this.dataInfo).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success',
+								});
+								this.resetForm();
+								this.$emit('request');
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error',
+								});
+							}
+						}).catch((err) => {
+						});
+					} else {
+						return false;
+					}
+				});
+			},
+		},
+	}
+</script>
+
+<style scoped>
+	@import '../../assets/css/mask-modules.css';
+</style>

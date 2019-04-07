@@ -102,7 +102,7 @@ export default {
             });
         },
         getTodoNumber() {//获取当前用户待办任务数
-            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts?BizState=1';
+            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
             this.$axios.get(url, {}).then((res) => {
                 this.toDoNumber = res.data.datas;
                 var url = window.location.href;

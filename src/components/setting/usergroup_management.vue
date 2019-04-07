@@ -21,39 +21,17 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
-
-							<div class="keep-open btn-group" title="列">
-								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
-									<span class="el-dropdown-link">
-										<font class="J_tabClose"><i class="icon-menu3"></i></font>
-										<i class="el-icon-arrow-down icon-arrow2-down"></i>
-									</span>
-									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
-											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
-												<el-checkbox :label="item.text"  name="type"></el-checkbox>
-											</el-dropdown-item>
-										</el-checkbox-group>
-									</el-dropdown-menu>
-								</el-dropdown>
-							</div>
-						</div>
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+						<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
+					</div>
 					</div>
 					<!-- 高级查询划出 -->
 					<div v-show="search">
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="名称" prop="name" label-width="70px">
-										<el-input v-model="searchList.name">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="5">
-									<el-form-item label="编号" prop="num" label-width="70px">
-										<el-input v-model="searchList.num">
-										</el-input>
+									<el-form-item label="组名" prop="name" label-width="70px">
+										<el-input v-model="searchList.name"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -69,12 +47,13 @@
 							<v-table ref="vtable" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<!-- <el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
 								</el-table-column> -->
-								<el-table-column label="名称" sortable prop="name" v-if="this.checkedName.indexOf('名称')!=-1">
+								<el-table-column label="组名" sortable prop="name" v-if="this.checkedName.indexOf('组名')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="所属机构" width="125" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('部门id')!=-1">
+
+								<el-table-column label="所属机构" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('所属机构')!=-1">
 								</el-table-column>
 							</v-table>
 						</el-col>
@@ -92,6 +71,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
+	import tableControle from '../plugin/table-controle/controle.vue'
 	import usergroup_mask from '../settingDetails/usergroup_mask.vue'
 	import vTable from '../plugin/table/table.vue'
 
@@ -101,8 +81,8 @@
 			'vheader': vheader,
 			'navs_tabs': navs_tabs,
 			'navs_left': navs_left,
-			'usergroup_mask': usergroup_mask,
 			'v-table': vTable,
+			'tableControle': tableControle,
 			'usergroupmask': usergroup_mask
 		},
 		data() {
@@ -110,48 +90,27 @@
 				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
-					// '序号',
-					'编号',
-					'名称',
-					'部门id',
-					'状态',
+					// '编号',
+					'组名',
+					'所属机构',
 				],
 				appName: 'group',
-				columns: [
+				tableHeader: [
 					{
-						text: '编号',
-						dataIndex: 'num',
-						width:'240',
-						isShow:true,
+						label: '组名',
+						prop: 'name',
 					},
 					{
-						text: '名称',
-						dataIndex: 'name',
-						isShow:true,
-					},
-					{
-						text: '部门id',
-						dataIndex: 'deptid',
-						isShow:true,
-					},
-					{
-						text: '状态',
-						dataIndex: 'del_flag',
-						isShow:true,
+						label: '所属机构',
+						prop: 'deptid',
 					},
 				],
-
-				companyId: '',
-				deptId: '',
-				selDept: [],
 				page: {
 					currentPage: 1,
 					pageSize: 20,
 					totalCount: 0
 				},
-				total:0,
-				deptList: [],
-				selMenu:[],
+				selUser:[],
 				search: false,
 				show: false,
 				down: true,
@@ -159,7 +118,8 @@
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					name: '',
-					deptid:''
+					deptid:'',
+					deptName:'',
 				},
 				detailData: {},//修改子组件时传递数据
 				buttons:[],//按钮
@@ -167,24 +127,25 @@
 		},
 		methods: {
 			setSelData(val){
-				this.selMenu = val;
+				this.selUser = val;
 			},
 			//清空
 			reset(){
 				this.detailData = {
-						"id":'1',
-						"name":'活动',
+						"id":'',
+						"name":'',
 						"num":'',
-						"deptid":0,
+						"deptid":this.$store.state.currentcjdw[0].id,
+						"deptName":this.$store.state.currentcjdw[0].fullname,
 						"createby":'',
 						"createdate":'',
-						"updateby":0,
+						"updateby":'',
 						"updatedate":'',
 						"del_flag":'',
 					};
 			},
 			//请求页面的button接口
-		    getbutton(childvalue){
+			getbutton(childvalue){
 		    	var data = {
 					menuId: childvalue.id,
 					roleId: this.$store.state.roleid,
@@ -195,8 +156,7 @@
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {})
-
-		    },
+			},
 			changeCheckedName(value){
 				this.checkedName=value
 				let str=value.toString()
@@ -209,22 +169,15 @@
 				}
 			},
 			//表格传过来
-			childByValue: function (childByValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childByValue
-		    },
+			// childByValue: function (childByValue) {
+		  //       // childValue就是子组件传过来的
+		  //       this.selMenu = childByValue
+		  //   },
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
 		    	 this.getbutton( childvalue);
 			},
-			getDetail(data){
-				this.view(data);
-			},
-			//查看
-			view(data) {
-			 	this.adddeptForm = data;
-				this.$refs.child.view();
-			},
+			
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
 			},
@@ -249,7 +202,8 @@
 			resetbtn(){
 				this.searchList = {//高级查询
 					name:'',
-					num:''
+					num:'',
+					deptName:'',
 				};
 				this.requestData('init');
 			},
@@ -274,28 +228,31 @@
 			},
 			//修改
 			modify() {
-				var selData = this.selMenu;
-				if(selData.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的机构',
 						type: 'warning'
 					});
 					return;
-				} else if(selData.length > 1) {
+				} else if(this.selUser.length > 1) {
 					this.$message({
 						message: '不可同时修改多个机构',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.detailData = this.selMenu[0]; 
-					this.$refs.usergroupmask.detail(this.selMenu[0].id);
+					this.detailData = this.selUser[0];
+					console.log(this.selUser[0]);
+					this.$refs.usergroupmask.detail(this.selUser[0]);
 				}
 			},
 			//查看用戶
-			 view(id) {
-				this.$refs.usergroupmask.view(id);
+			view(data) {
+				 this.detailData = data;
+				 console.log(this.detailData);
+				this.$refs.usergroupmask.view(this.detailData);
 			},
+		
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
@@ -304,110 +261,100 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selMenu;
+				var selData = this.selUser;
+				console.log(selData);
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的机构',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					var changeMenu = selData[0];
-					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
-						this.$message({
-							message: '先删除子机构',
-							type: 'error'
-						});
-					}else {
-						var url = this.basic_url + '/api-user/depts/deletes';
-						//changeMenu为勾选的数据
-	//					var changeMenu = selData[0];
-						//deleteid为id的数组
-						var deleteid = [];
-						var ids;
-						for(var i = 0; i < selData.length; i++) {
-							deleteid.push(selData[i].id);
-						}
-						//ids为deleteid数组用逗号拼接的字符串
-						ids = deleteid.toString(',');
-						var data = {
-							ids: ids,
-						}
-						this.$confirm('确定删除此数据吗？', '提示', {
-							confirmButtonText: '确定',
-							cancelButtonText: '取消',
-						}).then(({
-							value
-						}) => {
-							this.$axios.delete(url, {
-								params: data
-							}).then((res) => { //.delete 传数据方法
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '删除成功',
-										type: 'success'
-									});
-									this.requestData();
-								}
-							}).catch((err) => {
-							});
-						}).catch(() => {
-
-						});
+					var url = this.basic_url + '/api-user/groups/deletes';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
 					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+						});
+					}).catch(() => {
+
+					});
 				}
 			},
 			// 彻底删除
 			physicsDel() {
-				var selData = this.selMenu;
+				var selData = this.selUser;
+				console.log(selData);
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的机构',
+						message: '请您选择要删除的数据',
 						type: 'warning'
 					});
 					return;
-				} else {
-					var changeMenu = selData[0];
-					if(changeMenu.children!=null && typeof(changeMenu.children)!='undefined' && changeMenu.children.length>0){
-						this.$message({
-							message: '先删除子机构',
-							type: 'error'
-						});
-					}else {
-						var url = this.basic_url + '/api-user/depts/physicsDel';
-						var deleteid = [];
-						var ids;
-						for(var i = 0; i < selData.length; i++) {
-							deleteid.push(selData[i].id);
-						}
-						ids = deleteid.toString(',');
-						var data = {
-							ids: ids,
-						}
-						this.$confirm('确定删除此数据吗？', '提示', {
-							confirmButtonText: '确定',
-							cancelButtonText: '取消',
-						}).then(({
-							value
-						}) => {
-							this.$axios.delete(url, {
-								params: data
-							}).then((res) => { //.delete 传数据方法
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '删除成功',
-										type: 'success'
-									});
-									this.requestData();
-								}
-							}).catch((err) => {
-							});
-						}).catch(() => {
-
-						});
+				}  else {
+					var url = this.basic_url + '/api-user/groups/physicsDel';
+					//changeUser为勾选的数据
+					var changeUser = selData;
+					//deleteid为id的数组
+					var deleteid = [];
+					var ids;
+					for(var i = 0; i < changeUser.length; i++) {
+						deleteid.push(changeUser[i].id);
 					}
+					//ids为deleteid数组用逗号拼接的字符串
+					ids = deleteid.toString(',');
+					var data = {
+						ids: ids,
+					}
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {
+							params: data
+						}).then((res) => { //.delete 传数据方法
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.requestData();
+							}
+						}).catch((err) => {
+						});
+					}).catch(() => {
+
+					});
 				}
 			},
 			requestData(opt) {//高级查询字段

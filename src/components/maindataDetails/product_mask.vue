@@ -132,28 +132,6 @@
 			page: Object,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateName = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
 			return {
 				basic_url: Config.dev_url,
 				value: '',
@@ -179,13 +157,13 @@
 				rules: {
 					PRO_NUM: [{
 						required: false,
-						trigger: 'change',
-						validator: validateNum,
+						trigger: 'blur',
+						validator: this.Validators.isWorknumber,
 					}],
 					PRO_NAME: [{
 						required: true,
 						trigger: 'blur',
-						validator: validateName,
+						validator: this.Validators.isSpecificKey,
 					}],
 				},
 				//tree
@@ -207,40 +185,40 @@
 		},
 		methods: {
 			//编码提示
-			hint(){
-				this.hintshow = true;
-			},
-			hinthide(){
-				this.hintshow = false;
-			},
-			//获取导入表格勾选信息
-			SelChange(val) {
-				this.selUser = val;
-			},
+			// hint(){
+			// 	this.hintshow = true;
+			// },
+			// hinthide(){
+			// 	this.hintshow = false;
+			// },
+			// //获取导入表格勾选信息
+			// SelChange(val) {
+			// 	this.selUser = val;
+			// },
 			//导入添加数据按钮
-			leadadddata() {
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请您选择数据',
-						type: 'warning'
-					});
-					return;
-				} else if(selData.length > 1) {
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					this.dataInfo.attributes.push(selData[0]);
-					this.dialogVisible = false;
-				}
-			},
+			// leadadddata() {
+			// 	var selData = this.selUser;
+			// 	if(selData.length == 0) {
+			// 		this.$message({
+			// 			message: '请您选择数据',
+			// 			type: 'warning'
+			// 		});
+			// 		return;
+			// 	} else if(selData.length > 1) {
+			// 		this.$message({
+			// 			message: '不可同时选择多条数据',
+			// 			type: 'warning'
+			// 		});
+			// 		return;
+			// 	} else {
+			// 		this.dataInfo.attributes.push(selData[0]);
+			// 		this.dialogVisible = false;
+			// 	}
+			// },
 			//生成随机数函数
-			rand(min, max) {
-				return Math.floor(Math.random() * (max - min)) + min;
-			},
+			// rand(min, max) {
+			// 	return Math.floor(Math.random() * (max - min)) + min;
+			// },
 			//添加显示弹窗
 			visible() {
 				this.addtitle = true;

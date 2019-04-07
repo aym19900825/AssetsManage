@@ -134,7 +134,7 @@ const validators = {
 			callback();
 		}
 		setTimeout(() => {
-			var regs = /^.{3,30}$/g
+			var regs = /^.{2,30}$/g
 			if (!regs.test(value)) {
 				callback(new Error('内容不少于2位且不能大于30位'));
 			} else {
@@ -157,7 +157,7 @@ const validators = {
 			callback();
 		}
 		setTimeout(() => {
-			var regs = /^.{4,120}$/g
+			var regs = /^.{2,120}$/g
 			if (!regs.test(value)) {
 				callback(new Error('内容不少于2位且不能大于120位'));
 			} else {
@@ -299,7 +299,7 @@ const validators = {
 			callback();
 		}
 		setTimeout(() => {
-			var regs = /^.{4,200}$/g
+			var regs = /^.{3,200}$/g
 			if (!regs.test(value)) {
 				callback(new Error('内容不少于3位且不能大于200位'));
 			} else {
@@ -318,9 +318,9 @@ const validators = {
 			callback();
 		}
 		setTimeout(() => {
-			var regs = /^.{4,200}$/g
+			var regs = /^.{3,200}$/g
 			if (!regs.test(value)) {
-				callback(new Error('内容不少于1位且不能大于200位'));
+				callback(new Error('内容不少于3位且不能大于200位'));
 			} else {
 				if(!validators.SpecificWord(value)) {
 					callback(new Error('不支持特殊符号'));
@@ -435,7 +435,7 @@ const validators = {
 			setTimeout(() => {
 				var regs = /^.{1,1000}$/g
 				if (!regs.test(value)) {
-					callback(new Error('内容不少于1位且不能大于200位'));
+					callback(new Error('内容不少于1位且不能大于1000位'));
 				} else {
 					if(!validators.SpecificWord(value)) {
 						callback(new Error('不支持特殊符号'));

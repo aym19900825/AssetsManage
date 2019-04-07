@@ -143,7 +143,8 @@
 					"id":'',
 					"name":'',
 					"num":'',
-					"deptid":'',
+					"deptid":this.$store.state.currentcjdw[0].id,
+					"deptName":this.$store.state.currentcjdw[0].fullname,
 					"createby":'',
 					"createdate":'',
 					"updateby":'',
@@ -183,7 +184,12 @@
 			delKey(index,row){
 				if(row.id!=''){
 					var url = this.basic_url + '/api-user/groups/delGroupUserById?id=' + row.id;
-
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
 					this.$axios.delete(url, {}).then((res) => {
 						if(res.data.resp_code == 0){
 							this.$message({
@@ -198,6 +204,10 @@
 							});
 						}
 					}).catch((err) => {
+					});
+					
+					}).catch(() => {
+
 					});
 				}else{
 					this.dataInfo.userList.splice(index,1);
@@ -288,7 +298,8 @@
 					"id":'',
 					"name":'',
 					"num":'',
-					"deptid":'',
+					"deptid":this.$store.state.currentcjdw[0].id,
+					"deptName":this.$store.state.currentcjdw[0].fullname,
 					"createby":'',
 					"createdate":'',
 					"updateby":'',

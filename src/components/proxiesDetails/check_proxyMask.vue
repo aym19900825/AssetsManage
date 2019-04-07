@@ -1403,6 +1403,7 @@
 				this.edit = true;
 				this.noedit = false;
 				this.noedit1 = false;
+				this.noedit2=false;
 				this.special=true;
 				this.special1=false;
 			},

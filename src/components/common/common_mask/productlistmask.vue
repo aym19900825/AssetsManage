@@ -186,7 +186,17 @@
 		if(!!this.CJDW){
 				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_where_in='+this.allDepts;
 		}else{
-			var url = this.basic_url + '/api-apps/app/product2?authfrom='+this.appname+'&authfliter=true&NUM_wheres='+this.NUM;
+			console.log(this.appname);
+			// /api-apps/appCustom/findProductTypebyAuthandDept/{deptId}/{type}/{pdtypenum}
+			// var url = this.basic_url + '/api-apps/app/product2?authfrom='+this.appname+'&authfliter=true&NUM_wheres='+this.NUM;
+			// var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+this.NUM;
+				if(this.appname=='inspectPro'){
+					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+this.NUM;
+					console.log(url);
+			}else{
+					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+this.NUM;
+					console.log(url);
+			}
 		}
 		this.$axios.get(url, {}).then((res) => {
 			this.page.totalCount = res.data.count;

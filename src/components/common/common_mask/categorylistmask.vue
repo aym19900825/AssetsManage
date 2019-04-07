@@ -142,7 +142,6 @@
 		this.dialogCategory = false;
 	},
 	visible(DEPTID) {
-		console.log(DEPTID);
 	if(!!DEPTID.appname){
 		this.appname=DEPTID.appname;
 	}else{
@@ -223,7 +222,16 @@
 		}
 		if(!!this.appname){
 			console.log(2345678);
-			var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
+			console.log(this.appname);
+			if(this.appname=='inspectPro'){
+					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1;
+					console.log(url);
+			}else{
+					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2;
+					console.log(url);
+			}
+			
+			// var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
 		}else{
 			var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+this.allDepts;
 		}

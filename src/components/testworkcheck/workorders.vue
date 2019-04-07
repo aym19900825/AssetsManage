@@ -554,7 +554,7 @@
 			},
 			//下达任务
 			tasklist(){
-				console.log(this.selMenu);
+				console.log(this.selMenu[0].ID);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要下达任务的数据',
@@ -563,7 +563,7 @@
 					return;
 				} else if(this.selMenu.length > 1) {
 					this.$message({
-						message: '不可同时生成多条子任务单',
+						message: '不可下达多条子任务单',
 						type: 'warning'
 					});
 					return;

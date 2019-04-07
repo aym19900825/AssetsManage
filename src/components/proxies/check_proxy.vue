@@ -177,7 +177,8 @@
 		  navs_left,
 		  navs_tabs,
 		  inspectmask,
-		  reportmask,
+			reportmask,
+			checkassignmask,
 			vTable
 		},
 		data() {

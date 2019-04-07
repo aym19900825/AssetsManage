@@ -1966,8 +1966,6 @@
         },
        
 		mounted() {
-			this.getCompany();
-			this.getuser();
 			this.RVENDORSelect();
 		},
 	}

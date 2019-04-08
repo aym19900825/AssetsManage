@@ -22,28 +22,26 @@
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="30">
-										<el-col :span="6" class="pull-right pb10">
-											<el-form-item label="编号" prop="num">
-												<el-input v-model="dataInfo.num" placeholder="自动生成" disabled></el-input>
+										<el-col :span="6">
+											<el-form-item label="编号" prop="num" label-width="100px">
+												<el-input v-model="dataInfo.num" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="6" class="pull-right pb10">
-											<el-form-item label="所属机构">
-												<el-input v-model="dataInfo.deptName" disabled></el-input>
+										<el-col :span="6">
+											<el-form-item label="所属机构" label-width="100px">
+												<el-input v-model="dataInfo.deptName" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="12">
 											<el-form-item label="组名" prop="name" label-width="100px">
-												<el-input v-model="dataInfo.name"></el-input>
+												<el-input v-model="dataInfo.name" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								
-								<el-collapse-item title="用户列表" name="2" class="ml30">
-									<div class="table-func">
+
+								<el-collapse-item title="用户列表" name="2">
+									<div class="table-func" v-if="!viewtitle">
 										<el-button type="primary" size="mini" round @click="chooseUser()">
 											<i class="icon-search"></i>
 											<font>选择</font>
@@ -86,9 +84,38 @@
 										</el-table-column>
 									</el-table>
 								</el-collapse-item>
+
+								<el-collapse-item title="其他" name="3" v-show="views">
+									<!-- 第一行 -->
+									<el-row :gutter="30">
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="createby" label-width="100px">
+												<el-input v-model="dataInfo.createName" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="createdate" label-width="100px">
+												<el-input v-model="dataInfo.createdate" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="updateby" label-width="100px">
+												<el-input v-model="dataInfo.updateName" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="updatedate" label-width="100px">
+												<el-input v-model="dataInfo.updatedate" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+
 							</el-collapse>
 						</div>
-						<div class="content-footer">
+						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click='submitForm'>保存</el-button>
 							<el-button @click='close'>取消</el-button>
 						</div>
@@ -130,6 +157,10 @@
 				show: false,
 				isok1: true,
 				isok2: false,
+				edit: true, //禁填
+				noedit:false,//可编辑
+				views:false,//录入修改人信息
+				noviews:true,//按钮
 				down: true,
 				up: false,
 				activeNames: ['1', '2','3','4'], //手风琴数量
@@ -157,8 +188,8 @@
 			};
 		},
 		methods: {
+			//选择多条用户数据插入到行列表中
 			getUserData(val){
-				console.log(val);
 				for(var i=0;i<val.length;i++){
 					var userList={
 						id: '',
@@ -172,15 +203,18 @@
 				// this.dataInfo.userList[this.editUserIndex].userid = val.id;
 				// this.dataInfo.userList[this.editUserIndex].nickname = val.nickname;
 			},
+			//选择用户带回来值
 			chooseUser(){
 				this.$refs.usermask.requestData('groups');
 			},
+			//获取用户
 			getChoose(data){
 				var selData = data.data;
 				this.dataInfo.id = selData[0].id;
 				this.dataInfo.categoryname = selData[0].categoryname;
 				this.getData(this.dataInfo.id);
 			},
+			//删除用户
 			delKey(index,row){
 				if(row.id!=''){
 					var url = this.basic_url + '/api-user/groups/delGroupUserById?id=' + row.id;
@@ -213,9 +247,11 @@
 					this.dataInfo.userList.splice(index,1);
 				}
 			},
+			//判断当前行是否可编辑
 			changeState(data){
 				data.isEditing = !data.isEditing;
 			},
+			//新建按钮用户组行弹出框
 			// addKWord(){
 			// 	this.dataInfo.userList.push({
 			// 		'userid': '',
@@ -225,6 +261,8 @@
 			// 	});
 			// 	this.editUserIndex = this.dataInfo.userList.length-1;
 			// },
+			
+			//获取当前用户信息
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {
@@ -238,6 +276,7 @@
 				}).catch((err) => {
 				});
 			},
+			//获取当前时间
 			getToday(){
 				var date = new Date();
 				var month = date.getMonth();
@@ -253,24 +292,20 @@
 				this.show = true;
 				this.getUser('new');
 			},
-			// 这里是修改
+			//这里是修改
 			detail(val) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
 
 				this.detailData = val;
 				var id = this.detailData.id;
 				this.getData(id);
 				this.show = true;
 				this.getUser('');
-			},
-			getData(id){
-				var url = this.basic_url + '/api-user/groups/' + id;
-				this.$axios.get(url, {
-				}).then((res) => {
-					this.dataInfo = res.data;
-				}).catch((wrong) => {})
 			},
 			//这是查看
 			view(val) {
@@ -309,6 +344,14 @@
 				};
 				this.show = false;
 			},
+			//获取当前组信息
+			getData(id){
+				var url = this.basic_url + '/api-user/groups/' + id;
+				this.$axios.get(url, {
+				}).then((res) => {
+					this.dataInfo = res.data;
+				}).catch((wrong) => {})
+			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
 					this.maxDialog();
@@ -331,7 +374,7 @@
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
 			},
-
+			//提交保存
 			submitForm() {
 				var _this = this;
 				var url = this.basic_url + '/api-user/groups/saveOrUpdate';

@@ -86,7 +86,7 @@
 				innerVisible:false,
 				pramList:[],
 				basic_url: Config.dev_url,
-				noedit:false,//表单内容
+				noedit:false,//可编辑
 				userList:[],
 				selval:[],
 				dialogVisibleuser:false,//用户

@@ -253,39 +253,34 @@
 										</el-tab-pane>
 									</el-tabs>
 								</div>
-								<el-collapse-item title="其它" name="3"  v-show="views">
+								<el-collapse-item title="其它" name="3" v-show="views">
 									<!-- <el-form label-width="100px"> -->
 										<el-row :gutter="30">
 											<el-col :span="8">
 												<el-form-item label="录入人" prop="ENTERBYDesc">
-													<el-input v-model="CUSTOMER.ENTERBYDesc" placeholder="当前录入人" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col>
-											<!-- <el-col :span="8">
-												<el-form-item label="录入人机构" prop="DEPTID">
-													<el-input v-model="CUSTOMER.DEPTID" :disabled="edit"></el-input>
-												</el-form-item>
-											</el-col> -->
-											<el-col :span="8" v-if="dept">
-												<el-form-item label="机构" prop="DEPTIDDesc">
-													<el-input v-model="CUSTOMER.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
+													<el-input v-model="CUSTOMER.ENTERBYDesc" placeholder="录入人" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="录入时间" prop="ENTERDATE">
-													<el-input v-model="CUSTOMER.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
+													<el-input v-model="CUSTOMER.ENTERDATE" placeholder="录入时间" :disabled="edit"></el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="8" v-if="dept">
+												<el-form-item label="机构" prop="DEPTIDDesc">
+													<el-input v-model="CUSTOMER.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
 										<el-row :gutter="30">
 											<el-col :span="8">
 												<el-form-item label="修改人" prop="CHANGEBYDesc">
-													<el-input v-model="CUSTOMER.CHANGEBYDesc" placeholder="记录当前修改人" :disabled="edit"></el-input>
+													<el-input v-model="CUSTOMER.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="修改时间" prop="CHANGEDATE">
-													<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="自动记录当前修改时间" :disabled="edit"></el-input>
+													<el-input v-model="CUSTOMER.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>

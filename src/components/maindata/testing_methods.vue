@@ -116,7 +116,7 @@
 								</el-table-column>
 								<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
 								</el-table-column>
-								<el-table-column label="英文名称" width="180" sortable prop="M_ENAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
+								<el-table-column label="英文名称" width="280" sortable prop="M_ENAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
 								</el-table-column>
 								<el-table-column label="类别" width="170" sortable prop="M_TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
 								</el-table-column>
@@ -249,8 +249,6 @@
 				methodsList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					nickname: '',
@@ -410,8 +408,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

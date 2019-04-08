@@ -95,7 +95,7 @@
 							</el-table-column>	
 							<!-- <el-table-column label="修改人" width="120" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
 							</el-table-column> -->
-							<el-table-column label="修改日期" width="160" sortable prop="updatedate" v-if="checkedName.indexOf('修改日期')!=-1">
+							<el-table-column label="修改时间" width="160" sortable prop="updatedate" v-if="checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</v-table>
 					</el-col>
@@ -142,7 +142,7 @@
 					// '录入人',
 					'录入时间',
 					// '修改人',
-					'修改日期'
+					'修改时间'
 				],
 				tableHeader: [
 					{
@@ -178,7 +178,7 @@
 					// 	prop: 'updateby'
 					// },
 					{
-						label: '修改日期',
+						label: '修改时间',
 						prop: 'updatedate'
 					},
 					

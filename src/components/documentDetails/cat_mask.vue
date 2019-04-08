@@ -141,7 +141,7 @@
 						},
 						{
 							propName: 'createtime',
-							labelName: '创建时间'
+							labelName: '录入时间'
 						}
 
 					],

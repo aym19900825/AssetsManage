@@ -164,13 +164,13 @@
 	export default {
 		name: 'testing_standard',
 		components: {
-			'vheader': vheader,
-			'navs_left': navs_left,
-			'navs_tabs': navs_tabs,
-			'standardmask': standardmask,
-			'tableControle': tableControle,
-			'reportmask': reportmask,
-			'v-table': vTable
+			vheader,
+			navs_left,
+			navs_tabs,
+			standardmask,
+			tableControle,
+			reportmask,
+		  vTable
 		},
 		data() {
 			return {
@@ -257,11 +257,8 @@
 				standardList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin: true,
-
 				statusshow1: true,
 				statusshow2: true,
 				searchList: { //点击高级搜索后显示的内容
@@ -442,8 +439,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

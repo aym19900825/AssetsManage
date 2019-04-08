@@ -251,8 +251,7 @@
 			},
 			//查看用戶
 			view(data) {
-				 this.detailData = data;
-				 console.log(this.detailData);
+				this.detailData = data;
 				this.$refs.usergroupmask.view(this.detailData);
 			},
 		

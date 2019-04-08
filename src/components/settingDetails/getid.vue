@@ -2,7 +2,7 @@
     <div class="mc-user-info">
     	{{name}}
 
-    	<el-table-column  label="创建人" width="120">
+    	<el-table-column  label="录入人" width="120">
             <template slot-scope="scope">
                 <user-info :userId="scope.row.id"></user-info>
             </template>

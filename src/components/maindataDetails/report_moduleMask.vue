@@ -205,12 +205,12 @@
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-					//判断新建和修改时创建人/时间/机构和修改人/时间的变化
+					//判断新建和修改时录入人/时间/机构和修改人/时间的变化
 					if(opt == 'new'){
-						this.CATEGORY.DEPTID = res.data.deptId;//创建人机构
-						this.CATEGORY.ENTERBY = res.data.id;//创建人
+						this.CATEGORY.DEPTID = res.data.deptId;//录入人机构
+						this.CATEGORY.ENTERBY = res.data.id;//录入人
 						var date = new Date();
-						this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//创建时间
+						this.CATEGORY.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//录入时间
 					}
 					if(opt == 'edit'){
 						this.CATEGORY.CHANGEBY = res.data.id;//修改人

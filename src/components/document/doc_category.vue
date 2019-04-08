@@ -114,7 +114,7 @@
 								</el-table-column>
 								<el-table-column label="用户部门" sortable prop="deptfullname" v-if="checkedName.indexOf('用户部门')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" sortable prop="createtime" v-if="checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="录入时间" sortable prop="createtime" v-if="checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 							</v-table>
 						</el-col>
@@ -163,7 +163,7 @@
 					'类别',
 					'用户名称',
 					'用户部门',
-					'创建时间',
+					'录入时间',
 				],
 				tableHeader: [{
 						label: '关键字',
@@ -182,7 +182,7 @@
 						prop: 'deptfullname'
 					},
 					{
-						label: '创建时间',
+						label: '录入时间',
 						prop: 'createtime'
 					}
 				],

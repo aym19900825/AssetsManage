@@ -27,7 +27,7 @@
 				</el-table-column>	
 				<el-table-column label="修改人" sortable prop="updateby">
 				</el-table-column>
-				<el-table-column label="修改日期" sortable prop="updatedate">
+				<el-table-column label="修改时间" sortable prop="updatedate">
 				</el-table-column>	
 			
 		</el-table>

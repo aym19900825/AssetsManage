@@ -73,7 +73,7 @@
 								</el-table-column>
 								<el-table-column label="排序" width="120" align="right" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="录入时间" width="120" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 								<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('变更时间')!=-1">
 								</el-table-column>
@@ -135,7 +135,7 @@
 					'数据库表',
 					'模块',
 					'排序',
-					'创建时间',
+					'录入时间',
 					'变更时间',
 					'流程',
 					'流程代办单据号',
@@ -174,7 +174,7 @@
 					prop: 'sort'
 				},
 				{
-					label: '创建时间',
+					label: '录入时间',
 					prop: 'createTime'
 				},
 				{

@@ -351,10 +351,10 @@
 						                            <el-form-item label="文件描述"></el-form-item>
 						                        </el-col>
 						                        <el-col :span="4">
-						                            <el-form-item label="创建人" ></el-form-item>
+						                            <el-form-item label="录入人" ></el-form-item>
 						                        </el-col>
 						                        <el-col :span="4">
-						                            <el-form-item label="创建日期"></el-form-item>
+						                            <el-form-item label="录入时间"></el-form-item>
 						                        </el-col>
 						                        <el-col :span="2">
 						                            <el-form-item label="上传"></el-form-item>
@@ -374,10 +374,10 @@
 						                        	<el-input type="text"  placeholder="文件描述"></el-input>
 						                        </el-col>
 						                        <el-col :span="4">
-						                            <el-input type="text"  placeholder="创建人"></el-input>
+						                            <el-input type="text"  placeholder="录入人"></el-input>
 						                        </el-col>
 						                        <el-col :span="4">
-						                            <el-input type="text"  placeholder="创建日期"></el-input>
+						                            <el-input type="text"  placeholder="录入时间"></el-input>
 						                        </el-col>
 						                        <el-col :span="2">
 						                            <el-upload
@@ -409,22 +409,22 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="85px">
-												<el-input v-model="WORKPLAN.ENTERBYDesc" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.ENTERBYDesc" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入日期" prop="ENTERDATE" label-width="85px">
-												<el-input v-model="WORKPLAN.ENTERDATE" :disabled="edit"></el-input>
+											<el-form-item label="录入时间" prop="ENTERDATE" label-width="85px">
+												<el-input v-model="WORKPLAN.ENTERDATE" placeholder="当前录入时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="85px">
-												<el-input v-model="WORKPLAN.CHANGEBYDesc" :disabled="edit"></el-input>
+												<el-input v-model="WORKPLAN.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期" prop="CHANGEDATE" label-width="85px">
-												<el-input v-model="WORKPLAN.CHANGEDATE" :disabled="edit"></el-input>
+											<el-form-item label="修改时间" prop="CHANGEDATE" label-width="85px">
+												<el-input v-model="WORKPLAN.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

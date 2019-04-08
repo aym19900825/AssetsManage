@@ -86,7 +86,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期">
+											<el-form-item label="修改时间">
 												<el-input v-model="testingForm.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -232,12 +232,12 @@
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-					//判断新建和修改时创建人/时间/机构和修改人/时间的变化
+					//判断新建和修改时录入人/时间/机构和修改人/时间的变化
 					if(opt == 'new'){
-						this.testingForm.DEPTID = res.data.deptId;//创建人机构
-						this.testingForm.ENTERBY = res.data.id;//创建人
+						this.testingForm.DEPTID = res.data.deptId;//录入人机构
+						this.testingForm.ENTERBY = res.data.id;//录入人
 						var date = new Date();
-						this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//创建时间
+						this.testingForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//录入时间
 					}
 					if(opt == 'edit'){
 						this.testingForm.CHANGEBY = res.data.id;//修改人
@@ -327,7 +327,7 @@
 					_this.$refs.docTable.getData();
 				},100);			
 			},
-			modifyversion () {//点击修改后给当前创建人和创建日期赋值
+			modifyversion () {//点击修改后给当前录入人和录入时间赋值
 				this.$refs.testingForm.validate((valid) => {
 			        if (valid) {
 			          	var TESTINGFORM=JSON.stringify(this.TESTINGFORM); //接过来的数据

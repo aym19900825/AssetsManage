@@ -84,7 +84,7 @@
 								</el-table-column>
 								<el-table-column label="任务状态" sortable width="100px" align="center" prop="state" v-if="this.checkedName.indexOf('任务状态')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" sortable width="160px" prop="createTime" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="录入时间" sortable width="160px" prop="createTime" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -125,7 +125,7 @@ export default {
 					'应用',
 					'单据号',
 					'任务状态',
-					'创建时间',
+					'录入时间',
 					],
 		tableHeader: [
 //		{
@@ -153,7 +153,7 @@ export default {
 			prop: 'state'
 		},
 		{
-			label: '创建时间',
+			label: '录入时间',
 			prop: 'createTime'
 		}],
 		searchList: {

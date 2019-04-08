@@ -188,8 +188,6 @@
 				],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -219,7 +217,7 @@
 			},
 			fileSuccess(){//上传成功后返回数据
 				this.page.currentPage = 1;
-				this.requestData('init');
+				this.requestData();
 			},
 			handleSuccess(response, file, fileList){//上传文件列表
 			},
@@ -246,11 +244,23 @@
 					VERSION:'',
 					DEPTID: '',
 				};
-				this.requestData('init');
+				this.requestData();
 			},
 			//搜索
-			searchinfo(index) {
-				this.requestData('init');
+			searchinfo() {
+				var data = {
+					params: {
+						NUM: this.searchList.NUM,
+						TYPE: this.searchList.TYPE,
+						VERSION: this.searchList.VERSION,
+						DEPTID: this.searchList.DEPTID,
+					}
+				};
+				var url= this.basic_url +'/api-apps/appSelection/productType/treeForStation?tree_id=NUM&tree_pid=PARENT';
+				this.$axios.get(url, data).then((res) => {
+					this.deptList = res.data.datas;
+					this.loading = false;
+				}).catch((wrong) => {})
 			},
 			//清空
 			reset() {
@@ -414,8 +424,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			//彻底删除
 			physicsDel(){

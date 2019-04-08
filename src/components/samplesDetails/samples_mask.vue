@@ -288,7 +288,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期">
+											<el-form-item label="修改时间">
 												<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -400,7 +400,7 @@
 					</el-table-column>
 					<el-table-column label="公司" sortable prop="companyName">
 					</el-table-column>
-					<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+					<el-table-column label="录入时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
 
@@ -474,7 +474,7 @@
 				},
 				selectData: [], //获取检验/检测方法类别
 				Select_STATUS:[],//获取样品信息-样品状态-new
-				modify:false,//修订、修改人、修改日期
+				modify:false,//修订、修改人、修改时间
 				edit: true, //禁填
 				noedit:false,
 				selMenu:[],

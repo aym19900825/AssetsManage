@@ -35,7 +35,7 @@
 				</el-table-column>
 				<el-table-column label="手机号" sortable prop="phone">
 				</el-table-column>
-				<el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
+				<el-table-column label="录入时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>
 			<el-pagination background 

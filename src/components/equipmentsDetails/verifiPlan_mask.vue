@@ -250,7 +250,7 @@
                         displayType: 'inline-block'
                     },
                     {
-                        label: '录入日期',
+                        label: '录入时间',
                         prop: 'ENTERDATE',
                         width: '30%',
                         type: 'date',

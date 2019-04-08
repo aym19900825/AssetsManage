@@ -285,7 +285,7 @@
 				this.page = val; 
 				this.requestData();
 			}, 
-			searchinfo(index) {//高级查询
+			searchinfo() {//高级查询
 				var data = {
 					params: {
 						fullname: this.searchDept.fullname

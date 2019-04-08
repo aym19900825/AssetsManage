@@ -66,6 +66,14 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
+                                            <el-form-item label="是否允许授权" prop="canauthorization">
+                                                <el-radio-group v-model="menu.canauthorization">
+                                                    <el-radio label='1'>是</el-radio>
+                                                    <el-radio label='0'>否</el-radio>
+                                                </el-radio-group>
+                                            </el-form-item>
+                                        </el-col>
 									</el-row>
 								</el-collapse-item>
 							</el-collapse>
@@ -230,6 +238,7 @@
 				}else if(item.hidden == '1'){
 					item.hidden = false;
 				}
+				
 				this.show = true;
 				this.noedit = false;
 			},
@@ -294,6 +303,7 @@
 								"sort":this.menu.sort,
 								"hidden":this.menu.hidden,
 								"css":this.menu.css,
+								"canauthorization":this.menu.canauthorization,
 							}
 					
 						//return false;

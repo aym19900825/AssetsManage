@@ -93,12 +93,12 @@
 								<el-collapse-item title="其它" name="2"  v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="创建人"  label-width="110px">
+											<el-form-item label="录入人"  label-width="110px">
 												<el-input v-model="numbsetForm.createuserDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="创建时间" label-width="80px">
+											<el-form-item label="录入时间" label-width="80px">
 												<el-input v-model="numbsetForm.createtime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>

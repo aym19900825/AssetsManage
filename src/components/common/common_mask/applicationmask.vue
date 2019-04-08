@@ -54,7 +54,7 @@
 					</el-table-column>
 					<el-table-column label="排序" width="120" align="right" sortable prop="sort">
 					</el-table-column>
-					<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat">
+					<el-table-column label="录入时间" width="120" prop="createTime" sortable :formatter="dateFormat">
 					</el-table-column>
 					<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat">
 					</el-table-column>

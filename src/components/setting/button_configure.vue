@@ -248,8 +248,8 @@
 					sort: '',//排序
 					deptid: '',//部门ID
 					permission: '',//按钮事件名称
-					creatUser: '',//创建人
-					createTime: '',//创建时间
+					creatUser: '',//录入人
+					createTime: '',//录入时间
 					updateUser: '',//修改人
 					updateTime: '',//修改时间
 				};

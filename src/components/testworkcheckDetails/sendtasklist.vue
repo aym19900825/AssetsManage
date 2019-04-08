@@ -494,7 +494,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入日期" prop="ENTERDATE">
+											<el-form-item label="录入时间" prop="ENTERDATE">
 												<el-input v-model="workorderForm.ENTERDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
@@ -511,7 +511,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期" prop="CHANGEDATE">
+											<el-form-item label="修改时间" prop="CHANGEDATE">
 												<el-input v-model="workorderForm.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>

@@ -141,24 +141,30 @@
 								<el-collapse-item title="其他" name="1" v-show="views">
 									<el-row :gutter="30" v-show="personinfo">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="createUser">
-												<el-input v-model="adddeptForm.createUser" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="createUser" label-width="100px">
+												<el-input v-model="adddeptForm.createUser" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="createTime">
-												<el-input v-model="adddeptForm.createTime" :disabled="edit">
+											<el-form-item label="录入时间" prop="createTime" label-width="100px">
+												<el-input v-model="adddeptForm.createTime" placeholder="当前录入时间" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="updateUser">
-												<el-input v-model="adddeptForm.updateUser" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="deptidDesc" label-width="100px">
+												<el-input v-model="adddeptForm.deptidDesc" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="updateTime">
-												<el-input v-model="adddeptForm.updateTime" :disabled="edit">
+											<el-form-item label="修改人" prop="updateUser" label-width="100px">
+												<el-input v-model="adddeptForm.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="updateTime" label-width="100px">
+												<el-input v-model="adddeptForm.updateTime" placeholder="当前修改时间" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -167,11 +173,11 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							    <el-button type="primary" @click="save('Update')">保存</el-button>
-							    <el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
-							<!--	<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
-								<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
-								<el-button @click="close">取消</el-button> 
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
+							<!--<el-button type="primary" class="btn-primarys" @click="submitForm('adddeptForm')">提交</el-button>-->
+							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion">修订</el-button>
+							<el-button @click="close">取消</el-button> 
 						</div>
 					</el-form>
 				</div>
@@ -204,7 +210,7 @@
 								</el-table-column>
 								<!-- <el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
 								</el-table-column> -->
-								<el-table-column label="创建时间" width="150px" prop="createTime" sortable :formatter="dateFormat">
+								<el-table-column label="录入时间" width="150px" prop="createTime" sortable :formatter="dateFormat">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">

@@ -111,7 +111,7 @@
 								</el-table-column> -->
 								<!--<el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
 								</el-table-column>-->
-								<!-- <el-table-column label="创建时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<!-- <el-table-column label="录入时间" prop="createTime" width="100px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column> -->
 							</v-table>
 							<!-- 表格 -->
@@ -254,7 +254,7 @@
 					'用户有效期',
 					// '公司',
 					// '信息状态',
-					// '创建时间'
+					// '录入时间'
 				],
 				buttons: [],//请求回的按钮
 				tableHeader: [{
@@ -290,7 +290,7 @@
 					// 	prop: 'enabled'
 					// },
 					// {
-					// 	label: '创建时间',
+					// 	label: '录入时间',
 					// 	prop: 'createTime'
 					// }
 				],

@@ -90,24 +90,27 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="createby" label-width="100px">
-												<el-input v-model="dataInfo.createName" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.createName" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="createdate" label-width="100px">
-												<el-input v-model="dataInfo.createdate" :disabled="edit">
-												</el-input>
+												<el-input v-model="dataInfo.createdate" placeholder="当前录入时间" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="deptidDesc" label-width="100px">
+												<el-input v-model="dataInfo.deptidDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="updateby" label-width="100px">
-												<el-input v-model="dataInfo.updateName" :disabled="edit"></el-input>
+												<el-input v-model="dataInfo.updateName" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="updatedate" label-width="100px">
-												<el-input v-model="dataInfo.updatedate" :disabled="edit">
-												</el-input>
+												<el-input v-model="dataInfo.updatedate" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

@@ -105,7 +105,7 @@
 								</el-table-column>
 								<el-table-column label="模型版本" sortable width="140px" prop="version" v-if="this.checkedName.indexOf('模型版本')!=-1">
 								</el-table-column>
-								<el-table-column label="创建时间" width="200px" prop="createTime" sortable  v-if="this.checkedName.indexOf('创建时间')!=-1">
+								<el-table-column label="录入时间" width="200px" prop="createTime" sortable  v-if="this.checkedName.indexOf('录入时间')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 -->
@@ -155,7 +155,7 @@ export default {
 			'模型标识',
 			'模型名称',
 			'模型版本',
-			'创建时间'
+			'录入时间'
 		],
 		tableHeader: [{
 			label: '编号',
@@ -178,7 +178,7 @@ export default {
 			prop: 'version'
 		},
 		{
-			label: '创建时间',
+			label: '录入时间',
 			prop: 'createTime'
 		}
 		],

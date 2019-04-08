@@ -33,7 +33,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="录入日期" prop="ENTERDATE" label-width="80px">
+                        <el-form-item label="录入时间" prop="ENTERDATE" label-width="80px">
                             <div class="block">
                                 <el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
                                 </el-date-picker>
@@ -118,7 +118,7 @@
                     STATE: '',//状态
                     COMPLETE_DATE: '',//完成日期
                     // ENTERBY: '',//录入人
-                    ENTERDATE: '',//录入日期
+                    ENTERDATE: '',//录入时间
                 },
                 
             }
@@ -155,7 +155,7 @@
                     STATE: '',//状态
                     COMPLETE_DATE: '',//完成日期
                     // ENTERBY: '',//录入人
-                    ENTERDATE: '',//录入日期
+                    ENTERDATE: '',//录入时间
                 };
             },
             searchinfo(index) {

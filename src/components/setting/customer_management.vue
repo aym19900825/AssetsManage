@@ -15,8 +15,8 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
-								<i :class="item.icon"></i>{{item.name}}
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
@@ -211,8 +211,6 @@
 				customerList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin:true,
 				fileList: [],//上传附件数据
@@ -309,8 +307,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

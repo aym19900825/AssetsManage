@@ -1860,11 +1860,6 @@
 				var url = this.basic_url + '/api-apps/app/workplan/' + dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.WORKPLAN = res.data;
-					// for(var j=0;j<this.selectData.length;j++){
-					// 	if(this.WORKPLAN.PROP_UNIT==this.selectData[j].id){
-					// 		this.WORKPLAN.PROP_UNIT=this.selectData[j].fullname
-					// 	}
-					// }
 					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
 					this.worlplanlist = res.data.WORLPLANLINEList;
 					var worlplanlist = res.data.WORLPLANLINEList;
@@ -1885,12 +1880,7 @@
 					}).then((res) => {
 						this.selectData = res.data;
 					});
-				}).catch((err) => {
-					// this.$message({
-					// 	message: '网络错误，请重试',
-					// 	type: 'error'
-					// });
-				});
+				}).catch((err) => {});
 			},
 			//点击关闭按钮
 			close() {

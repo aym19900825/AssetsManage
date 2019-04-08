@@ -59,12 +59,12 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="模板描述" prop="DECRIPTION">
-										<el-input v-model="searchList.DECRIPTION"></el-input>
+										<el-input v-model="searchList.DECRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>

@@ -35,17 +35,17 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="文件名称" prop="DESCRIPTION">
-										<el-input v-model="searchList.DESCRIPTION"></el-input>
+										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION"></el-input>
+										<el-input v-model="searchList.VERSION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPTID" label-width="50px">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>

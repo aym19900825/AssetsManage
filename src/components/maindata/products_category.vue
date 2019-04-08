@@ -59,22 +59,22 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="编码" prop="NUM">
-										<el-input v-model="searchList.NUM"></el-input>
+										<el-input v-model="searchList.NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="名称" prop="TYPE">
-										<el-input v-model="searchList.TYPE"></el-input>
+										<el-input v-model="searchList.TYPE" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION"></el-input>
+										<el-input v-model="searchList.VERSION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -579,7 +579,8 @@
 			requestData(){
 				this.loading = true;
 				var url= this.basic_url +'/api-apps/appSelection/productType/treeForStation?tree_id=NUM&tree_pid=PARENT';
-				this.$axios.get(url, {}).then((res) => {
+				this.$axios.get(url, {
+				}).then((res) => {
 					this.deptList = res.data.datas;
 					this.loading = false;
 				}).catch((wrong) => {})

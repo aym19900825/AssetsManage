@@ -137,26 +137,28 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
+								</el-collapse-item>
+								<el-collapse-item title="其他" name="1" v-show="views">
 									<el-row :gutter="30" v-show="personinfo">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="enterby">
-												<el-input v-model="adddeptForm.enterby" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="createUser">
+												<el-input v-model="adddeptForm.createUser" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="enterdate">
-												<el-input v-model="adddeptForm.enterdate" :disabled="edit">
+											<el-form-item label="录入时间" prop="createTime">
+												<el-input v-model="adddeptForm.createTime" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="changeby">
-												<el-input v-model="adddeptForm.changeby" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="updateUser">
+												<el-input v-model="adddeptForm.updateUser" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="changedate">
-												<el-input v-model="adddeptForm.changedate" :disabled="edit">
+											<el-form-item label="修改时间" prop="updateTime">
+												<el-input v-model="adddeptForm.updateTime" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -246,10 +248,10 @@
 						fax:'',
 						email:'',
 						tips:'',
-						enterby:'',
-						enterdate:'',
-						changeby:'',
-						changedate:''
+						createUser:'',
+						createTime:'',
+						updateUser:'',
+						updateTime:''
 					}
 				}
 			}
@@ -276,6 +278,7 @@
 				}],
 				personinfo:false,
 				showcode:true,
+				views: false, //录入修改人信息
 				noviews:true,//按钮
 				selMenu:[],
 				selUser: [],
@@ -290,8 +293,8 @@
 					totalCount: 0
 				},
 				dialogVisible: false, //对话框
-				noedit: false,
 				edit: true, //禁填
+				noedit: false,//表单内容
 				editSearch: '',
 				noedit:false,//可编辑
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
@@ -302,7 +305,7 @@
 				addtitle:true,//添加弹出框titile
 				modifytitle:false,//修改弹出框titile
 				viewtitle:false,//查看弹出框titile
-				modify:false,
+				modify:false,//修订
 				dialogLeader:false,
 				stopcontent:false,
 				stopselect:false,
@@ -354,12 +357,12 @@
                 	 }
             		}
         	},
-        	
+        	//添加显示弹窗
 			visible() {//点击父组件按钮显示弹窗
 				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-	     			this.adddeptForm.enterby = res.data.nickname;
+	     			this.adddeptForm.createUser = res.data.nickname;
 	     			var date=new Date();
-					this.adddeptForm.enterdate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.adddeptForm.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				 }).catch((err) => {
 				});	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
@@ -367,7 +370,10 @@
 				this.show = true;
 				this.addtitle = true;
 				this.modifytitle = false;
-				this.modify = false;
+				this.modify = false;//修订按钮
+				this.noedit = false; //表单内容
+				this.views = false; //录入修改人信息
+				this.noviews = true; //按钮
 				this.stopcontent = true;
 				this.stopselect = false;
 				this.showcode = false;
@@ -377,13 +383,16 @@
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
-				this.modify = true;
+				this.views = false; //录入修改人信息
+				this.noviews = true; //按钮
+				this.modify = true;//修订按钮
+				this.noedit = false; //表单内容
 				this.stopcontent = false;
 				this.stopselect = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.adddeptForm.changeby = res.data.nickname;
+	    			this.adddeptForm.updateUser = res.data.nickname;
 	    			var date=new Date();
-					this.adddeptForm.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.adddeptForm.updateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					for(var key in this.adddeptForm){ 
 						this.adddeptForm.hasOwnProperty('_expanded');
 						this.adddeptForm.hasOwnProperty('_level');
@@ -402,13 +411,15 @@
 				});
                  this.show = true;
 			},
+			//这是查看
 			view(){
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
-				this.modify = true;
-				this.edit = true;
+				this.modify = true;//修订按钮
 				this.noedit = true;
+				this.views = true; //录入修改人信息
+				this.noviews = false; //按钮
 				this.stopcontent = false;
 				this.stopselect = true;
 				this.personinfo = true;

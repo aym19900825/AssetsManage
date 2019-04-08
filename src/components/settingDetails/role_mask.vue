@@ -120,8 +120,6 @@
 					value: '2',
 					label: '否'
 				}],
-
-				edit: true, //禁填
 				stopshow: false,
 				stopselect: false,
 				show: false, //控制弹出框显示隐藏
@@ -166,6 +164,7 @@
 				modifytitle: false,
 				viewtitle: false,
 				dept: false,
+				edit: true, //禁填
 				noedit: false, //表单内容
 				views: false, //录入修改人信息
 				noviews: true, //按钮

@@ -299,7 +299,7 @@
 				noedit: false,
 				edit: true, //禁填
 				editSearch: '',
-				noedit:false,//表单内容
+				noedit:false,//可编辑
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				show: false,
 				isok1: true,

@@ -378,7 +378,7 @@
 				falg:true,
 				index:0,
 				dept:false,
-				noedit:false,//表单内容
+				noedit:false,//可编辑
 				views:false,//录入修改人信息
 				noviews:true,//按钮
 				modify:false,//修订

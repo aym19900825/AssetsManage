@@ -1091,13 +1091,6 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							// this.$nextTick(()=>{
-							// 	var total=parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST)
-							// 	this.dataInfo.CONTRACTCOST = this.number_format(total,2);
-							// });
-							// this.$nextTick(()=>{
-							// 	this.dataInfo.CONTRACTCOST = parseFloat(this.INSPECTCOST) + parseFloat(this.ALLCOST);
-							// });
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
 							this.$forceUpdate();
@@ -2274,7 +2267,7 @@
 			},
 			getCompany() {
 				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, { }).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				});
 			},

@@ -27,8 +27,10 @@
 					this.innerVisible = true;
 				},
 	  	getvewPople(){
+
 	  		this.id=this.approvingData.id;
 				this.appname=this.approvingData.app;
+
 //		    /app/{app}/flow/isStart/{id}{app}单据是否启动流程
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/isStart/'+this.id;
 		    		this.$axios.get(url, {}).then((res) => {

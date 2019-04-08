@@ -205,6 +205,7 @@
 					});
 					return;
 				} else {
+					this.selMenu[0].canauthorization=this.selMenu[0].canauthorization.toString();
 					this.menu = this.selMenu[0]; 
 					this.$refs.child.detail(this.selMenu[0]);
 				}

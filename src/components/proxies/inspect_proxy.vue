@@ -728,7 +728,6 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				console.log(data);
 				if(data.type=='dept') {
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
@@ -736,14 +735,12 @@
 					this.page.currentPage = 1;
 				}else if(data.type=='product'){
 					this.searchList.P_NUM = data.num.substr(1);
-					console.log(data.num.substr(1));
 					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else if(data.type=='producttype'){
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = data.num.substr(2);
-					console.log(data.num.substr(2));
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else{

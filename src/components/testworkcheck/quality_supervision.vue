@@ -18,24 +18,6 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                    <i class="icon-add"></i>添加
-                                </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-                                    <i class="icon-edit"></i>修改
-                                </button>
-								<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
-                                    <i class="icon-trash"></i>删除
-                                </button>
-                                <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-                                    <i class="icon-search"></i>高级查询
-                                    <i class="icon-arrow1-down" v-show="down"></i>
-                                    <i class="icon-arrow1-up" v-show="up"></i>
-                                </button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -53,12 +35,12 @@
 							<el-row :gutter="10">
                                 <el-col :span="7">
 									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">
-										<el-input v-model="searchList.REPORTNUM"></el-input>
+										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
-										<el-input v-model="searchList.DESCRIPTION"></el-input>
+										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">

@@ -55,36 +55,36 @@
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="计划编号" prop="PMNUM">
-									<el-input v-model="searchList.PMNUM"></el-input>
+									<el-input v-model="searchList.PMNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="计划描述" prop="DESCRIPTION">
-									<el-input v-model="searchList.DESCRIPTION"></el-input>
+									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
 								<el-form-item label="设备编号" prop="ASSETNUM" label-width="100px">
-									<el-input v-model="searchList.ASSETNUM"></el-input>
+									<el-input v-model="searchList.ASSETNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="设备名称" prop="A_NAME">
-									<el-input v-model="searchList.A_NAME"></el-input>
+									<el-input v-model="searchList.A_NAME" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="溯源周期" prop="FREQUENCY">
-									<el-input v-model="searchList.FREQUENCY"></el-input>
+									<el-input v-model="searchList.FREQUENCY" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="溯源机构" prop="PM_MECHANISM">
-									<el-select clearable v-model="searchList.PM_MECHANISM" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
+									<el-select clearable v-model="searchList.PM_MECHANISM" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
@@ -93,7 +93,10 @@
 									    <el-date-picker
 									      v-model="searchList.COMP_DATE"
 									      type="date"
-									      placeholder="请选择" style="width: 100%"  value-format="yyyy-MM-dd">
+									      placeholder="请选择"
+										  style="width: 100%"  
+										  value-format="yyyy-MM-dd"
+										  @keyup.enter.native="searchinfo">
 									    </el-date-picker>
 								  	</div>
 								</el-form-item>

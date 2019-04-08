@@ -36,7 +36,7 @@
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.appname">
+									<el-input v-model="searchList.appname" @keyup.enter.native="searchinfo">
 										<template slot="prepend">应用名称</template>
 									</el-input>
 								</el-col>

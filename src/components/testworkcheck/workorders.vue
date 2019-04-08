@@ -44,43 +44,36 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务单编号" prop="WONUM">
-										<el-input v-model="searchList.WONUM">
+										<el-input v-model="searchList.WONUM"  @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="80px">
-										<el-input v-model="searchList.ITEM_NAME">
+										<el-input v-model="searchList.ITEM_NAME"  @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPLETE_DATE" label-width="80px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
+									    	<el-date-picker v-model="searchList.COMPLETE_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd"  @keyup.enter.native="searchinfo">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>
 								</el-col>
-								
-								<!-- <el-col :span="3">
-									<el-select v-model="searchList.STATE" placeholder="请选择信息状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col> -->
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
-										<el-input v-model="searchList.PROXYNUM">
+										<el-input v-model="searchList.PROXYNUM"  @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="录入日期" prop="ENTERDATE" label-width="80px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd">
+									    	<el-date-picker v-model="searchList.ENTERDATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd"  @keyup.enter.native="searchinfo">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>

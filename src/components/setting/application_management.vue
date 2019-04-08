@@ -35,12 +35,12 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="应用名称" prop="name">
-										<el-input v-model="searchList.name"></el-input>
+										<el-input v-model="searchList.name" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="应用描述" prop="description">
-										<el-input v-model="searchList.description"></el-input>
+										<el-input v-model="searchList.description" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">

@@ -18,36 +18,6 @@
 								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                      			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<button type="button" class="btn btn-primarys button-margin" @click="importData">
-								    <i class="icon-upload-cloud"></i>导入
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-								    <i class="icon-download-cloud"></i>导出
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-
-								<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-								    <i class="icon-print"></i>打印
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -61,7 +31,7 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="样品序号" prop="ITEM_STEP" label-width="85px">
-										<el-input v-model="searchList.ITEM_STEP"></el-input>
+										<el-input v-model="searchList.ITEM_STEP" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
@@ -70,21 +40,23 @@
 										    <el-date-picker
 										      v-model="searchList.ACCEPT_DATE"
 										      type="date"
-										      placeholder="请选择" style="width: 100%">
+										      placeholder="请选择"
+											  style="width: 100%"
+											   @keyup.enter.native="searchinfo">
 										    </el-date-picker>
 									  	</div>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="85px">
-										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
+										<el-input v-model="searchList.ACCEPT_PERSON"  @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="处理批准人" prop="APPR_PERSON" label-width="85px">
-										<el-input v-model="searchList.APPR_PERSON"></el-input>
+										<el-input v-model="searchList.APPR_PERSON"  @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
@@ -93,7 +65,9 @@
 										    <el-date-picker
 										      v-model="searchList.APPR_DATE"
 										      type="date"
-										      placeholder="请选择" style="width: 100%">
+										      placeholder="请选择"
+											  style="width: 100%"
+											   @keyup.enter.native="searchinfo">
 										    </el-date-picker>
 									  	</div>
 									</el-form-item>

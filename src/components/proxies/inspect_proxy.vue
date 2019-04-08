@@ -45,37 +45,32 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="委托单位名称" prop="V_NAMEDesc"  label-width="100px">
-										<el-input v-model="searchList.V_NAME"></el-input>
+										<el-input v-model="searchList.V_NAMEDesc" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="70px">
-										<el-input v-model="searchList.ITEM_NAME"></el-input>
+										<el-input v-model="searchList.ITEM_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
-										<el-input v-model="searchList.REPORT_NUM"></el-input>
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
+										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="5">
-									<el-form-item label="录入人" prop="ENTERBY" label-width="70px">
-										<el-input v-model="searchList.ENTERBY"></el-input>
-									</el-form-item>
-								</el-col -->
 								<el-col :span="5">
 									<el-form-item label="状态" prop="STATUS" label-width="70px">
 										<el-select clearable v-model="searchList.STATUS" placeholder="选择状态" style="width: 100%">
@@ -84,7 +79,7 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-                <el-col :span="4">
+                				<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
@@ -118,7 +113,7 @@
 									</template>
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
-								</el-table-column>
+							</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
 								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
@@ -318,7 +313,7 @@
 				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					V_NAME:'',
+					V_NAMEDesc:'',
 					ITEM_NAME: '',
 					REPORT_NUM: '',
 					PROXYNUM: '',
@@ -376,7 +371,7 @@
 
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
-					V_NAME:'',
+					V_NAMEDesc:'',
 					ITEM_NAME: '',
 					REPORT_NUM: '',
 					PROXYNUM: '',

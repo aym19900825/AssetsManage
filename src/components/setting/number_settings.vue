@@ -46,7 +46,7 @@
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="自动编号名称" prop="AUTOKEY" label-width="100px">
-									<el-input v-model="searchList.AUTOKEY">
+									<el-input v-model="searchList.AUTOKEY" @keyup.enter.native="searchinfo">
 									</el-input>
 								</el-form-item>
 							</el-col>

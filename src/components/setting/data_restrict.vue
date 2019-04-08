@@ -46,7 +46,7 @@
 							<el-row :gutter="10">
 								<el-col :span="6">
 									<el-form-item label="应用名称" prop="appName">
-										<el-input v-model="searchList.appName"></el-input>
+										<el-input v-model="searchList.appName" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>							
 								<el-col :span="4">

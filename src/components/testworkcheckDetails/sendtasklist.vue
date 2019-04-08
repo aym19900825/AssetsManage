@@ -320,7 +320,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable  width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.INSPECT_GROUP'" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择"  @change="getleader($event)" >
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择"  @change="getleader($event,'PROJECTLIST',scope.$index,'add')" >
 																<el-option v-for="data in maingroups" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -330,7 +330,7 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event)" >
+															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,PROJECTLIST,scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -419,7 +419,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable  width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择"   @change="getgroup($event)" >
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择"    @change="getleader($event,'CONTRACTList',scope.$index,'add')">
 																<el-option v-for="data in maingroups" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -429,7 +429,7 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event)" >
+															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,CONTRACTList,scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -1074,10 +1074,10 @@
 				this.approvingData.app=this.workorder;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			//获取导入表格勾选信息
-			SelChange(val) {
-				this.selMenu = val;
-			},
+			// //获取导入表格勾选信息
+			// SelChange(val) {
+			// 	this.selMenu = val;
+			// },
 		
 			reprotids(val){
 
@@ -1174,9 +1174,21 @@
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
 					this.RVENDORSelect(res.data.datas.CJDW);
 					// this.workorderForm = res.data;
-					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+					
+					for(let i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
+						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
+						this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
+						res.data.datas.WORKORDER_PROJECTList[i].LEADER = Number(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
+						res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 					}
+					for(let i = 0;i<res.data.datas.WORKORDER_CONTRACTList.length;i++){
+						
+						res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+						this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
+						res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
+						res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+					}
+					// this.getleader(WORKORDER_CONTRACTList.INSPECT_GROUP);
 							this.workorderForm = res.data.datas;
 							this.show=true;
 					}).catch((wrong) => {
@@ -1191,7 +1203,6 @@
 						this.approval=false;
 					}else{
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
-						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
 							
 							res.data.CJDW = Number(res.data.CJDW);
@@ -1199,7 +1210,6 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								// console.log("users----"+users);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -1217,12 +1227,31 @@
 				console.log(this.selMenu);
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
+							//检验项目与要求的数据id
+              var selectData= this.PROJECTLIST;
+		          var deleteid = [];
+		          var ids;
+		          for(let i = 0; i < selectData.length; i++) {
+		            deleteid.push(selectData[i].ID);
+		          }
+		          //ids为deleteid数组用逗号拼接的字符串
+		          ids = deleteid.toString(',');
+							// 分包项目的数据id
+							var selectDatas= this.CONTRACTLIST;
+							 //deleteid为id的数组
+		          var deleteids = [];
+		          var ides;
+		          for(let i = 0; i < selectDatas.length; i++) {
+		            deleteid.push(selectDatas[i].ID);
+		          }
+		          //ids为deleteid数组用逗号拼接的字符串
+		          ids = deleteids.toString(',');
 							var data = {
 								WORKORDER:this.workorderForm,
-								PROJECTLIST:this.PROJECTLIST,
-								CONTRACTLIST:this.CONTRACTLIST,
+								PROJECTLIST:ids,
+								CONTRACTLIST:ides,
 							}
-								// /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
+				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
 					// console.log(this.workorderForm);
 					this.$axios.post(url,{params: data}).then((res) => {
@@ -1313,21 +1342,34 @@
 	      });
 				
 			},
-			getleader(maingroupid){
+			getleader(maingroupid,PROJECTLIST,index,add){
 				this.maingroupid=maingroupid;
 				if(!maingroupid){
 					return;
 				}
-				// this.dataInfo.LEADER = '';
+			  if(!!add){
+					if(PROJECTLIST=='PROJECTLIST'){
+					this.workorderForm.WORKORDER_PROJECTList[index].LEADER='';
+					this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
+					}else{
+						this.workorderForm.WORKORDER_CONTRACTList[index].LEADER='';
+						this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
+					}
+				}
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
 				this.$axios.get(url, {}).then((res) => {
 					this.leader = res.data.data;
 				}).catch((err) => {
 				});		
 			},
-			visableleader(leader){
+			visableleader(leader,PROJECTLIST,index){
 				if(!leader){
 						return;
+				}
+				if(PROJECTLIST==PROJECTLIST){
+					this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
+				}else{
+					this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
 				}
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.maingroupid;
 				this.$axios.get(url, {}).then((res) => {
@@ -1351,7 +1393,7 @@
             sums[index] = '统计';
             return;
 					} 
-					else if(index === 8){
+					else if(index === 7){
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property]);
@@ -1391,7 +1433,7 @@
             sums[index] = '统计';
             return;
 					} 
-					else if(index === 7){
+					else if(index === 8){
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property]);

@@ -57,35 +57,29 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="编码" prop="P_NUM">
-										<el-input v-model="searchList.P_NUM">
+										<el-input v-model="searchList.P_NUM"  @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="名称" prop="P_NAME">
-										<el-input v-model="searchList.P_NAME">
+										<el-input v-model="searchList.P_NAME"  @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION">
+										<el-input v-model="searchList.VERSION"  @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择"  @keyup.enter.native="searchinfo">
 									    	<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="3">
-									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>

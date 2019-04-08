@@ -45,12 +45,13 @@
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<v-table ref="vtable" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<!-- <el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
-								</el-table-column> -->
-								<el-table-column label="组名" sortable prop="name" v-if="this.checkedName.indexOf('组名')!=-1">
+								<el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.num}}</p>
 									</template>
+								</el-table-column>
+
+								<el-table-column label="组名" sortable prop="name" v-if="this.checkedName.indexOf('组名')!=-1">
 								</el-table-column>
 
 								<el-table-column label="所属机构" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('所属机构')!=-1">
@@ -90,12 +91,16 @@
 				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
-					// '编号',
+					'编号',
 					'组名',
 					'所属机构',
 				],
 				appName: 'group',
 				tableHeader: [
+					{
+						label: '编号',
+						prop: 'num',
+					},
 					{
 						label: '组名',
 						prop: 'name',
@@ -152,9 +157,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// 
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {})
 			},
 			changeCheckedName(value){

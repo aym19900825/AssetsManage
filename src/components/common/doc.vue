@@ -43,8 +43,8 @@
             fixed="right"
             label="操作"
             width="100">
-            <template slot-scope="scope" v-if="docParm.model=='edit'">
-                <el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
+            <template slot-scope="scope">
+                <el-button @click="showAuth(scope.row)" type="text" size="small"  v-if="docParm.model=='edit'">关键字</el-button>
                 <el-button @click="readAuth(scope.row)" type="text" size="small">查看</el-button>
             </template>
         </el-table-column>

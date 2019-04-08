@@ -36,19 +36,19 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="日志名称" prop="logname">
-										<el-input v-model="searchList.logname">
+										<el-input v-model="searchList.logname" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="日志类型" prop="logtype">
-										<el-input v-model="searchList.logtype">
+										<el-input v-model="searchList.logtype" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="用户账号" prop="username">
-										<el-input v-model="searchList.username">
+										<el-input v-model="searchList.username" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>

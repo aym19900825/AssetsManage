@@ -58,55 +58,49 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="标准编号" prop="SS_NUM">
-										<el-input v-model="searchList.SS_NUM">
+										<el-input v-model="searchList.SS_NUM" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="标准名称" prop="S_NAME">
-										<el-input v-model="searchList.S_NAME">
+										<el-input v-model="searchList.S_NAME" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="英文名称" prop="S_ENGNAME">
-										<el-input v-model="searchList.S_ENGNAME">
+										<el-input v-model="searchList.S_ENGNAME" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="版本" prop="VERSION" label-width="45px">
-										<el-input v-model="searchList.VERSION">
+										<el-input v-model="searchList.VERSION" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-form-item label="机构" prop="DEPTID" label-width="45px">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-									    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select>
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="20">
 								<el-col :span="5">
 									<el-form-item label="发布时间" prop="RELEASETIME">
-										<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd" style="width: 100%">
+										<el-date-picker v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="启用时间" prop="STARTETIME">
-										<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd" style="width: 100%">>
+										<el-date-picker v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="3">
-									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>

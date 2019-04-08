@@ -1224,7 +1224,6 @@
 			},
 			// 保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.selMenu);
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
 							//检验项目与要求的数据id
@@ -1253,7 +1252,7 @@
 							}
 				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
-					// console.log(this.workorderForm);
+					console.log(this.workorderForm);
 					this.$axios.post(url,{params: data}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

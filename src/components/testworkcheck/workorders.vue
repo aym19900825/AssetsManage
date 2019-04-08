@@ -320,8 +320,6 @@
 				userList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				options: [{
 					value: '1',
 					label: '活动'
@@ -594,8 +592,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

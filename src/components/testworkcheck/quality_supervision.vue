@@ -15,27 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!-- <button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                    <i class="icon-add"></i>添加
-                                </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-                                    <i class="icon-edit"></i>修改
-                                </button>
-								<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
-                                    <i class="icon-trash"></i>删除
-                                </button>
-                                <button type="button" class="btn btn-primarys button-margin" @click="reportdata">
-							    <i class="icon-clipboard"></i>报表
-							</button>
-
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-                                    <i class="icon-search"></i>高级查询
-                                    <i class="icon-arrow1-down" v-show="down"></i>
-                                    <i class="icon-arrow1-up" v-show="up"></i>
-                                </button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -154,8 +136,6 @@
 				USESEAL: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -223,8 +203,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			//请求点击
 		    getbtn(item){

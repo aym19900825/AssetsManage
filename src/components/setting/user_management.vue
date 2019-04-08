@@ -559,17 +559,17 @@
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
 							arr.push(mData[a].id);
-							if(mData[a].children!=undefined){
-								for(var b=0;b<mData[a].children.length;b++){
-									if(!mData[a].children[b].checked){
-									flag=false;
-									break;
-									}
-								}
-								if(!flag){
-									arr.pop(mData[a].id)
-								}
-							}
+							// if(mData[a].children!=undefined){
+							// 	for(var b=0;b<mData[a].children.length;b++){
+							// 		if(!mData[a].children[b].checked){
+							// 		flag=false;
+							// 		break;
+							// 		}
+							// 	}
+							// 	if(!flag){
+							// 		arr.pop(mData[a].id)
+							// 	}
+							// }
 						}
 						if(mData[a].children!=undefined){
 							this.recursive(mData[a].children,arr);

@@ -305,7 +305,6 @@
 				this.statusshow2 = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.CATEGORY.CHANGEBY = res.data.id;
-					// this.CATEGORY.CHANGEBYDesc = res.data.nickname;
 					var date = new Date();
 					this.CATEGORY.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					//深拷贝数据
@@ -435,7 +434,7 @@
 					if(valid) {
 						this.CATEGORY.STATUS = ((this.CATEGORY.STATUS == "1" || this.CATEGORY.STATUS == '活动') ? '1' : '0');
 						if(this.CATEGORY.ID!=null&&this.CATEGORY.ID!=undefined&&this.CATEGORY.ID!=''){
-							this.$confirm('提示是否需要修订版本？').then(_ => {
+							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
 								this.close();

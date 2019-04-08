@@ -288,7 +288,7 @@
 					if(valid) {
 						this.PRODUCT.STATUS = ((this.PRODUCT.STATUS == "1" || this.PRODUCT.STATUS == '活动') ? '1' : '0');
 						if(this.PRODUCT.ID!=null&&this.PRODUCT.ID!=undefined&&this.PRODUCT.ID!=''){
-							this.$confirm('提示是否需要修订版本？').then(_ => {
+							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
 								this.close();

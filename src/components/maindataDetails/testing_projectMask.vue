@@ -189,8 +189,17 @@
 
 			<!-- 作业指导书 Begin -->
 			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
-				<el-table ref="table" :header-cell-style="rowClass" :data="WORK_INSTRUCTIONList" border stripe height="400" style="width: 100%;" :default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
-					<el-table-column type="selection" fixed width="55" align="center">
+				<el-table ref="table" 
+					:header-cell-style="rowClass" 
+					:data="WORK_INSTRUCTIONList" 
+					border 
+					stripe 
+					height="400" 
+					style="width: 100%;" 
+					:default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" 
+					@selection-change="SelChange" 
+					v-loadmore="loadMore">
+					<el-table-column type="selection" fixed width="55">
 					</el-table-column>
 					<el-table-column label="分发号" width="155" sortable prop="NUM">
 						<template slot-scope="scope">

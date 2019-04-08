@@ -38,8 +38,8 @@
                                         </el-col>
                                     </el-row>
 
-									<el-row>
-										<el-col :span="8">
+									<el-row :gutter="20">
+										<el-col :span="12">
 											<el-form-item label="委托方名称" prop="V_NAME">
 												<el-input v-model="report.V_NAME " :disabled="noedit"></el-input>
 											</el-form-item>
@@ -49,7 +49,7 @@
 												<el-input v-model="report.DEPTIDDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col> -->
-                                        <el-col :span="8">
+                                        <el-col :span="12">
 											<el-form-item label="分包性质" prop="CONTRACT_NATURE">
 												<el-select clearable v-model="report.CONTRACT_NATURE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
 													<el-option label="固定" value="1"></el-option>
@@ -58,8 +58,8 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-                                    <el-row>
-										<el-col :span="8">
+                                    <el-row :gutter="20">
+										<el-col :span="12">
 											<el-form-item label="委托书类型" prop="TYPE">
 												<el-select clearable v-model="report.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
 													<el-option label="检验" value="1"></el-option>
@@ -67,18 +67,13 @@
 												</el-select>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<el-col :span="12">
 											<el-form-item label="样品名称" prop="ITEMNAME">
 												<el-input v-model="report.ITEMNAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="样品状态" prop="ITEM_STATUS">
-												<el-input v-model="report.ITEM_STATUS" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
 									</el-row>
-                                    <el-row>
+                                    <el-row :gutter="20">
                                         <el-col :span="12">
 											<el-form-item label="检验检测项目内容" prop="P_REMARKS" label-width="160px">
 												<el-input v-model="report.P_REMARKS" :disabled="noedit"></el-input>
@@ -91,7 +86,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-                                    <el-row>
+                                    <el-row :gutter="20">
 										<el-col :span="12">
 											<el-form-item label="对环境和操作人员要求" prop="REQUIRES" label-width="160px">
 												<el-input v-model="report.REQUIRES" :disabled="noedit"></el-input>
@@ -104,26 +99,33 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-                                    <el-row>
-										<el-col :span="8">
+                                    <el-row :gutter="20">
+										<el-col :span="12">
 											<el-form-item label="完成日期" prop="COMPDATE">
 												<el-date-picker v-model="report.COMPDATE" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<el-col :span="12">
 											<el-form-item label="检验检测费用" prop="CHECKCOST">
 												<el-input v-model="report.CHECKCOST" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
-											<el-form-item label="对分包报告/证书的要求" prop="Q_TYPE">
+									</el-row>
+									<el-row :gutter="20">
+										<el-col :span="12">
+											<el-form-item label="对分包报告/证书的要求" prop="Q_TYPE"  label-width="180px">
 												<el-input v-model="report.Q_TYPE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="12">
+											<el-form-item label="样品状态" prop="ITEM_STATUS">
+												<el-input v-model="report.ITEM_STATUS" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
-									<el-row>
-										<el-col :span="8" v-if="dept">
+									<el-row :gutter="20">
+										<el-col :span="12" v-if="dept">
 											<el-form-item label="机构" prop="DEPTIDDesc">
 												<el-input v-model="report.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
@@ -131,7 +133,7 @@
 									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="其它" name="2" v-show="views">
-									<el-row>
+									<el-row :gutter="20">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
 												<el-input v-model="report.ENTERBYDesc" :disabled="edit"></el-input>

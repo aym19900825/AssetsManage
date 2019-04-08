@@ -438,7 +438,7 @@
 					if(valid) {
 						this.WORK_INSTRUCTION.STATUS = ((this.WORK_INSTRUCTION.STATUS == "1" || this.WORK_INSTRUCTION.STATUS == '活动') ? '1' : '0');
 						if(this.WORK_INSTRUCTION.ID!=null&&this.WORK_INSTRUCTION.ID!=undefined&&this.WORK_INSTRUCTION.ID!=''){
-							this.$confirm('提示是否需要修订版本？').then(_ => {
+							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
 								this.close();

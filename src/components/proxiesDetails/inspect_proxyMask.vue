@@ -647,7 +647,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="主检负责人" prop="LEADER" label-width="110px">
-												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @visible-change="visableleader($event)">
+												<el-select v-model="dataInfo.LEADER" filterable allow-create default-first-option placeholder="请选择" @visible-change="visableleader($event)" :disabled="noedit">
 													<el-option v-for="(data,index) in leaderdata" :key="index" :value="data.id" :label="data.nickname"></el-option>
 												</el-select>
 											</el-form-item>

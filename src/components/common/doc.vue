@@ -42,7 +42,7 @@
         <el-table-column
             fixed="right"
             label="操作"
-            width="100">
+            width="200">
             <template slot-scope="scope">
                 <el-button @click="showAuth(scope.row)" type="text" size="small"  v-if="docParm.model=='edit'">关键字</el-button>
                 <el-button @click="readAuth(scope.row)" type="text" size="small">查看</el-button>
@@ -227,6 +227,7 @@ export default {
                 'recordid': this.docParm.recordid,
             }).then((res) => {
                 this.doc = res.data.fileList;
+                this.page.totalCount = res.data.total;
             }).catch((err) => {});
         },
         download(){

@@ -329,6 +329,8 @@
 			     	this.reportdata();
 				}else if(item.name=="打印"){
 				 	this.Printing();
+				}else if(item.name=="导出"){
+					this.exportData();
 				}
 		    },
 			// 删除

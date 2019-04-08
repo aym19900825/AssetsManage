@@ -40,7 +40,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="单位名称" prop="VENDOR" label-width="70px">
+								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
 									<el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
@@ -100,7 +100,7 @@
 							</el-table-column>
 							<el-table-column label="状态" width="150" sortable prop="state" v-if="checkedName.indexOf('状态')!=-1">
 							</el-table-column>
-							<el-table-column label="单位名称" width="150" sortable prop="VENDORDesc" v-if="checkedName.indexOf('单位名称')!=-1">
+							<el-table-column label="分包单位" width="150" sortable prop="VENDORDesc" v-if="checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
 							<el-table-column label="分包协议类别" width="150" sortable prop="TYPE" v-if="checkedName.indexOf('分包协议类别')!=-1">
 							</el-table-column>

@@ -574,7 +574,7 @@
 					if (valid) {
 						this.dataInfo.STATUS = ((this.dataInfo.STATUS == "1"||this.dataInfo.STATUS == '活动') ? '1' : '0');
 						if(this.dataInfo.ID!=null&&this.dataInfo.ID!=undefined&&this.dataInfo.ID!=''){
-							this.$confirm('提示是否需要修订版本？').then(_ => {
+							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
 								this.close();

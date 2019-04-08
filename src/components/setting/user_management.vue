@@ -45,13 +45,13 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="用户名" prop="username" label-width="55px">
-										<el-input v-model="searchList.username">
+										<el-input v-model="searchList.username" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="姓名" prop="nickname" label-width="45px">
-										<el-input v-model="searchList.nickname">
+										<el-input v-model="searchList.nickname" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>

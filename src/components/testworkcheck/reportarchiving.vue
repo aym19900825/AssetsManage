@@ -35,29 +35,29 @@
 							<el-row :gutter="10">
                                 <el-col :span="7">
 									<el-form-item label="报告编号" prop="REPORTNUM">
-										<el-input v-model="searchList.REPORTNUM"></el-input>
+										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="报告名称" prop="REPORTNAME">
-										<el-input v-model="searchList.REPORTNAME"></el-input>
+										<el-input v-model="searchList.REPORTNAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="90px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
+										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="10">
 								<el-col :span="7">
 									<el-form-item label="归档人" prop="ONHOLEPERSON" label-width="70px">
-										<el-input v-model="searchList.ONHOLEPERSON"></el-input>
+										<el-input v-model="searchList.ONHOLEPERSON" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="归档时间" prop="ONHOLTIME">
-										<el-date-picker v-model="searchList.ONHOLTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
+										<el-date-picker v-model="searchList.ONHOLTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>

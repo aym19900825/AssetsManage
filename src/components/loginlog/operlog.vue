@@ -32,7 +32,7 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form inline-message :model="searchList" label-width="45px">
+						<el-form inline-message :model="searchList" label-width="100px">
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="日志名称" prop="logname">

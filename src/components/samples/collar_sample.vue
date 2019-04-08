@@ -31,30 +31,30 @@
 							<el-row :gutter="5">
 								<el-col :span="5">
 									<el-form-item label="样品序号" prop="ITEM_STEP">
-										<el-input v-model="searchList.ITEM_STEP"></el-input>
+										<el-input v-model="searchList.ITEM_STEP" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="样品类别" prop="TYPE" label-width="70px">
-										<el-input v-model="searchList.TYPE"></el-input>
+										<el-input v-model="searchList.TYPE" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="样品名称" prop="DESCRIPTION" label-width="70px">
-										<el-input v-model="searchList.DESCRIPTION"></el-input>
+										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="5">
 									<el-form-item label="领样人" prop="GRANT_PERSON" label-width="70px">
-										<el-input v-model="searchList.GRANT_PERSON"></el-input>
+										<el-input v-model="searchList.GRANT_PERSON" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="收样日期" prop="GRANT_DATE" label-width="70px">
 										<div class="block">
-									    	<el-date-picker v-model="searchList.GRANT_DATE" type="date" placeholder="请选择" style="width: 100%">
+									    	<el-date-picker v-model="searchList.GRANT_DATE" type="date" placeholder="请选择" style="width: 100%" @keyup.enter.native="searchinfo">
 									    	</el-date-picker>
 								  		</div>
 									</el-form-item>

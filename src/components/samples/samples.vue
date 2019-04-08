@@ -32,29 +32,29 @@
 							<el-row :gutter="5">
 								<el-col :span="7">
 									<el-form-item label="样品编号" prop="ITEMNUM">
-										<el-input v-model="searchList.ITEMNUM"></el-input>
+										<el-input v-model="searchList.ITEMNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="产品类别" prop="PRODUCT_TYPE">
-										<el-input v-model="searchList.PRODUCT_TYPE"></el-input>
+										<el-input v-model="searchList.PRODUCT_TYPE" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="委托单位" prop="V_NAME">
-										<el-input v-model="searchList.V_NAME"></el-input>
+										<el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="7">
 									<el-form-item label="样品名称" prop="DESCRIPTION">
-										<el-input v-model="searchList.DESCRIPTION"></el-input>
+										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="收样人" prop="ACCEPT_PERSON">
-										<el-input v-model="searchList.ACCEPT_PERSON"></el-input>
+										<el-input v-model="searchList.ACCEPT_PERSON" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
@@ -63,7 +63,9 @@
 											<el-date-picker
 											v-model="searchList.ACCEPT_DATE"
 											type="date"
-											placeholder="请选择" style="width: 100%">
+											placeholder="请选择"
+											style="width: 100%"
+											@keyup.enter.native="searchinfo">
 											</el-date-picker>
 										</div>
 									</el-form-item>

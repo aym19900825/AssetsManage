@@ -11,29 +11,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                      			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deldata">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="setrelation">
-								    <i class="icon-cpu"></i>配置关系
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="createtable">
-								    <i class="icon-refresh-cw"></i>生成表
-								</button>-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -109,14 +89,8 @@
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				selUser: [],
-				'启用': true,
-				'冻结': false,
-				'男': true,
-				'女': false,
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					name:'',
@@ -221,8 +195,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
 			},
 			// 删除数据
 			deldata() {

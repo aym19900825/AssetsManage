@@ -19,23 +19,6 @@
 							    <button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								<!--<button type="button" class="btn btn-green" @click="openAddData" id="">
-                                	<i class="icon-add"></i>添加
-                      			</button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button>-->
 							</div>
 						</div>
 
@@ -258,8 +241,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

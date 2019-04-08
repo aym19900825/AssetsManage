@@ -14,18 +14,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
-								</button>
-								<!--<button type="button" class="btn btn-green" @click="openAddMenu" id="">
-	                            	<i class="icon-add"></i>添加
-	                  			 </button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="delmenu">
-								    <i class="icon-trash"></i>删除
-								</button>-->
+							</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">

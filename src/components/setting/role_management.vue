@@ -15,34 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-				
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
-								 <!--<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-                                	<i class="icon-add"></i>添加
-                      			</button>
-								<button type="button" class="btn btn-blue button-margin" @click="modify">
-								    <i class="icon-edit"></i>修改
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="delroleinfo">
-								    <i class="icon-trash"></i>删除
-								</button>
-								<button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash"></i>彻底删除
-							</button>			
-								<button type="button" class="btn btn-primarys button-margin" @click="menu">
-								    <i class="icon-key"></i>应用模块权限配置
-								</button>
-								<button type="button" class="btn btn-primarys button-margin" @click="datalimit">
-								    <i class="icon-data"></i>数据范围
-								</button>
-								
-								<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-						    		<i class="icon-search"></i>高级查询
-						    		<i class="icon-arrow1-down" v-show="down"></i>
-						    		<i class="icon-arrow1-up" v-show="up"></i>
-								</button> -->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -168,8 +143,6 @@
 				buttons: [],//请求回的按钮
 				roleList: [],//表格数据
 				search: false,
-				down: true,
-				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {//高级查询数据
 					name: '',
@@ -300,8 +273,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			delroleinfo() {

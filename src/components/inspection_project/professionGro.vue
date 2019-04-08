@@ -153,7 +153,7 @@
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="version" align="right">
 				</el-table-column>
-				<el-table-column label="创建时间" width="120" prop="createTime" sortable :formatter="dateFormat">
+				<el-table-column label="录入时间" width="120" prop="createTime" sortable :formatter="dateFormat">
 				</el-table-column>
 				<el-table-column label="修改时间" width="120" prop="updateTime" sortable :formatter="dateFormat">
 				</el-table-column>

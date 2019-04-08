@@ -128,7 +128,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期">
+											<el-form-item label="修改时间">
 												<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -236,7 +236,7 @@
 					label: '不活动'
 				}],
 				selectData: [], //获取检验/检测方法类别
-				modify:false,//修订、修改人、修改日期
+				modify:false,//修订、修改人、修改时间
 				selMenu:[],
 				show: false,
 				isok1: true,

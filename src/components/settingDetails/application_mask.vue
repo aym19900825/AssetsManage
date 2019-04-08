@@ -112,12 +112,12 @@
 								<el-collapse-item title="其它" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="创建人" prop="createUser">
+											<el-form-item label="录入人" prop="createUser">
 												<el-input v-model="dataInfo.createUser" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="创建时间" prop="createTime">
+											<el-form-item label="录入时间" prop="createTime">
 												<el-input v-model="dataInfo.createTime" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>

@@ -634,10 +634,10 @@
 					SEND_DATE: '',//寄出时间
 					FILE_DATE: '',//归档时间
 					ENTERBY: '',//录入人
-					ENTERDATE: '',//录入日期
+					ENTERDATE: '',//录入时间
 					ORG_CODE: '',//录入人机构
 					CHANGEBY: '',//修改人
-					CHANGEDATE: '',//修改日期
+					CHANGEDATE: '',//修改时间
 					STATEDesc:'草稿',
 					STATE:'1',
 					WORKORDER_BASISList:[],//检测依据

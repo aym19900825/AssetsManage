@@ -137,7 +137,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改日期">
+											<el-form-item label="修改时间">
 												<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>

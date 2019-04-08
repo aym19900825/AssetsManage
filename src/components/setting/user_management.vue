@@ -89,7 +89,7 @@
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
+								<el-table-column label="用户名" sortable width="180px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.username}}
 										</p>
@@ -103,7 +103,7 @@
 								</el-table-column>
 								<el-table-column label="手机号" sortable width="150px" prop="phone" v-if="this.checkedName.indexOf('手机号')!=-1">
 								</el-table-column>
-								<el-table-column label="员工号" sortable prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
+								<el-table-column label="员工号" width="180px" sortable prop="worknumber" v-if="this.checkedName.indexOf('员工号')!=-1">
 								</el-table-column>
 								<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('用户有效期')!=-1">
 								</el-table-column>

@@ -122,7 +122,7 @@
 								</el-table-column>
 								<el-table-column label="中文名称" width="220" sortable prop="M_NAME" v-if="this.checkedName.indexOf('中文名称')!=-1">
 								</el-table-column>
-								<el-table-column label="英文名称" width="180" sortable prop="M_ENAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
+								<el-table-column label="英文名称" width="280" sortable prop="M_ENAME" v-if="this.checkedName.indexOf('英文名称')!=-1">
 								</el-table-column>
 								<el-table-column label="类别" width="170" sortable prop="M_TYPE" v-if="this.checkedName.indexOf('类别')!=-1">
 								</el-table-column>

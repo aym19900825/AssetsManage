@@ -188,12 +188,6 @@
 
 			<!--负责人 Begin-->
 			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
-				
-					<!-- <div class="mask_tab-head clearfix">
-						<div class="accordion_title">
-							<span class="accordion-toggle">选择负责人</span>
-						</div>
-					</div> -->
 					<!-- 第二层弹出的表格 -->
 						<el-table :data="userList" border stripe height="420px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 								<el-table-column type="selection" width="55" fixed>

@@ -15,7 +15,7 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-								<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>
@@ -114,7 +114,6 @@
 
 		<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-	</div>
 	</div>
 </template>
 <script>
@@ -217,8 +216,6 @@
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				searchList: {
 					ITEMNUM: '',//样品编号
 					APPR_PERSON: '',//处理批准人
@@ -364,8 +361,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
 			},
 						//报表
 			reportdata(){

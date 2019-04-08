@@ -104,13 +104,13 @@
 	export default {
 		name: 'customer_management',
 		components: {
-			'vheader': vheader,
-			'navs_left': navs_left,
-			'navs_tabs': navs_tabs,
-			'instructionmask': instructionmask,
-			'tableControle': tableControle,
-			'reportmask': reportmask,
-			'v-table': vTable
+			vheader,
+			navs_left,
+		  navs_tabs,
+			instructionmask,
+			tableControle,
+			reportmask,
+		  vTable
 		},
 		data() {
 			return {
@@ -164,8 +164,6 @@
 				WORK_INSTRUCTIONList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -253,11 +251,11 @@
 						type: 'warning'
 					});
 					}else{
-                       this.openAddMgr();
+           this.openAddMgr();
 					}
 		    	}else if(item.name=="修改"){
 					if(isshowbtn=='0'){
-                       this.$message({
+          this.$message({
 						message: '您没有修改的权限',
 						type: 'warning'
 					});
@@ -327,8 +325,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

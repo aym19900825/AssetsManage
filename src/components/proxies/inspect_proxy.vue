@@ -314,8 +314,6 @@
 				inspectList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
 					V_NAME:'',
@@ -568,8 +566,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
 			},
 			//报表
 			reportdata(){

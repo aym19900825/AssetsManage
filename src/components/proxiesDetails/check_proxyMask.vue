@@ -2018,7 +2018,7 @@
 							});
 							return false;
 			        	}else{
-							var url = this.basic_url + '/api-apps/app/inspectPro222222/saveOrUpdate';
+							var url = this.basic_url + '/api-apps/app/inspectPro2/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
 									this.$message({

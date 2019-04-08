@@ -58,25 +58,25 @@
 							<el-row>
 								<el-col :span="5">
 									<el-form-item label="编码" prop="M_NUM">
-										<el-input v-model="searchList.M_NUM">
+										<el-input v-model="searchList.M_NUM" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="中文名称" prop="M_NAME" label-width="90px">
-										<el-input v-model="searchList.M_NAME">
+										<el-input v-model="searchList.M_NAME" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="英文名称" prop="M_ENAME" label-width="90px">
-										<el-input v-model="searchList.M_ENAME">
+										<el-input v-model="searchList.M_ENAME" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="类别" prop="M_TYPE" label-width="60px">
-										<el-input v-model="searchList.M_TYPE">
+										<el-input v-model="searchList.M_TYPE" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -84,23 +84,17 @@
 							<el-row>
 								<el-col :span="5">
 									<el-form-item label="版本" prop="VERSION" >
-										<el-input v-model="searchList.VERSION">
+										<el-input v-model="searchList.VERSION" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="机构" prop="DEPTID" label-width="90px">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="6">
-									<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>

@@ -35,12 +35,12 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="报告模板名称" prop="DECRIPTION">
-										<el-input v-model="searchList.DECRIPTION"></el-input>
+										<el-input v-model="searchList.DECRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="报告模板类型" prop="RE_TYPE">
-										<el-select clearable v-model="searchList.RE_TYPE" filterable allow-create default-first-option placeholder="请选择">
+										<el-select clearable v-model="searchList.RE_TYPE" filterable allow-create default-first-option placeholder="请选择" @keyup.enter.native="searchinfo">
 										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 										</el-select>
 									</el-form-item>

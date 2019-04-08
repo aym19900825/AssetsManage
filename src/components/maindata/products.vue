@@ -60,29 +60,22 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="编码" prop="PRO_NUM">
-										<el-input v-model="searchList.PRO_NUM">
+										<el-input v-model="searchList.PRO_NUM" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="名称" prop="PRO_NAME">
-										<el-input v-model="searchList.PRO_NAME">
+										<el-input v-model="searchList.PRO_NAME" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="版本" prop="VERSION">
-										<el-input v-model="searchList.VERSION">
+										<el-input v-model="searchList.VERSION" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="5">
-									<el-form-item label="机构" prop="DEPTID">
-										<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
-									</el-form-item>
-								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>

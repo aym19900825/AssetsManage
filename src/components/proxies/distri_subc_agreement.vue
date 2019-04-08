@@ -31,26 +31,29 @@
 						<el-row :gutter="5">
 							<el-col :span="5">
 								<el-form-item label="分包协议编号" prop="PROXY_CONTRACT_NUM" label-width="100px">
-									<el-input v-model="searchList.PROXY_CONTRACT_NUM"></el-input>
+									<el-input v-model="searchList.PROXY_CONTRACT_NUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="委托书编号" prop="PROXYNUM" label-width="85px">
-									<el-input v-model="searchList.PROXYNUM"></el-input>
+									<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
-									<el-input v-model="searchList.VENDOR"></el-input>
+									<el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								  <el-form-item label="录入时间" prop="ENTERDATE" label-width="70px">
 									<div class="block">
 									    <el-date-picker
-									      v-model="searchList.ENTERDATE"
-									      type="date" style="width: 100%;"
-									      placeholder="录入时间" value-format="yyyy-MM-dd">
+									      	v-model="searchList.ENTERDATE"
+									      	type="date" 
+										  	style="width: 100%;"
+									      	placeholder="录入时间" 
+										  	value-format="yyyy-MM-dd"
+										  	@keyup.enter.native="searchinfo">
 									    </el-date-picker>
 								  </div>
 								</el-form-item>

@@ -285,6 +285,10 @@
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+												</el-table-column>
+
 												<el-table-column prop="P_NUM" label="检测项目编号" sortable width="120px">
 													<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -381,7 +385,7 @@
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope"><i class="el-icon-check"  v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
+													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check"  v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -1032,7 +1036,7 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 3) {//计算第几列的减1
+          } else if(index === 4) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));

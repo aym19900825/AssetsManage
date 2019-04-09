@@ -4,7 +4,7 @@
             <button class="roll-nav roll-left J_tabLeft"  @click="tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
-                    <span v-for="item in tabs" :class="item.name==selectedTab.name?'active':'J_menuTab'" @click="showSelected(item)">{{item.name}}<i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
+                    <span v-for="item in tabs" :class="item.name==selectedTab.name ? 'active':'J_menuTab'" @click="showSelected(item)">{{item.name}}<i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
                     <!-- <router-link to="/user_management" class="J_menuTab active" >用户管理 <i class="icon-close2"></i></router-link> -->
                 </div>
             </div>
@@ -87,6 +87,8 @@ export default {
             }
         },
         closeTab(tab, event){
+            console.log(tab);
+            console.log(event);
             if (event) event.preventDefault();
             var _this = this;
             var tabs = _this.tabs;

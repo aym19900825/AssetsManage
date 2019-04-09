@@ -21,10 +21,10 @@
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息 Begin-->
 								<el-collapse-item title="样品信息" name="1">
-									<div v-if="this.workorderForm.STATE!=3" class="check-btn-right">
+									<!-- <div v-if="this.workorderForm.STATE!=3" class="check-btn-right">
 										<el-button class="start" type="primary" round size="mini" @click="startup" v-show="start" ><i class="icon-check"></i> 接受此任务</el-button>
 										<el-button class="start" type="warning" round size="mini" @click="sendback" v-show="start" ><i class="icon-back"></i> 回退</el-button>
-									</div>
+									</div> -->
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="4" class="pull-right">
 											<el-input v-model="workorderForm.STATEDesc" :disabled="edit">
@@ -1181,7 +1181,6 @@
 						res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 					}
 					for(let i = 0;i<res.data.datas.WORKORDER_CONTRACTList.length;i++){
-						
 						res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
 						res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
@@ -1323,12 +1322,9 @@
 						$('.v-modal').hide();
 					});
 			},
-			
-			
-			
 			getUser(){//获取当前用户信息
-	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					var url = this.basic_url + '/api-user/users/currentMap';
+					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					this.currentuserinfo = res.data;
 				 	this.userid = res.data.id;
 	        this.username = res.data.username;

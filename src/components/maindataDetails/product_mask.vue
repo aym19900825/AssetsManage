@@ -8,10 +8,10 @@
 					<div class="mask_title" v-show="modifytitle">修改产品</div>
 					<div class="mask_title" v-show="viewtitle">查看产品</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>
+						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -99,7 +99,7 @@
 							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button v-if="modify" type="primary" class="btn-primarys" @click="modifyversion('PRODUCT')">修订</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('PRODUCT')">启用</el-button> -->
-							<el-button @click='close'>取消</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>

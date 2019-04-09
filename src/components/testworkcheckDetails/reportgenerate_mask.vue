@@ -6,10 +6,10 @@
 				<div class="mask_title_div clearfix">
 					<div class="mask_title">报告生成与编辑</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>
+						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -166,7 +166,7 @@
 						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
 						<!--封底按钮事件-->
 						<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
-						<el-button @click='close'>取消</el-button>
+						<el-button @click="close">取消</el-button>
 					</div>
 					
 				</div>

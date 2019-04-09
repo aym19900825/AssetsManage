@@ -281,7 +281,7 @@
 			//添加类别
 			openAddMgr() {
 				this.reset();
-				// this.$refs.categorymask.open(); // 方法1
+				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
 			},
 			//修改类别

@@ -8,16 +8,16 @@
 					<div class="mask_title" v-show="modifytitle">修改应用管理</div>
 					<div class="mask_title" v-show="viewtitle">查看应用管理</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>
+						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px" class="demo-adduserForm">
+					<el-form inline-message :model="dataInfo" :rules="rules" ref="dataInfo" label-width="110px" class="demo-adduserForm">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="应用管理" name="1">
@@ -179,6 +179,14 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
+				rules: {
+					code: [{required: true, message: '请填写', trigger: 'blur' }],//应用英文名称
+					name: [
+						{required: true, message: '请填写', trigger: 'blur' },
+						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],//应用名称
+					handleclass: [{required: true, message: '请填写', trigger: 'blur' }],//处理类
+				},
 				dataInfo:{
 					
 				}
@@ -209,7 +217,7 @@
 				this.statusshow2 = false;
 
 				this.getUser('new');
-				this.show = true;
+				// this.show = true;
 			},
 			// 这里是修改
 			detail(val) {
@@ -314,18 +322,17 @@
 					"num":'',
 					"deptid":this.$store.state.currentcjdw[0].id,
 					"deptName":this.$store.state.currentcjdw[0].fullname,
-					"createby":'',
-					"createdate":'',
-					"updateby":'',
-					"updatedate":'',
+					"createUser":'',
+					"createTime":'',
+					"updateUser":'',
+					"updateTime":'',
 					"del_flag":'',
-					"userList": []
 				};
 				this.show = false;
 			},
-			// open(){
-			// 	this.show = true;
-			// },
+			open(){
+				this.show = true;
+			},
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();

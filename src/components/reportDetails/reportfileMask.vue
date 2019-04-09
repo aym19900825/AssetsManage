@@ -7,10 +7,10 @@
 				<div class="mask_title" v-show="addtitle">添加报表文件</div>
 				<div class="mask_title"  v-show="modifytitle">修改报表文件</div>
 				<div class="mask_anniu">
-					<span class="mask_span mask_max" @click='toggle'>
+					<span class="mask_span mask_max" @click="toggle">
 						<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 					</span>
-					<span class="mask_span" @click='close'>
+					<span class="mask_span" @click="close">
 						<i class="icon-close1"></i>
 					</span>
 				</div>

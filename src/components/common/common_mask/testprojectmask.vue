@@ -218,30 +218,30 @@
             // var changeUser = this.selUser;
             var list = [];
             //basisnum为依据编号的数组
-            var basisnum = [];
-			var basisname = [];
-			var basisid = [];
-			var prover = [];//项目：版本
-            for (var i = 0; i < selData.length; i++) {
-                basisnum.push(selData[i].P_NUM);
-				basisname.push(selData[i].P_NAME);
-				basisid.push(selData[i].ID);
-				prover.push(selData[i].P_NUM+':'+selData[i].VERSION);
-            }
+            // var basisnum = [];
+			// var basisname = [];
+			// var basisid = [];
+			// var prover = [];//项目：版本
+            // for (var i = 0; i < selData.length; i++) {
+            //     basisnum.push(selData[i].P_NUM);
+			// 	basisname.push(selData[i].P_NAME);
+			// 	basisid.push(selData[i].ID);
+			// 	prover.push(selData[i].P_NUM+':'+selData[i].VERSION);
+            // }
             //basisnums为basisnum数组用逗号拼接的字符串
-            var basisnums = basisnum.toString(',');
-			var basisnames = basisname.toString(',');
-			var basisids = basisid.toString(',');
-			var provers = prover.toString(',');
+            // var basisnums = basisnum.toString(',');
+			// var basisnames = basisname.toString(',');
+			// var basisids = basisid.toString(',');
+			// var provers = prover.toString(',');
             for(var i = 0;i<selData.length;i++){
 				selData[i].ID = '';
                 list.push(this.selUser[i]);
             }
             this.$emit('testproject',list);
-			this.$emit('testprojectname',basisnames);
-			this.$emit('testprojectnum',basisnums);
-			this.$emit('testprojectid',basisids);
-			this.$emit('testprojectprover',provers);
+			// this.$emit('testprojectname',basisnames);
+			// this.$emit('testprojectnum',basisnums);
+			// this.$emit('testprojectid',basisids);
+			// this.$emit('testprojectprover',provers);
             this.resetBasisInfo();
         }
 	},

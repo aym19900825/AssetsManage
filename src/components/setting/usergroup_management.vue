@@ -238,7 +238,6 @@
 					return;
 				} else {
 					this.detailData = this.selUser[0];
-					console.log(this.selUser[0]);
 					this.$refs.usergroupmask.detail(this.selUser[0]);
 				}
 			},

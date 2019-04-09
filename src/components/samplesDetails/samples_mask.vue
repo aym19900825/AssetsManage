@@ -678,6 +678,9 @@
 			appenddata(value){
 				this.samplesForm.PRO_NUM = value[0];
 				this.samplesForm.PRODUCT = value[1];
+				if(!this.samplesForm.DESCRIPTION || this.samplesForm.DESCRIPTION == ''){
+					this.samplesForm.DESCRIPTION = value[1];
+				}
 				this.samplesForm.PRO_VERSION = value[2];//产品版本
 			},
 			reset(){

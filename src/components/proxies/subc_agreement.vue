@@ -41,7 +41,14 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
-									<el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input>
+									<!-- <el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input> -->
+									<el-select clearable 
+											   v-model="searchList.VENDOR" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
@@ -94,15 +101,15 @@
 							</el-table-column>
 							<el-table-column label="委托书编号" width="150" sortable prop="PROXYNUM" v-if="checkedName.indexOf('委托书编号')!=-1">
 							</el-table-column>
-							<el-table-column label="委托方名称" width="150" sortable prop="V_NAME" v-if="checkedName.indexOf('委托方名称')!=-1">
+							<el-table-column label="委托方名称" width="150" sortable prop="V_NAMEDesc" v-if="checkedName.indexOf('委托方名称')!=-1">
 							</el-table-column>
 							<el-table-column label="类别" width="150" sortable prop="TYPEDesc" v-if="checkedName.indexOf('类别')!=-1">
 							</el-table-column>
-							<el-table-column label="状态" width="150" sortable prop="state" v-if="checkedName.indexOf('状态')!=-1">
+							<el-table-column label="状态" width="150" sortable prop="stateDesc" v-if="checkedName.indexOf('状态')!=-1">
 							</el-table-column>
 							<el-table-column label="分包单位" width="150" sortable prop="VENDORDesc" v-if="checkedName.indexOf('单位名称')!=-1">
 							</el-table-column>
-							<el-table-column label="分包协议类别" width="150" sortable prop="TYPE" v-if="checkedName.indexOf('分包协议类别')!=-1">
+							<el-table-column label="分包协议类别" width="150" sortable prop="TYPEDesc" v-if="checkedName.indexOf('分包协议类别')!=-1">
 							</el-table-column>
 							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="checkedName.indexOf('检验/检测项目内容')!=-1">
 							</el-table-column>	
@@ -114,13 +121,13 @@
 							</el-table-column>
 							<el-table-column label="检验检测费用" width="120" sortable prop="CHECKCOST" v-if="checkedName.indexOf('检验检测费用')!=-1">
 							</el-table-column>
-							<el-table-column label="信息状态" width="100" sortable prop="STATUS" v-if="checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="信息状态" width="100" sortable prop="STATUSDesc" v-if="checkedName.indexOf('信息状态')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="100" sortable prop="ENTERBY" v-if="checkedName.indexOf('录入人')!=-1">
+							<el-table-column label="录入人" width="100" sortable prop="ENTERBYDesc" v-if="checkedName.indexOf('录入人')!=-1">
 							</el-table-column>
 							<el-table-column label="录入时间" width="120" sortable prop="ENTERDATE" :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" width="100" sortable prop="CHANGEBY" v-if="checkedName.indexOf('修改人')!=-1">
+							<el-table-column label="修改人" width="100" sortable prop="CHANGEBYDesc" v-if="checkedName.indexOf('修改人')!=-1">
 							</el-table-column>
 							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
@@ -286,7 +293,8 @@
 					totalCount: 0
 				},
 				buttons:[],
-				subcontrac:'subcontrac'//appname
+				subcontrac:'subcontrac',//appname
+				selectData: []
 			}
 		},
 		methods: {
@@ -467,10 +475,17 @@
 				this.id = this.$route.query.bizId;
 				this.$refs.child.view(this.id);
 			},
+			getSelectData(){
+				var url = this.basic_url + '/api-user/depts/findFirstSecond';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectData = res.data;
+				}).catch((wrong) => {})
+			}
 		},
 		mounted(){
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			this.getKey();
+			this.getSelectData();
             if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}

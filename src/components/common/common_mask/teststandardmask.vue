@@ -257,15 +257,15 @@
             var changeUser = this.selUser;
 			var list = [];
 			//basisnum为依据编号的数组
-            var basisnum = [];
-			var basisname = [];
-			var prover = [];
-            for (var i = 0; i < changeUser.length; i++) {
-				console.log(changeUser[i].S_NUM);
-                basisnum.push(changeUser[i].S_NUM);
-				basisname.push(changeUser[i].S_NAME);	
-				prover.push(changeUser[i].S_NUM+':'+changeUser[i].VERSION);			
-            }
+            // var basisnum = [];
+			// var basisname = [];
+			// var prover = [];
+            // for (var i = 0; i < changeUser.length; i++) {
+			// 	console.log(changeUser[i].S_NUM);
+            //     basisnum.push(changeUser[i].S_NUM);
+			// 	basisname.push(changeUser[i].S_NAME);	
+			// 	prover.push(changeUser[i].S_NUM+':'+changeUser[i].VERSION);			
+            // }
 			//basisnums为basisnum数组用逗号拼接的字符串
 			// var basisnums = basisnum.toString(',');
 			// var basisnames = basisname.toString(',');

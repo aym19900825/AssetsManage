@@ -89,7 +89,7 @@
 													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>-->
-											<el-form-item label="报表类型" prop="reportId" label-width="100px">
+											<el-form-item label="报表类型" prop="reportId">
 												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit">
 													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
 												</el-select>
@@ -122,8 +122,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="updateUser">
-												<el-input v-model="dataInfo.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="修改人" prop="updateUserName">
+												<el-input v-model="dataInfo.updateUserName" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -156,9 +156,7 @@
 		components: {
 			reportmask	
 		},
-		
 		data() {
-			
 			return {
 				basic_url: Config.dev_url,
 				selUser: [],
@@ -199,13 +197,6 @@
 			},
 			//添加显示弹窗
 			visible() {
-				this.dataInfo.id = '';
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.dataInfo.createUser = res.data.id;
-					var date = new Date();
-					this.dataInfo.createTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
-				}).catch((err) => {
-				});
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -216,10 +207,12 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
-//				this.show = true;
+
+				this.getUser('new');
+				this.show = true;
 			},
 			// 这里是修改
-			detail(id) {
+			detail(val) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -231,12 +224,59 @@
 				this.statusshow1 = false;
 				this.statusshow2 = true;
 				
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-				    this.dataInfo.updateUser = res.data.id;
-					var date = new Date();
-					this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
+				this.detailData = val;
+				var id = this.detailData.id;
+				this.getData(id);
+				this.show = true;
+				this.getUser('');
+
+				// this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+				//     this.dataInfo.updateUser = res.data.id;
+				// 	var date = new Date();
+				// 	this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
+				// }).catch((err) => {
+				// });
+			},
+			//这是查看
+			view(val) {
+				this.addtitle = false;
+				this.modifytitle = false;
+				this.viewtitle = true;
+				this.dept = true;
+				this.noedit = true;//表单内容
+				this.views = true;//录入修改人信息
+				this.noviews = false;//按钮
+
+				this.detailData = val;
+				var id = this.detailData.id;
+				this.getData(id);
+				this.show = true;				
+			},
+			//获取当前用户信息
+			getUser(opt){
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url,{}).then((res) => {
+					if(opt == 'new'){
+						this.dataInfo.createUser = res.data.id;
+						this.dataInfo.createTime =this.getToday();
+					}else{
+						this.dataInfo.updateUser = res.data.id;
+						this.dataInfo.updateTime = this.getToday();
+					}
 				}).catch((err) => {
 				});
+			},
+			//获取当前时间
+			getToday(){
+				var date = new Date();
+				// this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				return str;
+			},
+			//获取当前组信息
+			getData(id){ 
 				var url=this.basic_url + '/api-apps/appcfg/'+ id;
 				this.$axios.get(url, {}).then((res) => {
 					this.dataInfo=res.data;
@@ -254,28 +294,38 @@
 				this.show = true;
 				}).catch((err) => {
 				});
-					
+
+				// var url = this.basic_url + '/api-apps/appcfg/' + id;
+				// this.$axios.get(url, {
+				// }).then((res) => {
+				// 	this.dataInfo = res.data;
+				// }).catch((wrong) => {})
 			},
-			//这是查看
-			view() {
-				this.addtitle = false;
-				this.modifytitle = false;
-				this.viewtitle = true;
-				this.dept = true;
-				this.noedit = true;//表单内容
-				this.views = true;//录入修改人信息
-				this.noviews = false;//按钮
-				this.show = true;				
-			},
-			
 			//点击关闭按钮
 			close() {
+				this.resetForm();
 				this.show = false;
 				this.$emit('request');//关闭弹框去掉勾选
 			},
-			open(){
-				this.show = true;
+			resetForm(){
+				this.dataInfo = {
+					"id":'',
+					"name":'',
+					"num":'',
+					"deptid":this.$store.state.currentcjdw[0].id,
+					"deptName":this.$store.state.currentcjdw[0].fullname,
+					"createby":'',
+					"createdate":'',
+					"updateby":'',
+					"updatedate":'',
+					"del_flag":'',
+					"userList": []
+				};
+				this.show = false;
 			},
+			// open(){
+			// 	this.show = true;
+			// },
 			toggle(e) {
 				if(this.isok1 == true) {
 					this.maxDialog();

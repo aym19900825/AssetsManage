@@ -1057,6 +1057,10 @@
 								}else{
 									this.ALLCOST = '0.00元';
 								}
+								var paramData1 = this.INSPECTCOST;
+								var paramData2 = this.ALLCOST;
+								this.$forceUpdate();
+								this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 							} else {
 								sums[index] = ' ';
 							}
@@ -1810,12 +1814,16 @@
 			},
 			 //检验项目列表
 			addproject(value){
-				console.log(value);
 					for(var i = 0;i<value.length;i++){
-						value[i].P_DESC = value[i].P_NAME;
-						value[i].QUATITY=0;
-						this.dataInfo.INSPECT_PROXY_PROJECList.push(value[i]);
-						console.log(this.dataInfo.INSPECT_PROXY_PROJECList);
+						var list={
+								P_NUM:value[i].P_NUM,
+								P_DESC:value[i].P_DESC,
+								REMARKS:'',
+								UNITCOST:value[i].UNITCOST,
+								VERSION:value[i].VERSION,
+								QUATITY:0,
+						}	
+						this.dataInfo.INSPECT_PROXY_PROJECList.push(list);
 				}
 			},
 			//所外机构

@@ -269,19 +269,19 @@
 		    	if(item.name=="添加"){
 		         this.openAddMgr();
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+		    		this.modify();
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    		this.modestsearch();
 		    	}else if(item.name=="删除"){
-				 this.deluserinfo();
-				}else if(item.name=="彻底删除"){
-				 this.physicsDel();
-				}
+						this.deluserinfo();
+					}else if(item.name=="彻底删除"){
+						this.physicsDel();
+					}
 		    },
 			//添加类别
 			openAddMgr() {
 				this.reset();
-				this.$refs.categorymask.open(); // 方法1
+				// this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
 			},
 			//修改类别
@@ -300,13 +300,13 @@
 					return;
 				} else {
 					this.dataInfo = this.selUser[0];
-					this.$refs.categorymask.detail( this.selUser[0].id);
+					this.$refs.categorymask.detail( this.selUser[0]);
 				}
 			},
 			//查看
 			 view(data) {
 			 	this.dataInfo =data;
-				this.$refs.categorymask.view();
+				this.$refs.categorymask.view(this.dataInfo);
 			},
 			//高级查询
 			modestsearch() {
@@ -361,7 +361,6 @@
 						}).catch((err) => {
 						});
 					}).catch(() => {
-
 					});
 				}
 			},

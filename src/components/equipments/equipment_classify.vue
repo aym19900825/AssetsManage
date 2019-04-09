@@ -232,9 +232,9 @@
 		    	 this.deluserinfo();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
-					}else if(item.name=="打印"){
-				   this.Printing();
-					}
+				}else if(item.name=="打印"){
+				 this.Printing();
+				}
 		    },
 			//添加类别
 			openAddMgr() {

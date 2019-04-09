@@ -393,20 +393,20 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
-				 		this.download();
-					}else if(item.name=="导出"){
-		    	 this.download();
+					this.download();
+				}else if(item.name=="导出"){
+		    	 	this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.delinfo();
+					this.delinfo();
 		    	}else if(item.name=="中止"){
-		    	 this.breakoff();
+		    	 	this.breakoff();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
-					}else if(item.name=="打印"){
-						this.Printing();
-					}else if(item.name=="下达任务"){
-						this.build();
-					}
+					this.reportdata();
+				}else if(item.name=="打印"){
+					this.Printing();
+				}else if(item.name=="下达任务"){
+					this.build();
+				}
 		    },
 			//添加
 			openAddMgr() {

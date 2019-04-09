@@ -707,7 +707,7 @@
 					if(valid) {
 						_this.testing_projectForm.STATUS = ((_this.testing_projectForm.STATUS == "1" || _this.testing_projectForm.STATUS == '活动') ? '1' : '0');
 						if(_this.testing_projectForm.ID!=null&&_this.testing_projectForm.ID!=undefined&&_this.testing_projectForm.ID!=''){
-							this.$confirm('提示是否需要修订版本？').then(_ => {
+							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
 								this.close();

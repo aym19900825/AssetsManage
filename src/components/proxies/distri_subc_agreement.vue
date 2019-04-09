@@ -41,7 +41,14 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
-									<el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input>
+									<!-- <el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input> -->
+									<el-select clearable 
+											   v-model="searchList.VENDOR" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
@@ -417,10 +424,17 @@
 				this.id = this.$route.query.bizId;
 				this.$refs.child.view(this.id);
 			},
+			getSelectData(){
+				var url = this.basic_url + '/api-user/depts/findFirstSecond';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectData = res.data;
+				}).catch((wrong) => {})
+			}
 		},
 		mounted(){
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			this.getKey();
+			this.getSelectData();
 			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}

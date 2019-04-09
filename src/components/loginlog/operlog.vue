@@ -70,12 +70,6 @@
 								</el-table-column>
 								<el-table-column label="用户账号" sortable="custom" prop="username" v-if="checkedName.indexOf('用户账号')!=-1">
 								</el-table-column>
-								<!-- <el-table-column label="登录ip" width="200" sortable="custom" prop="ip" v-if="checkedName.indexOf('登录ip')!=-1">
-								</el-table-column> -->
-								<!-- <el-table-column label="登录开始时间" width="230" sortable="custom" prop="starttime" v-if="checkedName.indexOf('机构')!=-1">
-								</el-table-column>
-								<el-table-column label="登录截止时间" width="230" prop="ENTERDATE" sortable="endtime" :formatter="dateFormat" v-if="checkedName.indexOf('录入时间')!=-1">
-								</el-table-column> -->
 							</v-table>
 							<!-- 表格 End-->
 						</el-col>

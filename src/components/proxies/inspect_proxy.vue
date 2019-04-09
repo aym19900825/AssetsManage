@@ -385,7 +385,7 @@
 				//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+		       this.openAddMgr();
 		    	}else if(item.name=="修改"){
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
@@ -393,20 +393,20 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
-				 		this.download();
-					}else if(item.name=="导出"){
-		    	 this.download();
+					this.download();
+				}else if(item.name=="导出"){
+		    	 	this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.delinfo();
+					this.delinfo();
 		    	}else if(item.name=="中止"){
-		    	 this.breakoff();
+		    	 	this.breakoff();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
-					}else if(item.name=="打印"){
-						this.Printing();
-					}else if(item.name=="下达任务"){
-						this.build();
-					}
+					this.reportdata();
+				}else if(item.name=="打印"){
+					this.Printing();
+				}else if(item.name=="下达任务"){
+					this.build();
+				}
 		    },
 			//添加
 			openAddMgr() {

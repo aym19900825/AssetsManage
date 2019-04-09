@@ -1309,7 +1309,7 @@
 			//生成工作任务单
 			build(){
 				var dataid = this.dataInfo.ID;
-					var Url = this.basic_url + '/api-apps/app/inspectPro222222/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
+					var Url = this.basic_url + '/api-apps/app/inspectPro2/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
 					this.$axios.get(Url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -1351,7 +1351,7 @@
 					TableName = 'CHECK_PROXY_CONTRACT';
 				}
 				if(row.ID){
-					var url = this.basic_url + '/api-apps/app/inspectPro222222/' + TableName +'/' + row.ID;
+					var url = this.basic_url + '/api-apps/app/inspectPro2/' + TableName +'/' + row.ID;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -1409,7 +1409,7 @@
 			},
 			//
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/inspectPro222222/' + this.dataid;
+			var url = this.basic_url +'/api-apps/app/inspectPro2/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
@@ -1502,7 +1502,7 @@
 								  if(this.dataInfo.CNAS_OR_CMA_ID){
                       this.dataInfo.CNAS_OR_CMA_ID=1;
                   }
-							var url = this.basic_url+ '/api-apps/app/inspectPro222222/operate/upgraded'
+							var url = this.basic_url+ '/api-apps/app/inspectPro2/operate/upgraded'
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {
@@ -1543,6 +1543,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				console.log(12345);
 				this.dataid=dataid;				
 				this.modifytitle = false;
 				this.addtitle = false;
@@ -1558,13 +1559,13 @@
 				this.isEditing=false;
 				this.detailgetData();
 				//判断启动流程和审批的按钮是否显示
-				var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/isStart/'+dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
 					}else{
-						var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/Executors/'+dataid;
+						var url = this.basic_url + '/api-apps/app/inspectPro2/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
 							var users='';
@@ -2181,7 +2182,7 @@
 			},
 			//启动流程
 			startup(){
-				var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 1) {
 							this.$message({
@@ -2194,7 +2195,7 @@
 								type: 'success'
 							});
 							this.detailgetData();
-						var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/inspectPro2/flow/Executors/'+this.dataid;
 							this.$axios.get(url, {}).then((res) => {
 									var resullt=res.data.datas;
 									var users='';
@@ -2216,7 +2217,7 @@
 			approvals(){
 				this.approvingData.id =this.dataid;
 				this.approvingData.app=this.appname;
-				var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/isEnd/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isEnd/'+this.dataid;
 	    		this.$axios.get(url, {}).then((res) => {
 	    			if(res.data.resp_code == 0) {
 						this.$message({
@@ -2224,7 +2225,7 @@
 							type: 'warning'
 						});
 	    			}else{
-	    				var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/isExecute/'+this.dataid;
+	    				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isExecute/'+this.dataid;
 	    				this.$axios.get(url, {}).then((res) => {
 			    			if(res.data.resp_code == 1) {
 								this.$message({
@@ -2232,7 +2233,7 @@
 									type: 'warning'
 								});
 							}else{
-								var url = this.basic_url + '/api-apps/app/inspectPro222222/flow/customFlowValidate/'+this.dataid;
+								var url = this.basic_url + '/api-apps/app/inspectPro2/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
 				    				if(res.data.resp_code == 1) {
 										this.$message({

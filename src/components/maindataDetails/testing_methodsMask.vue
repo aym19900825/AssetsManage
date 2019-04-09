@@ -548,7 +548,7 @@
 					if (valid) {
 						_this.testingForm.STATUS=_this.testingForm.STATUS=="活动" ? '1' : '0';
 						if(_this.testingForm.ID!=null&&_this.testingForm.ID!=undefined&&_this.testingForm.ID!=''){
-							this.$confirm('提示是否需要修订版本？').then(_ => {
+							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
 								this.close();

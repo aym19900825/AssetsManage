@@ -35,12 +35,12 @@
 							<el-row :gutter="10">
                                 <el-col :span="7">
 									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">
-										<el-input v-model="searchList.REPORTNUM"></el-input>
+										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
-										<el-input v-model="searchList.DESCRIPTION"></el-input>
+										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -136,8 +136,6 @@
 				USESEAL: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -257,8 +255,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			//报表
 			reportdata(){

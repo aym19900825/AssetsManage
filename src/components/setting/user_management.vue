@@ -45,13 +45,13 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="用户名" prop="username" label-width="55px">
-										<el-input v-model="searchList.username">
+										<el-input v-model="searchList.username" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="姓名" prop="nickname" label-width="45px">
-										<el-input v-model="searchList.nickname">
+										<el-input v-model="searchList.nickname" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
 								</el-col>
@@ -302,8 +302,6 @@
 				userList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				searchList: {
 					nickname: '',
 					username: '',
@@ -561,17 +559,17 @@
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
 							arr.push(mData[a].id);
-							if(mData[a].children!=undefined){
-								for(var b=0;b<mData[a].children.length;b++){
-									if(!mData[a].children[b].checked){
-									flag=false;
-									break;
-									}
-								}
-								if(!flag){
-									arr.pop(mData[a].id)
-								}
-							}
+							// if(mData[a].children!=undefined){
+							// 	for(var b=0;b<mData[a].children.length;b++){
+							// 		if(!mData[a].children[b].checked){
+							// 		flag=false;
+							// 		break;
+							// 		}
+							// 	}
+							// 	if(!flag){
+							// 		arr.pop(mData[a].id)
+							// 	}
+							// }
 						}
 						if(mData[a].children!=undefined){
 							this.recursive(mData[a].children,arr);
@@ -713,8 +711,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down;
-				this.up = !this.up;
 			},
 			// 删除
 			deluserinfo() {

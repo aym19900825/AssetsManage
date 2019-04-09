@@ -15,8 +15,8 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
-								<i :class="item.icon"></i>{{item.name}}
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
 							</button>
 							<el-dropdown size="small">
 									<button class="btn mr5 btn-primarys">
@@ -55,33 +55,28 @@
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="统一社会信用代码" prop="CODE" label-width="160px">
-									<el-input v-model="searchList.CODE">
+									<el-input v-model="searchList.CODE" @keyup.enter.native="searchinfo">
 									</el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="单位名称" prop="NAME">
-									<el-input v-model="searchList.NAME">
+									<el-input v-model="searchList.NAME" @keyup.enter.native="searchinfo">
 									</el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="创建机构" prop="DEPTIDDesc">
-									<el-input v-model="searchList.DEPTIDDesc">
+									<el-input v-model="searchList.DEPTIDDesc" @keyup.enter.native="searchinfo">
 									</el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
-									<el-input v-model="searchList.CONTACT_ADDRESS">
+									<el-input v-model="searchList.CONTACT_ADDRESS" @keyup.enter.native="searchinfo">
 									</el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="4" style="margin-bottom:5px">
-								<el-select v-model="searchList.DEPTID" placeholder="请选择信息状态">
-									<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
-								</el-select>
-							</el-col> -->
 							<el-col :span="3">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
@@ -211,8 +206,6 @@
 				customerList: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin:true,
 				fileList: [],//上传附件数据
@@ -309,8 +302,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {

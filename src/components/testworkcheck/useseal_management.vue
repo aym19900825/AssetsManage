@@ -35,28 +35,28 @@
 							<el-row :gutter="10">
                                 <el-col :span="7">
 									<el-form-item label="工作任务单编号" prop="WONUM" label-width="110px">
-										<el-input v-model="searchList.WONUM"></el-input>
+										<el-input v-model="searchList.WONUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
+										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="用印人" prop="USER" label-width="80px">
-										<el-input v-model="searchList.USER"></el-input>
+										<el-input v-model="searchList.USER" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="归还时间" prop="GHTIME" label-width="110px">
-										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
+										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="归还接收人" prop="GHUSER" label-width="100px">
-										<el-input v-model="searchList.GHUSER"></el-input>
+										<el-input v-model="searchList.GHUSER" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -187,8 +187,6 @@
 				USESEAL: [],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
@@ -316,10 +314,8 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
-						//报表
+			//报表
 			reportdata(){
 				this.reportData.app=this.productType;
 				this.$refs.reportChild.visible();

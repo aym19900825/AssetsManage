@@ -629,7 +629,7 @@
 					],//工作任务单编号
 					ITEM_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
 					ITEM_MODEL: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//规格型号
-					ITEMNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//样品编号
+					// ITEMNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//样品编号
 					// ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_STATUS: [
 						{ required: true, message: '不能为空', trigger: 'blur' },
@@ -1170,7 +1170,6 @@
 
 				var url = this.basic_url + '/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
 					this.$axios.get(url, { }).then((res) => {
-						console.log(res);
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
 					this.RVENDORSelect(res.data.datas.CJDW);
 					// this.workorderForm = res.data;
@@ -1224,7 +1223,6 @@
 			},
 			// 保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.selMenu);
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
 							//检验项目与要求的数据id
@@ -1242,22 +1240,27 @@
 		          var deleteids = [];
 		          var ides;
 		          for(let i = 0; i < selectDatas.length; i++) {
-		            deleteid.push(selectDatas[i].ID);
+		            deleteids.push(selectDatas[i].ID);
 		          }
 		          //ids为deleteid数组用逗号拼接的字符串
-		          ids = deleteids.toString(',');
+		          ides = deleteids.toString(',');
 							var data = {
 								WORKORDER:this.workorderForm,
 								PROJECTLIST:ids,
 								CONTRACTLIST:ides,
 							}
+							for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+									this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION=this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.toString(',')
+							}
+							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
+									this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION=this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.toString(',')
+							}
 				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
-					// console.log(this.workorderForm);
-					this.$axios.post(url,{params: data}).then((res) => {
+					this.$axios.post(url,{WORKORDER:this.workorderForm,PROJECTLIST:ids,CONTRACTLIST:ides}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '保存成功',
+								message: '下达成功',
 								type: 'success'
 							});
 						}

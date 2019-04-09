@@ -50,7 +50,7 @@
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.username">
+									<el-input v-model="searchList.username"  @keyup.enter.native="searchinfo">
 										<template slot="prepend">姓名</template>
 									</el-input>
 								</el-col>

@@ -31,7 +31,7 @@
 							<el-row :gutter="10">
 								<el-col :span="5">
 									<el-form-item label="组名" prop="name" label-width="70px">
-										<el-input v-model="searchList.name"></el-input>
+										<el-input v-model="searchList.name" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -118,8 +118,6 @@
 				selUser:[],
 				search: false,
 				show: false,
-				down: true,
-				up: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: { //点击高级搜索后显示的内容
 					name: '',
@@ -171,11 +169,6 @@
 					}
 				}
 			},
-			//表格传过来
-			// childByValue: function (childByValue) {
-		  //       // childValue就是子组件传过来的
-		  //       this.selMenu = childByValue
-		  //   },
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {
 		    	 this.getbutton( childvalue);
@@ -258,8 +251,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-				this.up = !this.up
 			},
 			// 删除
 			deluserinfo() {
@@ -368,7 +359,3 @@
 		}
 	}
 </script>
-
-<style scoped>
-	
-</style>

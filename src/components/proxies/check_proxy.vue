@@ -44,47 +44,42 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
-										<el-input v-model="searchList.V_NAME"></el-input>
+									<el-form-item label="委托单位名称" prop="V_NAMEDesc"  label-width="100px">
+										<el-input v-model="searchList.V_NAMEDesc"  @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="70px">
-										<el-input v-model="searchList.ITEM_NAME"></el-input>
+										<el-input v-model="searchList.ITEM_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
-										<el-input v-model="searchList.REPORT_NUM"></el-input>
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
-										<el-input v-model="searchList.PROXYNUM"></el-input>
+										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="5">
-									<el-form-item label="录入人" prop="ENTERBY" label-width="70px">
-										<el-input v-model="searchList.ENTERBY"></el-input>
-									</el-form-item>
-								</el-col -->
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATE" label-width="70px">
-										<el-select clearable v-model="searchList.STATE" placeholder="选择状态" style="width: 100%">
+									<el-form-item label="状态" prop="STATEDesc" label-width="70px">
+										<el-select clearable v-model="searchList.STATEDesc" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
-                <el-col :span="4">
+                				<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
@@ -307,14 +302,13 @@
 				show: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				searchList: {
-					V_NAME:'',
+					V_NAMEDesc:'',
 					ITEM_NAME: '',
 					REPORT_NUM: '',
 					PROXYNUM: '',
 					COMPDATE: '',
 					ENTERBY: '',
-					STATE: '',
-					
+					STATEDesc: '',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -364,13 +358,13 @@
 			},
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
-					V_NAME:'',
+					V_NAMEDesc:'',
 					ITEM_NAME: '',
 					REPORT_NUM: '',
 					PROXYNUM: '',
 					COMPDATE: '',
 					ENTERBY: '',
-					STATE: '',
+					STATEDesc: '',
 				};
 				this.requestData('init');
 			},

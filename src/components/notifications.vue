@@ -36,12 +36,12 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="工作任务通知书编号" prop="N_CODE" label-width="140px">
-										<el-input v-model="searchList.N_CODE"></el-input>
+										<el-input v-model="searchList.N_CODE" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
-										<el-input v-model="searchList.ITEM_NAME"></el-input>
+										<el-input v-model="searchList.ITEM_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
@@ -62,22 +62,16 @@
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="下达日期" prop="XD_DATE" label-width="140px">
-										<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%">
+										<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
 									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%">
+										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
-								<!-- <el-col :span="3" class="pt5">
-									<el-select v-model="searchList.value" placeholder="请选择信息状态">
-										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-										</el-option>
-									</el-select>
-								</el-col> -->
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>

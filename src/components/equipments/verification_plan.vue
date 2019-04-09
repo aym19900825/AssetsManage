@@ -56,12 +56,12 @@
 						<el-row :gutter="10">
 							<el-col :span="6">
 								<el-form-item label="期间核查计划编号" prop="C_PLANNUM" label-width="130px">
-									<el-input v-model="searchList.C_PLANNUM"></el-input>
+									<el-input v-model="searchList.C_PLANNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="计划描述" prop="DESCRIPTION">
-									<el-input v-model="searchList.DESCRIPTION"></el-input>
+									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
@@ -70,7 +70,10 @@
 									    <el-date-picker
 									      v-model="searchList.ENTERDATE"
 									      type="date"
-									      placeholder="请选择" style="width: 100%"  value-format="yyyy-MM-dd">
+									      placeholder="请选择" 
+										  style="width: 100%"  
+										  value-format="yyyy-MM-dd"
+										  @keyup.enter.native="searchinfo">
 									    </el-date-picker>
 								  	</div>
 								</el-form-item>
@@ -78,8 +81,8 @@
 							<el-col :span="4">
 								<el-form-item label="机构" prop="DEPTID" label-width="45px">
 									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
+										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">

@@ -32,9 +32,9 @@
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息 Begin-->
 								<el-collapse-item title="样品信息" name="1">
-									<div v-if="this.workorderForm.STATE!=3" class="check-btn-right">
-										<el-button class="start" type="primary" round size="mini" @click="startup" v-show="start" ><i class="icon-check"></i> 接受此任务</el-button>
-										<el-button class="start" type="warning" round size="mini" @click="sendback" v-show="start" ><i class="icon-back"></i> 回退</el-button>
+									<div v-show="this.workorderForm.STATE==1" class="check-btn-right">
+										<el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接受此任务</el-button>
+										<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
 									</div>
 									<el-row :gutter="20" class="pb10">
 										<!--<el-col :span="4" class="pull-right">
@@ -936,6 +936,42 @@
 			};
 		},
 		methods: {
+			Accept(){
+				// /app/workorder/operate/acceptTask?WORKORDERID=当前主表ID
+					var Url = this.basic_url + '/api-apps/app/workorder/operate/acceptTask?WORKORDERID='+this.dataid;
+					this.$axios.get(Url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '接受工作任务单成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+							message: '已经接受工作任务单，请勿重复接受',
+							type: 'warning'
+						});
+						}
+					}).catch((err) => {
+					});
+			},
+			sendback(){
+				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
+					var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
+					this.$axios.get(Url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '回退工作任务单成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+							message: '已经接受工作任务单，请勿重复接受',
+							type: 'warning'
+						});
+						}
+					}).catch((err) => {
+					});
+			},
 			viewFile(row){
 				var url = this.po_url+'/show?fileid=' +  row.FILEID
 						+ '&userid=' +  this.docParm.userid
@@ -1939,7 +1975,6 @@
 						this.approval=false;
 					}else{
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
-						console.log(url);
 						this.$axios.get(url, {}).then((res) => {
 							
 							res.data.CJDW = Number(res.data.CJDW);

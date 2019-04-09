@@ -57,38 +57,19 @@
 							<el-col :span="5"></el-col>
 							<el-col :span="5">
 								<el-form-item label="设备名称" prop="DESCRIPTION">
-									<el-input v-model="searchList.DESCRIPTION"></el-input>
+									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="制造商" prop="VENDOR">
-									<el-input v-model="searchList.VENDOR"></el-input>
+									<el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
 								<el-form-item label="保管人" prop="KEEPER">
-									<el-input v-model="searchList.KEEPER"></el-input>
+									<el-input v-model="searchList.KEEPER" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="5">
-								<el-input v-model="searchList.STATE">
-									<template slot="prepend">设备状态</template>
-								</el-input>
-								<el-select v-model="searchList.STATE" placeholder="请选择">
-									<el-option
-									v-for="item in status"
-									:key="item.value"
-									:label="item.label"
-									:value="item.value">
-									</el-option>
-									<template slot="prepend">设备状态</template>
-								</el-select>
-							</el-col>
-							<el-col :span="4">
-								<el-input v-model="searchList.OPTION_STATUS">
-									<template slot="prepend">设备使用状态</template>
-								</el-input>
-							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>

@@ -31,7 +31,7 @@
 						<el-row :gutter="10">
 							<el-col :span="5">
 								<el-form-item label="设备编号" prop="ASSETNUM">
-									<el-input v-model="searchList.ASSETNUM"></el-input>
+									<el-input v-model="searchList.ASSETNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
@@ -39,6 +39,7 @@
 									<div class="block">
 									    <el-date-picker
 									      v-model="searchList.C_DATE"
+										  @keyup.enter.native="searchinfo"
 									      type="date"
 									      placeholder="录入时间" style="width: 100%"  value-format="yyyy-MM-dd">
 									    </el-date-picker>
@@ -47,12 +48,12 @@
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="设备名称" prop="A_NAME">
-									<el-input v-model="searchList.A_NAME"></el-input>
+									<el-input v-model="searchList.A_NAME" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
 								<el-form-item label="检查结论" prop="C_MEMO">
-									<el-input v-model="searchList.C_MEMO"></el-input>
+									<el-input v-model="searchList.C_MEMO" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">

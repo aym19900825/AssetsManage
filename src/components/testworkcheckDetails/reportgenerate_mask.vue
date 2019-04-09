@@ -15,183 +15,159 @@
 					</div>
 				</div>
 				<div class="mask_content">
-						<div class="content-accordion" id="information">
+					<div class="content-accordion" id="information">
+						<el-row>
+							<el-col :span="20">
+								<el-form inline-message :model="reportTemplate" ref="reportTemplate" :rules="rules" label-position="right">
+									<el-form-item label="请先选择报告模板" prop="RE_TYPE" label-width="160px">
+										<el-select clearable v-model="reportTemplate.RE_TYPE" placeholder="请选择" :disabled="noedit" style="width:500px;">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.RE_NUM" :label="data.DECRIPTION"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-form>
+							</el-col>
+							<el-col :span="4" class="text-right">
+								<!-- <el-button type="success" round size="medium"><i class="icon-eye"></i> 预览报告</el-button> -->
+							</el-col>
+						</el-row>
+
+						<el-form inline-message :model="reportGenerateForm" ref="reportGenerateForm" :rules="rules" label-position="right">
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 封面 Begin-->
+								
 								<el-tab-pane label="封面" name="first">
-										<el-row>
-											<el-col :span="24" class="">
-												<el-form inline-message :model="reportTemplate" ref="reportTemplate" :rules="rules" label-position="right">
-													<el-form-item label="请先选择报告模板" prop="RE_TYPE" label-width="160px">
-														<el-select clearable v-model="reportTemplate.RE_TYPE" placeholder="请选择" :disabled="noedit" style="width:500px;">
-															<el-option v-for="(data,index) in selectData" :key="index" :value="data.RE_NUM" :label="data.DECRIPTION"></el-option>
-														</el-select>
-													</el-form-item>
-												</el-form>
-											</el-col>
-										</el-row>
+									<el-row>
+										<el-col :span="8">封面</el-col>
+									</el-row>
 								</el-tab-pane>
 								<!-- 封面 End-->
 
 								<!-- 首页 Begin-->
 								<el-tab-pane label="首页" name="second">
-									<el-form inline-message :model="reportIndex" ref="reportIndex" :rules="rules" label-position="right">
-										<div class="text-center font20 pb10 pt20">国家铁路产品质量监督检验中心<br />检测报告首页</div>
-										<div class="pl30 pr30">
-											<table width="100%" border="1" cellspacing="0" cellpadding="0" class="reportTable">
-												<tr>
-													<td width="10%" rowspan="2">产品名称</td>
-													<td width="60%" rowspan="2">{{reportIndex.ITEM_NAME}}</td>
-													<td width="10%">型号规格</td>
-													<td width="20%">{{reportIndex.ITEM_MODEL}}</td>
-												</tr>
-												<tr>
-													<td>商标/标识</td>
-													<td>{{reportIndex.ITEM_TRADEMARK}}</td>
-												</tr>
-												<tr>
-													<td>委托单位</td>
-													<td colspan="3">{{reportIndex.ITEM_TRADEMARK}}</td>
-												</tr>
-												<tr>
-													<td>制造单位</td>
-													<td colspan="3">{{reportIndex.ITEM_TRADEMARK}}</td>
-												</tr>
-												<tr>
-													<td>检测类别</td>
-													<td>{{reportIndex.ITEM_TRADEMARK}}</td>
-													<td>样品来源</td>
-													<td>{{reportIndex.ITEM_SOURCE}}</td>
-												</tr>
-												<tr>
-													<td>抽样日期</td>
-													<td>{{reportIndex.CHECK_DATE}}</td>
-													<td>样品数量</td>
-													<td>{{reportIndex.ITEM_QUALITY}}</td>
-												</tr>
-												<tr>
-													<td>生产日期/批</td>
-													<td>{{reportIndex.PRODUCT_DATE}}</td>
-													<td>样品编号</td>
-													<td>{{reportIndex.ITEMNUM}}</td>
-												</tr>
-												<tr>
-													<td>样品到达日期</td>
-													<td>{{reportIndex.ARRIVAL_DATE}}</td>
-													<td>样品状态说明</td>
-													<td>{{reportIndex.ITEM_STATUS}}</td>
-												</tr>
-												<tr>
-													<td>抽样方案/判定依据</td>
-													<td colspan="3">{{reportIndex.CHECK_BASIS}}</td>
-												</tr>
-												<tr>
-													<td>检测依据（多条加、号拼接）</td>
-													<td colspan="3">{{reportIndex.S_NAME}}</td>
-												</tr>
-												<tr>
-													<td>检测项目（多条加、号拼接）</td>
-													<td colspan="3">
-														{{reportIndex.P_DESC}}
-													</td>
-												</tr>
-												<tr>
-													<td>检测主要仪器设备（多条加、号拼接）</td>
-													<td colspan="3">{{reportIndex.MAINASSET}}</td>
-												</tr>
-												<tr>
-													<td>检测地点</td>
-													<td>{{reportIndex.INSPECT_PLACE}}</td>
-													<td>检测日期</td>
-													<td>{{reportIndex.INSPECT_DATE}}</td>
-												</tr>
-												<tr>
-													<td>
-														<el-form-item label="" prop="INSPECT_RESULT_TYPE" label-width="0px">
-															<el-select v-model="reportIndex.INSPECT_RESULT_TYPE" placeholder="请选择检测结论/结果" style="width: 100%;" :disabled="noedit">
-																<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-																</el-option>
-															</el-select>
-														</el-form-item>
-													</td>
-													<td colspan="3">
-														<el-form-item label="" prop="INSPECT_RESULT" label-width="0px">
-															<el-input type="textarea" rows="5" placeholder="检测结论：是否符合XXX标准要求。" v-model="reportIndex.INSPECT_RESULT" :disabled="noedit"></el-input>
-														</el-form-item>
-
-														<el-form-item label="" prop="INSPECT_RESULT2" label-width="0px">
-															<el-input type="textarea" rows="5" placeholder="检测结果：综合判定结课。" v-model="reportIndex.INSPECT_RESULT2" :disabled="noedit"></el-input>
-														</el-form-item>
-
-														<el-form-item label="综合判定结课" prop="SYNTHETICAL" label-width="110px">
-															<el-radio-group v-model="reportIndex.SYNTHETICAL" :disabled="noedit">
-																<el-radio label="合格"></el-radio>
-																<el-radio label="不合格"></el-radio>
-															</el-radio-group>
-														</el-form-item>
-														<p class="text-right">（盖章）</p>
-													</td>
-												</tr>
-												<tr>
-													<td>备 注</td>
-													<td colspan="3">
-														<el-form-item label="" prop="REPORT_MEMO" label-width="0px">
-															<el-input type="textarea" rows="5" v-model="reportIndex.REPORT_MEMO" :disabled="noedit"></el-input>
-														</el-form-item>
-													</td>
-												</tr>
-											</table>
-											<el-row class="pt10 pb40">
-												<el-col :span="8">编制：</el-col>
-												<el-col :span="8">审核：</el-col>
-												<el-col :span="8">批准：</el-col>
-											</el-row>
-											<!-- <div class="clearfix pt10 pb20">注：下结论时，将“检测结论/检测结果”栏改为“检测结论”；不下结论时，将“检测结论/检测结果”栏改为“检测结果”。</div> -->
-										</div>
-									</el-form>
+									<el-row>
+										<el-col :span="8">首页</el-col>
+									</el-row>
 								</el-tab-pane>
 								<!-- 首页 End-->
 
-								<!-- 检测清单 Begin-->
-								<el-tab-pane label="检测清单" name="third">
-									<div class="clearfix">
-										<el-form inline-message :label-position="labelPosition" label-width="110px">
-											<el-row>
-												<el-col :span="8"></el-col>
-											</el-row>
-										</el-form>
+								<!-- 检验检测项目清单 Begin-->
+								<el-tab-pane label="检验检测项目清单" name="third">
+									<el-table :data="reportGenerateForm.WORKORDER_ITEMSLIST" 
+											border 
+											stripe 
+											:fit="true" 
+											max-height="460" 
+											style="width: 100%;" 
+											:default-sort="{prop:'WORKORDER_ITEMSLIST', order: 'descending'}">
+										<el-table-column type="selection" fixed width="55" align="center">
+										</el-table-column>
+
+										<el-table-column type="index" label="序号" width="50">
+											<template slot-scope="scope">
+												<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+											</template>
+										</el-table-column>
+										<el-table-column label="检验检测项目名称" sortable prop="LIABLE_PERSONDesc">
+										</el-table-column>
+										<el-table-column label="不合格类别" prop="FILESIZE_ORG">
+										</el-table-column>
+										<el-table-column label="技术要求" prop="FILESIZE">
+										</el-table-column>
+										<el-table-column label="计量单位" prop="FILESIZE">
+										</el-table-column>
+										<el-table-column label="检测结果" prop="FILESIZE">
+										</el-table-column>
+										<el-table-column label="单项判定" prop="FILESIZE">
+										</el-table-column>
+									</el-table>
+									<div class="pt10 text-right">
+										<el-pagination
+											@size-change="sizeChange"
+											background
+											@current-change="currentChange"
+											:current-page="page.currentPage"
+											:page-sizes="[10, 20, 30, 40]"
+											:page-size="page.pageSize"
+											layout="total, sizes, prev, pager, next"
+											:total="page.totalCount">
+										</el-pagination>
 									</div>
 								</el-tab-pane>
-								<!-- 检测清单 End-->
+								<!-- 检验检测项目清单 End-->
 
-								<!-- 内容页 Begin-->
-								<el-tab-pane label="内容页" name="fourth">
-									
-									
+								<!-- 检验检测成果文件 Begin-->
+								<el-tab-pane label="检验检测成果文件" name="fourth">
+									<el-table :data="reportGenerateForm.WORKORDER_DATA_TEMPLATEList" 
+											border 
+											stripe 
+											:fit="true" 
+											max-height="460" 
+											style="width: 100%;" 
+											:default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+										<el-table-column type="selection" fixed width="55" align="center">
+										</el-table-column>
+
+										<el-table-column type="index" label="序号" width="50">
+											<template slot-scope="scope">
+												<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+											</template>
+										</el-table-column>
+
+										<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+
+										</el-table-column>
+
+										<el-table-column label="文件名称" prop="FILESIZE_ORG">
+										</el-table-column>
+
+										<el-table-column label="文件大小" prop="FILESIZE">
+										</el-table-column>
+
+										<el-table-column label="操作">
+											<template slot-scope="scope">
+												<el-button title="预览" type="primary" round size="mini" @click="readFile(scope.row)"> 
+													<i class="icon-eye"></i> 预览
+												</el-button>
+												<el-button title="回退" type="warning" round size="mini" @click="editFile(scope.row)">
+													<i class="icon-back"></i> 回退
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+									<div class="pt10 text-right">
+										<el-pagination
+											@size-change="sizeChange"
+											background
+											@current-change="currentChange"
+											:current-page="page.currentPage"
+											:page-sizes="[10, 20, 30, 40]"
+											:page-size="page.pageSize"
+											layout="total, sizes, prev, pager, next"
+											:total="page.totalCount">
+										</el-pagination>
+									</div>
 								</el-tab-pane>
-								<!-- 内容页 End-->
+								<!-- 检验检测成果文件 End-->
 
 								<!-- 封底 Begin-->
 								<el-tab-pane label="封底" name="fifth">
-
 									
 								</el-tab-pane>
 								<!-- 封底 End-->
-								
 							</el-tabs>
-							
-						</div>
-						<div class="content-footer" v-show="firstBtn">
-								<!--首页按钮事件-->
-								<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
-								<!--检测清单按钮事件-->
-								<el-button type="primary" v-show="thirdBtn" @click="testListSubmit">保存</el-button>
-								<!--内容页按钮事件-->
-								<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
-								<!--封底按钮事件-->
-								<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
-								<el-button @click='close'>取消</el-button>
-						</div>
+						</el-form>
+					</div>
+					<div class="content-footer" v-show="firstBtn">
+						<!--首页按钮事件-->
+						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
+						<!--检验检测项目清单按钮事件-->
+						<el-button type="primary" v-show="thirdBtn" @click="testListSubmit">保存</el-button>
+						<!--内容页按钮事件-->
+						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
+						<!--封底按钮事件-->
+						<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
+						<el-button @click='close'>取消</el-button>
+					</div>
 					
 				</div>
 			</div>
@@ -214,9 +190,11 @@
 				reportTemplate:{
 					RE_TYPE: '1027',
 				},
-				reportIndex:{
+				reportGenerateForm:{
 					INSPECT_RESULT: '',
 					WORKORDER_PROJECTList:[],//检测项目
+					WORKORDER_ITEMSLIST:[],//检验检测项目清单
+					WORKORDER_DATA_TEMPLATEList:[],//检验检测成果文件
 				},
 				options: [{
 					value: '检测结论',
@@ -244,6 +222,11 @@
 				labelPosition: 'right', //表格
 				isEditing: true,
 				pageDisable: false,
+				page: {//分页显示
+					currentPage: 1,
+					pageSize: 20,
+					totalCount: 0
+				},
 				rules: {
 					RE_TYPE: [{ required: true, message: '请选择', trigger: 'change' }],//选择报告模板类型
 				},
@@ -286,13 +269,15 @@
 				// var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=RE_TYPE';
 				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.selectData = res.data.data;
+					console.log(res.data.data);
+					// this.templatefileid = res.data.data[0].ID;
+					this.templatefileid = 4;
 				});
 			},
 			//清空表单
 			reset(){
-					this.reportIndex = {
+					this.reportGenerateForm = {
 										
 				};
 			},
@@ -310,20 +295,28 @@
 				this.detailId = id;
 				this.requestData();
 			},
+			sizeChange(val) {//分页，总页数
+		      this.page.pageSize = val;
+		      this.requestData();
+		    },
+		    currentChange(val) {//分页，当前页
+		      this.page.currentPage = val;
+		      this.requestData();
+		    },
 			requestData(){
-				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
+				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.templatefileid +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
-					this.reportIndex = res.data.datas;//报告首页
-					console.log(res.data.datas);
+					this.reportGenerateForm = res.data;//报告首页
+					console.log(res.data);
 				}).catch((wrong) => {});
 			},
 			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
-				this.$refs.reportIndex.validate((valid) => {
+				this.$refs.reportGenerateForm.validate((valid) => {
 				if (valid) {
 					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
-					this.$axios.post(url,this.reportIndex).then((res) => {
+					this.$axios.post(url,this.reportGenerateForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -341,7 +334,7 @@
 						}
 					});
 			},
-			//检测清单按钮事件
+			//检验检测项目清单按钮事件
 			testListSubmit(){
 
 			},

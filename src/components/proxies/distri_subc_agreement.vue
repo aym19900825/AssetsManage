@@ -85,6 +85,7 @@
 					<div id="middle"></div>
 					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
+						
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
 								<template slot-scope="scope">

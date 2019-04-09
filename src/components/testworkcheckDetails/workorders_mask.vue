@@ -813,7 +813,7 @@
 					WORKORDER_BASISList:[],//检测依据
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
-					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+					WORKORDER_DATA_TEMPLATEList:[],//成果数据文件
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORTList:[],//报告
@@ -1038,7 +1038,6 @@
 						+ '&recordid=' + this.docParm.recordid
 						+ '&appname=' + this.docParm.appname
 						+ '&appid=' + this.docParm.appid;
-				console.log(url);
 				this.$axios.post(url, formData, config
 				).then((res)=>{
 					loading.close();
@@ -1673,7 +1672,7 @@
 				};
 				this.workorderForm.WORKORDER_CHECKPERSONList.push(obj);
 			},
-			//原始数据模版
+			//成果数据文件
 			addfield4(){
 				var obj = {
 					DATA_TYPE:'',
@@ -1852,7 +1851,7 @@
 					for(var i = 0;i<res.data.WORKORDER_CHECKPERSONList.length;i++){
 						res.data.WORKORDER_CHECKPERSONList[i].isEditing = false;
 					}
-					//原始数据
+					//成果数据文件
 					for(var i = 0;i<res.data.WORKORDER_DATA_TEMPLATEList.length;i++){
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILECHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;

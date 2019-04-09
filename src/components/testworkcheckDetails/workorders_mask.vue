@@ -32,7 +32,7 @@
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息 Begin-->
 								<el-collapse-item title="样品信息" name="1">
-									<div v-show="this.workorderForm.STATE==1" class="check-btn-right">
+									<div v-show="this.workorderForm.STATE==1&&this.workorderForm.ISACCEPT!=1" class="check-btn-right">
 										<el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接受此任务</el-button>
 										<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
 									</div>
@@ -941,6 +941,8 @@
 					var Url = this.basic_url + '/api-apps/app/workorder/operate/acceptTask?WORKORDERID='+this.dataid;
 					this.$axios.get(Url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
+							this.show=false;
+							this.$emit('request');
 							this.$message({
 								message: '接受工作任务单成功',
 								type: 'success'
@@ -959,6 +961,8 @@
 					var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
 					this.$axios.get(Url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
+							this.show=false;
+							this.$emit('request');
 							this.$message({
 								message: '回退工作任务单成功',
 								type: 'success'
@@ -1207,6 +1211,26 @@
 			appendite(value){
 				this.workorderForm.ITEMNUM = value;//样品名称
 			},
+			// getleader(maingroupid,PROJECTLIST,index,add){
+			// 	this.maingroupid=maingroupid;
+			// 	if(!maingroupid){
+			// 		return;
+			// 	}
+			//   if(!!add){
+			// 		if(PROJECTLIST=='PROJECTLIST'){
+			// 		this.workorderForm.WORKORDER_PROJECTList[index].LEADER='';
+			// 		this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
+			// 		}else{
+			// 			this.workorderForm.WORKORDER_CONTRACTList[index].LEADER='';
+			// 			this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
+			// 		}
+			// 	}
+			// 	var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		this.leader = res.data.data;
+			// 	}).catch((err) => {
+			// 	});		
+			// },
 			addperson(num,opt){
 				//opt主要是区是哪个子表添加人员
 				this.getuser();
@@ -1600,10 +1624,6 @@
 				    }
 				});
 			},
-			//回退按钮
-			sendback(){
-
-			},
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
@@ -1881,8 +1901,13 @@
 					}
 					//项目
 					for(var i = 0;i<res.data.WORKORDER_PROJECTList.length;i++){
-						res.data.WORKORDER_PROJECTList[i].isEditing = false;
+						// res.data.WORKORDER_PROJECTList[i].isEditing = false;
+						// res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
+						// this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
+						// res.data.datas.WORKORDER_PROJECTList[i].LEADER = Number(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
+						// res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 					}
+
 					//检验员
 					for(var i = 0;i<res.data.WORKORDER_CHECKPERSONList.length;i++){
 						res.data.WORKORDER_CHECKPERSONList[i].isEditing = false;
@@ -1899,21 +1924,17 @@
 							this.btnshow = false;
 						}
 					}
-					// for(var i = 0;i<res.data.WORKORDER_CONTRACTList.length;i++){
-					// 	if(res.data.WORKORDER_CONTRACTList[0].ISCREATED == '1'){
-					// 		this.showcreateagree = false;
-					// 	}
-					// }
+					//分包项目
 					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+						// res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
+						// // this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
+						// res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
+						// res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 					}
 					res.data.CJDW = Number(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
-					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
-					}
 					if(res.data.IS_MAIN == '1'){//是主任务单
 						this.showcreatereoprt = true;//显示生成报告按钮
 					}else{//不是主任务单

@@ -220,6 +220,7 @@
 			//添加
 			openAddMgr() {
 				this.reset();
+				this.$refs.usergroupmask.open(); // 方法1
 				this.$refs.usergroupmask.visible();
 			},
 			//修改

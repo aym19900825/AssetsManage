@@ -8,10 +8,10 @@
 					<div class="mask_title" v-show="modifytitle">修改检测委托书</div>
 					<div class="mask_title" v-show="viewtitle">查看检测委托书</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>						 
+						<span class="mask_span mask_max" @click="toggle">						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -285,6 +285,10 @@
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
+												<el-table-column prop="iconOperation" fixed label="" width="50px">
+													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+												</el-table-column>
+
 												<el-table-column prop="P_NUM" label="检测项目编号" sortable width="120px">
 													<template slot-scope="scope">
 													<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -381,7 +385,7 @@
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope"><i class="el-icon-check"  v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
+													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check"  v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -695,7 +699,7 @@
 							<el-button type="primary" @click="save('Update')">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 						<div class="content-footer" v-show="views">
 							<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成工作任务单</el-button>
@@ -1032,7 +1036,7 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 3) {//计算第几列的减1
+          } else if(index === 4) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));

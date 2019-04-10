@@ -163,7 +163,7 @@
 			</div>
 			<div class="content-footer">
 				<el-button type="primary" @click="submit">确定</el-button>
-				<el-button @click='close'>取消</el-button>
+				<el-button @click="close">取消</el-button>
 			</div>
 		</el-dialog>
 	</div>

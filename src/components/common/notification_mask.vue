@@ -8,10 +8,10 @@
 					<div class="mask_title" v-show="modifytitle">修改工作任务通知书</div>
 					<div class="mask_title" v-show="viewtitle">查看工作任务通知书</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>						 
+						<span class="mask_span mask_max" @click="toggle">						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -354,7 +354,7 @@
 					<div class="content-footer" v-show="noviews">
 	          <el-button type="primary" @click="save('Update')">保存</el-button>
 						<el-button type="success" v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
-						<el-button @click='close'>取消</el-button>
+						<el-button @click="close">取消</el-button>
 					</div>
 					<div class="content-footer" v-show="views">
 						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildcheck">生成检验委托书</el-button>

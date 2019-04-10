@@ -10,10 +10,10 @@
 					<div class="mask_title" v-show="modifytitle">修改使用/维护保养记录</div>
 					<div class="mask_title" v-show="viewtitle">查看使用/维护保养记录</div>
                     <div class="mask_anniu">
-                        <span class="mask_span mask_max" @click='toggle'>
+                        <span class="mask_span mask_max" @click="toggle">
                             <i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
                         </span>
-                        <span class="mask_span" @click='close'>
+                        <span class="mask_span" @click="close">
                             <i class="icon-close1"></i>
                         </span>
                     </div>
@@ -197,7 +197,7 @@
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate('dataInfo')">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit('dataInfo')" v-show="addtitle">保存并继续</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button @click="close">取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 						</div>
 					</el-form>

@@ -8,10 +8,10 @@
 					<div class="mask_title" v-show="modifytitle">修改检验委托书</div>
 					<div class="mask_title" v-show="viewtitle">查看检验委托书</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>						 
+						<span class="mask_span mask_max" @click="toggle">						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -285,8 +285,9 @@
 												highlight-current-row
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
+												
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
+													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
@@ -386,7 +387,7 @@
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 												
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing&&!viewtitle"></i><i class="el-icon-edit" v-else></i></template>
+													<template slot-scope="scope"  v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
 												</el-table-column>
 
 
@@ -700,7 +701,7 @@
 							<el-button type="primary" @click="save('Update')">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 						<div class="content-footer" v-show="views">
 							<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成工作任务单</el-button>
@@ -1059,7 +1060,7 @@
 								}
 								var paramData1 = this.INSPECTCOST;
 								var paramData2 = this.ALLCOST;
-								this.$forceUpdate();
+								// this.$forceUpdate();
 								this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 							} else {
 								sums[index] = ' ';
@@ -1097,7 +1098,7 @@
 							}
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
-							this.$forceUpdate();
+							// this.$forceUpdate();
 							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
@@ -1649,7 +1650,7 @@
 				this.dataInfo.PRODUCT_UNIT=val[4];//生产单位的信用代码
 				if(val[5]==1){
 					this.dataInfo.PRODUCE_TYPE=1;
-					this.dataInfo.DEPUTE_TYPE=1;
+					this.dataInfo.DEPUTE_TYPE=1;//委托单位
 				}else{
 					this.dataInfo.PRODUCE_TYPE=2;
 					this.dataInfo.DEPUTE_TYPE=2;

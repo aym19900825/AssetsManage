@@ -393,7 +393,7 @@
 				//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+		       this.openAddMgr();
 		    	}else if(item.name=="修改"){
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){

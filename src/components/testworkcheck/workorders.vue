@@ -740,7 +740,7 @@
 					this.resourceData = res.data.datas;
 					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
-					console.log(this.treeData);
+					// console.log(this.treeData);
 				});
 			},
 			transformTree(data) {
@@ -799,7 +799,6 @@
 			childvalue: function (childValue) {
 				// childValue就是子组件传过来的
 				this.selMenu = childValue;
-				console.log(this.selMenu);
 			},
 			//左侧菜单过来的
 		   childByValue:function(childValue) {
@@ -816,7 +815,6 @@
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {
 				})
 

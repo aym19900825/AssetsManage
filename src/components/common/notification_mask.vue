@@ -44,10 +44,10 @@
 								</el-row>
 								<el-form-item label="" prop="TYPE">
 									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''">
-										<el-col :span="4" v-if="!addtitle">
+										<el-col :span="4" v-if="!addtitle" >
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
-										<el-col :span="4">
+										<el-col :span="4" :disable="true">
 											<el-radio label="2">监督抽查复查</el-radio>
 										</el-col>
 										<el-col :span="4" v-if="!addtitle">
@@ -455,7 +455,8 @@
 			 productmask,
 			 enterprisemask,
 			 teststandardmask,
-			 testprojectmask
+			 testprojectmask,
+			 deptmask
 		},
 		data() {
 			//金额验证

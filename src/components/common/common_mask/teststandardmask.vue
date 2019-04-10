@@ -227,7 +227,6 @@
 	},
 	//页面显示
     basislead(value){
-		console.log(value);
 		this.PRO_NUM = value.PRO_NUM;//产品编号
 		this.P_NUM = value.P_NUM;//产品类别编号
 		this.S_NUM=value.S_NUM;
@@ -322,9 +321,7 @@
 		};
 		// var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_not_in='+this.S_NUM;
-	   console.log(url);
 	   this.$axios.get(url, {}).then((res) => {
-			console.log(res);
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

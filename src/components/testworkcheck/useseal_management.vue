@@ -45,7 +45,14 @@
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="用印人" prop="USER" label-width="80px">
-										<el-input v-model="searchList.USER" @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.USER" @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.USER" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -56,7 +63,14 @@
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="归还接收人" prop="GHUSER" label-width="100px">
-										<el-input v-model="searchList.GHUSER" @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.GHUSER" @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.GHUSER" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -207,6 +221,7 @@
 					totalCount: 0
 				},
 				buttons:[],
+				selPerson: [],
 			}
 		},
 		methods: {
@@ -462,12 +477,25 @@
 				// 只是改了query，其他都不变
 				this.id = this.$route.query.bizId;
 				this.$refs.child.view(this.id);
+			},
+			getSelPerson(){
+				this.$axios.get(this.basic_url + '/api-user/users', {
+				}).then((res) => {
+					var resData = res.data.data;
+					for (let i = 0; i < resData.length; i++) {
+						this.selPerson.push({
+							id: resData[i].id,
+							fullname:  resData[i].nickname
+						})
+					}
+				}).catch((wrong) => {})
 			}
 		},
 		mounted() {
 			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}
+			this.getSelPerson();
 		},
 	}
 </script>

@@ -67,7 +67,14 @@
 							</el-col>
 							<el-col :span="4">
 								<el-form-item label="保管人" prop="KEEPER">
-									<el-input v-model="searchList.KEEPER" @keyup.enter.native="searchinfo"></el-input>
+									<!-- <el-input v-model="searchList.KEEPER" @keyup.enter.native="searchinfo"></el-input> -->
+									<el-select clearable 
+											v-model="searchList.KEEPER" 
+											filterable 
+											default-first-option 
+											placeholder="请选择">
+										<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+									</el-select>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
@@ -295,6 +302,7 @@
 				},
 				treeData: [],
 				buttons:[],
+				selPerson: [],
 				asset:'asset'//appname
 			}
 		},
@@ -627,10 +635,23 @@
       		renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (<span><i class={data.iconClass}></i><span>{node.label}</span></span>)
 			},
+			getSelPerson(){
+				this.$axios.get(this.basic_url + '/api-user/users', {
+				}).then((res) => {
+					var resData = res.data.data;
+					for (let i = 0; i < resData.length; i++) {
+						this.selPerson.push({
+							id: resData[i].id,
+							fullname:  resData[i].nickname
+						})
+					}
+				}).catch((wrong) => {})
+			}
 		},
 		mounted(){
             this.getKey();
-            this.treeDrag();//调用树和表单之间拖拽改变宽度
+			this.treeDrag();//调用树和表单之间拖拽改变宽度
+			this.getSelPerson();
         },
 	}
 </script>

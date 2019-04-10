@@ -6,10 +6,10 @@
 				<div class="mask_title_div clearfix">
 					<div class="mask_title">报告生成与编辑</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>
+						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -31,73 +31,149 @@
 							</el-col>
 						</el-row>
 
-						<el-form inline-message :model="reportGenerateForm" ref="reportGenerateForm" :rules="rules" label-position="right">
+						<el-form inline-message :model="reportGenerateForm" ref="reportGenerateForm" :rules="rules" label-position="right" lable-width="120px">
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 封面 Begin-->
-								
-								<el-tab-pane label="封面" name="first">
-									<el-row>
-										<el-col :span="8">封面</el-col>
+								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
+									<!-- <el-row v-for="(reportDataList,index) in selectReportData[index].List" :key="index" >
+										<el-col :span="8">{{reportDataList.configid}}</el-col>
+										<el-col :span="8">{{reportDataList.fieldname}}</el-col>
+										<el-col :span="8">{{reportDataList.isdatabase}}</el-col>
+										<el-col :span="8">{{reportDataList.name}}</el-col>
+										<el-col :span="8">{{reportDataList.paramname}}</el-col>
+										<el-col :span="8">{{reportDataList.required}}</el-col>
+										<el-col :span="8">{{reportDataList.rtype}}</el-col>
+										<el-col :span="8">{{reportDataList.sort}}</el-col>
+										<el-col :span="8">{{reportDataList.tablename}}</el-col>
+										<el-col :span="8">{{reportDataList.type}}</el-col>
+										<el-col :span="8">{{reportDataList.value}}</el-col>
+									</el-row> -->
+									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'||reportData.name=='封底'">
+										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
+											<el-form-item :label="item.title" :prop="item.value" label-width="150px">
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												
+												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
+												</el-date-picker>
+
+												<el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
+													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
+												</el-radio-group>
+
+												<el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
+													<el-option v-for="item in assets"
+													:key="item.ID"
+													:label="item.value"
+													:value="item.value">
+													</el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
 									</el-row>
+
+									<el-row v-else>
+										<el-col :span="24">
+											<el-table :data="selectReportData[index].List" 
+													border 
+													stripe 
+													:fit="true" 
+													max-height="460" 
+													style="width: 100%;" 
+													:default-sort="{prop:'selectReportData[index].List', order: 'descending'}">
+												<el-table-column type="selection" fixed width="55" align="center">
+												</el-table-column>
+
+												<el-table-column type="index" label="序号" width="50">
+													<template slot-scope="scope">
+														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+													</template>
+												</el-table-column>
+
+												<el-table-column label="检验检测项目名称" sortable prop="LIABLE_PERSONDesc">
+												</el-table-column>
+
+												<el-table-column label="不合格类别" prop="FILESIZE_ORG">
+												</el-table-column>
+												<el-table-column label="技术要求" prop="FILESIZE">
+												</el-table-column>
+												<el-table-column label="计量单位" prop="FILESIZE">
+												</el-table-column>
+												<el-table-column label="检测结果" prop="FILESIZE">
+												</el-table-column>
+												<el-table-column label="单项判定" prop="FILESIZE">
+												</el-table-column>
+											</el-table>
+											<el-pagination
+												@size-change="sizeChange"
+												background
+												@current-change="currentChange"
+												:current-page="page.currentPage"
+												:page-sizes="[10, 20, 30, 40]"
+												:page-size="page.pageSize"
+												layout="total, sizes, prev, pager, next"
+												:total="page.totalCount"
+												class="pt10 text-right">
+											</el-pagination>
+										</el-col>
+									</el-row>
+									
 								</el-tab-pane>
 								<!-- 封面 End-->
-
-								<!-- 首页 Begin-->
-								<el-tab-pane label="首页" name="second">
-									<el-row>
-										<el-col :span="8">首页</el-col>
-									</el-row>
-								</el-tab-pane>
-								<!-- 首页 End-->
-
 								<!-- 检验检测项目清单 Begin-->
-								<el-tab-pane label="检验检测项目清单" name="third">
-									<el-table :data="reportGenerateForm.WORKORDER_ITEMSLIST" 
-											border 
-											stripe 
-											:fit="true" 
-											max-height="460" 
-											style="width: 100%;" 
-											:default-sort="{prop:'WORKORDER_ITEMSLIST', order: 'descending'}">
-										<el-table-column type="selection" fixed width="55" align="center">
-										</el-table-column>
+								<!-- <el-tab-pane v-show="reportData.name=='检验检测项目清单'" v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid"> -->
+								<!-- <el-tab-pane v-show="reportData.name=='检验检测项目清单'" label="检验检测项目清单" name="third"> -->
+											<!-- <el-table :data="selectReportData[index].List" 
+													border 
+													stripe 
+													:fit="true" 
+													max-height="460" 
+													style="width: 100%;" 
+													:default-sort="{prop:'selectReportData[index].List', order: 'descending'}">
+												<el-table-column type="selection" fixed width="55" align="center">
+												</el-table-column>
 
-										<el-table-column type="index" label="序号" width="50">
-											<template slot-scope="scope">
-												<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-											</template>
-										</el-table-column>
-										<el-table-column label="检验检测项目名称" sortable prop="LIABLE_PERSONDesc">
-										</el-table-column>
-										<el-table-column label="不合格类别" prop="FILESIZE_ORG">
-										</el-table-column>
-										<el-table-column label="技术要求" prop="FILESIZE">
-										</el-table-column>
-										<el-table-column label="计量单位" prop="FILESIZE">
-										</el-table-column>
-										<el-table-column label="检测结果" prop="FILESIZE">
-										</el-table-column>
-										<el-table-column label="单项判定" prop="FILESIZE">
-										</el-table-column>
-									</el-table>
-									<div class="pt10 text-right">
-										<el-pagination
-											@size-change="sizeChange"
-											background
-											@current-change="currentChange"
-											:current-page="page.currentPage"
-											:page-sizes="[10, 20, 30, 40]"
-											:page-size="page.pageSize"
-											layout="total, sizes, prev, pager, next"
-											:total="page.totalCount">
-										</el-pagination>
-									</div>
-								</el-tab-pane>
+												<el-table-column type="index" label="序号" width="50">
+													<template slot-scope="scope">
+														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+													</template>
+												</el-table-column>
+
+												<el-table-column label="检验检测项目名称" sortable prop="LIABLE_PERSONDesc">
+												</el-table-column>
+												
+												<el-table-column label="不合格类别" prop="FILESIZE_ORG">
+												</el-table-column>
+												<el-table-column label="技术要求" prop="FILESIZE">
+												</el-table-column>
+												<el-table-column label="计量单位" prop="FILESIZE">
+												</el-table-column>
+												<el-table-column label="检测结果" prop="FILESIZE">
+												</el-table-column>
+												<el-table-column label="单项判定" prop="FILESIZE">
+												</el-table-column>
+											</el-table>
+											<el-pagination
+												@size-change="sizeChange"
+												background
+												@current-change="currentChange"
+												:current-page="page.currentPage"
+												:page-sizes="[10, 20, 30, 40]"
+												:page-size="page.pageSize"
+												layout="total, sizes, prev, pager, next"
+												:total="page.totalCount"
+												class="pt10 text-right">
+											</el-pagination> -->
+								<!-- </el-tab-pane> -->
 								<!-- 检验检测项目清单 End-->
 
 								<!-- 检验检测成果文件 Begin-->
-								<el-tab-pane label="检验检测成果文件" name="fourth">
-									<el-table :data="reportGenerateForm.WORKORDER_DATA_TEMPLATEList" 
+								<!-- <el-tab-pane v-show="reportData.name=='检验检测成果文件'" v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid"> -->
+								<!-- <el-tab-pane label="检验检测成果文件" name="fourth"> -->
+									<!-- <el-table :data="selectReportData[index].List" 
 											border 
 											stripe 
 											:fit="true" 
@@ -133,8 +209,8 @@
 												</el-button>
 											</template>
 										</el-table-column>
-									</el-table>
-									<div class="pt10 text-right">
+									</el-table> -->
+									<!-- <div class="pt10 text-right">
 										<el-pagination
 											@size-change="sizeChange"
 											background
@@ -145,15 +221,11 @@
 											layout="total, sizes, prev, pager, next"
 											:total="page.totalCount">
 										</el-pagination>
-									</div>
-								</el-tab-pane>
+									</div> -->
+								<!-- </el-tab-pane> -->
 								<!-- 检验检测成果文件 End-->
 
-								<!-- 封底 Begin-->
-								<el-tab-pane label="封底" name="fifth">
-									
-								</el-tab-pane>
-								<!-- 封底 End-->
+							
 							</el-tabs>
 						</el-form>
 					</div>
@@ -166,7 +238,7 @@
 						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
 						<!--封底按钮事件-->
 						<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
-						<el-button @click='close'>取消</el-button>
+						<el-button @click="close">取消</el-button>
 					</div>
 					
 				</div>
@@ -187,15 +259,16 @@
 			return {
 				basic_url: Config.dev_url,
 				selectData: [],
+				selectReportData: [],
 				reportTemplate:{
 					RE_TYPE: '1027',
 				},
 				reportGenerateForm:{
-					INSPECT_RESULT: '',
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_ITEMSLIST:[],//检验检测项目清单
 					WORKORDER_DATA_TEMPLATEList:[],//检验检测成果文件
 				},
+				date: new Date(), //绑定的时候 直接绑定的当前时间 就好了
 				options: [{
 					value: '检测结论',
 					label: '检测结论'
@@ -217,7 +290,7 @@
 				up: false,
 				noedit:false,
 				selUser:[],
-				activeName: 'first', //tabs
+				activeName: '0', //tabs
 				activeNames: ['1','2','3','4','5'],//手风琴数量
 				labelPosition: 'right', //表格
 				isEditing: true,
@@ -236,27 +309,27 @@
 			//TAbs页切换事件判断按钮显示
 			handleClick(tab, event) {
 				var activeName = event.target.getAttribute('id');//获取当前tabID名
-				if(activeName=='tab-first') {//判断按钮显示问题，封面都不显示
+				if(activeName=='tab-0') {//判断按钮显示问题，封面都不显示
 					this.firstBtn = false;
-				}else if(activeName=='tab-second') {//判断按钮显示问题，首页显示保存和取消
+				}else if(activeName=='tab-1') {//判断按钮显示问题，首页显示保存和取消
 					this.firstBtn = true;
 					this.secondBtn = true;
 					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
-				}else if(activeName=='tab-third') {//判断按钮显示问题，检查清单显示保存和取消
+				}else if(activeName=='tab-2') {//判断按钮显示问题，检查清单显示保存和取消
 					this.firstBtn = true;
 					this.secondBtn = false;
 					this.thirdBtn = true;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
-				}else if(activeName=='tab-fourth') {//判断按钮显示问题，内容页显示生成内容页文档和取消
+				}else if(activeName=='tab-3') {//判断按钮显示问题，内容页显示生成内容页文档和取消
 					this.firstBtn = true;
 					this.secondBtn = false;
 					this.thirdBtn = false;
 					this.fourthBtn = true;
 					this.fifthBtn = false;
-				}else if(activeName=='tab-fifth') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
+				}else if(activeName=='tab-4') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
 					this.firstBtn = true;
 					this.secondBtn = false;
 					this.thirdBtn = false;
@@ -270,16 +343,34 @@
 				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
-					console.log(res.data.data);
+					// console.log(res.data.data);
 					// this.templatefileid = res.data.data[0].ID;
 					this.templatefileid = 4;
 				});
+			},
+			//报告模板整体数据列表
+			requestData(){
+				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.templatefileid +'/'+this.detailId;
+				this.$axios.get(url, {}).then((res) => {
+					this.selectReportData = res.data;//报告首页
+					// this.reportGenerateForm.inspect_date = this.getToday();
+					
+					console.log(res);
+				}).catch((wrong) => {});
 			},
 			//清空表单
 			reset(){
 					this.reportGenerateForm = {
 										
 				};
+			},
+			//获取当前时间
+			getToday(){
+				var date = new Date();
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				return str;
 			},
 			//获取导入表格勾选信息
 			SelChange(val) {
@@ -292,6 +383,7 @@
 			},
 			showDialog(id){
 				this.show = true;
+				// this.detailId = id;
 				this.detailId = id;
 				this.requestData();
 			},
@@ -302,14 +394,8 @@
 		    currentChange(val) {//分页，当前页
 		      this.page.currentPage = val;
 		      this.requestData();
-		    },
-			requestData(){
-				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.templatefileid +'/'+this.detailId;
-				this.$axios.get(url, {}).then((res) => {
-					this.reportGenerateForm = res.data;//报告首页
-					console.log(res.data);
-				}).catch((wrong) => {});
-			},
+				},
+			
 			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
@@ -323,7 +409,7 @@
 								message: '保存成功',
 								type: 'success'
 							});
-							this.show = false;
+							
 							//重新加载数据
 							this.$emit('requests');
 						}
@@ -378,6 +464,7 @@
 		
 		mounted() {
 			this.getReportType();
+			// this.requestData();
 		},
 	}
 </script>

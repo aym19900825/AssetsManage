@@ -8,10 +8,10 @@
 					<div class="mask_title" v-show="modifytitle">修改仪器和计量器具</div>
 					<div class="mask_title" v-show="viewtitle">查看仪器和计量器具</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>
+						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -57,10 +57,10 @@
 								<!-- 设备保管人员情况 -->
 								<el-collapse-item title="设备保管人员情况" name="2">
 									<el-form-item v-for="item in keeperInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPER' && item.prop =='KEEPER'" :type="item.type" :disabled="true">
+										<el-input v-model="dataInfo[item.prop]" v-if="item.type=='input'&&item.prop =='KEEPERDesc'" :type="item.type" :disabled="true">
 											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addPeople"></el-button>
 										</el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPER'" :disabled="noedit"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'&&item.prop!='KEEPERDesc'" :disabled="noedit"></el-input>
 									</el-form-item>
 								</el-collapse-item>
 
@@ -99,7 +99,7 @@
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="save('Update')">保存</el-button>
 							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button @click="close">取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
 						</div>
 					</el-form>
@@ -198,7 +198,7 @@
 				}
 			};
 			var validateKeeper = (rule, value, callback) => {//类别
-                if (this.dataInfo.KEEPER === undefined || this.dataInfo.KEEPER === '' || this.dataInfo.KEEPER === null) {
+                if (this.dataInfo.KEEPERDesc === undefined || this.dataInfo.KEEPERDesc === '' || this.dataInfo.KEEPERDesc === null) {
                     callback(new Error('必填'));
                 }else {
                     callback();
@@ -272,7 +272,7 @@
 					ISPM: [//是否需要溯源
 						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
-					KEEPER: [//设备保管人
+					KEEPERDesc: [//设备保管人
 						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata},
 					],
 					ACCEPT_DATE: [//接收日期
@@ -591,7 +591,7 @@
 				keeperInfo: [
 					{
 						label: '设备保管人',
-						prop: 'KEEPER',
+						prop: 'KEEPERDesc',
 						width: '50%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -678,6 +678,7 @@
 					'ISPM': '',
 					'STATUSDATE': '',
 					'KEEPER': '',
+					'KEEPERDesc': '',
 					'ACCEPT_DATE': '',
 					'S_DATE': '',   
 					'C_ADDRESS': '',  
@@ -833,7 +834,8 @@
 						type: 'warning'
 					});
 				}else{
-					this.dataInfo.KEEPER = this.selUser[0].nickname;
+					this.dataInfo.KEEPERDesc = this.selUser[0].nickname;
+					this.dataInfo.KEEPER = this.selUser[0].id;
 					this.getuserinfo();
 					this.resetBasisInfo();//调用resetBasisInfo函数
 				}

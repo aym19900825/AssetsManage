@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div slot="footer">
-                <el-button @click='close'>关闭</el-button>
+                <el-button @click="close">关闭</el-button>
             </div>
 		</el-dialog>
 	</div>

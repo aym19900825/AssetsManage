@@ -8,10 +8,10 @@
 					<div class="mask_title" v-show="modifytitle">修改用户组</div>
 					<div class="mask_title" v-show="viewtitle">查看用户组</div>
 					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click='toggle'>
+						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
 						</span>
-						<span class="mask_span" @click='close'>
+						<span class="mask_span" @click="close">
 							<i class="icon-close1"></i>
 						</span>
 					</div>
@@ -21,7 +21,7 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
-									<el-row :gutter="30">
+									<el-row>
 										<el-col :span="6">
 											<el-form-item label="编号" prop="num" label-width="100px">
 												<el-input v-model="dataInfo.num" placeholder="自动生成" :disabled="edit"></el-input>
@@ -119,8 +119,9 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click='submitForm'>保存</el-button>
-							<el-button @click='close'>取消</el-button>
+							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -292,7 +293,11 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
-				this.show = true;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				
+				// this.show = true;
 				this.getUser('new');
 			},
 			//这里是修改
@@ -355,6 +360,9 @@
 					this.dataInfo = res.data;
 				}).catch((wrong) => {})
 			},
+			open(){
+				this.show = true;
+			},
 			toggle(e) { //大弹出框大小切换
 				if(this.isok1) {
 					this.maxDialog();
@@ -378,7 +386,7 @@
 				$(".mask_div").css("top", "0px");
 			},
 			//提交保存
-			submitForm() {
+			save(parameter) {
 				var _this = this;
 				var url = this.basic_url + '/api-user/groups/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
@@ -389,8 +397,15 @@
 									message: '保存成功',
 									type: 'success',
 								});
+								if(parameter=="Update"){
+									this.show = false;
+									this.$emit('request');
+								}else{
+									this.show=true;
+									this.$emit('reset');
+								}
+								this.visible();
 								this.resetForm();
-								this.$emit('request');
 							}else{
 								this.$message({
 									message: res.data.resp_msg,

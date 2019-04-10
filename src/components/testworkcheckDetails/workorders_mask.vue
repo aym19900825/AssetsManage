@@ -1118,6 +1118,7 @@
 					ITEMNUM: '',//样品编号
 					CHECK_DATE: '',//抽样日期
 					PRODUCT_DATE: '',//生产日期/批
+					PRODUCT_TYPE: '',//产品类别
 					ITEM_STATU: '',//填写的样品状态
 					ITEM_STATUS: '',//选择的样品状态
 					ARRIVAL_DATE: '',//到站日期

@@ -49,14 +49,28 @@
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="85px">
-										<el-input v-model="searchList.ACCEPT_PERSON"  @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.ACCEPT_PERSON"  @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.ACCEPT_PERSON" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
 									<el-form-item label="处理批准人" prop="APPR_PERSON" label-width="85px">
-										<el-input v-model="searchList.APPR_PERSON"  @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.APPR_PERSON"  @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.APPR_PERSON" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="6">
@@ -267,6 +281,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				selPerson: [],
 				itemdisposition:'itemdisposition'//appname
 			}
 		},
@@ -608,6 +623,18 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
+			},
+			getSelPerson(){
+				this.$axios.get(this.basic_url + '/api-user/users', {
+				}).then((res) => {
+					var resData = res.data.data;
+					for (let i = 0; i < resData.length; i++) {
+						this.selPerson.push({
+							id: resData[i].id,
+							fullname:  resData[i].nickname
+						})
+					}
+				}).catch((wrong) => {})
 			}
 		},
 		
@@ -615,6 +642,7 @@
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 			this.requestData();
 			this.getKey();
+			this.getSelPerson();
 		},
 	}
 </script>

@@ -44,8 +44,15 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托单位名称" prop="V_NAMEDesc"  label-width="100px">
-										<el-input v-model="searchList.V_NAMEDesc"  @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+										<!-- <el-input v-model="searchList.V_NAME"  @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.V_NAME" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
@@ -169,9 +176,9 @@
 		name: 'inspectPro2',
 		components: {
 			vheader,
-		  navs_left,
-		  navs_tabs,
-		  inspectmask,
+		  	navs_left,
+		  	navs_tabs,
+		 	inspectmask,
 			reportmask,
 			checkassignmask,
 			vTable
@@ -325,6 +332,7 @@
 					totalCount: 0
 				},
 				buttons:[],
+				selectData: [],
 				inspectPro2:'inspectPro2'//appname
 			}
 		},
@@ -780,6 +788,32 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
+			},
+			getSelPromise(){
+				var arr1 = [];
+				var resFun = new Promise((resolve,reject)=>{
+					this.$axios.get(this.basic_url + '/api-user/depts/findFirstSecond', {}).then((res) => {
+						this.selectData = res.data;
+						resolve(arr1);
+					}).catch((wrong) => {})
+				})
+				return resFun;
+			},
+			getSelectData(){
+				this.getSelPromise().then(()=>{
+					this.$axios.get(this.basic_url + '/api-apps/app/customer', {}).then((res) => {
+						var resData = res.data.data;
+						for (let i = 0; i < resData.length; i++) {
+							this.selectData.push({
+								id: resData[i].ID,
+								fullname:  resData[i].NAME
+							})
+						}
+					}).catch((wrong) => {})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
 			}
 		},
 		beforeMount() {
@@ -789,6 +823,7 @@
 			if(this.$route.query.bizId!=undefined){
 				this.getRouterData();
 			}
+			this.getSelectData();
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 		},
 	}

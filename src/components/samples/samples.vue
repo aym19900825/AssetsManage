@@ -42,7 +42,14 @@
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="委托单位" prop="V_NAME">
-										<el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.V_NAME" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -54,7 +61,14 @@
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="收样人" prop="ACCEPT_PERSON">
-										<el-input v-model="searchList.ACCEPT_PERSON" @keyup.enter.native="searchinfo"></el-input>
+										<el-select clearable 
+											   v-model="searchList.ACCEPT_PERSON" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
+										<!-- <el-input v-model="searchList.ACCEPT_PERSON" @keyup.enter.native="searchinfo"></el-input> -->
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
@@ -333,6 +347,8 @@
 				buttons:[],
 				sampleList: [],
 				sampleTypeFlag: false,
+				selectData: [],
+				selPerson: [],
 				
 				item:'item'//appname
 			}
@@ -777,11 +793,51 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
+			},
+			getSelPromise(){
+				var arr1 = [];
+				var resFun = new Promise((resolve,reject)=>{
+					this.$axios.get(this.basic_url + '/api-user/depts/findFirstSecond', {}).then((res) => {
+						this.selectData = res.data;
+						resolve(arr1);
+					}).catch((wrong) => {})
+				})
+				return resFun;
+			},
+			getSelectData(){
+				this.getSelPromise().then(()=>{
+					this.$axios.get(this.basic_url + '/api-apps/app/customer', {}).then((res) => {
+						var resData = res.data.data;
+						for (let i = 0; i < resData.length; i++) {
+							this.selectData.push({
+								id: resData[i].ID,
+								fullname:  resData[i].NAME
+							})
+						}
+					}).catch((wrong) => {})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+			},
+			getSelPerson(){
+				this.$axios.get(this.basic_url + '/api-user/users', {
+				}).then((res) => {
+					var resData = res.data.data;
+					for (let i = 0; i < resData.length; i++) {
+						this.selPerson.push({
+							id: resData[i].id,
+							fullname:  resData[i].nickname
+						})
+					}
+				}).catch((wrong) => {})
 			}
 		},
 		mounted() {
 			this.getKey();
 			this.treeDrag();
+			this.getSelectData();
+			this.getSelPerson();
 		},
 	}
 </script>

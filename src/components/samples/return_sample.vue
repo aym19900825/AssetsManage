@@ -36,16 +36,23 @@
 								</el-col>
 								<el-col :span="6">
 									<el-form-item label="样品承接人" prop="ACCEPT_PERSON" label-width="85px">
-										<el-input v-model="searchList.ACCEPT_PERSON" @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.ACCEPT_PERSON" @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.ACCEPT_PERSON" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
-								<el-col :span="6">
+								<!-- <el-col :span="6">
 									<el-form-item label="处理批准人" prop="APPR_PERSON" label-width="85px">
 										<el-input v-model="searchList.APPR_PERSON" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="6">
 									<el-form-item label="批准日期" prop="APPR_DATE" label-width="100px">
 										<div class="block">
@@ -101,9 +108,9 @@
 								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
-								<el-table-column label="返样人" sortable width="120px" prop="RETURN_PERSONDesc" v-if="this.checkedName.indexOf('样品承接人')!=-1">
+								<el-table-column label="返样人" sortable prop="RETURN_PERSONDesc" v-if="this.checkedName.indexOf('返样人')!=-1">
 								</el-table-column>
-								<el-table-column label="返样日期" sortable width="100px" prop="RETURN_DATE" v-if="this.checkedName.indexOf('批准日期')!=-1" :formatter="dateFormat">
+								<el-table-column label="返样日期" sortable prop="RETURN_DATE" v-if="this.checkedName.indexOf('返样日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
 							</v-table>
 						</el-col>
@@ -152,15 +159,8 @@
 					'样品编号',
 					'样品序号',
 					'数量',
-					'收回入库时间',
-					'样品承接人',
-					'处理批准人',
-					'批准日期',
-					'处理人',
-					'处理日期',
-					'备注',
-					'状态',
-					'信息状态',
+					'返样人',
+					'返样日期',
 				],
 				tableHeader: [{
 						label: '样品编号',
@@ -175,40 +175,12 @@
 						prop: 'QUALITY'
 					},
 					{
-						label: '收回入库时间',
-						prop: 'ACCEPT_DATE'
+						label: '返样人',
+						prop: 'RETURN_PERSONDesc'
 					},
 					{
-						label: '样品承接人',
-						prop: 'ACCEPT_PERSON'
-					},
-					{
-						label: '处理批准人',
-						prop: 'APPR_PERSON'
-					},
-					{
-						label: '批准日期',
-						prop: 'APPR_DATE'
-					},
-					{
-						label: '处理人',
-						prop: 'DO_PERSON'
-					},
-					{
-						label: '处理日期',
-						prop: 'DO_DATE'
-					},
-					{
-						label: '备注',
-						prop: 'MEMO'
-					},
-					{
-						label: '状态',
-						prop: 'STATEDesc'
-					},
-					{
-						label: '信息状态',
-						prop: 'STATUS'
+						label: '返样日期',
+						prop: 'RETURN_DATE'
 					},
 				],
 				companyId: '',
@@ -242,6 +214,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				selPerson: [],
 				itemreturn:'itemreturn'//appname
 			}
 		},
@@ -578,12 +551,25 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
+			},
+			getSelPerson(){
+				this.$axios.get(this.basic_url + '/api-user/users', {
+				}).then((res) => {
+					var resData = res.data.data;
+					for (let i = 0; i < resData.length; i++) {
+						this.selPerson.push({
+							id: resData[i].id,
+							fullname:  resData[i].nickname
+						})
+					}
+				}).catch((wrong) => {})
 			}
 		},
 		
 		mounted() {// 在页面挂载前就发起请求
 			this.getKey();
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
+			this.getSelPerson();
 		},
 	}
 </script>

@@ -48,7 +48,14 @@
 							<el-row :gutter="5">
 								<el-col :span="5">
 									<el-form-item label="领样人" prop="GRANT_PERSON" label-width="70px">
-										<el-input v-model="searchList.GRANT_PERSON" @keyup.enter.native="searchinfo"></el-input>
+										<!-- <el-input v-model="searchList.GRANT_PERSON" @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.GRANT_PERSON" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -242,6 +249,7 @@
 				},
 				samplesForm: {},//修改子组件时传递数据
 				buttons:[],
+				selectData: [],
 				itemgrant:'itemgrant',//appname
 			}
 		},
@@ -599,11 +607,24 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
+			},
+			getSelectData(){
+				this.$axios.get(this.basic_url + '/api-user/users', {
+				}).then((res) => {
+					var resData = res.data.data;
+					for (let i = 0; i < resData.length; i++) {
+						this.selectData.push({
+							id: resData[i].id,
+							fullname:  resData[i].nickname
+						})
+					}
+				}).catch((wrong) => {})
 			}
 		},
 		
 		mounted() {// 在页面挂载前就发起请求
 			this.getKey();
+			this.getSelectData();
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 		},
 	}

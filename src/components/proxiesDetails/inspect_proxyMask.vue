@@ -285,9 +285,10 @@
 												highlight-current-row
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
-												
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+												<el-table-column prop="iconOperation" fixed label="" width="50px" >
+													<span v-show="!viewtitle">
+														<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+													</span>
 												</el-table-column>
 
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
@@ -385,11 +386,11 @@
 												highlight-current-row="highlight-current-row"
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
-												
-												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope"  v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
-												</el-table-column>
-
+													<span v-show="!viewtitle">
+														<el-table-column prop="iconOperation" fixed label="" width="50px" >
+															<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+														</el-table-column>
+													</span>
 
 												<!-- <el-table-column prop="PROXY_CONTRACT_NUM" label="分包协议编号" sortable width="120px">
 													<template slot-scope="scope">
@@ -586,6 +587,8 @@
 									  <el-col :span="8">
 											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
 												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice" disabled></el-input>
+													<el-input id="INSPECTCOST" style="display:none" disabled></el-input>
+													<el-input id="ALLCOST" style="display:none" disabled></el-input>
 											</el-form-item>
 										</el-col>  
 										<el-col :span="8">
@@ -1058,10 +1061,13 @@
 								}else{
 									this.ALLCOST = '0.00元';
 								}
-								var paramData1 = this.INSPECTCOST;
-								var paramData2 = this.ALLCOST;
-								// this.$forceUpdate();
-								this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
+							var paramData1 = this.INSPECTCOST;
+							if(paramData1==undefined){
+                 paramData1='0.00元';
+							}
+							var paramData2 = this.ALLCOST;
+							this.$forceUpdate();
+							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 							} else {
 								sums[index] = ' ';
 							}
@@ -1098,7 +1104,7 @@
 							}
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
-							// this.$forceUpdate();
+							this.$forceUpdate();
 							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
@@ -1650,7 +1656,7 @@
 				this.dataInfo.PRODUCT_UNIT=val[4];//生产单位的信用代码
 				if(val[5]==1){
 					this.dataInfo.PRODUCE_TYPE=1;
-					this.dataInfo.DEPUTE_TYPE=1;//委托单位
+					this.dataInfo.DEPUTE_TYPE=1;
 				}else{
 					this.dataInfo.PRODUCE_TYPE=2;
 					this.dataInfo.DEPUTE_TYPE=2;
@@ -2293,6 +2299,17 @@
 			this.getuser();
 			this.RVENDORSelect();
 		},
+// 		computed:{
+// 			// a(this.INSPECTCOST,this.ALLCOST){
+// 			// 	this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(this.INSPECTCOST.replace(/,/g,'').replace('元','')) + parseFloat(this.ALLCOST.replace(/,/g,'').replace('元','')),2) ;
+// 			// }
+			 
+// 			 'INSPECTCOST': function(){
+// 				 console.log(456789456);
+//               return 	this.dataInfo.CONTRACTCOST=this.number_format(parseFloat(this.INSPECTCOST.replace(/,/g,'').replace('元','')) + parseFloat(this.ALLCOST.replace(/,/g,'').replace('元','')),2)
+// 					},
+//        
+// 		},
 	}
 </script>
 

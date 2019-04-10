@@ -307,11 +307,6 @@
 			},
 			//这是查看
 			view(id) {
-<<<<<<< HEAD
-				// console.log(id);
-				// this.report = data;
-=======
->>>>>>> 786bf73f5f2842802186b05fb1b29d1b8fbb7ad3
 				this.dataid=id;
 				this.addtitle = false;
 				this.modifytitle = false;

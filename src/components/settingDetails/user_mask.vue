@@ -675,7 +675,6 @@
 		methods: {
 			//tabs
 			depthandleClick(tab, event) {
-				console.log(12222);
 				this.requestData();
 				this.getDept();
 				this.getCheckboxData=[];

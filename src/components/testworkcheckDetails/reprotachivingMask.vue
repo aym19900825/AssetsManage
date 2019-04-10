@@ -307,7 +307,7 @@
 			},
 			//这是查看
 			view(id) {
-				console.log(id);
+				// console.log(id);
 				// this.report = data;
 				this.dataid=id;
 				this.addtitle = false;

@@ -29,8 +29,8 @@
 							</button> -->
 							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
 					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
+					    		<!-- <i class="icon-arrow1-down" v-show="down"></i>
+					    		<i class="icon-arrow1-up" v-show="up"></i> -->
 							</button>
 							</div>
 						</div>

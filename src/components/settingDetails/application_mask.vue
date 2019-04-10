@@ -395,6 +395,7 @@
 									this.$emit('reset');
 								}
 								this.visible();
+								this.resetForm();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {

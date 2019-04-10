@@ -293,6 +293,10 @@
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
+				this.noedit = false;//表单内容
+				this.views = false;//录入修改人信息
+				this.noviews = true;//按钮
+				
 				// this.show = true;
 				this.getUser('new');
 			},
@@ -382,7 +386,7 @@
 				$(".mask_div").css("top", "0px");
 			},
 			//提交保存
-			submitForm() {
+			save(parameter) {
 				var _this = this;
 				var url = this.basic_url + '/api-user/groups/saveOrUpdate';
 				this.$refs['dataInfo'].validate((valid) => {
@@ -393,8 +397,15 @@
 									message: '保存成功',
 									type: 'success',
 								});
+								if(parameter=="Update"){
+									this.show = false;
+									this.$emit('request');
+								}else{
+									this.show=true;
+									this.$emit('reset');
+								}
+								this.visible();
 								this.resetForm();
-								this.$emit('request');
 							}else{
 								this.$message({
 									message: res.data.resp_msg,

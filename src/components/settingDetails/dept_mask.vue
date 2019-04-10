@@ -396,8 +396,9 @@
 				this.stopcontent = false;
 				this.stopselect = true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.adddeptForm.updateUser = res.data.nickname;
-	    			var date=new Date();
+	    			this.adddeptForm.updateUser = res.data.id;
+	    			this.adddeptForm.updatebyName = res.data.nickname;
+					var date=new Date();
 					this.adddeptForm.updateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					for(var key in this.adddeptForm){ 
 						this.adddeptForm.hasOwnProperty('_expanded');
@@ -670,7 +671,30 @@
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
-					this.$axios.post(url, _this.adddeptForm).then((res) => {
+					this.$axios.post(url, {
+						address: this.adddeptForm.address,
+						children: this.adddeptForm.children,
+						code: this.adddeptForm.code,
+						createTime: this.adddeptForm.createTime,
+						createUser: this.adddeptForm.createUser,
+						createbyName: this.adddeptForm.createbyName,
+						del_flag: this.adddeptForm.del_flag,
+						depttype: this.adddeptForm.depttype,
+						depttypeName: this.adddeptForm.depttypeName,
+						email: this.adddeptForm.email,
+
+						fullname: this.adddeptForm.fullname,
+						id: this.adddeptForm.id,
+						leaderName: this.adddeptForm.leaderName,
+						pName: this.adddeptForm.pName,
+						status: this.adddeptForm.status,
+						telephone: this.adddeptForm.telephone,
+						type: this.adddeptForm.type,
+						typeName: this.adddeptForm.typeName,
+						updateTime: this.adddeptForm.updateTime,
+						updateUser: this.adddeptForm.updateUser,
+						updatebyName:this.adddeptForm.updatebyName,
+					}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({

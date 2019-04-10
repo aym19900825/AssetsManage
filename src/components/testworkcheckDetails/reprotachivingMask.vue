@@ -240,6 +240,7 @@
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
+					
 				}).catch((err) => {
 				});
 				this.addtitle = true;
@@ -255,7 +256,6 @@
 				this.statusshow2 = false;
 				this.show = true;
 			},
-
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
@@ -284,7 +284,7 @@
 					setTimeout(function(){
 						_this.docParm.model = 'edit';
 						_this.docParm.appname = '报告归档/检测标准';
-						_this.docParm.recordid = _this.report.id;
+						_this.docParm.recordid = dataid;
 						_this.docParm.appid = 91;
 						_this.$refs.docTable.getData();
 					},100);
@@ -307,8 +307,6 @@
 			},
 			//这是查看
 			view(id) {
-				console.log(id);
-				// this.report = data;
 				this.dataid=id;
 				this.addtitle = false;
 				this.modifytitle = false;
@@ -318,36 +316,22 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				this.show = true;
-				//判断启动流程和审批的按钮是否显示
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					var _this = this;
+					setTimeout(function(){
+						_this.docParm.model = 'view';
+						_this.docParm.appname = '报告归档/检测标准';
+						_this.docParm.recordid = id;
+						_this.docParm.appid = 91;
+						_this.$refs.docTable.getData();
+					},100);
+				}).catch((err) => {
+                });
 				this.detailgetData();
-				// var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isStart/'+this.dataid;
-				// this.$axios.get(url, {}).then((res) => {
-				// 	 
-				// 	if(res.data.resp_code==1){
-				// 		this.start=true;
-				// 		this.approval=false;
-				// 	}else{
-				// 		var url = this.basic_url + '/api-apps/app/reportOnhole/flow/Executors/'+this.dataid;
-				// 		console.log(url);
-				// 		this.$axios.get(url, {}).then((res) => {
-				// 			// console.log(res.data.datas);
-				// 			res.data.CJDW = Number(res.data.CJDW);
-				// 			var resullt=res.data.datas;
-				// 			var users='';
-				// 			for(var i=0;i<resullt.length;i++){
-				// 				users = users + resullt[i].username+",";
-				// 				// console.log("users----"+users);
-				// 			}
-				// 			if(users.indexOf(this.username) != -1){
-				// 				this.approval=true;
-				// 				this.start=false;
-				// 			}else{
-				// 				this.approval=false;
-				// 				this.start=false;
-				// 			}
-				// 		});
-				// 	}
-				// });				
 			},
 			//点击关闭按钮
 			close() {
@@ -495,7 +479,7 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-	                    this.username = res.data.username;
+	                this.username = res.data.username;
 	            }).catch((err) => {
 	            });
         	},

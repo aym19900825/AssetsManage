@@ -20,7 +20,7 @@
 							<el-col :span="20">
 								<el-form inline-message :model="reportTemplate" ref="reportTemplate" :rules="rules" label-position="right">
 									<el-form-item label="请先选择报告模板" prop="RE_TYPE" label-width="160px">
-										<el-select clearable v-model="reportTemplate.RE_TYPE" placeholder="请选择" :disabled="noedit" style="width:500px;">
+										<el-select clearable v-model="reportTemplate.RE_TYPE" placeholder="请选择" @change="requestData" :disabled="noedit" style="width:500px;">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.RE_NUM" :label="data.DECRIPTION"></el-option>
 										</el-select>
 									</el-form-item>
@@ -65,10 +65,7 @@
 												</el-radio-group>
 
 												<el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
-													<el-option v-for="item in assets"
-													:key="item.ID"
-													:label="item.value"
-													:value="item.value">
+													<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
 													</el-option>
 												</el-select>
 											</el-form-item>
@@ -261,7 +258,7 @@
 				selectData: [],
 				selectReportData: [],
 				reportTemplate:{
-					RE_TYPE: '1027',
+					RE_TYPE: '1010',
 				},
 				reportGenerateForm:{
 					WORKORDER_PROJECTList:[],//检测项目
@@ -343,24 +340,27 @@
 				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
-					// console.log(res.data.data);
+					console.log(res.data.data[0].RE_NUM);
+					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
+					this.requestData();
+					// this.templatefileid = res.data.data[0].RE_NUM;
+					// this.templatefileid = 1010;
 					// this.templatefileid = res.data.data[0].ID;
-					this.templatefileid = 4;
 				});
 			},
 			//报告模板整体数据列表
 			requestData(){
-				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.templatefileid +'/'+this.detailId;
+				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					
-					console.log(res);
+					console.log(this.reportTemplate.RE_TYPE);
 				}).catch((wrong) => {});
 			},
 			//清空表单
 			reset(){
-					this.reportGenerateForm = {
+				this.reportGenerateForm = {
 										
 				};
 			},
@@ -386,6 +386,7 @@
 				// this.detailId = id;
 				this.detailId = id;
 				this.requestData();
+				console.log(this.detailId);
 			},
 			sizeChange(val) {//分页，总页数
 		      this.page.pageSize = val;
@@ -394,7 +395,7 @@
 		    currentChange(val) {//分页，当前页
 		      this.page.currentPage = val;
 		      this.requestData();
-				},
+			},
 			
 			
 			// 首页按钮事件保存users/saveOrUpdate

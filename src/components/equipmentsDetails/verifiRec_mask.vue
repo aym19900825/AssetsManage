@@ -55,7 +55,7 @@
 								</el-collapse-item>
 								<!-- 文件管理 -->
 								<el-collapse-item title="文件" name="2">
-									<doc-table ref="docTable" :docParm = "docParm"  @saveParent = "save"></doc-table>
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
 								<!-- 其他信息 -->
 								<el-collapse-item title="其他" name="3" v-show="!addtitle">

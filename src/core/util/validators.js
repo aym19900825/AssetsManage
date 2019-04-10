@@ -32,17 +32,6 @@ const validators = {
 		return letterNumber.test(str);
 	},
 
-	SpecificWord:function (str) {// 特殊字符
-		if( str!=null||str != undefined){
-		var specialKey = "[`~!#^&*()=|{}':;'\\[\\]<>?~！#……&*{}‘']‘'"; 
-			for (var i = 0; i < str.length; i++) {
-				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
-					return false;
-				}
-			}
-		}
-		return true;
-	},
 
 	LowerCase:function (str) {/* 小写字母*/
 		const reg = /^[a-z]+$/;
@@ -60,9 +49,30 @@ const validators = {
 		return true;
 	},
 
+
+	SpecificWord:function (str) {// 特殊字符
+		if( str!=null||str != undefined){
+			var specialKey = "[`~!#^&*()=|{}':;'\\[\\]<>?~！#……&*{}‘']‘'"; 
+			for (var i = 0; i < str.length; i++) {
+				if (specialKey.indexOf(str.substr(i, 1)) != -1) {
+					return false;
+				}
+			}
+		}
+		return true;
+	},
+
 	Mandarin:function (str) {/* 仅限中文*/
-		const mandarins = /^[\u4e00-\u9fa5]{0,}$/;
-		return mandarins.test(str);
+		if( str!=null||str != undefined){
+			var mandarins = /^[\u4e00-\u9fa5]{0,}$/;
+			for (var i = 0; i < str.length; i++) {
+				if (mandarins.indexOf(str.substr(i, 1)) != -1) {
+					return false;
+				}
+			}
+			// return mandarins.test(str);
+		}
+		return true;
 	},
 
 	Englishs:function (str) {/* 仅限英文*/
@@ -338,7 +348,7 @@ const validators = {
 		}
 		setTimeout(() => {
 			if (!Number(value)) {
-				callback(new Error('请输入正整数'));
+				callback(new Error('请输入数字'));
 			} else {
 				const re = /^[0-9]*[1-9][0-9]*$/;
 				const rsCheck = re.test(value);
@@ -440,7 +450,11 @@ const validators = {
 					if(!validators.SpecificWord(value)) {
 						callback(new Error('不支持特殊符号'));
 					} else {
-						callback();
+						if(!validators.Mandarin(value)) {
+							callback(new Error('不支持中文'));
+						} else {
+							callback();
+						}
 					}
 				}
 			}, 500);

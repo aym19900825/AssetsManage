@@ -255,6 +255,7 @@
 			changeState(data){
 				data.isEditing = !data.isEditing;
 			},
+
 			//新建按钮用户组行弹出框
 			// addKWord(){
 			// 	this.dataInfo.userList.push({
@@ -280,6 +281,7 @@
 				}).catch((err) => {
 				});
 			},
+
 			//获取当前时间
 			getToday(){
 				var date = new Date();
@@ -350,7 +352,7 @@
 					"del_flag":'',
 					"userList": []
 				};
-				this.show = false;
+				// this.show = false;
 			},
 			//获取当前组信息
 			getData(id){
@@ -389,9 +391,9 @@
 			save(parameter) {
 				var _this = this;
 				var url = this.basic_url + '/api-user/groups/saveOrUpdate';
-				this.$refs['dataInfo'].validate((valid) => {
+				this.$refs.dataInfo.validate((valid) => {
 					if (valid) {
-						this.$axios.post(url, _this.dataInfo).then((res) => {
+						this.$axios.post(url, this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '保存成功',
@@ -402,11 +404,12 @@
 									this.$emit('request');
 								}else{
 									this.show=true;
-									this.$emit('reset');
+									this.resetForm();
 								}
-								this.visible();
-								this.resetForm();
+								// this.visible();
+								// this.resetForm();
 							}else{
+								this.show = true;
 								this.$message({
 									message: res.data.resp_msg,
 									type: 'error',

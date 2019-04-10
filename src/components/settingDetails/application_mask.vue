@@ -62,11 +62,6 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="排序" prop="sort">
-												<el-input v-model="dataInfo.sort" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
 											<el-form-item label="流程" prop="flowkey">
 												<el-input v-model="dataInfo.flowkey" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -99,7 +94,13 @@
 													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>-->
-										</el-col>	
+										</el-col>
+										
+										<el-col :span="8">
+											<el-form-item label="排序" prop="sort">
+												<el-input v-model="dataInfo.sort" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
 									<!-- <el-row>
 										<el-col :span="8" v-if="dept">
@@ -180,12 +181,32 @@
 				statusshow1:true,
 				statusshow2:false,
 				rules: {
-					code: [{required: true, message: '请填写', trigger: 'blur' }],//应用英文名称
+					//应用英文名称
+					code: [
+						{required: true, message: '请填写', trigger: 'blur'},
+						{trigger: 'blur', validator: this.Validators.isEnglish}
+					],
+					//数据库表
+					object_id: [
+						{required: true, message: '请填写', trigger: 'blur'},
+						{trigger: 'blur', validator: this.Validators.isEnglish}
+					],
+					//应用名称
 					name: [
-						{required: true, message: '请填写', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
-					],//应用名称
-					handleclass: [{required: true, message: '请填写', trigger: 'blur' }],//处理类
+						{required: true, message: '请填写', trigger: 'blur'},
+						{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					//处理类
+					handleclass: [{required: true, message: '请填写', trigger: 'blur'}],
+					//排序
+					sort: [
+						{required: false, trigger: 'blur', validator: this.Validators.isInteger},
+					],
+					//应用描述
+					description: [
+						{required: true, message: '请填写', trigger: 'blur',},
+					],
+					
 				},
 				dataInfo:{
 					
@@ -395,7 +416,7 @@
 									this.$emit('reset');
 								}
 								this.visible();
-								this.resetForm();
+								// this.resetForm();
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {

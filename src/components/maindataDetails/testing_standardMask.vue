@@ -161,6 +161,7 @@
 						SS_NUM: '',
 						S_NAME: '',
 						S_ENGNAME: '',
+						ISUSESTATE: '0',//使用状态，默认0为使用，1为停用
 						RELEASETIME: '',
 						STARTETIME: '',
 						STOPTIME: '',
@@ -562,9 +563,8 @@
 			// 保存users/saveOrUpdate
 			save(opt) {
 				this.$refs['dataInfo'].validate((valid) => {
-					this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.STOPTIME = this.$moment(this.dataInfo.STOPTIME).format("YYYY-MM-DD HH:mm:ss");
+					// this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
+					// this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					if(!valid && opt == 'docUpload'){
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',
@@ -606,20 +606,19 @@
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复添加！',
-											type: 'warning'
-										});
-									}
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'warning'
+									});
+								}else{
+									this.$message({
+										message:'相同数据不可重复添加！',
+										type: 'warning'
+									});
 								}
 							}						
 						}).catch((err) => {
+
 						});
 						}
 			        } else {

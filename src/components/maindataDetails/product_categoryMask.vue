@@ -96,7 +96,7 @@
 				</div>
 			</div>
 			<!-- 弹出 -->
-			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="产品分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 				</el-tree>
 				<span slot="footer">

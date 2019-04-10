@@ -1421,12 +1421,8 @@
 				}
 				for(var i = 0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
 					this.pronums.push(this.workorderForm.WORKORDER_PROJECTList[i].P_NUM);
-					console.log(2323);
-					console.log(this.pronums);
 				}
 				this.workorderForm.PROJ_NUM = this.pronums.toString(',');
-				console.log(111222);
-				console.log(this.workorderForm.PROJ_NUM);
 			},
 			 //模版编号
 			templateNumber(item){

@@ -286,7 +286,9 @@
 												:default-sort="{prop:'dataInfo.INSPECT_PROXY_PROJECList', order: 'descending'}">
 
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+														<span v-show="!viewtitle">
+															<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+														</span>
 												</el-table-column>
 
 												<el-table-column prop="P_NUM" label="检测项目编号" sortable width="120px">
@@ -385,7 +387,9 @@
 												style="width: 100%;" @cell-click="iconOperation"
 												:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 												<el-table-column prop="iconOperation" fixed label="" width="50px">
-													<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check"  v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+													<span v-show="!viewtitle">
+														<template slot-scope="scope" v-if="!viewtitle"><i class="el-icon-check"  v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+													</span>
 												</el-table-column>
 
 
@@ -1056,6 +1060,9 @@
 									this.ALLCOST = '0.00元';
 								}
 								var paramData1 = this.INSPECTCOST;
+								if(paramData1==undefined){
+                 paramData1='0.00元';
+								}
 								var paramData2 = this.ALLCOST;
 								this.$forceUpdate();
 								this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
@@ -1093,8 +1100,6 @@
 							}else{
 								this.INSPECTCOST = '0.00元';
 							}
-							 console.log(this.INSPECTCOST);
-							 console.log(this.ALLCOST);
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
 							this.$forceUpdate();
@@ -1552,7 +1557,6 @@
 			},
 			//这是查看
 			view(dataid) {
-				console.log(12345);
 				this.dataid=dataid;				
 				this.modifytitle = false;
 				this.addtitle = false;

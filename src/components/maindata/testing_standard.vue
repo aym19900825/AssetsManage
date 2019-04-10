@@ -342,6 +342,7 @@
 					SS_NUM: '',
 					S_NAME: '',
 					S_ENGNAME: '',
+					ISUSESTATE: '0',
 					RELEASETIME: '',
 					STARTETIME: '',
 					RELEASE_UNIT:'',

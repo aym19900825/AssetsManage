@@ -1791,6 +1791,7 @@
 							PRO_NUM:this.dataInfo.PRO_NUM,
 							S_NUM:basisnums,
 						}
+						console.log(data);
 						this.$refs.standardchild.basislead(data);
 						this.main = 'main';
 					}

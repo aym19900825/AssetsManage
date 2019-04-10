@@ -66,13 +66,13 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="启用时间" prop="STARTETIME">
-												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%" :disabled="noedit">
+												<el-date-picker v-model="dataInfo.STARTETIME" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width:100%" :disabled="noedit" :picker-options="pickerOptions1" >
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="停用时间" prop="STOPTIME">
-												<el-date-picker v-model="dataInfo.STOPTIME" type="date" placeholder="永久" value-format="yyyy-MM-dd" style="width:100%" :disabled="noedit">
+												<el-date-picker v-model="dataInfo.STOPTIME" type="date" value-format="yyyy-MM-dd" style="width:100%" :disabled="noedit" :picker-options="pickerOptions2">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
@@ -182,47 +182,36 @@
 		},
 		components: {docTable},
 		data() {
-			var validateName = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请英文填写表名'));
-				} else {
-					callback();
-				}
-			};
-			var validateDecri = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写描述'));
-				} else {
-					if((/^[!@#$%^&*:";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
-			var validateSname = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写标准名称'));
-				} else {
-					if((/^[!@#$%^&*:";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写标准名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
-			var validateEname = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写标准名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写标准名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
 			return {
+				pickerOptions1: {
+					disabledDate: (time) => {
+						if(!!this.dataInfo.RELEASETIME){
+							return time.getTime() < new Date(this.dataInfo.RELEASETIME).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
+						}else{
+							this.dataInfo.STARTETIME='';
+							this.$message({
+								message: '请先选发布时间',
+								type: 'warning'
+							});
+
+						}
+						
+					}
+				},
+				pickerOptions2: {
+					disabledDate: (time) => {
+					if(!!this.dataInfo.STARTETIME){
+							return time.getTime() < new Date(this.dataInfo.STARTETIME).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
+						}else if(this.dataInfo.RELEASETIME==''||this.dataInfo.STARTETIME==''){
+							this.dataInfo.STOPTIME='';
+							this.$message({
+								message: '请先选启用时间',
+								type: 'warning'
+							});
+
+						}
+					}	
+				},
 				loading: false,
 				editDataInfo: '',
 				editDataInfoProp: '',
@@ -639,7 +628,7 @@
 				console.log('取消关闭');
 				$('.v-modal').hide();
 			});
-			}
+			},
 		}
 	}
 </script>

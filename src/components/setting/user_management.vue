@@ -603,6 +603,9 @@
 			var checkProductType=[];
 			var deptIds=[];
 			var checkDeptIds=[];
+      var mtype=[];
+			var mchecktype=[];
+
 			var work=this.$refs.work.getCheckedNodes();
 			var annual=this.$refs.annual.getCheckedNodes();
 			var products=this.$refs.product.getCheckedNodes();
@@ -617,28 +620,42 @@
 					  taskType.push(annual[b].id); 
 				}
 			}
-			for(var c=0;c<products.length;c++){
-				if(products[c].type!="dept"&&products[c].type!="producttype"){
-					if(!!products[c].id){
-						product.push(products[c].id); 
-					}
-				}else if(products[c].type!="dept"&&products[c].type!="product"){
-					  productType.push(products[c].id);
-				}else if(products[c].type="dept"){
-						deptIds.push(products[c].id)
-				}	
+       for(var c=0;c<products.length;c++){
+						if(products[c].type=="dept"){
+								deptIds.push(products[c].id);
+						}
+						if(products[c].type=="product"){
+								product.push(products[c].id);
+						}
+
+					if(products[c].type=="producttype"){
+								productType.push(products[c].id);
+						}
+
+					if(products[c].type=="menu"){
+								mtype.push(products[c].id);
+						}
 			}
-			for(var c=0;c<testingproduct.length;c++){
-				if(testingproduct[c].type!="dept"&&testingproduct[c].type!="producttype"){
-					if(!!testingproduct[c].id){
-						checkProduct.push(testingproduct[c].id);
-					}
-				}else if(testingproduct[c].type!="dept"&&testingproduct[c].type!="product"){
-					  checkProductType.push(testingproduct[c].id);
-				}else if(testingproduct[c].type="dept"){
-						checkDeptIds.push(testingproduct[c].id)
-				}	
+
+
+   for(var c=0;c<testingproduct.length;c++){
+						if(testingproduct[c].type=="dept"){
+								checkDeptIds.push(testingproduct[c].id);
+						}
+						if(testingproduct[c].type=="product"){
+								checkProduct.push(testingproduct[c].id);
+						}
+
+					if(testingproduct[c].type=="producttype"){
+								checkProductType.push(testingproduct[c].id);
+						}
+
+					if(testingproduct[c].type=="menu"){
+								mchecktype.push(testingproduct[c].id);
+						}
 			}
+
+			
 			pmType = pmType.join(',');
 			taskType = taskType.join(',');
 			product = product.join(',');
@@ -647,18 +664,9 @@
 			checkProductType = checkProductType.join(',');
 			deptIds=deptIds.join(',');
 			checkDeptIds=checkDeptIds.join(',');
- 				var data = {
- 					pmType:pmType,
-					taskType:taskType,
-					productType:productType,
-					product:product,
-					checkProduct:checkProduct,
-					checkProductType:checkProductType,
-					deptIds:deptIds,
-					checkDeptIds:checkDeptIds,
-					userId:this.selUser[0].id
-				}
-				console.log(data);
+			mtype=mtype.join(',');
+      mchecktype=mchecktype.join(',');
+ 			
 				var url = this.basic_url + '/api-user/users/setAuth';
 				this.$axios.post(url, {pmType:pmType,
 					taskType:taskType,
@@ -668,6 +676,8 @@
 					checkProductType:checkProductType,
 					deptIds:deptIds,
 					checkDeptIds:checkDeptIds,
+					mtype:mtype,
+          mchecktype:mchecktype,
 					userId:this.selUser[0].id}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

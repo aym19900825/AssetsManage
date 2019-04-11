@@ -21,13 +21,6 @@
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
-									<!-- <el-row :gutter="20" class="pb10">
-										<el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
-												<template slot="prepend">设备编号</template>
-											</el-input>
-										</el-col>
-									</el-row> -->
 									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='inputSelect'" disabled>
@@ -36,9 +29,6 @@
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
 										</el-date-picker>
-										<!-- <el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
-										</el-radio-group> -->
 										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
@@ -46,24 +36,21 @@
 								</el-collapse-item>
 
 								 <el-collapse-item title="其他" name="5">
-									<el-tabs tab-position="top">
-                                        <el-tab-pane label="作业计划任务">
-                                            <task ref="task"></task>
+									<el-tabs tab-position="top"  @tab-click="tabClick">
+                                        <el-tab-pane label="计划">
+                                            <plan ref="plan"></plan>
                                         </el-tab-pane>
-                                        <el-tab-pane label="人工">
-                                            <labor ref="labor"></labor>
+                                        <el-tab-pane label="任务分配">
+                                            <taskAssign ref="taskAssign"></taskAssign>
                                         </el-tab-pane>
-                                        <el-tab-pane label="物料">
-                                            <materials ref="materials"></materials>
+                                        <el-tab-pane label="实际情况">
+                                           <actual ref="actual"></actual>
                                         </el-tab-pane>
-                                        <el-tab-pane label="服务">
-                                            <service ref="service"></service>
+                                        <el-tab-pane label="日志">
+                                            <log ref="log"></log>
                                         </el-tab-pane>
-                                        <el-tab-pane label="工具">
-                                            <tool ref="tool"></tool>
-                                        </el-tab-pane>
-                                        <el-tab-pane label="工作资产">
-                                            <workAsset ref="workAsset"></workAsset>
+                                        <el-tab-pane label="故障分析">
+                                            <analysis ref="analysis"></analysis>
                                         </el-tab-pane>
                                     </el-tabs>
 								</el-collapse-item>
@@ -85,102 +72,205 @@
 
 <script>
 	import Config from '../../config.js'
-	import labor from './labor.vue'
-	import materials from './materials.vue'
-	import service from './service.vue'
-	import task from './task.vue'
-	import tool from './tool.vue'
-	import workAsset from './workAsset.vue'
+	import plan from './plan.vue'
+	import taskAssign from './taskAssign.vue'
+	import actual from './plan.vue'
+	import log from './log.vue'
+	import analysis from './analysis.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
 		components: {
-			labor,
-			materials,
-			service,
-			task,
-            tool,
-            workAsset
+			plan,
+			taskAssign,
+			actual,
+			log,
+            analysis
 		},
 		data() {
 			return {
                 //页面渲染字段
 				basicInfo: [
 					{
-                        label: '作业计划',
-                        prop: 'TYPE',
+                        label: '工单编号',
+                        prop: 'param1',
                         width: '30%',
                         type: 'input',						
                         displayType: 'inline-block'
                     },
                     {
-                        label: '摘要',
-                        prop: 'DESCRIPTION',
+                        label: '工单描述',
+                        prop: 'param2',
                         width: '30%',
                         type: 'input',
                         displayType: 'inline-block'
                     },
                     {
-                        label: '状态',
-                        prop: 'MODEL',
+                        label: '工单类型',
+                        prop: 'param3',
+                        width: '30%',
+                        type: 'select',
+                        displayType: 'inline-block'
+                    },
+                    {
+                        label: '资产编码',
+                        prop: 'param4',
+                        width: '30%',
+                        type: 'inputSelect',
+                        displayType: 'inline-block'
+                    },
+                    {
+                        label: '资产名称',
+                        prop: 'param5',
                         width: '30%',
                         type: 'input',
                         displayType: 'inline-block'
                     },
                     {
                         label: '位置',
-                        prop: 'CONFIG_UNITDes',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '主管人',
-                        prop: 'ACCEPT_DATE',
+                        prop: 'param6',
                         width: '30%',
                         type: 'inputSelect',
                         displayType: 'inline-block'
                     },
                     {
                         label: '组织',
-                        prop: 'ASSET_KPI',
+                        prop: 'param7',
                         width: '30%',
                         type: 'input',
                         displayType: 'inline-block'
                     },
                     {
-                        label: '分类',
-                        prop: 'SUPPORT_ASSET',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '负责人',
-                        prop: 'VENDOR',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
                         label: '地点',
-                        prop: 'FACTOR_NUM',
+                        prop: 'param8',
                         width: '30%',
                         type: 'inputSelect',
                         displayType: 'inline-block'
-                    }
+                    },
+                    {
+                        label: '资产分类',
+                        prop: 'param9',
+                        width: '30%',
+                        type: 'input',
+                        displayType: 'inline-block'
+                    },
+					{
+						label: '备注',
+						prop: 'param10',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '作业计划',
+						prop: 'param11',
+						width: '30%',
+						type: 'inputSelect',
+						displayType: 'inline-block'
+					},
+					{
+						label: 'PM',
+						prop: 'param12',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '优先级',
+						prop: 'param13',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '优先级理由',
+						prop: 'param14',
+						width: '70%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '计划开始时间',
+						prop: 'param15',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
+						label: '实际开始时间',
+						prop: 'param16',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
+						label: '计划完成时间',
+						prop: 'param17',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
+						label: '实际完成时间',
+						prop: 'param18',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
+						label: '持续时间(小时)',
+						prop: 'param19',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '剩余时间(小时)',
+						prop: 'param20',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '代表',
+						prop: 'param21',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '主管人',
+						prop: 'param22',
+						width: '30%',
+						type: 'inputSelect',
+						displayType: 'inline-block'
+					},
+					{
+						label: '供应商',
+						prop: 'param23',
+						width: '30%',
+						type: 'inputSelect',
+						displayType: 'inline-block'
+					},
+					{
+						label: '电话',
+						prop: 'param24',
+						width: '30%',
+						type: 'input',
+						displayType: 'inline-block'
+					},
+					{
+						label: '负责人',
+						prop: 'param25',
+						width: '30%',
+						type: 'inputSelect',
+						displayType: 'inline-block'
+					},
 				],
 				keeperInfo: [
 					{
 						label: '设备保管人',
 						prop: 'KEEPERDesc',
-						width: '50%',
-						type: 'input',
-						displayType: 'inline-block'
-					},
-					{
-						label: '备注',
-						prop: 'MEMO',
 						width: '50%',
 						type: 'input',
 						displayType: 'inline-block'
@@ -229,52 +319,45 @@
 				activeNames: ['1', '2','3','4','5'], //手风琴数量
 				// dialogVisible: false, //对话框
 				dataInfo: {
-					'ID': '',  //主键ID，必填但页面没有字段
-					'ASSETNUM': '',
-					'DESCRIPTION': '',
-					'CONFIG_UNIT': '',
-					'INS_SITE': '',
-					'SUPPORT_ASSET': '',
-					'VENDOR': '',
-					'SUPPLIER': '',	
-					'MODEL': '',
-					'FACTOR_NUM': '',
-					'ASSET_KPI': '',
-					'STATE': '',    //设备状态，必填但页面没有字段
-					'OPTION_STATUS': '',   
-					'TYPE': '', 
-					'ACCEPT_NUM': '',
-					'ISMETER': '',
-					'ISPM': '',
-					'STATUSDATE': '',
-					'KEEPER': '',
-					'KEEPERDesc': '',
-					'ACCEPT_DATE': '',
-					'S_DATE': '',   
-					'C_ADDRESS': '',  
-					'A_STATUS': '',
-					'A_PRICE': '',
-					'MODE': '',
-					'MODE1': '',
-					'CHANGEBY': '',	
-					'CHANGEDATE': '',	
-					'ENTERBY': '',
-					'ENTERDATE': '',	
-					'DEPTID': '',	
-					'MEMO': '',	
-					'STATUS': '1',
-					'SYNCHRONIZATION_TIME': '',
+					param1: '',
+					param2: '',
+					param3: '',
+					param4: '',
+					param5: '',
+					param6: '',
+					param7: '',
+					param8: '',
+					param9: '',
+					param10: '',
+					param11: '',
+					param12: '',
+					param13: '',
+					param14: '',
+					param15: '',
+					param16: '',
+					param17: '',
+					param18: '',
+					param19: '',
+					param20: '',
+					param21: '',
+					param22: '',
+					param23: '',
+					param24: '',
+					param25: ''
 				},
-                pagemode: 'new'
+				pagemode: 'new',
+				selectData: [],
 			};
 		},
 		methods: {
+			tabClick(tab, event) {
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
             addPage(){
-                this.show = true;
+				this.show = true;
             },
             maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;

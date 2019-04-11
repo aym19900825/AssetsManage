@@ -11,7 +11,7 @@
                         <button  class="btn mr5 btn-blue" @click="modify">
                             <i class="icon-edit"></i>修改
                         </button>
-                        <button  class="btn mr5  btn-red">
+                        <button  class="btn mr5 btn-red">
                             <i class="icon-trash"></i>删除
                         </button>
                     </div>
@@ -45,7 +45,7 @@
 	import detail from './detail.vue'
 	import vTable from '@/components/plugin/table/table.vue'
 	export default {
-		name: 'instruments',
+		name: 'workOrder',
 		components: {
 			'detail': detail,
 			'tableControle': tableControle,
@@ -65,18 +65,48 @@
 			        OPTION_STATUS: ''
 		        },
 				checkedName: [
-					'作业计划',
-					'摘要',
-					'持续时间(小时)',
-					'主管人',
-					'状态',
+					'工单编号',
+					'资产编码',
+					'资产名称',
+					'规格型号',
+					'生产厂家',
+					'井号',
+					'位置',
+					'工单类型',
 				],
 				tableHeader: [
-					{ label: '作业计划', prop: 'param1' },
-					{ label: '摘要', prop: 'param2' },
-					{ label: '持续时间(小时)', prop: 'param3' },
-					{ label: '主管人', prop: 'param4' },
-					{ label: '状态', prop: 'param5' }
+					{
+						label: '工单编号',
+						prop: 'param1'
+					},
+					{
+						label: '资产编码',
+						prop: 'param2'
+					},
+					{
+						label: '资产名称',
+						prop: 'param3'
+					},
+					{
+						label: '规格型号',
+						prop: 'param4'
+					},
+					{
+						label: '生产厂家',
+						prop: 'param5'
+					},
+					{
+						label: '井号',
+						prop: 'param6'
+					},
+					{
+						label: '位置',
+						prop: 'param7'
+					},
+					{
+						label: '工单类型',
+						prop: 'param8'
+					}
                 ],
                 selData: []
             }

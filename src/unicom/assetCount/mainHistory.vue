@@ -12,59 +12,67 @@
 				</el-form-item>
 			</div>
 			<h3 class="tit">维修信息</h3>
-			<el-table :data="list" border stripe :fit="true" max-height="260" style="width: 100%;">
-				<el-table-column label="工单编号" prop="param1" sortable width="260px">
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param1" placeholder="请输入">	
-						</el-input>
-					</template>
-				</el-table-column>
+			<div  style="position: relative;">
+				<div style="position: absolute; top:-35px; right:40px;">
+					<el-button type="success" size="mini" round>
+						<i class="icon-add"></i>
+						<font>新建行</font>
+					</el-button>
+				</div>
+				<el-table :data="list" border stripe :fit="true" max-height="260" style="width: 100%;">
+					<el-table-column label="工单编号" prop="param1" sortable width="260px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param1" placeholder="请输入">	
+							</el-input>
+						</template>
+					</el-table-column>
 
-				<el-table-column prop="param2" label="作业计划" sortable width="240px">
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param2" placeholder="请输入">	
-						</el-input>
-					</template>
-				</el-table-column>
-				<el-table-column prop="param3" label="维修类型" sortable width="240px">
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param3" placeholder="请输入">	
-						</el-input>
-					</template>
-				</el-table-column>
+					<el-table-column prop="param2" label="作业计划" sortable width="240px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param2" placeholder="请输入">	
+							</el-input>
+						</template>
+					</el-table-column>
+					<el-table-column prop="param3" label="维修类型" sortable width="240px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param3" placeholder="请输入">	
+							</el-input>
+						</template>
+					</el-table-column>
 
-				<el-table-column prop="param4" label="开始时间" sortable  width="200px">
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param4" placeholder="请输入"></el-input>
-					</template>
-				</el-table-column>
+					<el-table-column prop="param4" label="开始时间" sortable  width="200px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param4" placeholder="请输入"></el-input>
+						</template>
+					</el-table-column>
 
-				<el-table-column prop="param5" label="完成时间" sortable  width="200px">
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param5" placeholder="请输入"></el-input>
-					</template>
-				</el-table-column>
+					<el-table-column prop="param5" label="完成时间" sortable  width="200px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param5" placeholder="请输入"></el-input>
+						</template>
+					</el-table-column>
 
-				<el-table-column prop="param6" label="创建人" sortable width="100px">
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param6" placeholder="请输入"></el-input>
-					</template>
-				</el-table-column>
+					<el-table-column prop="param6" label="创建人" sortable width="100px">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param6" placeholder="请输入"></el-input>
+						</template>
+					</el-table-column>
 
-				<el-table-column prop="param7" label="创建时间" sortable>
-					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.param7" placeholder="请输入"></el-input>
-					</template>
-				</el-table-column>
+					<el-table-column prop="param7" label="创建时间" sortable>
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.param7" placeholder="请输入"></el-input>
+						</template>
+					</el-table-column>
 
-				<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-					<template slot-scope="scope">
-							<el-button title="删除" type="text" size="small">
-							<i class="icon-trash red"></i>
-						</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
+					<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+						<template slot-scope="scope">
+								<el-button title="删除" type="text" size="small">
+								<i class="icon-trash red"></i>
+							</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+			</div>
 		</el-form>
 	</div>
 </template>

@@ -1,5 +1,11 @@
 <template>
-	<div>
+	<div style="position: relative;">
+		<div style="position: absolute; top:-50px; right:40px;">
+			<el-button type="success" size="mini" round>
+				<i class="icon-add"></i>
+				<font>新建行</font>
+			</el-button>
+		</div>
 		<el-table :data="list" border stripe :fit="true" max-height="260" style="width: 100%;">
 			<el-table-column label="物资编码" prop="S_NAME" sortable width="260px">
 				<template slot-scope="scope">

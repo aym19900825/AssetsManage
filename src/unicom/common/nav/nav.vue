@@ -25,7 +25,7 @@
                     </router-link>
                 </li>
                 <li>
-                    <router-link :to="{path:'/unicom/assetCount'}">
+                    <router-link :to="{path:'/unicom/workOrder'}">
                         <i class="icon-file-text"></i>
                         <span class="nav-label">工单</span>
                     </router-link>

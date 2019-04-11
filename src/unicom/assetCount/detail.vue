@@ -20,7 +20,7 @@
 						<div class="content-accordion">
 							<!-- 设备基本信息 -->
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="设备基本信息" name="1">
+								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
 										<el-col :span="5" class="pull-right">
 											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">

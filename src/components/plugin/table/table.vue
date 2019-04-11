@@ -151,86 +151,93 @@ export default {
       this.requestData();
     },
     requestData(opt){
-      this.loadding = true;
-      var data ={};
-      if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){
-        if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
-					data.DEPTID = this.searchList.DEPTID;
-				};
+      		
+      if(this.appName == 'asset'){
+        this.list = [{ 
+          param1: '120114010001',
+          param2: '010101010001',
+          param3: '涡街流量计水表',
+          param4: 'LSU-99A-T',
+          param5: '145694',
+          param6: '',
+          param7: '百口泉采油厂-百21采油作业区-2号采油站-1050A水井',
+          param8: '杨鑫',
+          param9: '',
+          param10: '',
+          param11: '丁晓娟',
+          param12: '2017-02-07',
+          param13: '启用' 
+        },{
+          param1: '022500000053',
+          param2: '双容积计量分离装',
+          param3: 'XDY-1.6-25-50-Z-F',
+          param4: '',
+          param5: '',
+          param6: '风城-乌尔禾-33#区',
+          param7: '王凯',
+          param8: '浙江金龙自控设备有限公司',
+          param9: '',
+          param10: '',
+          param11: '',
+          param12: '2016-12-19',
+          param13: '停用' 
+        },{
+          param1: '022500000052',
+          param2: '双容积计量分离装置',
+          param3: 'XT6-LES16-0.8-IIB',
+          param4: '',
+          param5: '',
+          param6: '风城-乌尔禾-36#区',
+          param7: '王凯',
+          param8: '新疆石油勘察设计研究院（有限公司）',
+          param9: '',
+          param10: '',
+          param11: '',
+          param12: '2016-12-19',
+          param13: '活动' 
+        }];
+        this.page.totalCount = 3;
       }
-      if(opt == 'init'){
-        this.page.currentPage = 1;
-      }
-      data.page = this.page.currentPage;
-      data.limit = this.page.pageSize;
-      if(this.appName == 'inspectPro2'){
-        var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
-      }else if(this.appName == 'inspectPro'){
-        var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
-      }else if(this.appName == 'subcontrac'){
-        var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
-      }else if(this.appName == 'subcontrac2'){
-        var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=2';
-      }else if(this.appName == 'reportFile'){
-        var url =  this.basic_url + '/api-report/reportFile';
-      }else if(this.appName == 'report'){
-        var url =  this.basic_url + '/api-report/report';
-      }else if(this.appName == 'flow'){
-        var url =  this.basic_url + '/api-flow/flow/model';
-      }else if(this.appName == 'flowProcess'){
-        var url =  this.basic_url + '/api-flow/flow/process';
-      }else if(this.appName == 'appcfg'){
-        var url = this.basic_url + '/api-apps/' + this.appName;
-      }else if(this.appName == 'apppermissions'){
-        var url = this.basic_url + '/api-user/permissions';
-      }else if(this.appName == 'api-user'){
-        var url = this.basic_url + '/api-user/users';
-        if(!!this.searchList.deptId  && this.searchList.deptId != 128){
-					data.deptId = this.searchList.deptId;
-				}
-      }else if(this.appName == 'dataRestrict'){
-        var url = this.basic_url + '/api-user/dataRestrict';
-      }else if(this.appName == 'appRoles'){
-        var url = this.basic_url + '/api-user/roles';
-      }else if(this.appName == 'objectcfg'){
-        var url = this.basic_url + '/apps-center/objectcfg';
-      }else if(this.appName == 'dicts'){
-         var url = this.basic_url + '/api-user/dicts';
-      }else if(this.appName == 'serialnum'){
-        var url = this.basic_url + '/api-user/serialnum';
-      }else if(this.appName == 'loginlog'){
-        var url = this.basic_url + '/api-log/logs/loginLog';
-      }else if(this.appName == 'operlog'){
-        var url = this.basic_url + '/api-log/logs/operLog';
-      }else if(this.appName == 'productType'||this.appName == 'product'||this.appName == 'inspectionSta'||this.appName == 'inspectionPro'||this.appName == 'inspectionMet'||this.appName == 'rawDataTem'||this.appName == 'workIns'){//单独定义基础数据中的APPNAME数据显示本站室所有数据。
-        var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
-      }else if(this.appName == 'inspectionRepTem') {//检验/检测报告模板
-        var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
-      }else if(this.appName == 'group'){
-        var url = this.basic_url + '/api-user/groups';
-      }else {
-        var url = this.basic_url + '/api-apps/app/' + this.appName;
-      }
-      // console.log(url);
-      this.$axios.get(url, {
-        params: data
-      }).then((res) => {
-        this.page.totalCount = res.data.count;//页码赋值
-        //总的页数
-        let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-        if(this.page.currentPage >= totalPage) {
-          this.loadSign = false;
-        } else {
-          this.loadSign = true;
-        }
-        this.list = res.data.data;
-        this.page.totalCount = res.data.count;
 
-        this.loading = false;//加载动画关闭
-        if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-          $('.el-table__body-wrapper table').find('.filing').remove();
-        }
-      }).catch((wrong) => {})
+      if(this.appName == 'instruments'){
+        this.list = [{ 
+          param1: '1019',
+          param2: '222',
+          param3: '0.00',
+          param4: '育生',
+          param5: '等待批准',
+        },{
+          param1: '1020',
+          param2: '55',
+          param3: '5.00',
+          param4: '丁晓娟',
+          param5: '等待批准',
+        }];
+        this.page.totalCount = 2;
+      }
+
+      if(this.appName == 'workOrder'){
+        this.list = [{ 
+          param1: 'WO20180129001',
+          param2: '010101010008',
+          param3: '测试资产',
+          param4: '',
+          param5: '',
+          param6: '',
+          param7: '',
+          param8: '故障维修' 
+        },{
+          param1: 'WO20170904001',
+          param2: 'Z14060306000000001',
+          param3: '测试',
+          param4: '',
+          param5: '',
+          param6: '',
+          param7: '',
+          param8: '预防性维护' 
+        }];
+        this.page.totalCount = 2;
+      }
     },
     // loadMore(){
     //   let up2down = sessionStorage.getItem('up2down');

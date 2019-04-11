@@ -11,7 +11,10 @@
                         <button  class="btn mr5 btn-blue" @click="modify">
                             <i class="icon-edit"></i>修改
                         </button>
-                        <button  class="btn mr5 btn-purple">
+                         <button  class="btn mr5 btn-purple" @click="add">
+                            <i class="icon-edit"></i>报表
+                        </button>
+                        <button  class="btn mr5 btn-red">
                             <i class="icon-trash"></i>删除
                         </button>
                     </div>
@@ -25,7 +28,7 @@
                 <el-col :span="24" class="leftcont" id="right">
                     <!-- 表格 Begin-->
                     <v-table ref="table" :appName="appName"  @getSelData="setSelData">
-                        <el-table-column v-for="item in tableHeader" :label="item.label" sortable :prop="item.prop">
+                        <el-table-column v-for="item in tableHeader" :label="item.label" sortable :prop="item.prop" width="150px">
                         </el-table-column>
                     </v-table>
                     <!-- 表格 End-->

@@ -1,96 +1,68 @@
 <template>
 	<div>
-		<div class="mask" v-if="show"></div>
-		<div class="mask_divbg" v-if="show">
-			<div class="mask_div">
-				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="pagemode=='add'">添加设备</div>
-					<div class="mask_title" v-show="pagemode=='edit'">修改设备</div>
-					<div class="mask_anniu">
-						<span class="mask_span mask_max" @click="toggle">
-							<i :class="isok1?'icon-maximization':'icon-restore'"></i>
-						</span>
-						<span class="mask_span" @click="close">
-							<i class="icon-close1"></i>
-						</span>
-					</div>
-				</div>
-				<div class="mask_content">
-					<el-form inline-message :model="dataInfo" ref="dataInfo" label-width="120px" class="demo-user">
-						<div class="content-accordion">
-							<!-- 设备基本信息 -->
-							<el-collapse v-model="activeNames">
-								<el-collapse-item title="基本信息" name="1">
-									<!-- <el-row :gutter="20" class="pb10">
-										<el-col :span="5" class="pull-right">
-											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
-												<template slot="prepend">设备编号</template>
-											</el-input>
-										</el-col>
-									</el-row> -->
-									<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='inputSelect'" disabled>
-											<el-button slot="append" icon="el-icon-search"></el-button>
-										</el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
-										</el-date-picker>
-										<!-- <el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
-										</el-radio-group> -->
-										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
-											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
-									</el-form-item>
-								</el-collapse-item>
+		<div class="content-accordion">
+		<!-- 设备基本信息 -->
+		<el-collapse v-model="activeNames">
+			<el-collapse-item title="基本信息" name="1">
+				<!-- <el-row :gutter="20" class="pb10">
+					<el-col :span="5" class="pull-right">
+						<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
+							<template slot="prepend">设备编号</template>
+						</el-input>
+					</el-col>
+				</el-row> -->
+				<el-form-item v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
+					<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
+					<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='inputSelect'" disabled>
+						<el-button slot="append" icon="el-icon-search"></el-button>
+					</el-input>
+					<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
+					<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
+					</el-date-picker>
+					<!-- <el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
+						<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
+					</el-radio-group> -->
+					<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
+						<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-collapse-item>
 
-								 <el-collapse-item title="其他" name="5">
-									<el-tabs tab-position="top">
-                                        <el-tab-pane label="作业计划任务">
-                                            <task ref="task"></task>
-                                        </el-tab-pane>
-                                        <el-tab-pane label="人工">
-                                            <labor ref="labor"></labor>
-                                        </el-tab-pane>
-                                        <el-tab-pane label="物料">
-                                            <materials ref="materials"></materials>
-                                        </el-tab-pane>
-                                        <el-tab-pane label="服务">
-                                            <service ref="service"></service>
-                                        </el-tab-pane>
-                                        <el-tab-pane label="工具">
-                                            <tool ref="tool"></tool>
-                                        </el-tab-pane>
-                                        <el-tab-pane label="工作资产">
-                                            <workAsset ref="workAsset"></workAsset>
-                                        </el-tab-pane>
-                                    </el-tabs>
-								</el-collapse-item>
-							</el-collapse>
-						</div>
-
-						<div class="content-footer">
-							<el-button type="primary" @click="close">保存</el-button>
-							<el-button @click="close">取消</el-button>
-						</div>
-					</el-form>
-				</div>
-				<!--底部-->
-			</div>
-
-		</div>
+				<el-collapse-item title="其他" name="5">
+				<el-tabs tab-position="top">
+					<el-tab-pane label="工作任务">
+						<task ref="task"></task>
+					</el-tab-pane>
+					<el-tab-pane label="人工">
+						<labor ref="labor"></labor>
+					</el-tab-pane>
+					<el-tab-pane label="物料">
+						<materials ref="materials"></materials>
+					</el-tab-pane>
+					<el-tab-pane label="服务">
+						<service ref="service"></service>
+					</el-tab-pane>
+					<el-tab-pane label="工具">
+						<tool ref="tool"></tool>
+					</el-tab-pane>
+					<el-tab-pane label="工作资产">
+						<workAsset ref="workAsset"></workAsset>
+					</el-tab-pane>
+				</el-tabs>
+			</el-collapse-item>
+		</el-collapse>
+	</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
-	import labor from './labor.vue'
-	import materials from './materials.vue'
-	import service from './service.vue'
-	import task from './task.vue'
-	import tool from './tool.vue'
-	import workAsset from './workAsset.vue'
+	import labor from '../serviceFolder/labor.vue'
+	import materials from '../serviceFolder/materials.vue'
+	import service from '../serviceFolder/service.vue'
+	import task from '../serviceFolder/task.vue'
+	import tool from '../serviceFolder/tool.vue'
+	import workAsset from '../serviceFolder/workAsset.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],

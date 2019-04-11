@@ -241,12 +241,12 @@
 				this.i++;
 				if(this.i%2==0){
 					if(checked){
-							this.$refs.tree.setCheckedNodes([]);
-							this.$refs.tree.setCheckedNodes([data]);
-							//交叉点击节点
-						}else{
-							this.$refs.tree.setCheckedNodes([]);
-							//点击已经选中的节点，置空
+						this.$refs.tree.setCheckedNodes([]);
+						this.$refs.tree.setCheckedNodes([data]);
+						//交叉点击节点
+					}else{
+						this.$refs.tree.setCheckedNodes([]);
+						//点击已经选中的节点，置空
 					}
 				}
 			},

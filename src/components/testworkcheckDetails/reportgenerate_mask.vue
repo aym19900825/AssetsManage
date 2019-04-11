@@ -55,8 +55,10 @@
 
 												<el-input v-model="item.value" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
-												
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+
 												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
 

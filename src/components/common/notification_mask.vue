@@ -47,7 +47,7 @@
 										<el-col :span="4" v-if="!addtitle" >
 											<el-radio label="1">监督抽查</el-radio>
 										</el-col>
-										<el-col :span="4" :disable="true">
+										<el-col :span="4">
 											<el-radio label="2">监督抽查复查</el-radio>
 										</el-col>
 										<el-col :span="4" v-if="!addtitle">
@@ -85,6 +85,13 @@
 									<el-col :span="8">
 										<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
 											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
+												<span v-if="dataInfo.TYPE=='2'|| dataInfo.TYPE=='4'">
+													
+													<el-button slot="append" :disabled="false" icon="el-icon-search" @click="plannum"></el-button>
+												</span>
+												<!-- <span v-else>
+													<el-button slot="append" :disabled="edit" icon="el-icon-search" ></el-button>
+												</span> -->
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -459,19 +466,6 @@
 			 deptmask
 		},
 		data() {
-			//金额验证
-			// var price=(rule, value, callback) => {
-			// 	var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-			// 	if(value != '' && value!=undefined){
-			// 		if(exp.test(value)==false){ 
-			// 			callback(new Error('请输入数字'));
-			// 			}else{
-			// 				callback();
-			// 			}
-			// 	}else {
-			// 		callback();
-			// 	}
-			// };
 			return {
 				loading: false,
 				loadSign:true,//加载
@@ -502,6 +496,7 @@
 				edit: true, //禁填
 				noedit: false,
 				special:false,//特殊
+				plan:false,
 				editSearch: '', //判斷項目負責人和接收人
 				col_but1: true,
 				col_but2: true,

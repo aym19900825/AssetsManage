@@ -45,26 +45,8 @@
 									</el-form-item>
 								</el-collapse-item>
 
-                                <el-collapse-item title="设备详细信息" name="2">
-									<el-form-item v-for="item in basicInfo1" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'"></el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='inputSelect'" disabled>
-											<el-button slot="append" icon="el-icon-search"></el-button>
-										</el-input>
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'"></el-input>
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'">
-										</el-date-picker>
-										<!-- <el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'">
-											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
-										</el-radio-group> -->
-										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择">
-											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-										</el-select>
-									</el-form-item>
-								</el-collapse-item>
-
 								 <el-collapse-item title="其他" name="5">
-									<el-tabs tab-position="top">
+									<!-- <el-tabs tab-position="top">
                                         <el-tab-pane label="关联">
                                             <contract ref="contract"></contract>
                                         </el-tab-pane>
@@ -77,7 +59,7 @@
                                         <el-tab-pane label="预防性维护">
                                             <premainHistory ref="premianHistory"></premainHistory>
                                         </el-tab-pane>
-                                    </el-tabs>
+                                    </el-tabs> -->
 								</el-collapse-item>
 							</el-collapse>
 						</div>
@@ -97,42 +79,35 @@
 
 <script>
 	import Config from '../../config.js'
-	import premainHistory from './premainHistory.vue'
-	import mainHistory from './mainHistory.vue'
-	import changeHistory from './changeHistory.vue'
-	import contract from './contract.vue'
+	// import premainHistory from './premainHistory.vue'
+	// import mainHistory from './mainHistory.vue'
+	// import changeHistory from './changeHistory.vue'
+	// import contract from './contract.vue'
 	export default {
 		name: 'masks',
 		props: ['detailData'],
 		components: {
-			premainHistory,
-			mainHistory,
-			changeHistory,
-			contract,
+			// premainHistory,
+			// mainHistory,
+			// changeHistory,
+			// contract,
 		},
 		data() {
 			return {
                 //页面渲染字段
 				basicInfo: [
 					{
-                        label: '资产编码',
+                        label: '作业计划',
                         prop: 'TYPE',
                         width: '30%',
                         type: 'input',						
                         displayType: 'inline-block'
                     },
                     {
-                        label: '资产名称',
+                        label: '摘要',
                         prop: 'DESCRIPTION',
                         width: '30%',
                         type: 'input',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '位置',
-                        prop: 'A_PRICE',
-                        width: '30%',
-                        type: 'inputSelect',
                         displayType: 'inline-block'
                     },
                     {
@@ -143,197 +118,47 @@
                         displayType: 'inline-block'
                     },
                     {
-                        label: '组织',
+                        label: '位置',
                         prop: 'CONFIG_UNITDes',
                         width: '30%',
-                        type: 'input',
+                        type: 'inputSelect',
                         displayType: 'inline-block'
                     },
                     {
-                        label: '地点',
+                        label: '主管人',
                         prop: 'ACCEPT_DATE',
                         width: '30%',
                         type: 'inputSelect',
                         displayType: 'inline-block'
                     },
                     {
-                        label: '设备描述',
+                        label: '组织',
                         prop: 'ASSET_KPI',
-                        width: '100%',
-                        type: 'input',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '状态日期',
-                        prop: 'SUPPORT_ASSET',
                         width: '30%',
-                        type: 'date',
+                        type: 'input',
                         displayType: 'inline-block'
                     },
                     {
                         label: '分类',
-                        prop: 'VENDOR',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '资产父级',
-                        prop: 'FACTOR_NUM',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '类型',
-                        prop: 'SUPPLIER',
-                        width: '30%',
-                        type: 'select',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '公司',
-                        prop: 'ACCEPT_NUM',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '物资编码',
-                        prop: 'OPTION_STATUS',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block',
-                    },
-                    {
-                        label: '运行情况',
-                        prop: 'ISMETER',
-                        width: '30%',
-                        type: 'select',
-                        displayType: 'inline-block',
-                    },
-                ],
-                basicInfo1: [
-					{
-                        label: '生产厂家',
-                        prop: 'TYPE',
-                        width: '30%',
-                        type: 'inputSelect',						
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '出厂序列号',
-                        prop: 'DESCRIPTION',
-                        width: '30%',
-                        type: 'input',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '生产日期',
-                        prop: 'A_PRICE',
-                        width: '30%',
-                        type: 'date',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '购买日期',
-                        prop: 'MODEL',
-                        width: '30%',
-                        type: 'date',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '采购订单号',
-                        prop: 'CONFIG_UNITDes',
-                        width: '30%',
-                        type: 'inputSelect',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '规格型号',
-                        prop: 'ACCEPT_DATE',
-                        width: '30%',
-                        type: 'input',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '安装日期',
-                        prop: 'ASSET_KPI',
-                        width: '30%',
-                        type: 'date',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '质保期',
                         prop: 'SUPPORT_ASSET',
                         width: '30%',
-                        type: 'date',
+                        type: 'inputSelect',
                         displayType: 'inline-block'
                     },
                     {
-                        label: '责任人',
+                        label: '负责人',
                         prop: 'VENDOR',
                         width: '30%',
                         type: 'inputSelect',
                         displayType: 'inline-block'
                     },
                     {
-                        label: '采购价格',
+                        label: '地点',
                         prop: 'FACTOR_NUM',
                         width: '30%',
-                        type: 'input',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '有效期限',
-                        prop: 'SUPPLIER',
-                        width: '30%',
-                        type: 'date',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '质保截止日期',
-                        prop: 'ACCEPT_NUM',
-                        width: '30%',
-                        type: 'date',
-                        displayType: 'inline-block'
-                    },
-                    {
-                        label: '所属部门',
-                        prop: 'OPTION_STATUS',
-                        width: '30%',
                         type: 'inputSelect',
-                        displayType: 'inline-block',
-                    },
-                    {
-                        label: '维护成本',
-                        prop: 'OPTION_STATUS',
-                        width: '30%',
-                        type: 'input',
-                        displayType: 'inline-block',
-                    },
-                    {
-                        label: '报废日期',
-                        prop: 'OPTION_STATUS',
-                        width: '30%',
-                        type: 'date',
-                        displayType: 'inline-block',
-                    },
-                    {
-                        label: '累计成本',
-                        prop: 'OPTION_STATUS',
-                        width: '30%',
-                        type: 'input',
-                        displayType: 'inline-block',
-                    },
-                    {
-                        label: '井号',
-                        prop: 'OPTION_STATUS',
-                        width: '30%',
-                        type: 'textarea',
-                        displayType: 'inline-block',
-                    },
-
+                        displayType: 'inline-block'
+                    }
 				],
 				keeperInfo: [
 					{

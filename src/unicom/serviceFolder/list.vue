@@ -43,14 +43,12 @@
 	import Config from '../../config.js'
 	import tableControle from '@/components/plugin/table-controle/controle.vue'
 	import detail from './detail.vue'
-	// import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '@/components/plugin/table/table.vue'
 	export default {
 		name: 'instruments',
 		components: {
 			'detail': detail,
 			'tableControle': tableControle,
-			// 'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
@@ -67,72 +65,47 @@
 			        OPTION_STATUS: ''
 		        },
 				checkedName: [
+					'工单编号',
 					'资产编码',
-					'设备名称',
-					'型号',
-					'技术指标',
-					'制造商',
-					'出厂编号',
-					'价格（万元）',
-					'接受日期',
-					'启用日期',
-					'配置地址',
-					'接收状态',
-					'保管人',
-					'备注',
+					'资产名称',
+					'规格型号',
+					'生产厂家',
+					'井号',
+					'位置',
+					'工单类型',
 				],
 				tableHeader: [
 					{
-						label: '资产编码',
+						label: '工单编号',
 						prop: 'param1'
 					},
 					{
-						label: '设备名称',
+						label: '资产编码',
 						prop: 'param2'
 					},
 					{
-						label: '型号',
+						label: '资产名称',
 						prop: 'param3'
 					},
 					{
-						label: '技术指标',
+						label: '规格型号',
 						prop: 'param4'
 					},
 					{
-						label: '制造商',
+						label: '生产厂家',
 						prop: 'param5'
 					},
 					{
-						label: '出厂编号',
+						label: '井号',
 						prop: 'param6'
 					},
 					{
-						label: '价格（万元）',
+						label: '位置',
 						prop: 'param7'
 					},
 					{
-						label: '接受日期',
+						label: '工单类型',
 						prop: 'param8'
-					},
-					{
-						label: '启用日期',
-						prop: 'param9'
-					},
-					{
-						label: '配置地址',
-						prop: 'param10'
-					},
-					{
-						label: '接收状态',
-						prop: 'param11'
-					},
-					{
-						label: '保管人',
-						prop: 'param12'
-					},
-					{
-						label: '备注',
-						prop: 'param13'
 					}
                 ],
                 selData: []

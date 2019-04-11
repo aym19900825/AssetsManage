@@ -1,41 +1,41 @@
 <template>
 	<div>
 		<el-table :data="list" border stripe :fit="true" max-height="260" style="width: 100%;">
-			<el-table-column label="预防性维护编号" prop="S_NAME" sortable width="260px">
+			<el-table-column label="预防性维护编号" prop="param1" sortable width="260px">
 				<template slot-scope="scope">
-					<el-input size="small" v-model="scope.row.S_NAME" placeholder="请输入">	
+					<el-input size="small" v-model="scope.row.param1" placeholder="请输入">	
 					</el-input>
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="P_DESC" label="描述" sortable width="240px">
+			<el-table-column prop="param2" label="描述" sortable width="240px">
 				<template slot-scope="scope">
-					<el-input size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
+					<el-input size="small" v-model="scope.row.param2" placeholder="请输入">	
 					</el-input>
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="REMARKS" label="上一完成日期" sortable  width="200px">
+			<el-table-column prop="param3" label="上一完成日期" sortable  width="200px">
 				<template slot-scope="scope">
-					<el-input size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请输入"></el-input>
+					<el-input size="small" v-model="scope.row.param3" placeholder="请输入"></el-input>
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="COMPLETE_DATE" label="最早下一个截止日期" sortable  width="200px">
+			<el-table-column prop="param4" label="最早下一个截止日期" sortable  width="200px">
 				<template slot-scope="scope">
-					<el-input size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请输入"></el-input>
+					<el-input size="small" v-model="scope.row.param4" placeholder="请输入"></el-input>
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="LEADER" label="频率" sortable width="100px">
+			<el-table-column prop="param5" label="频率" sortable width="100px">
 				<template slot-scope="scope">
-					<el-input size="small" v-model="scope.row.LEADER" placeholder="请输入"></el-input>
+					<el-input size="small" v-model="scope.row.param5" placeholder="请输入"></el-input>
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="STATE" label="状态" sortable>
+			<el-table-column prop="param6" label="状态" sortable>
 				<template slot-scope="scope">
-					<el-input size="small" v-model="scope.row.ASSIST_PERSION" placeholder="请输入"></el-input>
+					<el-input size="small" v-model="scope.row.param6" placeholder="请输入"></el-input>
 				</template>
 			</el-table-column>
 
@@ -59,12 +59,12 @@
 			return{
 				list: [
 					{
-						S_NAME: '',
-						P_DESC: '',
-						REMARKS: '',
-						COMPLETE_DATE: '',
-						LEADER: '',
-						STATE: '',
+						param1: '' ,
+						param2: '' ,
+						param3: '' ,
+						param4: '' ,
+						param5: '' ,
+						param6: '' 
 					}
 				]
 			}
@@ -74,3 +74,8 @@
 		},
 	}
 </script>
+<style>
+	.tit{
+		font-size: 16px;
+	}
+</style>

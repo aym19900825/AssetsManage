@@ -92,6 +92,7 @@ const loginlog  = r => require.ensure([], () => r(require('@/components/loginlog
 const operlog  = r => require.ensure([], () => r(require('@/components/loginlog/operlog')), 'operlog')//打印条码
 const unicom  = r => require.ensure([], () => r(require('@/unicom/common/nav/nav')), 'nav')//联通导航
 const assetCount  = r => require.ensure([], () => r(require('@/unicom/assetCount/list')), 'assetCount')//设备台账
+const serviceFolder  = r => require.ensure([], () => r(require('@/unicom/serviceFolder/list')), 'serviceFolder')//设备台账
 
 Vue.use(Router)
   const routes = [
@@ -477,8 +478,8 @@ Vue.use(Router)
           path: 'assetCount',
           component: assetCount
         },{
-          path: 'loginlog',
-          component: loginlog
+          path: 'serviceFolder',
+          component: serviceFolder
         }
       ]
     },

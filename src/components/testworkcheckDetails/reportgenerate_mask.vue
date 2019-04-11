@@ -62,14 +62,14 @@
 												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
 
-												<el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
+												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
 													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
-												</el-radio-group>
+												</el-radio-group> -->
 
-												<el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
+												<!-- <el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
 													<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
 													</el-option>
-												</el-select>
+												</el-select> -->
 											</el-form-item>
 										</el-col>
 									</el-row>

@@ -591,6 +591,39 @@
 														  style="width: 100%;" 
 														  @cell-click="iconOperation" 
 														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+
+														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+														</el-table-column>
+
+														<el-table-column label="文件名称" prop="FILESIZE_ORG">
+														</el-table-column>
+
+														<el-table-column label="文件大小" prop="FILESIZE">
+														</el-table-column>
+
+														<el-table-column label="操作" v-show="!pageDisable">
+															<template slot-scope="scope">
+															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+																	<i class="icon-excel"></i>
+																	预览
+																</el-button>
+																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
+																	<i class="icon-pencil"></i>
+																	编辑
+																</el-button>
+																
+															</template>
+														</el-table-column>
+													</el-table>
+
+													<!-- <el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+														  border 
+														  stripe 
+														  :fit="true" 
+														  max-height="260" 
+														  style="width: 100%;" 
+														  @cell-click="iconOperation" 
+														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
 														<el-table-column prop="iconOperation" fixed width="50px">
 													      <template slot-scope="scope">
 													      	<i class="el-icon-check" v-show="scope.row.isEditing">
@@ -605,7 +638,6 @@
 																<el-option label="基础数据选择" value="1"></el-option>
 																<el-option label="链条选择" value="2"></el-option>															
 															</el-select>
-													      	<!-- <span v-else>{{scope.row.DATA_TYPEDesc}}</span> -->
 													      </template>
 													    </el-table-column>
 														<el-table-column label="模板编号" sortable prop="D_NUM">
@@ -625,7 +657,6 @@
 									            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
 															<template slot-scope="scope">
 															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
-																<!-- <span v-if="scope.row.FILESIZE_ORG == -1">0kb</span> -->
 															</template>
 														</el-table-column>
 														<el-table-column label="上传文件大小" prop="FILESIZE">
@@ -646,7 +677,7 @@
 																</el-button>
 															</template>
 														</el-table-column>
-									            	</el-table>
+													</el-table> -->
 												</el-col>
 													
 											</el-row>
@@ -702,10 +733,6 @@
 						<div class="content-footer" v-if="!viewtitle">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
-							<el-button @click="close">取消</el-button>
-						</div>
-						<div class="content-footer" v-show="views">
-							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>

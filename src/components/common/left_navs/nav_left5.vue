@@ -107,12 +107,7 @@ export default {
 					$('.wrapper').css('padding-left','0px');
 					this.$emit('childByValue',menu);
 				}
-			}).catch((wrong) => {
-				// this.$message({
-				// 	message: '网络错误，请重试左侧',
-				// 	type: 'error'
-				// });
-			});
+			}).catch((wrong) => {});
 		}
 	}
 }

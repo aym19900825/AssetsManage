@@ -7,11 +7,9 @@
       stripe
       :height="fullHeight"
       style="width: 100%;"
-      v-loadmore="loadMore"
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
-      v-loading="loading"
       element-loading-text="加载中…"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.9)">
@@ -154,7 +152,7 @@ export default {
     },
     requestData(opt){
       this.loadding = true;
-      var data = this.searchList;
+      var data ={};
       if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){
         if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
 					data.DEPTID = this.searchList.DEPTID;
@@ -234,35 +232,35 @@ export default {
         }
       }).catch((wrong) => {})
     },
-    loadMore(){
-      let up2down = sessionStorage.getItem('up2down');
-      if(this.loadSign) {					
-        if(up2down=='down'){
-          this.page.currentPage++;
-          if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-            this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-            return false;
-          }
-          let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-          if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-            $('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-            sessionStorage.setItem('toBtm','true');
-          }
-        }else{
-          sessionStorage.setItem('toBtm','false');
-          this.page.currentPage--;
-          if(this.page.currentPage < 1) {
-            this.page.currentPage=1;
-            return false;
-          }
-        }
-        this.loadSign = false;
-        setTimeout(() => {
-          this.loadSign = true;
-        }, 1000)
-        this.requestData();
-      }
-    },
+    // loadMore(){
+    //   let up2down = sessionStorage.getItem('up2down');
+    //   if(this.loadSign) {					
+    //     if(up2down=='down'){
+    //       this.page.currentPage++;
+    //       if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+    //         this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+    //         return false;
+    //       }
+    //       let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+    //       if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+    //         $('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+    //         sessionStorage.setItem('toBtm','true');
+    //       }
+    //     }else{
+    //       sessionStorage.setItem('toBtm','false');
+    //       this.page.currentPage--;
+    //       if(this.page.currentPage < 1) {
+    //         this.page.currentPage=1;
+    //         return false;
+    //       }
+    //     }
+    //     this.loadSign = false;
+    //     setTimeout(() => {
+    //       this.loadSign = true;
+    //     }, 1000)
+    //     this.requestData();
+    //   }
+    // },
     eventBind(){
       var that = this;
       document.onkeydown = function(e) { //按下键盘      

@@ -90,6 +90,8 @@ const printCode  = r => require.ensure([], () => r(require('@/components/samples
 
 const loginlog  = r => require.ensure([], () => r(require('@/components/loginlog/loginlog')), 'loginlog')//打印条码
 const operlog  = r => require.ensure([], () => r(require('@/components/loginlog/operlog')), 'operlog')//打印条码
+const unicom  = r => require.ensure([], () => r(require('@/unicom/common/nav/nav')), 'nav')//联通导航
+const assetCount  = r => require.ensure([], () => r(require('@/unicom/assetCount/list')), 'assetCount')//设备台账
 
 Vue.use(Router)
   const routes = [
@@ -466,6 +468,19 @@ Vue.use(Router)
       path: '/operlog',
       name: 'operlog',
       component: operlog
+    },
+    {//联通导航
+      path: '/unicom',
+      name: 'unicom',
+      component: unicom,
+      children: [{
+          path: 'assetCount',
+          component: assetCount
+        },{
+          path: 'loginlog',
+          component: loginlog
+        }
+      ]
     },
 ];
 

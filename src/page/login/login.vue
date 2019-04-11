@@ -79,7 +79,7 @@
                             sessionStorage.setItem('access_token',res.data.access_token);
                             sessionStorage.setItem('expires_in',res.data.expires_in);
                             sessionStorage.setItem('refresh_token',res.data.refresh_token);
-                            this.$router.push('/index')
+                            this.$router.push('/unicom')
                         }
                   }).catch((res) => {
                       this.$message({

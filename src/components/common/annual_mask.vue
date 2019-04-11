@@ -185,9 +185,9 @@
 											</template>
 										</el-table-column>
 
-										<el-table-column prop="S_NAME" label="检测依据" sortable width="220px">
+										<!-- <el-table-column prop="S_NAME" label="检测依据" sortable width="220px">
 											<template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请选择" :disabled="true">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请选择" :disabled="noedit">
 														<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)"></el-button>
 													</el-input>
 													<span v-else>{{scope.row.S_NAME}}</span>
@@ -196,12 +196,12 @@
 
 										<el-table-column prop="P_DESC" label="检测项目" sortable width="220px">
 											<template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请选择" :disabled="true">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请选择" :disabled="noedit">
 														<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)"></el-button>
 													</el-input>
 													<span v-else>{{scope.row.P_DESC}}</span>
 											</template>
-										</el-table-column>
+										</el-table-column> -->
 
 									    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 									      <template slot-scope="scope">
@@ -214,16 +214,17 @@
 												<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REASION" placeholder="请输入内容"></el-input><span v-else>{{scope.row.REASION}}</span>
 										  </template>
 									    </el-table-column>
-									    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
+									    <el-table-column fixed="right" label="操作" align="center" width="190px">
 									      <template slot-scope="scope">
 									        <el-button type="text" title="删除" @click="delPlan(scope.$index,scope.row, 'WORLPLANLINE','worlplanlist')"  size="small" v-show="!viewtitle">
 									          <i class="icon-trash red"></i>
 									        </el-button>
-											<el-button type="primary" circle title="下达任务通知书" @click="assign(scope.row)" size="small" v-if="assignshow&&(scope.row.ISCREATED!=1)">
+											<el-button type="primary" @click="assign(scope.row)" size="small" v-if="assignshow&&(scope.row.ISCREATED!=1)">
 									          <i class="icon-send"></i>
+											  下达工作任务通知书
 									        </el-button>
-									        <el-button type="primary" circle title="工作任务通知书已下达" @click="assign(scope.row)" size="small" v-if="assignshow&&(scope.row.ISCREATED==1)">
-									          <i class="icon-send"></i>
+									        <el-button type="info" size="small" v-if="assignshow&&(scope.row.ISCREATED==1)">
+									          已下达
 									        </el-button>
 									      </template>
 									    </el-table-column>
@@ -238,7 +239,7 @@
 								<!-- 年度计划列表 End -->
 
 								<!-- 检测依据、检测项目与要求 Begin-->
-								<!-- <div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
+								<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 									    <el-tab-pane label="检测依据" name="first">
 									    	<div class="table-func table-funcb">
@@ -254,7 +255,7 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column prop="WP_LINENUM" label="所属行序号" sortable width="150"></el-table-column>
+							            		<el-table-column prop="WP_LINENUM" label="所属序号" sortable width="150"></el-table-column>
 							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160"></el-table-column>
 							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350"></el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" sortable width="80"></el-table-column>
@@ -267,16 +268,17 @@
 											          size="small" v-if="!viewtitle">
 											          	<i class="icon-trash red"></i>
 											        </el-button>
-													<el-button
+													<!-- <el-button
 											          @click="viewPlanFile(scope.row)"
 											          type="text"
 											          size="small" v-if="!viewtitle">
 											          	<i class="icon-log red"></i>
-											        </el-button>
+											        </el-button> -->
 											      </template>
 											    </el-table-column>
 							            	</el-table>
 									    </el-tab-pane>
+
 									    <el-tab-pane label="检测项目与要求" name="second">
 									    	<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
@@ -291,7 +293,7 @@
 											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
 											      	</template>
 							            		</el-table-column>
-							            		<el-table-column label="所属行序号" sortable width="120px" prop="WP_LINENUM">
+							            		<el-table-column label="所属序号" sortable width="120px" prop="WP_LINENUM">
 											      <template slot-scope="scope">
 											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else>{{scope.row.WP_LINENUM}}</span>
 											      </template>
@@ -315,10 +317,11 @@
 											        </el-button>
 											      </template>
 											    </el-table-column>
+
 							            	</el-table>
 									    </el-tab-pane>
 									</el-tabs>
-								</div> -->
+								</div>
 								<!-- 检测依据、检测项目与要求 End-->
 
 								<!-- todo -->
@@ -1804,7 +1807,7 @@
 			// 这里是修改
 			detail(dataid) {
 				this.getCompany();
-				this.assignshow = true;
+				this.assignshow = false;
 				this.$axios.get(this.basic_url +'/api-apps/app/workplan/' + dataid, {}).then((res) => {
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 						res.data.WORLPLANLINEList[i].isEditing = false;
@@ -1880,8 +1883,10 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
+				this.assignshow = true;//下达工作任务通知书按钮显示
 				this.getCompany();
 				var _this = this;
+
 				setTimeout(function(){
 					_this.docParm.model = 'view';
 					_this.docParm.appname = '年度计划';

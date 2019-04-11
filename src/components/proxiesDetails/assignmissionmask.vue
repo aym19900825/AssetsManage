@@ -301,19 +301,18 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
-															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
-                              </el-input> 
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
 												</el-table-column>
-                                                <el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
+
+												<el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
 													<template slot-scope="scope">
-                                                        <el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.QUATITY'" >
-															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
-                                                            </el-input> 
+														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.QUATITY'" >
+																<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -340,11 +339,11 @@
 									    	<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round  @click="outdept" v-show="!viewtitle">
             							<i class="icon-search"></i>
-            							<font>所外机构</font>
+            							<font>中心外机构</font>
         								</el-button>
 												<el-button type="primary" size="mini" @click="withindept" round  style="margin-left: 10px;" v-show="!viewtitle">
 													<i class="icon-search"></i>
-													<font>所内机构</font>
+													<font>中心内机构</font>
 												</el-button>
 											</div>
 
@@ -679,9 +678,9 @@
 			<testprojectmask ref="projectchild" @testproject="addproject" @testprojectnum="testprojectnum" @testprojectid="testprojectid" @testprojectname="testprojectname" @testprojectprover = "testprojectprover"></testprojectmask>
 			<!--委托单位名称 -->
 			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor"></inspectcustommask>
-			<!--分包要求 所外机构-->
+			<!--分包要求 中心外机构-->
 			<custinspectmask ref="custinspectchild" @cusinspect="cusinspect"></custinspectmask>
-			<!--分包要求 所内机构-->
+			<!--分包要求 中心内机构-->
 			<withdepetmask ref="withinspectchild" @withdepet="withdepet"></withdepetmask>
 		</div>
 	</div>
@@ -702,8 +701,8 @@
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
-	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//所外机构
-	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//所内机构
+	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//中心外机构
+	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//中心内机构
 	export default {
 		name: 'masks',
 		components: {
@@ -1075,11 +1074,11 @@
 		　　　return s.join(dec);
 		},
 			
-			// 所内机构
+			// 中心内机构
 			withindept(){
 				this.$refs.withinspectchild.visible();
 			},
-			//所外机构
+			//中心外机构
 			outdept(){
 				this.$refs.custinspectchild.visible();
 			},
@@ -1579,7 +1578,7 @@
 			},
 			vendor(val){
 				this.dataInfo.VENDOR=val[0];
-				// DEPUTE_TYPE  委托单位类型（所内/所外）
+				// DEPUTE_TYPE  委托单位类型（中心内/中心外）
 				if(!!val[0]){
 					  this.dataInfo.PRODUCE_TYPE=1
 						this.dataInfo.DEPUTE_TYPE=1;
@@ -1720,7 +1719,7 @@
 			testprojectprover(value){
 				this.deptindex.PROJ_VERSIONNUM = value;
 			},
-			//所外机构
+			//中心外机构
 			  cusinspect(val){
 					for(var i = 0;i<val.length;i++){
 							for(var j = 0;j<val[i].length;j++){
@@ -1734,7 +1733,7 @@
 								VENDOR: val[j][i].ID,//分包方名称
 								VENDORDesc:val[j][i].NAME,//分包方名称
 								DEPTTYPE:1,//机构属性id
-								DEPTTYPEDesc:'所外机构',//机构属性名称
+								DEPTTYPEDesc:'中心外机构',//机构属性名称
 								PT_NUM:'',//产品类别编号
 								PRODUCT_TYPE:'',//产品类别
 								PRO_NUM:'',//产品编号
@@ -1757,7 +1756,7 @@
 						}
 					}
 				},
-				//所内机构
+				//中心内机构
 				withdepet(val){
 							for(var i = 0;i<val.length;i++){
 						var List={
@@ -1770,7 +1769,7 @@
 								VENDOR:val[i].dept,//承检单位
 								VENDORDesc:val[i].deptname,//承检单位名称
 								DEPTTYPE:2,//机构属性id
-								DEPTTYPEDesc:'所内机构',//机构属性名称
+								DEPTTYPEDesc:'中心内机构',//机构属性名称
 								PT_NUM:val[i].pt_num,//产品类别编号
 								PRODUCT_TYPE:val[i].pt_name,//产品类别
 								PRO_NUM:val[i].pro_num,//产品编号

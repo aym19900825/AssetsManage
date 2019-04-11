@@ -550,20 +550,20 @@
 				return data;
 			},
 			handleNodeClick(data) {
-				if(!!data.fullname) {
+				if(data.type=='dept') {
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.id;
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
-				}else if(!!data.TYPE){
-					this.searchList.P_NUM = data.NUM;
+				}else if(data.type=='product'){
+					this.searchList.PRO_NUM = data.num.substr(1);
+					this.searchList.P_NUM = '';
+					this.searchList.DEPTID = data.deptid;
+					this.page.currentPage = 1;
+				}else if(data.type=='producttype'){
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.DEPTID;
-					this.page.currentPage = 1;
-				}else if(!!data.PRO_NUM){
-					this.searchList.P_NUM = data.NUM;
-					this.searchList.PRO_NUM = data.PRO_NUM;
-					this.searchList.DEPTID = data.DEPTID;
+					this.searchList.P_NUM = data.num.substr(2);
+					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';

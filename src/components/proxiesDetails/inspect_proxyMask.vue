@@ -1825,7 +1825,7 @@
 					for(var i = 0;i<value.length;i++){
 						var list={
 								P_NUM:value[i].P_NUM,
-								P_DESC:value[i].P_DESC,
+								P_DESC:value[i].P_NAME,
 								REMARKS:'',
 								UNITCOST:value[i].UNITCOST,
 								VERSION:value[i].VERSION,

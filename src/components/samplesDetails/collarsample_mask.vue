@@ -384,6 +384,8 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 							this.samplesForm.ACCEPT_DATE = data.ACCEPT_DATE;
 							this.samplesForm.MODEL = data.MODEL;
 							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
+							this.samplesForm.PRO_NUM = data.PRO_NUM;
+							this.samplesForm.P_NUM = data.P_NUM;
 						}else{
 							this.$message({
 								message: '暂无可领样样品！',

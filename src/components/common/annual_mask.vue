@@ -1003,11 +1003,6 @@
 				this.page.currentPage = 1;
 				this.requestData();
 			},
-			handleSuccess(response, file, fileList){//上传文件列表
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
-			},
 			uploadUrl(){
 				var url = this.basic_url +'/api-apps/app/workplan/importExc?table=WORLPLANLINE&access_token='+sessionStorage.getItem('access_token');
 				return url;
@@ -1814,6 +1809,7 @@
 					for(var i = 0; i<res.data.WORLPLANLINEList.length; i++){
 						res.data.WORLPLANLINEList[i].isEditing = false;
 					}
+					res.data.CJDW = Number(res.data.CJDW);
 					res.data.PROP_UNIT = Number(res.data.PROP_UNIT);
 					this.WORKPLAN = res.data;
 					this.worlplanlist = res.data.WORLPLANLINEList;

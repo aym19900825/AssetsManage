@@ -365,6 +365,8 @@
 							this.samplesForm.DESCRIPTION = data.DESCRIPTION;
 							this.samplesForm.MODEL = data.MODEL;
 							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
+							this.samplesForm.PRO_NUM = data.PRO_NUM;
+							this.samplesForm.P_NUM = data.P_NUM;
 							if(this.samplesForm.ITEM_TYPE == '1'){
 								this.samplesForm.QUALITY = 1;
 								var data = res.data;

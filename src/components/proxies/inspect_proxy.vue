@@ -733,13 +733,13 @@
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else if(data.type=='product'){
-					this.searchList.P_NUM = data.num.substr(1);
-					this.searchList.PRO_NUM = '';
+					this.searchList.PRO_NUM = data.num.substr(1);
+					this.searchList.P_NUM = '';
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else if(data.type=='producttype'){
-					this.searchList.P_NUM = '';
-					this.searchList.PRO_NUM = data.num.substr(2);
+					this.searchList.PRO_NUM = '';
+					this.searchList.P_NUM = data.num.substr(2);
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else{

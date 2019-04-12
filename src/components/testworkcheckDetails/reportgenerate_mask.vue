@@ -35,29 +35,37 @@
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 封面 Begin-->
 								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
-									<!-- <el-row v-for="(reportDataList,index) in selectReportData[index].List" :key="index" >
-										<el-col :span="8">{{reportDataList.configid}}</el-col>
-										<el-col :span="8">{{reportDataList.fieldname}}</el-col>
-										<el-col :span="8">{{reportDataList.isdatabase}}</el-col>
-										<el-col :span="8">{{reportDataList.name}}</el-col>
-										<el-col :span="8">{{reportDataList.paramname}}</el-col>
-										<el-col :span="8">{{reportDataList.required}}</el-col>
-										<el-col :span="8">{{reportDataList.rtype}}</el-col>
-										<el-col :span="8">{{reportDataList.sort}}</el-col>
-										<el-col :span="8">{{reportDataList.tablename}}</el-col>
-										<el-col :span="8">{{reportDataList.type}}</el-col>
-										<el-col :span="8">{{reportDataList.value}}</el-col>
-									</el-row> -->
 									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'||reportData.name=='封底'">
 										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
-											<el-form-item :label="item.title" :prop="item.value" label-width="150px">
+											<el-form-item :label="item.title" :prop="item.fieldname" v-if="item.required == 0" label-width="150px">
 												<el-input v-model="item.value" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-input v-model="item.value" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+ 
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
+												</el-date-picker>
+
+												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
+													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
+												</el-radio-group> -->
+
+												<!-- <el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
+													<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
+													</el-option>
+												</el-select> -->
+											</el-form-item>
+											<el-form-item :label="item.title" :prop="item.fieldname" v-else label-width="150px" :rules="{required: true, message: '请填写', trigger: 'blur'}">
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+ 
+												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
@@ -73,18 +81,19 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-
-									<el-row v-else>
+									
+									
+									<el-row v-else-if="reportData.name=='产品质量检测报告'">
 										<el-col :span="24">
-											<el-table :data="selectReportData[index].List" 
-													border 
-													stripe 
-													:fit="true" 
-													max-height="460" 
-													style="width: 100%;" 
-													:default-sort="{prop:'selectReportData[index].List', order: 'descending'}">
-												<el-table-column type="selection" fixed width="55" align="center">
-												</el-table-column>
+											<el-table :data="reportData.List" 
+												border 
+												stripe 
+												:fit="true" 
+												max-height="460" 
+												style="width: 100%;" 
+												:default-sort="{prop:'reportData.List', order: 'descending'}">
+
+												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
@@ -92,20 +101,75 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column label="检验检测项目名称" sortable prop="LIABLE_PERSONDesc">
+												<el-table-column label="项目名称" sortable prop="P_DESC">
 												</el-table-column>
-
-												<el-table-column label="不合格类别" prop="FILESIZE_ORG">
+												<el-table-column label="不合格类别" sortable prop="ISQUALIFIED">
 												</el-table-column>
-												<el-table-column label="技术要求" prop="FILESIZE">
+												<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 												</el-table-column>
-												<el-table-column label="计量单位" prop="FILESIZE">
+												<el-table-column label="单位" sortable prop="UNIT">
 												</el-table-column>
-												<el-table-column label="检测结果" prop="FILESIZE">
+												<el-table-column label="检测结果" sortable prop="S_NAME">
 												</el-table-column>
-												<el-table-column label="单项判定" prop="FILESIZE">
+												<el-table-column label="单项判定" sortable prop="SYNTHETICAL">
 												</el-table-column>
 											</el-table>
+
+											<el-pagination
+												@size-change="sizeChange"
+												background
+												@current-change="currentChange"
+												:current-page="page.currentPage"
+												:page-sizes="[10, 20, 30, 40]"
+												:page-size="page.pageSize"
+												layout="total, sizes, prev, pager, next"
+												:total="page.totalCount"
+												class="pt10 text-right">
+											</el-pagination>
+										</el-col>
+									</el-row>
+
+									<el-row v-else>
+										<el-col :span="24">
+											<el-table :data="reportData.List" 
+												border 
+												stripe 
+												:fit="true" 
+												max-height="260" 
+												style="width: 100%;" 
+												@cell-click="iconOperation" 
+												:default-sort="{prop:'reportData.List', order: 'descending'}">
+												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+
+												<el-table-column type="index" label="序号" width="50">
+													<template slot-scope="scope">
+														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+													</template>
+												</el-table-column>
+
+												<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+												</el-table-column>
+
+												<el-table-column label="文件名称" prop="FILESIZE_ORG">
+												</el-table-column>
+
+												<el-table-column label="文件大小" prop="FILESIZE">
+												</el-table-column>
+
+												<el-table-column label="操作">
+													<template slot-scope="scope">
+														<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+															<i class="icon-excel"></i>
+															预览
+														</el-button>
+														<el-button title="回退" type="text" size="small" @click="editFile(scope.row)">
+															<i class="icon-back"></i>
+															回退
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+
 											<el-pagination
 												@size-change="sizeChange"
 												background
@@ -122,108 +186,7 @@
 									
 								</el-tab-pane>
 								<!-- 封面 End-->
-								<!-- 检验检测项目清单 Begin-->
-								<!-- <el-tab-pane v-show="reportData.name=='检验检测项目清单'" v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid"> -->
-								<!-- <el-tab-pane v-show="reportData.name=='检验检测项目清单'" label="检验检测项目清单" name="third"> -->
-											<!-- <el-table :data="selectReportData[index].List" 
-													border 
-													stripe 
-													:fit="true" 
-													max-height="460" 
-													style="width: 100%;" 
-													:default-sort="{prop:'selectReportData[index].List', order: 'descending'}">
-												<el-table-column type="selection" fixed width="55" align="center">
-												</el-table-column>
-
-												<el-table-column type="index" label="序号" width="50">
-													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-													</template>
-												</el-table-column>
-
-												<el-table-column label="检验检测项目名称" sortable prop="LIABLE_PERSONDesc">
-												</el-table-column>
-												
-												<el-table-column label="不合格类别" prop="FILESIZE_ORG">
-												</el-table-column>
-												<el-table-column label="技术要求" prop="FILESIZE">
-												</el-table-column>
-												<el-table-column label="计量单位" prop="FILESIZE">
-												</el-table-column>
-												<el-table-column label="检测结果" prop="FILESIZE">
-												</el-table-column>
-												<el-table-column label="单项判定" prop="FILESIZE">
-												</el-table-column>
-											</el-table>
-											<el-pagination
-												@size-change="sizeChange"
-												background
-												@current-change="currentChange"
-												:current-page="page.currentPage"
-												:page-sizes="[10, 20, 30, 40]"
-												:page-size="page.pageSize"
-												layout="total, sizes, prev, pager, next"
-												:total="page.totalCount"
-												class="pt10 text-right">
-											</el-pagination> -->
-								<!-- </el-tab-pane> -->
-								<!-- 检验检测项目清单 End-->
-
-								<!-- 检验检测成果文件 Begin-->
-								<!-- <el-tab-pane v-show="reportData.name=='检验检测成果文件'" v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid"> -->
-								<!-- <el-tab-pane label="检验检测成果文件" name="fourth"> -->
-									<!-- <el-table :data="selectReportData[index].List" 
-											border 
-											stripe 
-											:fit="true" 
-											max-height="460" 
-											style="width: 100%;" 
-											:default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-										<el-table-column type="selection" fixed width="55" align="center">
-										</el-table-column>
-
-										<el-table-column type="index" label="序号" width="50">
-											<template slot-scope="scope">
-												<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-											</template>
-										</el-table-column>
-
-										<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
-
-										</el-table-column>
-
-										<el-table-column label="文件名称" prop="FILESIZE_ORG">
-										</el-table-column>
-
-										<el-table-column label="文件大小" prop="FILESIZE">
-										</el-table-column>
-
-										<el-table-column label="操作">
-											<template slot-scope="scope">
-												<el-button title="预览" type="primary" round size="mini" @click="readFile(scope.row)"> 
-													<i class="icon-eye"></i> 预览
-												</el-button>
-												<el-button title="回退" type="warning" round size="mini" @click="editFile(scope.row)">
-													<i class="icon-back"></i> 回退
-												</el-button>
-											</template>
-										</el-table-column>
-									</el-table> -->
-									<!-- <div class="pt10 text-right">
-										<el-pagination
-											@size-change="sizeChange"
-											background
-											@current-change="currentChange"
-											:current-page="page.currentPage"
-											:page-sizes="[10, 20, 30, 40]"
-											:page-size="page.pageSize"
-											layout="total, sizes, prev, pager, next"
-											:total="page.totalCount">
-										</el-pagination>
-									</div> -->
-								<!-- </el-tab-pane> -->
-								<!-- 检验检测成果文件 End-->
-
+								
 							
 							</el-tabs>
 						</el-form>
@@ -263,6 +226,7 @@
 					RE_TYPE: '1010',
 				},
 				reportGenerateForm:{
+					List:[],
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_ITEMSLIST:[],//检验检测项目清单
 					WORKORDER_DATA_TEMPLATEList:[],//检验检测成果文件
@@ -344,7 +308,6 @@
 					this.selectData = res.data.data;
 					console.log(res.data.data[0].RE_NUM);
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
-					this.requestData();
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
 					// this.templatefileid = res.data.data[0].ID;
@@ -356,8 +319,8 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
 					// this.reportGenerateForm.inspect_date = this.getToday();
-					
 					console.log(this.reportTemplate.RE_TYPE);
+					console.log(res.data);
 				}).catch((wrong) => {});
 			},
 			//清空表单
@@ -383,11 +346,13 @@
 					row.isEditing = !row.isEditing;
 				}
 			},
+			//打开弹出框页面
 			showDialog(id){
 				this.show = true;
 				// this.detailId = id;
 				this.detailId = id;
 				this.requestData();
+				
 				console.log(this.detailId);
 			},
 			sizeChange(val) {//分页，总页数
@@ -467,7 +432,6 @@
 		
 		mounted() {
 			this.getReportType();
-			// this.requestData();
 		},
 	}
 </script>

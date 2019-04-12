@@ -14,6 +14,7 @@
 									<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="addPeople(item)"></el-button>
 							</el-input>
 						</el-form-item>
+						
 						<el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required!='1'">
 							<el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
 							</el-input> 

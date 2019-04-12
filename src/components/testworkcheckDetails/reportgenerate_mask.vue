@@ -111,12 +111,21 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="200px">
 													<template slot-scope="scope">
-														<el-table :data="scope.row.workorder_project_itemList" row-key="ID" style="width: 100%;">
+														<el-table :data="scope.row.workorder_project_itemList" row-key="ID" :show-header="false" style="width: 100%;">
 															<el-table-column label="样品编号" prop="ITEMNUM"></el-table-column>
 															<el-table-column label="样品描述" prop="MEMO"></el-table-column>
 														</el-table>
 													</template>
 												</el-table-column>
+												
+												<!-- <el-table-column label="检测结果" width="200px">
+													<template slot-scope="scope">
+														<el-table-column v-for="(itemList2,index) in scope.row.workorder_project_itemList" :key="index" :label="itemList2.ITEMNUM" prop="MEMO"></el-table-column>
+													</template>
+												</el-table-column> -->
+
+												
+
 												<el-table-column label="单项判定" width="200px" sortable prop="SYNTHETICAL">
 													<template slot-scope="scope">
 														<el-form-item :prop="'reportData.List.'+scope.$index + '.SYNTHETICAL'">

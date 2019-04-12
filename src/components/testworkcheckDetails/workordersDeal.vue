@@ -158,9 +158,7 @@
 														  stripe 
 														  :fit="true" 
 														  max-height="260" 
-														  style="width: 100%;" 
-														  @cell-click="iconOperation" 
-														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+														  style="width: 100%;">
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 													    </el-table-column>
 									            		<el-table-column label="文件名称" prop="FILESIZE_ORG">
@@ -461,14 +459,18 @@
 				this.$refs.equiptDialog.showData();
 			},
 			showDialog(id){
-				this.show = true;
 				this.detailId = id;
-				this.requestData();
+				this.requestData('showDialog');
 			},
-			requestData(){
+			requestData(opt){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
+					this.workorderForm.WORKORDER_DATA_TEMPLATEList = this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(0,1);
+					console.log(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
+					if(opt == 'showDialog'){
+						this.show = true;
+					}
 					if(res.data.datas.STATE == '1'){
 						this.pageDisable = false;
 					}else{

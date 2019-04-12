@@ -31,22 +31,22 @@
 							</el-col>
 						</el-row>
 
-						<el-form inline-message :model="reportGenerateForm" ref="reportGenerateForm" :rules="rules" label-position="right" lable-width="120px">
+						<el-form inline-message :model="inputData" ref="reportGenerateForm" :rules="rules" label-position="right" lable-width="120px">
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 封面 Begin-->
 								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
 									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'||reportData.name=='封底'">
 										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
-											<el-form-item :label="item.title" :prop="item.fieldname" v-if="item.required == 0" label-width="150px">
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+											<el-form-item :label="item.title" :prop="item.param" v-if="item.required == 0" label-width="150px">
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
+												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
 
 												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
@@ -58,16 +58,16 @@
 													</el-option>
 												</el-select> -->
 											</el-form-item>
-											<el-form-item :label="item.title" :prop="item.fieldname" v-else label-width="150px" :rules="{required: true, message: '请填写', trigger: 'blur'}">
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+											<el-form-item :label="item.title" :prop="item.param" v-else label-width="150px" :rules="{required: true, message: '请填写', trigger: 'change'}">
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="item.value" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-date-picker v-model="item.value" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
+												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
 
 												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
@@ -219,18 +219,14 @@
 		},
 		data() {
 			return {
+				inputData: {},
 				basic_url: Config.dev_url,
 				selectData: [],
 				selectReportData: [],
 				reportTemplate:{
 					RE_TYPE: '1010',
 				},
-				reportGenerateForm:{
-					List:[],
-					WORKORDER_PROJECTList:[],//检测项目
-					WORKORDER_ITEMSLIST:[],//检验检测项目清单
-					WORKORDER_DATA_TEMPLATEList:[],//检验检测成果文件
-				},
+				reportGenerateForm:{},
 				date: new Date(), //绑定的时候 直接绑定的当前时间 就好了
 				options: [{
 					value: '检测结论',
@@ -257,7 +253,6 @@
 				activeNames: ['1','2','3','4','5'],//手风琴数量
 				labelPosition: 'right', //表格
 				isEditing: true,
-				pageDisable: false,
 				page: {//分页显示
 					currentPage: 1,
 					pageSize: 20,
@@ -319,9 +314,28 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
 					// this.reportGenerateForm.inspect_date = this.getToday();
-					console.log(this.reportTemplate.RE_TYPE);
-					console.log(res.data);
+					this.dealData(res.data);
 				}).catch((wrong) => {});
+			},
+			dealData(data,opt){
+				var res = {};
+				data.forEach((item,listIndex)=>{
+					var list = item.List;
+					var totalIndex = 0;
+					list.forEach((val,index)=>{
+						var param = '';
+						if(listIndex == 0){
+							param = 'param' + index;
+						}else if(listIndex == 1){
+							param = 'param' + data[listIndex].length + index;
+						}else{
+							param = 'param' + data[listIndex].length + data[listIndex-1].length + index;
+						}
+						res[param] = val.value;
+						val.param = param;
+					});
+				});
+				this.inputData = res;
 			},
 			//清空表单
 			reset(){
@@ -352,9 +366,8 @@
 				// this.detailId = id;
 				this.detailId = id;
 				this.requestData();
-				
-				console.log(this.detailId);
 			},
+
 			sizeChange(val) {//分页，总页数
 		      this.page.pageSize = val;
 		      this.requestData();
@@ -367,12 +380,24 @@
 			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
+				console.log(this.reportGenerateForm.name);
 				this.$refs.reportGenerateForm.validate((valid) => {
 				if (valid) {
-					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
-					this.$axios.post(url,this.reportGenerateForm).then((res) => {
+					var paramData = this.selectReportData;
+					for(var i=0; i<paramData.length; i++){
+						paramData[i].value = this.inputData[paramData[i].param];
+					}
+					var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.detailId;
+					this.$axios.post(url,this.selectReportData).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
+							// this.reportGenerateForm.reportData.List.id=this.detailId;
+							// this.reportGenerateForm.reportData.List.report_num=this.detailId;
+							// this.reportGenerateForm.reportData.List.product=this.detailId;
+							// this.reportGenerateForm.reportData.List.v_name=this.detailId;
+							// this.reportGenerateForm.reportData.List.proxy_type=this.detailId;
+							// this.reportGenerateForm.reportData.List.id=this.detailId;
+							console.log(this.detailId);
 							this.$message({
 								message: '保存成功',
 								type: 'success'

@@ -138,7 +138,7 @@
 								</el-table-column>
 								<el-table-column label="受检产品型号" width="120" sortable prop="ITEM_MODEL" v-if="checkedName.indexOf('受检产品型号')!=-1">
 								</el-table-column>
-								<el-table-column label="受检企业" width="300" sortable prop="V_NAME" v-if="checkedName.indexOf('受检企业')!=-1">
+								<el-table-column label="受检企业" width="300" sortable prop="V_NAMEDesc" v-if="checkedName.indexOf('受检企业')!=-1">
 								</el-table-column>
 								<el-table-column label="承检单位" width="150" sortable prop="CJDWDesc" v-if="checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
@@ -364,9 +364,11 @@
 		    	 this.download();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
-				}else if(item.name=="发布"){
-				 this.releasebtn();
-				}
+					}else if(item.name=="发布"){
+						this.releasebtn();
+					}else if(item.name=="复查"){
+						this.review();
+					}
 		    },
 			//添加用戶
 			openAddMgr() {
@@ -425,6 +427,28 @@
 					}
 				}
 			},
+			review(){
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要复查的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时复查多个数据',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selUser[0].ISBUILDED == 1) {
+						this.$message({
+							message: '此条数据是合格数据，无须在生成。',
+							type: 'warning'
+						});
+				}else if(this.selUser[0].SYNTHETICAL == 1){
+					this.$refs.child.review(this.selUser[0].ID);
+				}
+		  },
 			//查看
 			view(id) {
 				this.$refs.child.view(id);
@@ -438,8 +462,6 @@
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
-				this.down = !this.down,
-					this.up = !this.up
 			},
 			// 删除
 			delinfo() {
@@ -755,6 +777,8 @@
 				}; 
 			}
 		},
+		
+
 		beforeMount() {
 			// 在页面挂载前就发起请求
 			this.getKey();

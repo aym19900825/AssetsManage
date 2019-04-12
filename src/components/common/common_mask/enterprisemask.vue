@@ -122,7 +122,6 @@
 				deptId: 0
 			}
 		},
-		props: ['dialogTit'],
 		methods: {
 			setSel(val) {
 				this.selData = val;
@@ -156,10 +155,10 @@
 					CONTACT_ADDRESS: ''
 				};
 			},
-			getData(){
+			getData(parm){
 				this.dialogShow = true;
 				this.requestData();
-				this.getDept();
+				this.getDept(parm);
 				this.getCheckboxData=[];
 			},
 			selChange(row) {
@@ -256,18 +255,27 @@
 				}).catch((wrong) => {
 				})
 			},
-			getDept() {
-				var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer';
-				var data = {
-					DEPTID: this.$store.state.currentcjdw[0].id,
-					TYPE: 'dept'
-				};
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.resourceData = res.data.datas;
-					this.dialogVisible = true;
-				});
+			getDept(parm) {
+				if(parm=="notice"){
+					var url=this.basic_url+'/api-user/depts/findStation';
+					this.$axios.get(url, {}).then((res) => {
+						this.resourceData = res.data;
+						this.dialogVisible = true;
+					});
+				}else{
+					var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer';
+					var data = {
+						DEPTID: this.$store.state.currentcjdw[0].id,
+						TYPE: 'dept'
+					};
+					this.$axios.get(url, {
+						params: data
+					}).then((res) => {
+						this.resourceData = res.data.datas;
+						this.dialogVisible = true;
+					});
+				}
+				
 			},
 			submit(){
 				var selData = {};

@@ -292,13 +292,13 @@ export default {
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: 'res.data.resp_msg',
+								message: res.data.resp_msg,
 								type: 'success'
 							});
 							this.requestData();
 						}else{
 							this.$message({
-								message: 'res.data.resp_msg',
+								message: res.data.resp_msg,
 								type: 'warning'
 							});
 						}

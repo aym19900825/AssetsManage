@@ -60,7 +60,7 @@
 									<el-row :gutter="30">
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="createuser" label-width="100px">
-												<el-input v-model="roleList.createuserName" placeholder="当前录入人" :disabled="edit"></el-input>
+												<el-input v-model="roleList.createbyName" placeholder="当前录入人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -70,14 +70,14 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="机构" prop="deptidDesc" label-width="100px">
-												<el-input v-model="roleList.deptidDesc" placeholder="当前录入人机构" :disabled="edit">
+											<el-form-item label="机构" prop="deptName" label-width="100px">
+												<el-input v-model="roleList.deptName" placeholder="当前录入人机构" :disabled="edit">
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="updateuser" label-width="100px">
-												<el-input v-model="roleList.updateName" placeholder="当前修改人" :disabled="edit"></el-input>
+												<el-input v-model="roleList.updatebyName" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

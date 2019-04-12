@@ -366,11 +366,19 @@
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
 					+ '&recordid=' + this.detailId
-					+ '&appname=工作任务单_关联原始数据模板&appid=39';
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
-			editFile(){
-
+			editFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
 			},
 			delFile(index,row){
 				if(row.ID){

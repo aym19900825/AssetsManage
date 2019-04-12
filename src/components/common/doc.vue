@@ -137,7 +137,7 @@ export default {
                 + '&recordid=' + this.docParm.recordid
                 + '&appname=' + this.docParm.appname
                 + '&appid=' + this.docParm.appid;
-         window.open(url); 
+        // window.open(url);
         },
         uploadTip(){
             this.tipSaveShow = true;

@@ -466,13 +466,13 @@
 			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
 				<div class="el-collapse-item pb10" aria-expanded="true" accordion>
 					<el-tabs v-model="activeName" @tab-click="depthandleClick">
-						<el-tab-pane label="所内机构" name="first">
+						<el-tab-pane label="中心内机构" name="first">
 							<div class="scrollbar" style="height:380px;">
 								<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @check="handleClicks" check-strictly>
 								</el-tree>
 							</div>
 						</el-tab-pane>
-						<el-tab-pane label="所外机构" name="second">
+						<el-tab-pane label="中心外机构" name="second">
 							<div class="scrollbar" style="height:380px;">
 								<el-form inline-message :model="searchList" label-width="90px">
 									<el-row>
@@ -1101,7 +1101,7 @@
 				});
 			},
 
-			//所内机构 
+			//中心内机构 
 			getDept() {
 				var url=this.basic_url+'/api-user/depts/treeMap'
 				this.$axios.get(url, {}).then((res) => {
@@ -1178,7 +1178,7 @@
 				}
 				this.requestData();
 			},
-			//所外机构Table默认加载数据
+			//中心外机构Table默认加载数据
 			requestData(){
 				this.loading = true;//加载动画打开
 				var data = {
@@ -1237,7 +1237,7 @@
 				}
 				this.requestData();
 			},
-			//所外机构Table默认加载数据
+			//中心外机构Table默认加载数据
 			requestData(){
 				this.loading = true;//加载动画打开
 				var data = {
@@ -1275,7 +1275,7 @@
 			dailogconfirm() { //小弹出框确认按钮事件
 			if(this.getCheckboxData==null&&this.selUser.length == 0){
 						this.$message({
-						message: '所内机构和所外机构，请至少选择一个',
+						message: '中心内机构和中心外机构，请至少选择一个',
 						type: 'erro'
 					});
 			}else if(this.getCheckboxData.length!=0&&this.getCheckboxData!=null){

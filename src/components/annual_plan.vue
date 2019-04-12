@@ -169,9 +169,9 @@
 								</el-table-column>
 								<el-table-column label="提出单位" sortable width="120px" prop="PROP_UNITDesc" v-if="checkedName.indexOf('提出单位')!=-1">
 								</el-table-column>
-								<el-table-column label="提报日期" sortable width="160px" prop="REPORTDATE" :formatter="dateFormat" v-if="checkedName.indexOf('提报日期')!=-1">
-								</el-table-column>
 								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="checkedName.indexOf('编辑状态')!=-1">
+								</el-table-column>
+								<el-table-column label="提报日期" sortable width="160px" prop="REPORTDATE" :formatter="dateFormat" v-if="checkedName.indexOf('提报日期')!=-1">
 								</el-table-column>
 								<el-table-column label="执行状态" sortable  width="120px" prop="LEADER_STATUSDesc" v-if="checkedName.indexOf('执行状态')!=-1">
 								</el-table-column>

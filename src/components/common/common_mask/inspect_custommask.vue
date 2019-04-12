@@ -241,7 +241,7 @@
 				customarr.push(this.selUser[0].customeraddress);//地址
 				customarr.push(this.selUser[0].customerzipcode);//邮编
 				customarr.push(this.selUser[0].customercode);//信用代码
-				customarr.push(this.selUser[0].depttype);//所内（所外）
+				customarr.push(this.selUser[0].depttype);//中心内（中心外）
 				customarr.push(this.selUser[0].customername);
 				this.$emit('customarr',customarr);
 				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){

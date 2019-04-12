@@ -35,7 +35,7 @@
 												</el-table-column>
 												<el-table-column prop="UNIT" label="计量单位" sortable>
 												</el-table-column>
-												<el-table-column prop="UNIT" label="样品序号" sortable>
+												<el-table-column label="样品序号" sortable>
 													<template slot-scope="scope">
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
 													</template>

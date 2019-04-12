@@ -283,6 +283,7 @@
 			proarr.push(this.selUser[0].NUM);
 			proarr.push(this.selUser[0].TYPE);
 			proarr.push(this.selUser[0].VERSION);
+			proarr.push(this.selUser[0].ID);
 			this.$emit('categorydata',proarr);
 			this.requestData();
 			this.resetBasisInfo();//调用resetBasisInfo函数

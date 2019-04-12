@@ -706,9 +706,9 @@
 							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
-						<div class="content-footer" v-show="views">
+						<!-- <div class="content-footer" v-show="views">
 							<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="build">生成工作任务单</el-button>
-						</div>
+						</div> -->
 					</el-form>
 				</div>
 			</div>
@@ -1994,14 +1994,14 @@
 			//生产单位名称
 			appendnames(value){
 				if(value.TYPE==1){
-					this.dataInfo.P_NAMEDesc=value.NAME;
+					this.dataInfo.V_NAME=value.ID;
 					this.dataInfo.PRODUCT_UNIT=value.CODE;
-					this.dataInfo.P_NAME=value.ID;
+					this.dataInfo.P_NAMEDesc=value.NAME;
 					this.dataInfo.PRODUCE_TYPE=1;
 				}else{
 					this.dataInfo.PRODUCE_TYPE=2;
-					this.dataInfo.P_NAMEDesc=value.fullname;
-					this.dataInfo.P_NAME=value.id;
+					this.dataInfo.V_NAMEDesc=value.fullname;
+					this.dataInfo.V_NAME=value.id;
 					this.dataInfo.PRODUCT_UNIT='';
 				}
 			},

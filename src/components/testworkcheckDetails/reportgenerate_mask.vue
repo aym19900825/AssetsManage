@@ -75,7 +75,7 @@
 												</el-radio-group> -->
 
 												<!-- <el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
-													<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
+														<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
 													</el-option>
 												</el-select> -->
 											</el-form-item>
@@ -100,18 +100,40 @@
 														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
 													</template>
 												</el-table-column>
-
+												
 												<el-table-column label="项目名称" sortable prop="P_DESC">
 												</el-table-column>
-												<el-table-column label="不合格类别" sortable prop="ISQUALIFIED">
+												<el-table-column label="不合格类别" sortable prop="ISQUALIFIEDDesc">
 												</el-table-column>
 												<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 												</el-table-column>
 												<el-table-column label="单位" sortable prop="UNIT">
 												</el-table-column>
-												<el-table-column label="检测结果" sortable prop="S_NAME">
+												<el-table-column label="检测结果" width="200px">
+													<template slot-scope="scope">
+														<el-table :data="scope.row.workorder_project_itemList" row-key="ID" :show-header="false" style="width: 100%;">
+															<el-table-column label="样品编号" prop="ITEMNUM"></el-table-column>
+															<el-table-column label="样品描述" prop="MEMO"></el-table-column>
+														</el-table>
+													</template>
 												</el-table-column>
-												<el-table-column label="单项判定" sortable prop="SYNTHETICAL">
+												
+												<!-- <el-table-column label="检测结果" width="200px">
+													<template slot-scope="scope">
+														<el-table-column v-for="(itemList2,index) in scope.row.workorder_project_itemList" :key="index" :label="itemList2.ITEMNUM" prop="MEMO"></el-table-column>
+													</template>
+												</el-table-column> -->
+
+												
+
+												<el-table-column label="单项判定" width="200px" sortable prop="SYNTHETICAL">
+													<template slot-scope="scope">
+														<el-form-item :prop="'reportData.List.'+scope.$index + '.SYNTHETICAL'">
+															<el-radio-group v-model="scope.row.SYNTHETICAL" :disabled="noedit">
+																<el-radio v-for="(data,index) in SelectIsSynthetical" :key="index" :label="data.code">{{data.name}}</el-radio>
+															</el-radio-group>
+														</el-form-item>
+													</template>
 												</el-table-column>
 											</el-table>
 
@@ -195,7 +217,7 @@
 						<!--首页按钮事件-->
 						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
 						<!--检验检测项目清单按钮事件-->
-						<el-button type="primary" v-show="thirdBtn" @click="testListSubmit">保存</el-button>
+						<el-button type="primary" v-show="thirdBtn" @click="submitForm">保存</el-button>
 						<!--内容页按钮事件-->
 						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
 						<!--封底按钮事件-->
@@ -221,8 +243,10 @@
 			return {
 				inputData: {},
 				basic_url: Config.dev_url,
-				selectData: [],
-				selectReportData: [],
+				selectData: [],//报告模板类型
+				selectReportData: [],//获取报告数据
+				SelectIsQualified:[],//不合格类别
+				SelectIsSynthetical:[],//获取单项判定合格不合格
 				reportTemplate:{
 					RE_TYPE: '1010',
 				},
@@ -301,7 +325,7 @@
 				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
-					console.log(res.data.data[0].RE_NUM);
+					// console.log(res.data.data[0].RE_NUM);
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
@@ -313,23 +337,43 @@
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
+					// console.log(res.data);
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
 			},
+			//获取不合格类别
+			getIsQualified() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=isqualified';
+				this.$axios.get(url, {}).then((res) => {
+					this.SelectIsQualified = res.data;
+				}).catch(error => {
+				})
+			},
+			//单项判定合格不合格
+			getIsSynthetical() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=isSynthetical';
+				this.$axios.get(url, {}).then((res) => {
+					this.SelectIsSynthetical = res.data;
+				}).catch(error => {
+				})
+			},
+			//From表单中的数据通过param找到Value值
 			dealData(data,opt){
 				var res = {};
 				data.forEach((item,listIndex)=>{
 					var list = item.List;
 					var totalIndex = 0;
 					list.forEach((val,index)=>{
+						// console.log(listIndex);
+						// console.log(data[listIndex]);
 						var param = '';
 						if(listIndex == 0){
 							param = 'param' + index;
 						}else if(listIndex == 1){
-							param = 'param' + data[listIndex].length + index;
+							param = 'param' + data[listIndex].List.length + index;
 						}else{
-							param = 'param' + data[listIndex].length + data[listIndex-1].length + index;
+							param = 'param' + data[listIndex].List.length + data[listIndex-1].List.length + index;
 						}
 						res[param] = val.value;
 						val.param = param;
@@ -384,8 +428,13 @@
 				this.$refs.reportGenerateForm.validate((valid) => {
 				if (valid) {
 					var paramData = this.selectReportData;
-					for(var i=0; i<paramData.length; i++){
-						paramData[i].value = this.inputData[paramData[i].param];
+					for(let i=0; i<paramData.length; i++){
+						var list = paramData[i].List;
+						for(let j=0; j<list.length; j++){
+							var tranData = list[j];
+							tranData.value = this.inputData[tranData.param];
+						}
+						
 					}
 					var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.detailId;
 					this.$axios.post(url,this.selectReportData).then((res) => {
@@ -457,6 +506,8 @@
 		
 		mounted() {
 			this.getReportType();
+			this.getIsQualified();//不合格类别
+			this.getIsSynthetical();//单项判定合格不合格
 		},
 	}
 </script>

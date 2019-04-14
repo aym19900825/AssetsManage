@@ -623,18 +623,6 @@
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
 
-														<el-table-column label="操作" v-show="!pageDisable">
-															<template slot-scope="scope">
-															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																	<i class="icon-excel"></i>
-																	预览
-																</el-button>
-																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
-																	<i class="icon-pencil"></i>
-																	编辑
-																</el-button>
-															</template>
-														</el-table-column>
 													</el-table>
 
 													<!-- <el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
@@ -656,9 +644,9 @@
 														<el-table-column label="模板来源" sortable prop="DATA_TYPE">
 													      <template slot-scope="scope">
 													      	<el-select v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
-																<el-option label="基础数据选择" value="1"></el-option>
-																<el-option label="链条选择" value="2"></el-option>															
-															</el-select>
+																		<el-option label="基础数据选择" value="1"></el-option>
+																		<el-option label="链条选择" value="2"></el-option>															
+																	</el-select>
 													      </template>
 													    </el-table-column>
 														<el-table-column label="模板编号" sortable prop="D_NUM">

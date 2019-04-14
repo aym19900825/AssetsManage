@@ -440,7 +440,7 @@
 						type: 'warning'
 					});
 					return;
-				}else if(this.selUser[0].ISBUILDED == 1) {
+				}else if(this.selUser[0].SYNTHETICAL == 0) {
 						this.$message({
 							message: '此条数据是合格数据，无须在生成。',
 							type: 'warning'

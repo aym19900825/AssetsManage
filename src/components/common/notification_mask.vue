@@ -181,23 +181,23 @@
 								<el-tabs v-model="activeName" @tab-click="handleClick">
 									<el-tab-pane label="检验依据" name="first">
 										<div class="table-func table-funcb">
-											<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')">
+											<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 											</el-button>
-											<el-button type="primary" size="mini" round @click="basisleadbtn" :dialog="view" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')">
+											<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 												<i class="icon-search"></i>
 												<font>选择</font>
 											</el-button>
 										</div>
 
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
+										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
 											<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 											</el-table-column>
 											<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容" :disabled="noedit">
 														   <!-- <el-button slot="append" icon="el-icon-search" :disabled="standard"></el-button> -->
 													</el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
@@ -207,7 +207,8 @@
 											<el-table-column prop="S_NAME" label="检验标准名称" sortable>
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入内容" :disabled="noedit"></el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.S_NAME}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -215,7 +216,7 @@
 											<el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容" :disabled="noedit"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
 													</el-form-item>
 												</template>
@@ -237,93 +238,104 @@
 											</el-table-column>
 										</el-table>
 									</el-tab-pane>
-									<el-tab-pane label="检验检测项目" name="second">
-										<div class="table-func table-funcb">
-											<el-button type="success" size="mini" round @click="addfieldProject" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')">
+
+									<el-tab-pane label="检验项目与要求" name="second">
+											<div class="table-func table-funcb">
+											<el-button type="success" size="mini" round @click="addfieldProject" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 											</el-button>
-											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')">
+											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 												<i class="icon-search"></i>
 												<font>选择</font>
 											</el-button>
-										</div>
-										<el-table :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true"
-										 highlight-current-row="highlight-current-row" style="width: 100%;"
-										  @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
-											<el-table-column label="序号" sortable width="120px" prop="NUMBER" type="index">
-											</el-table-column>
-											<el-table-column label="检验检测项目编号" sortable width="145px" prop="P_NUM">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入内容">
-														<!-- <el-button slot="append" icon="el-icon-search"></el-button> -->
-													</el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.P_NUM}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="P_DESC" label="检验检测项目内容" sortable width="250px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入内容"></el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.P_DESC}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="REMARKS" label="要求" sortable width="180px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容"></el-input>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<el-table-column prop="UNITCOST" label="单价" sortable width="100px">
-												<!-- <template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.UNITCOST'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-														<el-input size="small" v-model="scope.row.UNITCOST" placeholder="请输入内容"></el-input>
-													</el-form-item>
-												</template> -->
-											</el-table-column>
-											<el-table-column prop="VERSION" label="版本" sortable width="120px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column>
-											<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px">
-												<template slot-scope="scope">
-													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.' + scope.$index + 'STATUS'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
-													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" placeholder="请输入内容"></el-input>
-													<span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-													</el-form-item>
-												</template>
-											</el-table-column> -->
-											<el-table-column label="附件" sortable width="120px">
-												<template slot-scope="scope" v-if="!views">
-													<el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-remove="handleRemove" :before-remove="beforeRemove" multiple :limit="3" :on-exceed="handleExceed" :file-list="fileList">
-														<el-button size="small" type="primary" >点击上传</el-button>
-													</el-upload>
-												</template>
-											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="100px">
-												<template slot-scope="scope">
-													<el-button @click="deleteRow(scope.$index,scope.row,' onthebasisList')" type="text" size="small" v-if="!viewtitle" :disabled="views">
-														<i class="icon-trash red"></i>
-													</el-button>
-												</template>
-											</el-table-column>
-										</el-table>
-									</el-tab-pane>
+											</div>
+	                                        
+											<el-table ref="" :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true"
+												:summary-method="getSummaries" :show-summary="true"
+												highlight-current-row
+												style="width: 100%;" 
+												:default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
+												<el-table-column prop="iconOperation" fixed label="" width="50px" >
+													<span v-show="!viewtitle">
+														<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
+													</span>
+												</el-table-column>
+
+												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
+													<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入" :disabled="noedit">
+														</el-input>
+														<span v-else>{{scope.row.P_NUM}}</span>
+													</el-form-item>	
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="P_DESC" label="检验项目描述" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入" :disabled="noedit">
+															</el-input>
+															<span v-else>{{scope.row.P_DESC}}</span>
+														</el-form-item>	
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="REMARKS" label="要求" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.REMARKS'" >
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
+                              </el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column>
+
+												<!-- <el-table-column prop="INSPECT_GROUP" label="专业组" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.INSPECT_GROUP'" >
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择" :disabled="noedit"  @visible-change="visablemaingroup($event)" >
+																<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
+															</el-select>
+														</el-form-item>	
+													</template>
+												</el-table-column> -->
+
+												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.UNITCOST'" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST"  placeholder="请输入要求" :disabled="noedit">
+															</el-input>
+															<span v-else>{{scope.row.UNITCOST}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="noedit">
+														</el-input>
+														<span v-else>{{scope.row.VERSION}}</span>
+														</el-form-item>	
+													</template>
+												</el-table-column>
+												<el-table-column fixed="right" label="操作" width="120">
+													<template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small" v-if="!viewtitle">
+														 <i class="icon-trash red"></i>
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+									    </el-tab-pane>
 								</el-tabs>
 							</div>
 							<el-collapse-item title="完成日期及费用" name="6">
 								<el-row >
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
@@ -334,7 +346,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
-											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%">
+											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%" >
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
@@ -381,18 +393,18 @@
 						</el-collapse>
 						</div>
 					</el-form>
-					<div class="content-footer" v-show="reviewtitle">
+					<div class="content-footer" v-show="!addtitle&&!viewtitle">
 	          <el-button type="primary" @click="save('Update')">保存</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
-					<div class="content-footer" v-show="noviews">
+					<div class="content-footer" v-show="addtitle">
 	          <el-button type="primary" @click="save('Update')">保存</el-button>
-						<el-button type="success" v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
+						<el-button type="success" @click="save('Submit')">保存并继续</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
-					<div class="content-footer" v-show="views">
-						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildcheck">生成检验委托书</el-button>
-						<el-button type="success" v-if="this.dataInfo.STATE == 3" @click="buildtest">生成检测委托书</el-button>
+					<div class="content-footer" v-show="views&&this.dataInfo.STATE == 3">
+						<el-button type="success" @click="buildcheck">生成检验委托书</el-button>
+						<el-button type="success" @click="buildtest">生成检测委托书</el-button>
 					</div>	
 				</div>
 			</div>
@@ -492,6 +504,20 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+					disabledDate: (time) => {
+						if(!!this.dataInfo.XD_DATE){
+							return time.getTime() < new Date(this.dataInfo.XD_DATE).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
+						}else{
+							this.dataInfo.COMPDATE='';
+							this.$message({
+								message: '请先选下达时间',
+								type: 'warning'
+							});
+
+						}
+					}
+				},
 				loading: false,
 				loadSign:true,//加载
 				approvingData:{},//流程的数据
@@ -537,7 +563,6 @@
 				viewtitle: false, //查看弹出框title
 				modify: false,
 				views: false,
-				noviews: true, //保存的按钮
 				approval:false,
 				start:false,
 				activeName: 'first', //tabs
@@ -560,11 +585,15 @@
 					SOLUTION: '',
 					COMPDATE: '',
 					PRODUCE_TYPE:'',
+					P_LEADERDesc:'',//项目负责人
+					P_LEADER:'',//
+					ACCEPT_PERSONDesc:'',//接收人
+					ACCEPT_PERSON:'',//
 					STATE: '1',
 					STATEDesc: '草稿',
 					ENTERBY: '',
 					STATUS: '',
-					CHECTCOST:'',
+					CHECTCOST:0.00,
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: [],
 				},
@@ -608,6 +637,66 @@
 			};
 		},
 		methods: {
+			priceFormate(row, column) {
+				var money = row.UNITCOST;
+				return row.UNITCOST =  this.toFixedPrice(money);
+			},
+			//分包要求检测费用列的总和
+			getSummaries(param) {
+        const { columns, data } = param;
+        const sums = [];
+        columns.forEach((column, index) => {
+          if (index === 0) {
+            sums[index] = '总价';
+            return;
+					} else if(index === 4) {//计算第几列的减1
+						const values = data.map(item => {
+							if(!!item[column.property]){
+								return Number(item[column.property].replace(/,/g,''));
+							}else{
+								return 0.00;
+							}
+						});
+						//验证每个value值是否是数字，如果是执行if
+						if (!values.every(value => isNaN(value))) {
+							sums[index] = values.reduce((prev, curr) => {
+								return prev + curr;
+							}, 0);
+							sums[index] = this.toFixedPrice(sums[index]);
+							if(!!sums[index]){
+								this.INSPECTCOST = sums[index];
+							}else{
+								this.INSPECTCOST = '0.00';
+							}
+							var paramData1 = this.INSPECTCOST;
+							this.$forceUpdate();
+							 this.dataInfo.CHECTCOST = this.INSPECTCOST ;
+						} else {
+							sums[index] = ' ';
+						}
+					}
+				});
+					return sums;
+			},
+			toFixedPrice(price){
+				var res = 0;
+				var money = price;
+				var re = /^[0-9]+.?[0-9]*$/;
+				if (!re.test(money)||money == '') {
+	　　　　 res = 0.00;
+	　　　　 return;
+		　　}else{
+					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
+					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					res = num.join(".");
+				}
+				return res;
+			},
+			//金额两位小数点千位分隔符，四舍五入
+			testPrice(item){
+				var money = item.UNITCOST;
+				item.UNITCOST = this.toFixedPrice(money);
+			},
 			viewFile(){
 				var url = this.po_url+'/show?fileid=' +  row.FILEID
 						+ '&userid=' +  this.docParm.userid
@@ -649,7 +738,7 @@
 					STATEDesc: '草稿',
 					ENTERBY: '',
 					STATUS: '',
-					CHECTCOST:'',
+					CHECTCOST:0.00,
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: [],
 				}
@@ -658,14 +747,11 @@
 				// });
 				// this.$refs["dataInfo"].resetFields();
 			},
-			//机构值
+			//承检单位
 			getCompany() {
-				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
-					params: {
-						type: type
-					},
+					
 				}).then((res) => {
 					this.selectData = res.data;
 				});
@@ -744,6 +830,9 @@
 			},
 			
 			toNum(str) {
+				if(Object.prototype.toString.call(str)!="[object String]"){
+					str = str.toString();
+				}
 				return str.replace(/\,|\￥/g, "");
 			},
 			//金额两位小数点千位分隔符，四舍五入
@@ -756,11 +845,6 @@
 
 			//tabs
 			handleClick(tab, event) {
-			},
-			iconOperation(row, column, cell, event) {
-				if(column.property === "iconOperation") {
-					row.isEditing = !row.isEditing
-				}
 			},
 			//删除行
 			deleteRow(index, row, listName){
@@ -814,7 +898,7 @@
 					DEPTTYPE:'1',
 					S_NAME: '',
 					S_ENGNAME: '',
-					VERSION: '',
+					VERSION: 1,
 					STATUS: '1',
 					isEditing: true
 				};
@@ -861,8 +945,9 @@
 					P_NUM: '',
 					DEPTTYPE:'1',
 					P_DESC: '',
+					UNITCOST:'',
 					REMARKS: '',
-					VERSION: '1',
+					VERSION: 1,
 					STATUS: '1',
 					isEditing: true
 				};
@@ -922,7 +1007,6 @@
 			visible() {
 				this.reset();
 				this.reviewtitle=false;
-				this.noviews=true;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;
 					this.dataInfo.ENTERBY = res.data.id;
@@ -935,7 +1019,6 @@
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.views = false;
-				this.noviews = true;
 				this.edit = true;
 				this.noedit = false;
 			},
@@ -944,15 +1027,22 @@
 				this.$axios.get(url, {}).then((res) => {
 					//依据对号控制
 					for(var i = 0; i<res.data.WORK_NOTICE_CHECKBASISList.length;i++){
-						res.data.WORK_NOTICE_CHECKBASISList[i].isEditing = false;
+						if(res.data.WORK_NOTICE_CHECKBASISList[i].DEPTTYPE==1){
+							res.data.WORK_NOTICE_CHECKBASISList[i].isEditing = true;
+						}else{
+							res.data.WORK_NOTICE_CHECKBASISList[i].isEditing = false;
+						}
 					}
 					//项目要求对号控制
 					for(var j = 0; j<res.data.WORK_NOTICE_CHECKPROJECTList.length;j++){
-						res.data.WORK_NOTICE_CHECKPROJECTList[j].isEditing = false;
+						if(res.data.WORK_NOTICE_CHECKPROJECTList[j].DEPTTYPE==1){
+							res.data.WORK_NOTICE_CHECKPROJECTList[j].isEditing = true;
+						}else{
+							res.data.WORK_NOTICE_CHECKPROJECTList[j].isEditing = false;
+						}
 					}
+					res.data.CJDW=Number(res.data.CJDW);
 					this.dataInfo = res.data; 
-					this.dataInfo.CJDW=this.dataInfo.CJDWDesc;
-					console.log(res);
 					if(this.dataInfo.TYPE==2||this.dataInfo.TYPE==4){
 						this.reviewtitle = true;
 					}else{
@@ -971,10 +1061,8 @@
 					this.dataInfo.CHANGEBY = res.data.id;
 					if(this.dataInfo.WP_NUM!=undefined||this.dataInfo.WP_NUM!=null){
 							this.special=true;
-							this.noviews=false;
 					}else{
 							this.special=false;
-							this.noviews=true;
 					}
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
@@ -985,7 +1073,6 @@
 				this.modifytitle = true;
 				this.reviewtitle=true;
 				this.viewtitle = false;
-				this.noviews = true;
 				this.views = false; //
 				this.edit = true;
 				this.noedit = false;
@@ -997,7 +1084,6 @@
 				this.modifytitle = false;
 				this.viewtitle = true;
 				this.views = true; //
-				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
 				this.special=true;
@@ -1030,10 +1116,9 @@
 			},
 			//
 			review(dataid){
-				console.log(dataid);
 					var url = this.basic_url + '/api-apps/app/workNot/operate/createWorkNotice/?ID=' + dataid;
 					this.$axios.get(url, {}).then((res) => {
-							if(res.data.resp_code == 0) {
+							if(res.data.resp_code == "0") {
 									this.dataInfo=res.data;
 									this.show=true;
 							}
@@ -1044,8 +1129,7 @@
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.reviewtitle=true; 
-				this.views = false; //
-				this.noviews = false;
+				this.views = false; 
 				this.edit = true;
 				this.noedit = true;
 				this.special=true;
@@ -1095,7 +1179,6 @@
 			},
 			//接到产品类别的值
 			categorydata(value){
-				console.log(value)
 				this.dataInfo.P_NUM = value[0];
 				// this.dataInfo.PRODUCT_TYPEDesc = value[1];
 			  this.dataInfo.PRODUCT_TYPE = value[1];
@@ -1129,7 +1212,7 @@
 			save(parameter) {
 				this.$refs.dataInfo.validate((valid) => {
 		          if (valid) {
-							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0&&this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
+							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0||this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
 			        		this.$message({
 								message: '依据和检验检测项目是必填项，请填写！',
 								type: 'warning'
@@ -1145,13 +1228,13 @@
 							}); 
 						return;	
     				  }
-			        if(typeof(this.dataInfo.CJDW) != 'undefind') {
-			        	 for(var j=0;j<this.selectData.length;j++){
-			        	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
-			        	 		this.dataInfo.CJDW=this.selectData[j].id
-			        	 	}
-			        	 }		
-			        }
+			        // if(typeof(this.dataInfo.CJDW) != 'undefind') {
+			        // 	 for(var j=0;j<this.selectData.length;j++){
+			        // 	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
+			        // 	 		this.dataInfo.CJDW=this.selectData[j].id
+			        // 	 	}
+			        // 	 }		
+			        // }
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
 						if(res.data.resp_code == 0) {

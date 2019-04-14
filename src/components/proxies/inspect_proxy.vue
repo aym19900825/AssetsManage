@@ -199,23 +199,22 @@
 				value: '',
 				options: [{
 					value: '1',
-					label: '草稿'
+					label: '编制'
 				}, {
 					value: '2',
 					label: '审批中'
 				},{
 					value: '3',
-					label: '已发布'
+					label: '待分配'
 				},
 				{
 					value: '4',
-					label: '已取消'
+					label: '中止'
 				},
 				{
 					value: '0',
 					label: '驳回'
 				}
-				
 				],
 				isShow: false,
 				ismin: true,
@@ -821,11 +820,9 @@
 								fullname:  resData[i].NAME
 							})
 						}
-						console.log(this.selectData);
 					}).catch((wrong) => {})
 				})
 				.catch(function(err){
-					console.log(err);
 				})
 			}
 		},

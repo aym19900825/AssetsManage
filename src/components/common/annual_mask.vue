@@ -162,10 +162,10 @@
 									    </el-table-column>
 										<el-table-column prop="CJDW" label="承检单位" sortable width="200px">
 											<template slot-scope="scope">
-												<el-select v-if="scope.row.isEditing" clearable v-model="scope.row.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%">
+												<el-select v-if="scope.row.isEditing" clearable v-model="scope.row.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="getCjdw(scope.row)">
 													<el-option v-for="(data,index) in inspectUnit" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
-												<span v-if="!scope.row.isEditing">{{scope.row.CJDW}}</span>
+												<span v-if="!scope.row.isEditing">{{scope.row.CJDWDesc}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="200px">
@@ -268,34 +268,41 @@
 						                          	<font>新建行</font>
 						                        </el-button>
 											</div>
-							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
+							            	<el-table :header-cell-style="rowClass" 
+													  :data="basisList" 
+													  border 
+													  stripe 
+													  :fit="true" 
+													  max-length="260px" 
+													  style="width: 100%;" 
+													  :default-sort="{prop:'basisList', order: 'descending'}">
 							            		<el-table-column prop="NUMBER" label="序号" width="50" type="index">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUMBER"></el-input>
 														<span v-else>{{scope.row.NUMBER}}</span>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM"></el-input>
 														<span v-else>{{scope.row.S_NUM}}</span>
 													</template>
 												</el-table-column>
-							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350">
+							            		<el-table-column prop="S_NAME" label="标准名称" sortable>
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME"></el-input>
 														<span v-else>{{scope.row.S_NAME}}</span>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="版本" sortable width="80">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION"></el-input>
 														<span v-else>{{scope.row.VERSION}}</span>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="120">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FILESIZE" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FILESIZE"></el-input>
 														<span v-else>{{scope.row.FILESIZE}}</span>
 													</template>
 												</el-table-column>
@@ -327,19 +334,19 @@
 												<el-table-column prop="NUMBER" label="序号" width="50" type="index"></el-table-column>
 							            		<el-table-column prop="P_NUM" label="检验项目编号" width="100">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM"></el-input>
 														<span v-else>{{scope.row.P_NUM}}</span>
 													</template>
 												</el-table-column>
-							            		<el-table-column prop="P_DESC" label="检验项目描述" width="250">
+							            		<el-table-column prop="P_DESC" label="检验项目描述">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC"></el-input>
 														<span v-else>{{scope.row.P_DESC}}</span>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="REMARKS" label="要求" width="200">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" disabled></el-input>
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS"></el-input>
 														<span v-else>{{scope.row.REMARKS}}</span>
 													</template>
 												</el-table-column>
@@ -785,14 +792,14 @@
                     callback();
                 }
             };
-			//放大镜选择验证
-			var validateItemdata = (rule, value, callback) => {
-                if (this.WORKPLAN.ITEMTYPE === undefined || this.WORKPLAN.ITEMTYPE === '' || this.WORKPLAN.ITEMTYPE === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
+			// //放大镜选择验证
+			// var validateItemdata = (rule, value, callback) => {
+            //     if (this.WORKPLAN.ITEMTYPE === undefined || this.WORKPLAN.ITEMTYPE === '' || this.WORKPLAN.ITEMTYPE === null) {
+            //         callback(new Error('必填'));
+            //     }else {
+            //         callback();
+            //     }
+            // };
 			return {
 				docParm: {
 					'model': 'new',
@@ -879,12 +886,7 @@
 				rules: {
 					PROP_UNIT:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//提出单位
 					CJDW:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}], //承检单位
-       				ITEMTYPE:[{required: true, trigger: 'blur', message: '请选择',}],//产品类别
 					TYPE:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//类别
-					// DESCRIPTION:[
-					// 	{required: true, trigger: 'blur',message: '必填' },
-					// 	{trigger: 'blur', validator: this.Validators.isFillTips}
-					// ],//计划描述
 					COMPACTOR:[//编制人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
@@ -1102,17 +1104,12 @@
 									type: 'error'
 								});
 							}
-						}).catch((err) => {
-							// this.$message({
-							// 	message: '网络错误，请重试',
-							// 	type: 'error'
-							// });
-						});
+						}).catch((err) => {});
 					}).catch(() => {
 
 					});
 				}else{
-						this[delList].splice(index,1);
+					this[delList].splice(index,1);
 				}
 			},
 			//下达任务通知书
@@ -1147,8 +1144,8 @@
 				
 			},
 			showLineData(row){
-				this.proTestList = row.WORLPLANLINE_PROJECTList;
-				this.basisList = row.WORLPLANLINE_BASISList;
+				this.proTestList = !!row.WORLPLANLINE_PROJECTList ? row.WORLPLANLINE_PROJECTList : [];
+				this.basisList = !!row.WORLPLANLINE_BASISList ? row.WORLPLANLINE_BASISList : [];
 			},
    			//年度计划表格函数
    			iconOperation(row){
@@ -1291,7 +1288,6 @@
 						type: 'warning'
 					});
 				}else{
-					this.$forceUpdate();
 					this.editPlan.PRODUCT_TYPE = this.selUser[0].TYPE;
 					this.editPlan.NUM = this.selUser[0].NUM;
 					this.resetBasisInfo3();//调用resetBasisInfo3函数
@@ -1492,7 +1488,7 @@
 					});
 					return;
 				}
-				var basise = this.editPlan.WORLPLANLINE_BASISList;
+				var basise = !!this.basisList ? this.basisList : [];
 				var basissnums = [];
 				for (var i = 0; i < basise.length; i++) {
 					if(basise[i].DEPTTYPE == '1'){
@@ -1561,10 +1557,11 @@
 				  WP_NUM: '',
 				  WP_LINENUM: this.editPlan.WP_LINENUM,
 		          P_DESC: '',
-		          UNITCOST:'',
+		          UNITCOST:'0.00',
 		          REMARKS: '',
 		          VERSION: '1',
 		          STATUS: '1',
+				  DEPTTYPE: '1',
 		          isEditing: true
 		        };
 		        this.proTestList.push(obj);
@@ -1578,6 +1575,7 @@
 		          S_ENGNAME: '',
 		          VERSION: '',
 		          STATUS: '1',
+				  DEPTTYPE: '1',
 		          isEditing: true
 		        };
 		        this.basisList.push(obj);
@@ -1756,8 +1754,7 @@
 					'STATUSDesc': '草稿',
 					'LEADER_STATUS': '1',
 					'STATUSDATE': date,
-					'ITEMTYPE': '',
-					'CJDW': this.deptid,
+					// 'CJDW': this.deptid,
 					'PROP_UNIT': '',
 					'ENTERBY': '',
 					'ENTERDATE': date,
@@ -1807,10 +1804,30 @@
 					var worlplanlist = res.data.WORLPLANLINEList;
 					for(var i=0, len=worlplanlist.length; i<len; i++){
 						worlplanlist[i].isEditing = false;
+						worlplanlist[i].CJDW = Number(worlplanlist[i].CJDW);
+						var worBasisList = worlplanlist[i].WORLPLANLINE_BASISList;
+						var worProjectList = worlplanlist[i].WORLPLANLINE_PROJECTList;
+						for (var m = 0; m < worBasisList.length; m++) {
+							if(worBasisList[m].DEPTTYPE == '1'){
+								worBasisList[m].isEditing = true;
+							}else{
+								worBasisList[m].isEditing = false;
+							}
+						}
+						for (var n = 0; n < worProjectList.length; n++) {
+							if(worProjectList[n].DEPTTYPE == '1'){
+								worProjectList[n].isEditing = true;
+							}else{
+								worProjectList[n].isEditing = false;
+							}
+						}
 						worlplanlist[i].frontId = this.frontId++;
 					}
+
+					//默认编辑第一条子表数据
 					if(res.data.WORLPLANLINEList.length > 0){
 						res.data.WORLPLANLINEList[0].isEditing = true;
+						this.editPlan = res.data.WORLPLANLINEList[0];
 						this.basisList = res.data.WORLPLANLINEList[0].WORLPLANLINE_BASISList;
 						this.proTestList = res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList;
 						this.isEditList = true;
@@ -2025,7 +2042,7 @@
 					'STATUS': '1',
 					'LEADER_STATUS': '1',
 					'STATUSDATE': date,
-					'ITEMTYPE': '',
+					// 'ITEMTYPE': '',
 					'PROP_UNIT': '',
 					'ENTERBY': '当前人',
 					'ENTERDATE': date,

@@ -170,10 +170,10 @@
 															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
 																	<i class="icon-excel"></i>
 																</el-button>
-																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
+																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)">
 																	<i class="icon-pencil"></i>
 																</el-button>
-																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
+																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)">
 																	<i class="icon-trash red"></i>
 																</el-button>
 															</template>
@@ -466,8 +466,7 @@
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
-					this.workorderForm.WORKORDER_DATA_TEMPLATEList = this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(0,1);
-					console.log(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
+					// this.workorderForm.WORKORDER_DATA_TEMPLATEList = this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(1,1);
 					if(opt == 'showDialog'){
 						this.show = true;
 					}

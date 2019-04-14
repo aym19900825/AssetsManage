@@ -44,7 +44,12 @@
 			</div>
 			<!-- 高级查询划出 End-->
 			<!-- 第二层弹出的表格 Begin-->
-			<el-table :data="projectList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="projectList" height="400px" border stripe ref="singleTable"
+			 style="width: 100%;" 
+			 :default-sort="{prop:'projectList', order: 'descending'}"
+			  @selection-change="SelChange"
+			  @current-change="setSel"
+			   v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
 				<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -173,6 +178,12 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
+	setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.singleTable.clearSelection();
+		this.$refs.singleTable.toggleRowSelection(row);
+  	},
   	sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();
@@ -343,11 +354,35 @@
 			console.log('取消关闭');
 			$('.v-modal').hide();
 		});
-    },
+	},
+	eventBind(){
+      var that = this;
+      document.onkeydown = function(e) { //按下键盘      
+      switch (e.keyCode) {        
+        case 16:           
+          that.isshift = true;     
+          break;         
+        case 17:          
+          that.isctrl = true;        
+          break;     
+        }     
+      };    
+      document.onkeyup = function(e) { //放弃键盘   
+        switch (e.keyCode) {      
+          case 16:           
+            that.isshift = false;      
+            break;        
+          case 17:         
+            that.isctrl = false;     
+            break;       
+        }  
+      }   
+    }
   },
   mounted() {
         this.requestData();
-        this.getCompany();
+		this.getCompany();
+		this.eventBind();
     },
 }
 </script>

@@ -81,6 +81,8 @@
 												</el-form-item>
 											</template> -->
 										</el-table-column>
+										<el-table-column label="用户姓名" prop="memo" sortable>
+										</el-table-column>
 
 										<el-table-column fixed="right" width="120" label="操作">
 											<template slot-scope="scope">

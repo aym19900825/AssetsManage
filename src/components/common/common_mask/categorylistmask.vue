@@ -27,7 +27,7 @@
 
 			<el-table   ref="singleTable"
 						highlight-current-row
-    					@current-change="SelChange"
+    				@current-change="SelChange"
 						@selection-change="setSel"
 						:header-cell-style="rowClass" 
 						:data="categoryList" 

@@ -1171,9 +1171,9 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},	
-			toNum(str) {
-				return str.replace(/\,|\￥/g, "");
-			},
+			// toNum(str) {
+			// 	return str.replace(/\,|\￥/g, "");
+			// },
 			//金额两位小数点千位分隔符，四舍五入
 			testPrice(item){
 				var money = item.CHECKCOST;

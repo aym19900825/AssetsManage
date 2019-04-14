@@ -116,7 +116,7 @@
 					setTimeout(() => {
 						this.loadSign = true;
 					}, 1000)
-					this.requestData();
+					this.requestData(this.urlOpt);
 				}
 			},
 			//改变页数
@@ -128,7 +128,7 @@
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.requestData();
+				this.requestData(this.urlOpt);
 			},
 			//当前页数
 			currentChange(val) {
@@ -139,7 +139,7 @@
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.requestData();
+				this.requestData(this.urlOpt);
 			},
 			//Table默认加载数据
 			requestData(opt) {
@@ -149,10 +149,10 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				if(opt == 'groups'){
+				if(this.urlOpt == 'groups'){
 					var url = this.basic_url + '/api-user/users';
 				}else{
-					var url = this.basic_url + '/api-user/users?deptid_wheres='+opt;
+					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.urlOpt;
 				}
 				this.$axios.get(url, {
 					params: data
@@ -174,7 +174,7 @@
 				}).catch((wrong) => {})
 			},
 			submit(){
-				console.log();
+				console.log(this.selData);
 				if(this.urlOpt == 'groups'){
 					if(this.selData.length == 0){
 						this.$message({

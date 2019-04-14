@@ -186,6 +186,7 @@ i, cite, em, var, address, dfn {
 .font16 {font-size: 16px;}
 .font20 {font-size: 20px;}
 
+.fdtext {font-size: 14px; line-height: 28px;}
 
 h3,h6,.title {
 	font-size:18px;

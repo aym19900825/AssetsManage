@@ -1483,7 +1483,7 @@
 					this.$refs.templatechild.visible(data);
 					data = [];
 				}
-            },
+			},
 			showModule(data){
 				this.modulenum.D_NUM = data.num;
 				this.modulenum.D_DESC = data.desc;

@@ -794,7 +794,6 @@
 			},
 			//生成报告
 			getreport(){
-				console.log(this.reportname);
 				if(this.workorderForm.WORKORDER_DATA_TEMPLATEList.length < 2){
 					this.$message({
 						message: '请新建至少两条数据',
@@ -1011,12 +1010,12 @@
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 				this.currentuserinfo = res.data;
 				this.userid = res.data.id;
-				this.username = res.data.username;
+				this.username = res.data.nickname;
 				this.deptid = res.data.deptId;
 				this.deptfullname = res.data.deptName;
 				this.docParm = {
 					userid: res.data.id,
-					username: res.data.username,
+					username: res.data.nickname,
 					deptid: res.data.deptId,
 					deptfullname: res.data.deptName,
 					appname: '工作任务单_关联原始数据模板',

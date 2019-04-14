@@ -263,19 +263,42 @@
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
+												<el-button type="success" size="mini" round @click="addfieldBasis" v-show="isEditList">
+					                         	    <i class="icon-add"></i>
+						                          	<font>新建行</font>
+						                        </el-button>
 											</div>
 							            	<el-table :header-cell-style="rowClass" :data="basisList" border stripe :fit="true" max-length="260px" style="width: 100%;" :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="NUMBER" label="序号" width="50" type="index"></el-table-column>
-												<!-- <el-table-column prop="WP_NUM" label="所属编号" sortable width="150">
-											      	<template slot-scope="scope">
-											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
-											      	</template>
-							            		</el-table-column> -->
-							            		<!-- <el-table-column prop="WP_LINENUM" label="所属序号" sortable width="150"></el-table-column> -->
-							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160"></el-table-column>
-							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350"></el-table-column>
-							            		<el-table-column prop="VERSION" label="版本" sortable width="80"></el-table-column>
-							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="120"></el-table-column>
+							            		<el-table-column prop="NUMBER" label="序号" width="50" type="index">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUMBER" disabled></el-input>
+														<span v-else>{{scope.row.NUMBER}}</span>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" disabled></el-input>
+														<span v-else>{{scope.row.S_NUM}}</span>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="S_NAME" label="标准名称" sortable width="350">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" disabled></el-input>
+														<span v-else>{{scope.row.S_NAME}}</span>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="VERSION" label="版本" sortable width="80">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" disabled></el-input>
+														<span v-else>{{scope.row.VERSION}}</span>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="120">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FILESIZE" disabled></el-input>
+														<span v-else>{{scope.row.FILESIZE}}</span>
+													</template>
+												</el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80">
 													<template slot-scope="scope"  v-if="!viewtitle">
 														<el-button
@@ -295,28 +318,31 @@
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button>
+												<el-button type="success" size="mini" round @click="addfieldProject" v-show="isEditList">
+					                         	    <i class="icon-add"></i>
+						                          	<font>新建行</font>
+						                        </el-button>
 											</div>
 							            	<el-table :header-cell-style="rowClass" :data="proTestList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
 												<el-table-column prop="NUMBER" label="序号" width="50" type="index"></el-table-column>
-							            		<!-- <el-table-column prop="WP_NUM" label="所属编号" width="130">
-							            			<template slot-scope="scope">
-											        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_NUM" disabled></el-input><span v-else>{{scope.row.WP_NUM}}</span>
-											      	</template>
-							            		</el-table-column>
-							            		<el-table-column label="所属序号" sortable width="120px" prop="WP_LINENUM">
-											      <template slot-scope="scope">
-											      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.WP_LINENUM" disabled></el-input><span v-else>{{scope.row.WP_LINENUM}}</span>
-											      </template>
-											    </el-table-column> -->
-							            		<el-table-column prop="P_NUM" label="检验项目编号" width="100"></el-table-column>
-							            		<el-table-column prop="P_DESC" label="检验项目描述" width="250"></el-table-column>
+							            		<el-table-column prop="P_NUM" label="检验项目编号" width="100">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" disabled></el-input>
+														<span v-else>{{scope.row.P_NUM}}</span>
+													</template>
+												</el-table-column>
+							            		<el-table-column prop="P_DESC" label="检验项目描述" width="250">
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" disabled></el-input>
+														<span v-else>{{scope.row.P_DESC}}</span>
+													</template>
+												</el-table-column>
 							            		<el-table-column prop="REMARKS" label="要求" width="200">
-							            			<template slot-scope="scope">
-											        	<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入内容">
-											        	</el-input>
-											      </template>
-							            		</el-table-column>
-							            		<el-table-column prop="VERSION" label="版本"></el-table-column>
+													<template slot-scope="scope">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" disabled></el-input>
+														<span v-else>{{scope.row.REMARKS}}</span>
+													</template>
+												</el-table-column>
 							            		<el-table-column fixed="right" label="操作" width="80" v-if="!viewtitle">
 											      <template slot-scope="scope">
 											        <el-button
@@ -332,78 +358,6 @@
 									    </el-tab-pane>
 									</el-tabs>
 								</div>
-								<!-- 检测依据、检测项目与要求 End-->
-
-								<!-- todo -->
-								<!-- 文件编号列表 Begin-->
-								<!-- <el-collapse-item title="文件编号列表" name="5">
-									<div class="table-func">
-										<el-button type="success" size="mini" round @click="addfield2"><i class="icon-add"></i><font>新建行</font>
-										</el-button>
-									</div>
-									<el-form>
-						                <el-form-item>
-						                	<el-row :gutter="20">
-						                		<el-col :span="2">
-						                            <el-form-item label="计划编号" ></el-form-item>
-						                        </el-col>
-						                        <el-col :span="4">
-						                            <el-form-item label="文件编号"></el-form-item>
-						                        </el-col>
-						                        <el-col :span="6">
-						                            <el-form-item label="文件描述"></el-form-item>
-						                        </el-col>
-						                        <el-col :span="4">
-						                            <el-form-item label="录入人" ></el-form-item>
-						                        </el-col>
-						                        <el-col :span="4">
-						                            <el-form-item label="录入时间"></el-form-item>
-						                        </el-col>
-						                        <el-col :span="2">
-						                            <el-form-item label="上传"></el-form-item>
-						                        </el-col>		                        
-						                        <el-col :span="2">
-						                            <el-form-item label="操作"></el-form-item>
-						                        </el-col>
-						                	</el-row>
-						                    <el-row :gutter="10">
-						                        <el-col :span="2">
-						                            <el-input type="text"  placeholder="计划编号"></el-input>
-						                        </el-col>
-						                        <el-col :span="4">
-						                            <el-input type="text"  placeholder="文件编号"></el-input>
-						                        </el-col>
-						                        <el-col :span="6">
-						                        	<el-input type="text"  placeholder="文件描述"></el-input>
-						                        </el-col>
-						                        <el-col :span="4">
-						                            <el-input type="text"  placeholder="录入人"></el-input>
-						                        </el-col>
-						                        <el-col :span="4">
-						                            <el-input type="text"  placeholder="录入时间"></el-input>
-						                        </el-col>
-						                        <el-col :span="2">
-						                            <el-upload
-														class="upload-demo"
-														action="https://jsonplaceholder.typicode.com/posts/"
-														:on-preview="handlePreview"
-														:on-remove="handleRemove"
-														:before-remove="beforeRemove"
-														multiple
-														:limit="3"
-														:on-exceed="handleExceed"
-														:file-list="fileList">
-														<el-button size="small" type="primary">点击上传</el-button>
-													</el-upload>
-						                        </el-col>                
-						                        <el-col :span="2">
-						                            <i class="el-icon-delete" @click="delfield(item)" style="color: red;text-align:center"></i>
-						                        </el-col>
-						                    </el-row>
-						                </el-form-item>
-					            	</el-form>
-								</el-collapse-item> -->
-								<!-- 文件编号列表 End -->
 								<!-- 编制信息 Begin -->
 								<div class="el-collapse-item pt10 pr20" aria-expanded="true" accordion>
 									<el-row>
@@ -605,12 +559,6 @@
 										<el-input v-model="searchList.VERSION"></el-input>
 									</el-form-item>
 								</el-col>
-							<!-- <el-col :span="3">
-								<el-select v-model="searchList.STATUS" placeholder="请选择信息状态">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
-							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
@@ -630,8 +578,6 @@
 					</el-table-column>
 					<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
 					</el-table-column>
-					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
-					</el-table-column> -->
 					<el-table-column label="领域" width="120" sortable prop="FIELD" >
 					</el-table-column>
 					<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
@@ -1346,7 +1292,7 @@
 					});
 				}else{
 					this.$forceUpdate();
-					this.editPlan.PRODUCT_TYPE = this.selUser[0].ID;
+					this.editPlan.PRODUCT_TYPE = this.selUser[0].TYPE;
 					this.editPlan.NUM = this.selUser[0].NUM;
 					this.resetBasisInfo3();//调用resetBasisInfo3函数
 				}
@@ -1384,7 +1330,8 @@
 						type: 'warning'
 					});
 				}else{
-					this.editPlan.ITEM_NAME = this.selUser[0].ID;
+					this.editPlan.ITEM_NAME = this.selUser[0].PRO_NAME;
+					this.editPlan.PRO_NUM = this.selUser[0].NUM;
 					this.resetBasisInfo4();
 				}
 			},
@@ -1484,15 +1431,9 @@
 				this.basissnums = '';
 			},
 			basisleadbtn2(){
-				var projectpnum = [];
-				for(var i = 0;i<this.proTestList.length;i++){
-					projectpnum.push(this.proTestList[i].P_NUM);
-				}
-				this.projectpnums = projectpnum.toString(',');
 				this.page.currentPage = 1;
 				this.requestProject();
 				this.requestnum = '5';
-				
 				this.projectpnums = '';
 			},
 			//检测依据数据
@@ -1551,6 +1492,13 @@
 					});
 					return;
 				}
+				var basise = this.editPlan.WORLPLANLINE_BASISList;
+				var basissnums = [];
+				for (var i = 0; i < basise.length; i++) {
+					if(basise[i].DEPTTYPE == '1'){
+						basissnums.push(basise[i].S_NUM);
+					}
+				}
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -1566,7 +1514,7 @@
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.basissnums+'&P_NUM_where_not_in='+this.projectpnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT, {
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+basissnums.join(',')+'&P_NUM_where_not_in='+this.projectpnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -1604,6 +1552,36 @@
 					this.requesCategory(row.CJDW);
 				}
 			},
+			 addfieldProject() {
+		        var obj = {
+				  ID: '',
+				  NUMBER: '1',
+		          P_NUM:  this.editPlan.ITEM_NAME,
+		          DEPTTYPE:'1',
+				  WP_NUM: '',
+				  WP_LINENUM: this.editPlan.WP_LINENUM,
+		          P_DESC: '',
+		          UNITCOST:'',
+		          REMARKS: '',
+		          VERSION: '1',
+		          STATUS: '1',
+		          isEditing: true
+		        };
+		        this.proTestList.push(obj);
+	        },
+			  addfieldBasis() {
+		        var obj = {
+		          NUMBER: '1',
+		          S_NUM: '',
+		          DEPTTYPE:'1',
+		          S_NAME: '',
+		          S_ENGNAME: '',
+		          VERSION: '',
+		          STATUS: '1',
+		          isEditing: true
+		        };
+		        this.basisList.push(obj);
+		     },
 			//企业名称
 			requestDeptname(){
 				var data = {
@@ -1962,12 +1940,7 @@
 					}
 					if (valid) {
 						if(this.isEditList){
-							this.$message({
-								message: '请先保存当前年度计划列表数据项',
-								type: 'warning'
-							});
 							this.iconOperation(this.editPlan);
-							return;
 						}
 						if(this.worlplanlist.length>0){
 							for(var i=0;i<this.worlplanlist.length;i++){

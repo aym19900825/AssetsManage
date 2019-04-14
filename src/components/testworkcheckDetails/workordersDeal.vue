@@ -35,7 +35,7 @@
 												</el-table-column>
 												<el-table-column prop="UNIT" label="计量单位" sortable>
 												</el-table-column>
-												<el-table-column prop="UNIT" label="样品序号" sortable>
+												<el-table-column label="样品序号" sortable>
 													<template slot-scope="scope">
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
 													</template>
@@ -158,9 +158,7 @@
 														  stripe 
 														  :fit="true" 
 														  max-height="260" 
-														  style="width: 100%;" 
-														  @cell-click="iconOperation" 
-														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+														  style="width: 100%;">
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 													    </el-table-column>
 									            		<el-table-column label="文件名称" prop="FILESIZE_ORG">
@@ -172,10 +170,10 @@
 															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
 																	<i class="icon-excel"></i>
 																</el-button>
-																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
+																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)">
 																	<i class="icon-pencil"></i>
 																</el-button>
-																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||scope.row.WONUM==this.submitForm.WONUM">
+																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)">
 																	<i class="icon-trash red"></i>
 																</el-button>
 															</template>
@@ -461,14 +459,17 @@
 				this.$refs.equiptDialog.showData();
 			},
 			showDialog(id){
-				this.show = true;
 				this.detailId = id;
-				this.requestData();
+				this.requestData('showDialog');
 			},
-			requestData(){
+			requestData(opt){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
+					// this.workorderForm.WORKORDER_DATA_TEMPLATEList = this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(1,1);
+					if(opt == 'showDialog'){
+						this.show = true;
+					}
 					if(res.data.datas.STATE == '1'){
 						this.pageDisable = false;
 					}else{

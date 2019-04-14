@@ -325,9 +325,9 @@
 				username:'',
 				maingroup:[],//专业组
 				docParm: {},
-				reportname:'',//生成报告名称
 				btnshow:true,//报告提交按钮
 				pronums:[],
+				reportname:'',//生成报告名称
 				showcreatereoprt:false,//生成报告按钮
 				currentuserinfo:{},//储存当前用户信息
 				addPersonTable: '',
@@ -356,6 +356,7 @@
 				    }
 				});
 			},
+			//预览文件
 			readFile(row){
 				var url = this.po_url+"/show?filename=" +row.filename
 					+ '&fileid=' +  row.FILEID
@@ -367,6 +368,7 @@
 					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
+			//编辑文件
 			editFile(row){
 				var url = this.po_url+"/show?filename=" +row.filename
 					+ '&fileid=' +  row.FILEID
@@ -378,6 +380,7 @@
 					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
+			//删除文件
 			delFile(index,row){
 				if(row.ID){
 					var url = this.basic_url + '/api-apps/app/workorder/WORKORDER_DATA_TEMPLATE/' + row.ID;
@@ -665,9 +668,9 @@
 				this.pronums = [];//检测项目编号字符串
 			},
 			iconOperation(row, column, cell, event) {
-				if(column.property === "iconOperation") {
+				// if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
-				}
+				// }
 			},
 			handleClick(tab, event) {
 

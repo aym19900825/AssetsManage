@@ -289,7 +289,7 @@
 											 @cell-click="iconOperation" style="width: 100%;" 
 											 :summary-method="getSummaries" :show-summary="true"
 											 :default-sort="{prop:'workorderbasisList', order: 'descending'}" @selection-change="SelChange">
-												<el-table-column type="selection" width="30" fixed align="center">
+												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
 												<el-table-column label="检验/检测依据" prop="S_NAME" sortable  width="350px">
 													<template slot-scope="scope">
@@ -380,7 +380,7 @@
 											 :summary-method="getSummarie" :show-summary="true" 
 											 style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}" @selection-change="SelChanges">
 												
-												<el-table-column type="selection" width="30" fixed align="center">
+												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
 												<el-table-column prop="VENDOR" label="承包方单位名称" sortable width="260px">
 													<template slot-scope="scope">

@@ -38,6 +38,13 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
+									<el-row>
+										<el-col :span="24">
+											<el-form-item label="描述" prop="memo" label-width="100px">
+												<el-input v-model="dataInfo.memo" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
 								</el-collapse-item>
 
 								<el-collapse-item title="用户列表" name="2">
@@ -203,9 +210,6 @@
 					};
 					this.dataInfo.userList.push(userList);
 				}
-				
-				// this.dataInfo.userList[this.editUserIndex].userid = val.id;
-				// this.dataInfo.userList[this.editUserIndex].nickname = val.nickname;
 			},
 			//选择用户带回来值
 			chooseUser(){
@@ -255,18 +259,6 @@
 			changeState(data){
 				data.isEditing = !data.isEditing;
 			},
-
-			//新建按钮用户组行弹出框
-			// addKWord(){
-			// 	this.dataInfo.userList.push({
-			// 		'userid': '',
-			// 		'groupid': this.dataInfo.id,
-			// 		'isEditing': true,
-			// 		'id': ''
-			// 	});
-			// 	this.editUserIndex = this.dataInfo.userList.length-1;
-			// },
-			
 			//获取当前用户信息
 			getUser(opt){
 				var url = this.basic_url + '/api-user/users/currentMap';
@@ -335,6 +327,7 @@
 			},
 			//点击关闭按钮
 			close() {
+				this.show=false;
 				this.resetForm();
 				this.$emit('request');
 			},
@@ -343,6 +336,7 @@
 					"id":'',
 					"name":'',
 					"num":'',
+					"memo":'',
 					"deptid":this.$store.state.currentcjdw[0].id,
 					"deptName":this.$store.state.currentcjdw[0].fullname,
 					"createby":'',
@@ -406,8 +400,6 @@
 									this.show=true;
 									this.resetForm();
 								}
-								// this.visible();
-								// this.resetForm();
 							}else{
 								this.show = true;
 								this.$message({

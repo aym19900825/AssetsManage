@@ -35,7 +35,7 @@
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 封面 Begin-->
 								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
-									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'||reportData.name=='封底'">
+									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'">
 										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
 											<el-form-item :label="item.title" :prop="item.param" v-if="item.required == 0" label-width="150px">
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
@@ -69,7 +69,7 @@
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
-
+												
 												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
 													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
 												</el-radio-group> -->
@@ -82,14 +82,20 @@
 										</el-col>
 									</el-row>
 									
-									
+									<el-row v-else-if="reportData.name=='封底'">
+										<el-col :span="24" v-for="(itemfd,index) in selectReportData[index].List" :key="index">
+											<div class="fdtext" v-if="itemfd.type=='matters'" v-html="itemfd.value">{{itemfd.title}}</div>
+										</el-col>
+									</el-row>
+
 									<el-row v-else-if="reportData.name=='产品质量检测报告'">
 										<el-col :span="24">
 											<el-table :data="reportData.List" 
 												border 
 												stripe 
 												:fit="true" 
-												max-height="460" 
+												max-height="460"
+												key="table1"
 												style="width: 100%;" 
 												:default-sort="{prop:'reportData.List', order: 'descending'}">
 
@@ -111,7 +117,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="200px">
 													<template slot-scope="scope">
-														<el-table :data="scope.row.workorder_project_itemList" row-key="ID" :show-header="false" style="width: 100%;">
+														<el-table :data="scope.row.workorder_project_itemList" key="table3" row-key="ID" style="width: 100%;">
 															<el-table-column label="样品编号" prop="ITEMNUM"></el-table-column>
 															<el-table-column label="样品描述" prop="MEMO"></el-table-column>
 														</el-table>
@@ -128,11 +134,9 @@
 
 												<el-table-column label="单项判定" width="200px" sortable prop="SYNTHETICAL">
 													<template slot-scope="scope">
-														<el-form-item :prop="'reportData.List.'+scope.$index + '.SYNTHETICAL'">
-															<el-radio-group v-model="scope.row.SYNTHETICAL" :disabled="noedit">
-																<el-radio v-for="(data,index) in SelectIsSynthetical" :key="index" :label="data.code">{{data.name}}</el-radio>
-															</el-radio-group>
-														</el-form-item>
+														<el-radio-group v-model="scope.row.SYNTHETICAL" :disabled="noedit">
+															<el-radio v-for="(datasy,index) in SelectIsSynthetical" :key="index" :label="datasy.code">{{datasy.name}}</el-radio>
+														</el-radio-group>
 													</template>
 												</el-table-column>
 											</el-table>
@@ -150,7 +154,8 @@
 											</el-pagination>
 										</el-col>
 									</el-row>
-
+									
+									<!--成果文件-->
 									<el-row v-else>
 										<el-col :span="24">
 											<el-table :data="reportData.List" 
@@ -158,6 +163,7 @@
 												stripe 
 												:fit="true" 
 												max-height="260" 
+												key="table2"
 												style="width: 100%;" 
 												@cell-click="iconOperation" 
 												:default-sort="{prop:'reportData.List', order: 'descending'}">
@@ -184,7 +190,7 @@
 															<i class="icon-excel"></i>
 															预览
 														</el-button>
-														<el-button title="回退" type="text" size="small" @click="editFile(scope.row)">
+														<el-button title="回退" type="text" size="small" @click="sendback(scope.row)">
 															<i class="icon-back"></i>
 															回退
 														</el-button>
@@ -221,7 +227,7 @@
 						<!--内容页按钮事件-->
 						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
 						<!--封底按钮事件-->
-						<el-button type="primary" v-show="fifthBtn" @click="reportSubmit">生成检验/检测报告</el-button>
+						<el-button type="primary" v-show="fifthBtn" @click="getreport">生成检验/检测报告</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
 					
@@ -241,6 +247,8 @@
 		},
 		data() {
 			return {
+				file_url: Config.file_url,//文件URL
+				po_url: Config.po_url,//PageOffice-URL
 				inputData: {},
 				basic_url: Config.dev_url,
 				selectData: [],//报告模板类型
@@ -273,6 +281,10 @@
 				up: false,
 				noedit:false,
 				selUser:[],
+				docParm: {},//成果文件
+				reportname:'',//生成报告名称
+				showcreatereoprt:false,//生成报告按钮
+				currentuserinfo:{},//储存当前用户信息
 				activeName: '0', //tabs
 				activeNames: ['1','2','3','4','5'],//手风琴数量
 				labelPosition: 'right', //表格
@@ -325,7 +337,8 @@
 				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
-					// console.log(res.data.data[0].RE_NUM);
+					console.log(res.data.data[0].RE_NUM);
+					console.log(res.data.data[0].ID);
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
@@ -337,7 +350,9 @@
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
-					// console.log(res.data);
+					console.log(res.data);
+					console.log(this.reportTemplate.RE_TYPE);
+					console.log(this.detailId);
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
@@ -363,17 +378,18 @@
 				var res = {};
 				data.forEach((item,listIndex)=>{
 					var list = item.List;
+					var itemType = item.typeid;
 					var totalIndex = 0;
 					list.forEach((val,index)=>{
 						// console.log(listIndex);
 						// console.log(data[listIndex]);
 						var param = '';
 						if(listIndex == 0){
-							param = 'param' + index;
+							param = 'param'+ itemType + index;
 						}else if(listIndex == 1){
-							param = 'param' + data[listIndex].List.length + index;
+							param = 'param'+ itemType + (data[listIndex].List.length + index);
 						}else{
-							param = 'param' + data[listIndex].List.length + data[listIndex-1].List.length + index;
+							param = 'param'+ itemType + (data[listIndex].List.length + data[listIndex-1].List.length + index);
 						}
 						res[param] = val.value;
 						val.param = param;
@@ -384,7 +400,7 @@
 			//清空表单
 			reset(){
 				this.reportGenerateForm = {
-										
+					
 				};
 			},
 			//获取当前时间
@@ -395,14 +411,118 @@
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				return str;
 			},
+			//预览成果文件
+			readFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
+			},
+			//回退成果文件
+			sendback(row){
+			// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
+				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
+				this.$axios.get(Url, {}).then((res) => {
+					if(res.data.resp_code == 0) {
+						this.show=false;
+						this.$emit('request');
+						this.$message({
+							message: '回退工作任务单成功',
+							type: 'success'
+						});
+					}else{
+						this.$message({
+						message: '已经回退了此成果文件，请勿重复回退',
+						type: 'warning'
+					});
+					}
+				}).catch((err) => {
+				});
+			},
+			//编辑成果文件
+			editFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
+			},
+			//获取当前用户信息
+			getUser(){
+	            var url = this.basic_url + '/api-user/users/currentMap';
+	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				this.currentuserinfo = res.data;
+				this.userid = res.data.id;
+				this.username = res.data.username;
+				this.deptid = res.data.deptId;
+				this.deptfullname = res.data.deptName;
+				this.docParm = {
+					userid: res.data.id,
+					username: res.data.username,
+					deptid: res.data.deptId,
+					deptfullname: res.data.deptName,
+					appname: '工作任务单_关联原始数据模板',
+					appid: '39'
+				};
+	            }).catch((err) => { });
+			},
+			//生成报告
+			getreport(){
+				if(this.reportGenerateForm.WORKORDER_DATA_TEMPLATEList.length < 2){
+					this.$message({
+						message: '请新建至少两条数据',
+						type: 'warning'
+					});
+				}else if(this.reportGenerateForm.WORKORDER_REPORTList.length>0){
+					this.$message({
+						message: '检验报告已经生成，请勿重复生成',
+						type: 'warning'
+					});
+				}else{
+					var changeUser = this.reportGenerateForm.WORKORDER_DATA_TEMPLATEList;
+					//basisnum为依据编号的数组
+					var id = [];
+					for (var i = 0; i < changeUser.length; i++) {
+						id.push(changeUser[i].FILEID);		
+					}
+					//basisnums为basisnum数组用逗号拼接的字符串
+					var ids = id.toString(',');
+					console.log(ids);
+					if(ids == '' || ids == undefined || ids == null){
+						this.$message({
+							message: '请上传文件',
+							type: 'warning'
+						});
+					}else if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
+						var data = [];
+						data.push(this.reportGenerateForm.ID);
+						data.push(this.reportname);
+						data.push(this.reportGenerateForm.WORKORDER_DATA_TEMPLATEList);
+						data.push(this.reportGenerateForm.PROXYNUM);
+						data.push(this.reportGenerateForm.WONUM);
+						data.push(this.reportGenerateForm.DEPTIDDesc);
+						data.push(this.reportGenerateForm.ID);
+						this.$refs.reportdata.visible(data);
+					}
+				}
+			},
 			//获取导入表格勾选信息
 			SelChange(val) {
 				this.selUser = val;
 			},
 			iconOperation(row, column, cell, event) {
-				if(column.property === "iconOperation") {
+				// if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
-				}
+				// }
 			},
 			//打开弹出框页面
 			showDialog(id){
@@ -424,7 +544,6 @@
 			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.reportGenerateForm.name);
 				this.$refs.reportGenerateForm.validate((valid) => {
 				if (valid) {
 					var paramData = this.selectReportData;
@@ -440,12 +559,6 @@
 					this.$axios.post(url,this.selectReportData).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
-							// this.reportGenerateForm.reportData.List.id=this.detailId;
-							// this.reportGenerateForm.reportData.List.report_num=this.detailId;
-							// this.reportGenerateForm.reportData.List.product=this.detailId;
-							// this.reportGenerateForm.reportData.List.v_name=this.detailId;
-							// this.reportGenerateForm.reportData.List.proxy_type=this.detailId;
-							// this.reportGenerateForm.reportData.List.id=this.detailId;
 							console.log(this.detailId);
 							this.$message({
 								message: '保存成功',
@@ -505,9 +618,10 @@
 		},
 		
 		mounted() {
-			this.getReportType();
+			this.getReportType();//报告模板类型
 			this.getIsQualified();//不合格类别
 			this.getIsSynthetical();//单项判定合格不合格
+			this.getUser();//当前用户
 		},
 	}
 </script>

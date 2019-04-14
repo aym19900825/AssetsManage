@@ -552,8 +552,6 @@
 			// 保存users/saveOrUpdate
 			save(opt) {
 				this.$refs['dataInfo'].validate((valid) => {
-					// this.dataInfo.RELEASETIME =  this.$moment(this.dataInfo.RELEASETIME).format("YYYY-MM-DD HH:mm:ss");
-					// this.dataInfo.STARTETIME = this.$moment(this.dataInfo.STARTETIME).format("YYYY-MM-DD HH:mm:ss");
 					if(!valid && opt == 'docUpload'){
 						this.$message({
 							message: '请先正确填写信息，再进行文档上传',

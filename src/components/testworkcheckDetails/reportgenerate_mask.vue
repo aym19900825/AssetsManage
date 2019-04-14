@@ -111,7 +111,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="200px">
 													<template slot-scope="scope">
-														<el-table :data="scope.row.workorder_project_itemList" row-key="ID" :show-header="false" style="width: 100%;">
+														<el-table :data="scope.row.workorder_project_itemList" row-key="ID" style="width: 100%;">
 															<el-table-column label="样品编号" prop="ITEMNUM"></el-table-column>
 															<el-table-column label="样品描述" prop="MEMO"></el-table-column>
 														</el-table>
@@ -128,11 +128,9 @@
 
 												<el-table-column label="单项判定" width="200px" sortable prop="SYNTHETICAL">
 													<template slot-scope="scope">
-														<el-form-item :prop="'reportData.List.'+scope.$index + '.SYNTHETICAL'">
-															<el-radio-group v-model="scope.row.SYNTHETICAL" :disabled="noedit">
-																<el-radio v-for="(data,index) in SelectIsSynthetical" :key="index" :label="data.code">{{data.name}}</el-radio>
-															</el-radio-group>
-														</el-form-item>
+														<el-radio-group v-model="scope.row.SYNTHETICAL" :disabled="noedit">
+															<el-radio v-for="(datasy,index) in SelectIsSynthetical" :key="index" :label="datasy.code">{{datasy.name}}</el-radio>
+														</el-radio-group>
 													</template>
 												</el-table-column>
 											</el-table>
@@ -337,7 +335,9 @@
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
-					// console.log(res.data);
+					console.log(res.data);
+					console.log(this.reportTemplate.RE_TYPE);
+					console.log(this.detailId);
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
@@ -384,7 +384,7 @@
 			//清空表单
 			reset(){
 				this.reportGenerateForm = {
-										
+					
 				};
 			},
 			//获取当前时间
@@ -424,7 +424,6 @@
 			
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
-				console.log(this.reportGenerateForm.name);
 				this.$refs.reportGenerateForm.validate((valid) => {
 				if (valid) {
 					var paramData = this.selectReportData;

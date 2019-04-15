@@ -193,21 +193,21 @@
 		this.dialogProduct = false;
     },
     projectlead(value){
-		// this.PRO_NUM = value.PRO_NUM;//产品编号
-		// this.P_NUM = value.P_NUM;//产品类别编号
-		// this.S_NUM=value.S_NUM.toString(',');
-		// this.projectnum=value.proxypnum;
-		// // this.projectnum = value[0];
-		// // if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
-		// // 	this.projecttable = value[1];
-		// // 	var projectpnum = [];
-		// // 	for(var i = 0;i<this.projecttable.length;i++){
-		// // 		projectpnum.push(this.projecttable[i].P_NUM);
-		// // 	}
-		// // 	this.projectpnums = projectpnum.toString(',');
-		// // }else{
-		// // 	this.projectpnums = '';
-		// // }
+		this.PRO_NUM = value.PRO_NUM;//产品编号
+		this.P_NUM = value.P_NUM;//产品类别编号
+		this.S_NUM=value.S_NUM.toString(',');
+		this.projectnum=value.proxypnum;
+		// this.projectnum = value[0];
+		// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+		// 	this.projecttable = value[1];
+		// 	var projectpnum = [];
+		// 	for(var i = 0;i<this.projecttable.length;i++){
+		// 		projectpnum.push(this.projecttable[i].P_NUM);
+		// 	}
+		// 	this.projectpnums = projectpnum.toString(',');
+		// }else{
+		// 	this.projectpnums = '';
+		// }
 	    this.searchList.DEPTID=this.$store.state.currentcjdw[0].fullname;
 		this.requestData();//渲染数据
 		this.dialogVisible = true;

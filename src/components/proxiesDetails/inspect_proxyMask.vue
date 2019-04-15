@@ -808,31 +808,6 @@
 			 withdepetmask,
 		},
 		data() {
-				// var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-				// // 金额验证
-				// var price=(rule, value, callback) => {//生产单位名称 
-				// var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				// if (!values) {
-				// 	callback();
-				// }
-				// setTimeout(() => { 
-				// 	if(exp.test(value)==false){ 
-				// 		callback(new Error('请输入数字'));
-				// 	}else{
-				// 		callback();
-				// 	}
-				// }, 500);
-				
-				// if(value != '' && value!=undefined){
-				// 	if(exp.test(value)==false){ 
-				// 		callback(new Error('请输入数字'));
-				// 	}else{
-				// 		callback();
-				// 	}
-				// 		}else {
-				// 			callback();
-				// 		}
-				// };
 			return {
 				approvingData:{},
 				loading: false,
@@ -1746,23 +1721,23 @@
 					}else{
 						// this.sendchilddata.push(this.dataInfo.S_NUM);
 						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
-						// var arr=[];
-						// var proxy=[];
-						// var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
-						// for(var j=0;j<proxylist.length;j++){
-						// 		proxy.push(proxylist[j].P_NUM);
-						// }
-						// var proxypnum=proxy.join(',');
-						// for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
-						// 	arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
-						// }
-						// var data={
-						// 	P_NUM:this.dataInfo.P_NUM,
-						// 	PRO_NUM:this.dataInfo.PRO_NUM,
-						// 	S_NUM:arr,//依据的编号
-						// 	proxypnum:proxypnum
-						// }
-						this.$refs.projectchild.projectlead();
+						var arr=[];
+						var proxy=[];
+						var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
+						for(var j=0;j<proxylist.length;j++){
+								proxy.push(proxylist[j].P_NUM);
+						}
+						var proxypnum=proxy.join(',');
+						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
+							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
+						}
+						var data={
+							P_NUM:this.dataInfo.P_NUM,
+							PRO_NUM:this.dataInfo.PRO_NUM,
+							S_NUM:arr,//依据的编号
+							proxypnum:proxypnum
+						}
+						this.$refs.projectchild.projectlead(data);
 						// this.main = 'main';
 						// this.sendchilddata = [];
 					  //   this.deptindex = {};

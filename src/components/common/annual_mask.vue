@@ -1552,7 +1552,7 @@
 		        var obj = {
 				  ID: '',
 				  NUMBER: '1',
-		          P_NUM:  this.editPlan.ITEM_NAME,
+		          P_NUM:  '',
 		          DEPTTYPE:'1',
 				  WP_NUM: '',
 				  WP_LINENUM: this.editPlan.WP_LINENUM,

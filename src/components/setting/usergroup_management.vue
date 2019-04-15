@@ -36,7 +36,7 @@
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn1" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -52,6 +52,8 @@
 								</el-table-column>
 
 								<el-table-column label="组名" sortable prop="name" v-if="this.checkedName.indexOf('组名')!=-1">
+								</el-table-column>
+								<el-table-column label="描述" sortable prop="memo" v-if="this.checkedName.indexOf('组名')!=-1">
 								</el-table-column>
 
 								<el-table-column label="所属机构" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('所属机构')!=-1">
@@ -195,7 +197,7 @@
 			searchinfo(index) {//高级查询
 				this.requestData('init');
 			},
-			resetbtn(){
+			resetbtn1(){
 				this.searchList = {//高级查询
 					name:'',
 					num:'',

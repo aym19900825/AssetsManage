@@ -49,12 +49,26 @@
 
 								<el-collapse-item title="用户列表" name="2">
 									<div class="table-func" v-if="!viewtitle">
-										<el-button type="primary" size="mini" round @click="chooseUser()">
+										<el-button type="primary" size="mini" round @click="chooseUser">
 											<i class="icon-search"></i>
 											<font>选择</font>
 										</el-button>
 									</div>
 									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row style="width: 100% ;" max-height="260" :default-sort="{prop:'dataInfo.userList', order: 'descending'}">
+<<<<<<< HEAD
+=======
+										<!-- <el-table-column prop="iconOperation" fixed width="50px">
+											<template slot-scope="scope">
+												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeState(scope.row)"></i>
+												<i class="el-icon-edit" v-else @click="changeState(scope.row)"></i>
+											</template>
+										</el-table-column> -->
+										<el-table-column type="index" label="序号" width="50">
+											<template slot-scope="scope">
+												<span> {{scope.$index+1}} </span>
+											</template>
+										</el-table-column>
+>>>>>>> cbd8cf0ef1d8c0ab9d4e6f66a8eb48fd652401bf
 										<el-table-column label="用户名" prop="username" sortable>
 										</el-table-column>
 										<el-table-column label="用户姓名" prop="nickname" sortable>

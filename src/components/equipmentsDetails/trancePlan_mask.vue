@@ -71,7 +71,7 @@
 									<el-table :header-cell-style="rowClass" :data="pmRecordList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
 										 <el-table-column type="index" sortable label="序号" width="50">
 	                                    </el-table-column>
-										<el-table-column prop="RECORDNUM" label="溯源确认记录编号" sortable width="120px">
+										<el-table-column prop="RECORDNUM" label="溯源确认记录编号" sortable width="160px">
 										</el-table-column>
 										<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
 										</el-table-column>
@@ -114,8 +114,8 @@
 				<!--底部-->
 			</div>
 			<!--设备名称 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisname" width="60%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
+			<el-dialog title="设备" :modal-append-to-body="false" :visible.sync="dialogVisname" width="80%" :before-close="handleClose">
+				<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM">
@@ -140,7 +140,7 @@
 						</el-table-column>
 						<el-table-column label="接收状态" width="120" sortable prop="A_STATUS">
 						</el-table-column>
-						<el-table-column label="保管人" width="200" sortable prop="KEEPER">
+						<el-table-column label="保管人" width="200" sortable prop="KEEPERDesc">
 						</el-table-column>						
 						<el-table-column label="备注" width="200" sortable prop="MEMO">
 						</el-table-column>
@@ -366,7 +366,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '溯源周期单位',
+						// label: '溯源周期单位',
 						prop: 'FREQUENCYUNIT',
 						width: '100',
 						type: 'sel',
@@ -787,7 +787,7 @@
 				// this.show = true;
 			},
 			handleClose() {
-				this.assetList = [];
+				// this.assetList = [];
 				this.selName = [];
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;

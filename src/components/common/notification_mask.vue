@@ -429,7 +429,12 @@
 					</el-row>
 				</el-form>
 
-				<el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="360px" style="width: 100%;" :default-sort="{prop:'gridDataList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+				<el-table :header-cell-style="rowClass" ref="singleTable"
+				:data="gridDataList" line-center border stripe height="360px"
+				 style="width: 100%;" :default-sort="{prop:'gridDataList', order: 'descending'}"
+				  @selection-change="SelChange"
+					@current-change="setSel"
+					 v-loadmore="loadMore"
 				v-loading="loading"  
 				element-loading-text="加载中…"
 				element-loading-spinner="el-icon-loading"
@@ -452,7 +457,7 @@
 				<div slot="footer">
 	    			<el-button type="primary" @click="dailogconfirm" :disabled="views">确 定</el-button>
 	    			<el-button @click="resetBasisInfo" :disabled="views">取 消</el-button>
-	  			</div>
+	  		</div>
 			</el-dialog>
 			<!-- 产品类别  -->
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
@@ -754,6 +759,7 @@
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 				}).then((res) => {
+					console.log(res);
 					this.selectData = res.data;
 				});
 			},
@@ -1024,6 +1030,7 @@
 				this.noedit = false;
 			},
 			detailgetData() {
+				console.log(1223);
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据对号控制
@@ -1238,6 +1245,7 @@
 			        // }
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
+						console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
@@ -1380,6 +1388,12 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
+			setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.singleTable.clearSelection();
+		this.$refs.singleTable.toggleRowSelection(row);
+  },
 			loadMore () {
 			   if (this.loadSign) {
 			     this.loadSign = false

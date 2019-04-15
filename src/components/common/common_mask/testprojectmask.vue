@@ -161,12 +161,8 @@
     },
     //提出单位
     getCompany() {
-        var type = "2";
         var url = this.basic_url + '/api-user/depts/treeByType';
         this.$axios.get(url, {
-            params: {
-                type: type
-            },
         }).then((res) => {
             this.selectData = res.data;
         });
@@ -183,8 +179,8 @@
 	    this.selUser.push(row);
 	    this.$refs.singleTable.clearSelection();
 		this.$refs.singleTable.toggleRowSelection(row);
-  	},
-  	sizeChange(val) {
+  },
+  sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();
 	},

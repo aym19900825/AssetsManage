@@ -1232,16 +1232,6 @@
 				}
 				return str.replace(/\,|\￥/g, "");
 			},
-			checkMoney(obj){
-				var tempValue=obj.value.replace(/(^s+)|(s+$)/g,'').replace('￥','');
-				if(!tempValue){return}
-				if(/^-?d+(.d+)?$/.test(tempValue)){
-					obj.value="￥"+parseFloat(tempValue).toFixed(2);
-				}else{
-					alert('请输入合法的货币值！');
-				return
-				}
-			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
 				var money = document.getElementById("cost").value;

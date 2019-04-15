@@ -560,8 +560,20 @@
 		},
 		// 导出
 		exportData() {
-			var url = this.basic_url + '/api-apps/app/workplan/exportExc?access_token='+sessionStorage.getItem('access_token');
-				var xhr = new XMLHttpRequest();
+			var selData = this.selUser;
+			if(selData.length == 0){
+				this.message({
+					message: '请选择导出数据',
+					type: 'warning'
+				});
+				return;
+			}
+			var idArr = [];
+			for (var i = 0; i < selData.length; i++) {
+				idArr.push(selData[i].ID);
+			}
+			var url = this.basic_url + '/api-apps/app/workplan/exportExc/'+idArr.join(',')+'?access_token='+sessionStorage.getItem('access_token');
+			var xhr = new XMLHttpRequest();
 			xhr.open('POST', url, true);
 			xhr.responseType = "blob";
 			xhr.setRequestHeader("client_type", "DESKTOP_WEB");

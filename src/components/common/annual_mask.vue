@@ -69,24 +69,6 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-
-									<!-- <el-row :gutter="5">
-										<el-col :span="8">
-											<el-form-item label="承检单位" prop="CJDW" label-width="85px">
-												<el-select clearable v-model="WORKPLAN.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-												</el-select>
-											</el-form-item>	
-										</el-col>
-										
-										<el-col :span="8">
-											<el-form-item label="产品类别" prop="ITEMTYPE"  label-width="85px">
-												<el-input v-model="WORKPLAN.ITEMTYPE" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="addprobtn" :disabled="noedit"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col>
-									</el-row> -->
 									<el-row :gutter="5">
 										<el-col :span="24">
 											<el-form-item label="计划描述" prop="DESCRIPTION" label-width="85px">
@@ -99,12 +81,7 @@
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
 									<div style="position: absolute; top:10px; right:40px;">
-									<!-- <div> -->
-										<!-- <el-button type="primary" size="mini" round v-show="!viewtitle">
-											<i class="icon-upload-cloud"></i>
-											<font>导入</font>
-										</el-button> -->
-										<el-dropdown size="small" v-show="!viewtitle">
+										<!-- <el-dropdown size="small" v-show="!viewtitle">
 											<el-button round type="primary" size="mini">
 												<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon-right"></i>
 											</el-button>
@@ -130,7 +107,7 @@
 										<el-button type="primary" size="mini" round v-show="!addtitle" @click="exportData" style="margin-left: 10px;">
 											<i class="icon-upload-cloud"></i>
 											<font>导出</font>
-										</el-button>
+										</el-button> -->
 										<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
@@ -147,25 +124,19 @@
 											  :default-sort="{prop:'worlplanlist', order: 'descending'}" 
 											  v-loadmore="loadMore"
 											  @cell-dblclick="iconOperation">
-									    <!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
-									      <template slot-scope="scope" >
-									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)"></i>
-									      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="iconOperation(scope.row)"></i>
-									      </template>
-									    </el-table-column> -->
 									    <el-table-column label="序号" width="50px" type="index">
 									    </el-table-column>
 										<el-table-column prop="CJDW" label="承检单位" sortable width="200px">
 											<template slot-scope="scope">
 												<el-select v-if="scope.row.isEditing" clearable v-model="scope.row.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="getCjdw(scope.row)">
-													<el-option v-for="(data,index) in inspectUnit" :key="index" :value="data.id" :label="data.fullname"></el-option>
+													<el-option v-for="data in inspectUnit" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 												<span v-if="!scope.row.isEditing">{{scope.row.CJDWDesc}}</span>
 											</template>
 										</el-table-column>
 										<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="200px">
 											<template slot-scope="scope">
-												<el-input v-if="scope.row.isEditing" v-model="scope.row.PRODUCT_TYPE" :disabled="true">
+												<el-input v-if="scope.row.isEditing" v-model="scope.row.PRODUCT_TYPE" :disabled="true" placeholder="请选择">
 													<el-button slot="append" icon="el-icon-search" @click="addprobtn(scope.row)" :disabled="noedit"></el-button>
 												</el-input>
 												<span v-if="!scope.row.isEditing">{{scope.row.PRODUCT_TYPE}}</span>
@@ -187,6 +158,14 @@
 										  </template>
 									    </el-table-column>
 										<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
+											<!-- <template slot-scope="scope">
+												<el-form-item :prop="'worlplanlist.'+scope.$index + '.V_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请选择" :disabled="true">
+														<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
+													</el-input>
+													<span v-else>{{scope.row.V_NAME}}</span>
+												</el-form-item>
+											</template> -->
 											<template slot-scope="scope">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请选择" :disabled="true">
 														<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
@@ -194,24 +173,6 @@
 													<span v-else>{{scope.row.V_NAME}}</span>
 											</template>
 										</el-table-column>
-
-										<!-- <el-table-column prop="S_NAME" label="检测依据" sortable width="220px">
-											<template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请选择" :disabled="noedit">
-														<el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)"></el-button>
-													</el-input>
-													<span v-else>{{scope.row.S_NAME}}</span>
-											</template>
-										</el-table-column>
-
-										<el-table-column prop="P_DESC" label="检测项目" sortable width="220px">
-											<template slot-scope="scope">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请选择" :disabled="noedit">
-														<el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)"></el-button>
-													</el-input>
-													<span v-else>{{scope.row.P_DESC}}</span>
-											</template>
-										</el-table-column> -->
 
 									    <el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 									      <template slot-scope="scope">
@@ -271,11 +232,7 @@
 													  max-length="260px" 
 													  style="width: 100%;" 
 													  :default-sort="{prop:'basisList', order: 'descending'}">
-							            		<el-table-column prop="NUMBER" label="序号" width="50" type="index">
-													<!-- <template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUMBER"></el-input>
-														<span v-else>{{scope.row.NUMBER}}</span>
-													</template> -->
+							            		<el-table-column label="序号" width="50" type="index">
 												</el-table-column>
 							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160">
 													<template slot-scope="scope">
@@ -289,18 +246,18 @@
 														<span v-else>{{scope.row.S_NAME}}</span>
 													</template>
 												</el-table-column>
-							            		<el-table-column prop="VERSION" label="版本" sortable width="80">
+							            		<!-- <el-table-column prop="VERSION" label="版本" sortable width="80">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION"></el-input>
 														<span v-else>{{scope.row.VERSION}}</span>
 													</template>
-												</el-table-column>
-							            		<el-table-column prop="FILESIZE" label="文件大小" sortable width="120">
+												</el-table-column> -->
+							            		<!-- <el-table-column prop="FILESIZE" label="文件大小" sortable width="120">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.FILESIZE"></el-input>
 														<span v-else>{{scope.row.FILESIZE}}</span>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 							            		<el-table-column fixed="right" label="操作" width="80">
 													<template slot-scope="scope"  v-if="!viewtitle">
 														<el-button
@@ -355,7 +312,6 @@
 											        </el-button>
 											      </template>
 											    </el-table-column>
-
 							            	</el-table>
 									    </el-tab-pane>
 									</el-tabs>
@@ -463,13 +419,6 @@
 							</el-col>		
 						</el-row>
 						<el-row :gutter="10">
-							<!-- <el-col :span="6">
-								<el-form-item label="机构" prop="DEPTID">
-									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col> -->
 							<el-col :span="6">
 								<el-form-item label="发布时间" prop="RELEASETIME">
 									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
@@ -482,12 +431,6 @@
 									</el-date-picker>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="3">
-								<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
-							</el-col> -->
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
@@ -500,14 +443,10 @@
 				<el-table :data="standardList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
-					<!-- <el-table-column label="主键编号" width="120" sortable prop="ID">
-					</el-table-column> -->
 					<el-table-column label="标准编号" width="160" sortable prop="S_NUM">
 					</el-table-column>
 					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 					</el-table-column>
-					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
-					</el-table-column> -->
 					<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
 					</el-table-column>
 					<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
@@ -576,22 +515,24 @@
 					</el-table-column>
 					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
 					</el-table-column>
-					<el-table-column label="项目名称" width="220" sortable prop="P_NAME">
+					<el-table-column label="项目名称" sortable prop="P_NAME">
 					</el-table-column>
-					<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
+					<el-table-column label="标准编号" width="220" sortable prop="S_NUM">
+					</el-table-column>
+					<!-- <el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
 					</el-table-column>
 					<el-table-column label="领域" width="120" sortable prop="FIELD" >
 					</el-table-column>
 					<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
-					</el-table-column>
+					</el-table-column> -->
 					<el-table-column label="版本" width="100" sortable prop="VERSION">
 					</el-table-column>
 					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 					</el-table-column>
-					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
+					<!-- <el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
 					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
-					</el-table-column>
+					</el-table-column> -->
 				</el-table>
 				<el-pagination background class="text-right pt10 pb10"
 		            @size-change="sizeChange"
@@ -936,7 +877,17 @@
 		},
 		methods: {
 			getCjdw(row){
-				console.log(row);
+				this.inspectUnit.filter((item)=>{
+					if(row.CJDW == item.CJDW){
+						row.CJDWDesc = item.fullname;
+					}
+				});
+				row.ITEM_NAME = '';
+				row.PRODUCT_TYPE = '';
+				row.PRO_NUM = '';
+				row.NUM = '';
+				this.proTestList = [];
+				this.basisList = [];
 			},
 			selUnit(item){
 				var selData = item;
@@ -980,6 +931,7 @@
 				return url;
             },
 			exportData() {
+				// /api-apps/app/workplan/exportExc/'+ids+'?access_token='+sessionStorage.getItem('access_token');    ids为选择数据的id，以逗号分隔
            		var url = this.basic_url + '/api-apps/app/workplan/exportExc?table=WORLPLANLINE&WP_NUM_wheres='+this.WORKPLAN.WP_NUM+'&access_token='+sessionStorage.getItem('access_token');
           		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
@@ -1008,12 +960,8 @@
 			},
 			//提出单位
 			getCompany() {
-			// 	var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
-					// params: {
-					// 	type: type
-					// },
 				}).then((res) => {
 					this.selectData = res.data;
 				});
@@ -1085,6 +1033,16 @@
 			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
+				if(TableName == 'WORLPLANLINE_BASIS'){
+					if(row.DEPTTYPE == '2'){
+						var projectList = this.proTestList;
+						for (let i = projectList.length - 1; i >= 0; i--) {
+							if(projectList[i].S_NUM == row.S_NUM){
+								this.delPlan(i,projectList[i],'WORLPLANLINE_PROJECT','proTestList');
+							}
+						}
+					}
+				}
 				if(row.ID){
 					var url = this.basic_url +'/api-apps/app/workplan/' + TableName +'/' + row.ID;
 					this.$confirm('确定删除此数据吗？', '提示', {
@@ -1095,7 +1053,7 @@
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
 							if(res.data.resp_code == 0){
-									this[delList].splice(index,1);
+								this[delList].splice(index,1);
 							}else{
 								this.$message({
 									message: res.data.resp_msg,
@@ -1103,9 +1061,7 @@
 								});
 							}
 						}).catch((err) => {});
-					}).catch(() => {
-
-					});
+					}).catch(() => {});
 				}else{
 					this[delList].splice(index,1);
 				}
@@ -1219,6 +1175,7 @@
 						//产品编号  与主表关联
 						selData[i].WP_NUM = this.WORKPLAN.WP_NUM;
 						selData[i].WP_LINENUM = this.editPlan.WP_LINENUM;
+						selData[i].DEPTTYPE = '2';
 						//产品序号
 						selData[i].NUMBER = this.proTestList.length>0?this.proTestList[this.proTestList.length-1].NUMBER+i+1 :
 							1;
@@ -1253,10 +1210,9 @@
 				} else {
 					for(var i = 0;i<selData.length;i++){
 						selData[i].P_DESC = selData[i].P_NAME;
-						//可编辑状态
 						selData[i].isEditing = false;
-						//新选来的数据ID为空
 						selData[i].ID = '';
+						selData[i].DEPTTYPE = '2';
 						//产品要求
 						selData[i].REMARKS = this.editPlan.REMARKS;
 						//产品编号
@@ -1290,6 +1246,10 @@
 				}else{
 					this.editPlan.PRODUCT_TYPE = this.selUser[0].TYPE;
 					this.editPlan.NUM = this.selUser[0].NUM;
+					this.editPlan.ITEM_NAME = '';
+					this.editPlan.PRO_NUM = '';
+					this.proTestList = [];
+					this.basisList = [];
 					this.resetBasisInfo3();//调用resetBasisInfo3函数
 				}
 			},
@@ -1327,7 +1287,7 @@
 					});
 				}else{
 					this.editPlan.ITEM_NAME = this.selUser[0].PRO_NAME;
-					this.editPlan.PRO_NUM = this.selUser[0].NUM;
+					this.editPlan.PRO_NUM = this.selUser[0].PRO_NUM;
 					this.resetBasisInfo4();
 				}
 			},
@@ -1415,11 +1375,14 @@
 			},
             //检测依据弹出框
             basisleadbtn(){
-				var basissnum = [];
-				for(var i = 0;i<this.basisList.length;i++){
-					basissnum.push(this.basisList[i].S_NUM);
+				var basise = !!this.basisList ? this.basisList : [];
+				var basissnums = [];
+				for (var i = 0; i < basise.length; i++) {
+					if(basise[i].DEPTTYPE == '2'){
+						basissnums.push(basise[i].S_NUM);
+					}
 				}
-				this.basissnums = basissnum.toString(',');
+				this.basissnums = basissnums.toString(',');
 				this.page.currentPage = 1;
 				this.requestBasis();
 				this.requestnum = '4';
@@ -1434,9 +1397,9 @@
 			},
 			//检测依据数据
 			requestBasis(){
-				if(!!!this.WORKPLAN.PROP_UNIT){
+				if(!!!this.editPlan.CJDW){
 					this.$message({
-						message: '请先选择提出单位',
+						message: '请先选择承检单位',
 						type: 'warning'
 					});
 					return;
@@ -1448,11 +1411,11 @@
 					S_NAME: this.searchList.S_NAME,
 					S_ENGNAME:this.searchList.S_ENGNAME,
 					VERSION: this.searchList.VERSION,
-					DEPTID: this.WORKPLAN.PROP_UNIT,
+					DEPTID: this.editPlan.CJDW,
 					RELEASETIME: this.searchList.RELEASETIME,
 					STARTETIME: this.searchList.STARTETIME,
 				};
-				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.editPlanLineRow.NUM+'&S_NUM_where_not_in='+this.basissnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
+				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.editPlan.PRO_NUM+'&NUM_wheres='+ this.editPlan.NUM +'&S_NUM_where_not_in='+this.basissnums+'&DEPTID_wheres='+this.editPlan.CJDW;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1481,9 +1444,9 @@
 			},
 			//检测项目数据
 			requestProject(){
-				if(!!!this.WORKPLAN.PROP_UNIT){
+				if(!!!this.editPlan.CJDW){
 					this.$message({
-						message: '请先选择提出单位',
+						message: '请先选择承检单位',
 						type: 'warning'
 					});
 					return;
@@ -1491,9 +1454,15 @@
 				var basise = !!this.basisList ? this.basisList : [];
 				var basissnums = [];
 				for (var i = 0; i < basise.length; i++) {
-					if(basise[i].DEPTTYPE == '1'){
+					if(basise[i].DEPTTYPE == '2'){
 						basissnums.push(basise[i].S_NUM);
 					}
+				}
+
+				var projects = !!this.proTestList ? this.proTestList : [];
+				var projectnums = [];
+				for (var j = 0; j < projects.length; j++) {
+					projects.push(projects[j].P_NUM);
 				}
 				var data = {
 					page: this.page.currentPage,
@@ -1505,12 +1474,12 @@
 					STARTETIME: this.searchList.STARTETIME,
 					STATUS: this.searchList.STATUS,
 					P_NUM: this.searchList.P_NUM,
-					DEPTID: this.WORKPLAN.PROP_UNIT,
+					DEPTID: this.editPlan.CJDW,
 					P_NAME: this.searchList.P_NAME,
 					VERSION: this.searchList.VERSION,
 					STATUS: this.searchList.STATUS,
 				};
-				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+basissnums.join(',')+'&P_NUM_where_not_in='+this.projectpnums+'&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT, {
+				this.$axios.get(this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+basissnums.join(',')+'&P_NUM_where_not_in='+this.projectpnums+'&DEPTID_wheres='+this.editPlan.CJDW, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;	
@@ -1788,6 +1757,7 @@
             	this.show = true;
             	this.edit = true;
 				this.noedit = false;
+				this.getCompany();
 			},
 			// 这里是修改
 			detail(dataid) {
@@ -1846,23 +1816,8 @@
 						_this.docParm.appid = 20;
 						_this.$refs.docTable.getData();
 					},100);
-					var type = "2";
-					var url = this.basic_url + '/api-user/depts/treeByType';
-					this.$axios.get(url, {
-						params: {
-							type: type
-						},
-					}).then((res) => {
-						this.selectData = res.data;
-					});
 				}).catch((err) => {});
-				var type = "2";
-				var url = this.basic_url + '/api-user/depts/treeByType?id='+this.WORKPLAN.PROP_UNIT;
-				this.$axios.get(url, {
-
-				}).then((res) => {
-					this.selectData = res.data;
-				});
+				
 				this.viewtitle = false;
 				this.addtitle = false;
 				this.modifytitle = true;
@@ -1909,12 +1864,12 @@
 					this.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					this.show = true;
 
-					var type = "2";
+					// var type = "2";
 					var url = this.basic_url + '/api-user/depts/treeByType';
 					this.$axios.get(url, {
-						params: {
-							type: type
-						},
+						// params: {
+						// 	type: type
+						// },
 					}).then((res) => {
 						this.selectData = res.data;
 					});

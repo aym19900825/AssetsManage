@@ -38,6 +38,7 @@
 				style="width: 100%;" 
 				:default-sort="{prop:'list', order: 'descending'}" 
 				@selection-change="selChange"
+				@current-change="setSel"
 				v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"
@@ -122,6 +123,12 @@
 			selChange(val) {
 				this.selData = val;
 			},
+			setSel(row) {
+			    this.selUser = [];
+			    this.selUser.push(row);
+			    this.$refs.table.clearSelection();
+				this.$refs.table.toggleRowSelection(row);
+		   },
 			//表格滚动加载
 			loadMore() {
 				let up2down = sessionStorage.getItem('up2down');

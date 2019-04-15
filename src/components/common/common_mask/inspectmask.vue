@@ -37,7 +37,12 @@
 				</el-col>
 				</el-row>
 			</el-form>
-			<el-table :data="inspectList" border stripe :header-cell-style="rowClass" style="width: 100%;" height="360px" :default-sort="{prop:'inspectList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('inspect')"
+			<el-table  ref="table" :data="inspectList" border stripe :header-cell-style="rowClass"
+			 style="width: 100%;" height="360px"
+			  :default-sort="{prop:'inspectList', order: 'descending'}"
+				 @selection-change="SelChange" 
+				 @current-change="setSel"
+				 v-loadmore="loadMore('inspect')"
 			v-loading="loading" 
 			element-loading-text="加载中…"
 			element-loading-spinner="el-icon-loading"
@@ -123,6 +128,12 @@
 	SelChange(val) {
 		this.selval = val;
 	},
+	setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.table.clearSelection();
+		  this.$refs.table.toggleRowSelection(row);
+  },
   	sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();

@@ -53,6 +53,8 @@
 
 								<el-table-column label="组名" sortable prop="name" v-if="this.checkedName.indexOf('组名')!=-1">
 								</el-table-column>
+								<el-table-column label="描述" sortable prop="memo" v-if="this.checkedName.indexOf('组名')!=-1">
+								</el-table-column>
 
 								<el-table-column label="所属机构" align="center" sortable prop="deptName" v-if="this.checkedName.indexOf('所属机构')!=-1">
 								</el-table-column>

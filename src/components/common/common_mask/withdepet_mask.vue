@@ -23,13 +23,16 @@
                 </el-col>
             </el-row>
         </el-form>
-        <el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="270px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
+        <el-table ref="table" :header-cell-style="rowClass" :data="customerList" 
+		line-center border stripe height="270px" style="width: 100%;" 
+		 :default-sort="{prop:'customerList', order: 'descending'}"
             v-loadmore="loadMore"
             v-loading="loading"  
             element-loading-text="加载中…"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0.9)"
-            @selection-change="SelChange">
+            @selection-change="SelChange"
+			@current-change="setSel">
             <el-table-column type="selection" width="55" fixed align="center">
             </el-table-column>
             <el-table-column label="项目名称" width="200" sortable prop="p_name">
@@ -108,7 +111,12 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
-  	
+  	setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.table.clearSelection();
+		this.$refs.table.toggleRowSelection(row);
+  	},
 	searchinfo() {
 		this.page.currentPage = 1;
 		this.page.pageSize = 20;

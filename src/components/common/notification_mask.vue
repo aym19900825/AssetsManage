@@ -637,6 +637,7 @@
 				basisnum:'',////依据选中数据们字符串作为参数传值给项目
 				PRODUCT_TYPE:'',//产品类别
 				username:'',
+				users:'',//当前审批的人的name
 				sendchilddata:[],//子表已有的值
 			};
 		},
@@ -1030,7 +1031,6 @@
 				this.noedit = false;
 			},
 			detailgetData() {
-				console.log(1223);
 				var url = this.basic_url +'/api-apps/app/workNot/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据对号控制
@@ -1057,6 +1057,17 @@
 						this.reviewtitle  = false;
 					}
 					this.show = true;
+					console.log(1234561111);
+					this.users();
+					console.log(123456);
+					console.log(this.users);
+					if(this.users.indexOf(this.username) != -1){
+						this.approval=true;
+						this.start=false;
+					}else{
+						this.approval=false;
+						this.start=false;
+					}
 				}).catch((err) => {
 				});
 			},	
@@ -1143,18 +1154,6 @@
 				this.special=true;
 				this.isEditing=false;
 			},
-			//上传文件 Begin
-			handleRemove(file, fileList) {
-			},
-			handlePreview(file) {
-			},
-			handleExceed(files, fileList) {
-				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-			},
-			beforeRemove(file, fileList) {
-				return this.$confirm(`确定移除 ${ file.name }？`);
-			},
-			//上传文件 End
 			//点击关闭按钮
 			close() {
 				this.show = false;
@@ -1501,12 +1500,22 @@
 		
 			
 			getuser(){//获取当前用户信息
-						var url = this.basic_url + '/api-user/users/currentMap';
-						this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-										this.username = res.data.username;
-						}).catch((err) => {
-						});
-				},
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+								this.username = res.data.username;
+				}).catch((err) => {
+				});
+			},
+			getusers(){//获取当前审批人的name
+				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							// var users='';
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+				});
+			},
 		},
 		mounted() {
 			this.getCompany();

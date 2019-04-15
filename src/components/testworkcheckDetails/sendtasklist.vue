@@ -1261,6 +1261,8 @@
 								message: '下达成功',
 								type: 'success'
 							});
+							this.show = false;
+							this.$emit('request');
 						}
 					}).catch((err) => {
 					});

@@ -33,7 +33,7 @@
 								<!-- 样品信息 Begin-->
 								<el-collapse-item title="样品信息" name="1">
 									<div v-show="this.workorderForm.STATE==1&&this.workorderForm.ISACCEPT!=1" class="check-btn-right">
-										<el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接受此任务</el-button>
+										<el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button>
 										<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
 									</div>
 									<el-row :gutter="20" class="pb10">

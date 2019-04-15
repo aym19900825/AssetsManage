@@ -25,7 +25,7 @@
 							<el-collapse v-model="activeNames">							
 	                            <el-collapse-item title="基本信息" name="1">
 	                                <el-form-item label-width="120px" v-for="item in basicInfo" :key="item.id" :label="item.label" :prop="item.prop" :style="{ width: item.width, display: item.displayType}">
-										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+										<el-select v-model="dataInfo[item.prop]" filterable placeholder="请选择" v-if="item.type == 'select'" @change="selChange" :disabled="noedit" style="width:100%;">
 											<el-option v-for="item in item.option"
 											:key="item.ID"
 											:label="item.ASSETNUM"
@@ -294,7 +294,7 @@
                     // },
                     {
                         label: '保管人',
-                        prop: 'KEEPER',
+                        prop: 'KEEPERDesc',
                         width: '30%',
                         type: 'input',
                         displayType: 'inline-block'
@@ -365,6 +365,7 @@
 					'MODEL': '',
 					'STATE': '',    
 					'KEEPER': '',
+					'KEEPERDesc': '',
 					'tableList': [],
 					'maintenList': []
 				},
@@ -486,10 +487,13 @@
 				}).catch((err) => {
 				});
 			},
+			//获取当前时间
 			getToday(){
 				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				var rate = this.$moment(str).format("yyyy-MM-dd HH:mm:ss")
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
 				return rate;
 			},
 			changeEdit(row){

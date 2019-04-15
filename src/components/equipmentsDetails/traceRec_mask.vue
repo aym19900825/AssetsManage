@@ -428,16 +428,14 @@
 				}).catch((err) => {
 				});
 			},
+			//获取当前日期
 			getToday(){
 				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				var rate = this.$moment(str).format("yyyy-MM-dd")
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
 				return rate;
-			},
-			getToday(){
-				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				return str;
 			},
 			selChange(val){
 				var data = this.assets;

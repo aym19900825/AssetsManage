@@ -428,6 +428,7 @@
 				}).catch((err) => {
 				});
 			},
+			//获取当前日期
 			getToday(){
 				var date = new Date();
 				var month = date.getMonth();

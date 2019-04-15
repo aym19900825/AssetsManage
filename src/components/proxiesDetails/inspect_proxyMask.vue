@@ -1439,10 +1439,11 @@
 					// 分包要求
 					for(var n = 0;n<res.data.CHECK_PROXY_CONTRACTList.length;n++){
 						res.data.CHECK_PROXY_CONTRACTList[n].isEditing = false;
-						if(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST.indexOf(',')==-1){
-							res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+						if(!!res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST){
+							if(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST.indexOf(',')==-1){
+								res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST = this.toFixedPrice(res.data.CHECK_PROXY_CONTRACTList[n].CHECKCOST);
+							}
 						}
-						
 						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
 					}		
 				

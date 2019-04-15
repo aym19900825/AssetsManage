@@ -298,11 +298,11 @@
 			//获取当前时间
 			getToday(){
 				var date = new Date();
-				// this.dataInfo.updateTime = this.$moment(date).format("YYYY-MM-DD HH:MM:SS");
 				var month = date.getMonth();
 				month++;
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
-				return str;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
+				return rate;
 			},
 			//获取当前组信息
 			getData(id){ 

@@ -721,22 +721,23 @@
 			handleNodeClick(data) {
 				if(data.type=='dept') {
 					this.searchList.P_NUM = '';
-					this.searchList.PRO_NUM = '';
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else if(data.type=='product'){
-					this.searchList.PRO_NUM = data.num.substr(1);
+					this.searchList.PRODUCT=data.fullname;
 					this.searchList.P_NUM = '';
 					this.searchList.DEPTID = data.deptid;
 					this.page.currentPage = 1;
 				}else if(data.type=='producttype'){
-					this.searchList.PRO_NUM = '';
-					this.searchList.P_NUM = data.num.substr(2);
 					this.searchList.DEPTID = data.deptid;
+					this.searchList.PRODUCT='';
+					this.searchList.PRODUCT_TYPE=data.fullname;
 					this.page.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
+					this.searchList.PRODUCT='';
+					this.searchList.PRODUCT_TYPE='';
 					this.searchList.DEPTID = '';
 					this.page.currentPage = 1;
 				}

@@ -198,7 +198,7 @@
 			getUserData(val){
 				for(var i=0;i<val.length;i++){
 					var userList={
-						id: '',
+						id: val[i].id,
 						userid:val[i].id,
 						username:val[i].username,
 						nickname:val[i].nickname,

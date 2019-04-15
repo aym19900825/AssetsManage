@@ -808,31 +808,6 @@
 			 withdepetmask,
 		},
 		data() {
-				// var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-				// // 金额验证
-				// var price=(rule, value, callback) => {//生产单位名称 
-				// var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				// if (!values) {
-				// 	callback();
-				// }
-				// setTimeout(() => { 
-				// 	if(exp.test(value)==false){ 
-				// 		callback(new Error('请输入数字'));
-				// 	}else{
-				// 		callback();
-				// 	}
-				// }, 500);
-				
-				// if(value != '' && value!=undefined){
-				// 	if(exp.test(value)==false){ 
-				// 		callback(new Error('请输入数字'));
-				// 	}else{
-				// 		callback();
-				// 	}
-				// 		}else {
-				// 			callback();
-				// 		}
-				// };
 			return {
 				approvingData:{},
 				loading: false,

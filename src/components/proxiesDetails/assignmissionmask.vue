@@ -1265,10 +1265,11 @@
 								type: 'success'
 							});
 							this.close();
+						  this.$emit('request');
 						}else{
 							this.$message({
-							message: resp_msg,
-							type: 'warning'
+							  message: res.data.resp_msg,
+							  type: 'warning'
 						});
 						}
 					}).catch((err) => {

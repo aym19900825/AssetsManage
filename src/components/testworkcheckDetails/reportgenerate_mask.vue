@@ -498,21 +498,18 @@
 					this.moduleFileList = res.data.fileList;
 					var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
 					var path = [];
-					for(let i=0; i<this.moduleFileList.length;i++){
-						path.push(this.moduleFileList[i].fileid);
-					}
 					for(let j=0; j<this.selData.length;j++){
-						path.push(this.selData[j].FILEID);
+						path.push(this.selData[j].FILEPATH);
 					}
-					console.log(path);
 					var postData = {
 						proxynum: '',
 						templatecode: this.reportTemplate.RE_TYPE,
 						workorderid: this.detailId,//工作任务单ID
-						deptfullname: this.deptfullname,//部门名称
+					deptfullname: this.deptfullname,//部门名称
 						filePath: path.length>0?path.join(','):'',//文件路径
 						fileName: '',//文件名称
-						app: 'workorder'//应用名称
+						app: 'workorder',//应用名称
+						moduleList: this.moduleFileList
 					};
 					this.$axios.post(Url1, {
 						params: postData

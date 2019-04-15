@@ -24,8 +24,9 @@
 								<el-input v-model="searchList.deptName" @keyup.enter.native="searchinfo"></el-input>
 							</el-form-item>
 						</el-col>
+						<el-col :span="5">
 							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+							<el-button type="primary" @click="resetBtn2" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 						</el-col>
 					</el-row>
 				</el-form>
@@ -94,7 +95,7 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-				searchList: {},
+				// searchList: {},
 				list: [],
 				dialogShow: false,
 				urlOpt: '',
@@ -209,7 +210,7 @@
 				}).catch((wrong) => {})
 			},
 			submit(){
-				console.log(this.selData);
+				// console.log(this.selData);
 				if(this.urlOpt == 'groups'){
 					if(this.selData.length == 0){
 						this.$message({
@@ -240,7 +241,7 @@
 					}
 				}
 			},
-			resetBtn(){
+			resetBtn2(){
 				this.searchList = {
 					username: '',
 					nickname: '',

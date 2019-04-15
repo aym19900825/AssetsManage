@@ -49,7 +49,7 @@
 
 								<el-collapse-item title="用户列表" name="2">
 									<div class="table-func" v-if="!viewtitle">
-										<el-button type="primary" size="mini" round @click="chooseUser()">
+										<el-button type="primary" size="mini" round @click="chooseUser">
 											<i class="icon-search"></i>
 											<font>选择</font>
 										</el-button>
@@ -61,7 +61,11 @@
 												<i class="el-icon-edit" v-else @click="changeState(scope.row)"></i>
 											</template>
 										</el-table-column> -->
-
+										<el-table-column type="index" label="序号" width="50">
+											<template slot-scope="scope">
+												<span> {{scope.$index+1}} </span>
+											</template>
+										</el-table-column>
 										<el-table-column label="用户名" prop="username" sortable>
 											<!-- <template slot-scope="scope">
 												<el-form-item :prop="'userList.'+scope.$index + '.userid'" :rules="[{required: true, message: '请选择', trigger: 'blur'}]">

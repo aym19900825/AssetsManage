@@ -1267,7 +1267,7 @@
 							this.close();
 						}else{
 							this.$message({
-							message: '已经生成工作任务单，请勿重复生成',
+							message: resp_msg,
 							type: 'warning'
 						});
 						}

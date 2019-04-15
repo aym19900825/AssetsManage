@@ -181,7 +181,7 @@
 				this.requestData(this.urlOpt);
 			},
 			//Table默认加载数据
-			requestData(opt) {
+			requestData(opt,arr) {
 				this.loading = true;//加载动画打开
 				this.urlOpt = opt;
 				var data = {
@@ -192,7 +192,8 @@
 					deptName: this.searchList.deptName
 				}
 				if(this.urlOpt == 'groups'){
-					var url = this.basic_url + '/api-user/users';
+					var url = this.basic_url + "/api-user/users?id_not_in="+arr;
+					console.log(url);
 				}else{
 					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.urlOpt;
 				}
@@ -216,7 +217,6 @@
 				}).catch((wrong) => {})
 			},
 			submit(){
-				console.log(this.selData);
 				if(this.urlOpt == 'groups'){
 					if(this.selData.length == 0){
 						this.$message({
@@ -247,7 +247,7 @@
 					}
 				}
 			},
-			resetBtn(){
+			resetbtn(){
 				this.searchList = {
 					username: '',
 					nickname: '',

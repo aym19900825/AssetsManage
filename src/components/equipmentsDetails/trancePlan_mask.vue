@@ -23,16 +23,16 @@
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
-										<el-col :span="5" class="pull-right">
+										<el-col :span="6" class="pull-right">
 											<el-input v-model="dataInfo.PMNUM" :disabled="true">
 												<template slot="prepend">溯源计划编号</template>
 											</el-input>
 										</el-col>
 									</el-row>
 									<el-form-item v-for="item in basicInfo" :label="item.label" :key="item.id" :prop="item.prop" :style="{ width: item.width, display: item.displayType}" label-width="160px">
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" style="width: 220px;" :disabled="noedit || item.disabled" :placeholder="item.placeholder"></el-input>
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='input'" :disabled="noedit || item.disabled" :placeholder="item.placeholder"></el-input>
 
-										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='selname'&&item.prop=='A_NAME'" style="width: 220px;" :disabled="true" :placeholder="item.placeholder">
+										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='selname'&&item.prop=='A_NAME'" :disabled="true" :placeholder="item.placeholder">
 											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addinstru"></el-button>
 										</el-input>
 
@@ -45,7 +45,7 @@
 											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
 										</el-radio-group>
 
-										<el-select clearable v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'select'" @change="selChange" :disabled="noedit">
+										<el-select clearable v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'select'" @change="selChange" :disabled="noedit" style="width:100%;">
 											<el-option v-for="item in assets"
 											:key="item.ID"
 											:label="item.DESCRIPTION"
@@ -57,7 +57,7 @@
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 
-										<el-select clearable v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'sel'" style="width: 60px;" :disabled="noedit">
+										<el-select clearable v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'sel'" style="width: 70px;" :disabled="noedit">
 											<el-option v-for="item in time"
 											:key="item"
 											:label="item"
@@ -71,7 +71,7 @@
 									<el-table :header-cell-style="rowClass" :data="pmRecordList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'pmRecordList', order: 'descending'}">
 										 <el-table-column type="index" sortable label="序号" width="50">
 	                                    </el-table-column>
-										<el-table-column prop="RECORDNUM" label="溯源确认记录编号" sortable width="120px">
+										<el-table-column prop="RECORDNUM" label="溯源确认记录编号" sortable width="160px">
 										</el-table-column>
 										<el-table-column prop="PM_DATE" label="溯源日期" sortable width="120px">
 										</el-table-column>
@@ -114,8 +114,8 @@
 				<!--底部-->
 			</div>
 			<!--设备名称 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisname" width="60%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="400px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
+			<el-dialog title="设备" :modal-append-to-body="false" :visible.sync="dialogVisname" width="80%" :before-close="handleClose">
+				<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM">
@@ -140,7 +140,7 @@
 						</el-table-column>
 						<el-table-column label="接收状态" width="120" sortable prop="A_STATUS">
 						</el-table-column>
-						<el-table-column label="保管人" width="200" sortable prop="KEEPER">
+						<el-table-column label="保管人" width="200" sortable prop="KEEPERDesc">
 						</el-table-column>						
 						<el-table-column label="备注" width="200" sortable prop="MEMO">
 						</el-table-column>
@@ -366,7 +366,7 @@
 						displayType: 'inline-block'
 					},
 					{
-						label: '溯源周期单位',
+						// label: '溯源周期单位',
 						prop: 'FREQUENCYUNIT',
 						width: '100',
 						type: 'sel',
@@ -575,10 +575,13 @@
 					this.selectData = res.data;
 				});
 			},
+			//获取当前时间
 			getToday(){
 				var date = new Date();
-				var str = date.getFullYear() + '-' + date.getMonth() + '-'+ date.getDate();
-				var rate = this.$moment(str).format("yyyy-MM-dd")
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
 				return rate;
 			},
 			selChange(val){
@@ -787,7 +790,7 @@
 				// this.show = true;
 			},
 			handleClose() {
-				this.assetList = [];
+				// this.assetList = [];
 				this.selName = [];
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;

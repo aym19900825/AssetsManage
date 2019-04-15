@@ -1265,10 +1265,11 @@
 								type: 'success'
 							});
 							this.close();
+						  this.$emit('request');
 						}else{
 							this.$message({
-							message: '已经生成工作任务单，请勿重复生成',
-							type: 'warning'
+							  message: res.data.resp_msg,
+							  type: 'warning'
 						});
 						}
 					}).catch((err) => {

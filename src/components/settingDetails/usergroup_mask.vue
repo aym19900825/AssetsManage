@@ -49,44 +49,34 @@
 
 								<el-collapse-item title="用户列表" name="2">
 									<div class="table-func" v-if="!viewtitle">
-										<el-button type="primary" size="mini" round @click="chooseUser()">
+										<el-button type="primary" size="mini" round @click="chooseUser">
 											<i class="icon-search"></i>
 											<font>选择</font>
 										</el-button>
 									</div>
 									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row style="width: 100% ;" max-height="260" :default-sort="{prop:'dataInfo.userList', order: 'descending'}">
+<<<<<<< HEAD
+=======
 										<!-- <el-table-column prop="iconOperation" fixed width="50px">
 											<template slot-scope="scope">
 												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeState(scope.row)"></i>
 												<i class="el-icon-edit" v-else @click="changeState(scope.row)"></i>
 											</template>
 										</el-table-column> -->
-
-										<el-table-column label="用户名" prop="username" sortable>
-											<!-- <template slot-scope="scope">
-												<el-form-item :prop="'userList.'+scope.$index + '.userid'" :rules="[{required: true, message: '请选择', trigger: 'blur'}]">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.userid" disabled></el-input>
-													<span v-else>{{scope.row.userid}}</span>
-												</el-form-item>
-											</template> -->
+										<el-table-column type="index" label="序号" width="50">
+											<template slot-scope="scope">
+												<span> {{scope.$index+1}} </span>
+											</template>
 										</el-table-column>
-
+>>>>>>> cbd8cf0ef1d8c0ab9d4e6f66a8eb48fd652401bf
+										<el-table-column label="用户名" prop="username" sortable>
+										</el-table-column>
 										<el-table-column label="用户姓名" prop="nickname" sortable>
-											<!-- <template slot-scope="scope">
-												<el-form-item :prop="'userList.'+scope.$index + '.nickname'" :rules="[{required: true, message: '请选择', trigger: 'blur'}]">
-													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.nickname">
-														<el-button slot="append" icon="el-icon-search" @click="chooseUser"></el-button>
-													</el-input>
-													<span v-else>{{scope.row.nickname}}</span>
-												</el-form-item>
-											</template> -->
 										</el-table-column>
 										<el-table-column label="所属机构" prop="deptName" sortable>
 										</el-table-column>
-
 										<el-table-column label="手机号" prop="phone" sortable>
 										</el-table-column>
-
 										<el-table-column fixed="right" width="120" label="操作">
 											<template slot-scope="scope">
 												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
@@ -208,7 +198,7 @@
 			getUserData(val){
 				for(var i=0;i<val.length;i++){
 					var userList={
-						id: '',
+						id: val[i].id,
 						userid:val[i].id,
 						username:val[i].username,
 						nickname:val[i].nickname,
@@ -221,7 +211,21 @@
 			},
 			//选择用户带回来值
 			chooseUser(){
-				this.$refs.usermask.requestData('groups');
+			// 	var snum=this.dataInfo.INSPECT_PROXY_BASISList;
+			// 	var basislist=[];
+			// 	for(var i=0;i<snum.length;i++){
+          	// basislist.push(snum[i].S_NUM);
+			// 	}
+			// 	var basisnums=basislist.join(',');
+			    var arr=[];
+				for(var i=0;i<this.dataInfo.userList.length; i++){
+                     arr.push(this.dataInfo.userList[i].id);
+				}
+				console.log(arr);
+				console.log(this.dataInfo.userList);
+				arr=arr.join(',');
+				console.log(arr);
+				this.$refs.usermask.requestData('groups',arr);
 			},
 			//获取用户
 			getChoose(data){
@@ -288,7 +292,8 @@
 				var month = date.getMonth();
 				month++;
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
-				return str;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
+				return rate;
 			},
 			//添加显示弹窗
 			visible() {

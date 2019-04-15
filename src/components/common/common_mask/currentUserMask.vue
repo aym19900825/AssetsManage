@@ -24,6 +24,7 @@
 								<el-input v-model="searchList.deptName" @keyup.enter.native="searchinfo"></el-input>
 							</el-form-item>
 						</el-col>
+						<el-col :span="5">
 							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 						</el-col>
@@ -95,7 +96,7 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-				searchList: {},
+				// searchList: {},
 				list: [],
 				dialogShow: false,
 				urlOpt: '',
@@ -181,7 +182,7 @@
 				this.requestData(this.urlOpt);
 			},
 			//Table默认加载数据
-			requestData(opt) {
+			requestData(opt,arr) {
 				this.loading = true;//加载动画打开
 				this.urlOpt = opt;
 				var data = {
@@ -192,7 +193,8 @@
 					deptName: this.searchList.deptName
 				}
 				if(this.urlOpt == 'groups'){
-					var url = this.basic_url + '/api-user/users';
+					var url = this.basic_url + "/api-user/users?id_not_in="+arr;
+					console.log(url);
 				}else{
 					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.urlOpt;
 				}
@@ -216,7 +218,6 @@
 				}).catch((wrong) => {})
 			},
 			submit(){
-				console.log(this.selData);
 				if(this.urlOpt == 'groups'){
 					if(this.selData.length == 0){
 						this.$message({
@@ -247,7 +248,7 @@
 					}
 				}
 			},
-			resetBtn(){
+			resetbtn(){
 				this.searchList = {
 					username: '',
 					nickname: '',

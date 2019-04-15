@@ -208,13 +208,16 @@
 				}).catch((err) => {
 				});
 			},
+			//获取当前时间
 			getToday(){
 				var date = new Date();
 				var month = date.getMonth();
 				month++;
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
-				return str;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
+				return rate;
 			},
+			
 			//添加显示弹窗
 			visible() {
 				this.modify=false;

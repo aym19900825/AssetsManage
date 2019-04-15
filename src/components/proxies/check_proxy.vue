@@ -193,23 +193,22 @@
 				value: '',
 				options: [{
 					value: '1',
-					label: '草稿'
+					label: '编制'
 				}, {
 					value: '2',
 					label: '审批中'
 				},{
 					value: '3',
-					label: '已发布'
+					label: '待分配'
 				},
 				{
 					value: '4',
-					label: '已取消'
+					label: '中止'
 				},
 				{
 					value: '0',
 					label: '驳回'
 				}
-				
 				],
 				isShow: false,
 				ismin: true,
@@ -220,6 +219,8 @@
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
+					'状态',
+					'执行状态',
 					// '样品信息状态',
 					'检测依据',
 					'完成日期',
@@ -337,6 +338,7 @@
 			}
 		},
 		methods: {
+			
 			setSelData(val){
 				this.selUser = val;
 			},

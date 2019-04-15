@@ -35,7 +35,7 @@
 											<div class="el-input is-disabled el-input-group el-input-group--prepend">
 												<div class="el-input-group__prepend">承检单位</div>
 												<el-select clearable v-model="workorderForm.CJDW" filterable allow-create default-first-option placeholder="请选择承检单位" :disabled="noedit" @change="RVENDORSelect($event)">
-													<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+													<el-option v-for="(data,index) in cjdwtData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 												</el-select>
 											</div>
 										</el-col>
@@ -620,6 +620,7 @@
 				Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
 				Select_ITEM_MANAGEMENT:[],//获取样品信息-样品处置
 				fileList:[],//上传附件数据
+				cjdwtData:[],//承检单位
 				rules: {
 					PROXYNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//委托书编号
 					PROXY_VERSION: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//委托书版本
@@ -1171,8 +1172,6 @@
 				var url = this.basic_url + '/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
 					this.$axios.get(url, { }).then((res) => {
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
-					this.RVENDORSelect(res.data.datas.CJDW);
-					// this.workorderForm = res.data;
 					
 					for(let i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
 						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
@@ -1341,6 +1340,14 @@
 	      });
 				
 			},
+			//承检单位
+			getCompany() {
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+				}).then((res) => {
+					this.cjdwtData = res.data;
+				});
+			},
 			getleader(maingroupid,PROJECTLIST,index,add){
 				this.maingroupid=maingroupid;
 				if(!maingroupid){
@@ -1473,6 +1480,7 @@
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
+			this.getCompany();//承检单位
 			this.getUser();
 			this.getgroup();
 		},

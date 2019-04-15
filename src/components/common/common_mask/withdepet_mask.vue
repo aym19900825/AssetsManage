@@ -2,7 +2,6 @@
 <template>
 <div>
     <el-dialog :modal-append-to-body="false" title="分包" height="400px" :visible.sync="dialogcustom" width="80%" :before-close="handleClose">
-    <div class="scrollbar" style="height:380px;">
         <el-form inline-message :model="searchList" label-width="90px">
             <el-row>
                 <el-col :span="5">
@@ -56,7 +55,6 @@
             <el-button type="primary" @click="determine">确 定</el-button>
             <el-button @click="resetBasisInfo">取 消</el-button>
         </div>
-		</div>
     </el-dialog>
 </div>
 </template>

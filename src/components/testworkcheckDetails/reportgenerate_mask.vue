@@ -166,6 +166,7 @@
 												key="table2"
 												style="width: 100%;" 
 												@cell-click="iconOperation" 
+												@selection-change="selChange"
 												:default-sort="{prop:'reportData.List', order: 'descending'}">
 												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
@@ -297,9 +298,14 @@
 				rules: {
 					RE_TYPE: [{ required: true, message: '请选择', trigger: 'change' }],//选择报告模板类型
 				},
+				moduleFileList: [],
+				selData: [],
 			};
 		},
 		methods: {
+			selChange(val) {
+				this.selData = val;
+			},
 			//TAbs页切换事件判断按钮显示
 			handleClick(tab, event) {
 				var activeName = event.target.getAttribute('id');//获取当前tabID名
@@ -318,10 +324,10 @@
 					this.fourthBtn = false;
 					this.fifthBtn = false;
 				}else if(activeName=='tab-3') {//判断按钮显示问题，内容页显示生成内容页文档和取消
-					this.firstBtn = true;
+					this.firstBtn = false;
 					this.secondBtn = false;
 					this.thirdBtn = false;
-					this.fourthBtn = true;
+					this.fourthBtn = false;
 					this.fifthBtn = false;
 				}else if(activeName=='tab-4') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
 					this.firstBtn = true;
@@ -337,6 +343,7 @@
 				var url = this.basic_url + '/api-apps/appSelection/inspectionRepTem/page';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
+					this.reptemDetailId=res.data.data[0].ID;
 					console.log(res.data.data[0].RE_NUM);
 					console.log(res.data.data[0].ID);
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
@@ -347,6 +354,12 @@
 			},
 			//报告模板整体数据列表
 			requestData(){
+				this.selectData.filter((item)=>{
+					if(item.RE_NUM ==  this.reportTemplate.RE_TYPE){
+						this.reptemDetailId = item.ID;
+					}
+				});
+				this.reportTemplate.RE_TYPE
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
@@ -426,7 +439,7 @@
 			//回退成果文件
 			sendback(row){
 			// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
-				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
+				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.detailId;
 				this.$axios.get(Url, {}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.show=false;
@@ -477,48 +490,72 @@
 			},
 			//生成报告
 			getreport(){
-				if(this.reportGenerateForm.WORKORDER_DATA_TEMPLATEList.length < 2){
-					this.$message({
-						message: '请新建至少两条数据',
-						type: 'warning'
-					});
-				}else if(this.reportGenerateForm.WORKORDER_REPORTList.length>0){
-					this.$message({
-						message: '检验报告已经生成，请勿重复生成',
-						type: 'warning'
-					});
-				}else{
-					var changeUser = this.reportGenerateForm.WORKORDER_DATA_TEMPLATEList;
-					//basisnum为依据编号的数组
-					var id = [];
-					for (var i = 0; i < changeUser.length; i++) {
-						id.push(changeUser[i].FILEID);		
+				var url = this.file_url + '/file/fileList?page=0&size=10';
+				this.$axios.post(url,{
+					'appname': '检验检测项目_检验/检测报告模板',
+					'recordid': this.reptemDetailId,
+				}).then((res) => {
+					this.moduleFileList = res.data.fileList;
+					var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
+					var path = [];
+					for(let i=0; i<this.moduleFileList.length;i++){
+						path.push(this.moduleFileList[i].fileid);
 					}
-					//basisnums为basisnum数组用逗号拼接的字符串
-					var ids = id.toString(',');
-					console.log(ids);
-					if(ids == '' || ids == undefined || ids == null){
-						this.$message({
-							message: '请上传文件',
-							type: 'warning'
-						});
-					}else if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
-						var data = [];
-						data.push(this.reportGenerateForm.ID);
-						data.push(this.reportname);
-						data.push(this.reportGenerateForm.WORKORDER_DATA_TEMPLATEList);
-						data.push(this.reportGenerateForm.PROXYNUM);
-						data.push(this.reportGenerateForm.WONUM);
-						data.push(this.reportGenerateForm.DEPTIDDesc);
-						data.push(this.reportGenerateForm.ID);
-						this.$refs.reportdata.visible(data);
+					for(let j=0; j<this.selData.length;j++){
+						path.push(this.selData[j].FILEID);
 					}
-				}
+					console.log(path);
+					var postData = {
+						proxynum: '',
+						templatecode: this.reportTemplate.RE_TYPE,
+						workorderid: this.detailId,//工作任务单ID
+						deptfullname: this.deptfullname,//部门名称
+						filePath: path.length>0?path.join(','):'',//文件路径
+						fileName: '',//文件名称
+						app: 'workorder'//应用名称
+					};
+					this.$axios.post(Url1, {
+						params: postData
+					}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.show=false;
+							this.$emit('request');
+							this.$message({
+								message: '报告生成成功',
+								type: 'success'
+							});
+						}else{
+							this.$message({
+								message: '已经回退了此成果文件，请勿重复回退',
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+
+				}).catch((err) => {
+				});
+			},
+			//列出所有成果文件
+			showModule(data){
+				// this.modulenum.D_NUM = data.num;
+				// this.modulenum.D_DESC = data.desc;
+				var url = this.file_url + '/file/fileList?page=0&size=10';
+				this.$axios.post(url,{
+					'appname': '检验检测项目_检验/检测报告模板',
+					'recordid': this.reptemDetailId,
+				}).then((res) => {
+					this.moduleFileList = res.data.fileList;
+					// this.modulenum.FILESIZE_ORG = res.data.fileList[0].filesize;
+					// this.modulenum.FILEPATH_ORG = res.data.fileList[0].filepath;
+					// this.modulenum.FILEID_ORG = res.data.fileList[0].fileid;
+				}).catch((err) => {
+				});
 			},
 			//获取导入表格勾选信息
-			SelChange(val) {
-				this.selUser = val;
-			},
+			// SelChange(val) {
+			// 	this.selUser = val;
+			// },
 			iconOperation(row, column, cell, event) {
 				// if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;

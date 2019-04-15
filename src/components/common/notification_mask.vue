@@ -49,39 +49,38 @@
 											<el-col :span="4" v-if="!addtitle" >
 												<el-radio label="1">监督抽查</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="2">监督抽查复查</el-radio>
 											</el-col>
-											<el-col :span="4" >
+											<el-col :span="6" >
 												<el-radio label="3">质量抽查</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="4">质量抽查复查</el-radio>
 											</el-col>
 										</el-row>	
-										<el-row>
 											<el-col :span="4">
 												<el-radio label="5">生产许可证</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="6">认定检验检测</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="7">鉴定试验</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="8">委托检验检测</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="9">专项抽查</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="10">专项抽查复查</el-radio>
 											</el-col>
-											<el-col :span="4">
+											<el-col :span="6">
 												<el-radio label="11">其它</el-radio>
 											</el-col>
-										</el-row>	
+											
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
@@ -722,18 +721,22 @@
 					N_CODE: '',
 					TYPE: '',
 					XD_DATE: '',
-					ITEM_NAME: '',
 					PRODUCT_TYPE:'',
+					ITEM_NAME: '',
 					ITEM_MODEL: '',
 					V_NAME: '',
 					V_NAMEDesc:'',
 					VENDOR:'',
 					CJDW: '',
-					PRODUCE_TYPE:'',
 					P_LEADER: '',
 					TASKNUM: '',
 					SOLUTION: '',
 					COMPDATE: '',
+					PRODUCE_TYPE:'',
+					P_LEADERDesc:'',//项目负责人
+					P_LEADER:'',//
+					ACCEPT_PERSONDesc:'',//接收人
+					ACCEPT_PERSON:'',//
 					STATE: '1',
 					STATEDesc: '草稿',
 					ENTERBY: '',
@@ -742,16 +745,14 @@
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: [],
 				}
-				// this.$nextTick(() => {
-				// 	this.$refs.form.resetFields();
-				// });
-				// this.$refs["dataInfo"].resetFields();
+				if (this.$refs['dataInfo']!==undefined) {
+						this.$refs['dataInfo'].resetFields();
+				}
 			},
 			//承检单位
 			getCompany() {
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
-					
 				}).then((res) => {
 					this.selectData = res.data;
 				});
@@ -1245,12 +1246,11 @@
 							if(parameter=="Update"){
 								this.show = false;
 								this.$emit('request');
-								this.reset();
 							}else{
 								this.show = true;
 								this.$emit('request');
-								this.reset();
 							}
+							this.reset();
 						}
 					}).catch((err) => {
 							this.show = true;

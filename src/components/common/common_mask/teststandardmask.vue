@@ -86,7 +86,11 @@
 			</div>
 			<!-- 高级查询划出 End-->
 			<!-- 第二层弹出的表格 Begin -->
-			<el-table :data="standardList" height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+			<el-table :data="standardList" ref="singleTable"
+			height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}"
+			 @selection-change="SelChange" 
+			 @current-change="setSel"
+			 v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
 				<el-table-column label="主键编号" width="120" sortable prop="ID">
@@ -213,6 +217,13 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
+	setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.singleTable.clearSelection();
+		this.$refs.singleTable.toggleRowSelection(row);
+  	},
+
   	sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();

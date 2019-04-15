@@ -75,6 +75,7 @@
 
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="primary" @click="save('submitTime')">提交</el-button>
 							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->

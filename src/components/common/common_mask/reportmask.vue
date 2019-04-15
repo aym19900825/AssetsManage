@@ -2,7 +2,12 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="报表" height="400px" :visible.sync="dialogReport" width="80%" >
-			<el-table :data="reportsList" border stripe  height="360px" style="width: 100%;" :default-sort="{prop:'reportsList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+			<el-table ref="table" :data="reportsList" border stripe  
+			height="360px" style="width: 100%;"
+			 :default-sort="{prop:'reportsList', order: 'descending'}"
+			  @selection-change="SelChange"
+				@current-change="setSel"
+				 v-loadmore="loadMore"
 			v-loading="loading" 
 			element-loading-text="加载中…"
 			element-loading-spinner="el-icon-loading"
@@ -91,7 +96,13 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
-  	sizeChange(val) {
+	setSel(row) {
+    this.selUser = [];
+    this.selUser.push(row);
+    this.$refs.table.clearSelection();
+		this.$refs.table.toggleRowSelection(row);
+  },
+  sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();
 	},

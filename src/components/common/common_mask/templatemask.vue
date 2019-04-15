@@ -20,7 +20,10 @@
 					</el-col>
 				</el-row>
 			</el-form>
-			<el-table :header-cell-style="rowClass" :data="categoryList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}" @selection-change="SelChange"
+			<el-table ref="table" :header-cell-style="rowClass" :data="categoryList" border stripe height="360px"
+			 style="width: 100%;" :default-sort="{prop:'categoryList', order: 'descending'}"
+			  @selection-change="SelChange"
+				@current-change="setSel"
 			v-loadmore="loadMore"
 			v-loading="loading"  
 			element-loading-text="加载中…"
@@ -94,7 +97,13 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
-  	sizeChange(val) {
+	setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.table.clearSelection();
+		  this.$refs.table.toggleRowSelection(row);
+  },
+  sizeChange(val) {
 		this.page.pageSize = val;
 		this.requestData();
 	},

@@ -47,7 +47,11 @@
                 </el-row>
             </el-form>
 			<!-- 高级查询划出 End-->
-			<el-table :header-cell-style="rowClass" :data="userList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+			<el-table ref="table" :header-cell-style="rowClass" :data="userList" border stripe
+             height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}"
+              @selection-change="SelChange" 
+              @current-change="setSel"
+              v-loadmore="loadMore"
             v-loading="loading" 
             element-loading-text="加载中…"
             element-loading-spinner="el-icon-loading"
@@ -139,6 +143,12 @@
             SelChange(val) {
                 this.selval = val;
             },
+            setSel(row) {
+                this.selUser = [];
+                this.selUser.push(row);
+                this.$refs.table.clearSelection();
+                this.$refs.table.toggleRowSelection(row);
+          	},
             sizeChange(val) {
                 this.page.pageSize = val;
                 this.requestData();

@@ -9,6 +9,7 @@
 					style="width: 100%;"
 					:default-sort="{prop:'categoryList', order: 'descending'}"
 					@selection-change="SelChange"
+					@current-change="setSel"
 					v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"
@@ -83,7 +84,12 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
-  	
+  setSel(row) {
+    this.selUser = [];
+    this.selUser.push(row);
+    this.$refs.table.clearSelection();
+		this.$refs.table.toggleRowSelection(row);
+  },
 	searchinfo() {
 		this.page.currentPage = 1;
 		this.page.pageSize = 20;

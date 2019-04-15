@@ -45,7 +45,12 @@
 					</el-col>
 				</el-row>
 			</el-form>
-		<el-table :data="samplesList" :header-cell-style="rowClass" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'samplesList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore"
+		<el-table ref="table" :data="samplesList" :header-cell-style="rowClass" border stripe 
+		height="360px" style="width: 100%;" 
+		:default-sort="{prop:'samplesList', order: 'descending'}"
+		 @selection-change="SelChange" 
+		 @current-change="setSel"
+		 v-loadmore="loadMore"
 			v-loading="loading" 
 			element-loading-text="加载中…"
 			element-loading-spinner="el-icon-loading"
@@ -134,7 +139,13 @@
 	SelChange(val) {
 		this.selval = val;
 	},
-  	sizeChange(val) {
+	setSel(row) {
+    this.selUser = [];
+    this.selUser.push(row);
+    this.$refs.table.clearSelection();
+		this.$refs.table.toggleRowSelection(row);
+  },
+  sizeChange(val) {
 		this.page.pageSize = val;
 		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
 			$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');

@@ -62,7 +62,7 @@
 											</template>
 										</el-table-column> -->
 
-										<el-table-column label="用户ID" prop="userid" sortable>
+										<el-table-column label="用户名" prop="username" sortable>
 											<!-- <template slot-scope="scope">
 												<el-form-item :prop="'userList.'+scope.$index + '.userid'" :rules="[{required: true, message: '请选择', trigger: 'blur'}]">
 													<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.userid" disabled></el-input>
@@ -81,7 +81,10 @@
 												</el-form-item>
 											</template> -->
 										</el-table-column>
-										<el-table-column label="用户姓名" prop="memo" sortable>
+										<el-table-column label="所属机构" prop="deptName" sortable>
+										</el-table-column>
+
+										<el-table-column label="手机号" prop="phone" sortable>
 										</el-table-column>
 
 										<el-table-column fixed="right" width="120" label="操作">
@@ -207,7 +210,10 @@
 					var userList={
 						id: '',
 						userid:val[i].id,
+						username:val[i].username,
 						nickname:val[i].nickname,
+						deptName:val[i].deptName,
+						phone:val[i].phone,
 						isEditing: true,
 					};
 					this.dataInfo.userList.push(userList);

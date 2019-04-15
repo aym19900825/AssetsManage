@@ -34,7 +34,8 @@
             element-loading-text="加载中…"
             element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(255, 255, 255, 0.9)"
-            @selection-change="SelChange">
+            @selection-change="SelChange"
+			@current-change="setSel">
             <el-table-column type="selection" width="55" fixed align="center">
             </el-table-column>
             <el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
@@ -101,7 +102,12 @@
 	SelChange(val) {
 		this.selUser = val;
 	},
-  	
+  	setSel(row) {
+	    this.selUser = [];
+	    this.selUser.push(row);
+	    this.$refs.table.clearSelection();
+		this.$refs.table.toggleRowSelection(row);
+  	},
 	searchinfo() {
 		this.page.currentPage = 1;
 		this.page.pageSize = 20;

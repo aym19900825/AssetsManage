@@ -38,9 +38,10 @@
 	                            <!-- 使用记录、维护保养 Begin-->
 								<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-									    <el-tab-pane label="设备使用记录信息" name="first">
+									    <el-tab-pane name="first">
+											<span slot="label"><i class="red">*</i> 设备使用记录信息</span>
 									    	<div class="table-func table-funcb">
-										<el-button type="success" size="mini" round @click="addLine('tableList')" v-show="!viewtitle">
+												<el-button type="success" size="mini" round @click="addLine('tableList')" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
 										</el-button>
@@ -128,7 +129,9 @@
 										</el-table-column>
 									</el-table>
 									    </el-tab-pane>
-									    <el-tab-pane label="设备维护保养记录信息" name="second">
+									    <el-tab-pane name="second">
+											<span slot="label"><i class="red">*</i> 设备维护保养记录信息</span>
+
 									    	<div class="table-func table-funcb">
 										<el-button type="success" size="mini" round @click="addLine('maintenList')" v-show="!viewtitle">
 											<i class="icon-add"></i>

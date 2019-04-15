@@ -232,7 +232,8 @@
 					},
 					{
 						text: '录入人',
-						dataIndex: 'ENTERBY',
+						width: '130',
+						dataIndex: 'ENTERBYDesc',
 						isShow:true,
 					},
 					{
@@ -479,7 +480,37 @@
 						type: 'warning'
 					});
 					return;
-				} else{
+				} else if(this.selMenu[0].STATE == 0) {
+					this.$message({
+						message: '此任务单状态为驳回，报告暂不能生成与编辑',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE == 1) {
+					this.$message({
+						message: '此任务单状态为待接受，报告暂不能生成与编辑',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE == 2) {
+					this.$message({
+						message: '此任务单状态为待审批，报告暂不能生成与编辑',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE == 4) {
+					this.$message({
+						message: '此任务单状态为中止，报告暂不能生成与编辑',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE == 3) {
+					this.$message({
+						message: '此任务单状态为中止，报告暂不能生成与编辑',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE == 6) {//审批中
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
 					// console.log(this.selMenu[0].ID);
 				}
@@ -696,6 +727,7 @@
 			
 			SelChange(val) {
 				this.selMenu = val;
+				console.log(this.selMenu[0].STATE);
 			},
 			refresh(){
 				this.requestData();

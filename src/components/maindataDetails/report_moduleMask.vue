@@ -240,9 +240,9 @@
 				
 				this.docParm = {
 					'model': 'new',
-					'appname': '检验检测项目_报告模板',
+					'appname': '检验检测项目_检验/检测报告模板',
 					'recordid': 1,
-					'appid': 17
+					'appid': 18
 				};
 				this.getUser('new');
 //				this.show = true;
@@ -265,9 +265,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'edit';
-					_this.docParm.appname = '检验检测项目_原始数据模板';
+					_this.docParm.appname = '检验检测项目_检验/检测报告模板';
 					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 17;
+					_this.docParm.appid = 18;
 					_this.$refs.docTable.getData();
 				},100);
 				this.show = true;
@@ -286,9 +286,9 @@
 				var _this = this;
 				setTimeout(function(){
 					_this.docParm.model = 'view';
-					_this.docParm.appname = '检验检测项目_原始数据模板';
+					_this.docParm.appname = '检验检测项目_检验/检测报告模板';
 					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 17;
+					_this.docParm.appid = 18;
 					_this.$refs.docTable.getData();
 				},100);				
 			},

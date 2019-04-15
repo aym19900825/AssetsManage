@@ -384,9 +384,17 @@
 					ENTERBY: '',
 					STATUS: '',
 				};
-				this.requestData('init');
+				this.searchList.V_NAMEDesc='';
+				this.searchList.ITEM_NAME='';
+				this.searchList.REPORT_NUM='';
+				this.searchList.PROXYNUM='';
+				this.searchList.COMPDATE='';
+				this.searchList.ENTERBY='';
+				this.searchList.STATUS='';
+				console.log(this.searchList);;
+				this.$refs.table.requestData('init');
 			},
-			searchinfo(index) {
+			searchinfo() {
 				this.requestData('init');
 			},
 				//请求点击

@@ -54,7 +54,11 @@
 				<div v-show="search">
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
-							<el-col :span="5"></el-col>
+							<el-col :span="5">
+								<el-form-item label="设备编号" prop="ASSETNUM">
+									<el-input v-model="searchList.ASSETNUM" @keyup.enter.native="searchinfo"></el-input>
+								</el-form-item>
+							</el-col>
 							<el-col :span="5">
 								<el-form-item label="设备名称" prop="DESCRIPTION">
 									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
@@ -93,7 +97,14 @@
 							</div>
 							<div class="left_treebg" :style="{height: fullHeight}">
 								<div class="p15" v-if="ismin">
-									<el-tree ref="tree" class="filter-tree" :data="resourceData" node-key="id" default-expand-all :indent="22" :render-content="renderContent" :props="resourceProps" @node-click="handleNodeClick">
+									<el-tree ref="tree" class="filter-tree" 
+											:data="resourceData" 
+											node-key="id" 
+											default-expand-all 
+											:indent="22" 
+											:render-content="renderContent" 
+											:props="resourceProps" 
+											@node-click="handleNodeClick">
 									</el-tree>
 								</div>
 							</div>
@@ -103,6 +114,8 @@
 					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
+							<el-table-column label="设备分类" width="200" sortable prop="TYPE" v-if="this.checkedName.indexOf('设备分类')!=-1">
+							</el-table-column>
 							<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.ASSETNUM}}
@@ -129,7 +142,7 @@
 							</el-table-column>
 							<el-table-column label="接收状态" width="120" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
 							</el-table-column>
-							<el-table-column label="保管人" width="200" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
+							<el-table-column label="保管人" width="200" sortable prop="KEEPERDesc" v-if="this.checkedName.indexOf('保管人')!=-1">
 							</el-table-column>						
 							<el-table-column label="备注" width="200" sortable prop="MEMO" v-if="this.checkedName.indexOf('备注')!=-1">
 							</el-table-column>
@@ -200,6 +213,7 @@
 			        OPTION_STATUS: ''
 		        },
 				checkedName: [
+					'设备分类',
 					'设备编号',
 					'设备名称',
 					'型号',
@@ -215,6 +229,10 @@
 					'备注',
 				],
 				tableHeader: [
+					{
+						label: '设备分类',
+						prop: 'TYPE'
+					},
 					{
 						label: '设备编号',
 						prop: 'ASSETNUM'
@@ -261,7 +279,7 @@
 					},
 					{
 						label: '保管人',
-						prop: 'KEEPER'
+						prop: 'KEEPERDesc'
 					},
 					{
 						label: '备注',
@@ -285,7 +303,9 @@
 			        VENDOR: '',
 			        KEEPER: '',
 			        STATE: '',
-			        OPTION_STATUS: ''
+					OPTION_STATUS: '',
+					ASSETNUM: '',
+					TYPE: ''
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -322,28 +342,32 @@
 			        VENDOR: '',
 			        KEEPER: '',
 			        STATE: '',
-			        OPTION_STATUS: ''
+			        ASSETNUM: '',
+					OPTION_STATUS: '',
+					TYPE: ''
 				};
 				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
+		         	this.openAddMgr();
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+		    	 	this.modify();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+		    	 	this.physicsDel();
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+		    	 	this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
+		    	 	this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    	 	this.deluserinfo();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
 				   this.Printing();
+				}else if(item.name=="导出"){
+					this.exportData();
 				}
 		    },
 			//添加
@@ -564,12 +588,13 @@
 				return data;
 			},
 			handleNodeClick(data) {
+				// for(var i = 0; i < this.resourceData.length; i++) {
+				// 	if(data.CLASSIFY_DESCRIPTION == this.resourceData[i].CLASSIFY_DESCRIPTION) {
+				// 		this.searchList.DESCRIPTION = this.resourceData[i].CLASSIFY_DESCRIPTION;
+				// 	}
+				// }
 				console.log(data);
-				for(var i = 0; i < this.resourceData.length; i++) {
-					if(data.CLASSIFY_DESCRIPTION == this.resourceData[i].CLASSIFY_DESCRIPTION) {
-						this.searchList.DESCRIPTION = this.resourceData[i].CLASSIFY_DESCRIPTION;
-					}
-				}
+				this.searchList.TYPE = data.CLASSIFY_DESCRIPTION;
 				this.requestData();
 			},
 			childByValue:function(childValue) {

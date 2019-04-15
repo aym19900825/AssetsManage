@@ -156,7 +156,7 @@
 			        </el-pagination>
 				<div slot="footer" class="el-dialog__footer" v-if="noviews">
 	    			<el-button type="primary" @click="addinstruname">确 定</el-button>
-	    			<el-button @click="dialogVisname = false">取 消</el-button>
+	    			<el-button @click="handleClose">取 消</el-button>
 	  			</div>
 			</el-dialog>
 			<!--设备名称 End-->
@@ -786,15 +786,12 @@
 				this.save('save');
 				// this.show = true;
 			},
-			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						done();
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+			handleClose() {
+				this.assetList = [];
+				this.selName = [];
+				this.page.currentPage = 1;
+				this.page.pageSize = 20;
+				this.dialogVisname = false;
 			},
 			loadMore() {
 				if(this.loadSign) {

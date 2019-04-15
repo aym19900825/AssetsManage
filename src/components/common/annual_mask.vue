@@ -146,19 +146,14 @@
 											  style="width: 100% ;"  
 											  :default-sort="{prop:'worlplanlist', order: 'descending'}" 
 											  v-loadmore="loadMore"
-											  @cell-dblclick="iconOperation"
-											  @cell-click="showLineData">
+											  @cell-dblclick="iconOperation">
 									    <!-- <el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 									      <template slot-scope="scope" >
 									      	<i class="el-icon-check" v-if="scope.row.isEditing" @click="iconOperation(scope.row)"></i>
 									      	<i class="el-icon-edit" v-if="!scope.row.isEditing" @click="iconOperation(scope.row)"></i>
 									      </template>
 									    </el-table-column> -->
-									    <el-table-column label="序号" width="50px" prop="WP_LINENUM">
-									      <template slot-scope="scope">
-									      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.$index + 1" disabled></el-input>
-											<span v-if="!scope.row.isEditing">{{scope.$index + 1}}</span>
-									      </template>
+									    <el-table-column label="序号" width="50px" type="index">
 									    </el-table-column>
 										<el-table-column prop="CJDW" label="承检单位" sortable width="200px">
 											<template slot-scope="scope">
@@ -277,10 +272,10 @@
 													  style="width: 100%;" 
 													  :default-sort="{prop:'basisList', order: 'descending'}">
 							            		<el-table-column prop="NUMBER" label="序号" width="50" type="index">
-													<template slot-scope="scope">
+													<!-- <template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.NUMBER"></el-input>
 														<span v-else>{{scope.row.NUMBER}}</span>
-													</template>
+													</template> -->
 												</el-table-column>
 							            		<el-table-column prop="S_NUM" label="标准编号" sortable width="160">
 													<template slot-scope="scope">
@@ -331,7 +326,7 @@
 						                        </el-button>
 											</div>
 							            	<el-table :header-cell-style="rowClass" :data="proTestList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
-												<el-table-column prop="NUMBER" label="序号" width="50" type="index"></el-table-column>
+												<el-table-column label="序号" width="50" type="index"></el-table-column>
 							            		<el-table-column prop="P_NUM" label="检验项目编号" width="100">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM"></el-input>
@@ -940,6 +935,9 @@
 			};
 		},
 		methods: {
+			getCjdw(row){
+				console.log(row);
+			},
 			selUnit(item){
 				var selData = item;
 				this.selectData.forEach((item)=>{
@@ -1009,7 +1007,7 @@
 				this.page.pageSize = 10;//页码重新传值
 			},
 			//提出单位
-			 getCompany() {
+			getCompany() {
 			// 	var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
@@ -1144,6 +1142,7 @@
 				
 			},
 			showLineData(row){
+				// this.editPlan = row;
 				this.proTestList = !!row.WORLPLANLINE_PROJECTList ? row.WORLPLANLINE_PROJECTList : [];
 				this.basisList = !!row.WORLPLANLINE_BASISList ? row.WORLPLANLINE_BASISList : [];
 			},
@@ -1168,11 +1167,12 @@
 					this.editPlan = row;
 					this.proTestList = row.WORLPLANLINE_PROJECTList;
 					this.basisList = row.WORLPLANLINE_BASISList;
-				}else{
-					this.editPlan = {};
-					this.proTestList = [];
-					this.basisList = [];
 				}
+				// else{
+				// 	this.editPlan = {};
+				// 	this.proTestList = [];
+				// 	this.basisList = [];
+				// }
         	},
    			//上传文件 Begin
 			handleExceed(files, fileList) {

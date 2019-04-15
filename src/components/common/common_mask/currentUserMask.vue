@@ -6,7 +6,30 @@
 			height="300px" 
 			width="80%" 
 			:before-close="reset">
-			
+			<div>
+				<el-form inline-message :model="searchList" label-width="70px">
+					<el-row :gutter="10">
+						<el-col :span="5">
+							<el-form-item label="用户名" prop="username">
+								<el-input v-model="searchList.username" @keyup.enter.native="searchinfo"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="姓名" prop="nickname">
+								<el-input v-model="searchList.nickname" @keyup.enter.native="searchinfo"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="所属机构" prop="deptName">
+								<el-input v-model="searchList.deptName" @keyup.enter.native="searchinfo"></el-input>
+							</el-form-item>
+						</el-col>
+							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
 			<el-table ref="table" :data="list" 
 				border 
 				stripe 
@@ -74,11 +97,20 @@
 				searchList: {},
 				list: [],
 				dialogShow: false,
-				urlOpt: ''
+				urlOpt: '',
+				searchList: {
+					username: '',
+					nickname: '',
+					deptName: '',
+				}
 			}
 		},
 		props: ['dialogTit'],
 		methods: {
+			searchinfo(){
+				this.page.currentPage = 1;
+				this.requestData();
+			},
 			dateFormat(row, column) {
 				var date = row[column.property];
 				if(date == undefined) {
@@ -148,6 +180,9 @@
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					username: this.searchList.username,
+					nickname: this.searchList.nickname,
+					deptName: this.searchList.deptName
 				}
 				if(this.urlOpt == 'groups'){
 					var url = this.basic_url + '/api-user/users';
@@ -205,21 +240,27 @@
 					}
 				}
 			},
-    
+			resetBtn(){
+				this.searchList = {
+					username: '',
+					nickname: '',
+					deptName: '',
+				};
+				this.requestData();
+			},
 			reset(){//点击确定或取消按钮时重置数据20190303
 				this.dialogShow = false;
 				this.list = [];
 				this.page.currentPage = 1;
 				this.page.pageSize = 20;
+				this.searchList = {
+					username: '',
+					nickname: '',
+					deptName: '',
+				};
 			},
 			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						this.reset();
-					})
-					.catch(_ => {
-						$('.v-modal').hide();
-					});
+				this.reset();
 			}
 		},
 	}

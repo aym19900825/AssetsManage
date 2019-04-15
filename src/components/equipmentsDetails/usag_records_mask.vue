@@ -112,7 +112,7 @@
 										</el-table-column>
 	                                    <el-table-column prop="MEMO" label="备注" sortable>
 											<template slot-scope="scope">
-												<el-form-item :prop="'tableList.'+scope.$index + '.MEMO'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-form-item :prop="'tableList.'+scope.$index + '.MEMO'" :rules="{required: false, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
 	                                                </el-input>
 	                                                <span v-else>{{scope.row.MEMO}}</span>
@@ -168,6 +168,15 @@
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.W_PERSON" placeholder="请输入维护人">
 	                                                </el-input>
 	                                                <span v-else>{{scope.row.W_PERSON}}</span>
+												</el-form-item>
+											</template>
+										</el-table-column>
+										<el-table-column prop="MEMO" label="备注" sortable>
+											<template slot-scope="scope">
+												<el-form-item :prop="'maintenList.'+scope.$index + '.MEMO'" :rules="{required: false, message: '不能为空', trigger: 'blur'}">
+	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.MEMO" placeholder="请输入备注">
+	                                                </el-input>
+	                                                <span v-else>{{scope.row.MEMO}}</span>
 												</el-form-item>
 											</template>
 										</el-table-column>

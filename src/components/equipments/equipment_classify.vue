@@ -117,7 +117,7 @@
 				checkedName: [
 					'编码',
 					'分类描述',
-					'父级分类',
+					// '父级分类',
 					'录入时间',
 					'修改时间'
 				],
@@ -131,11 +131,11 @@
 					dataIndex: 'CLASSIFY_DESCRIPTION',
 					isShow:true,
 				},
-				{
-					text: '父级分类',
-					dataIndex: 'PARENTDesc',
-					isShow:true,
-				},
+				// {
+				// 	text: '父级分类',
+				// 	dataIndex: 'PARENTDesc',
+				// 	isShow:true,
+				// },
 				{
 					text: '录入时间',
 					dataIndex: 'ENTERDATE',

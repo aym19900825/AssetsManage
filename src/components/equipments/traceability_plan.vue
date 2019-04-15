@@ -335,6 +335,8 @@
 			     this.reportdata();
 				}else if(item.name=="打印"){
 				   this.Printing();
+				}else if(item.name=="导出"){
+				   this.exportData();
 				}
 			},
 			fileSuccess(){//上传成功后返回数据
@@ -493,7 +495,7 @@
 			// 导出
 			exportData() {
            		var url = this.basic_url + '/api-apps/app/pmPlan/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
+				var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
             	xhr.setRequestHeader("client_type", "DESKTOP_WEB");

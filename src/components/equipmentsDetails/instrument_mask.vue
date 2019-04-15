@@ -23,7 +23,12 @@
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="设备基本信息" name="1">
 									<el-row :gutter="20" class="pb10">
-										<el-col :span="5" class="pull-right">
+										<el-col :span="8" class="pull-right">
+											<el-input v-model="dataInfo.CONFIG_UNITDes" :disabled="true">
+												<template slot="prepend">配置单位</template>
+											</el-input>
+										</el-col>
+										<el-col :span="8" class="pull-right">
 											<el-input v-model="dataInfo.ASSETNUM" :disabled="true">
 												<template slot="prepend">设备编号</template>
 											</el-input>
@@ -165,7 +170,13 @@
 					<el-table-column label="录入时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
 					</el-table-column>
 				</el-table>
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				<el-pagination background class="text-right pt10" 
+							   @size-change="sizeChange" 
+							   @current-change="currentChange" 
+							   :current-page="page.currentPage" 
+							   :page-sizes="[10, 20, 30, 40]" 
+							   layout="total, sizes, prev, pager, next" 
+							   :total="page.totalCount">
 				</el-pagination>
 
 				<div slot="footer" v-if="noviews">
@@ -336,7 +347,7 @@
 					{
 						label: '设备名称',
 						prop: 'DESCRIPTION',
-						width: '30%',
+						width: '70%',
 						type: 'input',
 						displayType: 'inline-block'
 					},
@@ -354,16 +365,16 @@
 						type: 'input',
 						displayType: 'inline-block'
 					},
-                    {
-						label: '配置单位',
-						prop: 'CONFIG_UNITDes',
-						width: '30%',
-						type: 'input',
-						displayType: 'inline-block'
-					},
 					{
 						label: '接收日期',
 						prop: 'ACCEPT_DATE',
+						width: '30%',
+						type: 'date',
+						displayType: 'inline-block'
+					},
+					{
+						label: '启用日期',
+						prop: 'S_DATE',
 						width: '30%',
 						type: 'date',
 						displayType: 'inline-block'
@@ -552,13 +563,7 @@
 						type: 'input',
 						displayType: 'inline-block'
 					},
-					{
-						label: '启用日期',
-						prop: 'S_DATE',
-						width: '30%',
-						type: 'date',
-						displayType: 'inline-block'
-					},
+					
                     {
 						label: '技术资料',
 						prop: 'TECHNICAL_DATA',
@@ -726,7 +731,8 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-				selectData:[]
+				selectData:[],
+				pageDialog: ''
 			};
 		},
 		methods: {
@@ -735,7 +741,15 @@
 			    return 'text-align:center'
 			},
 			handlePrice(){
-				this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+				var money = this.dataInfo.A_PRICE.replace(/[^\d.]/g,'');
+				if(money==''||money==undefined){
+					this.dataInfo.A_PRICE = '0.00';
+				}else{
+					var num = parseFloat(money.replace(/\,|\￥/g, "")).toFixed(2).toString().split(".");
+					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
+					this.dataInfo.A_PRICE = num.join(".");
+				}
+				// this.dataInfo.A_PRICE = parseFloat(this.dataInfo.A_PRICE).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 			},
 			//机构值
 			getCompany() {
@@ -781,6 +795,7 @@
 					});
 				}else{
 					this.getuserinfo();
+					this.pageDialog = 'getuserinfo';
 					this.dialogVisible = true;
 				}
 			},
@@ -794,6 +809,7 @@
 					});
 				}else{
 					this.requestData();
+					this.pageDialog = 'requestData';
 					this.dialogVisible2 = true;
 				}
 			},
@@ -888,7 +904,12 @@
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.requestData();
+				if(this.pageDialog == 'getuserinfo'){
+					this.getuserinfo();
+				}
+				if(this.pageDialog == 'requestData'){
+					this.requestData();
+				}
 			},
 			//当前页数
 			currentChange(val) {
@@ -899,7 +920,12 @@
 				}else{
 					sessionStorage.setItem('toBtm','false');
 				}
-				this.requestData();
+				if(this.pageDialog == 'getuserinfo'){
+					this.getuserinfo();
+				}
+				if(this.pageDialog == 'requestData'){
+					this.requestData();
+				}
 			},
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -1081,24 +1107,10 @@
 				}
 			},
 			handleClose(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						this.resetBasisInfo();//调用resetBasisInfo函数
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-					$('.v-modal').hide();
-				});
+				this.resetBasisInfo();//调用resetBasisInfo函数
 			},
 			handleClose2(done) {
-				this.$confirm('确认关闭？')
-					.then(_ => {
-						this.resetBasisInfo2();//调用resetBasisInfo函数
-					})
-					.catch(_ => {
-				console.log('取消关闭');
-					$('.v-modal').hide();
-				});
+				this.resetBasisInfo2();//调用resetBasisInfo函数
 			},
 			maxDialog(e) { //定义大弹出框一个默认大小
 				this.isok1 = false;

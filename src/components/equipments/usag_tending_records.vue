@@ -72,7 +72,7 @@
 									<span v-text="scope.row.STATUS=='1'?'活动':'不活动'"></span>
 								</template>
 							</el-table-column> -->						
-							<el-table-column label="保管人" sortable prop="KEEPER" v-if="this.checkedName.indexOf('保管人')!=-1">
+							<el-table-column label="保管人" sortable prop="KEEPERDesc" v-if="this.checkedName.indexOf('保管人')!=-1">
 							</el-table-column>
 						</v-table>
 						<!-- 表格 End-->
@@ -140,7 +140,7 @@
 					// },
 					{
 						label: '保管人',
-						prop: 'KEEPER'
+						prop: 'KEEPERDesc'
 					}
 				],
 				selUser: [],

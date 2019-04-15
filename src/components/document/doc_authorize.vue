@@ -50,11 +50,15 @@
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="30" class="pb5">
 								<el-col :span="7">
-									<el-input v-model="searchList.username"  @keyup.enter.native="searchinfo">
+									<el-input v-model="searchList.username" @keyup.enter.native="searchinfo">
+										<template slot="prepend">用户名</template>
+									</el-input>
+								</el-col>
+								<el-col :span="7">
+									<el-input v-model="searchList.nickname" @keyup.enter.native="searchinfo">
 										<template slot="prepend">姓名</template>
 									</el-input>
 								</el-col>
-								
 								<!-- <el-col :span="7">
 									<el-input v-model="searchList.keywordidDesc">
 										<template slot="prepend">关键字</template>
@@ -73,7 +77,9 @@
 						<el-col :span="24">
 							<!-- 表格 -->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="姓名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('姓名')!=-1">
+								<el-table-column label="用户名" sortable width="140px" prop="username" v-if="this.checkedName.indexOf('用户名')!=-1">
+								</el-table-column>
+								<el-table-column label="姓名" sortable width="140px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
 								<el-table-column label="关键字" sortable prop="keywordidDesc" v-if="this.checkedName.indexOf('关键字')!=-1">
 								</el-table-column>
@@ -157,6 +163,7 @@
 				loadSign: true, //加载
 				commentArr: {},
 				checkedName: [
+					'用户名',
 					'姓名',
 					'关键字',
 					'查看',
@@ -168,8 +175,12 @@
 					'打印',
 				],
 				tableHeader: [{
-						label: '姓名',
+						label: '用户名',
 						prop: 'username'
+					},
+					{
+						label: '姓名',
+						prop: 'nickname'
 					},
 					{
 						label: '关键字',
@@ -211,7 +222,8 @@
 				up: false,
 				searchList: {
 					keywordidDesc: '',
-					username: ''
+					username: '',
+					nickname:''
 				},
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -279,6 +291,7 @@
 		   resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
 					username: '',
+					nickname: '',
 				};
 				this.requestData('init');
 			},
@@ -290,9 +303,9 @@
 		    	if(item.name=="添加"){
 		         this.openAddMgr();
 		    	}else if(item.name=="修改"){
-		    	 this.modify();
+		    		this.modify();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+		    		this.physicsDel();
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){

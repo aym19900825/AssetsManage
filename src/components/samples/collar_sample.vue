@@ -108,7 +108,7 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="220px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="样品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="产品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>

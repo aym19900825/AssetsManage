@@ -475,6 +475,8 @@
 					}
 					if(res.data.datas.STATE == '1'){
 						this.pageDisable = false;
+					}else if(res.data.datas.STATE == '2'){
+						this.pageDisable = false;
 					}else{
 						if(res.data.datas.STATE == '0'){
 							var url2 = this.basic_url +  '/api-apps/app/workorder/flow/Executors/25';

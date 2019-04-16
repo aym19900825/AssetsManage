@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="报表参数" :visible.sync="innerVisible" width="60%">
+		<el-dialog :modal-append-to-body="false" title="报表参数" :visible.sync="innerVisible" width="40%">
 		<div >
 			<el-form inline-message :model="dataInfo" ref="dataInfo" label-width="100px" >
 					<!-- 报表信息 -->

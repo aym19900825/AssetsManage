@@ -45,10 +45,22 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div id="refresh" title="刷新" class="btn btn-default btn-refresh">
-								<i class="icon-refresh"></i>
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<div class="keep-open btn-group" title="列">
+								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
+									<span class="el-dropdown-link">
+										<font class="J_tabClose"><i class="icon-menu3"></i></font>
+										<i class="el-icon-arrow-down icon-arrow2-down"></i>
+									</span>
+									<el-dropdown-menu slot="dropdown">
+										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
+											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
+												<el-checkbox :label="item.text" name="type"></el-checkbox>
+											</el-dropdown-item>
+										</el-checkbox-group>
+									</el-dropdown-menu>
+								</el-dropdown>
 							</div>
-							<tableControle :tableHeader="columns" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
 						</div>
 					</div>
 					<!--按钮操作行 End-->
@@ -169,10 +181,6 @@
 						width:'140',
 						isShow:true,
 					},
-					// {
-					// 	label: '信息状态',
-					// 	prop: 'STATUS'
-					// },
 					{
 						text: '录入时间',
 						dataIndex: 'ENTERDATE',
@@ -212,6 +220,19 @@
 			}
 		},
 		methods: {
+			//点击显示隐藏table列
+			changeCheckedName(value){
+				this.checkedName=value
+				let str=value.toString()
+				for(let i=0;i<this.columns.length;i++){
+					if(str.indexOf(this.columns[i].text) != -1){
+						this.columns[i].isShow=true
+					}else{
+						this.columns[i].isShow=false
+					}
+				}
+			},
+			//选择数据
 			SelChange(val) {
 				this.selUser = val;
 			},

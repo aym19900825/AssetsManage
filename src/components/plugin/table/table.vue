@@ -4,7 +4,7 @@
       ref="table" 
       @sort-change='tableSortChange'
       border
-      :stripe="true"
+      :stripe="stripe"
       :height="fullHeight"
       style="width: 100%;"
       v-loadmore="loadMore"
@@ -55,6 +55,7 @@ export default {
       selData: [],
       isshift: false,
       isctrl: false,
+      stripe: true,//table表格是否需要奇偶区别斑马线，true是false否
       fullHeight: document.documentElement.clientHeight - 210 + 'px',
       loading: false,
       loadSign: true
@@ -62,13 +63,13 @@ export default {
   },
   methods:{
    
-      tableRowClassName({row, rowIndex}) {
-         if(this.appName == 'inspectPro2'||this.appName == 'inspectPro'){
-          if (row.COMPMODE =="加急") {
-            return 'warning-row';
-          }
+    tableRowClassName({row, rowIndex}) {
+      if(this.appName == 'inspectPro2'||this.appName == 'inspectPro'){
+        if (row.COMPMODE =="加急") {
+          return 'warning-row';
+        }
       }
-      },
+    },
     tableSortChange(column){
       this.page.currentPage = 1;
       var searchObj = this.searchList;
@@ -91,7 +92,6 @@ export default {
     singleTable(row){
       if(this.isctrl){
         this.$refs.table.toggleRowSelection(row);
-        console.log(row);
       }else if(this.isshift){
         var selData = this.selData;
         var list = this.list;
@@ -175,8 +175,10 @@ export default {
       data.limit = this.page.pageSize;
       if(this.appName == 'inspectPro2'){
         var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
+        this.stripe = false;
       }else if(this.appName == 'inspectPro'){
         var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
+        this.stripe = false;
       }else if(this.appName == 'subcontrac'){
         var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';
       }else if(this.appName == 'subcontrac2'){
@@ -307,10 +309,13 @@ export default {
   }
   .el-table .warning-row {
     background:#ffecee;
+    font-weight: bold;
   }
-
+  .el-table .warning-row .cell {
+    color: #cb4040;
+  }
   .el-table .success-row {
-    background: #FFFFFF;
+    background: #bdfdd0;
   }
 </style>
 

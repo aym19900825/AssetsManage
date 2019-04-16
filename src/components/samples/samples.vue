@@ -41,7 +41,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托单位" prop="V_NAME">
+									<el-form-item label="委托方名称" prop="V_NAME">
 										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
@@ -125,7 +125,7 @@
 								</el-table-column>
 								<el-table-column label="产品类别" sortable width="300px" prop="PRODUCT_TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="委托单位" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="委托方名称" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称')!=-1">
 								</el-table-column>
 								<el-table-column label="生产单位" sortable width="200px" prop="P_NAMEDesc" v-if="this.checkedName.indexOf('生产单位')!=-1">
 								</el-table-column>
@@ -258,6 +258,7 @@
 					'产品类别',
 					'产品名称',
 					'委托单位',
+					'委托方名称',
 					'生产单位',
 					'型号',
 					'数量',
@@ -285,7 +286,7 @@
 						prop: 'PRODUCT_TYPE'
 					},
 					{
-						label: '委托单位',
+						label: '委托方名称',
 						prop: 'P_NAME'
 					},
 					{
@@ -329,7 +330,7 @@
 				up: false,
 				searchList: {
 					ITEMNUM:'',//样品编号
-					V_NAME: '',//委托单位名称
+					V_NAME: '',//委托方名称名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
 					// P_NAME: '',//生产单位名称
@@ -468,7 +469,7 @@
 			resetbtn(){
 				this.searchList = {
 					ITEMNUM:'',//样品编号
-					V_NAME: '',//委托单位名称
+					V_NAME: '',//委托方名称名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
 					TYPE: '',//样品类别

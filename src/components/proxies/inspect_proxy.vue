@@ -44,7 +44,7 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+									<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="100px">
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
 											   filterable 
@@ -119,7 +119,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								<el-table-column label="委托方名称名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称名称')!=-1">
 							</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
@@ -221,7 +221,7 @@
 				commentArr: {},
 				checkedName: [
 					'检验委托书编号',
-					'委托单位名称',
+					'委托方名称名称',
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
@@ -243,7 +243,7 @@
 						prop: 'PROXYNUM'
 					},
 					{
-						label: '委托单位名称',
+						label: '委托方名称名称',
 						prop: 'V_NAME'
 					},
 					{
@@ -391,7 +391,6 @@
 				this.searchList.COMPDATE='';
 				this.searchList.ENTERBY='';
 				this.searchList.STATUS='';
-				console.log(this.searchList);;
 				this.$refs.table.requestData('init');
 			},
 			searchinfo() {
@@ -524,10 +523,11 @@
 					return;
 				}else{
 					var url=this.basic_url;
+					var token = sessionStorage.getItem('access_token');
 						var pos = url.lastIndexOf(':');
 						url=url.substring(0,pos+1); 
 						this.url=url+"5300";
-						var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&id="+this.selUser[0].ID;
+						var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&access_token="+ token+"&id="+this.selUser[0].ID;
 						window.open(url);
 				}
 			},

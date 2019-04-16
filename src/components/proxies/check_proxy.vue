@@ -44,7 +44,7 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+									<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="100px">
 										<!-- <el-input v-model="searchList.V_NAME"  @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
@@ -86,7 +86,7 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-                				<el-col :span="4">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>
@@ -119,7 +119,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								<el-table-column label="委托方名称名称" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称名称')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
@@ -133,9 +133,9 @@
 								</el-table-column> -->
 								<el-table-column label="检测依据" width="200px" prop="REMARKS" sortable  v-if="this.checkedName.indexOf('检测依据')!=-1">
 								</el-table-column>
-								<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
+								<el-table-column label="完成方式" width="100px" prop="COMPMODE" class="newred" sortable v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
-								<el-table-column label="完成方式" width="100px" prop="COMPMODE" sortable v-if="this.checkedName.indexOf('完成方式')!=-1">
+								<el-table-column label="完成日期" width="140px" prop="COMPDATE" sortable  :formatter="dateFormat" data-type = ""  v-if="this.checkedName.indexOf('完成日期')!=-1">
 								</el-table-column>
 								<el-table-column label="检测报告编号" width="140px" prop="REPORT_NUM" sortable  v-if="this.checkedName.indexOf('检测报告编号')!=-1">
 								</el-table-column>
@@ -215,7 +215,7 @@
 				commentArr: {},
 				checkedName: [
 					'检验委托书编号',
-					'委托单位名称',
+					'委托方名称名称',
 					'生产单位名称',
 					'样品名称',
 					'样品型号',
@@ -237,7 +237,7 @@
 						prop: 'PROXYNUM'
 					},
 					{
-						label: '委托单位名称',
+						label: '委托方名称名称',
 						prop: 'V_NAMEDesc'
 					},
 					{
@@ -334,7 +334,7 @@
 				},
 				buttons:[],
 				selectData: [],
-				inspectPro2:'inspectPro2'//appname
+				// inspectPro2:'inspectPro2'//appname
 			}
 		},
 		methods: {
@@ -415,7 +415,6 @@
 			},
 			//修改
 			modify() {
-				console.log(this.selUser);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
@@ -548,11 +547,12 @@
 					return;
 				}else{
 					var url=this.basic_url;
-								var pos = url.lastIndexOf(':');
-								url=url.substring(0,pos+1); 
-						  	this.url=url+"5300";
-								var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&id="+this.selUser[0].ID;
-             		window.open(url);
+					var token = sessionStorage.getItem('access_token');
+					var pos = url.lastIndexOf(':');
+					url = url.substring(0,pos+1); 
+					this.url=url+"5300";
+					var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&access_token="+ token+"&id="+this.selUser[0].ID;
+					window.open(url);
 				}
 			},
 			getRouterData() {

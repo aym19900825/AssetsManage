@@ -4,7 +4,7 @@
 			<el-form inline-message :model="searchList">
 				<el-row :gutter="5">
 					<el-col :span="6">
-						<el-form-item label="委托单位名称" prop="V_NAME"  label-width="100px">
+						<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="100px">
 							<el-input v-model="searchList.V_NAME"></el-input>
 						</el-form-item>
 					</el-col>
@@ -51,7 +51,7 @@
 				</el-table-column>
 				<el-table-column label="检验委托书编号" sortable width="160px" prop="PROXYNUM">
 				</el-table-column>
-				<el-table-column label="委托单位名称" sortable width="220px" prop="V_NAME">
+				<el-table-column label="委托方名称名称" sortable width="220px" prop="V_NAME">
 				</el-table-column>
 				<el-table-column label="生产单位名称" sortable width="220px" prop="P_NAME">
 				</el-table-column>

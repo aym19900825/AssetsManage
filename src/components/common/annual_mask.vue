@@ -937,7 +937,7 @@
 			prodeptbtn(item){
 				// this.requestData();
 				this.requestDeptname();
-				this.dialogVisible5 = true;
+				
 				// this.$emit('request');
 				this.proindex = item;
 				this.requestnum = '3';
@@ -1544,6 +1544,7 @@
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
+					this.dialogVisible5 = true;
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

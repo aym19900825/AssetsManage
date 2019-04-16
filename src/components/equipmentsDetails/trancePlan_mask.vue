@@ -38,7 +38,7 @@
 
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :placeholder="item.placeholder"></el-input>
 
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" :placeholder="item.placeholder" v-if="item.type=='date'" :disabled="noedit">
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" :placeholder="item.placeholder" v-if="item.type=='date'" :disabled="noedit || item.disabled">
 										</el-date-picker>
 
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
@@ -398,6 +398,7 @@
 						prop: 'PM_START_END',
 						width: '50%',
 						type: 'date',
+						disabled: true,
 						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
@@ -439,7 +440,16 @@
 						type: 'date',
 						placeholder: '请选择',
 						displayType: 'inline-block'
-					}
+					},
+					// {
+					// 	label: '溯源记录确认时间',
+					// 	prop: 'CONFIRM_DATE',
+					// 	width: '50%',
+					// 	type: 'date',
+					// 	disabled: true,
+					// 	placeholder: '请选择',
+					// 	displayType: 'inline-block'
+					// },
 				],
 				otherInfo: [
 					{
@@ -861,6 +871,15 @@
 				this.page.currentPage = 1;
 				this.requestData();
 			},
+			resetbtn(){
+				this.searchList = {
+					ASSETNUM: '',
+					DESCRIPTION: '',
+					VENDOR: ''
+				};
+				this.page.currentPage = 1;
+				this.requestData();
+			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
@@ -868,6 +887,8 @@
 					ASSETNUM: this.searchList.ASSETNUM,
 					DESCRIPTION: this.searchList.DESCRIPTION,
 					VENDOR: this.searchList.VENDOR,
+					ISPM: 1,
+					ISCREATED: 0
 				}
 				var url = this.basic_url + '/api-apps/app/asset';
 				this.$axios.get(url, {

@@ -147,7 +147,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
-												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
+												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

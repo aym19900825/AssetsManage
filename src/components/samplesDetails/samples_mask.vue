@@ -52,7 +52,7 @@
 										<el-col :span="12">
 											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
 												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit || (modifytitle && samplesForm.PROXYNUM!='')">
-													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit || (modifytitle && samplesForm.PROXYNUM!='')"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>

@@ -106,6 +106,10 @@
 										<span v-text="scope.row.ITEM_STEP==-1?'':scope.row.ITEM_STEP"></span>
 									</template>
 								</el-table-column>
+								<el-table-column label="产品名称" sortable width="300px" prop="PRODUCT" v-if="this.checkedName.indexOf('产品名称')!=-1">
+								</el-table-column>
+								<el-table-column label="产品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
+								</el-table-column>
 								<el-table-column label="数量" width="100px" prop="QUALITY" sortable v-if="this.checkedName.indexOf('数量')!=-1">
 								</el-table-column>
 								<el-table-column label="返样人" sortable prop="RETURN_PERSONDesc" v-if="this.checkedName.indexOf('返样人')!=-1">
@@ -158,6 +162,8 @@
 				checkedName: [
 					'样品编号',
 					'样品序号',
+					'产品类别',
+					'产品名称',
 					'数量',
 					'返样人',
 					'返样日期',
@@ -169,6 +175,14 @@
 					{
 						label: '样品序号',
 						prop: 'ITEM_STEP'
+					},
+					{
+						label: '产品名称',
+						prop: 'PRODUCT'
+					},
+					{
+						label: '产品类别',
+						prop: 'PRODUCT_TYPE'
 					},
 					{
 						label: '数量',

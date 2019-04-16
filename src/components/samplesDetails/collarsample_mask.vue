@@ -380,6 +380,11 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 							}
 							this.$forceUpdate();
 							this.samplesForm.TYPE = data.PRODUCT_TYPE;
+							this.samplesForm.PRODUCT = data.PRODUCT;
+
+							this.samplesForm.PRO_NUM = data.PRO_NUM;
+							this.samplesForm.P_NUM = data.P_NUM;
+
 							this.samplesForm.DESCRIPTION = data.DESCRIPTION;
 							this.samplesForm.ACCEPT_DATE = data.ACCEPT_DATE;
 							this.samplesForm.MODEL = data.MODEL;

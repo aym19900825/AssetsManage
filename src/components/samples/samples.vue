@@ -121,6 +121,8 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
+								<el-table-column label="产品名称" sortable width="300px" prop="PRODUCT" v-if="this.checkedName.indexOf('产品名称')!=-1">
+								</el-table-column>
 								<el-table-column label="产品类别" sortable width="300px" prop="PRODUCT_TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位')!=-1">
@@ -254,6 +256,7 @@
 					'样品编号',
 					'样品名称',
 					'产品类别',
+					'产品名称',
 					'委托单位',
 					'生产单位',
 					'型号',
@@ -272,6 +275,10 @@
 					{
 						label: '样品名称',
 						prop: 'DESCRIPTION'
+					},
+					{
+						label: '产品名称',
+						prop: 'PRODUCT'
 					},
 					{
 						label: '产品类别',

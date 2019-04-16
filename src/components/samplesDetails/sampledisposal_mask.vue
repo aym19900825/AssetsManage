@@ -82,9 +82,9 @@
 											  @selection-change="selDataChange" v-loadmore="loadMore">
 										<el-table-column type="selection" width="55" fixed align="center">
 										</el-table-column>
-										<el-table-column label="产品类别" sortable prop="PRODUCT_TYPE">
+										<el-table-column label="产品类别" sortable prop="TYPE">
 										</el-table-column>
-										<el-table-column label="类别编号" sortable prop="PROXYNUM">
+										<el-table-column label="产品名称" sortable prop="PRODUCT">
 										</el-table-column>
 										<el-table-column label="样品编号" sortable prop="ITEMNUM">
 										</el-table-column>
@@ -348,6 +348,10 @@
 				var url = this.basic_url + '/api-apps/appCustom/getDispositonByItemNum/' + itemList.join(',');
 				this.$axios.get(url, {
 				}).then((res) => {
+					var resData = res.data;
+					for (var i = 0; i < resData.length; i++) {
+						resData[i].TYPE = resData[i].PRODUCT_TYPE;
+					}
 					this.samplenumList = res.data;
 				});
 			},

@@ -108,7 +108,9 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="220px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
-								<el-table-column label="产品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('样品类别')!=-1">
+								<el-table-column label="产品名称" sortable width="300px" prop="PRODUCT" v-if="this.checkedName.indexOf('产品名称')!=-1">
+								</el-table-column>
+								<el-table-column label="产品类别" sortable width="200px" prop="TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
 								<el-table-column label="型号" width="100px" prop="MODEL" sortable v-if="this.checkedName.indexOf('型号')!=-1">
 								</el-table-column>
@@ -166,7 +168,8 @@
 				checkedName: [
 					'样品编号',
 					'样品序号',
-					'样品类别',
+					'产品类别',
+					'产品名称',
 					'样品名称',
 					'型号',
 					'数量',
@@ -187,8 +190,12 @@
 						prop: 'ITEM_STEP'
 					},
 					{
-						label: '样品类别',
-						prop: 'TYPE'
+						label: '产品名称',
+						prop: 'PRODUCT'
+					},
+					{
+						label: '产品类别',
+						prop: 'PRODUCT_TYPE'
 					},
 					{
 						label: '样品名称',

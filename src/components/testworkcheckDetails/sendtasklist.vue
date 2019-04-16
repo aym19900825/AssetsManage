@@ -426,20 +426,20 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
+												<el-table-column prop="LEADERDesc" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,CONTRACTList,scope.$index)" >
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADERDesc'" >
+															<el-select clearable v-model="scope.row.LEADERDesc" placeholder="请选择"  @change="visableleader($event,CONTRACTList,scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="ASSIST_PERSION" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSIONDesc" label="助手" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ASSIST_PERSION'" >
-															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择"  multiple>
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ASSIST_PERSIONDesc'" >
+															<el-select clearable v-model="scope.row.ASSIST_PERSIONDesc" placeholder="请选择"  multiple>
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	

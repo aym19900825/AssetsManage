@@ -159,7 +159,7 @@
 				checkedName: [
 				    '工作任务单编号',
 					'样品名称',
-					// '委托书编号',
+					'委托书编号',
 					'状态',
 					'当前责任人',
 					'样品型号',
@@ -183,12 +183,12 @@
 					 	width: '200',
 						isShow:true,
 					},
-					// {
-					// 	text: '委托书编号',
-					// 	dataIndex: 'PROXYNUM',
-					//  	width: '160',
-					// 	isShow:true,
-					// },
+					{
+						text: '委托书编号',
+						dataIndex: 'PROXYNUM',
+					 	width: '160',
+						isShow:true,
+					},
 					{
 						text: '状态',
 						dataIndex: 'STATEDesc',

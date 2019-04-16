@@ -187,12 +187,12 @@
 					:data="sampleList"
 					highlight-current-row
 					@current-change="selCurrentChange"
-
+					@selection-change="selSample"
 					border
 					stripe
 					style="width: 100%;"
 					v-show="sampleType=='2'"
-					@selection-change="selSample">
+					>
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="ITEMNUM" label="样品编号" sortable  ></el-table-column>
 					<el-table-column prop="ITEM_STEP" label="样品序号" sortable ></el-table-column>
@@ -201,7 +201,7 @@
 				<img  id="barcode" :src="codeUrl" alt="条码" v-show="codeUrl!=''"/>
 			</div>
 			<span slot="footer">
-				<el-button type="primary" @click="genCode">生成条码</el-button>
+				<!-- <el-button type="primary" @click="genCode">生成条码</el-button> -->
 				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
 					<el-button type="primary" v-show="codeUrl!=''">打印条码</el-button>
 				</router-link>
@@ -237,7 +237,7 @@
 						{ required: true, message: '请选择条码类型', trigger: 'change' }
 					],
 				},
-				sampleType: '1',
+				sampleType: '2',
 				codeType: '2',
 				appName: 'item',
 				codeDialog: false,
@@ -358,10 +358,12 @@
 				this.selSampleData = [];
 				this.selSampleData.push(row);
 				this.$refs.singleTable.clearSelection();
-       			this.$refs.singleTable.toggleRowSelection(row);
+				this.$refs.singleTable.toggleRowSelection(row);
+				this.genCode();
 			},
 			selSample(val){
 				this.selSampleData = val;
+				this.genCode();
 			},
 			genCode(){
 				if(this.sampleType=='2'&&this.selSampleData.length==0){
@@ -415,6 +417,11 @@
 				var dataid = this.selMenu[0].ID;
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
 					this.sampleList = res.data.ITEM_LINEList;
+					if(this.sampleList.length>0){
+						setTimeout(() => {
+							this.selCurrentChange(res.data.ITEM_LINEList[0]);
+						}, 0);
+					}
 				}).catch((err) => {});
 			},
 			setSelData(val){
@@ -501,17 +508,19 @@
 					return;
 				} else {
 					this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
-					if(this.selMenu[0].ITEM_TYPE =='2'){
-						this.getSampleList();
-						this.sampleType = '2';
-					}
+					// if(this.selMenu[0].ITEM_TYPE =='2'){
+					// 	this.getSampleList();
+					// 	this.sampleType = '2';
+					// }
+					this.getSampleList();
+					this.sampleType = '2';
 					this.codeDialog = true;
 				}
 			},
 			resetCode(){
 				this.codeDialog = false;
 				this.sampleTypeFlag = false;
-				this.sampleType = '1';
+				this.sampleType = '2';
 				this.codeType = '2';
 				this.selMenu = [];
 				this.selSampleData = [];

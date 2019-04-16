@@ -28,9 +28,9 @@
 										<i class="el-icon-arrow-down icon-arrow2-down"></i>
 									</span>
 									<el-dropdown-menu slot="dropdown">
-										<el-checkbox-group v-model="checkedName">
-											<el-dropdown-item  v-for="(item,index) in tableHeader" :key="index">
-												<el-checkbox :label="item.label" name="type"></el-checkbox>
+										<el-checkbox-group v-model="checkedName" @change="changeCheckedName">
+											<el-dropdown-item  v-for="(item,index) in columns" :key="index">
+												<el-checkbox :label="item.text" name="type"></el-checkbox>
 											</el-dropdown-item>
 										</el-checkbox-group>
 									</el-dropdown-menu>
@@ -104,7 +104,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="userList" v-on:classByValue="childvalue" @getDetail="getDetail"></tree_grid>
+							<tree_grid :data-source="userList" :columns="columns" :loading="loading" :tree-structure="true" v-on:classByValue="childvalue" @getDetail="getDetail"></tree_grid>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -158,14 +158,15 @@
 				basic_url: Config.dev_url,
 				checkedName: [
 				    '工作任务单编号',
-					'状态',
 					'样品名称',
+					// '委托书编号',
+					'状态',
+					'当前责任人',
 					'样品型号',
 					'样品状态',
 					'抽样方案/判定依据',
-					'完成日期',
 					'完成方式',
-					'委托书编号',
+					'完成日期',
 					'录入人',
 					'录入时间'
 				],
@@ -173,25 +174,37 @@
 					 {
 					 	text: '工作任务单编号',
 					 	dataIndex: 'WONUM',
-					 	width: '300',
+					 	width: '220',
 					 	isShow:true,
 					 },
 					{
+						text: '样品名称',
+						dataIndex: 'ITEM_NAME',
+					 	width: '200',
+						isShow:true,
+					},
+					// {
+					// 	text: '委托书编号',
+					// 	dataIndex: 'PROXYNUM',
+					//  	width: '160',
+					// 	isShow:true,
+					// },
+					{
 						text: '状态',
 						dataIndex: 'STATEDesc',
-					 	width: '100',
+					 	width: '140',
+						isShow:true,
+					},
+					{
+						text: '当前责任人',
+						dataIndex: 'MASTER_INSPECTORDesc',
+					 	width: '160',
 						isShow:true,
 					},
 					{
 						text: '是否为主任务单',
 						dataIndex: 'IS_MAINDesc',
 					 	width: '120',
-						isShow:true,
-					},
-					{
-						text: '样品名称',
-						dataIndex: 'ITEM_NAME',
-					 	width: '200',
 						isShow:true,
 					},
 					{
@@ -213,20 +226,14 @@
 						isShow:true,
 					},
 					{
-						text: '完成日期',
-						dataIndex: 'COMPLETE_DATE',
-					 	width: '160',
-						isShow:true,
-					},
-					{
 						text: '完成方式',
 						dataIndex: 'COMPLETE_MODE',
 					 	width: '120',
 						isShow:true,
 					},
 					{
-						text: '委托书编号',
-						dataIndex: 'PROXYNUM',
+						text: '完成日期',
+						dataIndex: 'COMPLETE_DATE',
 					 	width: '160',
 						isShow:true,
 					},
@@ -247,67 +254,6 @@
 				loadSign:true,//加载
 				commentArr:{},
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				checkedName: [
-					'工作任务单编号',
-					'状态',
-					'是否为主任务单',
-					'样品名称',
-					'样品型号',
-					'样品状态',
-					'抽样方案/判定依据',
-					'完成日期',
-					'完成方式',
-					'委托书编号',
-					// '录入人',
-					'录入时间',
-					// '信息状态'
-				],
-				tableHeader: [
-					{
-						label: '工作任务单编号',
-						prop: 'WONUM'
-					},
-					{
-						label: '状态',
-						prop: 'STATE'
-					},
-					{
-						label: '是否为主任务单',
-						prop: 'IS_MAINDesc'
-					},
-					{
-						label: '样品名称',
-						prop: 'ITEM_NAME'
-					},
-					{
-						label: '样品型号',
-						prop: 'ITEM_MODEL'
-					},
-					{
-						label: '样品状态',
-						prop: 'ITEM_STATUS'
-					},
-					{
-						label: '抽样方案/判定依据',
-						prop: 'CHECK_BASIS'
-					},
-					{
-						label: '完成日期',
-						prop: 'COMPLETE_DATE'
-					},
-					{
-						label: '完成方式',
-						prop: 'COMPLETE_MODE'
-					},
-					{
-						label: '委托书编号',
-						prop: 'PROXYNUM'
-					},
-					{
-						label: '录入时间',
-						prop: 'ENTERDATE'
-					}
-				],
 				companyId: '',
 				deptId: '',
 				selMenu: [],
@@ -350,6 +296,18 @@
 			}
 		},
 		methods: {
+			//点击显示隐藏table列
+			changeCheckedName(value){
+				this.checkedName=value
+				let str=value.toString()
+				for(let i=0;i<this.columns.length;i++){
+					if(str.indexOf(this.columns[i].text) != -1){
+						this.columns[i].isShow=true
+					}else{
+						this.columns[i].isShow=false
+					}
+				}
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -468,49 +426,32 @@
 			},
 			//报告生成与编辑
 			reportGenerateMask(){
-				if(this.selMenu.length == 0) {
+				if(this.selMenu.length == '0') {
 					this.$message({
 						message: '请选择要处理的任务',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu.length > 1) {
+				} else if(this.selMenu.length > '1') {
 					this.$message({
 						message: '不可同时处理多条任务',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == 0) {
+				} else if(this.selMenu[0].STATE == '0') {
 					this.$message({
 						message: '此任务单状态为驳回，报告暂不能生成与编辑',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == 1) {
+				} else if(this.selMenu[0].STATE!=='5') {
+					console.log(this.selMenu[0].STATE);
 					this.$message({
-						message: '此任务单状态为待接受，报告暂不能生成与编辑',
+						message: '此任务单状态不是汇总中，暂不能使用报告生成与编辑',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == 2) {
-					this.$message({
-						message: '此任务单状态为待审批，报告暂不能生成与编辑',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selMenu[0].STATE == 4) {
-					this.$message({
-						message: '此任务单状态为中止，报告暂不能生成与编辑',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selMenu[0].STATE == 3) {
-					this.$message({
-						message: '此任务单状态为中止，报告暂不能生成与编辑',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selMenu[0].STATE == 6) {//审批中
+				} else if(this.selMenu[0].STATE == '5') {//汇总中
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
 					// console.log(this.selMenu[0].ID);
 				}

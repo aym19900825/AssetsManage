@@ -346,7 +346,7 @@
 								<!-- 检测要求与样品信息 End -->
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tabs v-model="activeName">
 										<!--检测项目与要求 Begin-->
 										<el-tab-pane label="检测项目与要求" name="first">
 											<!-- <div class="table-func table-funcb">
@@ -363,76 +363,30 @@
 													</el-table-column>
 
 													<el-table-column label="检验/检测依据" prop="S_NAME" sortable width="260px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入">	
-															</el-input>
-															<span v-else>{{scope.row.S_NAME}}</span>
-														</template>
 													</el-table-column>
 
 													<el-table-column prop="P_DESC" label="检测项目名称" sortable width="240px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
-															</el-input>
-															<span v-else>{{scope.row.P_DESC}}</span>
-														</template>
 													</el-table-column>
 
 													<el-table-column prop="REMARKS" label="要求" sortable width="300px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.REMARKS}}</span>
-														</template>
 													</el-table-column>
 
-													<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.INSPECT_GROUP" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.INSPECT_GROUP}}</span>
-														</template>
+													<el-table-column prop="INSPECT_GROUPDesc" label="专业组" sortable width="120px">
 													</el-table-column>
 
-													<el-table-column prop="LEADER" label="责任人" sortable width="100px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.LEADER" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.LEADER}}</span>
-														</template>
+													<el-table-column prop="LEADERDesc" label="责任人" sortable width="100px">
 													</el-table-column>
 
-													<el-table-column prop="ASSIST_PERSION" label="助手" sortable width="200px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSIST_PERSION" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.ASSIST_PERSION}}</span>
-														</template>
+													<el-table-column prop="ASSIST_PERSIONDesc" label="助手" sortable width="200px">
 													</el-table-column>
 
 													<el-table-column prop="QUATITY" label="样品数量" sortable width="160px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.QUATITY}}</span>
-														</template>
 													</el-table-column>
 
 													<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="150px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_MODE" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.COMPLETE_MODE}}</span>
-														</template>
 													</el-table-column>
 
-													<el-table-column prop="COMPLETE_DATE" label="完成日期" sortable width="180px">
-														<template slot-scope="scope">
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请输入"></el-input>
-															<span v-else>{{scope.row.COMPLETE_DATE}}</span>
-														</template>
-													</el-table-column>
-
-													<el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
-														<template slot-scope="scope">
-																<el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small">
-																<i class="icon-trash red"></i>
-															</el-button>
-														</template>
+													<el-table-column prop="COMPLETE_DATE" label="完成日期" :formatter="dateFormat" sortable width="180px">
 													</el-table-column>
 											</el-table>
 										</el-tab-pane>
@@ -446,9 +400,9 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="VENDOR" label="承包方单位名称" sortable width="260px">
+												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
 														</el-input>
 														<span v-else>{{scope.row.VENDOR}}</span>
 													</template>
@@ -478,27 +432,27 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable width="120px">
+												<el-table-column prop="INSPECT_GROUPDDesc" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
-														<el-select clearable v-model="scope.row.INSPECT_GROUP" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
+														<el-select clearable v-model="scope.row.INSPECT_GROUPDesc" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
 															<el-option v-for="data in maingroup" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="LEADER" label="责任人" sortable width="120px">
+												<el-table-column prop="LEADERDesc" label="责任人" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.LEADER" placeholder="请选择">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.LEADERDesc" placeholder="请选择">
 														</el-input>
-														<span v-else>{{scope.row.LEADER}}</span>
+														<span v-else>{{scope.row.LEADERDesc}}</span>
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="ASSIST_PERSION" label="助手" sortable width="120px">
+												<el-table-column prop="ASSIST_PERSIONDesc" label="助手" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSIST_PERSION" placeholder="请选择">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.ASSIST_PERSIONDesc" placeholder="请选择">
 														</el-input>
-														<span v-else>{{scope.row.ASSIST_PERSION}}</span>
+														<span v-else>{{scope.row.ASSIST_PERSIONDesc}}</span>
 													</template>
 												</el-table-column>
 
@@ -542,55 +496,23 @@
 										<!--检验检测设备 Begin-->
 										<el-tab-pane label="检验检测设备" name="third">
 											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-												<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
-											      <template slot-scope="scope">
-											      	<i class="el-icon-check" v-show="scope.row.isEditing">
-											      	</i>
-											      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-											      	</i>
-											      </template>
-											    </el-table-column>
-													<el-table-column type="index" label="序号" width="50">
-														<template slot-scope="scope">
-															<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-														</template>
-													</el-table-column>
-												<!-- <el-table-column prop="WONUM" label="工作任务单编号" sortable width="180px">
+													
+												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
-														<el-input disabled  size="small" v-model="scope.row.WONUM" placeholder="自动生成">	</el-input>
-													</template>
-												</el-table-column> -->
-												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
-													<template slot-scope="scope">
-														<el-input disabled  size="small" v-model="scope.row.ASSETNUM"></el-input>
+														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
 													</template>
 												</el-table-column>
-												<el-table-column prop="DESCRIPTION" label="设备名称" sortable width="180px">
-													<template slot-scope="scope">
-														<el-input disabled  size="small" v-model="scope.row.DESCRIPTION"></el-input>
-													</template>
+
+												<el-table-column prop="ASSETNUM" label="设备编号" sortable width="150px">
+												</el-table-column>
+
+												<el-table-column prop="DESCRIPTION" label="设备名称" sortable>
 												</el-table-column>
 
 												<el-table-column prop="MODEL" label="规格型号" sortable width="150px">
-													<template slot-scope="scope">
-														<el-input disabled  size="small" v-model="scope.row.MODEL"></el-input>
-													</template>
 												</el-table-column>
 
-												<el-table-column prop="USE_PERSON" label="使用人" sortable width="150px">
-													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.USE_PERSON">
-														  	<el-button slot="append" icon="el-icon-search" @click="addperson(scope.row, 'WORKORDER_ASSETList')" :disabled="noedit"></el-button>
-														</el-input>
-													</template>
-												</el-table-column>
-												
-												<el-table-column fixed="right" label="操作" width="120px">
-													<template slot-scope="scope">
-													  <el-button title="删除" @click.native.prevent="deleteRow(scope.$index,scope.row,'equipList')" type="text" size="small">
-														<i class="icon-trash red"></i>
-													  </el-button>
-													</template>
+												<el-table-column prop="USE_PERSONDesc" label="使用人" sortable width="150px">
 												</el-table-column>
 											</el-table>
 										</el-tab-pane>
@@ -608,6 +530,7 @@
 														  style="width: 100%;" 
 														  @cell-click="iconOperation" 
 														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+
 														<el-table-column type="index" label="序号" width="50">
 															<template slot-scope="scope">
 																<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
@@ -625,68 +548,7 @@
 
 													</el-table>
 
-													<!-- <el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
-														  border 
-														  stripe 
-														  :fit="true" 
-														  max-height="260" 
-														  style="width: 100%;" 
-														  @cell-click="iconOperation" 
-														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
-														<el-table-column prop="iconOperation" fixed width="50px">
-													      <template slot-scope="scope">
-													      	<i class="el-icon-check" v-show="scope.row.isEditing">
-													      	</i>
-													      	<i class="el-icon-edit" v-show="!scope.row.isEditing">
-													      	</i>
-													      </template>
-													    </el-table-column>
-														<el-table-column label="模板来源" sortable prop="DATA_TYPE">
-													      <template slot-scope="scope">
-													      	<el-select v-model="scope.row.DATA_TYPE" filterable allow-create default-first-option placeholder="请选择">
-																		<el-option label="基础数据选择" value="1"></el-option>
-																		<el-option label="链条选择" value="2"></el-option>															
-																	</el-select>
-													      </template>
-													    </el-table-column>
-														<el-table-column label="模板编号" sortable prop="D_NUM">
-													      <template slot-scope="scope">
-													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_NUM" :disabled="edit">
-													      		<el-button slot="append" icon="el-icon-search" @click="templateNumber(scope.row) "></el-button>
-													      	</el-input>
-													      	<span v-else>{{scope.row.D_NUM}}</span>
-													      </template>
-													    </el-table-column>
-													    <el-table-column label="模板描述" sortable prop="D_DESC">
-													      <template slot-scope="scope">
-													      	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.D_DESC"></el-input>
-													      	<span v-else>{{scope.row.D_DESC}}</span>
-													      </template>
-													    </el-table-column>
-									            		<el-table-column label="模板文件大小" prop="FILESIZE_ORG">
-															<template slot-scope="scope">
-															 	<el-checkbox v-if="!!scope.row.FILESIZE_ORG" v-model="scope.row.FILE_ORGCHECKED">{{scope.row.FILESIZE_ORG+'M'}}</el-checkbox>
-															</template>
-														</el-table-column>
-														<el-table-column label="上传文件大小" prop="FILESIZE">
-															<template slot-scope="scope">
-															 	<el-checkbox v-if="!!scope.row.FILESIZE" v-model="scope.row.FILECHECKED">{{scope.row.FILESIZE+'M'}}</el-checkbox>
-															</template>
-														</el-table-column>
-														<el-table-column label="操作">
-															<template slot-scope="scope">
-															 	<el-button title="下载" @click="downLoadRow(scope.row)" type="text" size="small"> 
-																	<i class="icon-arrow-down-circle"></i>
-																</el-button>
-																<el-button title="删除" @click="deleteTempRow(scope.$index,scope.row)" type="text" size="small">
-																	<i class="icon-trash red"></i>
-																</el-button>
-																<el-button title="编辑" type="text" size="small">
-																	<i class="icon-pencil"></i>
-																</el-button>
-															</template>
-														</el-table-column>
-													</el-table> -->
+												
 												</el-col>
 											</el-row>
 										</el-tab-pane>
@@ -800,7 +662,7 @@
 			<!-- 检验依据  -->
 			<teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask>
 			<!-- 检验项目 -->
-      		<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
+			<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
 			<!-- 查看子任务单  -->
 			<checkchildlist ref="checkchildlist"></checkchildlist>
 			<!-- 生成报告弹出显示数据  -->
@@ -976,6 +838,7 @@
 			};
 		},
 		methods: {
+			//接收此任务
 			Accept(){
 				// /app/workorder/operate/acceptTask?WORKORDERID=当前主表ID
 					var Url = this.basic_url + '/api-apps/app/workorder/operate/acceptTask?WORKORDERID='+this.dataid;
@@ -996,6 +859,7 @@
 					}).catch((err) => {
 					});
 			},
+			//回退按钮
 			sendback(){
 				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
 					var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
@@ -1016,131 +880,11 @@
 					}).catch((err) => {
 					});
 			},
-			viewFile(row){
-				var url = this.po_url+'/show?fileid=' +  row.FILEID
-						+ '&userid=' +  this.docParm.userid
-						+ '&username=' + this.docParm.username
-						+ '&deptid=' + this.docParm.deptid
-						+ '&deptfullname=' + this.docParm.deptfullname
-				window.open(url); 
-			},
-			downLoadRow(row){
-				if(row.FILECHECKED){
-					var url = row.FILEPATH 
-                        + '&userid=' + this.docParm.userid
-                        + '&username=' + this.docParm.username
-                        + '&deptid=' + this.docParm.deptid
-                        + '&deptfullname=' + this.docParm.deptfullname;
-                	window.open(url);
-				}else if(row.FILE_ORGCHECKED){
-					var url = row.FILEPATH_ORG 
-                        + '&userid=' + this.docParm.userid
-                        + '&username=' + this.docParm.username
-                        + '&deptid=' + this.docParm.deptid
-                        + '&deptfullname=' + this.docParm.deptfullname;
-                	window.open(url);
-				}else{
-					this.$message({
-						message: '请选择要下载的文件',
-						type: 'error'
-					});
-				}
-			},
-			deleteTempRow(index,row){
-				if(row.FILECHECKED){
-					var url = this.file_url + '/file/deleteFile/' + row.FILEID;
-					this.$axios.delete(url,{}).then((res) => {
-						if(res.data.code == 1){
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-							row.FILEID = 0;
-							row.FILECHECKED = false;
-							row.FILEPATH = '';
-							row.FILESIZE = 	'';
-						}else{
-							this.$message({
-								message: '删除失败',
-								type: 'error'
-							});
-						}
-					}).catch((err) => {
-					});
-				}else if(row.FILE_ORGCHECKED){
-					this.$message({
-						message: '模板文件不允许删除',
-						type: 'error'
-					});
-				}else{
-					this.deleteRow(index, row, 'moduleList');
-				}
-			},
-			upload(e){
-				var list = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
-				var editData = {};
-				var isEdit = false;
-				for(var i=0; i<list.length; i++){
-					if(list[i].isEditing){
-						editData = list[i];
-						isEdit = true;
-					}
-				}
-				if(!isEdit){
-					this.$message({
-						message: '请先选择或者新增行数据！',
-						type: 'error'
-					});
-					return;
-				}
-				var formData = new FormData();
-				var loading;
-				loading = Loading.service({
-					fullscreen: true,
-					text: '拼命上传中...',
-					background: 'rgba(F,F, F, 0.8)'
-				});
-				formData.append('files', document.getElementById('excelFile').files[0]);
-				var config = {
-					//添加请求头
-					headers: { "Content-Type": "multipart/form-data" },
-					//添加上传进度监听事件
-					onUploadProgress: e => {
-						var completeProgress = ((e.loaded / e.total * 100) | 0) + "%";
-						this.progress = completeProgress;
-					}
-				};
-				var url = '';
-				var url = this.file_url + '/file/uploadfile?userid=' + this.docParm.userid 
-						+ '&username=' + this.docParm.username
-						+ '&deptid=' + this.docParm.deptid
-						+ '&deptfullname=' + this.docParm.deptfullname
-						+ '&recordid=' + this.docParm.recordid
-						+ '&appname=' + this.docParm.appname
-						+ '&appid=' + this.docParm.appid;
-				this.$axios.post(url, formData, config
-				).then((res)=>{
-					loading.close();
-					if(res.data.code == 0){
-						this.$message({
-							message: res.data.message,
-							type: 'error'
-						});
-					}else{
-						this.$message({
-							message: '文件已成功上传至服务器',
-							type: 'success'
-						});
-						editData.FILEID = res.data.fileid;
-						editData.FILESIZE = res.data.filesize;
-						editData.FILEPATH = res.data.webUrl;
-					}
-				})
-			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
+			//清空数据
 			reset(){
 				this.workorderForm = {
 					PROXYNUM: '',//委托书编号
@@ -1206,17 +950,14 @@
 			},
 			//表格传过来
 			childByValue: function (childValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childValue
-		    },
+				// childValue就是子组件传过来的
+				this.selMenu = childValue
+		  },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
 				}
 			},
-			handleClick(tab, event) {
-//		        console.log(tab, event);
-		   },
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.getuser();
@@ -1797,91 +1538,8 @@
 				};
 				this.workorderForm.WORKORDER_ASSETList.push(obj);
 			},
-			reprotids(val){
-
-			},
-			// reportname(val){
-
-			// },
-			//生成报告
-			getreport(){
-				console.log(this.reportname);
-				if(this.workorderForm.WORKORDER_DATA_TEMPLATEList.length < 2){
-					this.$message({
-						message: '请新建至少两条数据',
-						type: 'warning'
-					});
-				}else if(this.workorderForm.WORKORDER_REPORTList.length>0){
-					this.$message({
-						message: '检验报告已经生成，请勿重复生成',
-						type: 'warning'
-					});
-				}else{
-					var changeUser = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
-					//basisnum为依据编号的数组
-					var id = [];
-					for (var i = 0; i < changeUser.length; i++) {
-						id.push(changeUser[i].FILEID);		
-					}
-					//basisnums为basisnum数组用逗号拼接的字符串
-					var ids = id.toString(',');
-					console.log(ids);
-					if(ids == '' || ids == undefined || ids == null){
-						this.$message({
-							message: '请上传文件',
-							type: 'warning'
-						});
-					}else if(this.reportname == '' || this.reportname == undefined || this.reportname == null){
-						var data = [];
-						data.push(this.workorderForm.ID);
-						data.push(this.reportname);
-						data.push(this.workorderForm.WORKORDER_DATA_TEMPLATEList);
-						data.push(this.workorderForm.PROXYNUM);
-						data.push(this.workorderForm.WONUM);
-						data.push(this.workorderForm.DEPTIDDesc);
-						data.push(this.workorderForm.ID);
-						this.$refs.reportdata.visible(data);
-					}else{
-						// console.log(this.reportname);
-						// // var url = this.basic_url +"/api-merge/merge/workorder/MergeWord?filePath="+ids+"&fileName="+this.reportname+"&proxynum="+this.workorderForm.PROXYNUM+"&wonum="+this.workorderForm.WONUM+"&deptfullname="+this.workorderForm.DEPTIDDesc+"&recordid="+this.workorderForm.ID;
-						// var url = this.basic_url +"/api-merge/merge/workorder/MergeWord";
-						
-						// this.$axios.post(url, {
-						// 		"filePath":ids,
-						// 		"fileName":this.reportname,
-						// 		"proxynum":this.workorderForm.PROXYNUM,
-						// 		"wonum":this.workorderForm.WONUM,
-						// 		"deptfullname":this.workorderForm.DEPTIDDesc,
-						// 		"recordid":this.workorderForm.ID
-
-						// }).then((res) => {
-						// 	this.workorderreportid = res.data.datas.id;
-						// 	
-						// 	console.log()
-						// 	var obj = {
-						// 		REPORTNUM:res.data.datas.reportnum,
-						// 		REPORTNAME:res.data.datas.reportname,
-						// 		// PREVIEW:'',
-						// 		VERSION:res.data.datas.version,
-						// 	}
-						// 	console.log(obj);
-						// 	this.workorderForm.WORKORDER_REPORTList.push(obj);
-						// 	console.log(this.workorderForm.WORKORDER_REPORTList);
-						// 	if(res.data.resp_code == 0) {
-						// 		this.$message({
-						// 			message: '生成成功',
-						// 			type: 'success'
-						// 		});
-						// 	}
-						// }).catch((err) => {
-						// 	this.$message({
-						// 		message: '网络错误，请重试',
-						// 		type: 'error'
-						// 	});
-						// });
-					}
-				}
-			},
+		
+			
 			//查看报告
 			lookoverreport(item){
 				this.detailgetData();
@@ -1929,6 +1587,7 @@
 				this.edit = true;
 				this.noedit = false;
 			},
+			//查看数据
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -2213,33 +1872,5 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
-	.ml60 {margin-left: 60px;}
-	.a-upload input{
-		position: absolute;
-		font-size: 0;
-		left: 0;
-		top: 0;
-		opacity: 0;
-		filter: alpha(opacity=0);
-		cursor: pointer;
-		width: 80px;
-		height: 30px;
-		cursor: pointer;
-	}
-	.check-btn-right{
-		position: absolute;
-    right: 50px;
-    top: 10px;
-    z-index: 999;}
-	.upload-btn{
-		color: #fff;
-		background-color: #286090;
-		border-radius: 4px;
-		padding: 4px 10px;
-		width: 85px;
-		height: 34px;
-		line-height: 28px;
-		border: none;
-		cursor: pointer;
-	}
+
 </style>

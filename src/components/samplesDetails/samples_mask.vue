@@ -59,14 +59,14 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="委托单位名称" prop="V_NAMEDesc" label-width="110px">
+											<el-form-item label="委托方名称名称" prop="V_NAMEDesc" label-width="110px">
 												<el-input v-model="samplesForm.V_NAMEDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getVname('V_NAME')" :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="委托单位统一社会信用代码" prop="VENDOR" label-width="220px">
+											<el-form-item label="委托方名称统一社会信用代码" prop="VENDOR" label-width="220px">
 												<el-input v-model="samplesForm.VENDOR" disabled></el-input>
 											</el-form-item>
 										</el-col>
@@ -317,7 +317,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="7">
-								<el-form-item label="委托单位名称" prop="V_NAMEDesc">
+								<el-form-item label="委托方名称名称" prop="V_NAMEDesc">
 									<el-input v-model="proxy_search.V_NAMEDesc"></el-input>
 								</el-form-item>
 							</el-col>
@@ -343,7 +343,7 @@
 					</el-table-column>
 					<el-table-column label="检验委托书编号" sortable width="200px" prop="PROXYNUM" >
 					</el-table-column>
-					<el-table-column label="委托单位名称" sortable width="220px" prop="V_NAMEDesc">
+					<el-table-column label="委托方名称名称" sortable width="220px" prop="V_NAMEDesc">
 					</el-table-column>
 					<el-table-column label="生产单位名称" sortable width="220px" prop="P_NAMEDesc">
 					</el-table-column>
@@ -507,8 +507,8 @@
 				tips:'1',
 				rules: { //定义需要校验数据的名称
 					// PROXYNUM: [{ required:true, trigger:'blur', message:'必填'}],//委托书编号
-					VENDOR: [{ required:false, trigger:'blur', message:'必填'}],//委托单位编号
-					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托单位名称
+					VENDOR: [{ required:false, trigger:'blur', message:'必填'}],//委托方名称编号
+					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托方名称名称
 					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
 					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
 					DESCRIPTION: [
@@ -601,11 +601,11 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},
-			//委托单位统一社会信用代码
+			//委托方名称统一社会信用代码
 			appendcode(value){
 				this.samplesForm.VENDOR=value;
 			},
-			//委托单位
+			//委托方名称
 			appendname(value){
 				this.samplesForm.V_NAME = value;//名称
 			},
@@ -616,7 +616,7 @@
 			},
 			//生成单位统一社会信用代码
 			appendcodes(value){
-				this.samplesForm.PRODUCT_COMPANY=value;//委托单位编号
+				this.samplesForm.PRODUCT_COMPANY=value;//委托方名称编号
 			},
 			//承检单位
 			getCompany() {
@@ -666,7 +666,7 @@
 					this.$refs.productchild.visible(this.samplesForm.P_NUM,this.samplesForm.CJDW);
 				}
 			},
-			//委托单位名称
+			//委托方名称名称
 			getCustomer(type) {
 				if(type == 'vname'){
 					this.$refs.enterprisechild.visible(type , this.samplesForm.appendid);
@@ -688,9 +688,9 @@
 					ID: '',
 					PROXYNUM: '',//委托书编号
 					ITEMNUM: '',//样品编号
-					VENDOR: '',//委托单位编号
+					VENDOR: '',//委托方名称编号
 					PRODUCT_COMPANY: '',//生产单位编号
-					V_NAME: '',//委托单位名称
+					V_NAME: '',//委托方名称名称
 					P_NAME: '',//生产单位名称
 					DESCRIPTION: '',//样品名称
 					PRODUCT_CODE: '',//产品标识代码

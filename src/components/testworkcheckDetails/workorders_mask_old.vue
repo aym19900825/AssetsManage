@@ -779,7 +779,7 @@
 														<span v-else>{{scope.row.PROXYNUM}}</span>
 													</template>
 												</el-table-column>
-												<el-table-column prop="V_NAME" label="委托单位" sortable width="120px">
+												<el-table-column prop="V_NAME" label="委托方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请输入委托方名称">
 														</el-input>

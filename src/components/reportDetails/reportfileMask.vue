@@ -34,12 +34,12 @@
     url:'',
     src:'',
     isok1: true,
-	isok2: false,
-	addtitle:false,
-	modifytitle:false,
+		isok2: false,
+		addtitle:false,
+		modifytitle:false,
     }
   },
-   methods: {
+  methods: {
   	//点击关闭按钮
 	close() {
 		this.show = false;

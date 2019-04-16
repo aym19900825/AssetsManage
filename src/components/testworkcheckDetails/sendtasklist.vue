@@ -382,7 +382,7 @@
 												
 												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
-												<el-table-column prop="VENDOR" label="承包方单位名称" sortable width="260px">
+												<el-table-column prop="VENDOR" label="承包方名称" sortable width="260px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR">
 														</el-input>

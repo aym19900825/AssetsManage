@@ -29,7 +29,7 @@
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="委托单位" name="1">
+								<el-collapse-item title="委托方名称" name="1">
 									<el-row :gutter="5" class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="dataInfo.VERSION" :disabled="edit">
@@ -401,7 +401,7 @@
 														</el-form-item>
 													</template>
 												</el-table-column> -->
-												<el-table-column prop="V_NAMEDesc" label="委托单位" sortable width="120px">
+												<el-table-column prop="V_NAMEDesc" label="委托方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc">
 														</el-input>
@@ -762,7 +762,7 @@
 			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检验项目  -->
 			<testprojectmask ref="projectchild" @testproject="addproject" ></testprojectmask>
-			<!--委托单位名称 -->
+			<!--委托方名称名称 -->
 			<inspectcustommask ref="inscustom" @customarr="customarr" @custarr="custarr" @vendor="vendor"></inspectcustommask>
 			<!--分包要求 中心外机构-->
 			<custinspectmask ref="custinspectchild" @cusinspect="cusinspect"></custinspectmask>
@@ -776,7 +776,7 @@
 	// import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
-	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托单位
+	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托方名称
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
@@ -824,10 +824,10 @@
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
 					STATUS:'0',
-					VENDOR:'',//委托单位编号
+					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
 					R_VENDORDesc:'',
-					V_PERSON:'',//委托单位联系人
+					V_PERSON:'',//委托方名称联系人
 					ITEM_NAME:'',//样品名称
 					ITEM_MODEL:'',//样品型号
 					ITEM_QUALITY:'',//样品数量
@@ -845,8 +845,8 @@
 					COMPDATE:'',
 					COMPMODE:'',//完成方式
 					REMARKS:'',
-					V_NAME:'',//委托单位名称
-					V_ADDRESS:'',//委托单位地址
+					V_NAME:'',//委托方名称名称
+					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					P_NAME:'',
 					CHECK_COST:0,//合同费用
@@ -929,13 +929,13 @@
 				labelPositions: 'right',
 				rules: {
 					V_NAME: [
-						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托单位名称
+						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托方名称名称
 					V_ADDRESS: [{required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话
 					R_VENDORDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
-					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托单位编号
+					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托方名称编号
 					P_NAMEDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
 					PRODUCT: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
 					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
@@ -1250,10 +1250,10 @@
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
 					STATUS:'0',
-					VENDOR:'',//委托单位编号
+					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
 					R_VENDORDesc:'',
-					V_PERSON:'',//委托单位联系人
+					V_PERSON:'',//委托方名称联系人
 					V_PHONE:'',//电话号码
 					ITEM_NAME:'',//样品名称
 					ITEM_MODEL:'',//样品型号
@@ -1278,8 +1278,8 @@
 					COMPDATE:'',
 					COMPMODE:'正常',//完成方式
 					REMARKS:'',
-					V_NAME:'',//委托单位名称
-					V_ADDRESS:'',//委托单位地址
+					V_NAME:'',//委托方名称名称
+					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					ACTUAL_PERCENT:0,
 					CHECK_COST:0,//合同费用
@@ -1441,7 +1441,7 @@
 					 		this.special=true;
 							this.special1=true;
 							this.noedit1=true;
-					}else if(res.data.ISRECEIVE=='2'){//2，委托单位不能动；
+					}else if(res.data.ISRECEIVE=='2'){//2，委托方名称不能动；
 							this.noedit2=true
 							this.special=true;
 							this.special1=true;
@@ -1620,13 +1620,13 @@
 			},
 			
 			 
-			//委托单位
+			//委托方名称
 			customarr(val){
 				this.dataInfo.V_NAME=val[0];
 				this.dataInfo.V_NAMEDesc=val[1];//
 				this.dataInfo.V_ADDRESS=val[2];
 				this.dataInfo.V_ZIPCODE=val[3];
-				this.dataInfo.VENDOR=val[4];//委托单位的信用代码
+				this.dataInfo.VENDOR=val[4];//委托方名称的信用代码
 				this.dataInfo.P_NAME=val[0];
 				this.dataInfo.P_NAMEDesc=val[1];//生产单位
 				this.dataInfo.PRODUCT_UNIT=val[4];//生产单位的信用代码
@@ -1684,7 +1684,7 @@
 			},
 			vendor(val){
 				this.dataInfo.VENDOR=val[0];
-				// DEPUTE_TYPE  委托单位类型（中心内/中心外）
+				// DEPUTE_TYPE  委托方名称类型（中心内/中心外）
 				if(!!val[0]){
 					  this.dataInfo.PRODUCE_TYPE=1
 						this.dataInfo.DEPUTE_TYPE=1;
@@ -1817,8 +1817,8 @@
 						var List={
 								PROXY_CONTRACT_NUM: '',
 								PROXYNUM: '',
-								V_NAME:this.$store.state.currentcjdw[0].id,//委托单位
-								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托单位
+								V_NAME:this.$store.state.currentcjdw[0].id,//委托方名称
+								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托方名称
 								INSPECT_GROUP:'',
 								PROJECT_ID:'',
 								VENDOR: val[j][i].ID,//分包方名称
@@ -1854,8 +1854,8 @@
 						var List={
 								PROXY_CONTRACT_NUM: '',
 								PROXYNUM: '',
-							  V_NAME:this.$store.state.currentcjdw[0].id,//委托单位
-								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托单位
+							  V_NAME:this.$store.state.currentcjdw[0].id,//委托方名称
+								V_NAMEDesc:this.$store.state.currentcjdw[0].fullname,//委托方名称
 								INSPECT_GROUP:'',
 								PROJECT_ID:'',
 								VENDOR:val[i].dept,//承检单位
@@ -1946,12 +1946,12 @@
 				this.dataInfo.LEADER = '';
 				this.RVENDORSelect();
 			},
-			//委托单位
+			//委托方名称
 			// appendname(value){
 			// 	this.dataInfo.V_NAME = value;//名称
 			// 	if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
 
-			// 	}else{//更新子表委托单位
+			// 	}else{//更新子表委托方名称
 			// 		for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
 			// 			this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
 			// 		}
@@ -2101,16 +2101,16 @@
 			getCustomer() {
 					this.$refs.enterprisechild.getData();
 			},
-			//委托单位名称
+			//委托方名称名称
 			getinspect_cust(){
          this.$refs.inscustom.visible();	
 			},
 			//姓名
 			addname(){
-				var customid=this.dataInfo.V_NAME;//委托单位id
+				var customid=this.dataInfo.V_NAME;//委托方名称id
 				if(customid==""||customid=="undenfiend"){
 					this.$message({
-						message: '请先选委托单位名称',
+						message: '请先选委托方名称名称',
 						type: 'warning'
 					});
 				}else{

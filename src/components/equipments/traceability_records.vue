@@ -18,6 +18,30 @@
 							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
+							<el-dropdown size="small" v-if="isUploadBtn">
+								<button class="btn mr5 btn-primarys">
+									<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+								</button>
+								<el-dropdown-menu slot="dropdown">
+									<el-dropdown-item>
+										<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+									</el-dropdown-item>
+									
+									<el-dropdown-item>
+										<el-upload
+										ref="upload"
+										class="upload"
+										:action="uploadUrl()"
+										:on-success="fileSuccess"
+										:limit=1
+										multiple
+										method:="post"
+										:file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
+									</el-dropdown-item>
+								</el-dropdown-menu>
+							</el-dropdown>
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -284,10 +308,13 @@
 				},
 				aaaData:[],
 				buttons:[],
+				isUploadBtn: false,
+				fileList: [],
 				pmRecord:'pmRecord'//appname
 			}
 		},
 		methods: {
+			fileSuccess(){},
 			setSelData(val){
 				this.selUser = val;
 			},
@@ -316,23 +343,29 @@
 			//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		         this.openAddMgr();
-		    	}else if(item.name=="修改"){
-		    	 this.modify();
+					this.openAddMgr();
+		    	}else if(item.name=="编辑"){
+					this.modify();
 		    	}else if(item.name=="彻底删除"){
-		    	 this.physicsDel();
+					this.physicsDel();
 		    	}else if(item.name=="高级查询"){
-		    	 this.modestsearch();
+					this.modestsearch();
 		    	}else if(item.name=="导入"){
-		    	 this.download();
+					this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.deluserinfo();
+		    	 	this.deluserinfo();
 		    	}else if(item.name=="报表"){
-			     this.reportdata();
+			     	this.reportdata();
 				}else if(item.name=="打印"){
 				   this.Printing();
+				}else if(item.name=="导出"){
+				   this.exportData();
 				}
-		    },
+			},
+			uploadUrl(){
+                var url = this.basic_url +'/api-apps/app/pmRecord/importExc?access_token='+sessionStorage.getItem('access_token');
+                return url;
+            },
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.visible();
@@ -462,12 +495,40 @@
 				}
 			},
 			// 导入
-			importData() {
-				
+			download() {
+				var url = this.basic_url + '/api-apps/app/pmRecord/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
 			},
 			// 导出
 			exportData() {
-				
+				var url = this.basic_url + '/api-apps/app/pmRecord/exportExc?access_token='+sessionStorage.getItem('access_token');
+          		var xhr = new XMLHttpRequest();
+            	xhr.open('POST', url, true);
+            	xhr.responseType = "blob";
+            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+            	xhr.onload = function() {
+                	if (this.status == 200) {
+						var filename = "pmRecord.xls";
+						var blob = this.response;
+						var link = document.createElement('a');
+						var objecturl = URL.createObjectURL(blob);
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+                	}
+            	}
+            	xhr.send();
 			},
 			// 打印
 			Printing() {
@@ -512,7 +573,19 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					this.buttons = res.data;
+					var resData = res.data;
+					var uploadIndex = 0;
+					var uploadBtn = resData.filter((item,index)=>{
+						if(item.name == '导入'){
+							uploadIndex  = index;
+							return item;
+						}
+					});
+					if(uploadBtn.length > 0){
+						this.isUploadBtn = true;
+						resData.splice(uploadIndex, 1);
+					}
+					this.buttons = resData;
 				}).catch((wrong) => {})
 		    },
 		}

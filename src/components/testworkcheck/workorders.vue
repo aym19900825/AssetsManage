@@ -113,7 +113,7 @@
 			<!--工作任务单详情/Houling-->
 			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 			<!--工作任务单详情/Houling-->
-			<sendtasklist ref="task" v-bind:page=page @refresh="refresh"></sendtasklist>
+			<sendtasklist ref="task" v-bind:page=page @refresh="refresh" @requests="requestData"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 			<!--任务处理/Aiyamin-->

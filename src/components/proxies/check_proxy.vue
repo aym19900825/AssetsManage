@@ -44,7 +44,7 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="100px">
+									<el-form-item label="委托方名称" prop="V_NAME"  label-width="100px">
 										<!-- <el-input v-model="searchList.V_NAME"  @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
@@ -73,14 +73,20 @@
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
+									<el-form-item label="完成日期（开始）" prop="COMPDATE" label-width="130px">
+										<el-date-picker v-model="searchList.COMPDATE_where_date_from" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
+									</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="6">
+									<el-form-item label="完成日期（结束）" prop="COMPDATE" label-width="130px">
+										<el-date-picker v-model="searchList.COMPDATE_where_date_to" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATEDesc" label-width="70px">
-										<el-select clearable v-model="searchList.STATEDesc" placeholder="选择状态" style="width: 100%">
+									<el-form-item label="状态" prop="STATE" label-width="70px">
+										<el-select clearable v-model="searchList.STATE_wheres" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
 										</el-select>
@@ -204,6 +210,14 @@
 				{
 					value: '4',
 					label: '中止'
+				},
+				 {
+					value: '5',
+					label: '已分配'
+				},
+				{
+					value: '15',
+					label: '已回退'
 				},
 				{
 					value: '0',
@@ -378,7 +392,7 @@
 				};
 				this.requestData('init');
 			},
-			searchinfo(index) {
+			searchinfo() {
 				this.requestData('init');
 			},
 				//请求点击
@@ -481,9 +495,9 @@
 						type: 'warning'
 					});
 					return;
-				}else if(this.selUser[0].STATE !=3) {
+				}else if(this.selUser[0].STATE !=3&&this.selUser[0].STATE !=15) {
 					this.$message({
-						message: '此委托书暂不能下达任务，请确认【状态】是否通过!',
+						message: '此委托书暂不能下达任务，请确认【状态】!',
 						type: 'warning'
 					});
 					return;
@@ -501,7 +515,7 @@
 			breakoff(){
 				if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修中止的数据',
+						message: '请您选择要中止的数据',
 						type: 'warning'
 					});
 					return;

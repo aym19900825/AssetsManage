@@ -442,7 +442,7 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2||this.selUser[0].STATE == 5) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
@@ -493,7 +493,7 @@
 					return;
 				}else if(this.selUser[0].STATE !=3) {
 					this.$message({
-						message: '此委托书暂不能下达任务，请确认【状态】是否通过!',
+						message: '此委托书暂不能下达任务，请查看【状态】!',
 						type: 'warning'
 					});
 					return;

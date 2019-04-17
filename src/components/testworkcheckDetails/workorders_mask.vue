@@ -1728,7 +1728,7 @@
 							});
 							this.show = false;
 							//重新加载数据
-							this.$emit('requests');
+							this.$emit('request');
 						}
 					}).catch((err) => {
 					});

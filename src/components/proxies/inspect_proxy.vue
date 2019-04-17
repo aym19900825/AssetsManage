@@ -44,7 +44,7 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
 								<el-col :span="6">
-									<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="100px">
+									<el-form-item label="委托方名称" prop="V_NAME"  label-width="100px">
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
 											   filterable 

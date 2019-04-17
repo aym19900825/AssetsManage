@@ -100,7 +100,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品来源" prop="ITEM_SOURCE" label-width="110px">
+											<el-form-item label="样品数量" prop="ITEM_SOURCE" label-width="110px">
 												<el-select v-model="workorderForm.ITEM_SOURCE" style="width: 100%" :disabled="edit">
 													<el-option v-for="(data,index) in Select_ITEM_SOURCE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
@@ -291,7 +291,7 @@
 											 :default-sort="{prop:'workorderbasisList', order: 'descending'}" @selection-change="SelChange">
 												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
-												<el-table-column label="检验/检测依据" prop="S_NAME" sortable  width="350px">
+												<el-table-column label="检验/检测依据" prop="S_NAME" sortable  width="300px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.S_NAME" placeholder="请输入">
@@ -300,7 +300,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="P_DESC" label="检测项目名称" sortable width="240px">
+												<el-table-column prop="P_DESC" label="检测项目名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
 														</el-input>
@@ -308,7 +308,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="要求" sortable width="150px">
+												<el-table-column prop="REMARKS" label="要求" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
@@ -337,16 +337,16 @@
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="ASSIST_PERSION" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSION" label="助手" width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ASSIST_PERSION'" >
-															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择"  multiple >
+															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择" multiple >
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
 												</el-table-column>
-												<el-table-column prop="QUATITY" label="样品数量" sortable width="160px">
+												<el-table-column prop="QUATITY" label="样品数量" width="80px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.QUATITY'" >
 															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
@@ -355,7 +355,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="250px">
+												<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="180px">
 													<template slot-scope="scope">
 														<el-radio-group v-model="scope.row.COMPLETE_MODE">
 																<el-radio label="加急" class="red"></el-radio>
@@ -382,11 +382,11 @@
 												
 												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
-												<el-table-column prop="VENDOR" label="承包方名称" sortable width="260px">
+												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDOR">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
 														</el-input>
-														<span v-else>{{scope.row.VENDOR}}</span>
+														<span v-else>{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
 
@@ -436,7 +436,7 @@
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="ASSIST_PERSIONDesc" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSIONDesc" label="助手" width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ASSIST_PERSIONDesc'" >
 															<el-select clearable v-model="scope.row.ASSIST_PERSIONDesc" placeholder="请选择"  multiple>
@@ -446,7 +446,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="QUATITY" label="样品数量" sortable width="110px">
+												<el-table-column prop="QUATITY" label="样品数量" width="80px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.QUATITY'" >
 															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
@@ -769,7 +769,7 @@
 				this.workorderForm.PRODUCT = '';
 				this.workorderForm.PRO_NUM = '';
 				this.workorderForm.S_NUM = '';
-				this.workorderForm.WORKORDER_PROJECTList    = [];
+				this.workorderForm.WORKORDER_PROJECTList = [];
 				ITEM_PROFESSIONAL_GROUP:'';//清空承接人数据
 			},
 			//产品类别放大镜

@@ -1367,8 +1367,9 @@
 					}
 					this.basissnums = basissnums.toString(',');
 					this.page.currentPage = 1;
-					this.requestBasis();
+					this.requestBasis();//检测依据数据接口
 					this.requestnum = '4';
+					console.log(this.editPlan.CJDW);
 					// this.dialogVisible = true;
 					this.basissnums = '';
 				}
@@ -1382,7 +1383,7 @@
 					});
 				}else{
 					this.page.currentPage = 1;
-					this.requestProject();
+					this.requestProject();//检测项目与要求数据接口
 					this.requestnum = '5';
 					this.projectpnums = '';
 				}
@@ -1409,6 +1410,7 @@
 					STARTETIME: this.searchList.STARTETIME,
 				};
 				var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.editPlan.PRO_NUM+'&NUM_wheres='+ this.editPlan.NUM +'&S_NUM_where_not_in='+this.basissnums+'&DEPTID_wheres='+this.editPlan.CJDW;
+				
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

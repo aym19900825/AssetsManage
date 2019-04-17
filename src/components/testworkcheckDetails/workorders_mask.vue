@@ -359,17 +359,17 @@
 												<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 													<el-table-column type="index" label="序号" width="50">
 														<template slot-scope="scope">
-															<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+															<span> {{scope.$index+1}} </span>
 														</template>
 													</el-table-column>
 
 													<el-table-column label="检验/检测依据" prop="S_NAME" sortable width="260px">
 													</el-table-column>
 
-													<el-table-column prop="P_DESC" label="检测项目名称" sortable width="240px">
+													<el-table-column label="检测项目名称" prop="P_DESC" sortable width="240px">
 													</el-table-column>
 
-													<el-table-column prop="REMARKS" label="要求" sortable width="300px">
+													<el-table-column label="要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
 
 													<el-table-column prop="INSPECT_GROUPDesc" label="专业组" sortable width="120px">
@@ -397,7 +397,7 @@
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														<span> {{scope.$index+1}} </span>
 													</template>
 												</el-table-column>
 
@@ -500,7 +500,7 @@
 													
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														<span> {{scope.$index+1}} </span>
 													</template>
 												</el-table-column>
 
@@ -534,7 +534,7 @@
 
 														<el-table-column type="index" label="序号" width="50">
 															<template slot-scope="scope">
-																<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+																<span> {{scope.$index+1}} </span>
 															</template>
 														</el-table-column>
 
@@ -546,7 +546,6 @@
 
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
-														
 													</el-table>
 
 												
@@ -618,7 +617,7 @@
 						</el-table-column>
 						<el-table-column type="index" label="序号" width="50">
 							<template slot-scope="scope">
-								<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+								<span> {{scope.$index+1}} </span>
 							</template>
 						</el-table-column>
 						<el-table-column label="用户名" sortable width="140px" prop="username">

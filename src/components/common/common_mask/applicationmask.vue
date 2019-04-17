@@ -128,7 +128,13 @@
 	    this.selUser = [];
 	    this.selUser.push(row);
 	    this.$refs.table.clearSelection();
-		  this.$refs.table.toggleRowSelection(row);
+			this.$refs.table.toggleRowSelection(row);
+			this.table.forEach(item => {
+          // 排他,每次选择时把其他选项都清除
+          if (item.id !== row.id) {
+            item.checked = false
+					}
+			});
   },	
 	searchinfo() {
 		this.page.currentPage = 1;

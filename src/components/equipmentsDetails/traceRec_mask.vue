@@ -75,6 +75,7 @@
 
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="save('Update')">保存</el-button>
+							<el-button type="primary" @click="save('submitTime')">提交</el-button>
 							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 							<!-- <el-button type="primary" @click='submitForm'>提交</el-button> -->
@@ -586,29 +587,34 @@
 					if (valid) {
 						this.$axios.post(url, _this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success',
-								});
-								if(opt=='Update'){
-									this.$emit('request');
-									this.resetForm();
-									this.show=false;
+								if(opt == 'submitTime'){
+									this.submitTime();
 								}else{
-									this.$emit('request');
-									this.resetForm();
-									this.show=true;
+									this.$message({
+										message: '保存成功',
+										type: 'success',
+									});
+									if(opt=='Update'){
+										this.$emit('request');
+										this.resetForm();
+										this.show=false;
+									}else{
+										this.$emit('request');
+										this.resetForm();
+										this.show=true;
+									}
+									if(opt == 'docUpload'){
+										this.docParm.recordid = res.data.datas.id;
+										this.docParm.model = 'edit';
+										this.$refs.docTable.autoLoad();
+										this.dataInfo.ID = res.data.datas.id;
+										this.dataInfo.RECORDNUM = res.data.datas.RECORDNUM;
+									}else{
+										this.$emit('request');
+										this.resetForm();
+									}
 								}
-								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
-									this.docParm.model = 'edit';
-									this.$refs.docTable.autoLoad();
-									this.dataInfo.ID = res.data.datas.id;
-									this.dataInfo.RECORDNUM = res.data.datas.RECORDNUM;
-								}else{
-									this.$emit('request');
-									this.resetForm();
-								}
+								
 							}else{
 
 							}
@@ -623,6 +629,24 @@
 					}
 				});
 			},
+			submitTime(){
+				var url = this.basic_url + '/api-apps/app/pmPlan/operate/setConfirmDate';
+				this.$axios.post(url, {
+					pmnum: this.dataInfo.PMNUM,
+					c_date: this.dataInfo.C_DATE
+				}).then((res) => {
+					if(res.data.resp_code == '0'){
+						this.$emit('request');
+						this.resetForm();
+					}else{
+						this.message({
+							message: res.data.message,
+							type: 'warning'
+						});
+					}
+				}).catch((err) => {
+				});
+			}
 		},
 		mounted() {
 			var url = this.basic_url + '/api-apps/app/asset';

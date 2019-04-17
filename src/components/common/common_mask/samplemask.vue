@@ -14,7 +14,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="7">
-						<el-form-item label="委托单位" prop="V_NAME">
+						<el-form-item label="委托方名称" prop="V_NAME">
 							<el-input v-model="searchList.V_NAME"></el-input>
 						</el-form-item>
 					</el-col>
@@ -63,7 +63,7 @@
 			</el-table-column>
 			<el-table-column label="样品类别" sortable width="200px" prop="TYPE">
 			</el-table-column>
-			<el-table-column label="委托单位" sortable width="200px" prop="V_NAME">
+			<el-table-column label="委托方名称" sortable width="200px" prop="V_NAME">
 			</el-table-column>
 			<el-table-column label="生产单位" sortable width="200px" prop="P_NAME">
 			</el-table-column>
@@ -115,7 +115,7 @@
 		},
 		searchList: {
 			ITEMNUM:'',//样品编号
-			V_NAME: '',//委托单位名称
+			V_NAME: '',//委托方名称名称
 			DESCRIPTION: '',//样品名称
 			ACCEPT_PERSON: '',//收样人
 			TYPE: '',//样品类别
@@ -225,7 +225,7 @@
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
 			ITEMNUM: this.searchList.ITEMNUM,//样品编号
-			V_NAME: this.searchList.V_NAME,//委托单位名称
+			V_NAME: this.searchList.V_NAME,//委托方名称名称
 			DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
 			ACCEPT_PERSON: this.searchList.ACCEPT_PERSON,//收样人
 			TYPE: this.searchList.TYPE,//样品类别

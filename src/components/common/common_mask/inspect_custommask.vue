@@ -242,8 +242,8 @@
 				var itemid=this.selUser[0].itemid;
 				var itemnum=this.selUser[0].itemnum;
 				var customarr=[];
-				customarr.push(this.selUser[0].customerid);//委托单位id
-				customarr.push(this.selUser[0].customername);//委托单位名称
+				customarr.push(this.selUser[0].customerid);//委托方名称id
+				customarr.push(this.selUser[0].customername);//委托方名称名称
 				customarr.push(this.selUser[0].customeraddress);//地址
 				customarr.push(this.selUser[0].customerzipcode);//邮编
 				customarr.push(this.selUser[0].customercode);//信用代码

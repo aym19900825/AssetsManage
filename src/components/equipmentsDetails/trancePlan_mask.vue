@@ -38,7 +38,7 @@
 
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :placeholder="item.placeholder"></el-input>
 
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" :placeholder="item.placeholder" v-if="item.type=='date'" :disabled="noedit">
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" :placeholder="item.placeholder" v-if="item.type=='date'" :disabled="noedit || item.disabled">
 										</el-date-picker>
 
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
@@ -114,8 +114,47 @@
 				<!--底部-->
 			</div>
 			<!--设备名称 Begin-->
-			<el-dialog title="设备" :modal-append-to-body="false" :visible.sync="dialogVisname" width="80%" :before-close="handleClose">
-				<el-table :header-cell-style="rowClass" :data="assetList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'assetList', order: 'descending'}" @selection-change="SelectChange" v-loadmore="loadMore">
+			<el-dialog title="设备" 
+					  :modal-append-to-body="false" 
+					  :visible.sync="dialogVisname" 
+					  width="80%" 
+					  :before-close="handleClose">
+				<div>
+					<el-form inline-message :model="searchList" label-width="70px">
+						<el-row :gutter="10">
+							<el-col :span="5">
+								<el-form-item label="计划编号" prop="ASSETNUM">
+									<el-input v-model="searchList.ASSETNUM" @keyup.enter.native="searchinfo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="5">
+								<el-form-item label="设备名称" prop="DESCRIPTION">
+									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="制造商" prop="VENDOR" label-width="100px">
+									<el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
+				<el-table :header-cell-style="rowClass" 
+						  :data="assetList" 
+						  border 
+						  ref="table"
+						  stripe 
+						  height="360px" 
+						  style="width: 100%;" 
+						  :default-sort="{prop:'assetList', order: 'descending'}"
+						  @selection-change="SelectChange" 
+						  @current-change="singleTable"
+						  v-loadmore="loadMore">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM">
@@ -194,6 +233,11 @@
 			return {
 				loadSign: true, //加载
 				commentArr: {},
+				searchList: {
+					'ASSETNUM': '',
+					'DESCRIPTION': '',
+					'VENDOR': ''
+				},
 				docParm: {
 					'model': 'new',
 					'appname': '',
@@ -354,6 +398,7 @@
 						prop: 'PM_START_END',
 						width: '50%',
 						type: 'date',
+						disabled: true,
 						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
@@ -395,7 +440,16 @@
 						type: 'date',
 						placeholder: '请选择',
 						displayType: 'inline-block'
-					}
+					},
+					// {
+					// 	label: '溯源记录确认时间',
+					// 	prop: 'CONFIRM_DATE',
+					// 	width: '50%',
+					// 	type: 'date',
+					// 	disabled: true,
+					// 	placeholder: '请选择',
+					// 	displayType: 'inline-block'
+					// },
 				],
 				otherInfo: [
 					{
@@ -504,6 +558,10 @@
 			},
 			SelectChange(val){
 				this.selName = val;
+			},
+			singleTable(row){
+				this.$refs.table.clearSelection();
+				this.$refs.table.toggleRowSelection(row);
 			},
 			sizeChange(val) {
 		      this.page.pageSize = val;
@@ -809,10 +867,28 @@
 					this.requestData()
 				}
 			},
+			searchinfo(){
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			resetbtn(){
+				this.searchList = {
+					ASSETNUM: '',
+					DESCRIPTION: '',
+					VENDOR: ''
+				};
+				this.page.currentPage = 1;
+				this.requestData();
+			},
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
+					ASSETNUM: this.searchList.ASSETNUM,
+					DESCRIPTION: this.searchList.DESCRIPTION,
+					VENDOR: this.searchList.VENDOR,
+					ISPM: 1,
+					ISCREATED: 0
 				}
 				var url = this.basic_url + '/api-apps/app/asset';
 				this.$axios.get(url, {

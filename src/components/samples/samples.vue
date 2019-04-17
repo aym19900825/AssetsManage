@@ -41,7 +41,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托单位" prop="V_NAME">
+									<el-form-item label="委托方名称" prop="V_NAME">
 										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
@@ -121,9 +121,11 @@
 								</el-table-column>
 								<el-table-column label="样品名称" sortable width="200px" prop="DESCRIPTION" v-if="this.checkedName.indexOf('样品名称')!=-1">
 								</el-table-column>
+								<el-table-column label="产品名称" sortable width="300px" prop="PRODUCT" v-if="this.checkedName.indexOf('产品名称')!=-1">
+								</el-table-column>
 								<el-table-column label="产品类别" sortable width="300px" prop="PRODUCT_TYPE" v-if="this.checkedName.indexOf('产品类别')!=-1">
 								</el-table-column>
-								<el-table-column label="委托单位" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="委托方名称" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称')!=-1">
 								</el-table-column>
 								<el-table-column label="生产单位" sortable width="200px" prop="P_NAMEDesc" v-if="this.checkedName.indexOf('生产单位')!=-1">
 								</el-table-column>
@@ -187,12 +189,12 @@
 					:data="sampleList"
 					highlight-current-row
 					@current-change="selCurrentChange"
-
+					@selection-change="selSample"
 					border
 					stripe
 					style="width: 100%;"
 					v-show="sampleType=='2'"
-					@selection-change="selSample">
+					>
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="ITEMNUM" label="样品编号" sortable  ></el-table-column>
 					<el-table-column prop="ITEM_STEP" label="样品序号" sortable ></el-table-column>
@@ -201,7 +203,7 @@
 				<img  id="barcode" :src="codeUrl" alt="条码" v-show="codeUrl!=''"/>
 			</div>
 			<span slot="footer">
-				<el-button type="primary" @click="genCode">生成条码</el-button>
+				<!-- <el-button type="primary" @click="genCode">生成条码</el-button> -->
 				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
 					<el-button type="primary" v-show="codeUrl!=''">打印条码</el-button>
 				</router-link>
@@ -237,7 +239,7 @@
 						{ required: true, message: '请选择条码类型', trigger: 'change' }
 					],
 				},
-				sampleType: '1',
+				sampleType: '2',
 				codeType: '2',
 				appName: 'item',
 				codeDialog: false,
@@ -254,7 +256,9 @@
 					'样品编号',
 					'样品名称',
 					'产品类别',
+					'产品名称',
 					'委托单位',
+					'委托方名称',
 					'生产单位',
 					'型号',
 					'数量',
@@ -274,11 +278,15 @@
 						prop: 'DESCRIPTION'
 					},
 					{
+						label: '产品名称',
+						prop: 'PRODUCT'
+					},
+					{
 						label: '产品类别',
 						prop: 'PRODUCT_TYPE'
 					},
 					{
-						label: '委托单位',
+						label: '委托方名称',
 						prop: 'P_NAME'
 					},
 					{
@@ -322,7 +330,7 @@
 				up: false,
 				searchList: {
 					ITEMNUM:'',//样品编号
-					V_NAME: '',//委托单位名称
+					V_NAME: '',//委托方名称名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
 					// P_NAME: '',//生产单位名称
@@ -358,10 +366,12 @@
 				this.selSampleData = [];
 				this.selSampleData.push(row);
 				this.$refs.singleTable.clearSelection();
-       			this.$refs.singleTable.toggleRowSelection(row);
+				this.$refs.singleTable.toggleRowSelection(row);
+				this.genCode();
 			},
 			selSample(val){
 				this.selSampleData = val;
+				this.genCode();
 			},
 			genCode(){
 				if(this.sampleType=='2'&&this.selSampleData.length==0){
@@ -415,6 +425,11 @@
 				var dataid = this.selMenu[0].ID;
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
 					this.sampleList = res.data.ITEM_LINEList;
+					if(this.sampleList.length>0){
+						setTimeout(() => {
+							this.selCurrentChange(res.data.ITEM_LINEList[0]);
+						}, 0);
+					}
 				}).catch((err) => {});
 			},
 			setSelData(val){
@@ -454,7 +469,7 @@
 			resetbtn(){
 				this.searchList = {
 					ITEMNUM:'',//样品编号
-					V_NAME: '',//委托单位名称
+					V_NAME: '',//委托方名称名称
 					DESCRIPTION: '',//样品名称
 					ACCEPT_PERSON: '',//收样人
 					TYPE: '',//样品类别
@@ -501,17 +516,19 @@
 					return;
 				} else {
 					this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
-					if(this.selMenu[0].ITEM_TYPE =='2'){
-						this.getSampleList();
-						this.sampleType = '2';
-					}
+					// if(this.selMenu[0].ITEM_TYPE =='2'){
+					// 	this.getSampleList();
+					// 	this.sampleType = '2';
+					// }
+					this.getSampleList();
+					this.sampleType = '2';
 					this.codeDialog = true;
 				}
 			},
 			resetCode(){
 				this.codeDialog = false;
 				this.sampleTypeFlag = false;
-				this.sampleType = '1';
+				this.sampleType = '2';
 				this.codeType = '2';
 				this.selMenu = [];
 				this.selSampleData = [];

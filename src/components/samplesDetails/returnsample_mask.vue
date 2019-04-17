@@ -361,7 +361,12 @@
 					}).then((res) => {
 						if(JSON.stringify(res.data)!='{}'){
 							var data = res.data;
-							this.samplesForm.TYPE = data.TYPE;
+							this.samplesForm.TYPE = data.PRODUCT_TYPE;
+							this.samplesForm.PRODUCT = data.PRODUCT;
+
+							this.samplesForm.PRO_NUM = data.PRO_NUM;
+							this.samplesForm.P_NUM = data.P_NUM;
+
 							this.samplesForm.DESCRIPTION = data.DESCRIPTION;
 							this.samplesForm.MODEL = data.MODEL;
 							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;

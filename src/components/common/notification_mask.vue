@@ -44,9 +44,9 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''" style="width:100%">
 										<el-row v-if="!addtitle">
-											<el-col :span="4" v-if="!addtitle" >
+											<el-col :span="6" v-if="!addtitle" >
 												<el-radio label="1">监督抽查</el-radio>
 											</el-col>
 											<el-col :span="6">
@@ -58,8 +58,9 @@
 											<el-col :span="6">
 												<el-radio label="4">质量抽查复查</el-radio>
 											</el-col>
-										</el-row>	
-											<el-col :span="4">
+										</el-row>
+										<el-row>
+											<el-col :span="6">
 												<el-radio label="5">生产许可证</el-radio>
 											</el-col>
 											<el-col :span="6">
@@ -80,7 +81,7 @@
 											<el-col :span="6">
 												<el-radio label="11">其它</el-radio>
 											</el-col>
-											
+										</el-row>
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
@@ -613,7 +614,7 @@
 					], //受检产品型号
 					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
+					QUALITY: [{required: true,message: '必填', trigger:'blur',},{trigger:'blur', validator:this.Validators.isInteger}], //样品数量
 					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
 					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [

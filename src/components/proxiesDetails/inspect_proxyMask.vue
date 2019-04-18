@@ -972,7 +972,7 @@
 					],//型号
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求

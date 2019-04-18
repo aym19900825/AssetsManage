@@ -43,8 +43,8 @@
 					<div v-show="search">
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
-								<el-col :span="6">
-									<el-form-item label="委托方名称" prop="V_NAME"  label-width="100px">
+								<el-col :span="5">
+									<el-form-item label="委托方名称" prop="V_NAME"  label-width="130px">
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
 											   filterable 
@@ -56,36 +56,36 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="70px">
+									<el-form-item label="样品名称" prop="ITEM_NAME" label-width="130px">
 										<el-input v-model="searchList.ITEM_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="100px">
+									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="130px">
 										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="110px">
+									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="130px">
 										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
-								<el-col :span="6">
+								<el-col :span="5">
 									<el-form-item label="完成日期（开始）" prop="COMPDATE" label-width="130px">
 										<el-date-picker v-model="searchList.COMPDATE_where_date_from" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
-								<el-col :span="6">
+								<el-col :span="5">
 									<el-form-item label="完成日期（结束）" prop="COMPDATE" label-width="130px">
 										<el-date-picker v-model="searchList.COMPDATE_where_date_to" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%" @keyup.enter.native="searchinfo">
 									</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="状态" prop="STATE" label-width="70px">
+									<el-form-item label="状态" prop="STATE" label-width="130px">
 										<el-select clearable v-model="searchList.STATE_wheres" placeholder="选择状态" style="width: 100%">
 											<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 											</el-option>
@@ -587,7 +587,8 @@
 			//报表
 			reportdata(){
 				this.reportData.app=this.inspectPro;
-				this.$refs.reportChild.visible();
+			  this.$refs.reportChild.visible();
+				// this.$router.push({path: '/report'})
 			},
 			// 删除
 			delinfo() {

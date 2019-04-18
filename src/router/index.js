@@ -90,7 +90,7 @@ const printCode  = r => require.ensure([], () => r(require('@/components/samples
 
 const loginlog  = r => require.ensure([], () => r(require('@/components/loginlog/loginlog')), 'loginlog')//打印条码
 const operlog  = r => require.ensure([], () => r(require('@/components/loginlog/operlog')), 'operlog')//打印条码
-
+const report = r => require.ensure([], () => r(require('@/components/common/common_mask/report')), 'report')
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -107,6 +107,11 @@ Vue.use(Router)
       path: '/task',
       name: 'task',
       component: task
+    },
+    {//报表
+      path: '/report',
+      name: 'report',
+      component: report
     },
     {//年度计划
       path: '/annual_plan',

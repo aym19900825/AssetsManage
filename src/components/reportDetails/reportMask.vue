@@ -167,6 +167,7 @@
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
 				this.$axios.get(url, {}).then((res) => {
 					this.reportsList = res.data.datas;
+					console.log(res.data.datas);
 					this.innerVisible = true;
 				}).catch((wrong) => {
 				})

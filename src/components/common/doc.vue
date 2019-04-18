@@ -136,8 +136,9 @@ export default {
                 + '&deptfullname=' + this.docParm.deptfullname
                 + '&recordid=' + this.docParm.recordid
                 + '&appname=' + this.docParm.appname
-                + '&appid=' + this.docParm.appid;
-        // window.open(url);
+                + '&appid=' + this.docParm.appid
+                + '&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+            window.open(url);
         },
         uploadTip(){
             this.tipSaveShow = true;
@@ -215,9 +216,9 @@ export default {
                 this.getData();
             })
         },
-        getData(){
-            if(this.docParm.model == 'new'){
-                res.data.fileList = [];
+        getData(opt){
+            if(this.docParm.model == 'new' || opt=='new'){
+                this.doc = [];
                 return false;
             }
             var pageNum = this.page.currentPage - 1;

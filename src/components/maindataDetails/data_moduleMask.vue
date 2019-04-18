@@ -174,8 +174,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="save('Update')">保存</el-button>
-							<el-button type="success" @click="save('Submit')" v-show="addtitle">保存并继续</el-button>
+							<el-button type="primary" @click="save('save')">保存</el-button>
+							<el-button type="success" @click="save('update')" v-show="addtitle">保存并继续</el-button>
 							<!-- <el-button v-if="modify" type="success" @click="update('CATEGORY')">启用</el-button> -->
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -523,10 +523,9 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.id;
-									this.CATEGORY.PT_NUM = res.data.datas.PT_NUM;
+									this.CATEGORY.PT_NUM = res.data.datas.NUM;
 								}else{
 									if(opt == 'save'){
-										this.show = false;
 										this.$emit('request');
 									}
 									if(opt == 'update'){

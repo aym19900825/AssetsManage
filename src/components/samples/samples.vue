@@ -399,7 +399,7 @@
 				}
 				this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
 					if(res.data.resp_code == 0) {
-						this.sampleTypeFlag = false;
+						// this.sampleTypeFlag = false;
 						this.codeDialog = true;
 						this.codeUrl = this.code_url + res.data.datas;
 						this.saveData();
@@ -515,7 +515,8 @@
 					});
 					return;
 				} else {
-					this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
+					// this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
+					this.sampleTypeFlag = !this.selMenu[0].ISRECEIVE ? true : false;
 					// if(this.selMenu[0].ITEM_TYPE =='2'){
 					// 	this.getSampleList();
 					// 	this.sampleType = '2';
@@ -527,7 +528,7 @@
 			},
 			resetCode(){
 				this.codeDialog = false;
-				this.sampleTypeFlag = false;
+				this.sampleTypeFlag = true;
 				this.sampleType = '2';
 				this.codeType = '2';
 				this.selMenu = [];

@@ -85,6 +85,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ISQUALIFIED'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
+																<el-option key="1" label="" value=""></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
 																<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -363,9 +364,9 @@
 				}
 			},
 			startup(){
-				var url = this.basic_url + '/api-apps/app/workorder/operate/submitApproval/'+this.detailId;
+				var url = this.basic_url + '/api-apps/app/workorder/operate/submitApproval?ID='+this.detailId;
 
-				var projectList = this.workorderForm.WORKORDER_PROJECT_List;
+				var projectList = this.workorderForm.WORKORDER_PROJECTList;
 				var contractList = this.workorderForm.WORKORDER_CONTRACTList;
 				var fileList = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
 				//数据验证
@@ -418,6 +419,8 @@
 									message:res.data.resp_msg,
 									type: 'success'
 								});
+								this.show = false;
+								this.$emit('requests');
 							}
 						});
 					}else{

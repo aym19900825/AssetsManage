@@ -516,8 +516,8 @@
 						{ trigger:'blur', validator: this.Validators.isSpecificKey}
 					],//样品名称
 					MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
-					SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
-					SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
+					// SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
+					// SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
 					PRODUCT_CODE: [
 						{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
 					],//产品标识代码

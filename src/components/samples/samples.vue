@@ -164,7 +164,7 @@
 				<el-form label-width="120px" :rules="rules" ref="codeForm">
 					<el-row>
 						<el-col :span="8">
-							<el-form-item label="样品类型" v-show="sampleTypeFlag && codeUrl==''">
+							<el-form-item label="样品类型" v-show="sampleTypeFlag">
 								<el-radio-group v-model="sampleType" @change="getSampleList">
 									<el-radio label="1">样品批次</el-radio>
 									<el-radio label="2">样品序号</el-radio>
@@ -534,7 +534,7 @@
 				this.selSampleData = [];
 				this.sampleList = [];
 				this.codeUrl = '';
-				this.requestData();
+				// this.requestData();
 			},
 			printCode(){
 				let routeUrl = this.$router.resolve({

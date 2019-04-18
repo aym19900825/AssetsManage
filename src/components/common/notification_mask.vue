@@ -466,7 +466,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -1052,16 +1052,29 @@
 						this.reviewtitle  = false;
 					}
 					this.show = true;
-					this.users();
-					if(this.users.indexOf(this.username) != -1){
-						this.approval=true;
-						this.start=false;
-					}else{
-						this.approval=false;
-						this.start=false;
-					}
+				
 				}).catch((err) => {
 				});
+			},
+			//刷新页面的审批按钮
+			refresh(){
+				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							// var users='';
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+					}
+				});	
 			},	
 			// 这里是修改
 			detail(dataid) {
@@ -1488,16 +1501,7 @@
 				}).catch((err) => {
 				});
 			},
-			getusers(){//获取当前审批人的name
-				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
-					this.$axios.get(url, {}).then((res) => {
-							var resullt=res.data.datas;
-							// var users='';
-							for(var i=0;i<resullt.length;i++){
-							this.users =this.users + resullt[i].username+",";
-						}
-				});
-			},
+		
 		},
 		mounted() {
 			this.getCompany();

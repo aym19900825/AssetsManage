@@ -438,6 +438,7 @@
 					});
 				}
 			},
+			//导入文件上传
 			uploadUrl(){
                 var url = this.basic_url +'/api-apps/app/rawDataTem/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;

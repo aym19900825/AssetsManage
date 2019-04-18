@@ -18,6 +18,32 @@
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
+								<!--导入上传 Begin-->
+								<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item>
+											<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+										</el-dropdown-item>
+										
+										<el-dropdown-item>
+											<el-upload
+											ref="upload"
+											class="upload"
+											:action="uploadUrl()"
+											:on-success="fileSuccess"
+											:limit=1
+											multiple
+											method:="post"
+											:file-list="fileList">
+												<i class="icon-upload-cloud"></i> 上传
+											</el-upload>
+										</el-dropdown-item>
+									</el-dropdown-menu>
+								</el-dropdown>
+								<!--导入上传 End-->
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -120,6 +146,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				fileList:[],//文件上传的接收数据
 				commentArr: {},
 				value: '',
 				checkedName: [
@@ -209,6 +236,15 @@
 			},
 			tableControle(data) {
 				this.checkedName = data;
+			},
+			fileSuccess(){//上传成功后返回数据
+				this.page.currentPage = 1;
+				this.requestData('init');
+			},
+			handleSuccess(response, file, fileList){//上传文件列表
+				console.log(response);
+				console.log(file);
+				console.log(fileList);
 			},
 			resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
@@ -423,10 +459,29 @@
 					});
 				}
 			},
-			// 导入
-			importData() {
-
+			// 导入文件上传
+			uploadUrl(){
+					var url = this.basic_url +'/api-apps/app/workIns/importExc?access_token='+sessionStorage.getItem('access_token');
+					return url;
 			},
+          	
+			// 导入
+			download() {
+				var url = this.basic_url + '/api-apps/app/workIns/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var blob = this.response;
+							var objecturl = URL.createObjectURL(blob);
+							window.location.href = objecturl;
+						}
+					}
+					xhr.send();
+			},
+
 			// 导出
 			exportData() {
 				var selData = this.selMenu;

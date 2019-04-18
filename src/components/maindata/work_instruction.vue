@@ -160,7 +160,7 @@
 						prop: 'DEPTIDDesc'
 					}
 				],
-				selUser: [],
+				selMenu: [],
 				WORK_INSTRUCTIONList: [],
 				search: false,
 				show: false,
@@ -193,7 +193,7 @@
 		},
 		methods: {
 			setSelData(val){
-				this.selUser = val;
+				this.selMenu = val;
 			},
 			//机构值
 			getCompany() {
@@ -300,20 +300,20 @@
 			},
 			//修改类别
 			modify() {
-				if(this.selUser.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selUser.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.WORK_INSTRUCTION = this.selUser[0];
+					this.WORK_INSTRUCTION = this.selMenu[0];
 					this.$refs.instructionmask.detail();
 				}
 			},
@@ -328,7 +328,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -376,7 +376,7 @@
 			},
 			// 彻底删除
 			physicsDel() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -429,23 +429,39 @@
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/workIns/exportExc?access_token='+sessionStorage.getItem('access_token');
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择您要导出的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var exportid = [];
+					var ids;
+					for (var i = 0; i < selData.length; i++) {
+						exportid.push(selData[i].ID);
+					}
+						//ids为exportid数组用逗号拼接的字符串
+						ids = exportid.toString(',');
+           		var url = this.basic_url + '/api-apps/app/workIns/exportExc/'+ids+'?access_token='+sessionStorage.getItem('access_token');
           		var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
             	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
             	xhr.onload = function() {
-                	if (this.status == 200) {
-						var filename = "workIns.xls";
-						var blob = this.response;
-						var link = document.createElement('a');
-						var objecturl = URL.createObjectURL(blob);
-						link.href = objecturl;
-						link.download = filename;
-						link.click();
-                	}
-            	}
-            	xhr.send();
+								if (this.status == 200) {
+									var filename = "workIns.xls";
+									var blob = this.response;
+									var link = document.createElement('a');
+									var objecturl = URL.createObjectURL(blob);
+									link.href = objecturl;
+									link.download = filename;
+									link.click();
+								}
+							}
+						xhr.send();
+				}
 			},
 			// 打印
 			Printing() {

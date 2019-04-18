@@ -253,7 +253,7 @@
 
 				companyId: '',
 				deptId: '',
-				selUser: [],
+				selMenu: [],
 				standardList: [],
 				search: false,
 				show: false,
@@ -294,7 +294,7 @@
 
 		methods: {
 			setSelData(val){
-				this.selUser = val;
+				this.selMenu = val;
 			},
 			//上传成功后返回数据
 			fileSuccess(){
@@ -361,30 +361,30 @@
 		    	var isshowbtn=this.btn;
 		    	if(item.name=="添加"){
 					if(isshowbtn=='0'){
-                       this.$message({
+							this.$message({
 						message: '您没有添加的权限',
 						type: 'warning'
 					});
 					}else{
-                       this.openAddMgr();
+						this.openAddMgr();
 					}
 		    	}else if(item.name=="修改"){
 					if(isshowbtn=='0'){
-                       this.$message({
+						this.$message({
 						message: '您没有修改的权限',
 						type: 'warning'
 					});
 					}else{
-				        this.modify();
+						this.modify();
 					}
 		    	}else if(item.name=="彻底删除"){
 					if(isshowbtn=='0'){
-                       this.$message({
+						this.$message({
 						message: '您没有彻底删除的权限',
 						type: 'warning'
 					});
 					}else{
-      					this.physicsDel();
+						this.physicsDel();
 					}
 				}else if(item.name=="删除"){
 					if(isshowbtn=='0'){
@@ -399,6 +399,8 @@
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
 		    	 this.download();
+		    	}else if(item.name=="导出"){
+				 		this.exportData();
 		    	}else if(item.name=="配置关系"){
 		    	 this.Configuration();
 		    	}else if(item.name=="报表"){
@@ -415,21 +417,21 @@
 			},
 			//修改
 			modify() {
-				if(this.selUser.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selUser.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多个数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.dataInfo = this.selUser[0];
-					this.$refs.child.detail(this.selUser[0].ID);
+					this.dataInfo = this.selMenu[0];
+					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
 			//查看
@@ -443,7 +445,7 @@
 			},
 			// 删除
 			deluserinfo() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -491,7 +493,7 @@
 			},
 			//物理 删除
 			physicsDel() {
-				var selData = this.selUser;
+				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请您选择要删除的数据',
@@ -543,11 +545,11 @@
 				console.log(file);
 				console.log(fileList);
 			},
-			// 导入
+			//导入上传文件
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/inspectionSta/importExc?access_token='+sessionStorage.getItem('access_token');
-                return url;
-            },
+					var url = this.basic_url +'/api-apps/app/inspectionSta/importExc?access_token='+sessionStorage.getItem('access_token');
+					return url;
+			},
           	
 			// 导入
 			download() {
@@ -567,23 +569,39 @@
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/inspectionSta/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
-            	xhr.open('POST', url, true);
-            	xhr.responseType = "blob";
-            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            	xhr.onload = function() {
-                	if (this.status == 200) {
-						var filename = "inspectionSta.xls";
-						var blob = this.response;
-						var link = document.createElement('a');
-						var objecturl = URL.createObjectURL(blob);
-						link.href = objecturl;
-						link.download = filename;
-						link.click();
-                	}
-            	}
-            	xhr.send();
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择您要导出的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var exportid = [];
+					var ids;
+					for (var i = 0; i < selData.length; i++) {
+						exportid.push(selData[i].ID);
+					}
+						//ids为exportid数组用逗号拼接的字符串
+						ids = exportid.toString(',');
+						var url = this.basic_url + '/api-apps/app/inspectionSta/exportExc/'+ids+'?access_token='+sessionStorage.getItem('access_token');
+						var xhr = new XMLHttpRequest();
+						xhr.open('POST', url, true);
+						xhr.responseType = "blob";
+						xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+						xhr.onload = function() {
+							if (this.status == 200) {
+								var filename = "inspectionSta.xls";
+								var blob = this.response;
+								var link = document.createElement('a');
+								var objecturl = URL.createObjectURL(blob);
+								link.href = objecturl;
+								link.download = filename;
+								link.click();
+							}
+						}
+					xhr.send();
+				}
 			},
 			// 打印
 			Printing() {
@@ -605,8 +623,8 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			SelChange(val) { //选中值后赋值给一个自定义的数组：selUser
-				this.selUser = val;
+			SelChange(val) { //选中值后赋值给一个自定义的数组：selMenu
+				this.selMenu = val;
 			},
 			//Table默认加载数据
 			requestData(opt) {

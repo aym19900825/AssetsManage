@@ -22,14 +22,14 @@
 								<!-- 样品信息列表 Begin-->
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-										<el-tab-pane label="检测项目与要求" name="first">
+										<el-tab-pane label="检验检测项目与要求" name="first">
 											<div class="table-func table-funcb">
 												<el-button style="float:left;" type="success" size="mini" round @click="viewModule" v-show="!pageDisable">
 													<i class="icon-edit"></i><font>查看所有模板</font>
 												</el-button>
 											</div>
 							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
-												<el-table-column prop="P_DESC" label="检测项目名称" sortable>
+												<el-table-column prop="P_DESC" label="检验检测项目名称" sortable>
 												</el-table-column>
 							            		<el-table-column prop="REMARKS" label="技术要求" sortable>
 												</el-table-column>

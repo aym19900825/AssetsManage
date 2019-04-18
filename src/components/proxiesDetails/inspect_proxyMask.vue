@@ -866,8 +866,8 @@
 							PRODUCT_TYPE:'',//产品类别
 							PRO_NUM:'',//产品编号
 							PRODUCT:'',//产品名称
-							S_NUM:'',//检测依据编号
-							BASIS: '',//检测依据
+							S_NUM:'',//检验检测依据编号
+							BASIS: '',//检验检测依据
 							PROJ_NUM:'',//检测项目编号
 							PROJECT_ID:'',//检测项目ID
 							P_REMARKS: '',//检测项目

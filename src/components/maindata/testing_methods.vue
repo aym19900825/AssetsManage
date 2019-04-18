@@ -385,7 +385,7 @@
 			modify() {//修改检验/检测方法编号数据
 				if(this.selMenu.length == 0) {
 					this.$message({
-						message: '请您选择要修改的数据',
+						message: '请选择您要修改的数据',
 						type: 'warning'
 					});
 					return;
@@ -414,7 +414,7 @@
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的数据',
+						message: '请选择您要删除的数据',
 						type: 'warning'
 					});
 					return;
@@ -458,7 +458,7 @@
 				var selData = this.selMenu;
 				if(selData.length == 0) {
 					this.$message({
-						message: '请您选择要删除的数据',
+						message: '请选择您要删除的数据',
 						type: 'warning'
 					});
 					return;
@@ -520,23 +520,39 @@
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/inspectionMet/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
-            	xhr.open('POST', url, true);
-            	xhr.responseType = "blob";
-            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            	xhr.onload = function() {
-                	if (this.status == 200) {
-						var filename = "inspectionMet.xls";
-						var blob = this.response;
-						var link = document.createElement('a');
-						var objecturl = URL.createObjectURL(blob);
-						link.href = objecturl;
-						link.download = filename;
-						link.click();
-                	}
-            	}
-            	xhr.send();
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择您要导出的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var exportid = [];
+					var ids;
+					for (var i = 0; i < selData.length; i++) {
+						exportid.push(selData[i].ID);
+					}
+					//ids为exportid数组用逗号拼接的字符串
+					ids = exportid.toString(',');
+					var url = this.basic_url + '/api-apps/app/inspectionMet/exportExc/'+ids+'?access_token='+sessionStorage.getItem('access_token');
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var filename = "inspectionMet.xls";
+							var blob = this.response;
+							var link = document.createElement('a');
+							var objecturl = URL.createObjectURL(blob);
+							link.href = objecturl;
+							link.download = filename;
+							link.click();
+						}
+					}
+					xhr.send();
+				}	
 			},
 			// 打印
 			Printing() {

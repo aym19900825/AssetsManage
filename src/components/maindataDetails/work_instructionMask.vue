@@ -447,12 +447,12 @@
 						var url = this.basic_url + '/api-apps/app/workIns/saveOrUpdate';
 						this.$axios.post(url, this.WORK_INSTRUCTION).then((res) => {
 							if(res.data.resp_code == 0) {
-								
 								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
+									this.docParm.recordid = res.data.datas.ID;
 									this.docParm.model = 'edit';
-									this.WORK_INSTRUCTION.ID = res.data.datas.id;
+									this.WORK_INSTRUCTION.ID = res.data.datas.ID;
 									this.WORK_INSTRUCTION.NUM = res.data.datas.NUM;
+									this.WORK_INSTRUCTION.WI_NUM = res.data.datas.WI_NUM;
 								}else{
 									this.$message({
 									message: '保存成功',

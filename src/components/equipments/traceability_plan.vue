@@ -124,6 +124,11 @@
 							<el-table-column label="设备编号" width="120" sortable prop="ASSETNUM" v-if="this.checkedName.indexOf('设备编号')!=-1">
 							</el-table-column>
 							<el-table-column label="设备名称" width="220" sortable prop="A_NAME" v-if="this.checkedName.indexOf('设备名称')!=-1">
+							</el-table-column>
+							<el-table-column label="是否确认溯源计划" width="180" sortable prop="ISCREATED" v-if="this.checkedName.indexOf('是否确认溯源计划')!=-1">
+								<template slot-scope="scope">
+									<p v-text="scope.row.ISCREATED=='1'?'是':'否'"></p>
+								</template>
 							</el-table-column>						
 							<el-table-column label="规格型号" width="180" sortable prop="MODEL" v-if="this.checkedName.indexOf('规格型号')!=-1">
 							</el-table-column>
@@ -362,7 +367,15 @@
 					});
 					return;
 				} else {
-					this.$refs.child.detail();
+					if(this.selUser[0].ISCREATED == '1'){
+						this.$message({
+							message: '此溯源计划已有确认的溯源记录，不可修改！',
+							type: 'warning'
+						});
+						return;
+					}else{
+						this.$refs.child.detail();
+					}
 				}
 			},
 			//查看

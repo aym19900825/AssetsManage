@@ -630,7 +630,7 @@
 				});
 			},
 			submitTime(){
-				var url = this.basic_url + '/api-apps/app/pmPlan/operate/setConfirmDate';
+				var url = this.basic_url + '/api-apps/app/pmRecord/operate/setConfirmDate';
 				this.$axios.post(url, {
 					pmnum: this.dataInfo.PMNUM,
 					c_date: this.dataInfo.C_DATE

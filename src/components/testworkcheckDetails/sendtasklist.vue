@@ -284,23 +284,21 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<!--检测项目与要求 Begin-->
-										<el-tab-pane label="检测项目与要求" name="first">
+										<el-tab-pane label="检验检测项目与要求" name="first">
 											<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260"
 											 @cell-click="iconOperation" style="width: 100%;" 
 											 :summary-method="getSummaries" :show-summary="true"
 											 :default-sort="{prop:'workorderbasisList', order: 'descending'}" @selection-change="SelChange">
 												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
-												<el-table-column label="检验/检测依据" prop="S_NAME" sortable  width="300px">
-													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.REMARKS'" >
-															<el-input size="small" v-model="scope.row.S_NAME" placeholder="请输入">
-                              </el-input> 
-														</el-form-item>	
-													</template>
-												</el-table-column>
 
-												<el-table-column prop="P_DESC" label="检测项目名称" sortable width="200px">
+												<el-table-column type="index" label="序号" width="50">
+														<template slot-scope="scope">
+															<span> {{scope.$index+1}} </span>
+														</template>
+													</el-table-column>
+
+												<el-table-column prop="P_DESC" label="检验检测项目名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">	
 														</el-input>
@@ -308,11 +306,11 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="要求" sortable width="200px">
+												<el-table-column prop="REMARKS" label="技术要求" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
-                              </el-input> 
+															</el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -350,7 +348,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.QUATITY'"  :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]">
 															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
-                              </el-input> 
+															</el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -375,8 +373,8 @@
 											</el-table>
 										</el-tab-pane>
 										<!--检测项目与要求 End-->
-										<!--分包项目 Begin-->
-										<el-tab-pane label="分包项目" name="second">
+										<!--分包项目与要求 Begin-->
+										<el-tab-pane label="分包项目与要求" name="second">
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID"
 											 border stripe :fit="true" highlight-current-row="highlight-current-row" 
 											 :summary-method="getSummarie" :show-summary="true" 
@@ -384,6 +382,13 @@
 												
 												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
+
+												<el-table-column type="index" label="序号" width="50">
+														<template slot-scope="scope">
+															<span> {{scope.$index+1}} </span>
+														</template>
+													</el-table-column>
+
 												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
@@ -396,7 +401,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.BASIS'" >
 															<el-input size="small" v-model="scope.row.BASIS" placeholder="请输入">
-                              </el-input> 
+															</el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -412,8 +417,7 @@
 												<el-table-column prop="REQUIRES" label="检验检测项目要求" sortable  width="240px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.REQUIRES'" >
-															<el-input size="small" v-model="scope.row.REQUIRES" placeholder="请输入">
-                              </el-input> 
+															<el-input size="small" v-model="scope.row.REQUIRES" placeholder="请输入"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -451,8 +455,7 @@
 												<el-table-column prop="QUATITY" label="样品数量" width="80px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.QUATITY'" >
-															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]">
-                              </el-input> 
+															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -476,7 +479,7 @@
 												</el-table-column>
 											</el-table>
 										</el-tab-pane>
-										<!--分包项目 End-->
+										<!--分包项目与要求 End-->
 									</el-tabs>
 									<!-- 备注 Begin-->
 									<el-row class="pt10">
@@ -1372,7 +1375,8 @@
 						this.workorderForm.WORKORDER_CONTRACTList[index].MASTER_INSPECTOR=[];
 					}
 				}
-				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid+'&id_not_in='+this.userid;
+
 				this.$axios.get(url, {}).then((res) => {
 					this.leader = res.data.data;
 				}).catch((err) => {

@@ -35,32 +35,35 @@
 												</el-table-column>
 												<el-table-column prop="UNIT" label="计量单位" sortable>
 												</el-table-column>
-												<el-table-column label="样品序号" sortable>
+												<el-table-column label="检测结果" sortable>
 													<template slot-scope="scope">
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
-														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
-															<el-option key="1" label="不合格" value="1"></el-option>
-															<el-option key="2" label="A类不合格" value="2"></el-option>
-															<el-option key="3" label="B类不合格" value="3"></el-option>
-														</el-select>
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" :rules="{required: true, message: '请输入', trigger: 'blur'}" style="margin-left: 0px;">
+															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
+																<el-option key="1" label="不合格" value="1"></el-option>
+																<el-option key="2" label="A类不合格" value="2"></el-option>
+																<el-option key="3" label="B类不合格" value="3"></el-option>
+															</el-select>
+														</el-form-item>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="模板" sortable>
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="pageDisable">	
-														</el-input>
+														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">查看模板</el-button>
 													</template>
 												</el-table-column>
-												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable>
+												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable width="220px">
 													<template slot-scope="scope">
-														<div class="block">
-															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
-															</el-date-picker>
-														</div>
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.INSPECT_DATE'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
+															<div class="block" style="margin-left: -110px;">
+																<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
+																</el-date-picker>
+															</div>
+														</el-form-item>
 													</template>
 												</el-table-column>
 							            	</el-table>
@@ -73,32 +76,35 @@
 												</el-table-column>
 												<el-table-column prop="UNIT" label="计量单位" sortable>
 												</el-table-column>
-												<el-table-column prop="UNIT" label="样品序号" sortable>
+												<el-table-column prop="UNIT" label="检测结果" sortable>
 													<template slot-scope="scope">
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
-														<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
-															<el-option key="1" label="不合格" value="1"></el-option>
-															<el-option key="2" label="A类不合格" value="2"></el-option>
-															<el-option key="3" label="B类不合格" value="3"></el-option>
-														</el-select>
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ISQUALIFIED'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
+															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
+																<el-option key="1" label="不合格" value="1"></el-option>
+																<el-option key="2" label="A类不合格" value="2"></el-option>
+																<el-option key="3" label="B类不合格" value="3"></el-option>
+															</el-select>
+														</el-form-item>
 													</template>
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="模板" sortable>
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="pageDisable">	
-														</el-input>
+														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">查看模板</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable>
 													<template slot-scope="scope">
-														<div class="block">
-															<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">
-															</el-date-picker>
-														</div>
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.INSPECT_DATE'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
+															<div class="block" style="margin-left: -110px;">
+																<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
+																</el-date-picker>
+															</div>
+														</el-form-item>
 													</template>
 												</el-table-column>
 							            	</el-table>
@@ -120,6 +126,12 @@
 												</el-table-column>
 												<el-table-column prop="DESCRIPTION" label="设备名称" sortable >
 												</el-table-column>
+												<el-table-column prop="ASSET_MOVESTATUS" label="设备运行情况" sortable width="200px">
+													<template slot-scope="scope">
+														<el-input size="small" v-model="scope.row.ASSET_MOVESTATUS" placeholder="请输入" :disabled="pageDisable">	
+														</el-input>
+													</template>
+												</el-table-column>
 												<el-table-column prop="START_TIME" label="开始使用时间" sortable width="200px">
 													<template slot-scope="scope">
 														<el-date-picker v-model="scope.row.START_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'||pageDisable">
@@ -134,7 +146,7 @@
 												</el-table-column>
 												<el-table-column label="操作">
 													<template slot-scope="scope">
-														<el-button title="删除" @click="delEquipt(scope.$index,scope.row)" type="text" size="small" v-if="scope.row.ISUSE=='0'||!pageDisable">
+														<el-button title="删除" @click="delEquipt(scope.$index,scope.row)" type="text" size="small" v-if="scope.row.ISUSE=='0' && !pageDisable">
 															<i class="icon-trash red"></i>
 														</el-button>
 													</template>
@@ -161,7 +173,7 @@
 														  style="width: 100%;">
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 													    </el-table-column>
-									            		<el-table-column label="文件名称" prop="FILESIZE_ORG">
+									            		<el-table-column label="文件名称" prop="FILENAME">
 														</el-table-column>
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
@@ -206,7 +218,7 @@
 				:default-sort="{prop:'workorderbasisList', order: 'descending'}">
 				<el-table-column label="样品序号" sortable prop="ITEM_STEP" >
 				</el-table-column>
-				<el-table-column label="样品备注" sortable prop="OTHER">
+				<el-table-column label="检测结果" sortable prop="OTHER">
 					<template slot-scope="scope">
 						<el-input size="small" v-model="scope.row.MEMO"></el-input>
 					</template>
@@ -340,21 +352,81 @@
 			};
 		},
 		methods: {
+			showMoudel(index,row){
+				if(row.TEMPLATELIST.length == 0){
+					this.$message({
+						message: '此项目暂无模板文件',
+						type: 'warning'
+					});
+				}else{
+					
+				}
+			},
 			startup(){
-				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.detailId;
-				this.$axios.get(url, {}).then((res) => {
-					if(res.data.resp_code == 1) {
+				var url = this.basic_url + '/api-apps/app/workorder/operate/submitApproval/'+this.detailId;
+
+				var projectList = this.workorderForm.WORKORDER_PROJECT_List;
+				var contractList = this.workorderForm.WORKORDER_CONTRACTList;
+				var fileList = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
+				//数据验证
+				//输入检验结果必填
+				for (let i = 0; i < projectList.length; i++) {
+					var tmpList = projectList[i].WORKORDER_PROJECT_ITEMList;
+					for (let j = 0; j < tmpList.length; j++) {
+						if(!tmpList[j].MEMO || tmpList[j].MEMO==''){
+							this.message({
+								message: '检测项目结果未录入完全！',
+								type: 'warning'
+							});
+						}
+					}
+				}
+
+				for (let i = 0; i < contractList.length; i++) {
+					var tmpList = contractList[i].WORKORDER_CONTRACT_ITEMList;
+					for (let j = 0; j < tmpList.length; j++) {
+						if(!tmpList[j].beizhu || tmpList[j].beizhu==''){
+							this.message({
+								message: '分包项目结果未录入完全！',
+								type: 'warning'
+							});
+						}
+					}
+				}
+
+				//当检测项目或者分包项目不为空时，必须上传成果文件
+				if(projectList.length>0||contractList.length.length>0){
+					if(fileList.length==0){
 						this.$message({
-							message:res.data.resp_msg,
+							message: '请上传成果文件',
 							type: 'warning'
 						});
-				    }else{
-				    	this.$message({
-							message:res.data.resp_msg,
-							type: 'success'
+					}
+				}
+				
+				this.$refs.workorderForm.validate((valid)=>{
+					if(valid){
+						this.submitForm('apply');
+						this.$axios.get(url, {}).then((res) => {
+							if(res.data.resp_code == 1) {
+								this.$message({
+									message:res.data.resp_msg,
+									type: 'warning'
+								});
+							}else{
+								this.$message({
+									message:res.data.resp_msg,
+									type: 'success'
+								});
+							}
 						});
-				    }
-				});
+					}else{
+						this.$message({
+							message: '有必填项未填!',
+							type: 'warning'
+						});
+					}
+				})
 			},
 			//预览文件
 			readFile(row){
@@ -403,7 +475,28 @@
 				}
 			},
 			delEquipt(index,row){
-
+				if(row.ID){
+					var url = this.basic_url +'/api-apps/app/workorderAsset/' + row.ID;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.workorderForm.WORKORDER_ASSETList.splice(index,1);
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {});
+					}).catch(() => {});
+				}else{
+					this.workorderForm.WORKORDER_ASSETList.splice(index,1);
+				}
 			},
 			setEquipt(data){
 				var index = this.editEquptIndex;
@@ -414,14 +507,33 @@
 				this.$refs.dataTemplate.showData(this.deptid);
 			},
 			addRemark(index, row, opt){
+				var flag = false;
+				if(opt == 'contract'){
+					this.sampleNumList = row.WORKORDER_CONTRACT_ITEMList;
+					if(row.WORKORDER_CONTRACT_ITEMList.length == 0){
+						this.$message({
+							message: '请先领取样品',
+							type: 'warning'
+						});
+						flag = true;
+					}
+				}else{
+					this.sampleNumList = row.WORKORDER_PROJECT_ITEMList;
+					if(row.WORKORDER_PROJECT_ITEMList.length == 0){
+						this.$message({
+							message: '请先领取样品',
+							type: 'warning'
+						});
+						flag = true;
+					}
+				}
+				if(flag){
+					return;
+				}
 				this.editStepIndex = index;
 				this.sampleListVisible = true;
 				this.stepType = opt;
-				if(opt == 'contract'){
-					this.sampleNumList = row.WORKORDER_CONTRACT_ITEMList;
-				}else{
-					this.sampleNumList = row.WORKORDER_PROJECT_ITEMList;
-				}
+				
 			},
 			submitSample(){
 				var index = this.editStepIndex;
@@ -593,6 +705,7 @@
 						});
 						var obj = {
 							FILEID: res.data.fileid,
+							FILENAME: res.data.filename,
 							FILESIZE: res.data.filesize,
 							FILEPATH: res.data.webUrl,
 							LIABLE_PERSONDesc: this.username,
@@ -881,29 +994,23 @@
 				});
 			},	
 			// 保存users/saveOrUpdate
-			submitForm() {
-				this.$refs.workorderForm.validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
-					// console.log(this.workorderForm);
-					this.$axios.post(url,this.workorderForm).then((res) => {
-						// 
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('requests');
-						}
-					}).catch((err) => {
-					});
-			          } else {
-			            return false;
-			          }
-			        });
+			submitForm(opt) {
+				var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
+				// console.log(this.workorderForm);
+				this.$axios.post(url,this.workorderForm).then((res) => {
+					if(opt=='apply'){
+						return;
+					}
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '保存成功',
+							type: 'success'
+						});
+						this.show = false;
+						//重新加载数据
+						this.$emit('requests');
+					}
+				}).catch((err) => {});
 			},
 			//点击关闭按钮
 			close() {
@@ -1060,5 +1167,8 @@
 		line-height: 28px;
 		border: none;
 		cursor: pointer;
+	}
+	.el-form-item__content{
+		margin-left: 0px;
 	}
 </style>

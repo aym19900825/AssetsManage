@@ -183,6 +183,18 @@
 					 	width: '200',
 						isShow:true,
 					},
+					{
+					 	text: '产品类别',
+					 	dataIndex: 'PRODUCT_TYPE',
+					 	width: '220',
+					 	isShow:true,
+					 },
+					 {
+					 	text: '产品名称',
+					 	dataIndex: 'PRODUCT',
+					 	width: '220',
+					 	isShow:true,
+					 },
 					// {
 					// 	text: '委托书编号',
 					// 	dataIndex: 'PROXYNUM',
@@ -668,7 +680,6 @@
 			
 			SelChange(val) {
 				this.selMenu = val;
-				console.log(this.selMenu[0].STATE);
 			},
 			refresh(){
 				this.requestData();
@@ -742,20 +753,20 @@
 				this.requestData();
 			},
 			handleNodeClick(data) {
-				if(!!data.fullname) {
+				if(data.type == 'dept') {
 					this.searchList.P_NUM = '';
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.id;
-					this.currentPage = 1;
-				}else if(!!data.TYPE){
-					this.searchList.P_NUM = data.NUM;
+					this.searchList.DEPTID = data.deptid;
+					this.curDataTransferItemrentPage = 1;
+				}else if(data.type == 'producttype'){
+					this.searchList.P_NUM = data.num.slice(2,data.num.length-1);
 					this.searchList.PRO_NUM = '';
-					this.searchList.DEPTID = data.DEPTID;
+					this.searchList.DEPTID = data.deptid;
 					this.currentPage = 1;
-				}else if(!!data.PRO_NUM){
-					this.searchList.P_NUM = data.NUM;
-					this.searchList.PRO_NUM = data.PRO_NUM;
-					this.searchList.DEPTID = data.DEPTID;
+				}else if(data.type == 'product'){
+					this.searchList.P_NUM = data.parent.slice(2,data.num.length-1);
+					this.searchList.PRO_NUM = data.num.slice(1,data.num.length-1);
+					this.searchList.DEPTID = data.deptid;
 					this.currentPage = 1;
 				}else{
 					this.searchList.P_NUM = '';

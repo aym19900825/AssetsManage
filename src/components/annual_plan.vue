@@ -394,6 +394,20 @@
 				});
 				return;
 			} else {
+				if(this.selUser[0].STATUS == '2'){
+					this.$message({
+						message: '审批中的数据不允许编辑',
+						type: 'warning'
+					});
+					return;
+				}
+				if(this.selUser[0].STATUS == '3'){
+					this.$message({
+						message: '已发布的数据不允许编辑',
+						type: 'warning'
+					});
+					return;
+				}
 				this.$refs.child.detail(this.selUser[0].ID);
 			}
 		},

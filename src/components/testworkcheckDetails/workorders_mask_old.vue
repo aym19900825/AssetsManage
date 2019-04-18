@@ -400,7 +400,6 @@
 											</div> -->
 
 											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
-
 											    <el-table-column label="标准编号" sortable width="160px" prop="S_NUM">
 											      <template slot-scope="scope">
 											      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" >
@@ -420,12 +419,6 @@
 											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" ></el-input><span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
 											      </template>
 											    </el-table-column>
-
-											     <!-- <el-table-column prop="STATUS" label="信息状态" sortable width="120px" :formatter="judge">
-											      <template slot-scope="scope">
-											         <el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.STATUS" :disabled="true"></el-input><span v-show="!scope.row.isEditing">{{scope.row.STATUS}}</span>
-											      </template>
-											    </el-table-column> -->
 
 											    <el-table-column fixed="right" label="操作" width="120" v-if="!viewtitle">
 											        <template slot-scope="scope">

@@ -342,7 +342,8 @@
 						this.loadSign=true
 					}
 					this.product2Form.inspectionList=!!res.data.PRODUCT2List?res.data.PRODUCT2List:[];
-					
+					console.log(this.product2Form.inspectionList);
+					console.log(res.data);
 					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 						$('.el-table__body-wrapper table').find('.filing').remove();
 					}//滚动加载数据判断filing

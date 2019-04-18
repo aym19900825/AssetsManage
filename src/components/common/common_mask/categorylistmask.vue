@@ -114,15 +114,22 @@
 	    return 'text-align:center'
 	},
 	SelChange(row) {
-		console.log(row);
 		this.selUser = [];
 		this.selUser.push(row);
-		console.log(this.selUser);
 		this.$refs.singleTable.clearSelection();
-        this.$refs.singleTable.toggleRowSelection(row);
+		this.$refs.singleTable.toggleRowSelection(row);	
 	},
 	setSel(val) {
-      	this.selUser = val;
+			console.log(456);
+			this.selUser = val;
+			this.categoryList.forEach(item => {
+				// 排他,每次选择时把其他选项都清除
+				console.log(item);
+				console.log(item);
+				if (item.id !== val.id) {
+					item.checked = false
+				}
+			});
     },
   	
 	searchinfo() {
@@ -247,6 +254,9 @@
 				this.loadSign = true
 			}
 			this.categoryList = res.data.data;
+			this.categoryList.forEach(item => {
+          item.checked = false
+        })
 			this.loading = false;//加载动画关闭
 			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 				$('.el-table__body-wrapper table').find('.filing').remove();

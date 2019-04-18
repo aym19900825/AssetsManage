@@ -820,6 +820,8 @@
 					LEADER:'',//主检负责人
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
+					LEADER_STATUS:'1',
+					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
@@ -1246,6 +1248,8 @@
 					LEADER:'',//主检负责人
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
+					LEADER_STATUS:'1',
+					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
 					TYPE:'1',//检验
 					TYPEDesc:'检验',
@@ -1307,6 +1311,8 @@
 								message: '生成工作任务单成功',
 								type: 'success'
 							});
+							this.show=false;
+							this.$emit('request');
 						}else{
 							this.$message({
 							message: '已经生成工作任务单，请勿重复生成',

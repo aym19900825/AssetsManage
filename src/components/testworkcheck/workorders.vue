@@ -111,9 +111,9 @@
 					</div>
 				</div>
 			<!--工作任务单详情/Houling-->
-			<workorders_mask :workorderForm="workorderForm" ref="child" @requests="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
+			<workorders_mask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
 			<!--工作任务单详情/Houling-->
-			<sendtasklist ref="task" v-bind:page=page @refresh="refresh" @requests="requestData"></sendtasklist>
+			<sendtasklist ref="task" v-bind:page=page @refresh="refresh" @request="requestData"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 			<!--任务处理/Aiyamin-->
@@ -159,7 +159,7 @@
 				checkedName: [
 				    '工作任务单编号',
 					'样品名称',
-					// '委托书编号',
+					'委托书编号',
 					'状态',
 					'当前责任人',
 					'样品型号',
@@ -201,6 +201,12 @@
 					//  	width: '160',
 					// 	isShow:true,
 					// },
+					{
+						text: '委托书编号',
+						dataIndex: 'PROXYNUM',
+					 	width: '160',
+						isShow:true,
+					},
 					{
 						text: '状态',
 						dataIndex: 'STATEDesc',

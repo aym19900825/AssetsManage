@@ -32,8 +32,9 @@
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息 Begin-->
 								<el-collapse-item title="样品信息" name="1">
-									<div v-show="this.workorderForm.STATE==1&&this.workorderForm.ISACCEPT!=1" class="check-btn-right">
-										<el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button>
+									<div v-if="this.workorderForm.STATE==1" class="text-right pb10">
+										<!-- <el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button> -->
+										<el-button class="start" type="primary" round size="mini" @click="startup" ><i class="icon-check"></i> 接收此任务</el-button>
 										<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
 									</div>
 									<el-row :gutter="20" class="pb10">
@@ -358,17 +359,17 @@
 												<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 													<el-table-column type="index" label="序号" width="50">
 														<template slot-scope="scope">
-															<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+															<span> {{scope.$index+1}} </span>
 														</template>
 													</el-table-column>
 
 													<el-table-column label="检验/检测依据" prop="S_NAME" sortable width="260px">
 													</el-table-column>
 
-													<el-table-column prop="P_DESC" label="检测项目名称" sortable width="240px">
+													<el-table-column label="检测项目名称" prop="P_DESC" sortable width="240px">
 													</el-table-column>
 
-													<el-table-column prop="REMARKS" label="要求" sortable width="300px">
+													<el-table-column label="要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
 
 													<el-table-column prop="INSPECT_GROUPDesc" label="专业组" sortable width="120px">
@@ -396,7 +397,7 @@
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														<span> {{scope.$index+1}} </span>
 													</template>
 												</el-table-column>
 
@@ -404,7 +405,7 @@
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
 														</el-input>
-														<span v-else>{{scope.row.VENDOR}}</span>
+														<span v-else>{{scope.row.VENDORDesc}}</span>
 													</template>
 												</el-table-column>
 
@@ -499,7 +500,7 @@
 													
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														<span> {{scope.$index+1}} </span>
 													</template>
 												</el-table-column>
 
@@ -533,7 +534,7 @@
 
 														<el-table-column type="index" label="序号" width="50">
 															<template slot-scope="scope">
-																<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+																<span> {{scope.$index+1}} </span>
 															</template>
 														</el-table-column>
 
@@ -545,7 +546,6 @@
 
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
-
 													</el-table>
 
 												
@@ -617,7 +617,7 @@
 						</el-table-column>
 						<el-table-column type="index" label="序号" width="50">
 							<template slot-scope="scope">
-								<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+								<span> {{scope.$index+1}} </span>
 							</template>
 						</el-table-column>
 						<el-table-column label="用户名" sortable width="140px" prop="username">
@@ -847,12 +847,12 @@
 							this.show=false;
 							this.$emit('request');
 							this.$message({
-								message: '接受工作任务单成功',
+								message: '接收工作任务单成功',
 								type: 'success'
 							});
 						}else{
 							this.$message({
-							message: '已经接受工作任务单，请勿重复接受',
+							message: '已经接收工作任务单，请勿重复接收',
 							type: 'warning'
 						});
 						}
@@ -873,7 +873,7 @@
 							});
 						}else{
 							this.$message({
-							message: '已经接受工作任务单，请勿重复接受',
+							message: '已经接收工作任务单，请勿重复接收',
 							type: 'warning'
 						});
 						}
@@ -1372,7 +1372,6 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
@@ -1728,7 +1727,7 @@
 							});
 							this.show = false;
 							//重新加载数据
-							this.$emit('requests');
+							this.$emit('request');
 						}
 					}).catch((err) => {
 					});

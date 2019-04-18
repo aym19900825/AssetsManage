@@ -287,7 +287,8 @@
 						{ required: true, message: '请选择类别', trigger: 'change' }
 					],
 					QUALITY: [
-						{ required: true, message: '请填写数量', trigger: 'blur' }
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],
 					DO_PERSON: [
 						{ required: true, message: '处理人不能为空', trigger: 'blur' }

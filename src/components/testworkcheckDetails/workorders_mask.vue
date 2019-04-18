@@ -508,14 +508,14 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column fixed="right" label="操作" width="160" align="center">
+												<!-- <el-table-column fixed="right" label="操作" width="160" align="center">
 													<template slot-scope="scope">
 														<el-button type="primary" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
 															<i class="icon-send"></i>
 															生成分包协议
 														</el-button>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 
 											</el-table>
 										</el-tab-pane>
@@ -573,6 +573,15 @@
 
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
+
+														<el-table-column fixed="right" label="操作" width="120px">
+															<template slot-scope="scope">
+																<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+																	<i class="icon-excel"></i>
+																</el-button>
+															</template>
+														</el-table-column>
+
 													</el-table>
 												</el-col>
 											</el-row>
@@ -804,8 +813,8 @@
 						{ required: false, trigger: 'change', validator: this.Validators.isSpecificKey},
 					],
 					ITEM_QUALITY: [
-						{ required: true, message: '不能为空', trigger: 'change' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],
 					CHECK_BASIS: [
 						{ required: true, message: '不能为空', trigger: 'change' },
@@ -1017,6 +1026,18 @@
 			},
 			appendite(value){
 				this.workorderForm.ITEMNUM = value;//样品名称
+			},
+			//预览文件
+			readFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
 			},
 			// getleader(maingroupid,PROJECTLIST,index,add){
 			// 	this.maingroupid=maingroupid;

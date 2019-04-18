@@ -44,9 +44,9 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''" style="width:100%">
 										<el-row v-if="!addtitle">
-											<el-col :span="4" v-if="!addtitle" >
+											<el-col :span="6" v-if="!addtitle" >
 												<el-radio label="1">监督抽查</el-radio>
 											</el-col>
 											<el-col :span="6">
@@ -58,8 +58,9 @@
 											<el-col :span="6">
 												<el-radio label="4">质量抽查复查</el-radio>
 											</el-col>
-										</el-row>	
-											<el-col :span="4">
+										</el-row>
+										<el-row>
+											<el-col :span="6">
 												<el-radio label="5">生产许可证</el-radio>
 											</el-col>
 											<el-col :span="6">
@@ -80,7 +81,7 @@
 											<el-col :span="6">
 												<el-radio label="11">其它</el-radio>
 											</el-col>
-											
+										</el-row>
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
@@ -466,7 +467,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -613,7 +614,7 @@
 					], //受检产品型号
 					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
+					QUALITY: [{required: true,message: '必填', trigger:'blur',},{trigger:'blur', validator:this.Validators.isInteger}], //样品数量
 					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
 					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [
@@ -1052,16 +1053,29 @@
 						this.reviewtitle  = false;
 					}
 					this.show = true;
-					this.users();
-					if(this.users.indexOf(this.username) != -1){
-						this.approval=true;
-						this.start=false;
-					}else{
-						this.approval=false;
-						this.start=false;
-					}
+				
 				}).catch((err) => {
 				});
+			},
+			//刷新页面的审批按钮
+			refresh(){
+				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							// var users='';
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+					}
+				});	
 			},	
 			// 这里是修改
 			detail(dataid) {
@@ -1488,16 +1502,7 @@
 				}).catch((err) => {
 				});
 			},
-			getusers(){//获取当前审批人的name
-				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
-					this.$axios.get(url, {}).then((res) => {
-							var resullt=res.data.datas;
-							// var users='';
-							for(var i=0;i<resullt.length;i++){
-							this.users =this.users + resullt[i].username+",";
-						}
-				});
-			},
+		
 		},
 		mounted() {
 			this.getCompany();

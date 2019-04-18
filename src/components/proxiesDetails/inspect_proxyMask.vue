@@ -361,12 +361,12 @@
 									    </el-tab-pane>
 
 									    <el-tab-pane label="分包要求" name="third">
-									    	<div class="table-func table-funcb">
+									    	<div class="table-func table-funcb table-func-middle">
 												<!-- <el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button> -->
-												<el-button type="primary" size="mini" round  @click="outdept" v-show="!viewtitle">
+												<el-button type="primary" size="mini" round @click="outdept" v-show="!viewtitle">
             							<i class="icon-search"></i>
             							<font>中心外机构</font>
         								</el-button>
@@ -468,7 +468,7 @@
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
+														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button> -->
 														</el-input>
@@ -486,7 +486,7 @@
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
-															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button> -->
 															</el-input>
@@ -496,7 +496,7 @@
 															</el-input>
 															<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 															</el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
+															<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -758,7 +758,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild"  @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -972,7 +972,7 @@
 					],//型号
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
@@ -1488,11 +1488,29 @@
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
-        			this.DataInfo = JSON.parse(_obj);
+        	this.DataInfo = JSON.parse(_obj);
 				}).catch((err) => {
 				});
 			},	
-			
+			//刷新页面的审批按钮
+			refresh(){
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+					}
+				});	
+			},
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
@@ -2364,6 +2382,7 @@
 #cost{text-align: right}
 #stacost{text-align: right}
 #actualcost{text-align: right}
+.table-func-middle button:hover {width:100px;}
 /*.el-form-item__error {
 	top: 18%;
     left: 5px;

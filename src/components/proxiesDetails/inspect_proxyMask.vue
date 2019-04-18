@@ -468,7 +468,7 @@
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
+														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button> -->
 														</el-input>
@@ -486,7 +486,7 @@
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
-															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button> -->
 															</el-input>
@@ -496,7 +496,7 @@
 															</el-input>
 															<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 															</el-input>
-														<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
+															<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>

@@ -1125,7 +1125,10 @@
 					// ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_STATUS: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_SOURCE: [{ required: true, message: '不能为空', trigger: 'change' }],
-					ITEM_QUALITY: [{ required: true, message: '不能为空', trigger: 'blur' }],
+					ITEM_QUALITY: [
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isInteger}
+					],
 					CHECK_BASIS: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					COMPLETE_DATE: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					COMPLETE_MODE: [{ required: true, message: '不能为空', trigger: 'blur' }],

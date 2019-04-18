@@ -804,8 +804,8 @@
 						{ required: false, trigger: 'change', validator: this.Validators.isSpecificKey},
 					],
 					ITEM_QUALITY: [
-						{ required: true, message: '不能为空', trigger: 'change' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],
 					CHECK_BASIS: [
 						{ required: true, message: '不能为空', trigger: 'change' },

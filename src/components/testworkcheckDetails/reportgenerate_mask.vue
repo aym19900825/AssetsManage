@@ -33,7 +33,7 @@
 
 						<el-form inline-message :model="inputData" ref="reportGenerateForm" :rules="rules" label-position="right" lable-width="120px">
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-								<!-- 封面 Begin-->
+								<!-- 报告生成与编辑 Begin-->
 								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
 									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'">
 										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
@@ -113,7 +113,7 @@
 												</el-table-column>
 												<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 												</el-table-column>
-												<el-table-column label="单位" sortable prop="UNIT">
+												<el-table-column label="计量单位" sortable prop="UNITDesc">
 												</el-table-column>
 												<el-table-column label="检测结果" width="200px">
 													<template slot-scope="scope">
@@ -129,8 +129,6 @@
 														<el-table-column v-for="(itemList2,index) in scope.row.workorder_project_itemList" :key="index" :label="itemList2.ITEMNUM" prop="MEMO"></el-table-column>
 													</template>
 												</el-table-column> -->
-
-												
 
 												<el-table-column label="单项判定" width="200px" sortable prop="SYNTHETICAL">
 													<template slot-scope="scope">
@@ -152,74 +150,123 @@
 												:total="page.totalCount"
 												class="pt10 text-right">
 											</el-pagination>
-										</el-col>
-									</el-row>
+											
+									</el-col>
+								</el-row>
 									
-									<!--成果文件-->
-									<el-row v-else>
-										<el-col :span="24">
-											<el-table :data="reportData.List" 
-												border 
-												stripe 
-												:fit="true" 
-												max-height="260" 
-												key="table2"
-												style="width: 100%;" 
-												@cell-click="iconOperation" 
-												@selection-change="selChange"
-												:default-sort="{prop:'reportData.List', order: 'descending'}">
-												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+								<!--成果文件-->
+								<el-row v-else>
+									<el-col :span="24">
+										<el-table :data="reportData.List" 
+											border 
+											stripe 
+											:fit="true" 
+											max-height="260" 
+											key="table2"
+											style="width: 100%;" 
+											@cell-click="iconOperation" 
+											@selection-change="selChange"
+											:default-sort="{prop:'reportData.List', order: 'descending'}">
+											<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
-												<el-table-column type="index" label="序号" width="50">
-													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-													</template>
-												</el-table-column>
+											<el-table-column type="index" label="序号" width="50">
+												<template slot-scope="scope">
+													<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+												</template>
+											</el-table-column>
 
-												<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
-												</el-table-column>
+											<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+											</el-table-column>
 
-												<el-table-column label="文件名称" prop="FILESIZE_ORG">
-												</el-table-column>
+											<el-table-column label="文件名称" prop="FILESIZE_ORG">
+											</el-table-column>
 
-												<el-table-column label="文件大小" prop="FILESIZE">
-												</el-table-column>
+											<el-table-column label="文件大小" prop="FILESIZE">
+											</el-table-column>
 
-												<el-table-column label="操作">
-													<template slot-scope="scope">
-														<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-															<i class="icon-excel"></i>
-															预览
-														</el-button>
-														<el-button title="回退" type="text" size="small" @click="sendback(scope.row)">
-															<i class="icon-back"></i>
-															回退
-														</el-button>
-													</template>
-												</el-table-column>
-											</el-table>
+											<el-table-column label="操作">
+												<template slot-scope="scope">
+													<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+														<i class="icon-excel"></i>
+														预览
+													</el-button>
+													<el-button title="编辑" @click="editFile(scope.row)" type="text" size="small"> 
+														<i class="icon-edit"></i>
+														编辑
+													</el-button>
+													<el-button title="回退" type="text" size="small" @click="sendback(scope.row)">
+														<i class="icon-back"></i>
+														回退
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
 
-											<el-pagination
-												@size-change="sizeChange"
-												background
-												@current-change="currentChange"
-												:current-page="page.currentPage"
-												:page-sizes="[10, 20, 30, 40]"
-												:page-size="page.pageSize"
-												layout="total, sizes, prev, pager, next"
-												:total="page.totalCount"
-												class="pt10 text-right">
-											</el-pagination>
-										</el-col>
-									</el-row>
+										<el-pagination
+											@size-change="sizeChange"
+											background
+											@current-change="currentChange"
+											:current-page="page.currentPage"
+											:page-sizes="[10, 20, 30, 40]"
+											:page-size="page.pageSize"
+											layout="total, sizes, prev, pager, next"
+											:total="page.totalCount"
+											class="pt10 text-right">
+										</el-pagination>
+									</el-col>
+								</el-row>
 									
 								</el-tab-pane>
-								<!-- 封面 End-->
-								
+								<!-- 报告生成与编辑 End-->
 							
 							</el-tabs>
 						</el-form>
+
+						<!--生成的报告列表 Begin-->
+						<el-row class="pt10 pb20" v-show="fifthBtn">
+							<el-col :span="24">
+								<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
+									<el-table :data="workorderForm.WORKORDER_REPORTList" 
+										border 
+										stripe 
+										:fit="true" 
+										max-height="260" 
+										key="table2"
+										style="width: 100%;" 
+										:default-sort="{prop:'workorderForm.WORKORDER_REPORTList', order: 'descending'}">
+
+										<el-table-column type="index" label="序号" width="50">
+											<template slot-scope="scope">
+												<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+											</template>
+										</el-table-column>
+
+										<el-table-column label="报告文件名称" prop="REPORTNAME">
+										</el-table-column>
+
+										<el-table-column label="报告文件大小" prop="FILESIZE">
+										</el-table-column>
+
+										<el-table-column label="操作">
+											<template slot-scope="scope">
+												<el-button title="预览" @click="readReportFile(scope.row)" type="text" size="small"> 
+													<i class="icon-eye"></i>
+													预览
+												</el-button>
+												<el-button title="编辑" @click="editReportFile(scope.row)" type="text" size="small"> 
+													<i class="icon-edit"></i>
+													编辑
+												</el-button>
+											</template>
+										</el-table-column>
+									</el-table>
+								</el-form>
+								
+							</el-col>
+						</el-row>
+						<!--生成的报告列表 End-->
 					</div>
+
 					<div class="content-footer" v-show="firstBtn">
 						<!--首页按钮事件-->
 						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
@@ -229,22 +276,26 @@
 						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
 						<!--封底按钮事件-->
 						<el-button type="primary" v-show="fifthBtn" @click="getreport">生成检验/检测报告</el-button>
+						<el-button type="primary" v-show="fifthBtn" @click="getreport">重新生成检验/检测报告</el-button>
+						<!-- <el-button type="success" v-show="fifthBtn" @click="lookoverreport">查看生成报告</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
 					
 				</div>
 			</div>
 		</div>
-		
+		<!-- 生成报告弹出显示数据  -->
+		<reportdata ref="reportdata" @reportdatavalue = "reportdatavalue"></reportdata>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import reportdata from './reportdata.vue'//生成报告弹出显示数据
 	export default {
 		name: 'masks',
 		components: {
-
+			reportdata,//生成报告弹出显示数据
 		},
 		data() {
 			return {
@@ -258,6 +309,9 @@
 				SelectIsSynthetical:[],//获取单项判定合格不合格
 				reportTemplate:{
 					RE_TYPE: '1010',
+				},
+				workorderForm: {
+					WORKORDER_REPORTList:[],//报告
 				},
 				reportGenerateForm:{},
 				date: new Date(), //绑定的时候 直接绑定的当前时间 就好了
@@ -284,6 +338,7 @@
 				selUser:[],
 				docParm: {},//成果文件
 				reportname:'',//生成报告名称
+				reportvalue:{},//储存生成报告数据
 				showcreatereoprt:false,//生成报告按钮
 				currentuserinfo:{},//储存当前用户信息
 				activeName: '0', //tabs
@@ -335,6 +390,7 @@
 					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = true;
+					this.detailgetData();//请求生成报告列表
 				}
 			},
 			//报告模板类型
@@ -363,9 +419,9 @@
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
-					console.log(res.data);
-					console.log(this.reportTemplate.RE_TYPE);
-					console.log(this.detailId);
+					// console.log(res.data);
+					// console.log(this.reportTemplate.RE_TYPE);
+					// console.log(this.detailId);
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
@@ -415,6 +471,9 @@
 				this.reportGenerateForm = {
 					
 				};
+				this.workorderForm = {
+					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
+				}
 			},
 			//获取当前时间
 			getToday(){
@@ -424,6 +483,77 @@
 				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
 				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
 				return rate;
+			},
+		
+			//预览生成报告文件
+			readReportFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单&appid=38fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+				// var url = this.po_url+"/show?filename=&fileid=234&appname=工作任务单&appid=38&fileedit=0&fileprint=0&fileread=1&fileduplicate=0";
+				 window.open(url); 
+			},
+
+			//编辑生成报告文件
+			editReportFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单&appid=38&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
+			},
+
+			//加载生成报告的文件
+			detailgetData() {
+				var url = this.basic_url +'/api-apps/app/workorder/'+ this.detailId;
+				this.$axios.get(url, {}).then((res) => {
+					this.workorderForm.WORKORDER_REPORTList=res.data.WORKORDER_REPORTList;
+					console.log(res);
+					console.log(this.detailId);
+				}).catch((err) => {
+				});
+			},	
+			//查看报告
+			lookoverreport(item){
+				var url = this.po_url+"/show?fileid=" +item.FILEID
+				+ '&userid=' + this.currentuserinfo.id
+				+ '&username=' + this.currentuserinfo.username
+				+ '&deptid=' + this.currentuserinfo.deptId
+				+ '&deptfullname=' + this.currentuserinfo.deptName
+				window.open(url); 
+			},
+			reportdatavalue(value){
+				this.reportvalue = value;//储存生成报告数据
+				this.workorderreportid = value.id;
+					var obj = {
+						ID:value.ID,
+						REPORTNUM:value.reportnum,
+						REPORTNAME:value.reportname,
+						FILEID:value.fileid,
+						VERSION:value.version,
+				}
+				this.workorderForm.WORKORDER_REPORTList.push(obj);
+			},
+			//编辑成果文件
+			editFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
 			},
 			//预览成果文件
 			readFile(row){
@@ -458,36 +588,24 @@
 				}).catch((err) => {
 				});
 			},
-			//编辑成果文件
-			editFile(row){
-				var url = this.po_url+"/show?filename=" +row.filename
-					+ '&fileid=' +  row.FILEID
-					+ '&userid=' +  this.docParm.userid
-					+ '&username=' + this.docParm.username
-					+ '&deptid=' + this.docParm.deptid
-					+ '&deptfullname=' + this.docParm.deptfullname
-					+ '&recordid=' + this.detailId
-					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
-				 window.open(url); 
-			},
 			//获取当前用户信息
 			getUser(){
-	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				this.currentuserinfo = res.data;
-				this.userid = res.data.id;
-				this.username = res.data.username;
-				this.deptid = res.data.deptId;
-				this.deptfullname = res.data.deptName;
-				this.docParm = {
-					userid: res.data.id,
-					username: res.data.username,
-					deptid: res.data.deptId,
-					deptfullname: res.data.deptName,
-					appname: '工作任务单_关联原始数据模板',
-					appid: '39'
-				};
-	            }).catch((err) => { });
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					this.currentuserinfo = res.data;
+					this.userid = res.data.id;
+					this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
+					this.docParm = {
+						userid: res.data.id,
+						username: res.data.username,
+						deptid: res.data.deptId,
+						deptfullname: res.data.deptName,
+						appname: '工作任务单_关联原始数据模板',
+						appid: '39'
+					};
+				}).catch((err) => { });
 			},
 			//生成报告
 			getreport(){
@@ -534,6 +652,7 @@
 				}).catch((err) => {
 				});
 			},
+			
 			//列出所有成果文件
 			showModule(data){
 				// this.modulenum.D_NUM = data.num;

@@ -498,6 +498,12 @@
 						type: 'warning'
 					});
 					return;
+				}else if(this.selUser[0].ISRECEIVE==''||this.selUser[0].ISRECEIVE==null||this.selUser[0].ISRECEIVE==undefined||this.selUser[0].ISRECEIVE==0){
+					this.$message({
+						message: '此委托书暂不能下达任务，请查看是否接样!',
+						type: 'warning'
+					});
+					return;
 				}else if(this.selUser[0].STATE !=3&&this.selUser[0].STATE !=15) {
 					this.$message({
 						message: '此委托书暂不能下达任务，请查看【状态】!',
@@ -510,7 +516,7 @@
 						type: 'warning'
 					});
 					return;
-				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&((!!this.selUser.ISRECEIVE)&&this.selUser.ISRECEIVE!=0)){
 					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},

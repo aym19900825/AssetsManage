@@ -196,7 +196,7 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
-											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
@@ -830,6 +830,11 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+          }
+        },
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载
@@ -974,13 +979,14 @@
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
+					PAYMENT_METHOD:[{ required: true, message: '必填', trigger: 'change' }],//付款
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
-						{ required: true, message: '必填', trigger: 'blur'},
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+						{required: true, message: '必填', trigger: 'blur'},
+						{validator:this.Validators.isSpecificKey}
 					],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号

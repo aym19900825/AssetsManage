@@ -468,23 +468,36 @@
 												</el-table-column>
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
-													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
+												 <template slot-scope="scope">
+														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button> -->
 														</el-input>
-														<span v-else>{{scope.row.BASIS}}</span>
+													
+														<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
+															<el-button slot="append" icon="el-icon-search" @click="basis1(scope.row,scope.$index)">
+															</el-button>
+														</el-input>
+														<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入">
+														</el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button> -->
 															</el-input>
-														<span v-else>{{scope.row.P_REMARKS}}</span>
+															<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" :disabled="true">
+																<el-button slot="append" icon="el-icon-search" @click="contents(scope.row,scope.$index)">
+																</el-button>
+															</el-input>
+															<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															</el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -571,7 +584,7 @@
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
 													<el-radio label="自取"></el-radio>
 													<el-radio label="邮寄"></el-radio>
-													<el-radio label="其它"></el-radio>
+													<el-radio label="其他"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>

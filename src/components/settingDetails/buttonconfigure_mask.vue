@@ -66,11 +66,11 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="2" v-show="views">
+								<el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="creatUser">
-												<el-input v-model="CATEGORY.creatUser" :disabled="edit"></el-input>
+											<el-form-item label="录入人" prop="createbyName">
+												<el-input v-model="CATEGORY.createbyName" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -79,13 +79,19 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
+											<el-form-item label="机构" prop="deptName" label-width="100px">
+												<el-input v-model="CATEGORY.deptName" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="修改人" prop="updateUser">
 												<el-input v-model="CATEGORY.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="updateTime">
-												<el-input v-model="CATEGORY.updateTime" placeholder="当前修改时间" :disabled="edit"></el-input>
+											<el-form-item label="修改时间" prop="updatebyName">
+												<el-input v-model="CATEGORY.updatebyName" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

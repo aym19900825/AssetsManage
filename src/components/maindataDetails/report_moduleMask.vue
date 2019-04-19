@@ -53,7 +53,7 @@
 								<el-collapse-item title="文件" name="2">
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="3" v-show="views">
+								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -63,6 +63,12 @@
 										<el-col :span="8">
 											<el-form-item label="录入时间" prop="ENTERDATE">
 												<el-input v-model="CATEGORY.ENTERDATE" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="100px">
+												<el-input v-model="CATEGORY.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

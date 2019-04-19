@@ -101,8 +101,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="机构" prop="deptidDesc" label-width="100px">
-												<el-input v-model="dataInfo.deptidDesc" placeholder="当前录入人机构" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="deptName" label-width="100px">
+												<el-input v-model="dataInfo.deptName" placeholder="当前录入人机构" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

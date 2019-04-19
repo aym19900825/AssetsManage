@@ -257,7 +257,7 @@
 			},
 			getDept(parm) {
 				if(parm=="notice"){
-					var url=this.basic_url+'/api-user/depts/findStation';
+					var url=this.basic_url+'/api-user/depts/findStation/2';
 					this.$axios.get(url, {}).then((res) => {
 						this.resourceData = res.data;
 						this.dialogVisible = true;

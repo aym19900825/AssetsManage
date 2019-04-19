@@ -97,6 +97,8 @@
 								</el-table-column>
 								<el-table-column label="姓名" sortable width="200px" prop="nickname" v-if="this.checkedName.indexOf('姓名')!=-1">
 								</el-table-column>
+								<el-table-column label="角色" sortable width="120px" prop="roleName" v-if="this.checkedName.indexOf('角色')!=-1">
+								</el-table-column>
 								<el-table-column label="性别" sortable width="100px" prop="sexName" v-if="this.checkedName.indexOf('性别')!=-1">
 								</el-table-column>
 								<el-table-column label="机构" sortable width="150px" prop="deptName" v-if="this.checkedName.indexOf('机构')!=-1">
@@ -247,6 +249,7 @@
 				checkedName: [
 					'用户名',
 					'姓名',
+					'角色',
 					'性别',
 					'机构',
 					'手机号',
@@ -264,6 +267,10 @@
 					{
 						label: '姓名',
 						prop: 'nickname'
+					},
+					{
+						label: '角色',
+						prop: 'roleName'
 					},
 					{
 						label: '性别',

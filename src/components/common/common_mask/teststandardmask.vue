@@ -32,14 +32,14 @@
 							</el-col>		
 						</el-row>
 						<el-row :gutter="10">
-							<el-col :span="6">
+							<!-- <el-col :span="6">
 								<el-form-item label="机构" prop="DEPTID">
 									<el-input v-model="searchList.DEPTID" :disabled="true"></el-input>
-									<!-- <el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
 										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select> -->
+									</el-select>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 							<el-col :span="6">
 								<el-form-item label="发布时间" prop="RELEASETIME">
 									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">

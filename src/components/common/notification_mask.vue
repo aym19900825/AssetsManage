@@ -1343,8 +1343,8 @@
 			},
 			//生成检验委托书
 			buildcheck(){
-				var dataid = this.dataInfo.ID;
-				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE=1';
+				  var dataid = this.dataInfo.ID;
+				  var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE=1';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

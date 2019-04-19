@@ -1121,9 +1121,6 @@
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
-					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-						this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(this.workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
-					}
 					if(res.data.IS_MAIN == '1'){//是主任务单
 						this.showcreatereoprt = true;//显示生成报告按钮
 					}else{//不是主任务单

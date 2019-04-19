@@ -3,7 +3,7 @@
 		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
 		<div class="scrollbar" style="max-height:360px;">
 			<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-				<el-table ref="multipleTable" :data="REPORTList" row-key="ID" border height="260"  @selection-change="SelChange" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'REPORTList', order: 'descending'}">
+				<el-table ref="multipleTable" :data="REPORTList" row-key="ID" border height="260" @selection-change="SelChange" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'REPORTList', order: 'descending'}">
 					<el-table-column type="selection" fixed width="55" align="center"> 
 					</el-table-column>
 					<el-table-column prop="D_DESC" label="描述" sortable width="220px">

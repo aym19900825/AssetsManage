@@ -93,7 +93,10 @@
 			 v-loadmore="loadMore">
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
-				<el-table-column label="主键编号" width="120" sortable prop="ID">
+				<el-table-column type="index" label="序号" width="50">
+					<template slot-scope="scope">
+						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+					</template>
 				</el-table-column>
 				<el-table-column label="标准编号" width="120" sortable prop="S_NUM">
 				</el-table-column>
@@ -105,21 +108,15 @@
 				</el-table-column> -->
 				<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
 				</el-table-column> -->
-				<el-table-column label="发布时间" width="160" sortable prop="RELEASETIME">
+				<el-table-column label="发布时间" width="100" sortable prop="RELEASETIME">
 				</el-table-column>
-				<el-table-column label="启用时间" width="160" sortable prop="STARTETIME">
+				<el-table-column label="启用时间" width="100" sortable prop="STARTETIME">
 				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION">
+				<el-table-column label="停用时间" width="100" sortable prop="STOPTIME">
 				</el-table-column>
-				<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
+				<el-table-column label="版本" width="80" sortable prop="VERSION">
 				</el-table-column>
-				<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-				</el-table-column> -->
-				<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable>
-				</el-table-column>
-				<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-				</el-table-column> -->
-				<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable>
+				<el-table-column label="机构" sortable prop="DEPTIDDesc">
 				</el-table-column>
 			</el-table>
 			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">

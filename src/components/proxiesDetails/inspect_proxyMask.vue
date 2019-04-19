@@ -979,13 +979,14 @@
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
+					PAYMENT_METHOD:[{ required: true, message: '必填', trigger: 'change' }],//付款
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
-						{ required: true, message: '必填', trigger: 'blur'},
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+						{required: true, message: '必填', trigger: 'blur'},
+						{validator:this.Validators.isSpecificKey}
 					],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号

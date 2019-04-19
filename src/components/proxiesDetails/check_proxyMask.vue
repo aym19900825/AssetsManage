@@ -195,7 +195,7 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
-											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
@@ -821,6 +821,11 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+          }
+        },
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载
@@ -832,6 +837,8 @@
 					LEADER:'',//主检负责人
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
+					LEADER_STATUS:'1',
+					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
 					TYPE:'2',//检验
 					TYPEDesc:'检测',
@@ -962,6 +969,7 @@
 					],//数量
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
+					PAYMENT_METHOD:[{ required: true, message: '必填', trigger: 'change' }],//付款
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
@@ -1247,6 +1255,8 @@
 					LEADER:'',//主检负责人
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
+					LEADER_STATUS:'1',
+					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
 					TYPE:'2',//检验
 					TYPEDesc:'检测',
@@ -1739,23 +1749,23 @@
 					}else{
 						// this.sendchilddata.push(this.dataInfo.S_NUM);
 						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
-						// var arr=[];
-						// var proxy=[];
-						// var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
-						// for(var j=0;j<proxylist.length;j++){
-						// 		proxy.push(proxylist[j].P_NUM);
-						// }
-						// var proxypnum=proxy.join(',');
-						// for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
-						// 	arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
-						// }
-						// var data={
-						// 	P_NUM:this.dataInfo.P_NUM,
-						// 	PRO_NUM:this.dataInfo.PRO_NUM,
-						// 	S_NUM:arr,//依据的编号
-						// 	proxypnum:proxypnum
-						// }
-						this.$refs.projectchild.projectlead();
+						var arr=[];
+						var proxy=[];
+						var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
+						for(var j=0;j<proxylist.length;j++){
+								proxy.push(proxylist[j].P_NUM);
+						}
+						var proxypnum=proxy.join(',');
+						for(var i = 0;i<this.dataInfo.INSPECT_PROXY_BASISList.length;i++){
+							arr.push(this.dataInfo.INSPECT_PROXY_BASISList[i].S_NUM);
+						}
+						var data={
+							P_NUM:this.dataInfo.P_NUM,
+							PRO_NUM:this.dataInfo.PRO_NUM,
+							S_NUM:arr,//依据的编号
+							proxypnum:proxypnum
+						}
+						this.$refs.projectchild.projectlead(data);
 						// this.main = 'main';
 						// this.sendchilddata = [];
 					  //   this.deptindex = {};

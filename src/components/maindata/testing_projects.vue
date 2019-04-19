@@ -112,6 +112,8 @@
 							</el-table-column>
 							<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD" v-if="this.checkedName.indexOf('子领域')!=-1">
 							</el-table-column>
+							<el-table-column label="计量单位" width="80" prop="UNITDesc" v-if="this.checkedName.indexOf('计量单位')!=-1">
+							</el-table-column>
 							<el-table-column label="版本" sortable prop="VERSION" v-if="this.checkedName.indexOf('版本')!=-1" align="right">
 							</el-table-column>
 							<el-table-column label="机构" width="160" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
@@ -181,6 +183,7 @@
 					// '人员资质',
 					// '信息状态',
 					'领域',
+					'计量单位',
 					'子领域',
 					'版本',
 					'机构',
@@ -217,6 +220,10 @@
 					{
 						label: '子领域',
 						prop: 'CHILD_FIELD'
+					},
+					{
+						label: '计量单位',
+						prop: 'UNITDesc'
 					},
 					{
 						label: '版本',

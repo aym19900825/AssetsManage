@@ -800,10 +800,10 @@
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.noviews = true;
-            	this.modify=false;
+				this.modify=false;
 				this.show = true;
 				this.views = false;
-            	this.edit = true;
+				this.edit = true;
 				this.noedit = false;
 			},
 			findDeptId(){

@@ -17,7 +17,13 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="100px" status-icon>
+					<el-form inline-message 
+					         :model="samplesForm" 
+							 :label-position="labelPosition" 
+							 :rules="rules" 
+							 ref="samplesForm" 
+							 label-width="100px" 
+							 status-icon>
 						<div class="accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
@@ -86,7 +92,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="领样人" prop="GRANT_PERSONDesc">
-												<el-input v-model="samplesForm.GRANT_PERSONDesc" disabled>
+												<el-input v-model="samplesForm.GRANT_PERSONDesc" disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -235,16 +241,19 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
 					ITEMNUM: [//样品编号
-						{ required: true, message: '必填', trigger: 'blur' }
+						{ required: true, message: '必填', trigger: 'change' }
 					],
 					DESCRIPTION: [//样品名称
-						{ required: true, message: '必填', trigger: 'blur' }
+						{ required: true, message: '必填', trigger: 'change' }
 					],
 					TYPE: [//类别
-						{ required: true, message: '必填', trigger: 'blur' }
+						{ required: true, message: '必填', trigger: 'change' }
+					],
+					GRANT_PERSONDesc: [
+						{ required: true, message: '必填', trigger: 'blur'}
 					],
 					MODEL: [//型号
-						{ required: true, message: '必填', trigger: 'blur' },
+						{ required: true, message: '必填', trigger: 'change' },
 						{trigger: 'blur', validator: this.Validators.isSpecificKey}
 					],
 					QUALITY: [//数量

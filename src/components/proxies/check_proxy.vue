@@ -408,7 +408,7 @@
 		    	}else if(item.name=="导入"){
 				 		this.download();
 					}else if(item.name=="导出"){
-		    	 this.download();
+		    	 this.exportData();
 		    	}else if(item.name=="删除"){
 		    	 this.delinfo();
 		    	}else if(item.name=="中止"){
@@ -483,7 +483,7 @@
 			},
 				//下达任务
 			build(){
-				if(this.selUser.length == 0) {
+					if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要下达任务的数据',
 						type: 'warning'
@@ -495,19 +495,25 @@
 						type: 'warning'
 					});
 					return;
+				}else if(this.selUser[0].ISRECEIVE==''||this.selUser[0].ISRECEIVE==null||this.selUser[0].ISRECEIVE==undefined||this.selUser[0].ISRECEIVE==0){
+					this.$message({
+						message: '此委托书暂不能下达任务，请查看是否接样!',
+						type: 'warning'
+					});
+					return;
 				}else if(this.selUser[0].STATE !=3&&this.selUser[0].STATE !=15) {
 					this.$message({
-						message: '此委托书暂不能下达任务，请确认【状态】!',
+						message: '此委托书暂不能下达任务，请查看【状态】!',
 						type: 'warning'
 					});
 					return;
 				}else if(this.selUser[0].ISCREATED==1){
 					this.$message({
-						message: '已经生成任务单，无须在次生成',
+						message: '已经生成任务单，无需再次生成',
 						type: 'warning'
 					});
 					return;
-				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&((!!this.selUser.ISRECEIVE)&&this.selUser.ISRECEIVE!=0)){
 					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},
@@ -567,6 +573,47 @@
 					this.url=url+"5300";
 					var url = this.url+"/ureport/preview?_u=mysql:inspectproxyjianyan_table.ureport.xml&access_token="+ token+"&id="+this.selUser[0].ID;
 					window.open(url);
+				}
+			},
+			// 导入
+			download() {
+				
+			},
+		
+			// 导出
+			exportData() {
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择您要导出的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var exportid = [];
+					var ids;
+					for (var i = 0; i < selData.length; i++) {
+						exportid.push(selData[i].ID);
+					}
+						//ids为exportid数组用逗号拼接的字符串
+						ids = exportid.toString(',');
+						var url = this.basic_url + '/api-apps/app/inspectPro2/exportExc/'+ids+'?access_token='+sessionStorage.getItem('access_token');
+						var xhr = new XMLHttpRequest();
+						xhr.open('POST', url, true);
+						xhr.responseType = "blob";
+						xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+						xhr.onload = function() {
+							if (this.status == 200) {
+								var filename = "inspectPro2.xls";
+								var blob = this.response;
+								var link = document.createElement('a');
+								var objecturl = URL.createObjectURL(blob);
+								link.href = objecturl;
+								link.download = filename;
+								link.click();
+							}
+						}
+						xhr.send();
 				}
 			},
 			getRouterData() {

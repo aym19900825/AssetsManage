@@ -574,7 +574,7 @@
 		},
 		// 导出
 		exportData() {
-			var selData = this.selMenu;
+			var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择您要导出的数据',

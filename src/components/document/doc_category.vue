@@ -246,6 +246,8 @@
 			     this.reportdata();
 				}else if(item.name=="打印"){
 				   this.Printing();
+				}else if(item.name=="导出"){
+				   this.exportData();
 				}
 		    },
 			//报表
@@ -421,7 +423,22 @@
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/tbKeyword2/exportExc?access_token='+sessionStorage.getItem('access_token');
+				var selData = this.selMenu;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择您要导出的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var exportid = [];
+					var ids;
+					for (var i = 0; i < selData.length; i++) {
+						exportid.push(selData[i].id);
+					}
+						//ids为exportid数组用逗号拼接的字符串
+				ids = exportid.toString(',');
+           		var url = this.basic_url + '/api-apps/app/tbKeyword2/exportExc/' + ids + '?access_token='+sessionStorage.getItem('access_token');
           		 var xhr = new XMLHttpRequest();
             	xhr.open('POST', url, true);
             	xhr.responseType = "blob";
@@ -437,7 +454,8 @@
 						link.click();
                 	}
             	}
-            	xhr.send();
+				xhr.send();
+				}
 			},
 			//Table默认加载数据
 			requestData(opt){

@@ -424,6 +424,13 @@
 					});
 					return;
 				} else{
+					if(this.selMenu[0].STATE == '1'){
+						this.$message({
+							message: '此工作任务单未接受任务，不允许任务处理！',
+							type: 'warning'
+						});
+						return;
+					}
 					this.$refs.workDeal.showDialog(this.selMenu[0].ID);
 				}
 			},
@@ -551,7 +558,6 @@
 			},
 			//下达任务
 			tasklist(){
-				console.log(this.selMenu[0].ID);
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要下达任务的数据',
@@ -564,23 +570,42 @@
 						type: 'warning'
 					});
 					return;
+				} else if(this.selMenu[0].STATE == 1) {
+					this.$message({
+						message: '此任务单的状态为待接收，暂不能下达任务。',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE == 15) {
+					this.$message({
+						message: '此任务单已退回，不能下达任务。',
+						type: 'warning'
+					});
+					return;
 				} else {
-					if(this.selMenu[0].STATE == 1) {
+<<<<<<< HEAD
+					if(this.selMenu[0].STATE == '1'){
 						this.$message({
-							message: '此任务单的状态为待接收，暂不能下达任务。',
+							message: '此工作任务单未接受任务，不允许任务处理！',
 							type: 'warning'
 						});
 						return;
-					} else {
-						if(res.data.resp_code == 0) {
-							this.$refs.task.view(this.selMenu[0].ID);
-						}else{
+					}
+					this.$refs.task.view(this.selMenu[0].ID);	
+=======
+					var url = this.basic_url +'/api-apps/app/workorder/' +this.selMenu[0].ID;
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.WORKORDER_PROJECTList.length==0&&res.data.WORKORDER_CONTRACTList.length==0){
 							this.$message({
-								message: res.data.resp_msg,
+								message: '此任务单没有任务可下达,请确认。',
 								type: 'warning'
 							});
+							return;
+						}else{
+							this.$refs.task.view(this.selMenu[0].ID);
 						}
-					}
+					});
+>>>>>>> f8ddee7a60dcb3436c0da7b5083d9724664f1813
 				}
 			},
 			//报表

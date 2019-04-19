@@ -11,8 +11,13 @@
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="6">
-								<el-form-item label="标准编号" prop="S_NUM">
+								<el-form-item label="编码" prop="S_NUM">
 									<el-input v-model="searchList.S_NUM"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="标准编号" prop="SS_NUM">
+									<el-input v-model="searchList.SS_NUM"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
@@ -98,7 +103,9 @@
 						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
 					</template>
 				</el-table-column>
-				<el-table-column label="标准编号" width="120" sortable prop="S_NUM">
+				<el-table-column label="编码" width="120" sortable prop="S_NUM">
+				</el-table-column>
+				<el-table-column label="标准编号" width="120" sortable prop="SS_NUM">
 				</el-table-column>
 				<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 				</el-table-column>
@@ -150,7 +157,8 @@
 			totalCount: 0
         },
         searchList: { //点击高级搜索后显示的内容
-            S_NUM: '',
+			S_NUM: '',
+			SS_NUM: '',
             S_NAME: '',
             VERSION: '',
             DEPARTMENT: '',
@@ -163,6 +171,7 @@
 		PRO_NUM :'',//产品编号
 		P_NUM:'',//产品类别编号 
 		S_NUM:'',//依据的id
+		SS_NUM:'',//依据的编号
 		pronum:'',//产品类别的编号
 		basisids:'',//存放勾选过的id逗号拼接的字符串
 		productnum:'',//产品的编号
@@ -181,7 +190,8 @@
     //重置
     resetbtn(){
         this.searchList = {
-            S_NUM:'',
+			S_NUM:'',
+			SS_NUM:'',
             S_NAME:'',
             VERSION:'',
             DEPARTMENT:'',
@@ -238,6 +248,7 @@
 		this.PRO_NUM = value.PRO_NUM;//产品编号
 		this.P_NUM = value.P_NUM;//产品类别编号
 		this.S_NUM=value.S_NUM;
+		this.SS_NUM=value.SS_NUM;
 		// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
 		// 	this.basistable = value[1];//检测依据表格中已有的数据
 		// 	var basissnum = [];
@@ -318,7 +329,8 @@
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
-            S_NUM: this.searchList.S_NUM,
+			S_NUM: this.searchList.S_NUM,
+			SS_NUM: this.searchList.SS_NUM,
             S_NAME: this.searchList.S_NAME,
             S_ENGNAME:this.searchList.S_ENGNAME,
             VERSION: this.searchList.VERSION,

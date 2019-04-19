@@ -757,7 +757,7 @@
 			},
 			//承检单位
 			getCompany() {
-				var url = this.basic_url + '/api-user/depts/treeByType';
+				var url=this.basic_url+'/api-user/depts/findStation/2';
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.selectData = res.data;

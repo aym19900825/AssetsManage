@@ -270,6 +270,8 @@
 				 this.physicsDel();
 				}else if(item.name=="报表"){
 			     this.reportdata();
+				}else if(item.name=="导出"){
+			     this.exportData();
 				}
 		    },
 			//添加
@@ -440,23 +442,39 @@
 			},
 			// 导出
 			exportData() {
-           		var url = this.basic_url + '/api-apps/app/customer/exportExc?access_token='+sessionStorage.getItem('access_token');
-          		 var xhr = new XMLHttpRequest();
-            	xhr.open('POST', url, true);
-            	xhr.responseType = "blob";
-            	xhr.setRequestHeader("client_type", "DESKTOP_WEB");
-            	xhr.onload = function() {
-                	if (this.status == 200) {
-						var filename = "customer.xls";
-						var blob = this.response;
-						var link = document.createElement('a');
-						var objecturl = URL.createObjectURL(blob);
-						link.href = objecturl;
-						link.download = filename;
-						link.click();
-                	}
-            	}
-            	xhr.send();
+				var selData = this.selUser;
+				if(selData.length == 0) {
+					this.$message({
+						message: '请选择您要导出的数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var exportid = [];
+					var ids;
+					for (var i = 0; i < selData.length; i++) {
+						exportid.push(selData[i].ID);
+					}
+						//ids为exportid数组用逗号拼接的字符串
+					ids = exportid.toString(',');
+					var url = this.basic_url + '/api-apps/app/customer/exportExc/'+ids + '?access_token='+sessionStorage.getItem('access_token');
+					var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var filename = "customer.xls";
+							var blob = this.response;
+							var link = document.createElement('a');
+							var objecturl = URL.createObjectURL(blob);
+							link.href = objecturl;
+							link.download = filename;
+							link.click();
+						}
+					}
+					xhr.send();
+				}
 			},
 			// 打印
 			Printing() {

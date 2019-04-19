@@ -227,7 +227,7 @@
 								<!-- 检测依据、检测项目与要求 Begin-->
 								<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">
-									    <el-tab-pane label="检测依据" name="first">
+									    <el-tab-pane label="检验检测依据" name="first">
 									    	<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="isEditList">
 													<i class="icon-search"></i>
@@ -239,7 +239,7 @@
 												</el-button>
 											</div>
 											<el-form inline-message :model="basisListForm" ref="basisListForm">
-												<!--检测依据table表验证-->
+												<!--检验检测依据table表验证-->
 												<el-table :header-cell-style="rowClass" 
 														:data="basisListForm.basisList" 
 														border 
@@ -252,7 +252,7 @@
 													<el-table-column label="序号" width="50" type="index">
 													</el-table-column>
 
-													<el-table-column prop="S_NUM" label="标准编号" sortable width="160">
+													<el-table-column prop="S_NUM" label="编码" sortable width="160">
 														<template slot-scope="scope">
 															<el-form-item :prop="'basisList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM"></el-input>
@@ -261,7 +261,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="SS_NUM" label="标准编码" sortable width="160">
+													<el-table-column prop="SS_NUM" label="标准编号" sortable width="160">
 														<template slot-scope="scope">
 															<el-form-item :prop="'basisList.'+scope.$index + '.SS_NUM'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM"></el-input>
@@ -305,7 +305,7 @@
 											</el-form>
 									    </el-tab-pane>
 
-									    <el-tab-pane label="检测项目与要求" name="second">
+									    <el-tab-pane label="检验检测项目与要求" name="second">
 									    	<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="isEditList">
 													<i class="icon-search"></i>
@@ -320,7 +320,7 @@
 												<!--检测项目与要求table表验证-->
 												<el-table :header-cell-style="rowClass" :data="proTestListForm.proTestList" border stripe :fit="true" max-height="260" style="width: 100%;" :default-sort="{prop:'proTestList', order: 'descending'}">
 													<el-table-column label="序号" width="50" type="index"></el-table-column>
-													<el-table-column prop="P_NUM" label="检验项目编号" width="100">
+													<el-table-column prop="P_NUM" label="项目编号" width="100">
 														<template slot-scope="scope">
 															<el-form-item :prop="'proTestList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" :disabled="noedit|| scope.row.S_NUM"></el-input>
@@ -328,7 +328,7 @@
 															</el-form-item>
 														</template>
 													</el-table-column>
-													<el-table-column prop="P_DESC" label="检验项目描述">
+													<el-table-column prop="P_DESC" label="检验检测项目名称">
 														<template slot-scope="scope">
                                                             <el-form-item :prop="'proTestList.'+scope.$index + '.P_DESC'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
                                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" :disabled="noedit || scope.row.S_NUM"></el-input>
@@ -336,7 +336,7 @@
                                                             </el-form-item>
 														</template>
 													</el-table-column>
-													<el-table-column prop="REMARKS" label="要求" width="200">
+													<el-table-column prop="REMARKS" label="技术要求" width="300">
 														<template slot-scope="scope">
                                                             <el-form-item :prop="'proTestList.'+scope.$index + '.REMARKS'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
                                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" :disabled="noedit"></el-input>
@@ -446,12 +446,12 @@
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="6">
-								<el-form-item label="标准编号" prop="S_NUM">
+								<el-form-item label="编码" prop="S_NUM">
 									<el-input v-model="searchList.S_NUM"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
-								<el-form-item label="标准编码" prop="SS_NUM">
+								<el-form-item label="标准编号" prop="SS_NUM">
 									<el-input v-model="searchList.SS_NUM"></el-input>
 								</el-form-item>
 							</el-col>
@@ -491,9 +491,9 @@
 				<el-table :data="standardList" height="360px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
-					<el-table-column label="标准编号" width="160" sortable prop="S_NUM">
+					<el-table-column label="编码" width="160" sortable prop="S_NUM">
 					</el-table-column>
-					<el-table-column label="标准编码" width="160" sortable prop="SS_NUM">
+					<el-table-column label="标准编号" width="160" sortable prop="SS_NUM">
 					</el-table-column>
 					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
 					</el-table-column>
@@ -564,9 +564,9 @@
 					</el-table-column>
 					<el-table-column label="项目名称" sortable prop="P_NAME">
 					</el-table-column>
-					<el-table-column label="标准编号" width="160" sortable prop="S_NUM">
+					<el-table-column label="编码" width="160" sortable prop="S_NUM">
 					</el-table-column>
-					<el-table-column label="标准编码" width="160" sortable prop="SS_NUM">
+					<el-table-column label="标准编号" width="160" sortable prop="SS_NUM">
 					</el-table-column>
 					<!-- <el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
 					</el-table-column>
@@ -772,8 +772,8 @@
 				search:'',
 				selectData:[],//提出单位
 				selectDataType:[],//年度抽查计划类别
-				standardList: [],//检测依据数据
-				projectList: [],//检测项目与要求
+				standardList: [],//检验检测依据数据
+				projectList: [],//检验检测项目与要求
 				fileList:[],//上传附件数据
 				page: { //分页显示
 					currentPage: 1,
@@ -807,11 +807,11 @@
 					EMAIL:[{required: true, trigger: 'blur', validator:this.Validators.isEmail,}],
        				YEAR: [{type: 'string', required: true, message: '请选择年度', trigger: 'change' }],//年度
        				REPORTDATE: [{type: 'string', required: true, message: '请选择提报日期', trigger: 'change'}],//提报日期
-       				//检测依据 
+       				//检验检测依据 
 					ITEM_NAME:[{required: true, message: '请填写', trigger: 'blur'}], //产品名称 
 					MODEL:[{required: true, message: '请填写', trigger: 'blur'}],
 					REMARKS:[{required: true, message: '请填写', trigger: 'blur'}],
-					basisList:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//检测依据
+					basisList:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//检验检测依据
 				},
 				editPlanLineRow: [],
 				//tree
@@ -819,7 +819,7 @@
 					worlplanlist: [], //年度计划列表	
 				},
 				basisListForm:{
-					basisList: [], //检测依据
+					basisList: [], //检验检测依据
 				},
 				proTestListForm:{
 					proTestList: [], //项目检测和要求
@@ -874,7 +874,7 @@
 				});
 			},
 			
-			//检测依据弹出框数据置空
+			//检验检测依据弹出框数据置空
 			resetBasisInfo1(){
 				this.dialogVisible = false;
 				this.resetbtn();

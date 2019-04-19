@@ -76,6 +76,15 @@
 			      </template>
 			    </el-table-column>
 
+					<el-table-column label="计量单位" sortable width="100" prop="UNITDesc">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.UNITDesc'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITDesc" :disabled="true" placeholder="自动生成">
+			        	</el-input><span v-else>{{scope.row.UNITDesc}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
 				<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 			      <template slot-scope="scope">
 			         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else>{{scope.row.STATUS}}</span>
@@ -173,6 +182,8 @@
 				<el-table-column label="项目名称" sortable prop="P_NAME">
 				</el-table-column>
 				<el-table-column label="单价" sortable align="right" prop="UNITCOST">
+				</el-table-column>
+				<el-table-column label="计量单位" sortable align="right" prop="UNITDesc">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -493,6 +504,8 @@
 								"P_NUM": '',
 								"P_NAME": '',
 								"UNITCOST": '',
+								"UNITDesc": '',
+								"UNIT": '',
 								"STATUS": '',
 								"VERSION": '',
 								"DEPTID": '',
@@ -520,6 +533,8 @@
 						"P_NUM": row.P_NUM,
 						"P_NAME": row.P_NAME,
 						"UNITCOST":  row.UNITCOST,
+						"UNITDesc":  row.UNITDesc,
+						"UNIT":  row.UNIT,
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
@@ -580,6 +595,8 @@
 					this.catedata.P_NUM = val.P_NUM;
 					this.catedata.P_NAME = val.P_NAME;
 					this.catedata.UNITCOST = val.UNITCOST;
+					this.catedata.UNITDesc = val.UNITDesc;
+					this.catedata.UNIT = val.UNIT;
 					this.catedata.DEPTID = val.DEPTID;
 					this.catedata.VERSION = val.VERSION;
 					this.$emit('request');

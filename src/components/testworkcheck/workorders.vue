@@ -549,7 +549,22 @@
 					});
 					return;
 				} else {
-					this.$refs.task.view(this.selMenu[0].ID);	
+					if(this.selMenu[0].STATE == 1) {
+						this.$message({
+							message: '此任务单的状态为待接收，暂不能下达任务。',
+							type: 'warning'
+						});
+						return;
+					} else {
+						if(res.data.resp_code == 0) {
+							this.$refs.task.view(this.selMenu[0].ID);
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}
 				}
 			},
 			//报表

@@ -100,7 +100,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品数量" prop="ITEM_SOURCE" label-width="110px">
+											<el-form-item label="样品来源" prop="ITEM_SOURCE" label-width="110px">
 												<el-select v-model="workorderForm.ITEM_SOURCE" style="width: 100%" :disabled="edit">
 													<el-option v-for="(data,index) in Select_ITEM_SOURCE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
@@ -110,7 +110,7 @@
 
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="样品来源" prop="ITEM_SOURCE" label-width="110px">
+											<el-form-item label="样品数量" prop="ITEM_SOURCE" label-width="110px">
 												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="edit"></el-input-number>
 											</el-form-item>
 										</el-col>

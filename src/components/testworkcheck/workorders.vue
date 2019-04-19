@@ -159,8 +159,11 @@
 				checkedName: [
 				    '工作任务单编号',
 					'样品名称',
-					'委托书编号',
 					'状态',
+					'委托书编号',
+					'产品类别',
+					'产品名称',
+					'是否为主任务',
 					'当前责任人',
 					'样品型号',
 					'样品状态',
@@ -184,6 +187,18 @@
 						isShow:true,
 					},
 					{
+						text: '状态',
+						dataIndex: 'STATEDesc',
+					 	width: '140',
+						isShow:true,
+					},
+					{
+						text: '委托书编号',
+						dataIndex: 'PROXYNUM',
+					 	width: '160',
+						isShow:true,
+					},
+					{
 					 	text: '产品类别',
 					 	dataIndex: 'PRODUCT_TYPE',
 					 	width: '220',
@@ -202,27 +217,15 @@
 					// 	isShow:true,
 					// },
 					{
-						text: '委托书编号',
-						dataIndex: 'PROXYNUM',
-					 	width: '160',
-						isShow:true,
-					},
-					{
-						text: '状态',
-						dataIndex: 'STATEDesc',
-					 	width: '140',
+						text: '是否为主任务单',
+						dataIndex: 'IS_MAINDesc',
+					 	width: '120',
 						isShow:true,
 					},
 					{
 						text: '当前责任人',
 						dataIndex: 'MASTER_INSPECTORDesc',
 					 	width: '160',
-						isShow:true,
-					},
-					{
-						text: '是否为主任务单',
-						dataIndex: 'IS_MAINDesc',
-					 	width: '120',
 						isShow:true,
 					},
 					{

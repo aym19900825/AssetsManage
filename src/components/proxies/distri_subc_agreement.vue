@@ -271,6 +271,7 @@
 					totalCount: 0
 				},
 				buttons:[],
+				selectData: []
 			}
 		},
 		methods: {

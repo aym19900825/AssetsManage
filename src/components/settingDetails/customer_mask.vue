@@ -251,7 +251,7 @@
 										</el-tab-pane>
 									</el-tabs>
 								</div>
-								<el-collapse-item title="其它" name="3" v-show="views">
+								<el-collapse-item title="其他" name="3" v-show="views">
 									<!-- <el-form label-width="100px"> -->
 										<el-row :gutter="30">
 											<el-col :span="8">

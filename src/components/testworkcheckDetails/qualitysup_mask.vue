@@ -51,7 +51,7 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<!-- <el-collapse-item title="其它" name="2" v-show="views">
+								<!-- <el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">

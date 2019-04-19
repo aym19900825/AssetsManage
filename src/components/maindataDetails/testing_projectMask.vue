@@ -160,6 +160,12 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="100px">
+												<el-input v-model="testing_projectForm.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="100px">
 												<el-input v-model="testing_projectForm.CHANGEBYDesc" :disabled="true"></el-input>
 											</el-form-item>

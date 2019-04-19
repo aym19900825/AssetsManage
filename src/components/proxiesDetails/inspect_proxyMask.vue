@@ -145,7 +145,7 @@
 											</el-col>
 											<el-col :span="5">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="special1">
+													<el-input v-model.number="dataInfo.ITEM_QUALITY"  @keyup.native="number" :disabled="special1">
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -361,12 +361,12 @@
 									    </el-tab-pane>
 
 									    <el-tab-pane label="分包要求" name="third">
-									    	<div class="table-func table-funcb">
+									    	<div class="table-func table-funcb table-func-middle">
 												<!-- <el-button type="success" size="mini" round @click="addcheckProCont"  v-show="!viewtitle">
 													<i class="icon-search"></i>
 													<font>选择</font>
 												</el-button> -->
-												<el-button type="primary" size="mini" round  @click="outdept" v-show="!viewtitle">
+												<el-button type="primary" size="mini" round @click="outdept" v-show="!viewtitle">
             							<i class="icon-search"></i>
             							<font>中心外机构</font>
         								</el-button>
@@ -468,22 +468,35 @@
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
+														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button> -->
 														</el-input>
-														<span v-else>{{scope.row.BASIS}}</span>
+													
+														<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
+															<el-button slot="append" icon="el-icon-search" @click="basis1(scope.row,scope.$index)">
+															</el-button>
+														</el-input>
+														<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入">
+														</el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button> -->
 															</el-input>
-														<span v-else>{{scope.row.P_REMARKS}}</span>
+															<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" :disabled="true">
+																<el-button slot="append" icon="el-icon-search" @click="contents(scope.row,scope.$index)">
+																</el-button>
+															</el-input>
+															<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															</el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -745,7 +758,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild"  @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -768,6 +781,10 @@
 			<custinspectmask ref="custinspectchild" @cusinspect="cusinspect"></custinspectmask>
 			<!--分包要求 中心内机构-->
 			<withdepetmask ref="withinspectchild" @withdepet="withdepet"></withdepetmask>
+			<!-- 分包要求中的检验检测依据 -->
+			<basis ref='basis' @addBasis='addBasis'></basis>		
+			<!-- 分包要求中的检验项目内容 -->
+			<contents ref='contents' @add='add'></contents>
 		</div>
 	</div>
 </template>
@@ -789,6 +806,8 @@
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
 	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//中心外机构
 	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//中心内机构
+	import contents from'../common/common_mask/contents.vue'//分包要求中的检验项目内容
+	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检测依据
 	export default {
 		name: 'masks',
 		components: {
@@ -806,6 +825,8 @@
 			 inspectcustommask,
 			 custinspectmask,
 			 withdepetmask,
+			 contents,
+			 basis,
 		},
 		data() {
 			return {
@@ -815,6 +836,8 @@
 				commentArr:{},
 				basic_url: Config.dev_url,
 				po_url: Config.po_url,
+				index:'',
+				indexs:'',
 				dataInfo: {
 					MAINGROUP:'',//主检组
 					LEADER:'',//主检负责人
@@ -866,8 +889,8 @@
 							PRODUCT_TYPE:'',//产品类别
 							PRO_NUM:'',//产品编号
 							PRODUCT:'',//产品名称
-							S_NUM:'',//检测依据编号
-							BASIS: '',//检测依据
+							S_NUM:'',//检验检测依据编号
+							BASIS: '',//检验检测依据
 							PROJ_NUM:'',//检测项目编号
 							PROJECT_ID:'',//检测项目ID
 							P_REMARKS: '',//检测项目
@@ -949,7 +972,7 @@
 					],//型号
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
@@ -1006,6 +1029,10 @@
 			};
 		},
 		methods: {
+			number(){　　
+　　　 	this.famount=this.famount.replace(/[^\.\d]/g,'');
+        this.famount=this.famount.replace('.','');
+　　	},
 			priceFormate(row, column) {
 				var money = row.UNITCOST;
 				return row.UNITCOST =  this.toFixedPrice(money);
@@ -1081,6 +1108,9 @@
 							}
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
+							if(paramData2==undefined){
+                 paramData2='0.00元';
+							}
 							this.$forceUpdate();
 							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
@@ -1458,11 +1488,29 @@
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
-        			this.DataInfo = JSON.parse(_obj);
+        	this.DataInfo = JSON.parse(_obj);
 				}).catch((err) => {
 				});
 			},	
-			
+			//刷新页面的审批按钮
+			refresh(){
+				var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+					}
+				});	
+			},
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
@@ -1773,7 +1821,6 @@
 							PRO_NUM:this.dataInfo.PRO_NUM,
 							S_NUM:basisnums,
 						}
-						console.log(data);
 						this.$refs.standardchild.basislead(data);
 						this.main = 'main';
 					}
@@ -2270,29 +2317,60 @@
 				});
 			},
 			getuser(){//获取当前用户信息
-	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-	                    this.username = res.data.username;
-	            }).catch((err) => {
-	            });
-        	},
+				var url = this.basic_url + '/api-user/users/currentMap';
+				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+								this.username = res.data.username;
+				}).catch((err) => {
+				});
+			},
+			basis1(val,i){
+				var arr=[];
+				this.indexs =i
+				for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+							arr.push(this.dataInfo.CHECK_PROXY_CONTRACTList[i].BASIS);
+						}
+						var data={
+							N_CODE:this.dataInfo.N_CODE,
+							arr:arr,
+						}
+						this.$refs.basis.requestData(data);
+			},
+			addBasis(val){
+				var str=val.toString(',');
+				for(let i=0; i<this.dataInfo.CHECK_PROXY_CONTRACTList.length; i++){
+           if(i==this.indexs){
+							this.dataInfo.CHECK_PROXY_CONTRACTList[i].BASIS=str;
+					 }
+				}
+			},
+			contents(val,i){
+				this.index =i
+				var arr=[];
+				for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
+							arr.push(this.dataInfo.CHECK_PROXY_CONTRACTList[i].P_REMARKS);
+						}
+						var data={
+							N_CODE:this.dataInfo.N_CODE,
+							arr:arr,
+						}
+						this.$refs.contents.requestData(data);
+			},
+			add(val){
+				var str=val.toString(',');
+				for(let i=0; i<this.dataInfo.CHECK_PROXY_CONTRACTList.length; i++){
+           if(i==this.index){
+							this.dataInfo.CHECK_PROXY_CONTRACTList[i].P_REMARKS=str;
+					 }
+				}
+			},
+			
 		},
 		mounted() {
 			this.getCompany();
 			this.getuser();
 			this.RVENDORSelect();
 		},
-// 		computed:{
-// 			// a(this.INSPECTCOST,this.ALLCOST){
-// 			// 	this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(this.INSPECTCOST.replace(/,/g,'').replace('元','')) + parseFloat(this.ALLCOST.replace(/,/g,'').replace('元','')),2) ;
-// 			// }
-			 
-// 			 'INSPECTCOST': function(){
-// 				 console.log(456789456);
-//               return 	this.dataInfo.CONTRACTCOST=this.number_format(parseFloat(this.INSPECTCOST.replace(/,/g,'').replace('元','')) + parseFloat(this.ALLCOST.replace(/,/g,'').replace('元','')),2)
-// 					},
-//        
-// 		},
+
 	}
 </script>
 
@@ -2304,6 +2382,7 @@
 #cost{text-align: right}
 #stacost{text-align: right}
 #actualcost{text-align: right}
+.table-func-middle button:hover {width:100px;}
 /*.el-form-item__error {
 	top: 18%;
     left: 5px;

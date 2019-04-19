@@ -575,7 +575,6 @@
 										type: 'success'
 									});
 									if(opt=='Update'){
-										console.log(1111);
 										this.show=false;	
 									}else{
 										this.show=true;	

@@ -58,7 +58,7 @@
 					<div v-show="search">
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="5">
-								<el-col :span="6">
+								<el-col :span="5">
 									<el-form-item label="工作任务通知书编号" prop="N_CODE" label-width="140px">
 										<el-input v-model="searchList.N_CODE" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
@@ -75,7 +75,7 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="4">
+								<el-col :span="5">
 									<el-form-item label="类型" prop="TYPE" label-width="45px">
 										<el-select clearable v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
@@ -84,15 +84,27 @@
 								</el-col>
 							</el-row>
 							<el-row :gutter="5">
-								<el-col :span="6">
-									<el-form-item label="下达日期" prop="XD_DATE" label-width="140px">
-										<el-date-picker v-model="searchList.XD_DATE" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
+								<el-col :span="5">
+									<el-form-item label="下达日期（开始）" prop="XD_DATE" label-width="140px">
+										<el-date-picker v-model="searchList.XD_DATE_where_date_from" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
-										<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
+									<el-form-item label="下达日期（结束）" prop="XD_DATE" label-width="140px">
+										<el-date-picker v-model="searchList.XD_DATE_where_date_to" type="date" placeholder="下达日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="完成日期（开始）" prop="COMPDATE" label-width="140px">
+										<el-date-picker v-model="searchList.COMPDATE_where_date_from" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
+										</el-date-picker>
+									</el-form-item>
+								</el-col>
+								<el-col :span="5">
+									<el-form-item label="完成日期（结束）" prop="COMPDATE" label-width="140px">
+										<el-date-picker v-model="searchList.COMPDATE_where_date_to" type="date" placeholder="完成日期" value-format="yyyy-MM-dd" style="width: 100%" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>

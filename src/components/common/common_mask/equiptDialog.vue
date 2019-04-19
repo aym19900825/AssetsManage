@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" 
-				   title="模板" 
+				   title="检验检测设备" 
 				   :visible.sync="dialogVisible" 
 				   width="80%"
 				   :before-close="reset">
@@ -15,9 +15,9 @@
 									@change="getProject">
 									<el-option
 										v-for="item in projectList"
-										:key="item.S_NUM"
+										:key="item.P_NUM"
 										:label="item.P_DESC"
-										:value="item.S_NUM">
+										:value="item.P_NUM">
 									</el-option>
 								</el-select>
 							</el-form-item>
@@ -161,8 +161,6 @@
 	showData(id){
 		this.dialogVisible = true;
 		this.deptId = id;
-		// this.getDocParm();
-		console.log(this.projectList);
 		this.requestData();
 	},
   	loadMore () {
@@ -186,12 +184,12 @@
 			url = this.basic_url + '/api-apps/app/raw_data_asset2';
 			var project = this.searchList.project;
 			var projectList = this.projectList;
-			var sNum = [];
+			// var sNum = [];
 			var pNum = [];
-			for (var i = 0; i < project.length; i++) {
-				for(var j=0; j<projectList.length; j++){
-					if(project[i] == projectList[j].S_NUM){
-						sNum.push(projectList[j].S_NUM)
+			for (let i = 0; i < project.length; i++) {
+				for(let j=0; j<projectList.length; j++){
+					if(project[i] == projectList[j].P_NUM){
+						// sNum.push(projectList[j].S_NUM)
 						pNum.push(projectList[j].P_NUM);
 					}
 				}
@@ -199,7 +197,7 @@
 			data = {
 				PRO_NUM_wheres: this.pro_num,
 				NUM_wheres: this.num,
-				S_NUM_wheres: sNum.join(','),
+				// S_NUM_wheres: sNum.join(','),
 				P_NUM_wheres: pNum.join(',')
 			}
 		}else{

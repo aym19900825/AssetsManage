@@ -468,23 +468,36 @@
 												</el-table-column>
 
 												<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
-													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS" placeholder="请输入">
+												 <template slot-scope="scope">
+														<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button> -->
 														</el-input>
-														<span v-else>{{scope.row.BASIS}}</span>
+													
+														<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
+															<el-button slot="append" icon="el-icon-search" @click="basis1(scope.row,scope.$index)">
+															</el-button>
+														</el-input>
+														<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入">
+														</el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 																<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
 																</el-button> -->
 															</el-input>
-														<span v-else>{{scope.row.P_REMARKS}}</span>
+															<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" :disabled="true">
+																<el-button slot="append" icon="el-icon-search" @click="contents(scope.row,scope.$index)">
+																</el-button>
+															</el-input>
+															<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
+															</el-input>
+															<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -744,7 +757,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild"  @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -807,31 +820,6 @@
 			 withdepetmask,
 		},
 		data() {
-				// var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
-				// // 金额验证
-				// var price=(rule, value, callback) => {//生产单位名称 
-				// var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-				// if (!values) {
-				// 	callback();
-				// }
-				// setTimeout(() => { 
-				// 	if(exp.test(value)==false){ 
-				// 		callback(new Error('请输入数字'));
-				// 	}else{
-				// 		callback();
-				// 	}
-				// }, 500);
-				
-				// if(value != '' && value!=undefined){
-				// 	if(exp.test(value)==false){ 
-				// 		callback(new Error('请输入数字'));
-				// 	}else{
-				// 		callback();
-				// 	}
-				// 		}else {
-				// 			callback();
-				// 		}
-				// };
 			return {
 				approvingData:{},
 				loading: false,
@@ -1469,7 +1457,25 @@
 				}).catch((err) => {
 				});
 			},	
-			
+			//刷新页面的审批按钮
+			refresh(){
+				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+					}
+				});	
+			},
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;

@@ -62,6 +62,14 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
+											<el-form-item label="计量单位" prop="UNIT" label-width="100px">
+												<!-- <el-input v-model="testing_projectForm.UNIT" :disabled="noedit"></el-input> -->
+												<el-select v-model="testing_projectForm.UNIT" :disabled="noedit" filterable style="width: 100%">
+													<el-option v-for="item in selectData" :key="item.id" :value="item.code" :label="item.name" :class="item.name"></el-option>
+												</el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="作业指导书" prop="DOCLINKS_NUM" label-width="100px">
 												<el-input v-model="testing_projectForm.DOCLINKS_NUM" :disabled="true">
 													<el-button slot="append" icon="icon-search" @click="getwork" :disabled="noedit"></el-button>
@@ -93,7 +101,14 @@
 												<el-input v-model="testing_projectForm.DEPTIDDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>	
+									</el-row>
+									<el-row>
+										<el-col :span="24">
+											<el-form-item label="技术要求" prop="TECHNICAL_REQUIRE" label-width="100px">
+												<el-input v-model="testing_projectForm.TECHNICAL_REQUIRE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
 								</el-collapse-item>
 								<el-collapse-item title="人员资质" name="2">
 									<div class="table-func" v-show="noviews">
@@ -281,19 +296,7 @@
 					callback();
 				}
 			};
-			 //金额验证
-			// var price=(rule, value, callback) => {//生产单位名称 
-			// 	var exp = /^(-)?\d{1,3}(,\d{3})*(.\d+)?$/;
-			// 	if(value != '' && value!=undefined){
-			// 		if(exp.test(value)==false){ 
-			// 			callback(new Error('请输入数字'));
-			// 		}else{
-			// 			callback();
-			// 			}
-			// 	}else {
-			// 		callback();
-			// 	}
-			// };
+			
 			return {
 				testing_projectForm:{
 					CHANGEBY: '',
@@ -306,6 +309,7 @@
 					ID: '',
 					P_NAME: '',
 					P_NUM: '',
+					UNIT: '1',//计量单位
 					QUALIFICATION: '',
 					QUALIFICATIONList: [],
 					QUANTITY: '',
@@ -313,6 +317,7 @@
 					VERSION: 1,
 					WORK_INSTRUCTIONList: []
 				},
+				
 				basic_url: Config.dev_url,
 				editSearch: '',
 				value: '',
@@ -323,6 +328,7 @@
 					value: '0',
 					label: '不活动'
 				}],
+				selectData: [],//计量单位
 				edit: true, //禁填
 				show: false,
 				isok1: true,
@@ -508,6 +514,18 @@
 					this.testing_projectForm.DOCLINKSId = this.checkedNodes[0].id;
 					this.testing_projectForm.DOCLINKS_NUM = this.checkedNodes[0].simplename;
 				}
+			},
+			//获取计量单位
+			getMeteUnit(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=mete_unit';
+				this.$axios.get(url, {}).then((res) => {
+					this.selectData = res.data;
+					this.testing_projectForm.UNIT = res.data[0].code;
+					// this.testing_projectForm.UNITDesc = res.data[0].name;
+					console.log(this.testing_projectForm.UNIT);
+
+				}).catch((wrong) => {
+				})	
 			},
 			SelChange(val) {
 				this.selval = val;
@@ -736,18 +754,11 @@
 								this.visible();
 							}else{
 								this.show = true;
-								if(res.data.resp_code == 1) {
-									if( res.data.resp_msg!=''){
-										this.$message({
+								if(res.data.resp_code != 0) {
+									this.$message({
 											message: res.data.resp_msg,
 											type: 'warning'
 										});
-									}else{
-										this.$message({
-											message:'相同数据不可重复添加！',
-											type: 'warning'
-										});
-									}
 								}
 							}
 						//清空表单验证
@@ -871,7 +882,7 @@
 			},
 		},
 		mounted() {
-			// this.requestData();
+			this.getMeteUnit();//计量单位
 			this.getCompany();
 		},
 	}

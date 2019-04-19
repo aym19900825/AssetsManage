@@ -44,9 +44,9 @@
 									</el-col>
 								</el-row>
 								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''">
+									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''" style="width:100%">
 										<el-row v-if="!addtitle">
-											<el-col :span="4" v-if="!addtitle" >
+											<el-col :span="6" v-if="!addtitle" >
 												<el-radio label="1">监督抽查</el-radio>
 											</el-col>
 											<el-col :span="6">
@@ -58,8 +58,9 @@
 											<el-col :span="6">
 												<el-radio label="4">质量抽查复查</el-radio>
 											</el-col>
-										</el-row>	
-											<el-col :span="4">
+										</el-row>
+										<el-row>
+											<el-col :span="6">
 												<el-radio label="5">生产许可证</el-radio>
 											</el-col>
 											<el-col :span="6">
@@ -80,7 +81,7 @@
 											<el-col :span="6">
 												<el-radio label="11">其他</el-radio>
 											</el-col>
-											
+										</el-row>
 									</el-radio-group>
 								</el-form-item>
 							</el-collapse-item>
@@ -177,7 +178,7 @@
 								</el-row>
 							</el-collapse-item>
 							<div class="el-collapse-item pt10 pb20" aria-expanded="true" accordion>
-								<el-tabs v-model="activeName" @tab-click="handleClick">
+								<el-tabs v-model="activeName">
 									<el-tab-pane label="检验依据" name="first">
 										<div class="table-func table-funcb">
 											<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
@@ -302,8 +303,8 @@
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.UNITCOST'" >
-															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST"  placeholder="请输入要求" :disabled="noedit">
+														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.UNITCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
+															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" @blur="testPrice(scope.row)"  placeholder="请输入要求" :disabled="noedit">
 															</el-input>
 															<span v-else>{{scope.row.UNITCOST}}</span>
 														</el-form-item>
@@ -333,20 +334,20 @@
 							<el-collapse-item title="完成日期及费用" name="6">
 								<el-row >
 									<el-col :span="8">
+										<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
+											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%" >
+											</el-date-picker>
+										</el-form-item>
+									</el-col>
+									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
 											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
-									<el-col :span="8">
+										<el-col :span="8">
 										<el-form-item label="检验检测费用(元)" prop="CHECTCOST" label-width="130px">
 											<el-input v-model="dataInfo.CHECTCOST" :disabled="noedit" id="cost" @blur="toPrice"></el-input>
-										</el-form-item>
-									</el-col>
-									<el-col :span="8">
-										<el-form-item label="下达日期" prop="XD_DATE" label-width="110px">
-											<el-date-picker v-model="dataInfo.XD_DATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" :disabled="noedit" style="width: 100%" >
-											</el-date-picker>
 										</el-form-item>
 									</el-col>
 								</el-row>
@@ -466,7 +467,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild" @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -514,11 +515,10 @@
 							return time.getTime() < new Date(this.dataInfo.XD_DATE).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
 						}else{
 							this.dataInfo.COMPDATE='';
-							this.$message({
-								message: '请先选下达时间',
-								type: 'warning'
-							});
-
+							// this.$message({
+							// 	message: '请先选下达时间',
+							// 	type: 'warning'
+							// });
 						}
 					}
 				},
@@ -614,7 +614,7 @@
 					], //受检产品型号
 					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,message: '必填'},{ type: 'number', message: '必须为数字值'}], //样品数量
+					QUALITY: [{required: true,message: '必填', trigger:'blur',},{trigger:'blur', validator:this.Validators.isInteger}], //样品数量
 					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
 					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [
@@ -760,7 +760,6 @@
 				var url = this.basic_url + '/api-user/depts/treeByType';
 				this.$axios.get(url, {
 				}).then((res) => {
-					console.log(res);
 					this.selectData = res.data;
 				});
 			},
@@ -851,9 +850,6 @@
 				this.dataInfo.CHECTCOST = num.join(".");
 			},
 
-			//tabs
-			handleClick(tab, event) {
-			},
 			//删除行
 			deleteRow(index, row, listName){
 				var TableName = '';
@@ -1057,19 +1053,29 @@
 						this.reviewtitle  = false;
 					}
 					this.show = true;
-					console.log(1234561111);
-					this.users();
-					console.log(123456);
-					console.log(this.users);
-					if(this.users.indexOf(this.username) != -1){
-						this.approval=true;
-						this.start=false;
-					}else{
-						this.approval=false;
-						this.start=false;
-					}
+				
 				}).catch((err) => {
 				});
+			},
+			//刷新页面的审批按钮
+			refresh(){
+				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							// var users='';
+							for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+					}
+				});	
 			},	
 			// 这里是修改
 			detail(dataid) {
@@ -1218,33 +1224,16 @@
 			// 保存users/saveOrUpdate
 			save(parameter) {
 				this.$refs.dataInfo.validate((valid) => {
-		          if (valid) {
-							if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0||this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
-			        		this.$message({
-								message: '依据和检验检测项目是必填项，请填写！',
-								type: 'warning'
-						    });
-						return false;
-			      }else{
-			         var oDate1 = new Date(this.dataInfo.XD_DATE); //下达日期
-    				 	 var oDate2 = new Date(this.dataInfo.COMPDATE);//完成日期
-    				  if(oDate1.getTime() > oDate2.getTime()){ 
-        						this.$message({
-								message: '完成时间不能早于下达时间',
-								type: 'warning'
-							}); 
-						return;	
-    				  }
-			        // if(typeof(this.dataInfo.CJDW) != 'undefind') {
-			        // 	 for(var j=0;j<this.selectData.length;j++){
-			        // 	 	if(this.dataInfo.CJDW==this.selectData[j].fullname){
-			        // 	 		this.dataInfo.CJDW=this.selectData[j].id
-			        // 	 	}
-			        // 	 }		
-			        // }
+				if (valid) {
+				if(this.dataInfo.WORK_NOTICE_CHECKBASISList.length<=0||this.dataInfo.WORK_NOTICE_CHECKPROJECTList.length<=0){
+							this.$message({
+						message: '依据和检验检测项目是必填项，请填写！',
+						type: 'warning'
+						});
+				return false;
+				}else{
 					var url = this.basic_url + '/api-apps/app/workNot/saveOrUpdate';
 					this.$axios.post(url, this.dataInfo).then((res) => {
-						console.log(res);
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',
@@ -1253,11 +1242,17 @@
 							if(parameter=="Update"){
 								this.show = false;
 								this.$emit('request');
+								this.$nextTick(() => {
+									this.reset();
+								})
 							}else{
 								this.show = true;
 								this.$emit('request');
+								this.$nextTick(() => {
+									this.reset();
+								})
 							}
-							this.reset();
+							// this.reset();
 						}
 					}).catch((err) => {
 							this.show = true;
@@ -1356,6 +1351,7 @@
 								message: '生成检验委托书成功',
 								type: 'success'
 							});
+							this.show=false;
 						}else{
 							this.$message({
 							message: '已经生成检验委托书，请勿重复生成',
@@ -1506,16 +1502,7 @@
 				}).catch((err) => {
 				});
 			},
-			getusers(){//获取当前审批人的name
-				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
-					this.$axios.get(url, {}).then((res) => {
-							var resullt=res.data.datas;
-							// var users='';
-							for(var i=0;i<resullt.length;i++){
-							this.users =this.users + resullt[i].username+",";
-						}
-				});
-			},
+		
 		},
 		mounted() {
 			this.getCompany();

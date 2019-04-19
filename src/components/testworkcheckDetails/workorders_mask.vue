@@ -348,8 +348,35 @@
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">
-										<!--检测项目与要求 Begin-->
-										<el-tab-pane label="检测项目与要求" name="first">
+										<!--检验/检测依据 Begin-->
+										<el-tab-pane label="检验检测依据" name="first">
+											<!-- <div class="table-func table-funcb">
+												<el-button type="primary" size="mini" round @click="basisleadbtn">
+													<i class="icon-search"></i>
+													<font>选择</font>
+												</el-button>
+											</div> -->
+
+											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
+													<el-table-column type="index" label="序号" width="50">
+														<template slot-scope="scope">
+															<span> {{scope.$index+1}} </span>
+														</template>
+													</el-table-column>
+
+													<el-table-column label="标准编码" sortable width="160px" prop="SS_NUM">
+											    </el-table-column>
+
+											    <el-table-column label="标准名称" sortable prop="S_NAME">
+											    </el-table-column>
+
+											    <el-table-column prop="VERSION" label="标准版本" sortable width="120px">
+											    </el-table-column>
+											  </el-table>
+										</el-tab-pane>
+										<!--检验/检测依据 End-->
+										<!--检验/检测项目与要求 Begin-->
+										<el-tab-pane label="检验检测项目与要求" name="second">
 											<!-- <div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn2">
 													<i class="icon-search"></i>
@@ -363,13 +390,13 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column label="检验/检测依据" prop="S_NAME" sortable width="260px">
+													<el-table-column label="检验检测项目名称" prop="P_DESC" sortable width="240px">
 													</el-table-column>
 
-													<el-table-column label="检测项目名称" prop="P_DESC" sortable width="240px">
+													<el-table-column label="技术要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
-
-													<el-table-column label="要求" prop="REMARKS" sortable width="300px">
+													
+													<el-table-column label="计量单位" prop="UNIT" sortable width="120px">
 													</el-table-column>
 
 													<el-table-column prop="INSPECT_GROUPDesc" label="专业组" sortable width="120px">
@@ -391,9 +418,9 @@
 													</el-table-column>
 											</el-table>
 										</el-tab-pane>
-										<!--检测项目与要求 End-->
-										<!--分包项目 Begin-->
-										<el-tab-pane label="分包项目" name="second">
+										<!--检验/检测项目与要求 End-->
+										<!--分包项目与要求 Begin-->
+										<el-tab-pane label="分包项目与要求" name="third">
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_CONTRACTList', order: 'descending'}">
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
@@ -481,21 +508,21 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column fixed="right" label="操作" width="160" align="center">
+												<!-- <el-table-column fixed="right" label="操作" width="160" align="center">
 													<template slot-scope="scope">
 														<el-button type="primary" v-if="scope.row.ISCREATED!='1'" size="small" @click="proagree(scope.row)" v-show="showcreateagree">
 															<i class="icon-send"></i>
 															生成分包协议
 														</el-button>
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 
 											</el-table>
 										</el-tab-pane>
-										<!--分包项目 End-->
+										<!--分包项目与要求 End-->
 
 										<!--检验检测设备 Begin-->
-										<el-tab-pane label="检验检测设备" name="third">
+										<el-tab-pane label="检验检测设备" name="fourth">
 											<el-table :data="workorderForm.WORKORDER_ASSETList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
 													
 												<el-table-column type="index" label="序号" width="50">
@@ -520,7 +547,7 @@
 										<!--检验检测设备 End-->
 
 										<!--成果数据 Begin-->
-										<el-tab-pane label="成果数据" name="fourth">
+										<el-tab-pane label="成果数据" name="fifth">
 											<el-row>
 												<el-col :span="24">
 													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
@@ -546,9 +573,16 @@
 
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
-													</el-table>
 
-												
+														<el-table-column fixed="right" label="操作" width="120px">
+															<template slot-scope="scope">
+																<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+																	<i class="icon-excel"></i>
+																</el-button>
+															</template>
+														</el-table-column>
+
+													</el-table>
 												</el-col>
 											</el-row>
 										</el-tab-pane>
@@ -779,8 +813,8 @@
 						{ required: false, trigger: 'change', validator: this.Validators.isSpecificKey},
 					],
 					ITEM_QUALITY: [
-						{ required: true, message: '不能为空', trigger: 'change' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey}
+						{ required: true, message: '必填', trigger: 'blur'},
+						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],
 					CHECK_BASIS: [
 						{ required: true, message: '不能为空', trigger: 'change' },
@@ -992,6 +1026,18 @@
 			},
 			appendite(value){
 				this.workorderForm.ITEMNUM = value;//样品名称
+			},
+			//预览文件
+			readFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.detailId
+					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+				 window.open(url); 
 			},
 			// getleader(maingroupid,PROJECTLIST,index,add){
 			// 	this.maingroupid=maingroupid;

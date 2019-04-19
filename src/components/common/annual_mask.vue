@@ -702,7 +702,6 @@
 		name: 'masks',
 		components: {docTable},
 		data() {
-			
 			return {
 				docParm: {
 					'model': 'new',
@@ -979,7 +978,13 @@
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
 							if(res.data.resp_code == 0){
-								this[delList].splice(index,1);
+								if(delList == 'worlplanlist'){
+									this.worlPlanListForm.worlplanlist.splice(index,1);
+								}else if(delList == 'basisList'){
+									this.basisListForm.basisList.splice(index,1);
+								}else{
+									this.proTestListForm.proTestList.splice(index,1);
+								}
 							}else{
 								this.$message({
 									message: res.data.resp_msg,
@@ -989,7 +994,13 @@
 						}).catch((err) => {});
 					}).catch(() => {});
 				}else{
-					this[delList].splice(index,1);
+					if(delList == 'worlplanlist'){
+						this.worlPlanListForm.worlplanlist.splice(index,1);
+					}else if(delList == 'basisList'){
+						this.basisListForm.basisList.splice(index,1);
+					}else{
+						this.proTestListForm.proTestList.splice(index,1);
+					}
 				}
 			},
 			//下达任务通知书
@@ -1298,7 +1309,7 @@
 					}
 					// this.dialogVisible5 = false;
 					// this.$emit('request');
-					this.requestDeptname();//调用企业名称requestDeptname函数
+					// this.requestDeptname();//调用企业名称requestDeptname函数
 					this.resetBasisInfo5();//调用resetBasisInfo函数
 				}
 			},
@@ -1701,6 +1712,12 @@
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
+				this.docParm = {
+					'model': 'new',
+					'appname': '年度计划',
+					'recordid': 1,
+					'appid': 20
+				};
 				this.assignshow = false;//下达 按钮
 				var myDate = new Date();
 				var date = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -1734,12 +1751,7 @@
 				this.basisListForm.basisList = []; //检测依据
 				this.proTestListForm.proTestList = []; //项目检测和要求
 				this.isEditList = false;
-				this.docParm = {
-					'model': 'new',
-					'appname': '年度计划',
-					'recordid': 1,
-					'appid': 20
-				};
+				
 				this.getUser('new');
 				this.addtitle = true;
             	this.modifytitle = false;
@@ -1751,6 +1763,7 @@
             	this.edit = true;
 				this.noedit = false;
 				this.getCompany();
+				this.$refs.docTable.getData('new');
 			},
 			// 这里是修改
 			detail(dataid) {

@@ -79,7 +79,7 @@
 												<el-radio label="10">专项抽查复查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="11">其它</el-radio>
+												<el-radio label="11">其他</el-radio>
 											</el-col>
 										</el-row>
 									</el-radio-group>
@@ -757,7 +757,7 @@
 			},
 			//承检单位
 			getCompany() {
-				var url = this.basic_url + '/api-user/depts/treeByType';
+				var url=this.basic_url+'/api-user/depts/findStation/2';
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.selectData = res.data;
@@ -1343,8 +1343,8 @@
 			},
 			//生成检验委托书
 			buildcheck(){
-				var dataid = this.dataInfo.ID;
-				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE=1';
+				  var dataid = this.dataInfo.ID;
+				  var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE=1';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

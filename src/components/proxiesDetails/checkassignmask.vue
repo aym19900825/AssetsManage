@@ -301,19 +301,17 @@
 												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
-															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
-                              </el-input> 
+															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
 												</el-table-column>
-                                                <el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
+												<el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
 													<template slot-scope="scope">
-                                                        <el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.QUATITY'" >
-															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
-                                                            </el-input> 
+															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.QUATITY'" >
+															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -449,15 +447,14 @@
 													</template>
 												</el-table-column>
 
-                                                <el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
+												<el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
 													<template slot-scope="scope">
-                                                        <el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.QUATITY'" >
-															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
-                                                            </el-input> 
+															<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.QUATITY'" >
+															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
-							                    <el-table-column fixed="right" label="操作" width="120">
+												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'requestList')" type="text" size="small" v-if="!viewtitle">
 															 <i class="icon-trash red"></i>
@@ -475,7 +472,7 @@
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
+										<el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
 													<el-radio label="认证中心"></el-radio>
@@ -503,7 +500,7 @@
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
 													<el-radio label="自取"></el-radio>
 													<el-radio label="邮寄"></el-radio>
-													<el-radio label="其它"></el-radio>
+													<el-radio label="其他"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>

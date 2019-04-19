@@ -138,12 +138,12 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBYDesc">
+											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="110px">
 												<el-input v-model="samplesForm.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间">
+											<el-form-item label="修改时间" label-width="110px">
 												<el-input v-model="samplesForm.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -274,7 +274,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					GRANT_DATE: [//领样时间
 						{ required: true, message: '请选择', trigger: 'change' }
 					],
-					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其它资料
+					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其他资料
 					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 				},
 				dialogVisible3: false, //对话框

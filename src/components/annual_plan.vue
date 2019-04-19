@@ -163,10 +163,10 @@
 								</el-table-column>
 								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="checkedName.indexOf('年度')!=-1">
 								</el-table-column>
-								<el-table-column label="类型" sortable  width="100px" prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" sortable  width="180px" prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
 								</el-table-column>
-								<el-table-column label="产品类别" sortable width="200px" prop="ITEMTYPE" v-if="checkedName.indexOf('产品类别')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="产品类别" sortable width="200px" prop="ITEMTYPE" v-if="checkedName.indexOf('产品类别')!=-1">
+								</el-table-column> -->
 								<el-table-column label="提出单位" sortable width="120px" prop="PROP_UNITDesc" v-if="checkedName.indexOf('提出单位')!=-1">
 								</el-table-column>
 								<el-table-column label="编辑状态" sortable width="100px" prop="STATUSDesc" v-if="checkedName.indexOf('编辑状态')!=-1">
@@ -225,7 +225,7 @@
 					'描述',
 					'年度',
 					'类型',
-					'产品类别',
+					// '产品类别',
 					'提出单位',
 					'提报日期',
 					'编辑状态',
@@ -252,10 +252,10 @@
 						label: '类型',
 						prop: 'TYPE'
 					},
-					{
-						label: '产品类别',
-						prop: 'ITEMTYPE'
-					},
+					// {
+					// 	label: '产品类别',
+					// 	prop: 'ITEMTYPE'
+					// },
 					{
 						label: '提出单位',
 						prop: 'PROP_UNITEDesc'
@@ -574,7 +574,7 @@
 		},
 		// 导出
 		exportData() {
-			var selData = this.selMenu;
+			var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择您要导出的数据',

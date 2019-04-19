@@ -160,6 +160,12 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="100px">
+												<el-input v-model="testing_projectForm.DEPTIDDesc" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc" label-width="100px">
 												<el-input v-model="testing_projectForm.CHANGEBYDesc" :disabled="true"></el-input>
 											</el-form-item>
@@ -730,42 +736,42 @@
 							}).catch(_ => {
 								this.close();
 							});	
-						}else{
-							var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
-							this.$axios.post(url, _this.testing_projectForm).then((res) => {
-							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
-								if(parameter='Update'){
-									this.show=false;
-								}else{
-									this.show=true;
-								}
-								this.$emit('reset');
-								this.$emit('request');
-								this.visible();
+					}else{
+						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
+						this.$axios.post(url, _this.testing_projectForm).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							if(parameter='Update'){
+								this.show=false;
 							}else{
-								this.show = true;
-								if(res.data.resp_code != 0) {
-									this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-										});
-								}
+								this.show=true;
 							}
-						//清空表单验证
-						}).catch((err) => {
-						});
-					}
-			} else {
-						this.show = true;
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-					}
+							this.$emit('reset');
+							this.$emit('request');
+							this.visible();
+						}else{
+							this.show = true;
+							if(res.data.resp_code != 0) {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}
+							//清空表单验证
+							}).catch((err) => {
+							});
+						}
+						} else {
+							this.show = true;
+							this.$message({
+								message: '未填写完整，请填写',
+								type: 'warning'
+							});
+						}
 				});
 			},
 			getpepole(item) {

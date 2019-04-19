@@ -538,7 +538,7 @@
 					PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
 					PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
 					MODEL: [{ required:true, trigger:'change', validator: this.Validators.isSpecificKey}],//型号
-					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其它资料
+					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其他资料
 					MEMO: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//备注
 				},
 				selectDept:[],//承检单位
@@ -807,10 +807,10 @@
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.noviews = true;
-            	this.modify=false;
+				this.modify=false;
 				this.show = true;
 				this.views = false;
-            	this.edit = true;
+				this.edit = true;
 				this.noedit = false;
 			},
 			findDeptId(){

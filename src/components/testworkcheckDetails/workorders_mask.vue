@@ -396,7 +396,7 @@
 													<el-table-column label="技术要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
 													
-													<el-table-column label="计量单位" prop="UNIT" sortable width="120px">
+													<el-table-column label="计量单位" prop="UNITDesc" sortable width="120px">
 													</el-table-column>
 
 													<el-table-column prop="INSPECT_GROUPDesc" label="专业组" sortable width="120px">
@@ -1777,10 +1777,10 @@
 						}
 					}).catch((err) => {
 					});
-			          } else {
-			            return false;
-			          }
-			        });
+						} else {
+							return false;
+						}
+					});
 			},
 			//查看子任务单
 			checkchildlist(){

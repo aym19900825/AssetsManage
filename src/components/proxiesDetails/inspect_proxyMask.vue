@@ -196,7 +196,7 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
-											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
@@ -472,29 +472,33 @@
 															<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn(scope.row)">
 															</el-button> -->
 														</el-input>
-													
+														<!-- 新建时事中心的不可输 2 -->
+														<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入" >
+														</el-input>
+														<el-input v-show="scope.row.DEPTTYPE==2&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true" >
+														</el-input>
+										        <!-- 工作任务通知书生成委托书 -->
 														<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.BASIS" placeholder="请输入" :disabled="true">
 															<el-button slot="append" icon="el-icon-search" @click="basis1(scope.row,scope.$index)">
 															</el-button>
 														</el-input>
-														<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入">
-														</el-input>
-															<span v-show="!scope.row.isEditing">{{scope.row.BASIS}}</span>
+														<span v-show="!scope.row.isEditing">{{scope.row.BASIS}}</span>
 													</template>
 												</el-table-column>
 
 												<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
-															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
-																<!-- <el-button slot="append" icon="el-icon-search" @click="basisleadbtn2(scope.row)">
-																</el-button> -->
+															<el-input v-show="scope.row.isEditing&&scope.row.DEPTTYPE==2&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" :disabled="true">
+															</el-input>
+																<!-- 新建时事中心的不可输 2 -->
+															<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" >
+															</el-input>
+															<el-input v-show="scope.row.DEPTTYPE==2&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" :disabled="true" >
 															</el-input>
 															<el-input v-show="scope.row.DEPTTYPE==1&&dataInfo.N_CODE!=null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入" :disabled="true">
 																<el-button slot="append" icon="el-icon-search" @click="contents(scope.row,scope.$index)">
 																</el-button>
-															</el-input>
-															<el-input v-show="scope.row.isEditing&&dataInfo.N_CODE==null" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 															</el-input>
 															<span v-show="!scope.row.isEditing">{{scope.row.P_REMARKS}}</span>
 														</el-form-item>
@@ -583,7 +587,7 @@
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
 													<el-radio label="自取"></el-radio>
 													<el-radio label="邮寄"></el-radio>
-													<el-radio label="其它"></el-radio>
+													<el-radio label="其他"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
@@ -830,6 +834,11 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+          }
+        },
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载
@@ -974,12 +983,13 @@
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
+					PAYMENT_METHOD:[{ required: true, message: '必填', trigger: 'change' }],//付款
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
-						{ required: true, message: '必填', trigger: 'blur'},
+						{required: true, message: '必填', trigger: 'blur'},
 						{trigger: 'blur', validator:this.Validators.isSpecificKey}
 					],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
@@ -2083,9 +2093,9 @@
 			        }else{
 			          	this.show = true;
 			            this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
+										message: '未填写完整，请填写',
+										type: 'warning'
+									});
 			        }
 				});
 			},
@@ -2224,6 +2234,8 @@
 			},
 			//启动流程
 			startup(){
+				this.$refs.dataInfo.validate((valid) => {
+			  if (valid) {
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 1) {
@@ -2253,6 +2265,13 @@
 								}
 							});
 				    }
+				});
+				}else{
+						this.$message({
+										message: '未填写完整，请先填写',
+										type: 'warning'
+									});
+				}
 				});
 			},
 			//审批流程

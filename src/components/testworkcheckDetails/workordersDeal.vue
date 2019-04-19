@@ -87,9 +87,9 @@
 												</el-table-column>
 							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable>
 												</el-table-column>
-												<el-table-column prop="UNIT" label="计量单位" sortable>
+												<el-table-column prop="UNITDesc" label="计量单位" sortable>
 												</el-table-column>
-												<el-table-column prop="UNIT" label="检测结果" sortable>
+												<el-table-column label="检测结果" sortable>
 													<template slot-scope="scope">
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
 													</template>

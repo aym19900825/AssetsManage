@@ -16,10 +16,22 @@
 				</div>
 				<div class="mask_content">
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
-					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
+					<el-form inline-message :model="workorderForm" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
+
 								<!-- 样品信息列表 Begin-->
+								<el-collapse-item title="检测要求与样品信息" name="1">
+									<el-row>
+										<el-col>
+											<el-form-item label="样品检后状态" label-width="150px" label-position="left" style="text-align: left;">
+												<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="noedit">
+													<el-radio v-for="(data,index) in Select_ITEM_CHECK_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检验检测项目与要求" name="first">
@@ -33,7 +45,7 @@
 												</el-table-column>
 							            		<el-table-column prop="REMARKS" label="技术要求" sortable>
 												</el-table-column>
-												<el-table-column prop="UNIT" label="计量单位" sortable>
+												<el-table-column prop="UNITDesc" label="计量单位" sortable>
 												</el-table-column>
 												<el-table-column label="检测结果" sortable>
 													<template slot-scope="scope">
@@ -42,8 +54,9 @@
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" :rules="{required: true, message: '请输入', trigger: 'blur'}" style="margin-left: 0px;">
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" style="margin-left: 0px;">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
+																<el-option key="0" label="" value=""></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
 																<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -83,7 +96,7 @@
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ISQUALIFIED'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ISQUALIFIED'">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
 																<el-option key="1" label="" value=""></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
@@ -284,6 +297,7 @@
             };
 			return {
 				sampleNumList: [],
+				Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
 				file_url: Config.file_url,
 				po_url: Config.po_url,
 				dialogVisible2:false,
@@ -356,6 +370,12 @@
 			};
 		},
 		methods: {
+			getITEM_CHECK_STATUS() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_CHECK_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_ITEM_CHECK_STATUS = res.data;
+				}).catch(error => {})
+			},
 			showMoudel(index,row){
 				if(row.TEMPLATELIST.length == 0){
 					this.$message({
@@ -378,7 +398,7 @@
 					var tmpList = projectList[i].WORKORDER_PROJECT_ITEMList;
 					for (let j = 0; j < tmpList.length; j++) {
 						if(!tmpList[j].MEMO || tmpList[j].MEMO==''){
-							this.message({
+							this.$message({
 								message: '检测项目结果未录入完全！',
 								type: 'warning'
 							});
@@ -390,7 +410,7 @@
 					var tmpList = contractList[i].WORKORDER_CONTRACT_ITEMList;
 					for (let j = 0; j < tmpList.length; j++) {
 						if(!tmpList[j].beizhu || tmpList[j].beizhu==''){
-							this.message({
+							this.$message({
 								message: '分包项目结果未录入完全！',
 								type: 'warning'
 							});
@@ -1144,6 +1164,7 @@
 		mounted() {
 			this.getCompany();
 			this.getUser();
+			this.getITEM_CHECK_STATUS();
 		},
 	}
 </script>

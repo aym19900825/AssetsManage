@@ -421,6 +421,13 @@
 					});
 					return;
 				} else{
+					if(this.selMenu[0].STATE == '1'){
+						this.$message({
+							message: '此工作任务单未接受任务，不允许任务处理！',
+							type: 'warning'
+						});
+						return;
+					}
 					this.$refs.workDeal.showDialog(this.selMenu[0].ID);
 				}
 			},
@@ -549,6 +556,13 @@
 					});
 					return;
 				} else {
+					if(this.selMenu[0].STATE == '1'){
+						this.$message({
+							message: '此工作任务单未接受任务，不允许任务处理！',
+							type: 'warning'
+						});
+						return;
+					}
 					this.$refs.task.view(this.selMenu[0].ID);	
 				}
 			},

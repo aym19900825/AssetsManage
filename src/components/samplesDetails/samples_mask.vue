@@ -19,7 +19,14 @@
 				
 				<!--详情页弹出框 Begin-->
 				<div class="mask_content">
-					<el-form inline-message :model="samplesForm" :label-position="labelPosition" :rules="rules" ref="samplesForm" label-width="110px" status-icon class="demo-form-inline">
+					<el-form inline-message 
+							 ref="samplesForm" 
+						     :model="samplesForm" 
+							 :label-position="labelPosition" 
+							 :rules="rules" 
+							 label-width="110px" 
+							 status-icon 
+							 class="demo-form-inline">
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">

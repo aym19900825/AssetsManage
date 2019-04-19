@@ -196,7 +196,7 @@
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
-											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
 									</el-col>
@@ -830,6 +830,11 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+          }
+        },
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载

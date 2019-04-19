@@ -483,7 +483,7 @@
 			},
 				//下达任务
 			build(){
-				if(this.selUser.length == 0) {
+					if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要下达任务的数据',
 						type: 'warning'
@@ -495,19 +495,25 @@
 						type: 'warning'
 					});
 					return;
+				}else if(this.selUser[0].ISRECEIVE==''||this.selUser[0].ISRECEIVE==null||this.selUser[0].ISRECEIVE==undefined||this.selUser[0].ISRECEIVE==0){
+					this.$message({
+						message: '此委托书暂不能下达任务，请查看是否接样!',
+						type: 'warning'
+					});
+					return;
 				}else if(this.selUser[0].STATE !=3&&this.selUser[0].STATE !=15) {
 					this.$message({
-						message: '此委托书暂不能下达任务，请确认【状态】!',
+						message: '此委托书暂不能下达任务，请查看【状态】!',
 						type: 'warning'
 					});
 					return;
 				}else if(this.selUser[0].ISCREATED==1){
 					this.$message({
-						message: '已经生成任务单，无须在次生成',
+						message: '已经生成任务单，无需再次生成',
 						type: 'warning'
 					});
 					return;
-				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 5)&&(this.selUser.ISCREATED==undefined || (this.selUser.ISCREATED!=undefined&&this.selUser.ISCREATED!=1))){
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&((!!this.selUser.ISRECEIVE)&&this.selUser.ISRECEIVE!=0)){
 					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},

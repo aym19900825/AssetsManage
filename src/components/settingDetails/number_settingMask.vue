@@ -90,7 +90,7 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="2"  v-show="views">
+								<el-collapse-item title="其他" name="2"  v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人"  label-width="110px">
@@ -99,19 +99,23 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="录入时间" label-width="80px">
-												<el-input v-model="numbsetForm.createtime" :disabled="true"></el-input>
+												<el-input v-model="numbsetForm.createTime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-										<el-form-item label="变更人" label-width="80px">
-												<el-input v-model="numbsetForm.updateuserDesc" :disabled="true"></el-input>
+											<el-form-item label="机构" prop="deptidDesc" label-width="100px">
+												<el-input v-model="numbsetForm.deptidDesc" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="8">
-											<el-form-item label="变更时间"  label-width="110px">
-												<el-input v-model="numbsetForm.updatetime" :disabled="true"></el-input>
+										<el-form-item label="变更人" label-width="110px">
+												<el-input v-model="numbsetForm.updateUser" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="变更时间"  label-width="80px">
+												<el-input v-model="numbsetForm.updateTime" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

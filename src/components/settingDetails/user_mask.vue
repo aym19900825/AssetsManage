@@ -438,8 +438,14 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="updateby" label-width="100px">
-												<el-input v-model="user.updateby" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="deptName" label-width="100px">
+												<el-input v-model="user.deptName" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="updatebyName" label-width="100px">
+												<el-input v-model="user.updatebyName" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

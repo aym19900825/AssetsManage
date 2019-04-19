@@ -571,7 +571,7 @@
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
 													<el-radio label="自取"></el-radio>
 													<el-radio label="邮寄"></el-radio>
-													<el-radio label="其它"></el-radio>
+													<el-radio label="其他"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>

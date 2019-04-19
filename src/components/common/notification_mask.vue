@@ -78,7 +78,7 @@
 												<el-radio label="10">专项抽查复查</el-radio>
 											</el-col>
 											<el-col :span="6">
-												<el-radio label="11">其它</el-radio>
+												<el-radio label="11">其他</el-radio>
 											</el-col>
 											
 									</el-radio-group>

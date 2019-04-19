@@ -531,7 +531,7 @@
 					PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
 					PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
 					MODEL: [{ required:true, trigger:'change', validator: this.Validators.isSpecificKey}],//型号
-					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其它资料
+					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其他资料
 					MEMO: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//备注
 				},
 				selectDept:[],//承检单位

@@ -6,7 +6,7 @@
 			<span @click="spantext($event)"  :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>
 			</el-col>
 		</el-row>
-		<h3 class="pt30">其它</h3>
+		<h3 class="pt30">其他</h3>
 		<el-row :gutter="30">
 			<el-col :span="6" v-for="(item,index) in classLists1" :key="index">
 			<span @click="spantext($event)" :class="currentItem==item?'current':'' "><i :class="item">{{item}}</i></span>

@@ -110,7 +110,7 @@
 										</el-col>
 									</el-row> -->
 								</el-collapse-item>
-								<el-collapse-item title="其它" name="2" v-show="views">
+								<el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="createUser">
@@ -123,8 +123,14 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="updateUserName">
-												<el-input v-model="dataInfo.updateUserName" placeholder="当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="机构" prop="deptidDesc" label-width="100px">
+												<el-input v-model="dataInfo.deptidDesc" placeholder="当前录入人机构" :disabled="edit">
+												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="updateUser">
+												<el-input v-model="dataInfo.updateUser" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

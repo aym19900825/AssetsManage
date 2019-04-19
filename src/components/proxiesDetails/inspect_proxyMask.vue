@@ -2083,9 +2083,9 @@
 			        }else{
 			          	this.show = true;
 			            this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
+										message: '未填写完整，请填写',
+										type: 'warning'
+									});
 			        }
 				});
 			},
@@ -2224,6 +2224,8 @@
 			},
 			//启动流程
 			startup(){
+				this.$refs.dataInfo.validate((valid) => {
+			  if (valid) {
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 1) {
@@ -2253,6 +2255,13 @@
 								}
 							});
 				    }
+				});
+				}else{
+						this.$message({
+										message: '未填写完整，请先填写',
+										type: 'warning'
+									});
+				}
 				});
 			},
 			//审批流程

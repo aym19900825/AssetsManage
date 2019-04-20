@@ -1640,6 +1640,7 @@
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					//依据
+					console.log(res.data);
 					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
 						res.data.WORKORDER_BASISList[i].isEditing = false;
 					}
@@ -1671,9 +1672,9 @@
 					//分包项目
 					for(var i = 0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
 						// res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
-						// // this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
+					  // this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
 						// res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
-						// res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+						// res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION =res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION.split(',');
 					}
 					res.data.CJDW = Number(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);

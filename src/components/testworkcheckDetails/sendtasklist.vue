@@ -328,17 +328,17 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER"  placeholder="请选择" @change="visableleader($event,PROJECTLIST,scope.$index)" >
+															<el-select clearable v-model="scope.row.LEADER"  placeholder="请选择" @change="visableleader($event,'PROJECTLIST',scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="MASTER_INSPECTOR" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSION" label="助手" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.MASTER_INSPECTOR'" >
-															<el-select clearable v-model="scope.row.MASTER_INSPECTOR" placeholder="请选择" multiple >
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ASSIST_PERSION'" >
+															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择" multiple >
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -444,17 +444,17 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择" @change="visableleader($event,CONTRACTList,scope.$index)" >
+															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择" @change="visableleader($event,'CONTRACTList',scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="MASTER_INSPECTOR" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSION" label="助手" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.MASTER_INSPECTOR'" >
-															<el-select clearable v-model="scope.row.MASTER_INSPECTOR" placeholder="请选择"  multiple>
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ASSIST_PERSION'" >
+															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择"  multiple>
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -1173,18 +1173,19 @@
 				this.noedit = true;
 				var url = this.basic_url + '/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
 					this.$axios.get(url, { }).then((res) => {
+						console.log(res.data.datas);
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
 					for(let i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
 						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
 						res.data.datas.WORKORDER_PROJECTList[i].LEADER = Number(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
-						res.data.datas.WORKORDER_PROJECTList[i].MASTER_INSPECTOR = Number(res.data.datas.WORKORDER_PROJECTList[i].MASTER_INSPECTOR);
+						res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 					}
 					for(let i = 0;i<res.data.datas.WORKORDER_CONTRACTList.length;i++){
 						res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
 						res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
-						res.data.datas.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR = Number(res.data.datas.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR);
+						res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 					}
 					// this.getleader(WORKORDER_CONTRACTList.INSPECT_GROUP);
 							this.workorderForm = res.data.datas;
@@ -1251,21 +1252,18 @@
 									});
 							}else{
 									for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-										console.log(this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR);
-								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR){
-									console.log(this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.length);
-										this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR = 	this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.join(',');
-										// this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.toString(',')
+										console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
+									console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.length);
+										this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.join(',');
 								}
 								
 							}
 							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-								console.log(this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR);
-								if(!!this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR){
-									this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR = 	this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR.join(',');
-									// this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR.toString(',')
+								console.log(this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION);
+								if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
+									this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
 								}
-									
 							}
 				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
@@ -1372,11 +1370,11 @@
 				}
 			  if(!!add){
 					if(PROJECTLIST=='PROJECTLIST'){
-					this.workorderForm.WORKORDER_PROJECTList[index].LEADER='';
-					this.workorderForm.WORKORDER_PROJECTList[index].MASTER_INSPECTOR=[];
+						this.workorderForm.WORKORDER_PROJECTList[index].LEADER='';
+				  	this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
 					}else{
 						this.workorderForm.WORKORDER_CONTRACTList[index].LEADER='';
-						this.workorderForm.WORKORDER_CONTRACTList[index].MASTER_INSPECTOR=[];
+						this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
 					}
 				}
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
@@ -1390,10 +1388,10 @@
 				if(!leader){
 						return;
 				}
-				if(PROJECTLIST==PROJECTLIST){
-					this.workorderForm.WORKORDER_PROJECTList[index].MASTER_INSPECTOR=[];
+				if(PROJECTLIST=='PROJECTLIST'){
+					this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
 				}else{
-					this.workorderForm.WORKORDER_CONTRACTList[index].MASTER_INSPECTOR=[];
+					this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
 				}
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.maingroupid;
 				this.$axios.get(url, {}).then((res) => {

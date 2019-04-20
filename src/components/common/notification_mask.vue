@@ -179,28 +179,38 @@
 							</el-collapse-item>
 							<div class="el-collapse-item pt10 pb20" aria-expanded="true" accordion>
 								<el-tabs v-model="activeName">
-									<el-tab-pane label="检验依据" name="first">
-										<div class="table-func table-funcb">
+									<el-tab-pane label="检验检测依据" name="first">
+										<div class="table-func table-funcb table-funcW100">
 											<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 													<i class="icon-add"></i>
-													<font>新建行</font>
+													<font>新建中心外</font>
 											</el-button>
 											<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 												<i class="icon-search"></i>
-												<font>选择</font>
+												<font>选择中心内</font>
 											</el-button>
 										</div>
 
 										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
 											<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 											</el-table-column>
-											<el-table-column label="检验标准编号" sortable width="200px" prop="S_NUM">
+											<el-table-column label="编码" sortable width="200px" prop="S_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容" :disabled="noedit">
 														   <!-- <el-button slot="append" icon="el-icon-search" :disabled="standard"></el-button> -->
 													</el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column label="标准编号" sortable width="200px" prop="SS_NUM">
+												<template slot-scope="scope">
+													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.SS_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
+													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" placeholder="请输入内容" :disabled="noedit">
+														   <!-- <el-button slot="append" icon="el-icon-search" :disabled="standard"></el-button> -->
+													</el-input>
+													<span v-show="!scope.row.isEditing">{{scope.row.SS_NUM}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
@@ -239,15 +249,15 @@
 										</el-table>
 									</el-tab-pane>
 
-									<el-tab-pane label="检验项目与要求" name="second">
-											<div class="table-func table-funcb">
+									<el-tab-pane label="检验检测项目与要求" name="second">
+											<div class="table-func table-funcb table-funcW100">
 											<el-button type="success" size="mini" round @click="addfieldProject" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 													<i class="icon-add"></i>
-													<font>新建行</font>
+													<font>新建中心外</font>
 											</el-button>
 											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 												<i class="icon-search"></i>
-												<font>选择</font>
+												<font>选择中心内</font>
 											</el-button>
 											</div>
 	                                        
@@ -256,11 +266,18 @@
 												highlight-current-row
 												style="width: 100%;" 
 												:default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
+												<el-table-column type="index" label="序号" width="50">
+													<template slot-scope="scope">
+														<span> {{scope.$index+1}} </span>
+													</template>
+												</el-table-column>
+
 												<el-table-column prop="iconOperation" fixed label="" width="50px" >
 													<span v-show="!viewtitle">
 														<template slot-scope="scope"><i class="el-icon-check" v-if="scope.row.isEditing"></i><i class="el-icon-edit" v-else></i></template>
 													</span>
 												</el-table-column>
+
 
 												<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 													<template slot-scope="scope">
@@ -771,6 +788,7 @@
 				this.dataInfo.ITEM_NAME = '';
 				this.dataInfo.PRO_NUM = '';
 				this.dataInfo.S_NUM = '';
+				this.dataInfo.SS_NUM = '';
 				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
@@ -899,6 +917,7 @@
 				var obj = {
 					NUMBER: '1',
 					S_NUM: '',
+					SS_NUM: '',
 					DEPTTYPE:'1',
 					S_NAME: '',
 					S_ENGNAME: '',
@@ -925,6 +944,7 @@
 						var data={
 							P_NUM:this.dataInfo.P_NUM,
 							PRO_NUM:this.dataInfo.PRO_NUM,
+							SS_NUM:this.dataInfo.SS_NUM,
 							S_NUM:basisnums,
 						}
 					this.$refs.standardchild.basislead(data);
@@ -935,6 +955,7 @@
 				for(var i = 0;i<val.length;i++){
 						var List={
 								S_NUM: val[i].S_NUM,
+								SS_NUM: val[i].SS_NUM,
 								S_NAME: val[i].S_NAME,
 								VERSION:val[i].VERSION,
 								DEPTTYPE:'2',
@@ -979,6 +1000,7 @@
 						var data={
 							P_NUM:this.dataInfo.P_NUM,
 							PRO_NUM:this.dataInfo.PRO_NUM,
+							SS_NUM:this.dataInfo.SS_NUM,
 							S_NUM:sum,
 							proxypnum:proxypnum
 						}
@@ -1198,6 +1220,7 @@
 				this.dataInfo.ITEM_NAME = '';
 				this.dataInfo.PRO_NUM = '';
 				this.dataInfo.S_NUM = '';
+				this.dataInfo.SS_NUM = '';
 				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
@@ -1206,6 +1229,7 @@
 				this.dataInfo.PRO_NUM = value[0];
 				this.dataInfo.ITEM_NAME = value[1];
 				this.dataInfo.S_NUM = '';
+				this.dataInfo.SS_NUM = '';
 				this.dataInfo.WORK_NOTICE_CHECKBASISList = [];
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},

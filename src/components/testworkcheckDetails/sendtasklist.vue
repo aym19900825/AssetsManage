@@ -293,10 +293,10 @@
 												</el-table-column>
 
 												<el-table-column type="index" label="序号" width="50">
-														<template slot-scope="scope">
-															<span> {{scope.$index+1}} </span>
-														</template>
-													</el-table-column>
+													<template slot-scope="scope">
+														<span> {{scope.$index+1}} </span>
+													</template>
+												</el-table-column>
 
 												<el-table-column prop="P_DESC" label="检验检测项目名称" sortable width="200px">
 													<template slot-scope="scope">
@@ -384,10 +384,10 @@
 												</el-table-column>
 
 												<el-table-column type="index" label="序号" width="50">
-														<template slot-scope="scope">
-															<span> {{scope.$index+1}} </span>
-														</template>
-													</el-table-column>
+													<template slot-scope="scope">
+														<span> {{scope.$index+1}} </span>
+													</template>
+												</el-table-column>
 
 												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
 													<template slot-scope="scope">

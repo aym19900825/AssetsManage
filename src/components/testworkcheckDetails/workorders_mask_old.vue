@@ -1179,18 +1179,18 @@
 			downLoadRow(row){
 				if(row.FILECHECKED){
 					var url = row.FILEPATH 
-                        + '&userid=' + this.docParm.userid
-                        + '&username=' + this.docParm.username
-                        + '&deptid=' + this.docParm.deptid
-                        + '&deptfullname=' + this.docParm.deptfullname;
-                	window.open(url);
+					+ '&userid=' + this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname;
+					window.open(url);
 				}else if(row.FILE_ORGCHECKED){
 					var url = row.FILEPATH_ORG 
-                        + '&userid=' + this.docParm.userid
-                        + '&username=' + this.docParm.username
-                        + '&deptid=' + this.docParm.deptid
-                        + '&deptfullname=' + this.docParm.deptfullname;
-                	window.open(url);
+						+ '&userid=' + this.docParm.userid
+						+ '&username=' + this.docParm.username
+						+ '&deptid=' + this.docParm.deptid
+						+ '&deptfullname=' + this.docParm.deptfullname;
+						window.open(url);
 				}else{
 					this.$message({
 						message: '请选择要下载的文件',

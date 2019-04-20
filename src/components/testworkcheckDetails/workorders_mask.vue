@@ -20,7 +20,7 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.workorderForm.STATE!=3" class="pr10">
+							<span v-if="this.workorderForm.STATE==3" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
@@ -363,8 +363,11 @@
 															<span> {{scope.$index+1}} </span>
 														</template>
 													</el-table-column>
+													
+													<el-table-column label="编码" sortable width="160px" prop="S_NUM">
+											    </el-table-column>
 
-													<el-table-column label="标准编码" sortable width="160px" prop="SS_NUM">
+													<el-table-column label="标准编号" sortable width="160px" prop="SS_NUM">
 											    </el-table-column>
 
 											    <el-table-column label="标准名称" sortable prop="S_NAME">
@@ -568,7 +571,7 @@
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 														</el-table-column>
 
-														<el-table-column label="文件名称" prop="FILESIZE_ORG">
+														<el-table-column label="文件名称" prop="FILENAME">
 														</el-table-column>
 
 														<el-table-column label="文件大小" prop="FILESIZE">
@@ -1279,7 +1282,7 @@
 					'appname': '检验检测项目_原始数据模板',
 					'recordid': data.id,
 				}).then((res) => {
-					this.modulenum.FILESIZE_ORG = res.data.fileList[0].filesize;
+					this.modulenum.FILENAME = res.data.fileList[0].filesize;
 					this.modulenum.FILEPATH_ORG = res.data.fileList[0].filepath;
 					this.modulenum.FILEID_ORG = res.data.fileList[0].fileid;
 				}).catch((err) => {
@@ -1564,7 +1567,7 @@
 					FILESIZE: '',
 					FILEID_ORG: '',
 					FILEPATH_ORG: '',
-					FILESIZE_ORG: '',
+					FILENAME: '',
 					FILECHECKED: false,
 					FILE_ORGCHECKED: false,
 				};

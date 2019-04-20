@@ -189,7 +189,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 						OTHER: '',//其他资料
 						MEMO: '',//备注
 						ACCEPTDATE: '',//入库时间
-						ACCEPT_PERSON: '',//领样人
+						ACCEPT_PERSON: '',//收样人
 						ACCEPT_DATE: '',//收样日期
 						GRANT_PERSON: '',//领样人
 						GRANT_DATE: '',//领样日期

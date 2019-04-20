@@ -361,20 +361,7 @@
 					}
 				})
 			},
-			//所在机构
-			getDept() {
-				// this.editSearch = 'dept';
-				var type = 2;
-				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
-					this.resourceData = res.data;
-					this.dialogVisible = true;
-				});
-			},
+			
 			//确定按钮
 			queding() {
 				this.getCheckedNodes();
@@ -397,11 +384,7 @@
 		mounted() {
 			this.getKey();
 		},
-		watch:{
-			val(){
-				
-			}
-		},
+		
 	}
 </script>
 

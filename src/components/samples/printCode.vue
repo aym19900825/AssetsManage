@@ -1,7 +1,7 @@
 <template>
 	<div>
 	    <div id="printdom">
-            <img  id="barcode" :src="codeUrl" alt="条码" />
+            <img v-for="item in codeUrl"  id="barcode" :src="item" alt="条码" />
         </div>
 	</div>
 </template>
@@ -25,7 +25,7 @@
 		},
 		data() {
 			return {
-				codeUrl: 'http://192.168.1.115:7902/stripcode/image/91325219.jpg',
+				codeUrl: [],
 				code_url: Config.code_url,
 			}
 		},

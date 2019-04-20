@@ -33,7 +33,12 @@
 
 		},
 		mounted(){
-			this.codeUrl = this.$route.query.imgUrl;
+			var codeUrl = this.$route.query.imgUrl;
+			if(!Array.isArray(codeUrl)){
+				this.codeUrl.push(codeUrl);
+			}else{
+				this.codeUrl = codeUrl;
+			}
 			console.log(this.codeUrl);
             setTimeout(function(){
                 window.print();

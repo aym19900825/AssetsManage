@@ -41,7 +41,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托方名称" prop="V_NAME">
+									<el-form-item label="委托方名称" prop="V_NAME" label-width="100px">
 										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.V_NAME" 
@@ -194,6 +194,7 @@
 					stripe
 					style="width: 100%;"
 					v-show="sampleType=='2'"
+					height="300"
 					>
 					<el-table-column type="selection" width="55"></el-table-column>
 					<el-table-column prop="ITEMNUM" label="样品编号" sortable  ></el-table-column>
@@ -543,19 +544,28 @@
 			printCode(){
 				var _this = this;
 				var selData = this.selSampleData;
+				if(selData.length == 0){
+					this.$message({
+						message: '请选择数据！',
+						type: 'warning'
+					});
+					return;
+				}
 				for (let i = 0; i < selData.length; i++) {
 					this.genCode(selData[i]);
 				}
-				let routeUrl = this.$router.resolve({
-					path:'/printCode',
-					query:{
-						imgUrl: this.codeUrls,
-					}
-				});
-				var time = 500*selData.length;
+				
+				var time = 300*selData.length;
 				setTimeout(() => {
+					let routeUrl = this.$router.resolve({
+						path:'/printCode',
+						query:{
+							imgUrl: this.codeUrls,
+						}
+					});
+					console.log(this.codeUrls);
 					window.open(routeUrl.href, '_blank');
-					_this.resetCode();
+				 	this.codeUrls = [];
 				}, time);
 			},
 			//添加样品管理

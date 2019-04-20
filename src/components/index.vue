@@ -405,11 +405,20 @@ export default {
 					this.$store.dispatch('setcurrentcjdwNavAct',res.data);
 				}).catch(error => {
 				});
-		}
+		},
+		getUser(){//获取当前用户信息
+			var url = this.basic_url + '/api-user/users/currentMap';
+			this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+				this.$store.dispatch('setcurrentuserNavAct',res.data);
+				 console.log(this.$store.state.currentuser);
+					}).catch((err) => {
+					});
+		},
 	},
 	mounted(){
 		//获取全局的承检单位
 		this.getcjdw();
+		this.getUser();
 		//加载待办任务
 		this.requestData();
 		//一级菜单

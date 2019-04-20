@@ -535,9 +535,14 @@
 				xhr.setRequestHeader("client_type", "DESKTOP_WEB");
 				xhr.onload = function() {
 					if (this.status == 200) {
+						var filename = "workplan.xls";
 						var blob = this.response;
+						var link = document.createElement('a');
 						var objecturl = URL.createObjectURL(blob);
-						window.location.href = objecturl;
+						link.href = objecturl;
+						link.download = filename;
+						link.click();
+						// window.location.href = objecturl;
 					}
 					//ids为cancelid数组用逗号拼接的字符串
 					ids = cancelid.toString(',');

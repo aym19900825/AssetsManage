@@ -18,6 +18,30 @@
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
+								<el-dropdown size="small">
+									<button class="btn mr5 btn-primarys">
+										<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon--right"></i>
+									</button>
+								<el-dropdown-menu slot="dropdown">
+    								<el-dropdown-item>
+    									<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
+    								</el-dropdown-item>
+    								
+    								<el-dropdown-item>
+										<el-upload
+										ref="upload"
+										class="upload"
+										:action="uploadUrl()"
+										:on-success="fileSuccess"
+										:limit=1
+										multiple
+										method:="post"
+										:file-list="fileList">
+											<i class="icon-upload-cloud"></i> 上传
+										</el-upload>
+    								</el-dropdown-item>
+						  		</el-dropdown-menu>
+							</el-dropdown>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -327,6 +351,7 @@
 				deptId: '',
 				selUser: [],
 				inspectList: [],
+				fileList:[],//文件上传的接收数据
 				search: false,
 				show: false,
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
@@ -362,6 +387,10 @@
 		methods: {
 			setSelData(val){
 				this.selUser = val;
+			},
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
 				return (<span><i class={data.iconClass}></i><span  title={data.lable}>{data.lable}</span></span>)
@@ -516,7 +545,7 @@
 						type: 'warning'
 					});
 					return;
-				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&((!!this.selUser.ISRECEIVE)&&this.selUser.ISRECEIVE!=0)){
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&this.selUser.ISRECEIVE!=1){
 					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},
@@ -544,9 +573,33 @@
 						window.open(url);
 				}
 			},
+			handleSuccess(response, file, fileList){
+			},
+				// 导入文件上传
+			uploadUrl(){
+					var url = this.basic_url +'/api-apps/app/inspectPro/importExc?access_token='+sessionStorage.getItem('access_token');
+					return url;
+			},
 			// 导入
 			download() {
-				
+				var url = this.basic_url + '/api-apps/app/inspectPro/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var xhr = new XMLHttpRequest();
+					xhr.open('POST', url, true);
+					xhr.responseType = "blob";
+					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
+					xhr.onload = function() {
+						if (this.status == 200) {
+							var filename = "inspectPro.xls";
+							var blob = this.response;
+							var link = document.createElement('a');
+							var objecturl = URL.createObjectURL(blob);
+							// window.location.href = objecturl;
+							link.href = objecturl;
+							link.download = filename;
+							link.click();
+						}
+					}
+					xhr.send();
 			},
 			// 导出
 			exportData() {
@@ -907,5 +960,11 @@ span.el-tree__empty-text {
 	width:200px;
 	top:100%;
 	color: #909399;
+}
+input[type="text"], input[type="password"], textarea {
+    height: 35px;
+    padding: 0px 5px;
+    border-left:none;
+    border: 1px solid #DFE5EA;
 }
 </style>

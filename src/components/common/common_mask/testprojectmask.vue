@@ -56,24 +56,14 @@
 				</el-table-column>
 				<el-table-column label="项目名称" width="220" sortable prop="P_NAME">
 				</el-table-column>
-				<el-table-column label="人员资质" width="180" sortable prop="QUALIFICATION">
-				</el-table-column>
-				<!-- <el-table-column label="状态" width="100" sortable prop="STATUS" :formatter="judge">
-				</el-table-column> -->
-				<el-table-column label="领域" width="120" sortable prop="FIELD" >
-				</el-table-column>
-				<el-table-column label="子领域" width="120" sortable prop="CHILD_FIELD">
+				<el-table-column label="单价" width="100" sortable prop="UNITCOST">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION">
 				</el-table-column>
 				<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
 				</el-table-column>
-				<!-- <el-table-column label="录入人" width="120" prop="ENTERBY" sortable>
-				</el-table-column> -->
 				<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
 				</el-table-column>
-				<!-- <el-table-column label="修改人" width="120" prop="CHANGEBY" sortable>
-				</el-table-column> -->
 				<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
 				</el-table-column>
 			</el-table>

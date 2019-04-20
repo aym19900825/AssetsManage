@@ -420,22 +420,28 @@
 				console.log(file);
 				console.log(fileList);
 			},
+			//导入文件上传
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+                var url = this.basic_url +'/api-apps/app/customer/importExc?access_token='+sessionStorage.getItem('access_token');
                 return url;
             },
 			// 导入
 			download() {
-				var url = this.basic_url + '/api-apps/app/productType/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
+				var url = this.basic_url + '/api-apps/app/customer/importExcTemplete?access_token='+sessionStorage.getItem('access_token');
 				var xhr = new XMLHttpRequest();
 					xhr.open('POST', url, true);
 					xhr.responseType = "blob";
 					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
 					xhr.onload = function() {
 						if (this.status == 200) {
+							var filename = "customer.xls";
 							var blob = this.response;
+							var link = document.createElement('a');
 							var objecturl = URL.createObjectURL(blob);
-							window.location.href = objecturl;
+							link.href = objecturl;
+							link.download = filename;
+							link.click();
+							// window.location.href = objecturl;
 						}
 					}
 					xhr.send();

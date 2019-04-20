@@ -184,11 +184,11 @@
 						</el-col>
 					</el-row>
 				</el-form>
+				<!-- @current-change="selCurrentChange" -->
 				<el-table
 					ref="singleTable"
 					:data="sampleList"
 					highlight-current-row
-					@current-change="selCurrentChange"
 					@selection-change="selSample"
 					border
 					stripe
@@ -203,10 +203,10 @@
 				<img  id="barcode" :src="codeUrl" alt="条码" v-show="codeUrl!=''"/>
 			</div>
 			<span slot="footer">
-				<!-- <el-button type="primary" @click="genCode">生成条码</el-button> -->
-				<router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
+				<el-button type="primary" @click="printCode">打印条码</el-button>
+				<!-- <router-link target="_blank" :to="{path:'/printCode',query:{imgUrl: codeUrl}}">
 					<el-button type="primary" v-show="codeUrl!=''">打印条码</el-button>
-				</router-link>
+				</router-link> -->
 			</span>
 		</el-dialog>
 	</div>
@@ -244,6 +244,7 @@
 				appName: 'item',
 				codeDialog: false,
 				codeUrl: '',
+				codeUrls: [],
 				code_url: Config.code_url,
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -370,10 +371,11 @@
 				this.genCode();
 			},
 			selSample(val){
+				console.log(val);
 				this.selSampleData = val;
-				this.genCode();
+				// this.genCode();
 			},
-			genCode(){
+			genCode(data){
 				if(this.sampleType=='2'&&this.selSampleData.length==0){
 					this.$message({
 						message: '请您选择数据',
@@ -381,27 +383,27 @@
 					});
 					return;
 				}
-				if(this.selSampleData.length>1){
-					this.$message({
-						message: '不可同时选择多条数据',
-						type: 'warning'
-					});
-					return;
-				}
+				// if(this.selSampleData.length>1){
+				// 	this.$message({
+				// 		message: '不可同时选择多条数据',
+				// 		type: 'warning'
+				// 	});
+				// 	return;
+				// }
 				var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='
-						+this.selMenu[0].ITEMNUM
+						+ data.ITEMNUM
 						+'&SIMPLE_NAME='
-						+ this.selMenu[0].DESCRIPTION
+						+ data.DESCRIPTION
 						+'&CODE_TYPE='
 						+ this.codeType;
 				if(this.sampleType=='2'){
-					url = url+ '&ITEM_STEP='+ this.selSampleData[0].ITEM_STEP;
+					url = url+ '&ITEM_STEP='+ data.ITEM_STEP;
 				}
 				this.$axios.get(url, {}).then((res) => {//.delete 传数据方法
 					if(res.data.resp_code == 0) {
 						// this.sampleTypeFlag = false;
 						this.codeDialog = true;
-						this.codeUrl = this.code_url + res.data.datas;
+						this.codeUrls.push(this.code_url + res.data.datas);
 						this.saveData();
 					}
 				}).catch((err) => {});
@@ -425,11 +427,11 @@
 				var dataid = this.selMenu[0].ID;
 				this.$axios.get(this.basic_url + '/api-apps/app/item/' + dataid, {}).then((res) => {
 					this.sampleList = res.data.ITEM_LINEList;
-					if(this.sampleList.length>0){
-						setTimeout(() => {
-							this.selCurrentChange(res.data.ITEM_LINEList[0]);
-						}, 0);
-					}
+					// if(this.sampleList.length>0){
+					// 	setTimeout(() => {
+					// 		this.selCurrentChange(res.data.ITEM_LINEList[0]);
+					// 	}, 0);
+					// }
 				}).catch((err) => {});
 			},
 			setSelData(val){
@@ -535,17 +537,26 @@
 				this.selSampleData = [];
 				this.sampleList = [];
 				this.codeUrl = '';
+				this.codeUrls = [];
 				// this.requestData();
 			},
 			printCode(){
+				var _this = this;
+				var selData = this.selSampleData;
+				for (let i = 0; i < selData.length; i++) {
+					this.genCode(selData[i]);
+				}
 				let routeUrl = this.$router.resolve({
-					name: '/print',
+					path:'/printCode',
 					query:{
-						imgUrl: this.codeUrl,
+						imgUrl: this.codeUrls,
 					}
 				});
-				this.resetCode();
-				window.open(routeUrl.href, '_blank');
+				var time = 500*selData.length;
+				setTimeout(() => {
+					window.open(routeUrl.href, '_blank');
+					_this.resetCode();
+				}, time);
 			},
 			//添加样品管理
 			openAddMgr() {

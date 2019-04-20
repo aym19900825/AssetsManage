@@ -191,7 +191,7 @@
 				for(var i=0;i<val.length;i++){
 					var userList={
 						groupid:this.detailData.id,
-						id: val[i].id,
+						// id: val[i].id,
 						userid:val[i].id,
 						username:val[i].username,
 						nickname:val[i].nickname,
@@ -213,7 +213,7 @@
 			// 	var basisnums=basislist.join(',');
 			    var arr=[];
 				for(var i=0;i<this.dataInfo.userList.length; i++){
-                     arr.push(this.dataInfo.userList[i].id);
+                     arr.push(this.dataInfo.userList[i].userid);
 				}
 				console.log(arr);
 				console.log(this.dataInfo.userList);

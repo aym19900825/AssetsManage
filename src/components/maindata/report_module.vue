@@ -460,9 +460,14 @@
 					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
 					xhr.onload = function() {
 						if (this.status == 200) {
+							var filename = "inspectionRepTem.xls";
 							var blob = this.response;
 							var objecturl = URL.createObjectURL(blob);
-							window.location.href = objecturl;
+							var link = document.createElement('a');
+								link.href = objecturl;
+								link.download = filename;
+								link.click();
+							// window.location.href = objecturl;
 						}
 					}
 					xhr.send();

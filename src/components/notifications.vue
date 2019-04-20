@@ -142,6 +142,8 @@
 								</el-table-column>
 								<el-table-column label="类型" width="140" sortable prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
 								</el-table-column>
+								<el-table-column label="状态" width="130" prop="STATEDesc" sortable v-if="checkedName.indexOf('状态')!=-1">
+								</el-table-column>
 								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="checkedName.indexOf('下达日期')!=-1">
 								</el-table-column>
 								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="checkedName.indexOf('任务号')!=-1">
@@ -157,8 +159,6 @@
 								<el-table-column label="抽样方案" width="120" prop="SOLUTION" sortable v-if="checkedName.indexOf('抽样方案')!=-1">
 								</el-table-column>
 								<el-table-column label="完成日期" width="130" prop="COMPDATE" sortable :formatter="dateFormat" v-if="checkedName.indexOf('完成日期')!=-1">
-								</el-table-column>
-								<el-table-column label="状态" width="130" prop="STATEDesc" sortable v-if="checkedName.indexOf('状态')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -216,6 +216,7 @@
 					'工作任务通知书编号',
 					'类型',
 					'下达日期',
+					'状态',
 					'受检产品名称',
 					'受检产品型号',
 					'受检企业',
@@ -223,7 +224,6 @@
 					'任务号',
 					'抽样方案',
 					'完成日期',
-					'状态',
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -236,6 +236,10 @@
 					{
 						label: '下达日期',
 						prop: 'XD_DATE'
+					},
+					{
+						label: '状态',
+						prop: 'STATEDesc'
 					},
 					{
 						label: '受检产品名称',
@@ -264,10 +268,6 @@
 					{
 						label: '完成日期',
 						prop: 'COMPDATE'
-					},
-					{
-						label: '状态',
-						prop: 'STATEDesc'
 					},
 				],
 
@@ -310,8 +310,8 @@
 
 		methods: {
 			uploadUrl(){
-                var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
-                return url;
+				var url = this.basic_url +'/api-apps/app/productType/importExc?access_token='+sessionStorage.getItem('access_token');
+				return url;
 			},
 			fileSuccess(){//上传成功后返回数据
 				this.page.currentPage = 1;

@@ -55,20 +55,11 @@
 										</el-button>
 									</div>
 									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row style="width: 100% ;" max-height="260" :default-sort="{prop:'dataInfo.userList', order: 'descending'}">
-<<<<<<< HEAD
-=======
-										<!-- <el-table-column prop="iconOperation" fixed width="50px">
-											<template slot-scope="scope">
-												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeState(scope.row)"></i>
-												<i class="el-icon-edit" v-else @click="changeState(scope.row)"></i>
-											</template>
-										</el-table-column> -->
 										<el-table-column type="index" label="序号" width="50">
 											<template slot-scope="scope">
 												<span> {{scope.$index+1}} </span>
 											</template>
 										</el-table-column>
->>>>>>> cbd8cf0ef1d8c0ab9d4e6f66a8eb48fd652401bf
 										<el-table-column label="用户名" prop="username" sortable>
 										</el-table-column>
 										<el-table-column label="用户姓名" prop="nickname" sortable>
@@ -196,8 +187,10 @@
 		methods: {
 			//选择多条用户数据插入到行列表中
 			getUserData(val){
+				console.log(val);
 				for(var i=0;i<val.length;i++){
 					var userList={
+						groupid:this.detailData.id,
 						id: val[i].id,
 						userid:val[i].id,
 						username:val[i].username,
@@ -207,6 +200,7 @@
 						isEditing: true,
 					};
 					this.dataInfo.userList.push(userList);
+					
 				}
 			},
 			//选择用户带回来值

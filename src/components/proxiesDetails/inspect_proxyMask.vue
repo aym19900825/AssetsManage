@@ -223,13 +223,25 @@
 												</el-button>
 											</div>
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
+												
+												<el-table-column prop="S_NUM" label="编码" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
 														<span v-else>{{scope.row.S_NUM}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="SS_NUM" label="标准编号" sortable width="150px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.SS_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" placeholder="请输入">
+															   <el-button slot="append" icon="el-icon-search"></el-button>
+														</el-input>
+														<span v-else>{{scope.row.SS_NUM}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -312,7 +324,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="要求" sortable>
+												<el-table-column prop="REMARKS" label="技术要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
@@ -403,7 +415,7 @@
 												</el-table-column> -->
 												<el-table-column prop="V_NAMEDesc" label="委托方名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAMEDesc">
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.V_NAMEDesc">
 														</el-input>
 														<span v-else>{{scope.row.V_NAMEDesc}}</span>
 													</template>
@@ -427,7 +439,7 @@
 												<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.VENDORDesc">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
 															</el-button> -->
 														</el-input>
@@ -438,7 +450,7 @@
 	
 												<el-table-column prop="DEPTTYPEDesc" label="机构类型" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="">
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.DEPTTYPEDesc" placeholder="">
 														</el-input>
 														<span v-else>{{scope.row.DEPTTYPEDesc}}</span>
 													</template>
@@ -447,7 +459,7 @@
 												<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_DESC'"  >
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE">
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.PRODUCT_TYPE">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="addcategory(scope.row)">
 															</el-button> -->
 														</el-input>
@@ -458,7 +470,7 @@
 
 												<el-table-column prop="PRODUCT" label="产品名称" sortable width="120px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT">
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.PRODUCT">
 															<!-- <el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)">
 															</el-button> -->
 														</el-input>
@@ -896,7 +908,8 @@
 							PRODUCT_TYPE:'',//产品类别
 							PRO_NUM:'',//产品编号
 							PRODUCT:'',//产品名称
-							S_NUM:'',//检验检测依据编号
+							S_NUM:'',//检验检测依据编码
+							SS_NUM:'',//检验检测依据编号
 							BASIS: '',//检验检测依据
 							PROJ_NUM:'',//检测项目编号
 							PROJECT_ID:'',//检测项目ID
@@ -981,7 +994,7 @@
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isInteger}
 					],//数量
-					PAYMENT_METHOD:[{ required: true, message: '必填', trigger: 'change' }],//付款
+					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
@@ -1851,6 +1864,7 @@
 				for(var i = 0;i<val.length;i++){
 						var List={
 								S_NUM: val[i].S_NUM,
+								SS_NUM: val[i].SS_NUM,
 								S_DESC: val[i].S_NAME,
 								VERSION:val[i].VERSION,
 						};
@@ -1890,7 +1904,8 @@
 								PRODUCT_TYPE:'',//产品类别
 								PRO_NUM:'',//产品编号
 								PRODUCT:'',//产品名称
-								S_NUM:'',//检测依据编号
+								S_NUM:'',//检测依据编码
+								SS_NUM:'',//检测依据编号
 								BASIS: '',//检测依据
 								PROJ_NUM:'',//检测项目编号
 								P_REMARKS: '',//检测项目
@@ -1927,7 +1942,8 @@
 								PRODUCT_TYPE:val[i].pt_name,//产品类别
 								PRO_NUM:val[i].pro_num,//产品编号
 								PRODUCT:val[i].pro_name,//产品名称
-								S_NUM:val[i].s_num,//检测依据编号
+								S_NUM:val[i].s_num,//检测依据编码
+								SS_NUM:val[i].sa_num,//检测依据编号
 								BASIS: val[i].s_name,//检测依据
 								PROJ_NUM:val[i].p_num,//检测项目编号
 								P_REMARKS: val[i].p_name,//检测项目
@@ -2112,7 +2128,7 @@
 			    if(callback){
 			    	if(this.dataInfo.R_VENDOR==""||this.dataInfo.R_VENDOR==undefined){
 						this.$message({
-							message: '请先输入承检单位',
+							message: '请先选择承检单位',
 							type: 'error'
 						});
 			    	}
@@ -2122,7 +2138,7 @@
 				 if(callback){
 			    	if(this.dataInfo.MAINGROUP==""||this.dataInfo.MAINGROUP==undefined){
 						this.$message({
-							message: '请先输入主检组',
+							message: '请先选择主检组',
 							type: 'error'
 						});
 			    	}

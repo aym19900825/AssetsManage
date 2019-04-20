@@ -856,6 +856,7 @@
 						{required: true, message: '必填', trigger: 'blur' },
 						{trigger: 'blur', validator:this.Validators.isSpecificKey}
 					],//型号
+					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ type: 'number', message: '请输入数字'}

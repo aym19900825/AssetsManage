@@ -161,7 +161,7 @@
 											border 
 											stripe 
 											:fit="true" 
-											max-height="260" 
+											max-height="200" 
 											key="table2"
 											style="width: 100%;" 
 											@cell-click="iconOperation" 
@@ -178,10 +178,17 @@
 											<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 											</el-table-column>
 
-											<el-table-column label="文件名称" prop="FILESIZE_ORG">
+											<el-table-column label="结果文件名称" prop="FILENAME">
 											</el-table-column>
 
 											<el-table-column label="文件大小" prop="FILESIZE">
+											</el-table-column>
+
+											<el-table-column label="排序" prop="SORT">
+												<template slot-scope="scope">
+													<el-button size="mini" :disabled="scope.$index===0" @click="moveUp(scope.$index,scope.row)"><i class="el-icon-arrow-up"></i></el-button>
+													<el-button size="mini" :disabled="scope.$index===(reportData.List.length-1)" @click="moveDown(scope.$index,scope.row)"><i class="el-icon-arrow-down"></i></el-button>
+												</template>
 											</el-table-column>
 
 											<el-table-column label="操作">
@@ -202,17 +209,6 @@
 											</el-table-column>
 										</el-table>
 
-										<el-pagination
-											@size-change="sizeChange"
-											background
-											@current-change="currentChange"
-											:current-page="page.currentPage"
-											:page-sizes="[10, 20, 30, 40]"
-											:page-size="page.pageSize"
-											layout="total, sizes, prev, pager, next"
-											:total="page.totalCount"
-											class="pt10 text-right">
-										</el-pagination>
 									</el-col>
 								</el-row>
 									
@@ -223,14 +219,14 @@
 						</el-form>
 
 						<!--生成的报告列表 Begin-->
-						<el-row class="pt10 pb20" v-show="fifthBtn">
+						<el-row class="pt10 pb20" v-show="fourthBtn">
 							<el-col :span="24">
 								<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 									<el-table :data="workorderForm.WORKORDER_REPORTList" 
 										border 
 										stripe 
 										:fit="true" 
-										max-height="260" 
+										max-height="200" 
 										key="table2"
 										style="width: 100%;" 
 										:default-sort="{prop:'workorderForm.WORKORDER_REPORTList', order: 'descending'}">
@@ -241,10 +237,16 @@
 											</template>
 										</el-table-column>
 
+										<el-table-column label="报告文件ID" prop="FILEID">
+										</el-table-column>
+
 										<el-table-column label="报告文件名称" prop="REPORTNAME">
 										</el-table-column>
 
 										<el-table-column label="报告文件大小" prop="FILESIZE">
+										</el-table-column>
+										
+										<el-table-column label="生成时间" prop="ENTERDATE">
 										</el-table-column>
 
 										<el-table-column label="操作">
@@ -273,10 +275,9 @@
 						<!--检验检测项目清单按钮事件-->
 						<el-button type="primary" v-show="thirdBtn" @click="submitForm">保存</el-button>
 						<!--内容页按钮事件-->
-						<el-button type="primary" v-show="fourthBtn" @click="filesSubmit">生成内容页文档</el-button>
-						<!--封底按钮事件-->
 						<el-button type="primary" v-show="fifthBtn" @click="getreport">生成检验/检测报告</el-button>
-						<el-button type="primary" v-show="fifthBtn" @click="getreport">重新生成检验/检测报告</el-button>
+						<el-button type="success" v-show="fifthBtn" @click="submitVerify">提交报告审核</el-button>
+						<!--封底按钮事件-->
 						<!-- <el-button type="success" v-show="fifthBtn" @click="lookoverreport">查看生成报告</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
@@ -307,6 +308,7 @@
 				selectReportData: [],//获取报告数据
 				SelectIsQualified:[],//不合格类别
 				SelectIsSynthetical:[],//获取单项判定合格不合格
+				wenjian:[],
 				reportTemplate:{
 					RE_TYPE: '1010',
 				},
@@ -336,7 +338,7 @@
 				up: false,
 				noedit:false,
 				selUser:[],
-				docParm: {},//成果文件
+				docParm: {},//成果文件和生成报告文件
 				reportname:'',//生成报告名称
 				reportvalue:{},//储存生成报告数据
 				showcreatereoprt:false,//生成报告按钮
@@ -379,18 +381,45 @@
 					this.fourthBtn = false;
 					this.fifthBtn = false;
 				}else if(activeName=='tab-3') {//判断按钮显示问题，内容页显示生成内容页文档和取消
+					this.firstBtn = true;
+					this.secondBtn = false;
+					this.thirdBtn = false;
+					this.fourthBtn = true;
+					this.fifthBtn = true;
+					for(var i=0; i<this.selectReportData.length;i++){//遍历成果文件数据
+               if(this.selectReportData[i].name=='成果文件'){
+								 this.wenjian=this.selectReportData[i].List;
+							 }
+					}
+					this.detailgetData();//请求生成报告列表
+				}else if(activeName=='tab-4') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
 					this.firstBtn = false;
 					this.secondBtn = false;
 					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
-				}else if(activeName=='tab-4') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
-					this.firstBtn = true;
-					this.secondBtn = false;
-					this.thirdBtn = false;
-					this.fourthBtn = false;
-					this.fifthBtn = true;
-					this.detailgetData();//请求生成报告列表
+				}
+			},
+			//向上移动
+			moveUp(index,row) {
+					var that = this;
+					if (index > 0) {
+							let upDate = that.wenjian[index - 1];
+							that.wenjian.splice(index - 1, 1);
+							that.wenjian.splice(index,0, upDate);
+					} else {
+						alert('已经是第一条，不可上移');
+					}
+			},
+			//向下移动
+			moveDown(index,row){
+				var that = this;
+				if ((index + 1) === that.wenjian.length){
+					alert('已经是最后一条，不可下移');
+				} else {
+					let downDate = that.wenjian[index + 1];
+					that.wenjian.splice(index + 1, 1);
+					that.wenjian.splice(index,0, downDate);
 				}
 			},
 			//报告模板类型
@@ -400,8 +429,8 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 					this.reptemDetailId=res.data.data[0].ID;
-					console.log(res.data.data[0].RE_NUM);
-					console.log(res.data.data[0].ID);
+					// console.log(res.data.data[0].RE_NUM);
+					// console.log(res.data.data[0].ID);
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
@@ -514,9 +543,9 @@
 
 			//加载生成报告的文件
 			detailgetData() {
-				var url = this.basic_url +'/api-apps/app/workorder/'+ this.detailId;
+				var url = this.basic_url +'/api-merge/merge/workorder/findByWorkorderId/'+ this.detailId;
 				this.$axios.get(url, {}).then((res) => {
-					this.workorderForm.WORKORDER_REPORTList=res.data.WORKORDER_REPORTList;
+					this.workorderForm.WORKORDER_REPORTList=res.data.datas;
 					console.log(res);
 					console.log(this.detailId);
 				}).catch((err) => {
@@ -607,6 +636,29 @@
 					};
 				}).catch((err) => { });
 			},
+			//提交审核
+			submitVerify(){
+				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.detailId;
+					this.$axios.post(url, {}).then((res) => {
+						console.log(res);
+						console.log(this.detailId);
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.$emit('requests');
+						}else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+			},
 			//生成报告
 			getreport(){
 				var url = this.file_url + '/file/fileList?page=0&size=10';
@@ -624,7 +676,7 @@
 						proxynum: '',
 						templatecode: this.reportTemplate.RE_TYPE,
 						workorderid: this.detailId,//工作任务单ID
-					deptfullname: this.deptfullname,//部门名称
+						deptfullname: this.deptfullname,//部门名称
 						filePath: path.length>0?path.join(','):'',//文件路径
 						fileName: '',//文件名称
 						app: 'workorder',//应用名称
@@ -634,7 +686,7 @@
 						params: postData
 					}).then((res) => {
 						if(res.data.resp_code == 0) {
-							this.show=false;
+							// this.show=false;
 							this.$emit('request');
 							this.$message({
 								message: '报告生成成功',
@@ -713,7 +765,7 @@
 					this.$axios.post(url,this.selectReportData).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
-							console.log(this.detailId);
+							// console.log(this.detailId);
 							this.$message({
 								message: '保存成功',
 								type: 'success'

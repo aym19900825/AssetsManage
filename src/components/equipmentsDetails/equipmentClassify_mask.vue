@@ -89,7 +89,16 @@
 			</div>
 			<!-- 弹出 -->
 			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+				<el-tree ref="tree" 
+					    :data="resourceData" 
+						show-checkbox 
+						node-key="id" 
+						:default-checked-keys="resourceCheckedKey" 
+						:props="resourceProps" 
+						default-expand-all 
+						@node-click="handleNodeClick" 
+						@check="handleClicks" 
+						check-strictly>
 				</el-tree>
 				<span slot="footer">
 			       <el-button type="primary" @click="queding">确 定</el-button>
@@ -224,17 +233,12 @@
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-						this.i++;
-						if(this.i%2==0){
-							if(checked){
-									this.$refs.tree.setCheckedNodes([]);
-									this.$refs.tree.setCheckedNodes([data]);
-									//交叉点击节点
-								}else{
-									this.$refs.tree.setCheckedNodes([]);
-									//点击已经选中的节点，置空
-							}
-					}
+           		if(checked){
+					this.$refs.tree.setCheckedNodes([data]);
+					this.$refs.tree.setCheckedKeys([data.id]);
+				}else{
+					this.$refs.tree.setCheckedNodes([]);
+				}
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {

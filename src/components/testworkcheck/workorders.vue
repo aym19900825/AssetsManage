@@ -424,6 +424,13 @@
 					});
 					return;
 				} else{
+					if(this.selMenu[0].STATE == '1'){
+						this.$message({
+							message: '此工作任务单未接受任务，不允许任务处理！',
+							type: 'warning'
+						});
+						return;
+					}
 					this.$refs.workDeal.showDialog(this.selMenu[0].ID);
 				}
 			},
@@ -441,7 +448,20 @@
 						type: 'warning'
 					});
 					return;
-				} else{
+				}  else if(this.selMenu[0].STATE == '0') {
+					this.$message({
+						message: '此任务单状态为驳回，暂不能生成分包协议',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu[0].STATE!='2') {
+					console.log(this.selMenu[0].STATE);
+					this.$message({
+						message: '此任务单状态不是执行中，暂不能生成分包协议',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selMenu[0].STATE == '2'){
 					this.$refs.protocolMask.showDialog(this.selMenu[0].ID);
 				}
 			},
@@ -465,14 +485,14 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE!=='5') {
+				} else if(this.selMenu[0].STATE!='6') {
 					console.log(this.selMenu[0].STATE);
 					this.$message({
-						message: '此任务单状态不是汇总中，暂不能使用报告生成与编辑',
+						message: '此任务单状态不是待生成，暂不能使用报告生成与编辑',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == '5') {//汇总中
+				} else if(this.selMenu[0].STATE == '6') {//待生成
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
 					// console.log(this.selMenu[0].ID);
 				}
@@ -563,6 +583,7 @@
 					});
 					return;
 				} else {
+					this.$refs.task.view(this.selMenu[0].ID);	
 					var url = this.basic_url +'/api-apps/app/workorder/' +this.selMenu[0].ID;
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.WORKORDER_PROJECTList.length==0&&res.data.WORKORDER_CONTRACTList.length==0){

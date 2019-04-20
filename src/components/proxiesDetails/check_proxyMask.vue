@@ -214,6 +214,7 @@
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
+
 									    <el-tab-pane label="检测依据" name="first">
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
@@ -222,13 +223,24 @@
 												</el-button>
 											</div>
 											<el-table :data="dataInfo.INSPECT_PROXY_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.INSPECT_PROXY_BASISList', order: 'descending'}">
-												<el-table-column prop="S_NUM" label="标准编号" sortable width="150px">
+												<el-table-column prop="S_NUM" label="编码" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
 														<span v-else>{{scope.row.S_NUM}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="SS_NUM" label="标准编号" sortable width="150px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.SS_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" placeholder="请输入">
+															   <el-button slot="append" icon="el-icon-search"></el-button>
+														</el-input>
+														<span v-else>{{scope.row.SS_NUM}}</span>
 														</el-form-item>
 													</template>
 												</el-table-column>
@@ -312,7 +324,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="要求" sortable>
+												<el-table-column prop="REMARKS" label="技术要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
@@ -885,7 +897,8 @@
 							PRODUCT_TYPE:'',//产品类别
 							PRO_NUM:'',//产品编号
 							PRODUCT:'',//产品名称
-							S_NUM:'',//检测依据编号
+							S_NUM:'',//检测依据编码
+							SS_NUM:'',//检测依据编号
 							BASIS: '',//检测依据
 							PROJ_NUM:'',//检测项目编号
 							PROJECT_ID:'',//检测项目ID
@@ -971,7 +984,7 @@
 					],//数量
 					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
 					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
-					PAYMENT_METHOD:[{ required: true, message: '必填', trigger: 'change' }],//付款
+					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
@@ -1819,6 +1832,7 @@
 				for(var i = 0;i<val.length;i++){
 						var List={
 								S_NUM: val[i].S_NUM,
+								SS_NUM: val[i].SS_NUM,
 								S_DESC: val[i].S_NAME,
 								VERSION:val[i].VERSION,
 						};
@@ -1869,7 +1883,8 @@
 								PRODUCT_TYPE:'',//产品类别
 								PRO_NUM:'',//产品编号
 								PRODUCT:'',//产品名称
-								S_NUM:'',//检测依据编号
+								S_NUM:val[i].s_num,//检测依据编码
+								SS_NUM:val[i].sa_num,//检测依据编号
 								BASIS: '',//检测依据
 								PROJ_NUM:'',//检测项目编号
 								P_REMARKS: '',//检测项目
@@ -1906,7 +1921,8 @@
 								PRODUCT_TYPE:val[i].pt_name,//产品类别
 								PRO_NUM:val[i].pro_num,//产品编号
 								PRODUCT:val[i].pro_name,//产品名称
-								S_NUM:val[i].s_num,//检测依据编号
+								S_NUM:val[i].s_num,//检测依据编码
+								SS_NUM:val[i].ss_num,//检测依据编号
 								BASIS: val[i].s_name,//检测依据
 								PROJ_NUM:val[i].p_num,//检测项目编号
 								P_REMARKS: val[i].p_name,//检测项目
@@ -2089,7 +2105,7 @@
 			    if(callback){
 			    	if(this.dataInfo.R_VENDOR==""||this.dataInfo.R_VENDOR==undefined){
 						this.$message({
-							message: '请先输入承检单位',
+							message: '请先选择承检单位',
 							type: 'error'
 						});
 			    	}
@@ -2099,7 +2115,7 @@
 				 if(callback){
 			    	if(this.dataInfo.MAINGROUP==""||this.dataInfo.MAINGROUP==undefined){
 						this.$message({
-							message: '请先输入主检组',
+							message: '请先选择主检组',
 							type: 'error'
 						});
 			    	}

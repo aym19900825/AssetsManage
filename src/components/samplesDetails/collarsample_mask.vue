@@ -84,7 +84,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="0" :max="maxNum" label="描述文字" :disabled="noedit || samplesForm.ITEM_TYPE=='2'" style="width: 100%"></el-input-number>
+												<el-input-number v-model="samplesForm.QUALITY" :min="0" :max="maxNum" :disabled="noedit || samplesForm.ITEM_TYPE=='2'" style="width: 100%"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -152,7 +152,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-if="pageState != 'view'">
-							<el-button type="primary" @click="saveAndSubmit" >保存</el-button>
+							<el-button type="primary" @click="saveAndSubmit">保存</el-button>
 							<el-button type="success" @click="saveAndUpdate">保存并继续</el-button>
 							<el-button @click="close">取消</el-button> 
 						</div>
@@ -191,6 +191,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 						ACCEPTDATE: '',//入库时间
 						ACCEPT_PERSON: '',//收样人
 						ACCEPT_DATE: '',//收样日期
+						GRANT_PERSONDesc: '',//领样人
 						GRANT_PERSON: '',//领样人
 						GRANT_DATE: '',//领样日期
 						STATE: '',//状态
@@ -212,7 +213,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
-				value: '',
 				selectData: [], //获取检验/检测方法类别
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
 				selMenu:[],
@@ -249,9 +249,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					TYPE: [//类别
 						{ required: true, message: '必填', trigger: 'change' }
 					],
-					GRANT_PERSONDesc: [
-						{ required: true, message: '必填', trigger: 'blur'}
-					],
 					MODEL: [//型号
 						{ required: true, message: '必填', trigger: 'change' },
 						{trigger: 'blur', validator: this.Validators.isSpecificKey}
@@ -267,12 +264,11 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					ACCEPT_DATE: [//收样时间
 						{required: true, message: '请选择', trigger: 'change' }
 					],
-					GRANT_PERSON: [//领样人
-						{ required: true, message: '必填', trigger: 'blur' },
-						{trigger: 'blur', validator: this.Validators.isNickname}
-					],
 					GRANT_DATE: [//领样时间
 						{ required: true, message: '请选择', trigger: 'change' }
+					],
+					GRANT_PERSONDesc: [
+						{ required: false, message: '必填', trigger: 'change'}
 					],
 					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其他资料
 					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
@@ -307,7 +303,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			getUserData(data){
 				this.$forceUpdate();
 				this.samplesForm.GRANT_PERSON = data.id;
-				this.samplesForm.GRANT_PERSONDesc = data.username;
+				this.samplesForm.GRANT_PERSONDesc = data.nickname;
 			},
 			// removeStep(){
 			// 	this.samplesForm.QUALITY--;

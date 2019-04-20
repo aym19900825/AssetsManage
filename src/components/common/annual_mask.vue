@@ -131,7 +131,7 @@
 											<el-table-column prop="CJDW" label="承检单位" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'worlplanlist.'+scope.$index + '.CJDW'" :rules="{required: true, message: '请选择', trigger: 'change'}">
-														<el-select v-if="scope.row.isEditing" size="small" clearable v-model="scope.row.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="getCjdw(scope.row)">
+														<el-select v-if="scope.row.isEditing" size="small" clearable v-model="scope.row.CJDW" filterable default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="getCjdw(scope.row)">
 															<el-option v-for="data in inspectUnit" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 														<span v-if="!scope.row.isEditing">{{scope.row.CJDWDesc}}</span>

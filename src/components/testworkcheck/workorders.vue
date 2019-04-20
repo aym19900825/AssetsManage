@@ -582,9 +582,6 @@
 						type: 'warning'
 					});
 					return;
-<<<<<<< HEAD
-				} else {
-=======
 				}else if(this.selMenu[0].STATE == 1){
 					this.$message({
 						message: '此工作任务单未接受任务，不允许任务处理！',
@@ -598,7 +595,6 @@
 					});
 					return;
 				}else{
->>>>>>> a423784d5bca9df90243334261dfb0ceaf672034
 					this.$refs.task.view(this.selMenu[0].ID);	
 					var url = this.basic_url +'/api-apps/app/workorder/' +this.selMenu[0].ID;
 					this.$axios.get(url, {}).then((res) => {

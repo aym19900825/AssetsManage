@@ -415,11 +415,11 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="PROXYNUM" label="项目名称" sortable width="200px">
+												<el-table-column prop="P_REMARKS" label="项目名称" sortable width="200px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 														</el-input>
-														<span v-else>{{scope.row.PROXYNUM}}</span>
+														<span v-else>{{scope.row.P_REMARKS}}</span>
 													</template>
 												</el-table-column>
 
@@ -643,7 +643,7 @@
 				fileList:[],//上传附件数据
 				cjdwtData:[],//承检单位
 				rules: {
-					PROXYNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//委托书编号
+					P_REMARKS: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//委托书编号
 					PROXY_VERSION: [{ required: true, trigger: 'blur', validator: this.Validators.isNickname}],//委托书版本
 					WONUM: [
 						{ required: true, message: '不能为空', trigger: 'blur' },
@@ -741,7 +741,7 @@
 				}
 			},	
 			appendpro(value){
-				this.workorderForm.PROXYNUM =value;
+				this.workorderForm.P_REMARKS =value;
 					
 			},
 			appendver(value){

@@ -42,9 +42,9 @@
 
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" row="3" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" row="3" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
@@ -99,7 +99,7 @@
 												style="width: 100%;" 
 												:default-sort="{prop:'reportData.List', order: 'descending'}">
 
-												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+												<!-- <el-table-column type="selection" fixed width="55" align="center"></el-table-column> -->
 
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
@@ -113,23 +113,17 @@
 												</el-table-column>
 												<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 												</el-table-column>
-												<el-table-column label="计量单位" sortable prop="UNITDesc">
+												<el-table-column label="计量单位" width="100px" prop="UNITDesc">
 												</el-table-column>
 												<el-table-column label="检测结果" width="200px">
 													<template slot-scope="scope">
 														<el-table :data="scope.row.workorder_project_itemList" key="table3" row-key="ID" style="width: 100%;">
-															<el-table-column label="样品编号" prop="ITEMNUM"></el-table-column>
+															<el-table-column label="样品序号" prop="ITEM_STEP"></el-table-column>
 															<el-table-column label="样品描述" prop="MEMO"></el-table-column>
 														</el-table>
 													</template>
 												</el-table-column>
-												
-												<!-- <el-table-column label="检测结果" width="200px">
-													<template slot-scope="scope">
-														<el-table-column v-for="(itemList2,index) in scope.row.workorder_project_itemList" :key="index" :label="itemList2.ITEMNUM" prop="MEMO"></el-table-column>
-													</template>
-												</el-table-column> -->
-
+											
 												<el-table-column label="单项判定" width="200px" sortable prop="SYNTHETICAL">
 													<template slot-scope="scope">
 														<el-radio-group v-model="scope.row.SYNTHETICAL" :disabled="noedit">
@@ -139,32 +133,21 @@
 												</el-table-column>
 											</el-table>
 
-											<el-pagination
-												@size-change="sizeChange"
-												background
-												@current-change="currentChange"
-												:current-page="page.currentPage"
-												:page-sizes="[10, 20, 30, 40]"
-												:page-size="page.pageSize"
-												layout="total, sizes, prev, pager, next"
-												:total="page.totalCount"
-												class="pt10 text-right">
-											</el-pagination>
-											
 									</el-col>
 								</el-row>
 									
 								<!--成果文件-->
 								<el-row v-else>
 									<el-col :span="24">
-										<el-table :data="reportData.List" 
+										<el-table ref="table2" :data="reportData.List" 
 											border 
 											stripe 
 											:fit="true" 
-											max-height="200" 
-											key="table2"
+											max-height="260" 
 											style="width: 100%;" 
-											@cell-click="iconOperation" 
+											@cell-click="iconOperation"
+											highlight-current-row
+     										@current-change="singleTable"
 											@selection-change="selChange"
 											:default-sort="{prop:'reportData.List', order: 'descending'}">
 											<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
@@ -184,17 +167,17 @@
 											<el-table-column label="文件大小" prop="FILESIZE">
 											</el-table-column>
 
-											<el-table-column label="排序" prop="SORT">
+											<el-table-column label="排序" width="130px" prop="SORT">
 												<template slot-scope="scope">
-													<el-button size="mini" :disabled="scope.$index===0" @click="moveUp(scope.$index,scope.row)"><i class="el-icon-arrow-up"></i></el-button>
-													<el-button size="mini" :disabled="scope.$index===(reportData.List.length-1)" @click="moveDown(scope.$index,scope.row)"><i class="el-icon-arrow-down"></i></el-button>
+													<el-button size="mini" :disabled="scope.$index===0" @click="moveUp(scope.$index,scope.row)" title="上移"><i class="el-icon-arrow-up"></i></el-button>
+													<el-button size="mini" :disabled="scope.$index===(reportData.List.length-1)" @click="moveDown(scope.$index,scope.row)" title="下移"><i class="el-icon-arrow-down"></i></el-button>
 												</template>
 											</el-table-column>
 
 											<el-table-column label="操作">
 												<template slot-scope="scope">
 													<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-														<i class="icon-excel"></i>
+														<i class="icon-eye"></i>
 														预览
 													</el-button>
 													<el-button title="编辑" @click="editFile(scope.row)" type="text" size="small"> 
@@ -214,69 +197,70 @@
 									
 								</el-tab-pane>
 								<!-- 报告生成与编辑 End-->
-							
+
+								<el-tab-pane label="已生成的报告文件" name="6">
+									<!--生成的报告列表 Begin-->
+									<el-row class="pt20 pb20">
+										<el-col :span="24">
+											<!-- <el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px"> -->
+												<el-table :data="reportGenerateForm.WORKORDER_REPORTList" 
+													border 
+													stripe 
+													:fit="true" 
+													max-height="260" 
+													key="table4"
+													style="width: 100%;" 
+													@selection-change="selChange"
+													:default-sort="{prop:'reportGenerateForm.WORKORDER_REPORTList', order: 'descending'}">
+													<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+
+													<el-table-column type="index" label="序号" width="50">
+														<template slot-scope="scope">
+															<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														</template>
+													</el-table-column>
+
+													<el-table-column label="报告文件ID" prop="FILEID">
+													</el-table-column>
+
+													<el-table-column label="报告文件名称" prop="REPORTNAME">
+													</el-table-column>
+
+													<el-table-column label="报告文件大小" prop="FILESIZE">
+													</el-table-column>
+													
+													<el-table-column label="生成时间" prop="ENTERDATE">
+													</el-table-column>
+
+													<el-table-column label="操作">
+														<template slot-scope="scope">
+															<el-button type="text" title="预览" @click="readReportFile(scope.row)" size="mini"> 
+																<i class="icon-eye"></i>
+																预览
+															</el-button>
+															<el-button type="text" title="编辑" @click="editReportFile(scope.row)" size="mini"> 
+																<i class="icon-edit"></i>
+																编辑
+															</el-button>
+														</template>
+													</el-table-column>
+												</el-table>
+											<!-- </el-form> -->
+										</el-col>
+									</el-row>
+									<!--生成的报告列表 End-->
+								</el-tab-pane>
 							</el-tabs>
 						</el-form>
-
-						<!--生成的报告列表 Begin-->
-						<el-row class="pt10 pb20" v-show="fourthBtn">
-							<el-col :span="24">
-								<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
-									<el-table :data="workorderForm.WORKORDER_REPORTList" 
-										border 
-										stripe 
-										:fit="true" 
-										max-height="200" 
-										key="table2"
-										style="width: 100%;" 
-										:default-sort="{prop:'workorderForm.WORKORDER_REPORTList', order: 'descending'}">
-
-										<el-table-column type="index" label="序号" width="50">
-											<template slot-scope="scope">
-												<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-											</template>
-										</el-table-column>
-
-										<el-table-column label="报告文件ID" prop="FILEID">
-										</el-table-column>
-
-										<el-table-column label="报告文件名称" prop="REPORTNAME">
-										</el-table-column>
-
-										<el-table-column label="报告文件大小" prop="FILESIZE">
-										</el-table-column>
-										
-										<el-table-column label="生成时间" prop="ENTERDATE">
-										</el-table-column>
-
-										<el-table-column label="操作">
-											<template slot-scope="scope">
-												<el-button title="预览" @click="readReportFile(scope.row)" type="text" size="small"> 
-													<i class="icon-eye"></i>
-													预览
-												</el-button>
-												<el-button title="编辑" @click="editReportFile(scope.row)" type="text" size="small"> 
-													<i class="icon-edit"></i>
-													编辑
-												</el-button>
-											</template>
-										</el-table-column>
-									</el-table>
-								</el-form>
-								
-							</el-col>
-						</el-row>
-						<!--生成的报告列表 End-->
 					</div>
 
 					<div class="content-footer" v-show="firstBtn">
 						<!--首页按钮事件-->
-						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
 						<!--检验检测项目清单按钮事件-->
-						<el-button type="primary" v-show="thirdBtn" @click="submitForm">保存</el-button>
+						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
 						<!--内容页按钮事件-->
 						<el-button type="primary" v-show="fifthBtn" @click="getreport">生成检验/检测报告</el-button>
-						<el-button type="success" v-show="fifthBtn" @click="submitVerify">提交报告审核</el-button>
+						<el-button type="success" v-show="fifthBtn" @click="submitVerify">提交审核</el-button>
 						<!--封底按钮事件-->
 						<!-- <el-button type="success" v-show="fifthBtn" @click="lookoverreport">查看生成报告</el-button> -->
 						<el-button @click="close">取消</el-button>
@@ -308,14 +292,19 @@
 				selectReportData: [],//获取报告数据
 				SelectIsQualified:[],//不合格类别
 				SelectIsSynthetical:[],//获取单项判定合格不合格
-				wenjian:[],
+				reportFileDate:[],//成果文件上移下移获取数据
+				selData: [],//点击table行选中Checkbox
+				isshift: false,//点击table行选中Checkbox
+				isctrl: false,//点击table行选中Checkbox
 				reportTemplate:{
 					RE_TYPE: '1010',
 				},
-				workorderForm: {
-					WORKORDER_REPORTList:[],//报告
+				// workorderForm: {
+				// 	WORKORDER_REPORTList:[],//查看生成的报告列表
+				// },
+				reportGenerateForm:{
+					WORKORDER_REPORTList:[],//查看生成的报告列表
 				},
-				reportGenerateForm:{},
 				date: new Date(), //绑定的时候 直接绑定的当前时间 就好了
 				options: [{
 					value: '检测结论',
@@ -356,10 +345,10 @@
 					RE_TYPE: [{ required: true, message: '请选择', trigger: 'change' }],//选择报告模板类型
 				},
 				moduleFileList: [],
-				selData: [],
 			};
 		},
 		methods: {
+			//选择数据带值
 			selChange(val) {
 				this.selData = val;
 			},
@@ -376,50 +365,56 @@
 					this.fifthBtn = false;
 				}else if(activeName=='tab-2') {//判断按钮显示问题，检查清单显示保存和取消
 					this.firstBtn = true;
-					this.secondBtn = false;
-					this.thirdBtn = true;
+					this.secondBtn = true;
+					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
 				}else if(activeName=='tab-3') {//判断按钮显示问题，内容页显示生成内容页文档和取消
 					this.firstBtn = true;
-					this.secondBtn = false;
-					this.thirdBtn = false;
-					this.fourthBtn = true;
-					this.fifthBtn = true;
-					for(var i=0; i<this.selectReportData.length;i++){//遍历成果文件数据
-               if(this.selectReportData[i].name=='成果文件'){
-								 this.wenjian=this.selectReportData[i].List;
-							 }
+					this.secondBtn = true;
+					this.thirdBtn = true;
+					this.fourthBtn = false;
+					this.fifthBtn = false;
+					for(var i=0; i<this.selectReportData.length;i++){//遍历成果文件数据上移下移
+						if(this.selectReportData[i].name=='成果文件'){
+							this.reportFileDate=this.selectReportData[i].List;
+						}
 					}
-					this.detailgetData();//请求生成报告列表
 				}else if(activeName=='tab-4') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
 					this.firstBtn = false;
 					this.secondBtn = false;
 					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
+				}else if(activeName=='tab-6') {//判断按钮显示问题，已生成的报告文件
+					this.firstBtn = true;
+					this.secondBtn = true;
+					this.thirdBtn = false;
+					this.fourthBtn = true;
+					this.fifthBtn = true;
+					this.detailgetData();//请求生成报告列表
 				}
 			},
 			//向上移动
 			moveUp(index,row) {
-					var that = this;
-					if (index > 0) {
-							let upDate = that.wenjian[index - 1];
-							that.wenjian.splice(index - 1, 1);
-							that.wenjian.splice(index,0, upDate);
-					} else {
-						alert('已经是第一条，不可上移');
-					}
+				var that = this;
+				if (index > 0) {
+						let upDate = that.reportFileDate[index - 1];
+						that.reportFileDate.splice(index - 1, 1);
+						that.reportFileDate.splice(index,0, upDate);
+				} else {
+					alert('已经是第一条，不可上移');
+				}
 			},
 			//向下移动
 			moveDown(index,row){
 				var that = this;
-				if ((index + 1) === that.wenjian.length){
+				if ((index + 1) === that.reportFileDate.length){
 					alert('已经是最后一条，不可下移');
 				} else {
-					let downDate = that.wenjian[index + 1];
-					that.wenjian.splice(index + 1, 1);
-					that.wenjian.splice(index,0, downDate);
+					let downDate = that.reportFileDate[index + 1];
+					that.reportFileDate.splice(index + 1, 1);
+					that.reportFileDate.splice(index,0, downDate);
 				}
 			},
 			//报告模板类型
@@ -442,6 +437,7 @@
 				this.selectData.filter((item)=>{
 					if(item.RE_NUM ==  this.reportTemplate.RE_TYPE){
 						this.reptemDetailId = item.ID;
+						// console.log(this.reptemDetailId);
 					}
 				});
 				this.reportTemplate.RE_TYPE
@@ -454,6 +450,14 @@
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
+			},
+			//表格单选选值
+			singleTable(row) {
+				this.selData.push(row);
+				// this.$refs.table2.clearSelection();
+				// this.$refs.table2.toggleRowSelection(row);
+				this.currentRow = row;
+				// console.log(row);
 			},
 			//获取不合格类别
 			getIsQualified() {
@@ -545,7 +549,7 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-merge/merge/workorder/findByWorkorderId/'+ this.detailId;
 				this.$axios.get(url, {}).then((res) => {
-					this.workorderForm.WORKORDER_REPORTList=res.data.datas;
+					this.reportGenerateForm.WORKORDER_REPORTList=res.data.datas;
 					console.log(res);
 					console.log(this.detailId);
 				}).catch((err) => {
@@ -570,7 +574,7 @@
 						FILEID:value.fileid,
 						VERSION:value.version,
 				}
-				this.workorderForm.WORKORDER_REPORTList.push(obj);
+				this.reportGenerateForm.WORKORDER_REPORTList.push(obj);
 			},
 			//编辑成果文件
 			editFile(row){
@@ -598,7 +602,7 @@
 			},
 			//回退成果文件
 			sendback(row){
-			// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
+				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
 				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.detailId;
 				this.$axios.get(Url, {}).then((res) => {
 					if(res.data.resp_code == 0) {
@@ -638,26 +642,38 @@
 			},
 			//提交审核
 			submitVerify(){
-				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.detailId;
-					this.$axios.post(url, {}).then((res) => {
-						console.log(res);
-						console.log(this.detailId);
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.$emit('requests');
-						}else {
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'warning'
-							});
-						}
-					}).catch((err) => {
+				if(this.selData.length == 0){
+					this.$message({
+						message: '请选择要审核的报告文件',
+						type: 'warning'
 					});
+				}else if(this.selData.length > 1){
+					this.$message({
+						message: '不可同时选择多条报告文件',
+						type: 'warning'
+					});
+				}else{
+					var repotFileId=this.selData[0].ID;
+					var url = this.basic_url + '/api-apps/app/workorder/operate/createReportApprove?ID='+ repotFileId;
+						this.$axios.get(url, {}).then((res) => {
+							// console.log(repotFileId);
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '提交成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('requests');
+							}else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+						});
+				}
 			},
 			//生成报告
 			getreport(){
@@ -751,35 +767,37 @@
 			// 首页按钮事件保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.reportGenerateForm.validate((valid) => {
-				if (valid) {
-					var paramData = this.selectReportData;
-					for(let i=0; i<paramData.length; i++){
-						var list = paramData[i].List;
-						for(let j=0; j<list.length; j++){
-							var tranData = list[j];
-							tranData.value = this.inputData[tranData.param];
+					if (valid) {
+						var paramData = this.selectReportData;
+						for(let i=0; i<paramData.length; i++){
+							var list = paramData[i].List;
+							for(let j=0; j<list.length; j++){
+								var tranData = list[j];
+								tranData.value = this.inputData[tranData.param];
+							}
 						}
-						
+						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.detailId;
+						this.$axios.post(url,this.selectReportData).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								// console.log(this.detailId);
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('requests');
+							}
+						}).catch((err) => {
+						});
+					} else {
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						return false;
 					}
-					var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.detailId;
-					this.$axios.post(url,this.selectReportData).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							// console.log(this.detailId);
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							
-							//重新加载数据
-							this.$emit('requests');
-						}
-					}).catch((err) => {
-					});
-						} else {
-							return false;
-						}
-					});
+				});
 			},
 			//检验检测项目清单按钮事件
 			testListSubmit(){

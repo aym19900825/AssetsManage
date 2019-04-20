@@ -62,7 +62,6 @@ export default {
     }
   },
   methods:{
-   
     tableRowClassName({row, rowIndex}) {
       if(this.appName == 'inspectPro2'||this.appName == 'inspectPro'){
         if (row.COMPMODE =="加急") {
@@ -223,7 +222,6 @@ export default {
       }else {
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }
-      // console.log(url);
       this.$axios.get(url, {
         params: data
       }).then((res) => {

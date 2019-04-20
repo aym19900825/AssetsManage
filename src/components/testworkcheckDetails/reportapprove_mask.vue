@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.report.STATE!=3">
+							<span v-if="this.report.STATE!=3" class="pr10">
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
@@ -51,7 +51,58 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<!-- <el-collapse-item title="其他" name="2" v-show="views">
+								<el-collapse-item title="需审批的报告文件" name="1">
+									<el-row>
+										<el-col :span="24">
+											<el-table :data="report.WORKORDER_REPORTList" 
+												border 
+												stripe 
+												:fit="true" 
+												max-height="260" 
+												key="table4"
+												style="width: 100%;" 
+												@selection-change="selChange"
+												:default-sort="{prop:'report.WORKORDER_REPORTList', order: 'descending'}">
+												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+
+												<!-- <el-table-column type="index" label="序号" width="50">
+													<template slot-scope="scope">
+														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+													</template>
+												</el-table-column> -->
+
+												<el-table-column label="报告编号" prop="DESCRIPTION">
+												</el-table-column>
+
+												<el-table-column label="委托书编号" prop="PROXYNUM">
+												</el-table-column>
+
+												<el-table-column label="报告文件大小" prop="FILESIZE">
+												</el-table-column>
+												
+												<el-table-column label="生成时间" prop="ENTERDATE">
+												</el-table-column>
+
+												<el-table-column label="编辑人" prop="ENTERBYDesc" width="130px">
+												</el-table-column>
+
+												<el-table-column label="操作" width="100px">
+													<template slot-scope="scope">
+														<el-button type="text" title="预览" @click="readAuth" size="mini"> 
+															<i class="icon-eye"></i>
+															预览
+														</el-button>
+														<!-- <el-button type="text" title="编辑" @click="editReportFile(scope.row)" size="mini"> 
+															<i class="icon-edit"></i>
+															编辑
+														</el-button> -->
+													</template>
+												</el-table-column>
+											</el-table>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
+								<!-- <el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -80,19 +131,19 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item> -->
-								<!-- <el-collapse-item title="文件" name="2">
+								<!-- <el-collapse-item title="文件" name="4">
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
 								</el-collapse-item> -->
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-show ="!addtitle">
-							<el-button title="查看文件" type="primary" @click="readAuth()">查看文件</el-button>
-						</div>
+						<!-- <div class="content-footer" v-show ="!addtitle">
+							<el-button title="查看文件" type="primary" @click="readAuth">查看文件</el-button>
+						</div> -->
 					</el-form>
 				</div>
 			</div>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -192,9 +243,11 @@
                     REPORTNUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
-                    STATUS:'0',	//活动/不活动
-                    STATE:'1',//流程状态
-                    STATEDesc:'草稿',
+                    STATUS:'',	//活动/不活动
+                    STATE:'',//流程状态
+					STATEDesc:'',
+					WORKORDER_REPORTList: []
+					
                     // CHANGEBY:'',	//修改人
                     // CHANGEDATE:'',	//修改时间
                     // DEPTID:'',	//机构ID
@@ -212,7 +265,7 @@
 				this.loading = false;
 			},
 			//获取导入表格勾选信息
-			SelChange(val) {
+			selChange(val) {
 				this.selUser = val;
 			},
 			//添加显示弹窗
@@ -249,17 +302,24 @@
 				this.statusshow2 = false;
 				this.show = true;
 			},
+			//生成的报告文件列表
 			detailgetData(){
+				console.log('detailgetData');
 				var url = this.basic_url +'/api-apps/app/reportApprove/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					this.report = res.data;
+					// this.report = res.data;
+					this.report.WORKORDER_REPORTList = !!this.report.WORKORDER_REPORTList?this.report.WORKORDER_REPORTList:[];
+					this.report.WORKORDER_REPORTList.push(res.data);
 					this.show = true;
 				}).catch((err) => {
 				});
 			},
 			// 这里是修改
-			detail(dataid) {
-				this.dataid=dataid;
+			detail(maindata) {
+				this.dataid = maindata.ID;
+				this.report.DESCRIPTION = maindata.DESCRIPTION;
+				this.report.STATEDesc = maindata.STATEDesc;
+				this.report.REPORTNUM = maindata.REPORTNUM;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -305,8 +365,11 @@
 				// this.show = true;
 			},
 			//这是查看
-			view(dataid) {
-				this.dataid = dataid;
+			view(maindata) {
+				this.dataid = maindata.ID;
+				this.report.DESCRIPTION = maindata.DESCRIPTION;
+				this.report.STATEDesc = maindata.STATEDesc;
+				this.report.REPORTNUM = maindata.REPORTNUM;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -318,7 +381,6 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/reportApprove/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -384,25 +446,25 @@
 							});
 				    }else{
 				    	this.$message({
-								message:res.data.resp_msg,
-								type: 'success'
-							});
-							this.detailgetData();
-							var url = this.basic_url + '/api-apps/app/reportApprove/flow/Executors/'+this.dataid;
-							this.$axios.get(url, {}).then((res) => {
-								var resullt=res.data.datas;
-								var users='';
-								for(var i=0;i<resullt.length;i++){
-									users = users + resullt[i].username+",";
-								}
-								if(users.indexOf(this.username) != -1){
-									this.approval=true;
-									this.start=false;
-								}else{
-									this.approval=false;
-									this.start=false;
-								}
-							});
+							message:res.data.resp_msg,
+							type: 'success'
+						});
+						this.detailgetData();
+						var url = this.basic_url + '/api-apps/app/reportApprove/flow/Executors/'+this.dataid;
+						this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
+								this.start=false;
+							}
+						});
 				    }
 				});
 			},	
@@ -536,20 +598,20 @@
                     REPORTNUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
-                    STATUS:'1',	//活动/不活动
-                    STATE:'1',//流程状态
-                    STATEDesc:'草稿',
+                    STATUS:'',	//活动/不活动
+                    STATE:'',//流程状态
+                    STATEDesc:'',
                 }
 			},
-			//查看
+			//预览报告文件
 			readAuth(){
-				this.detailgetData();
-            var url = this.po_url+"/show?fileid=" +this.report.FILEID
-                        + '&userid=' +  this.userid
-                        + '&username=' + this.username
-                        + '&deptid=' + this.deptid
-                        + '&deptfullname=' + this.deptfullname
-             window.open(url); 
+				// this.detailgetData();
+            	var url = this.po_url+"/show?fileid=" + this.report.WORKORDER_REPORTList[0].FILEID
+				+ '&userid=' +  this.userid
+				+ '&username=' + this.username
+				+ '&deptid=' + this.deptid
+				+ '&deptfullname=' + this.deptfullname
+				window.open(url); 
         	},
 			//时间格式化
 			dateFormat(row, column) {

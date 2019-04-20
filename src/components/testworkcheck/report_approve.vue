@@ -39,7 +39,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
+									<el-form-item label="报告编号" prop="DESCRIPTION"  label-width="80px">
 										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
@@ -61,9 +61,9 @@
 										</p>
 									</template>
 								</el-table-column>
-                                <el-table-column label="报告描述" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告描述')!=-1">
+                                <el-table-column label="报告编号" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告编号')!=-1">
 								</el-table-column>
-								<el-table-column label="流程状态" sortable prop="STATEDesc" v-if="checkedName.indexOf('流程状态')!=-1">
+								<el-table-column label="流程状态" sortable prop="STATEDesc" width="160px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -116,7 +116,7 @@
 				}],
 				checkedName: [
                     '编码',
-					'报告描述',
+					'报告编号',
                     '流程状态',
 				],
 				tableHeader: [
@@ -124,7 +124,7 @@
 						label: '编码',
 						prop: 'REPORTNUM'
 					},{
-						label: '报告描述',
+						label: '报告编号',
 						prop: 'DESCRIPTION'
 					},
 					{
@@ -218,7 +218,7 @@
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
 						});
-						this.$refs.reportapprove.view(this.selUser[0].ID);
+						this.$refs.reportapprove.view(this.selUser[0]);
 					}
 					//驳回
 					else if(this.selUser[0].STATE == 0) {
@@ -228,7 +228,7 @@
 								var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isPromoterNode/' + this.selMenu[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
-										this.$refs.child.detail(this.selMenu[0].ID);
+										this.$refs.child.detail(this.selMenu[0]);
 									} else {
 										this.$message({
 											message: res.data.resp_msg,
@@ -244,13 +244,13 @@
 							}
 						});
 					}else{
-						this.$refs.reportapprove.detail(this.selUser[0].ID);	
+						this.$refs.reportapprove.detail(this.selUser[0]);	
 					}
 				}
 			},
 			//查看
 			view(data) {
-				this.$refs.reportapprove.view(data.ID);
+				this.$refs.reportapprove.view(data);
 			},
 			//高级查询
 			modestsearch() {

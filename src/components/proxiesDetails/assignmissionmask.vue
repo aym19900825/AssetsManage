@@ -622,6 +622,7 @@
 						 -->
 						<div class="content-footer">
 							<el-button type="success" @click="build">确定</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -1904,7 +1905,7 @@
 			    if(callback){
 			    	if(this.dataInfo.R_VENDOR==""||this.dataInfo.R_VENDOR==undefined){
 						this.$message({
-							message: '请先输入承检单位',
+							message: '请先选择承检单位',
 							type: 'error'
 						});
 			    	}
@@ -1914,7 +1915,7 @@
 				 if(callback){
 			    	if(this.dataInfo.MAINGROUP==""||this.dataInfo.MAINGROUP==undefined){
 						this.$message({
-							message: '请先输入主检组',
+							message: '请先选择主检组',
 							type: 'error'
 						});
 			    	}

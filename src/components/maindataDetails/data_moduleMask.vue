@@ -520,22 +520,24 @@
 						var url = this.basic_url + '/api-apps/app/rawDataTem/saveOrUpdate';
 						this.$axios.post(url, this.CATEGORY).then((res) => {
 							if(res.data.resp_code == 0) {
-								this.$message({
-									message: '保存成功',
-									type: 'success'
-								});
+								
 								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
+									this.docParm.recordid = res.data.datas.ID;
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
-									this.CATEGORY.ID = res.data.datas.id;
+									this.CATEGORY.ID = res.data.datas.ID;
 									this.CATEGORY.PT_NUM = res.data.datas.NUM;
 								}else{
+									this.$message({
+										message: '保存成功',
+										type: 'success'
+									});
 									if(opt == 'save'){
 										this.$emit('request');
+										this.show = false;
 									}
 									if(opt == 'update'){
-										this.show = false;
+										this.show = true;
 										this.visible();
 									}
 									this.emit('request');

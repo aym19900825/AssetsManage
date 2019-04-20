@@ -28,6 +28,7 @@
 				</el-table-column>
 			</el-table>
 			<el-pagination background 
+						   v-show="!exist"
 						   class="text-right pt10" 
 						   @size-change="sizeChange" 
 						   @current-change="currentChange" 
@@ -72,7 +73,8 @@
 		NUM:'',//产品类别编号
 		appname:'',//appname
 		NUM:'',//产品类别的编号
-		docParm: {}
+		docParm: {},
+		exist: false
     }
   },
 
@@ -114,6 +116,11 @@
 		this.deptId = id;
 		this.getDocParm();
 		this.requestData();
+	},
+	showExistData(data){
+		this.exist = true;
+		this.list = data;
+		this.dialogVisible = true;
 	},
   	loadMore () {
 	   if (this.loadSign) {

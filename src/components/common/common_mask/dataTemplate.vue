@@ -94,6 +94,13 @@
 			'recordid': row.ID,
 		}).then((res) => {
 			var resData = res.data.fileList;
+			if(resData.length == 0){
+				this.$message({
+					message: '此模板暂无文件！',
+					type: 'warning'
+				});
+				return;
+			}
 			var data = resData.length > 0 ? resData[0] : {};
 			var url = data.filepath 
 				+ '&userid=' + this.docParm.userid

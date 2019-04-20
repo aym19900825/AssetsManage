@@ -389,11 +389,20 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
+												<!-- <el-table-column prop="DEPTTYPEDesc" label="承包方名称1" sortable width="260px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
+														<span >{{scope.row.DEPTTYPEDesc}}</span>
+													</template>
+												</el-table-column> -->
+													<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.VENDORDesc">
+															<!-- <el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
+															</el-button> -->
 														</el-input>
 														<span v-else>{{scope.row.VENDORDesc}}</span>
+														</el-form-item>	
 													</template>
 												</el-table-column>
 
@@ -1099,6 +1108,7 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data.WORKORDER_CONTRACTList);
 					//项目
 					for(var i = 0;i<res.data.WORKORDER_PROJECTList.length;i++){
 						res.data.WORKORDER_PROJECTList[i].isEditing = false;
@@ -1161,12 +1171,9 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				//判断启动流程和审批的按钮是否显示
-
 				var url = this.basic_url + '/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
 					this.$axios.get(url, { }).then((res) => {
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
-					
 					for(let i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
 						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
@@ -1217,6 +1224,7 @@
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
+								console.log(this.workorderForm);
 							//检验项目与要求的数据id
               var selectData= this.PROJECTLIST;
 		          var deleteid = [];
@@ -1243,20 +1251,26 @@
 									});
 							}else{
 									for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+										console.log(this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR);
 								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR){
-										this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.toString(',')
+									console.log(this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.length);
+										this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR = 	this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.join(',');
+										// this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.toString(',')
 								}
 								
 							}
 							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
+								console.log(this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR);
 								if(!!this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR){
-									this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR.toString(',')
+									this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR = 	this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR.join(',');
+									// this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR.toString(',')
 								}
 									
 							}
 				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
 					this.$axios.post(url,{WORKORDER:this.workorderForm,PROJECTLIST:ids,CONTRACTLIST:ides}).then((res) => {
+						console.log(this.workorderForm);
 						if(res.data.resp_code == 0) {
 							this.show = false;
 							this.$emit('request');
@@ -1334,7 +1348,10 @@
 			},
 			getgroup(){//获取专业组信息
 			var url = this.basic_url + '/api-user/depts/findDeptList/'+this.$store.state.currentcjdw[0].id;
+			console.log(url);
 			this.$axios.get(url, {}).then((res) => {
+				console.log(res);
+				console.log(123);
 			this.maingroups=res.data;
 	    	}).catch((err) => {
 	      });
@@ -1440,7 +1457,7 @@
             sums[index] = '统计';
             return;
 					} 
-					else if(index === 8){
+					else if(index === 9){
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property]);
@@ -1474,6 +1491,7 @@
 		},
 		
 		mounted() {
+			this.getgroup();
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
 			this.getCOMPLETE_MODE();//页面打开加载-完成方式
@@ -1483,7 +1501,7 @@
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
 			this.getCompany();//承检单位
 			this.getUser();
-			this.getgroup();
+			
 		},
 	}
 </script>

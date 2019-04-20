@@ -160,6 +160,7 @@ export default {
       this.requestData();
     },
     requestData(opt){
+      console.log(this.searchList);
       this.loadding = true;
       var data = this.searchList;
       if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){

@@ -611,7 +611,7 @@
 					ACCEPT_PERSONDesc:'',//接收人
 					ACCEPT_PERSON:'',//
 					STATE: '1',
-					STATEDesc: '草稿',
+					STATEDesc: '编制',
 					ENTERBY: '',
 					STATUS: '',
 					CHECTCOST:0.00,
@@ -761,7 +761,7 @@
 					ACCEPT_PERSONDesc:'',//接收人
 					ACCEPT_PERSON:'',//
 					STATE: '1',
-					STATEDesc: '草稿',
+					STATEDesc: '编制',
 					ENTERBY: '',
 					STATUS: '',
 					CHECTCOST:0.00,

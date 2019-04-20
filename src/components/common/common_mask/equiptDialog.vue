@@ -181,7 +181,7 @@
 		var data = {};
 		var url = '';
 		if(this.searchList.project.length>0){
-			url = this.basic_url + '/api-apps/app/raw_data_asset2';
+			url = this.basic_url + '/api-apps/app/rawDataAsset';
 			var project = this.searchList.project;
 			var projectList = this.projectList;
 			// var sNum = [];
@@ -195,8 +195,8 @@
 				}
 			}
 			data = {
-				PRO_NUM_wheres: this.pro_num,
-				NUM_wheres: this.num,
+				// PRO_NUM_wheres: this.pro_num,
+				// NUM_wheres: this.num,
 				// S_NUM_wheres: sNum.join(','),
 				P_NUM_wheres: pNum.join(',')
 			}

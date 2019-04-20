@@ -28,6 +28,7 @@
 				</el-table-column>
 			</el-table>
 			<el-pagination background 
+						   v-show="!exist"
 						   class="text-right pt10" 
 						   @size-change="sizeChange" 
 						   @current-change="currentChange" 
@@ -72,7 +73,8 @@
 		NUM:'',//产品类别编号
 		appname:'',//appname
 		NUM:'',//产品类别的编号
-		docParm: {}
+		docParm: {},
+		exist: false
     }
   },
 
@@ -92,6 +94,13 @@
 			'recordid': row.ID,
 		}).then((res) => {
 			var resData = res.data.fileList;
+			if(resData.length == 0){
+				this.$message({
+					message: '此模板暂无文件！',
+					type: 'warning'
+				});
+				return;
+			}
 			var data = resData.length > 0 ? resData[0] : {};
 			var url = data.filepath 
 				+ '&userid=' + this.docParm.userid
@@ -114,6 +123,11 @@
 		this.deptId = id;
 		this.getDocParm();
 		this.requestData();
+	},
+	showExistData(data){
+		this.exist = true;
+		this.list = data;
+		this.dialogVisible = true;
 	},
   	loadMore () {
 	   if (this.loadSign) {

@@ -131,7 +131,7 @@
 											<el-table-column prop="CJDW" label="承检单位" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'worlplanlist.'+scope.$index + '.CJDW'" :rules="{required: true, message: '请选择', trigger: 'change'}">
-														<el-select v-if="scope.row.isEditing" size="small" clearable v-model="scope.row.CJDW" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="getCjdw(scope.row)">
+														<el-select v-if="scope.row.isEditing" size="small" clearable v-model="scope.row.CJDW" filterable default-first-option placeholder="请选择" :disabled="noedit" style="width: 100%" @change="getCjdw(scope.row)">
 															<el-option v-for="data in inspectUnit" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 														<span v-if="!scope.row.isEditing">{{scope.row.CJDWDesc}}</span>
@@ -884,7 +884,7 @@
 			},
 			//提出单位
 			getCompany() {
-				var url = this.basic_url + '/api-user/depts/treeByType';
+				var url = this.basic_url + '/api-user/depts/findStation/2,4';
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.selectData = res.data;
@@ -935,6 +935,13 @@
 			//生产企业名称
 			prodeptbtn(item){
 				// this.requestData();
+				if(!!!this.editPlan.CJDW){
+					this.$message({
+						message: '请先选择承检单位！',
+						type: 'warning'
+					});
+					return;
+				}
 				this.requestDeptname();
 				
 				// this.$emit('request');
@@ -980,6 +987,10 @@
 							if(res.data.resp_code == 0){
 								if(delList == 'worlplanlist'){
 									this.worlPlanListForm.worlplanlist.splice(index,1);
+									if(row.isEditing){
+										this.basisListForm.basisList = [];
+										this.proTestListForm.proTestList = [];
+									}
 								}else if(delList == 'basisList'){
 									this.basisListForm.basisList.splice(index,1);
 								}else{
@@ -996,6 +1007,10 @@
 				}else{
 					if(delList == 'worlplanlist'){
 						this.worlPlanListForm.worlplanlist.splice(index,1);
+						if(row.isEditing){
+							this.basisListForm.basisList = [];
+							this.proTestListForm.proTestList = [];
+						}
 					}else if(delList == 'basisList'){
 						this.basisListForm.basisList.splice(index,1);
 					}else{
@@ -1553,7 +1568,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				var url = this.basic_url + '/api-apps/app/customer?&DEPTID_wheres='+this.WORKPLAN.PROP_UNIT;
+				var url = this.basic_url + '/api-apps/app/customer?TYPE_where_in=1,3&page=1&limit=20&NAME&CODE&CONTACT_ADDRESS&DEPTID='+this.proindex.CJDW;
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1562,22 +1577,21 @@
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
 					if(this.page.currentPage >= totalPage){
-						 this.loadSign = false
+						this.loadSign = false
 					}else{
 						this.loadSign=true
 					}
 					this.commentArr[this.page.currentPage]=res.data.data
 					let newarr=[]
 					for(var i = 1; i <= totalPage; i++){
-					
 						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-							
 							for(var j = 0; j < this.commentArr[i].length; j++){
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}					
 					this.customerList = newarr;
+					console.log(this.dialogVisible5);
 				}).catch((wrong) => {})
 			},
 			//产品类别数据
@@ -1632,7 +1646,7 @@
 			},
 			addfield1(){//年度计划列表新建行
 				var flag = true;
-				if (this.isEditList){
+				if (this.isEditList && this.worlPlanListForm.worlplanlist.length>0){
 					flag = this.iconOperation(this.editPlan);
 				}
 				if(flag){
@@ -1870,7 +1884,7 @@
 					this.proTestListForm.proTestList = res.data.WORLPLANLINEList.length > 0 ? res.data.WORLPLANLINEList[0].WORLPLANLINE_PROJECTList : [];
 					this.show = true;
 					// var type = "2";
-					var url = this.basic_url + '/api-user/depts/treeByType';
+					var url = this.basic_url + '/api-user/depts/findStation/2,4';
 					this.$axios.get(url, {
 						// params: {
 						// 	type: type

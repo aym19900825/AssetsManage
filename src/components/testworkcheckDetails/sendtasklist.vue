@@ -110,8 +110,8 @@
 
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="样品数量" prop="ITEM_SOURCE" label-width="110px">
-												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="edit"></el-input-number>
+											<el-form-item label="样品数量" prop="ITEM_QUALITY" label-width="110px">
+												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" style="width: 100%" :disabled="edit"></el-input-number>
 											</el-form-item>
 										</el-col>
 										
@@ -282,7 +282,7 @@
 								<!-- 检测要求与样品信息 End -->
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tabs v-model="activeName">
 										<!--检测项目与要求 Begin-->
 										<el-tab-pane label="检验检测项目与要求" name="first">
 											<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260"
@@ -328,17 +328,17 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,PROJECTLIST,scope.$index)" >
-																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
+															<el-select clearable v-model="scope.row.LEADER"  placeholder="请选择" @change="visableleader($event,'PROJECTLIST',scope.$index)" >
+																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="MASTER_INSPECTOR" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSION" label="助手" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.MASTER_INSPECTOR'" >
-															<el-select clearable v-model="scope.row.MASTER_INSPECTOR" placeholder="请选择"  multiple >
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ASSIST_PERSION'" >
+															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择" multiple >
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -346,7 +346,7 @@
 												</el-table-column>
 												<el-table-column prop="QUATITY" label="样品数量" width="80px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.QUATITY'"  :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]">
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.QUATITY'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]">
 															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
 															</el-input> 
 														</el-form-item>	
@@ -366,7 +366,7 @@
 													<template slot-scope="scope">
 														<!-- <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请输入"></el-input>
 														<span v-else>{{scope.row.COMPLETE_DATE}}</span> -->
-														<el-date-picker v-model="scope.row.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;">
+														<el-date-picker v-model="scope.row.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :picker-options="pickerOptions1" >
 														</el-date-picker>
 													</template>
 												</el-table-column>
@@ -389,11 +389,20 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
+												<!-- <el-table-column prop="DEPTTYPEDesc" label="承包方名称1" sortable width="260px">
 													<template slot-scope="scope">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
+														<span >{{scope.row.DEPTTYPEDesc}}</span>
+													</template>
+												</el-table-column> -->
+													<el-table-column prop="VENDORDesc" label="分包方名称" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.VENDORDesc'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" :disabled="true" size="small" v-model="scope.row.VENDORDesc">
+															<!-- <el-button slot="append" icon="el-icon-search" @click="getDept(scope.row)">
+															</el-button> -->
 														</el-input>
 														<span v-else>{{scope.row.VENDORDesc}}</span>
+														</el-form-item>	
 													</template>
 												</el-table-column>
 
@@ -425,7 +434,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable  width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择"    @change="getleader($event,'CONTRACTList',scope.$index,'add')">
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择" @change="getleader($event,'CONTRACTList',scope.$index,'add')">
 																<el-option v-for="data in maingroups" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -435,17 +444,17 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,CONTRACTList,scope.$index)" >
-																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
+															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择" @change="visableleader($event,'CONTRACTList',scope.$index)" >
+																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
 												</el-table-column>
 
-                        <el-table-column prop="MASTER_INSPECTOR" label="助手" sortable width="150px">
+                        <el-table-column prop="ASSIST_PERSION" label="助手" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.MASTER_INSPECTOR'" >
-															<el-select clearable v-model="scope.row.MASTER_INSPECTOR" placeholder="请选择"  multiple>
+														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ASSIST_PERSION'" >
+															<el-select clearable v-model="scope.row.ASSIST_PERSION" placeholder="请选择"  multiple>
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -584,6 +593,11 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+          }
+        },
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
 				po_url: Config.po_url,
@@ -705,6 +719,11 @@
 				addPersonTable: ''
 			};
 		},
+		computed: {
+			nowUser: function(){
+				return this.$store.state.currentuser;
+			}
+		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
@@ -720,12 +739,7 @@
 				if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
 				}
-			},
-			handleClick(tab, event) {
-//		        console.log(tab, event);
-		   },
-			
-		
+			},	
 			appendpro(value){
 				this.workorderForm.PROXYNUM =value;
 					
@@ -1090,25 +1104,11 @@
 			reprotids(val){
 
 			},
-		
-			// reportdatavalue(value){
-			// 	this.reportvalue = value;//储存生成报告数据
-			// 	console.log(value);
-			// 	this.workorderreportid = value.id;
-      //           var obj = {
-			// 		ID:value.ID,
-      //               REPORTNUM:value.reportnum,
-      //               REPORTNAME:value.reportname,
-      //               FILEID:value.fileid,
-      //               VERSION:value.version,
-      //           }
-      //           console.log(obj);
-      //           this.workorderForm.WORKORDER_REPORTList.push(obj);
-			// },
-		
+	
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data.WORKORDER_CONTRACTList);
 					//项目
 					for(var i = 0;i<res.data.WORKORDER_PROJECTList.length;i++){
 						res.data.WORKORDER_PROJECTList[i].isEditing = false;
@@ -1171,23 +1171,21 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				//判断启动流程和审批的按钮是否显示
-
 				var url = this.basic_url + '/api-apps/app/workorder/operate/subtaskList?WORKORDERID='+dataid;
 					this.$axios.get(url, { }).then((res) => {
+						console.log(res.data.datas);
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
-					
 					for(let i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
 						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
 						res.data.datas.WORKORDER_PROJECTList[i].LEADER = Number(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
-						res.data.datas.WORKORDER_PROJECTList[i].MASTER_INSPECTOR = Number(res.data.datas.WORKORDER_PROJECTList[i].MASTER_INSPECTOR);
+						res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 					}
 					for(let i = 0;i<res.data.datas.WORKORDER_CONTRACTList.length;i++){
 						res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
 						res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
-						res.data.datas.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR = Number(res.data.datas.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR);
+						res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 					}
 					// this.getleader(WORKORDER_CONTRACTList.INSPECT_GROUP);
 							this.workorderForm = res.data.datas;
@@ -1227,6 +1225,7 @@
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
+								console.log(this.workorderForm);
 							//检验项目与要求的数据id
               var selectData= this.PROJECTLIST;
 		          var deleteid = [];
@@ -1253,20 +1252,23 @@
 									});
 							}else{
 									for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR){
-										this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_CONTRACTList[i].MASTER_INSPECTOR.toString(',')
+										console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
+									console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.length);
+										this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.join(',');
 								}
 								
 							}
 							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-								if(!!this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR){
-									this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR=this.workorderForm.WORKORDER_PROJECTList[i].MASTER_INSPECTOR.toString(',')
+								console.log(this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION);
+								if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
+									this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
 								}
-									
 							}
 				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
 					this.$axios.post(url,{WORKORDER:this.workorderForm,PROJECTLIST:ids,CONTRACTLIST:ides}).then((res) => {
+						console.log(this.workorderForm);
 						if(res.data.resp_code == 0) {
 							this.show = false;
 							this.$emit('request');
@@ -1344,7 +1346,10 @@
 			},
 			getgroup(){//获取专业组信息
 			var url = this.basic_url + '/api-user/depts/findDeptList/'+this.$store.state.currentcjdw[0].id;
+			console.log(url);
 			this.$axios.get(url, {}).then((res) => {
+				console.log(res);
+				console.log(123);
 			this.maingroups=res.data;
 	    	}).catch((err) => {
 	      });
@@ -1365,14 +1370,14 @@
 				}
 			  if(!!add){
 					if(PROJECTLIST=='PROJECTLIST'){
-					this.workorderForm.WORKORDER_PROJECTList[index].LEADER='';
-					this.workorderForm.WORKORDER_PROJECTList[index].MASTER_INSPECTOR=[];
+						this.workorderForm.WORKORDER_PROJECTList[index].LEADER='';
+				  	this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
 					}else{
 						this.workorderForm.WORKORDER_CONTRACTList[index].LEADER='';
-						this.workorderForm.WORKORDER_CONTRACTList[index].MASTER_INSPECTOR=[];
+						this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
 					}
 				}
-				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid+'&id_not_in='+this.userid;
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
 
 				this.$axios.get(url, {}).then((res) => {
 					this.leader = res.data.data;
@@ -1383,10 +1388,10 @@
 				if(!leader){
 						return;
 				}
-				if(PROJECTLIST==PROJECTLIST){
-					this.workorderForm.WORKORDER_PROJECTList[index].MASTER_INSPECTOR=[];
+				if(PROJECTLIST=='PROJECTLIST'){
+					this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
 				}else{
-					this.workorderForm.WORKORDER_CONTRACTList[index].MASTER_INSPECTOR=[];
+					this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
 				}
 				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.maingroupid;
 				this.$axios.get(url, {}).then((res) => {
@@ -1423,9 +1428,9 @@
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-								if(this.Quety>this.workorderForm.ITEM_RETURN_QUALITY){
+								if(this.Quety>this.workorderForm.ITEM_QUALITY){
 											this.$message({
-											message:'样品数量不能大于'+this.workorderForm.ITEM_RETURN_QUALITY,
+											message:'样品数量不能大于'+this.workorderForm.ITEM_QUALITY,
 											type: 'warning'
 										});
 								}
@@ -1450,7 +1455,7 @@
             sums[index] = '统计';
             return;
 					} 
-					else if(index === 8){
+					else if(index === 9){
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property]);
@@ -1463,9 +1468,9 @@
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-								if(this.Quety>this.workorderForm.ITEM_RETURN_QUALITY){
+								if(this.Quety>this.workorderForm.ITEM_QUALITY){
 											this.$message({
-											message:'样品数量不能大于'+this.workorderForm.ITEM_RETURN_QUALITY,
+											message:'样品数量不能大于'+this.workorderForm.ITEM_QUALITY,
 											type: 'warning'
 										});
 								}
@@ -1484,6 +1489,7 @@
 		},
 		
 		mounted() {
+			this.getgroup();
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
 			this.getCOMPLETE_MODE();//页面打开加载-完成方式
@@ -1493,7 +1499,7 @@
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
 			this.getCompany();//承检单位
 			this.getUser();
-			this.getgroup();
+			
 		},
 	}
 </script>

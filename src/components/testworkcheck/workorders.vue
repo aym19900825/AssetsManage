@@ -576,13 +576,29 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == 15) {
+				}else if(this.selMenu[0].STATE == 15) {
 					this.$message({
 						message: '此任务单已退回，不能下达任务。',
 						type: 'warning'
 					});
 					return;
+<<<<<<< HEAD
 				} else {
+=======
+				}else if(this.selMenu[0].STATE == 1){
+					this.$message({
+						message: '此工作任务单未接受任务，不允许任务处理！',
+						type: 'warning'
+					});
+					return;
+				}else if(this.selMenu[0].STATE !=2){
+					this.$message({
+						message: '此工作任务单已经执行中，请勿再次下达任务！',
+						type: 'warning'
+					});
+					return;
+				}else{
+>>>>>>> a423784d5bca9df90243334261dfb0ceaf672034
 					this.$refs.task.view(this.selMenu[0].ID);	
 					var url = this.basic_url +'/api-apps/app/workorder/' +this.selMenu[0].ID;
 					this.$axios.get(url, {}).then((res) => {

@@ -76,7 +76,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" style="margin-left: 0px;">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
-																<el-option key="0" label="" value=""></el-option>
+																<el-option key="0" label="" value="0"></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
 																<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -168,13 +168,25 @@
 												</el-table-column>
 												<el-table-column prop="START_TIME" label="开始使用时间" sortable width="200px">
 													<template slot-scope="scope">
-														<el-date-picker v-model="scope.row.START_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'||pageDisable">
+														<el-date-picker 
+															v-model="scope.row.START_TIME" 
+															type="date" 
+															placeholder="请选择" 
+															style="width: 100%" 
+															value-format="yyyy-MM-dd" 
+															:disabled="scope.row.ISUSE=='1'||pageDisable">
 														</el-date-picker>
 													</template>
 												</el-table-column>
 												<el-table-column prop="END_TIME" label="截止使用时间" sortable width="200px">
 													<template slot-scope="scope">
-														<el-date-picker v-model="scope.row.END_TIME" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="scope.row.ISUSE=='1'||pageDisable">
+														<el-date-picker 
+															v-model="scope.row.END_TIME" 
+															type="date" 
+															placeholder="请选择" 
+															style="width: 100%" 
+															value-format="yyyy-MM-dd" 
+															:disabled="scope.row.ISUSE=='1'||pageDisable">
 														</el-date-picker>
 													</template>
 												</el-table-column>
@@ -403,7 +415,7 @@
 						type: 'warning'
 					});
 				}else{
-					
+					this.$refs.dataTemplate.showExistData(row.TEMPLATELIST);
 				}
 			},
 			startup(){

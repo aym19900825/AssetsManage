@@ -110,8 +110,8 @@
 
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="样品数量" prop="ITEM_SOURCE" label-width="110px">
-												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="edit"></el-input-number>
+											<el-form-item label="样品数量" prop="ITEM_QUALITY" label-width="110px">
+												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" style="width: 100%" :disabled="edit"></el-input-number>
 											</el-form-item>
 										</el-col>
 										
@@ -282,7 +282,7 @@
 								<!-- 检测要求与样品信息 End -->
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tabs v-model="activeName">
 										<!--检测项目与要求 Begin-->
 										<el-tab-pane label="检验检测项目与要求" name="first">
 											<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260"
@@ -328,8 +328,8 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,PROJECTLIST,scope.$index)" >
-																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
+															<el-select clearable v-model="scope.row.LEADER"  placeholder="请选择" @change="visableleader($event,PROJECTLIST,scope.$index)" >
+																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
@@ -338,7 +338,7 @@
                         <el-table-column prop="MASTER_INSPECTOR" label="助手" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.MASTER_INSPECTOR'" >
-															<el-select clearable v-model="scope.row.MASTER_INSPECTOR" placeholder="请选择"  multiple >
+															<el-select clearable v-model="scope.row.MASTER_INSPECTOR" placeholder="请选择" multiple >
 																<el-option v-for="data in assistant" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -346,7 +346,7 @@
 												</el-table-column>
 												<el-table-column prop="QUATITY" label="样品数量" width="80px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.QUATITY'"  :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]">
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.QUATITY'" :rules="[{required: true, message: '请输入数字', trigger: 'blur'}]">
 															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入">
 															</el-input> 
 														</el-form-item>	
@@ -366,7 +366,7 @@
 													<template slot-scope="scope">
 														<!-- <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请输入"></el-input>
 														<span v-else>{{scope.row.COMPLETE_DATE}}</span> -->
-														<el-date-picker v-model="scope.row.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;">
+														<el-date-picker v-model="scope.row.COMPLETE_DATE" type="date" placeholder="请选择完成日期" value-format="yyyy-MM-dd" style="width: 100%;" :picker-options="pickerOptions1" >
 														</el-date-picker>
 													</template>
 												</el-table-column>
@@ -425,7 +425,7 @@
 												<el-table-column prop="INSPECT_GROUP" label="专业组" sortable  width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.INSPECT_GROUP'" >
-															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择"    @change="getleader($event,'CONTRACTList',scope.$index,'add')">
+															<el-select clearable v-model="scope.row.INSPECT_GROUP" placeholder="请选择" @change="getleader($event,'CONTRACTList',scope.$index,'add')">
 																<el-option v-for="data in maingroups" :key="data.id" :value="data.id" :label="data.fullname"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -435,8 +435,8 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择"  @change="visableleader($event,CONTRACTList,scope.$index)" >
-																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname"></el-option>
+															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择" @change="visableleader($event,CONTRACTList,scope.$index)" >
+																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
 													</template>
@@ -584,6 +584,11 @@
 		},
 		data() {
 			return {
+				pickerOptions1: {
+          disabledDate(time) {
+            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+          }
+        },
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
 				po_url: Config.po_url,
@@ -705,6 +710,11 @@
 				addPersonTable: ''
 			};
 		},
+		computed: {
+			nowUser: function(){
+				return this.$store.state.currentuser;
+			}
+		},
 		methods: {
 			//表头居中
 			rowClass({ row, rowIndex}) {
@@ -720,12 +730,7 @@
 				if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
 				}
-			},
-			handleClick(tab, event) {
-//		        console.log(tab, event);
-		   },
-			
-		
+			},	
 			appendpro(value){
 				this.workorderForm.PROXYNUM =value;
 					
@@ -1090,22 +1095,7 @@
 			reprotids(val){
 
 			},
-		
-			// reportdatavalue(value){
-			// 	this.reportvalue = value;//储存生成报告数据
-			// 	console.log(value);
-			// 	this.workorderreportid = value.id;
-      //           var obj = {
-			// 		ID:value.ID,
-      //               REPORTNUM:value.reportnum,
-      //               REPORTNAME:value.reportname,
-      //               FILEID:value.fileid,
-      //               VERSION:value.version,
-      //           }
-      //           console.log(obj);
-      //           this.workorderForm.WORKORDER_REPORTList.push(obj);
-			// },
-		
+	
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -1372,7 +1362,7 @@
 						this.workorderForm.WORKORDER_CONTRACTList[index].MASTER_INSPECTOR=[];
 					}
 				}
-				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid+'&id_not_in='+this.userid;
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+maingroupid;
 
 				this.$axios.get(url, {}).then((res) => {
 					this.leader = res.data.data;
@@ -1423,9 +1413,9 @@
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-								if(this.Quety>this.workorderForm.ITEM_RETURN_QUALITY){
+								if(this.Quety>this.workorderForm.ITEM_QUALITY){
 											this.$message({
-											message:'样品数量不能大于'+this.workorderForm.ITEM_RETURN_QUALITY,
+											message:'样品数量不能大于'+this.workorderForm.ITEM_QUALITY,
 											type: 'warning'
 										});
 								}
@@ -1463,9 +1453,9 @@
 								sums[index] = values.reduce((prev, curr) => {
 									return prev + curr;
 								}, 0);
-								if(this.Quety>this.workorderForm.ITEM_RETURN_QUALITY){
+								if(this.Quety>this.workorderForm.ITEM_QUALITY){
 											this.$message({
-											message:'样品数量不能大于'+this.workorderForm.ITEM_RETURN_QUALITY,
+											message:'样品数量不能大于'+this.workorderForm.ITEM_QUALITY,
 											type: 'warning'
 										});
 								}

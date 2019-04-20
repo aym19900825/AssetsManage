@@ -30,11 +30,6 @@
 									<el-input v-model="searchList.S_ENGNAME"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6">
-								<el-form-item label="版本" prop="VERSION">
-									<el-input v-model="searchList.VERSION"></el-input>
-								</el-form-item>
-							</el-col>		
 						</el-row>
 						<el-row :gutter="10">
 							<!-- <el-col :span="6">
@@ -45,6 +40,11 @@
 									</el-select>
 								</el-form-item>
 							</el-col> -->
+							<el-col :span="6">
+								<el-form-item label="版本" prop="VERSION">
+									<el-input v-model="searchList.VERSION"></el-input>
+								</el-form-item>
+							</el-col>		
 							<el-col :span="6">
 								<el-form-item label="发布时间" prop="RELEASETIME">
 									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">

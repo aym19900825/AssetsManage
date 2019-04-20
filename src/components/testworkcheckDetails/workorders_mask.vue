@@ -1419,7 +1419,7 @@
 			},
 			//启动流程
 			startup(){
-				var url = this.basic_url + '/api-apps/app/workorder/flow/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/workorder/operate/receivingTask?ID='+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 1) {
 							this.$message({

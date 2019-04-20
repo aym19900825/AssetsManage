@@ -516,7 +516,7 @@
 						type: 'warning'
 					});
 					return;
-				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&((!!this.selUser.ISRECEIVE)&&this.selUser.ISRECEIVE!=0)){
+				}else if((this.selUser[0].STATE == 3 || this.selUser[0].STATE == 15)&&this.selUser.ISRECEIVE!=1){
 					this.$refs.assingn.view(this.selUser[0].ID);	
 				}
 			},

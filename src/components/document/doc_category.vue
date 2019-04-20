@@ -414,9 +414,14 @@
 					xhr.setRequestHeader("client_type", "DESKTOP_WEB");
 					xhr.onload = function() {
 						if (this.status == 200) {
+							var filename = "tbKeyword2.xls";
 							var blob = this.response;
+							var link = document.createElement('a');
 							var objecturl = URL.createObjectURL(blob);
-							window.location.href = objecturl;
+							link.href = objecturl;
+							link.download = filename;
+							link.click();
+							// window.location.href = objecturl;
 						}
 					}
 					xhr.send();

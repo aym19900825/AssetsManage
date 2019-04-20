@@ -399,7 +399,7 @@
 													<el-table-column label="技术要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
 													
-													<el-table-column label="计量单位" prop="UNITDesc" sortable width="120px">
+													<el-table-column label="计量单位" prop="UNITDesc" width="100px">
 													</el-table-column>
 
 													<el-table-column prop="INSPECT_GROUPDesc" label="专业组" sortable width="120px">
@@ -504,7 +504,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="COMPLETE_DATE" label="完成日期" sortable width="220px">
+												<el-table-column prop="COMPLETE_DATE" label="完成日期" :formatter="dateFormat" sortable width="220px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.COMPLETE_DATE" placeholder="请选择"></el-input>
 														<span v-else>{{scope.row.COMPLETE_DATE}}</span>
@@ -580,12 +580,18 @@
 														<el-table-column fixed="right" label="操作" width="120px">
 															<template slot-scope="scope">
 																<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																	<i class="icon-excel"></i>
+																	<i class="icon-eye"></i>
 																</el-button>
 															</template>
 														</el-table-column>
 
 													</el-table>
+												</el-col>
+											</el-row>
+											<el-row class="pt20 pb20">
+												<el-col :span="24" class="text-center">
+													<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
+													<el-button type="success" @click="submitVerify">回退</el-button>
 												</el-col>
 											</el-row>
 										</el-tab-pane>
@@ -875,6 +881,29 @@
 			};
 		},
 		methods: {
+			//确认检测数据通过
+			submitVerify(){
+				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
+						console.log(this.dataid);
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '保存成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.$emit('requests');
+						}else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+			},
 			//接收此任务
 			Accept(){
 				// /app/workorder/operate/acceptTask?WORKORDERID=当前主表ID
@@ -1038,7 +1067,7 @@
 					+ '&username=' + this.docParm.username
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
-					+ '&recordid=' + this.detailId
+					+ '&recordid=' + this.dataid
 					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},

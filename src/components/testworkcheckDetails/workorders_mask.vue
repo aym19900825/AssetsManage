@@ -885,8 +885,6 @@
 			submitVerify(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
-						console.log(this.dataid);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -1282,7 +1280,6 @@
 			},
 			 //模版编号
 			templateNumber(item){
-				console.log(this.workorderForm.WORKORDER_PROJECTList);
 				if((item.DATA_TYPE == '2')&&(this.workorderForm.WORKORDER_PROJECTList==''||this.workorderForm.WORKORDER_PROJECTList==null||this.workorderForm.WORKORDER_PROJECTList==undefined)){
 					this.$message({
 						message: '请先选择检测项目与要求',
@@ -1346,16 +1343,16 @@
 				})
 			},
 			//获取样品信息-接收人、
-			getselectData() {
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
-				this.$axios.get(url, {}).then((res) => {
-					this.selectData = res.data;
-				}).catch(error => {
-					console.log('请求失败');
-				})
-			},
+			// getselectData() {
+			// 	var page = this.page.currentPage;
+			// 	var limit = this.page.pageSize;
+			// 	var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
+			// 	this.$axios.get(url, {}).then((res) => {
+			// 		this.selectData = res.data;
+			// 	}).catch(error => {
+			// 		console.log('请求失败');
+			// 	})
+			// },
 			//获取样品信息-样品检后状态
 			getITEM_CHECK_STATUS() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_CHECK_STATUS';
@@ -1375,13 +1372,10 @@
            
 			//更改样品数量
 			handleChangeQuality(value) {
-				console.log(value);
 			},	
       		//刪除新建行
 			deleteRow(index, row, listName){
-				console.log(row);
 				var TableName = '';
-				console.log(listName);
 				if(listName =='basisList'){
 					TableName = 'WORKORDER_BASIS';
 				}else if(listName =='projectList'){
@@ -1425,7 +1419,6 @@
 			},
 			//生成分包协议
 			proagree(row){
-				console.log(row);
 				var data = {
 					"WORKORDER_CONTRACTID":row.ID.toString(),
 				};
@@ -1552,7 +1545,6 @@
 					MEMO: '',
 					isEditing: true,
 				};
-				console.log(typeof(this.workorderForm.WORKORDER_BASISList));
 				this.workorderForm.WORKORDER_BASISList.push(obj);//检验检测依据
 			},
 			addfield2() {
@@ -1625,7 +1617,6 @@
 			},
 			reportdatavalue(value){
 				this.reportvalue = value;//储存生成报告数据
-				console.log(value);
 				this.workorderreportid = value.id;
                 var obj = {
 					ID:value.ID,
@@ -1634,9 +1625,7 @@
                     FILEID:value.fileid,
                     VERSION:value.version,
                 }
-                console.log(obj);
                 this.workorderForm.WORKORDER_REPORTList.push(obj);
-				console.log(this.workorderForm.WORKORDER_REPORTList);
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {
@@ -1664,8 +1653,8 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					res.data.CJDW = parseInt(res.data.CJDW);
 					//依据
-					console.log(res.data);
 					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
 						res.data.WORKORDER_BASISList[i].isEditing = false;
 					}
@@ -1701,8 +1690,8 @@
 						// res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
 						// res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION =res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION.split(',');
 					}
-					res.data.CJDW = parseInt(res.data.CJDW);
-					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
+					
+					// res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
 					if(res.data.IS_MAIN == '1'){//是主任务单
@@ -1746,7 +1735,6 @@
 			},
 			//这是查看
 			view(dataid) {
-				// console.log(this.username);
 				this.btnshow = true;//显示报告提交按钮
 				this.dataid=dataid;	
 				this.modifytitle = false;
@@ -1767,9 +1755,6 @@
 					}else{
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
-							
-							// res.data.CJDW = Number(res.data.CJDW);
-							// console.log(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
@@ -1792,7 +1777,6 @@
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
 					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
-					// console.log(this.workorderForm);
 					this.$axios.post(url,this.workorderForm).then((res) => {
 						// 
 						//resp_code == 0是后台返回的请求成功的信息
@@ -1934,7 +1918,7 @@
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
 			this.getCOMPLETE_MODE();//页面打开加载-完成方式
-			this.getselectData();//页面打开加载-接收人、负责人、收样人
+			// this.getselectData();//页面打开加载-接收人、负责人、收样人
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置

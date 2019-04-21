@@ -34,11 +34,17 @@
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-select v-model="samplesForm.ITEM_TYPE" placeholder="样品类型" disabled>
+											<el-select v-model="samplesForm.ITEM_TYPE" placeholder="样品类型" :disabled="sampleAutoInput || noedit">
 												<el-option key="1" label="样品批次" value="1"></el-option>
 												<el-option key="2" label="样品序号" value="2"></el-option>
 											</el-select>
 										</el-col>
+										<!-- <el-col :span="6" class="pull-right">
+											<el-select v-model="sampleInput" placeholder="选择输入方式" disabled>
+												<el-option key="1" label="手动输入" value="1"></el-option>
+												<el-option key="2" label="扫码枪输入" value="2"></el-option>
+											</el-select>
+										</el-col> -->
 									</el-row>
 
 									<el-row >
@@ -48,16 +54,17 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
+											<!-- @input="getCodeInfo" -->
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @input="getCodeInfo" ref="itemnum" :disabled="noedit"></el-input>
+												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @keyup.native.enter="showInfo" :disabled="noedit"></el-input>
 											</el-form-item>
 											<!-- <input type="text" name="fname" id="idtest"/> -->
 										</el-col>
 										<el-col :span="8" v-if="samplesForm.ITEM_TYPE=='2'">
 											<el-form-item label="样品序号" prop="ITEM_STEPs">
+												 <!-- @input="getCodeInfo" -->
 												<el-select v-model="ITEM_STEPs" 
 														   multiple 
-														   @input="getCodeInfo"
 														   @change="showQuality"
 														   :disabled="noedit">
 													<el-option
@@ -288,7 +295,9 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				firstItem: true,
 				beforeItemNum: '',
 				ITEM_STEPs: [],
-				lastTime: 0
+				lastTime: 0,
+				noedit: false,
+				sampleAutoInput: false //扫描枪输入
 			};
 		},
 		watch:{
@@ -300,6 +309,65 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			}
 		},
 		methods: {
+			showInfo(){
+				var str = this.samplesForm.ITEMNUM;
+				if(str.indexOf('{')!=-1){
+					this.sampleAutoInput = true;
+					this.getCodeInfo();
+				}else{
+					this.sampleAutoInput = false;
+					this.getSampleList(str);
+					this.getSampleObj(str);
+				}
+			},
+			getSampleObj(itemnum){
+				var url = this.basic_url + '/api-apps/app/item';
+				var data = {
+					ITEMNUM: itemnum
+				};
+				this.$axios.get(url,{
+					params: data
+				}).then((res) => {
+					if(res.data.data.length > 0){	
+						var data = res.data.data[0];
+						if(data.PROXYNUM==''){
+							this.$message({
+								message: '此样品编号未绑定委托书，暂无可领样样品！',
+								type: 'warning'
+							});
+							return;
+						}
+						this.$forceUpdate();
+
+						if(data.ISRECEIVE == '1'){
+							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
+							this.sampleAutoInput = true;
+						}
+						
+						this.samplesForm.TYPE = data.PRODUCT_TYPE;
+						this.samplesForm.PRODUCT = data.PRODUCT;
+
+						this.samplesForm.PRO_NUM = data.PRO_NUM;
+						this.samplesForm.P_NUM = data.P_NUM;
+
+						this.samplesForm.DESCRIPTION = data.DESCRIPTION;
+						this.samplesForm.ACCEPT_DATE = data.ACCEPT_DATE;
+						this.samplesForm.MODEL = data.MODEL;
+						
+						this.samplesForm.PRO_NUM = data.PRO_NUM;
+						this.samplesForm.P_NUM = data.P_NUM;
+
+						
+					}else{
+						this.$message({
+							message: '暂无可领样样品！',
+							type: 'warning'
+						});
+						this.$forceUpdate();
+						this.resetSamples();
+					}
+				}).catch((wrong) => {})
+			},
 			getUserData(data){
 				this.$forceUpdate();
 				this.samplesForm.GRANT_PERSON = data.id;
@@ -318,8 +386,10 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					if(str.indexOf('{')!=-1){
 						var sampleObj = str.slice(str.indexOf('{'),str.length);
 							sample = JSON.parse(sampleObj);
+						this.sampleAutoInput = true;
 					}else{
 						sample.code = this.samplesForm.ITEMNUM;
+						this.sampleAutoInput = false;
 					}
 					
 					//记录第一次扫描编号
@@ -420,7 +490,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 							});
 						}
 					}
-					console.log(this.sampleList);
 				}).catch((err) => {});
 			},
 			resetSamples(){

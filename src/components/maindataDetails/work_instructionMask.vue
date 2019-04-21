@@ -331,7 +331,7 @@
 							});
 							return false;
 					    }else{
-							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
+							var url = this.basic_url + '/api-apps/app/workIns/operate/upgraded';
 							this.$axios.post(url, this.WORK_INSTRUCTION).then((res) => {
 								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {
@@ -381,8 +381,8 @@
 					}
 				}
 				if (isEditingflag==false){
-                	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-                		var currentUser, currentDate
+						this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+						var currentUser, currentDate
 						this.currentUser=res.data.nickname;
 						var date=new Date();
 						this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -399,8 +399,8 @@
 						this.testing_filesForm.inspectionList.unshift(obj);//在列表前新建行unshift，在列表后新建行push
 					}).catch((err)=>{
 					})
-	            } else {
-	                this.$message.warning("请先保存当前编辑项");
+						} else {
+							this.$message.warning("请先保存当前编辑项");
 				}
 			},
 			//点击关闭按钮

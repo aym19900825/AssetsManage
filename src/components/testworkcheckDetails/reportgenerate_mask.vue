@@ -37,14 +37,14 @@
 								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
 									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'">
 										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
-											<el-form-item :label="item.title" :prop="item.param" v-if="item.required == 0" label-width="150px">
+											<el-form-item v-if="item.required == 0" :label="item.title" :prop="item.param" label-width="150px">
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="inputData[item.param]" :type="item.type" row="3" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="inputData[item.param]" :type="item.type" row="3" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
@@ -58,14 +58,14 @@
 													</el-option>
 												</el-select> -->
 											</el-form-item>
-											<el-form-item :label="item.title" :prop="item.param" v-else label-width="150px" :rules="{required: true, message: '请填写', trigger: 'change'}">
+											<el-form-item v-else :label="item.title" :prop="item.param" label-width="150px" :rules="{required: true, message: '请填写', trigger: 'change'}">
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='1'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase=='0'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
@@ -220,8 +220,8 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column label="报告文件ID" prop="FILEID">
-													</el-table-column>
+													<!-- <el-table-column label="报告文件ID" prop="FILEID">
+													</el-table-column> -->
 
 													<el-table-column label="报告文件名称" prop="REPORTNAME">
 													</el-table-column>
@@ -444,7 +444,7 @@
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
-					// console.log(res.data);
+					console.log(res.data);
 					// console.log(this.reportTemplate.RE_TYPE);
 					// console.log(this.detailId);
 					// this.reportGenerateForm.inspect_date = this.getToday();

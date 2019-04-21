@@ -910,17 +910,7 @@
 				}).catch(error => {
 				})
 			},
-			//获取样品信息-接收人、
-			getselectData() {
-				var page = this.page.currentPage;
-				var limit = this.page.pageSize;
-				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
-				this.$axios.get(url, {}).then((res) => {
-					this.selectData = res.data;
-				}).catch(error => {
-					console.log('请求失败');
-				})
-			},
+		
 			//获取样品信息-样品检后状态
 			getITEM_CHECK_STATUS() {
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_CHECK_STATUS';
@@ -1495,7 +1485,6 @@
 			this.getITEM_STATUS();//页面打开加载-样品状态
 			this.getITEM_SOURCE();//页面打开加载-样品来源
 			this.getCOMPLETE_MODE();//页面打开加载-完成方式
-			this.getselectData();//页面打开加载-接收人、负责人、收样人
 			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
 			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
 			this.getITEM_MANAGEMENT();//页面打开加载-样品处置

@@ -520,12 +520,12 @@
 				} else {
 					// this.sampleTypeFlag = !this.selMenu[0].ITEM_TYPE||!this.selMenu[0].ISRECEIVE ? true : false;
 					this.sampleTypeFlag = !this.selMenu[0].ISRECEIVE ? true : false;
-					// if(this.selMenu[0].ITEM_TYPE =='2'){
-					// 	this.getSampleList();
-					// 	this.sampleType = '2';
-					// }
-					this.getSampleList();
-					this.sampleType = '2';
+					if(this.selMenu[0].ITEM_TYPE =='2'){
+						this.getSampleList();
+						this.sampleType = '2';
+					}else{
+						this.sampleType = '1';
+					}
 					this.codeDialog = true;
 				}
 			},
@@ -542,31 +542,46 @@
 				// this.requestData();
 			},
 			printCode(){
-				var _this = this;
-				var selData = this.selSampleData;
-				if(selData.length == 0){
-					this.$message({
-						message: '请选择数据！',
-						type: 'warning'
-					});
-					return;
-				}
-				for (let i = 0; i < selData.length; i++) {
-					this.genCode(selData[i]);
+				if(this.sampleType == '1'){
+					this.genCode(this.selMenu[0]);
+					setTimeout(() => {
+						let routeUrl = this.$router.resolve({
+							path:'/printCode',
+							query:{
+								imgUrl: this.codeUrls,
+							}
+						});
+						window.open(routeUrl.href, '_blank');
+						this.codeUrls = [];
+					}, 300);
+				}else{
+					var _this = this;
+					var selData = this.selSampleData;
+					if(selData.length == 0){
+						this.$message({
+							message: '请选择数据！',
+							type: 'warning'
+						});
+						return;
+					}
+					for (let i = 0; i < selData.length; i++) {
+						this.genCode(selData[i]);
+					}
+					
+					var time = 300*selData.length;
+					setTimeout(() => {
+						let routeUrl = this.$router.resolve({
+							path:'/printCode',
+							query:{
+								imgUrl: this.codeUrls,
+							}
+						});
+						console.log(this.codeUrls);
+						window.open(routeUrl.href, '_blank');
+						this.codeUrls = [];
+					}, time);
 				}
 				
-				var time = 300*selData.length;
-				setTimeout(() => {
-					let routeUrl = this.$router.resolve({
-						path:'/printCode',
-						query:{
-							imgUrl: this.codeUrls,
-						}
-					});
-					console.log(this.codeUrls);
-					window.open(routeUrl.href, '_blank');
-				 	this.codeUrls = [];
-				}, time);
 			},
 			//添加样品管理
 			openAddMgr() {

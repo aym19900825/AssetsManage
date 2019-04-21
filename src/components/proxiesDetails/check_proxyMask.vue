@@ -42,7 +42,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="3" class="pull-right">
-											<el-input v-model="dataInfo.TYPEDesc" :disabled="edit">
+											<el-input v-model="dataInfo.DETECTIONTYPEDesc" :disabled="edit">
 												<template slot="prepend">类别</template>
 											</el-input>
 										</el-col>
@@ -344,13 +344,14 @@
 												</el-table-column> -->
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
-													<!-- <template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" @change="" placeholder="请输入要求">
 															</el-input>
-															<span v-else>{{scope.row.UNITCOST}}</span>
-														</el-form-item>
-													</template> -->
+														</el-form-item> -->
+															<span>{{scope.row.UNITCOST}}</span>
+														
+													</template>
 												</el-table-column>
 
 												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
@@ -854,8 +855,8 @@
 					LEADER_STATUS:'1',
 					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
-					TYPE:'2',//检验
-					TYPEDesc:'检测',
+					DETECTIONTYPE:'2',//检验
+					DETECTIONTYPEDesc:'检测',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
@@ -1273,8 +1274,8 @@
 					LEADER_STATUS:'1',
 					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
-					TYPE:'2',//检验
-					TYPEDesc:'检测',
+					DETECTIONTYPE:'2',//检验
+					DETECTIONTYPEDesc:'检测',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位

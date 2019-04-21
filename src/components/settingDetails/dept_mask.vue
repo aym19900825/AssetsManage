@@ -365,12 +365,12 @@
         	},
         	//添加显示弹窗
 			visible() {//点击父组件按钮显示弹窗
-				this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
-	     			this.adddeptForm.createUser = res.data.nickname;
-	     			var date=new Date();
-					this.adddeptForm.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				 }).catch((err) => {
-				});	
+				// this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {
+	     		// 	this.adddeptForm.createUser = res.data.nickname;
+	     		// 	var date=new Date();
+				// 	this.adddeptForm.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				//  }).catch((err) => {
+				// });	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
 				this.adddeptForm.depttype='1';
 				this.show = true;
@@ -688,14 +688,15 @@
 						fullname: this.adddeptForm.fullname,
 						id: this.adddeptForm.id,
 						leaderName: this.adddeptForm.leaderName,
+						pid:this.adddeptForm.pid,
 						pName: this.adddeptForm.pName,
 						status: this.adddeptForm.status,
 						telephone: this.adddeptForm.telephone,
 						type: this.adddeptForm.type,
 						typeName: this.adddeptForm.typeName,
-						updateTime: this.adddeptForm.updateTime,
-						updateUser: this.adddeptForm.updateUser,
-						updatebyName:this.adddeptForm.updatebyName,
+						// updateTime: this.adddeptForm.updateTime,
+						// updateUser: this.adddeptForm.updateUser,
+						// updatebyName:this.adddeptForm.updatebyName,
 					}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
@@ -749,11 +750,4 @@
 
 <style>
 	@import '../../assets/css/mask-modules.css';
-	
-	/*.el-form-item__error {
-		top: 18%;
-	    left: 5px;
-	    background: #FFF;
-	    padding: 5px 10px;
-	}*/
 </style>

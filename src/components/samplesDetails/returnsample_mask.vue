@@ -46,7 +46,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input v-model="samplesForm.ITEMNUM" @input="getCodeInfo"  ref="itemnum"></el-input>
+												<el-input v-model="samplesForm.ITEMNUM" @keyup.native.enter="showInfo"  ref="itemnum"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" v-if="samplesForm.ITEM_TYPE=='2'">
@@ -85,8 +85,8 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="返样人" prop="RETURN_PERSONDesc">
-												<el-input v-model="samplesForm.RETURN_PERSONDesc" disabled v-if="samplesForm.ITEM_TYPE=='2'"></el-input>
-												<el-select v-model="samplesForm.RETURN_PERSON"  v-if="samplesForm.ITEM_TYPE=='1'" placeholder="请选择">
+												<el-input v-model="samplesForm.RETURN_PERSONDesc" disabled v-if="samplesForm.ITEM_TYPE=='2'&&sampleAutoInput"></el-input>
+												<el-select v-model="samplesForm.RETURN_PERSON"  v-if="samplesForm.ITEM_TYPE=='1' || !sampleAutoInput" placeholder="请选择">
 													<el-option
 														v-for="item in rePerson"
 														:key="item.id"
@@ -290,12 +290,16 @@
 				commentArr:{},//下拉加载
 				beforeItemNum: '',
 				firstItem: true,
+				sampleAutoInput: true
 			};
 		},
 		methods: {
 			// removeStep(){
 			// 	this.samplesForm.QUALITY--;
 			// },
+			showInfo(){
+				this.getCodeInfo();
+			},
 			showQuality(){
 				this.samplesForm.QUALITY = this.ITEM_STEPs.length;
 			},
@@ -317,8 +321,10 @@
 					if(str.indexOf('{')!=-1){
 						var sampleObj = str.slice(str.indexOf('{'),str.length);
 							sample = JSON.parse(sampleObj);
+						this.sampleAutoInput = true;
 					}else{
 						sample.code = this.samplesForm.ITEMNUM;
+						this.sampleAutoInput = false;
 					}
 					//记录第一次扫描编号
 					if(this.firstItem){
@@ -362,6 +368,7 @@
 					}).then((res) => {
 						if(JSON.stringify(res.data)!='{}'){
 							var data = res.data;
+							this.$forceUpdate();
 							this.samplesForm.TYPE = data.PRODUCT_TYPE;
 							this.samplesForm.PRODUCT = data.PRODUCT;
 
@@ -371,8 +378,7 @@
 							this.samplesForm.DESCRIPTION = data.DESCRIPTION;
 							this.samplesForm.MODEL = data.MODEL;
 							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
-							this.samplesForm.PRO_NUM = data.PRO_NUM;
-							this.samplesForm.P_NUM = data.P_NUM;
+
 							if(this.samplesForm.ITEM_TYPE == '1'){
 								this.samplesForm.QUALITY = 1;
 								var data = res.data;
@@ -386,8 +392,7 @@
 								this.maxNum = data.REMAINQUALITY;
 								this.getReceive();
 							}else{
-								this.samplesForm.RETURN_PERSON = data.GRANT_PERSON;
-								this.samplesForm.RETURN_PERSONDesc = data.GRANT_PERSONDesc;
+								this.getReceive();
 								if(this.samplesList.length==0){
 									this.getSampleList(this.samplesForm.ITEMNUM, data.GRANT_PERSON);
 								}
@@ -398,6 +403,8 @@
 									this.$forceUpdate();
 									this.ITEM_STEPs.push(sample.step);
 									this.samplesForm.QUALITY = this.ITEM_STEPs.length;
+									this.samplesForm.RETURN_PERSON = data.GRANT_PERSON;
+									this.samplesForm.RETURN_PERSONDesc = data.GRANT_PERSONDesc;
 								}
 							}
 						}else{
@@ -524,7 +531,7 @@
 						if(this.samplesForm.ITEM_TYPE == '2'){
 							this.samplesForm.ITEM_STEP = this.ITEM_STEPs.join(',');
 						}
-						this.samplesForm.RETURN_PERSON = this.samplesForm.RETURN_PERSON.toString()
+						this.samplesForm.RETURN_PERSON = this.samplesForm.RETURN_PERSON.toString();
 						var url = this.basic_url + '/api-apps/app/itemreturn/saveOrUpdate';
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							if(res.data.resp_code == 0) {

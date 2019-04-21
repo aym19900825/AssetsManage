@@ -11,6 +11,11 @@
                         <i class="icon-notice"></i>
                     </a>
                 </el-badge>
+                <el-badge v-else  class="item pt5 mr30">
+                    <a class="lingdang">
+                        <i class="icon-notice"></i>
+                    </a>
+                </el-badge>
             </span>
             <el-dropdown placement="top" trigger="click">
               <span class="el-dropdown-link white">

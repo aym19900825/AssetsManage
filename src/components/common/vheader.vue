@@ -6,7 +6,7 @@
         </ul>
         <div class="nav-head pull-right nav-right">
             <span @click="appCenter">
-                <el-badge :value="toDoNumber" :max="99" class="item pt5 mr30">
+                <el-badge v-if="toDoNumber>0" :value="toDoNumber" :max="99"   class="item pt5 mr30">
                     <a class="lingdang">
                         <i class="icon-notice"></i>
                     </a>

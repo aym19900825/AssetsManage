@@ -1170,14 +1170,10 @@
 					}
 				});
 			},
+			//承建单位
 			getCompany() {
-				var type = "2";
 				var url = this.basic_url + '/api-user/depts/treeByType';
-				this.$axios.get(url, {
-					params: {
-						type: type
-					},
-				}).then((res) => {
+				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 				});
 			},
@@ -1705,7 +1701,7 @@
 						// res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
 						// res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION =res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION.split(',');
 					}
-					res.data.CJDW = Number(res.data.CJDW);
+					res.data.CJDW = parseInt(res.data.CJDW);
 					res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
@@ -1772,7 +1768,8 @@
 						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
 						this.$axios.get(url, {}).then((res) => {
 							
-							res.data.CJDW = Number(res.data.CJDW);
+							// res.data.CJDW = Number(res.data.CJDW);
+							// console.log(res.data.CJDW);
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){

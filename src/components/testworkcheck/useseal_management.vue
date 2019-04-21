@@ -87,8 +87,7 @@
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="工作任务单编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}</p>
 									</template>
 								</el-table-column>
                                 <el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">

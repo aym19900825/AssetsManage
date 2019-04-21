@@ -24,7 +24,7 @@
 						     :model="samplesForm" 
 							 :label-position="labelPosition" 
 							 :rules="rules" 
-							 label-width="110px" 
+							 label-width="130px" 
 							 status-icon 
 							 class="demo-form-inline">
 						<div class="content-accordion">
@@ -50,14 +50,14 @@
 										</el-col>
 
 										<el-col :span="8" class="pull-right">
-											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="110px">
+											<el-form-item label="承检单位" prop="CJDWDesc"  label-width="130px">
 												<el-input v-model="samplesForm.CJDWDesc" disabled></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="12">
-											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="110px">
+											<el-form-item label="委托书编号" prop="PROXYNUM" label-width="130px">
 												<el-input v-model="samplesForm.PROXYNUM" :disabled="edit || (modifytitle && samplesForm.PROXYNUM!='')">
 													<el-button slot="append" icon="el-icon-search" @click="getProxy" :disabled="noedit || (modifytitle && samplesForm.PROXYNUM!='')"></el-button>
 												</el-input>
@@ -66,7 +66,7 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="委托方名称名称" prop="V_NAMEDesc" label-width="110px">
+											<el-form-item label="委托方名称名称" prop="V_NAMEDesc" label-width="130px">
 												<el-input v-model="samplesForm.V_NAMEDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getVname('V_NAME')" :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
@@ -80,7 +80,7 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
+											<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="130px">
 												<el-input v-model="samplesForm.P_NAMEDesc" disabled>
 													<el-button slot="append" icon="el-icon-search"  @click="getVname('P_NAME')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
@@ -94,14 +94,14 @@
 									</el-row>
 									<el-row>
 										<el-col :span="12" >
-											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
+											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="130px">
 												<el-input v-model="samplesForm.PRODUCT_TYPE" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addcategory" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="12">
-											<el-form-item label="产品名称" prop="PRODUCT" label-width="110px">
+											<el-form-item label="产品名称" prop="PRODUCT" label-width="130px">
 												<el-input v-model="samplesForm.PRODUCT" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="addproduct" :disabled="noedit||!!samplesForm.PROXYNUM"></el-button>
 												</el-input>
@@ -110,29 +110,29 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="110px">
+											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="130px">
 												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="型号" prop="MODEL" label-width="110px">
+											<el-form-item label="型号" prop="MODEL" label-width="130px">
 												<el-input v-model="samplesForm.MODEL" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品数量" prop="QUATITY" label-width="110px">
+											<el-form-item label="样品数量" prop="QUATITY" label-width="130px">
 												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" @change="changeNum" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="生产日期/批" prop="MANUFACTURE_DATE" label-width="110px">
+											<el-form-item label="生产日期/批" prop="MANUFACTURE_DATE" label-width="130px">
 												<el-input  v-model="samplesForm.MANUFACTURE_DATE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="抽样日期" prop="SAMPLE_DATE" label-width="110px">
+											<el-form-item label="抽样日期" prop="SAMPLE_DATE" label-width="130px">
 												<el-date-picker
 												      v-model="samplesForm.SAMPLE_DATE"
 												      type="date"
@@ -141,24 +141,24 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="抽样人" prop="SAMPLE_PERSON" label-width="110px">
+											<el-form-item label="抽样人" prop="SAMPLE_PERSON" label-width="130px">
 												<el-input v-model="samplesForm.SAMPLE_PERSON" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="抽样地点" prop="SAMPLE_PLACE" label-width="110px">
+											<el-form-item label="抽样地点" prop="SAMPLE_PLACE" label-width="130px">
 												<el-input v-model="samplesForm.SAMPLE_PLACE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="110px">
+											<el-form-item label="产品标识代码" prop="PRODUCT_CODE" label-width="130px">
 												<el-input v-model="samplesForm.PRODUCT_CODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="收样人" prop="ACCEPT_PERSONDesc" label-width="110px">
+											<el-form-item label="收样人" prop="ACCEPT_PERSONDesc" label-width="130px">
 												<el-input v-model="samplesForm.ACCEPT_PERSONDesc" placeholder="当前人" :disabled="true">
 													<!-- <el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button> -->
 												</el-input>
@@ -167,7 +167,7 @@
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="收样日期" prop="ACCEPT_DATE" label-width="110px">
+											<el-form-item label="收样日期" prop="ACCEPT_DATE" label-width="130px">
 												<div class="block">
 												    <el-date-picker
 												      v-model="samplesForm.ACCEPT_DATE"
@@ -178,14 +178,14 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
-											<el-form-item label="其他资料" prop="OTHER" label-width="110px">
+											<el-form-item label="其他资料" prop="OTHER" label-width="130px">
 												<el-input v-model="samplesForm.OTHER" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="企业确认样品日期" prop="SAMPLE_CONFIRMATION_DATE" label-width="110px">
+											<el-form-item label="企业确认样品日期" prop="SAMPLE_CONFIRMATION_DATE" label-width="130px">
 												<div class="block">
 												    <el-date-picker
 												      v-model="samplesForm.SAMPLE_CONFIRMATION_DATE"
@@ -196,12 +196,12 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="样品费用（万元）" prop="ITEM_CHARGE" label-width="110px">
+											<el-form-item label="样品费用（万元）" prop="ITEM_CHARGE" label-width="130px">
 												<el-input v-model="samplesForm.ITEM_CHARGE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="发票日期" prop="INVOICEDATE " label-width="110px">
+											<el-form-item label="发票日期" prop="INVOICEDATE " label-width="130px">
 												<div class="block">
 												    <el-date-picker
 												      v-model="samplesForm.INVOICEDATE"
@@ -215,7 +215,7 @@
 									
 									<el-row>
 										<el-col :span="24">
-											<el-form-item label="备注" prop="MEMO" label-width="110px">
+											<el-form-item label="备注" prop="MEMO" label-width="130px">
 												<el-input type="textarea" rows="5" v-model="samplesForm.MEMO" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -273,17 +273,17 @@
 								<el-collapse-item title="其他" name="3" v-show="views">
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="110px">
+											<el-form-item label="录入人" prop="ENTERBYDesc" label-width="130px">
 												<el-input v-model="samplesForm.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE" label-width="110px">
+											<el-form-item label="录入时间" prop="ENTERDATE" label-width="130px">
 												<el-input v-model="samplesForm.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="机构" prop="DEPTIDDesc" label-width="110px">
+											<el-form-item label="机构" prop="DEPTIDDesc" label-width="130px">
 												<el-input v-model="samplesForm.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -314,33 +314,33 @@
 			</div>
 
 			<!--委托书编号-弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose1">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="70%" :before-close="handleClose1">
 				<div>
-					<el-form inline-message :model="proxy_search" label-width="70px">
+					<el-form inline-message :model="proxy_search" label-width="120px">
 						<el-row :gutter="5">
 							<el-col :span="7">
-								<el-form-item label="委托书编号" prop="PROXYNUM">
+								<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
 									<el-input v-model="proxy_search.PROXYNUM"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="7">
-								<el-form-item label="委托方名称名称" prop="V_NAMEDesc">
+								<el-form-item label="委托方名称名称" prop="V_NAMEDesc" label-width="120px">
 									<el-input v-model="proxy_search.V_NAMEDesc"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="完成方式" prop="COMPMODE">
+								<el-form-item label="完成方式" prop="COMPMODE" label-width="80px">
 									<el-input v-model="proxy_search.COMPMODE"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetProxy" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetProxy" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
-				<el-table ref="table" :data="gridDataList" height="400px" @selection-change="SelChange"
+				<el-table ref="table" :data="gridDataList" height="300px" @selection-change="SelChange"
 					v-loadmore="loadMore('proxy')"
 					v-loading="loading"
 					element-loading-text="加载中…"

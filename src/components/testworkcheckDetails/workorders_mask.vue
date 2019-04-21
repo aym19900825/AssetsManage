@@ -591,7 +591,7 @@
 											<el-row class="pt20 pb20">
 												<el-col :span="24" class="text-center">
 													<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-													<el-button type="success" @click="submitVerify">回退</el-button>
+													<el-button type="success" @click="">回退</el-button>
 												</el-col>
 											</el-row>
 										</el-tab-pane>
@@ -888,7 +888,7 @@
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
-								message: '保存成功',
+								message: '确认成功',
 								type: 'success'
 							});
 							//重新加载数据

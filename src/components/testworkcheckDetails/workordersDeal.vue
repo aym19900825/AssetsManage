@@ -76,7 +76,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" style="margin-left: 0px;">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
-																<el-option key="0" label="" value="0"></el-option>
+																<el-option key="0" label=" " value=" "></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
 																<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -118,7 +118,7 @@
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ISQUALIFIED'">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
-																<el-option key="1" label="" value=""></el-option>
+																<el-option key="0" label=" " value=" "></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
 																<el-option key="3" label="B类不合格" value="3"></el-option>
@@ -424,6 +424,7 @@
 				var projectList = this.workorderForm.WORKORDER_PROJECTList;
 				var contractList = this.workorderForm.WORKORDER_CONTRACTList;
 				var fileList = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
+				var flag = true;
 				//数据验证
 				//输入检验结果必填
 				for (let i = 0; i < projectList.length; i++) {
@@ -434,6 +435,7 @@
 								message: '检测项目结果未录入完全！',
 								type: 'warning'
 							});
+							flag = false;
 						}
 					}
 				}
@@ -446,6 +448,7 @@
 								message: '分包项目结果未录入完全！',
 								type: 'warning'
 							});
+							flag = false;
 						}
 					}
 				}
@@ -457,9 +460,12 @@
 							message: '请上传成果文件',
 							type: 'warning'
 						});
+						flag = false;
 					}
 				}
-				
+				if(!flag){
+					return;
+				}
 				this.$refs.workorderForm.validate((valid)=>{
 					if(valid){
 						this.submitForm('apply');
@@ -639,6 +645,18 @@
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
+					// var data = res.data.datas;
+					// for (let i = 0; i < data.workorderForm.WORKORDER_CONTRACTList; i++) {
+					// 	if(data.WORKORDER_CONTRACTList[i].ISQUALIFIED == '0'){
+					// 		data.WORKORDER_CONTRACTList[i].ISQUALIFIED = '';
+					// 	}
+					// }
+					// for (let j = 0; j < data.WORKORDER_PROJECTList; j++) {
+					// 	if(data.WORKORDER_PROJECTList[j].ISQUALIFIED == '0'){
+					// 		data.WORKORDER_PROJECTList[j].ISQUALIFIED = '';
+					// 	}
+					// }
+					// console.log(this.workorderForm);
 					// this.workorderForm.WORKORDER_DATA_TEMPLATEList = this.workorderForm.WORKORDER_DATA_TEMPLATEList.splice(1,1);
 					if(opt == 'showDialog'){
 						this.show = true;

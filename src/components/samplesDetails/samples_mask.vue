@@ -314,33 +314,33 @@
 			</div>
 
 			<!--委托书编号-弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose1">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="70%" :before-close="handleClose1">
 				<div>
-					<el-form inline-message :model="proxy_search" label-width="70px">
+					<el-form inline-message :model="proxy_search" label-width="120px">
 						<el-row :gutter="5">
 							<el-col :span="7">
-								<el-form-item label="委托书编号" prop="PROXYNUM">
+								<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
 									<el-input v-model="proxy_search.PROXYNUM"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="7">
-								<el-form-item label="委托方名称名称" prop="V_NAMEDesc">
+								<el-form-item label="委托方名称名称" prop="V_NAMEDesc" label-width="120px">
 									<el-input v-model="proxy_search.V_NAMEDesc"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="完成方式" prop="COMPMODE">
+								<el-form-item label="完成方式" prop="COMPMODE" label-width="80px">
 									<el-input v-model="proxy_search.COMPMODE"></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
 								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetProxy" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="resetProxy" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
-				<el-table ref="table" :data="gridDataList" height="400px" @selection-change="SelChange"
+				<el-table ref="table" :data="gridDataList" height="300px" @selection-change="SelChange"
 					v-loadmore="loadMore('proxy')"
 					v-loading="loading"
 					element-loading-text="加载中…"

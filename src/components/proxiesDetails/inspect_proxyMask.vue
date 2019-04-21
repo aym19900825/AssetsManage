@@ -344,13 +344,14 @@
 												</el-table-column> -->
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
-													<!-- <template slot-scope="scope">
-														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
+													<template slot-scope="scope">
+														<!-- <el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.UNITCOST'" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITCOST" @change="" placeholder="请输入要求">
-															</el-input>
-															<span v-else>{{scope.row.UNITCOST}}</span>
-														</el-form-item>
-													</template> -->
+															</el-input> -->
+															<!-- </el-form-item> -->
+															<span>{{scope.row.UNITCOST}}</span>
+													</template>
+													
 												</el-table-column>
 
 												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
@@ -1875,6 +1876,7 @@
 			},
 			 //检验项目列表
 			addproject(value){
+				console.log(value);
 					for(var i = 0;i<value.length;i++){
 						var list={
 								P_NUM:value[i].P_NUM,

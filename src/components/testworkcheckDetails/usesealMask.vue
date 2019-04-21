@@ -68,13 +68,13 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="用印时间" prop="USETIME">
-                                                <el-date-picker v-model="USESEAL.USETIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+                                                <el-date-picker v-model="USESEAL.USETIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
                                             <el-form-item label="用印人机构" prop="SEAL_DEPARTMENT">
-                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENT" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
+                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
                                                     <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
                                                 </el-select>
                                             </el-form-item>
@@ -83,7 +83,7 @@
                                     <el-row>
                                         <el-col :span="8">
 											<el-form-item label="归还时间" prop="GHTIME">
-												<el-date-picker v-model="USESEAL.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="USESEAL.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
@@ -129,8 +129,9 @@
 						</div>
 						<div class="content-footer">
 							<el-button type="primary" @click="saveAndUpdate()" v-show="!viewtitle">保存</el-button>
+							<el-button type="success" @click="submited()" v-show="!addtitle">已确认盖章</el-button>
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
-							<el-button  type="primary" @click="readAuth()" v-show ="!addtitle">查看文件</el-button>
+							<el-button type="primary" @click="readAuth()" v-show ="!addtitle">查看文件</el-button>
 							<el-button @click="close" v-show="!viewtitle">取消</el-button>
 						</div>
 					</el-form>
@@ -753,15 +754,38 @@
 				this.reset();
 				this.show = true;
 			},
+			//已确认盖章
+			submited(){
+				var url = this.basic_url + '/api-apps/app/workorder/operate/createReportData?id='+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+						// console.log(repotFileId);
+						//resp_code == 0是后台返回的请求成功的信息
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '确认成功',
+								type: 'success'
+							});
+							//重新加载数据
+							this.$emit('requests');
+						}else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+				
+			},
 			//查看
 			readAuth(){
 				this.detailgetData();
 				console.log(this.USESEAL);
-            var url = this.po_url+"/show?fileid=" +this.USESEAL.FILEID
-                        + '&userid=' +  this.userid
-                        + '&username=' + this.username
-                        + '&deptid=' + this.deptid
-                        + '&deptfullname=' + this.deptfullname
+            	var url = this.po_url+"/show?fileid=" +this.USESEAL.FILEID
+					+ '&userid=' +  this.userid
+					+ '&username=' + this.username
+					+ '&deptid=' + this.deptid
+					+ '&deptfullname=' + this.deptfullname
              window.open(url); 
         	},
 			//时间格式化

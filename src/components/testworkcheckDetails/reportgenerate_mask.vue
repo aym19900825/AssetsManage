@@ -63,9 +63,9 @@
 
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" autosize v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" autosize v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
 												</el-date-picker>
@@ -184,10 +184,10 @@
 														<i class="icon-edit"></i>
 														编辑
 													</el-button>
-													<el-button title="回退" type="text" size="small" @click="sendback(scope.row)">
-														<i class="icon-back"></i>
+													<!-- <el-button class="orange" title="回退" type="text" size="small" @click="sendback(scope.row)">
+														<i class="icon-back orange"></i>
 														回退
-													</el-button>
+													</el-button> -->
 												</template>
 											</el-table-column>
 										</el-table>
@@ -200,7 +200,7 @@
 
 								<el-tab-pane label="已生成的报告文件" name="6">
 									<!--生成的报告列表 Begin-->
-									<el-row class="pt20 pb20">
+									<el-row>
 										<el-col :span="24">
 											<!-- <el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px"> -->
 												<el-table :data="reportGenerateForm.WORKORDER_REPORTList" 
@@ -223,16 +223,22 @@
 													<!-- <el-table-column label="报告文件ID" prop="FILEID">
 													</el-table-column> -->
 
-													<el-table-column label="报告文件名称" prop="REPORTNAME">
+													<el-table-column label="报告文件编号" prop="REPORTNUM">
 													</el-table-column>
 
-													<el-table-column label="报告文件大小" prop="FILESIZE">
+													<el-table-column label="文件名称" prop="REPORTNAME">
+													</el-table-column>
+
+													<el-table-column label="报告文件大小" width="100px" prop="FILESIZE">
 													</el-table-column>
 													
-													<el-table-column label="生成时间" prop="ENTERDATE">
+													<el-table-column label="报告生成时间" width="160px" prop="ENTERDATE">
 													</el-table-column>
 
-													<el-table-column label="操作">
+													<el-table-column label="是否提交审核" width="100px" prop="ISCREATEDDesc">
+													</el-table-column>
+
+													<el-table-column label="操作" width="180px">
 														<template slot-scope="scope">
 															<el-button type="text" title="预览" @click="readReportFile(scope.row)" size="mini"> 
 																<i class="icon-eye"></i>
@@ -241,6 +247,10 @@
 															<el-button type="text" title="编辑" @click="editReportFile(scope.row)" size="mini"> 
 																<i class="icon-edit"></i>
 																编辑
+															</el-button>
+															<el-button class="red" type="text" title="删除" @click="delKey(scope.$index,scope.row)" size="mini"> 
+																<i class="icon-trash red"></i>
+																删除
 															</el-button>
 														</template>
 													</el-table-column>
@@ -259,10 +269,11 @@
 						<!--检验检测项目清单按钮事件-->
 						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
 						<!--内容页按钮事件-->
-						<el-button type="primary" v-show="fifthBtn" @click="getreport">生成检验/检测报告</el-button>
+						<el-button type="warning" v-show="thirdBtn" @click="sendback">回退</el-button>
+						<el-button type="primary" v-show="thirdBtn" @click="getreport">生成检验/检测报告</el-button>
+						<!--已生成报告按钮事件-->
 						<el-button type="success" v-show="fifthBtn" @click="submitVerify">提交审核</el-button>
 						<!--封底按钮事件-->
-						<!-- <el-button type="success" v-show="fifthBtn" @click="lookoverreport">查看生成报告</el-button> -->
 						<el-button @click="close">取消</el-button>
 					</div>
 					
@@ -299,9 +310,6 @@
 				reportTemplate:{
 					RE_TYPE: '1010',
 				},
-				// workorderForm: {
-				// 	WORKORDER_REPORTList:[],//查看生成的报告列表
-				// },
 				reportGenerateForm:{
 					WORKORDER_REPORTList:[],//查看生成的报告列表
 				},
@@ -371,7 +379,7 @@
 					this.fifthBtn = false;
 				}else if(activeName=='tab-3') {//判断按钮显示问题，内容页显示生成内容页文档和取消
 					this.firstBtn = true;
-					this.secondBtn = true;
+					this.secondBtn = false;
 					this.thirdBtn = true;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
@@ -388,9 +396,9 @@
 					this.fifthBtn = false;
 				}else if(activeName=='tab-6') {//判断按钮显示问题，已生成的报告文件
 					this.firstBtn = true;
-					this.secondBtn = true;
+					this.secondBtn = false;
 					this.thirdBtn = false;
-					this.fourthBtn = true;
+					this.fourthBtn = false;
 					this.fifthBtn = true;
 					this.detailgetData();//请求生成报告列表
 				}
@@ -441,12 +449,12 @@
 					}
 				});
 				this.reportTemplate.RE_TYPE
-				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.detailId;
+				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
 					console.log(res.data);
 					// console.log(this.reportTemplate.RE_TYPE);
-					// console.log(this.detailId);
+					// console.log(this.dataid);
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
@@ -502,11 +510,9 @@
 			//清空表单
 			reset(){
 				this.reportGenerateForm = {
-					
+					WORKORDER_REPORTList:[],//生成的报告文件
 				};
-				this.workorderForm = {
-					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
-				}
+				
 			},
 			//获取当前时间
 			getToday(){
@@ -526,7 +532,7 @@
 					+ '&username=' + this.docParm.username
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
-					+ '&recordid=' + this.detailId
+					+ '&recordid=' + this.dataid
 					+ '&appname=工作任务单&appid=38fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
 				// var url = this.po_url+"/show?filename=&fileid=234&appname=工作任务单&appid=38&fileedit=0&fileprint=0&fileread=1&fileduplicate=0";
 				 window.open(url); 
@@ -540,18 +546,52 @@
 					+ '&username=' + this.docParm.username
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
-					+ '&recordid=' + this.detailId
+					+ '&recordid=' + this.dataid
 					+ '&appname=工作任务单&appid=38&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
 
+			//删除生成报告文件
+			delKey(index,row){
+				if(row.ID!=''){
+					var url = this.basic_url + '/api-apps/app/workorder/WORKORDER_REPORT/' + row.ID;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+					this.$axios.delete(url, {}).then((res) => {
+						if(res.data.resp_code == 0){
+							this.$message({
+								message: '删除成功',
+								type: 'success'
+							});
+							this.dataInfo.userList.splice(index,1);
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'error'
+							});
+						}
+					}).catch((err) => {
+					});
+					
+					}).catch(() => {
+
+					});
+				}else{
+					this.dataInfo.userList.splice(index,1);
+				}
+			},
+
 			//加载生成报告的文件
 			detailgetData() {
-				var url = this.basic_url +'/api-merge/merge/workorder/findByWorkorderId/'+ this.detailId;
+				var url = this.basic_url +'/api-merge/merge/workorder/findByWorkorderId/'+ this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.reportGenerateForm.WORKORDER_REPORTList=res.data.datas;
 					console.log(res);
-					console.log(this.detailId);
+					// console.log(this.dataid);
 				}).catch((err) => {
 				});
 			},	
@@ -584,7 +624,7 @@
 					+ '&username=' + this.docParm.username
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
-					+ '&recordid=' + this.detailId
+					+ '&recordid=' + this.dataid
 					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
@@ -596,14 +636,14 @@
 					+ '&username=' + this.docParm.username
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
-					+ '&recordid=' + this.detailId
+					+ '&recordid=' + this.dataid
 					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
 			//回退成果文件
 			sendback(row){
 				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
-				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.detailId;
+				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
 				this.$axios.get(Url, {}).then((res) => {
 					if(res.data.resp_code == 0) {
 						this.show=false;
@@ -677,48 +717,55 @@
 			},
 			//生成报告
 			getreport(){
-				var url = this.file_url + '/file/fileList?page=0&size=10';
-				this.$axios.post(url,{
-					'appname': '检验检测项目_检验/检测报告模板',
-					'recordid': this.reptemDetailId,
-				}).then((res) => {
-					this.moduleFileList = res.data.fileList;
-					var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
-					var path = [];
-					for(let j=0; j<this.selData.length;j++){
-						path.push(this.selData[j].FILEPATH);
-					}
-					var postData = {
-						proxynum: '',
-						templatecode: this.reportTemplate.RE_TYPE,
-						workorderid: this.detailId,//工作任务单ID
-						deptfullname: this.deptfullname,//部门名称
-						filePath: path.length>0?path.join(','):'',//文件路径
-						fileName: '',//文件名称
-						app: 'workorder',//应用名称
-						moduleList: this.moduleFileList
-					};
-					this.$axios.post(Url1, {
-						params: postData
+				if(this.selData.length == 0){
+					this.$message({
+						message: '请选择要生成报告的成果文件',
+						type: 'warning'
+					});
+				}else{
+					var url = this.file_url + '/file/fileList?page=0&size=10';
+					this.$axios.post(url,{
+						'appname': '检验检测项目_检验/检测报告模板',
+						'recordid': this.reptemDetailId,
 					}).then((res) => {
-						if(res.data.resp_code == 0) {
-							// this.show=false;
-							this.$emit('request');
-							this.$message({
-								message: '报告生成成功',
-								type: 'success'
-							});
-						}else{
-							this.$message({
-								message: '已经回退了此成果文件，请勿重复回退',
-								type: 'warning'
-							});
+						this.moduleFileList = res.data.fileList;
+						var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
+						var path = [];
+						for(let j=0; j<this.selData.length;j++){
+							path.push(this.selData[j].FILEPATH);
 						}
+						var postData = {
+							proxynum: '',
+							templatecode: this.reportTemplate.RE_TYPE,
+							workorderid: this.dataid,//工作任务单ID
+							deptfullname: this.deptfullname,//部门名称
+							filePath: path.length>0?path.join(','):'',//文件路径
+							fileName: '',//文件名称
+							app: 'workorder',//应用名称
+							moduleList: this.moduleFileList
+						};
+						this.$axios.post(Url1, {
+							params: postData
+						}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.show=true;//弹出框不开关闭
+								this.$message({
+									message: '报告生成成功',
+									type: 'success'
+								});
+								this.detailgetData();//重新加载报告生成列表数据
+							}else{
+								this.$message({
+									message: '已经回退了此成果文件，请勿重复回退',
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+						});
+
 					}).catch((err) => {
 					});
-
-				}).catch((err) => {
-				});
+				}
 			},
 			
 			//列出所有成果文件
@@ -749,8 +796,7 @@
 			//打开弹出框页面
 			showDialog(id){
 				this.show = true;
-				// this.detailId = id;
-				this.detailId = id;
+				this.dataid = id;
 				this.requestData();
 			},
 
@@ -776,11 +822,10 @@
 								tranData.value = this.inputData[tranData.param];
 							}
 						}
-						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.detailId;
+						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid;
 						this.$axios.post(url,this.selectReportData).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
-								// console.log(this.detailId);
 								this.$message({
 									message: '保存成功',
 									type: 'success'
@@ -827,8 +872,9 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
+				$(".mask_divbg").css("top", "0px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
@@ -837,6 +883,7 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
+				$(".mask_divbg").css("top", "100px");
 			},
 			
 		},

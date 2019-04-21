@@ -44,8 +44,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="90px">
-										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="委托单位" prop="V_NAME" label-width="90px">
+										<el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>
@@ -81,7 +81,7 @@
 								</el-table-column>
                                 <el-table-column label="报告名称" sortable prop="REPORTNAME" v-if="this.checkedName.indexOf('报告名称')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
 								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSON" v-if="this.checkedName.indexOf('归档人')!=-1">
 								</el-table-column>
@@ -143,7 +143,7 @@
 				checkedName: [
                     '报告编号',
 					'报告名称',
-                    '委托书编号',
+                    '委托单位',
                     '归档人',
                     '归档时间',
                     '修改时间',
@@ -158,8 +158,8 @@
 						prop: 'REPORTNAME'
 					},
 					{
-						label: '委托书编号',
-						prop: 'PROXYNUM'
+						label: '委托单位',
+						prop: 'V_NAME'
 					},
 					{
 						label: '归档人',
@@ -188,7 +188,7 @@
                 searchList: { //点击高级搜索后显示的内容
 					REPORTNUM:'',
 					REPORTNAME:'',
-					PROXYNUM:'',
+					V_NAME:'',
 					ONHOLEPERSON: '',
 					ONHOLTIME:'',
 				},
@@ -216,7 +216,7 @@
 				this.searchList = {
 					REPORTNUM:'',
 					REPORTNAME:'',
-					PROXYNUM:'',
+					V_NAME:'',
 					ONHOLEPERSON: '',
 					ONHOLTIME:'',
 				};

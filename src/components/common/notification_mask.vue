@@ -1368,7 +1368,7 @@
 			//生成检验委托书
 			buildcheck(){
 				  var dataid = this.dataInfo.ID;
-				  var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE=1';
+				  var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&DETECTIONTYPE=1';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -1388,7 +1388,7 @@
 			//生成检测委托书
 			buildtest(){
 				var dataid = this.dataInfo.ID;
-				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&TYPE=2';
+				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&DETECTIONTYPE=2';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
 							this.$message({

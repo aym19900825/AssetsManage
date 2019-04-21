@@ -42,7 +42,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="3" class="pull-right">
-											<el-input v-model="dataInfo.TYPEDesc" :disabled="edit">
+											<el-input v-model="dataInfo.DETECTIONTYPEDesc" :disabled="edit">
 												<template slot="prepend">类别</template>
 											</el-input>
 										</el-col>
@@ -855,8 +855,8 @@
 					LEADER_STATUS:'1',
 					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
-					TYPE:'2',//检验
-					TYPEDesc:'检测',
+					DETECTIONTYPE:'2',//检验
+					DETECTIONTYPEDesc:'检测',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
@@ -1274,8 +1274,8 @@
 					LEADER_STATUS:'1',
 					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
-					TYPE:'2',//检验
-					TYPEDesc:'检测',
+					DETECTIONTYPE:'2',//检验
+					DETECTIONTYPEDesc:'检测',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位

@@ -748,11 +748,4 @@
 
 <style>
 	@import '../../assets/css/mask-modules.css';
-	
-	/*.el-form-item__error {
-		top: 18%;
-	    left: 5px;
-	    background: #FFF;
-	    padding: 5px 10px;
-	}*/
 </style>

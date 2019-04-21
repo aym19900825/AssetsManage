@@ -174,10 +174,10 @@ export default {
       data.page = this.page.currentPage;
       data.limit = this.page.pageSize;
       if(this.appName == 'inspectPro2'){
-        var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=2';
+        var url =  this.basic_url + '/api-apps/app/inspectPro?DETECTIONTYPE_wheres=2';
         this.stripe = false;
       }else if(this.appName == 'inspectPro'){
-        var url =  this.basic_url + '/api-apps/app/inspectPro?TYPE_wheres=1';
+        var url =  this.basic_url + '/api-apps/app/inspectPro?DETECTIONTYPE_wheres=1';
         this.stripe = false;
       }else if(this.appName == 'subcontrac'){
         var url =  this.basic_url + '/api-apps/app/subcontrac?TYPE_wheres=1';

@@ -526,7 +526,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.ID;
-									this.CATEGORY.PT_NUM = res.data.datas.NUM;
+									this.CATEGORY.PT_NUM = res.data.datas.PT_NUM;
 								}else{
 									this.$message({
 										message: '保存成功',

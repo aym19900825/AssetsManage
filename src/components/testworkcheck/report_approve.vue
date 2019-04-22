@@ -55,15 +55,23 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="编码" width="155" sortable prop="REPORTNUM" v-if="checkedName.indexOf('编码')!=-1">
+                                <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
 										</p>
 									</template>
 								</el-table-column>
-                                <el-table-column label="报告编号" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告名称" width="160" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告名称')!=-1">
 								</el-table-column>
-								<el-table-column label="流程状态" sortable prop="STATEDesc" width="160px" v-if="checkedName.indexOf('流程状态')!=-1">
+								<el-table-column label="委托单位" width="255" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位')!=-1">
+								</el-table-column>
+								<el-table-column label="检测类型" width="140" sortable prop="TYPE" v-if="checkedName.indexOf('检测类型')!=-1">
+								</el-table-column>
+								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
+								</el-table-column>
+								<el-table-column label="提交人" width="120" sortable prop="ENTERBYDesc" v-if="checkedName.indexOf('提交人')!=-1">
+								</el-table-column>
+								<el-table-column label="提交时间" width="160" sortable prop="ENTERDATE" v-if="checkedName.indexOf('提交时间')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -115,21 +123,35 @@
 					label: '不活动'
 				}],
 				checkedName: [
-                    '编码',
 					'报告编号',
-                    '流程状态',
+					'报告名称',
+                    '委托单位',
+					'检测类型',
+					'流程状态',
+					'提交人',
+					'提交时间',
 				],
-				tableHeader: [
-                    {
-						label: '编码',
-						prop: 'REPORTNUM'
-					},{
+				tableHeader: [{
 						label: '报告编号',
 						prop: 'DESCRIPTION'
-					},
-					{
+					},{
+						label: '报告名称',
+						prop: 'FILENAME'
+					},{
+						label: '委托单位',
+						prop: 'V_NAME'
+					},{
+						label: '检测类型',
+						prop: 'TYPE'
+					},{
 						label: '流程状态',
 						prop: 'STATE'
+					},{
+						label: '提交人',
+						prop: 'ENTERBYDesc'
+					},{
+						label: '提交时间',
+						prop: 'ENTERDATE'
 					},
 				],
 				selUser: [],
@@ -250,6 +272,7 @@
 			},
 			//查看
 			view(data) {
+				console.log(data);
 				this.$refs.reportapprove.view(data);
 			},
 			//高级查询

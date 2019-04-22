@@ -64,13 +64,12 @@ const validators = {
 
 	Mandarin:function (str) {/* 仅限中文*/
 		if( str!=null||str != undefined){
-			var mandarins = /^[\u4e00-\u9fa5]{0,}$/;
+			var mandarins = "^[\u4e00-\u9fa5]{0,}$";
 			for (var i = 0; i < str.length; i++) {
 				if (mandarins.indexOf(str.substr(i, i.length-1)) != -1) {
 					return false;
 				}
 			}
-			// return mandarins.test(str);
 		}
 		return true;
 	},

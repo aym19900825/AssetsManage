@@ -591,7 +591,7 @@
 											<el-row class="pt20 pb20">
 												<el-col :span="24" class="text-center">
 													<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-													<el-button type="success" @click="">回退</el-button>
+													<el-button type="success" @click="sendback">回退</el-button>
 												</el-col>
 											</el-row>
 										</el-tab-pane>
@@ -928,6 +928,7 @@
 				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
 					var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
 					this.$axios.get(Url, {}).then((res) => {
+						// console.log(this.dataid);
 						if(res.data.resp_code == 0) {
 							this.show=false;
 							this.$emit('request');
@@ -1818,8 +1819,9 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
+				$(".mask_divbg").css("top", "0px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
@@ -1828,6 +1830,7 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
+				$(".mask_divbg").css("top", "100px");
 			},
 			
 			//时间格式化  

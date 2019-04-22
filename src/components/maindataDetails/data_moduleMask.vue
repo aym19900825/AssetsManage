@@ -487,8 +487,9 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
+				$(".mask_divbg").css("top", "0px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
@@ -497,6 +498,7 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
+				$(".mask_divbg").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {
@@ -526,7 +528,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.CATEGORY.ID = res.data.datas.ID;
-									this.CATEGORY.PT_NUM = res.data.datas.NUM;
+									this.CATEGORY.PT_NUM = res.data.datas.PT_NUM;
 								}else{
 									this.$message({
 										message: '保存成功',

@@ -189,7 +189,7 @@
 					{
 						text: '状态',
 						dataIndex: 'STATEDesc',
-					 	width: '140',
+					 	width: '100',
 						isShow:true,
 					},
 					{
@@ -225,7 +225,7 @@
 					{
 						text: '当前责任人',
 						dataIndex: 'MASTER_INSPECTORDesc',
-					 	width: '160',
+					 	width: '100',
 						isShow:true,
 					},
 					{
@@ -243,24 +243,24 @@
 					{
 						text: '抽样方案/判定依据',
 						dataIndex: 'CHECK_BASIS',
-					 	width: '160',
+					 	width: '180',
 						isShow:true,
 					},
 					{
 						text: '完成方式',
 						dataIndex: 'COMPLETE_MODE',
-					 	width: '120',
+					 	width: '80',
 						isShow:true,
 					},
 					{
 						text: '完成日期',
 						dataIndex: 'COMPLETE_DATE',
-					 	width: '160',
+					 	width: '120',
 						isShow:true,
 					},
 					{
 						text: '录入人',
-						width: '130',
+						width: '100',
 						dataIndex: 'ENTERBYDesc',
 						isShow:true,
 					},

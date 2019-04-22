@@ -423,8 +423,9 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
+				$(".mask_divbg").css("top", "0px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
@@ -433,6 +434,7 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
+				$(".mask_divbg").css("top", "100px");
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {
@@ -524,7 +526,7 @@
 <style scoped>
 	.el-table__body-wrapper 
 	{
-    overflow-y:scroll;
+    	overflow-y:scroll;
     }
 	@import '../../assets/css/mask-modules.css';
 </style>

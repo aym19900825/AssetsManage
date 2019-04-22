@@ -20,8 +20,9 @@
 					<el-form inline-message :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.dataInfo.STATE!=3">
-								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 提交审批</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState=='3'"><i class="icon-edit-3"></i> 确认接收</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -1049,6 +1050,7 @@
 				pnum:'',//用于主表接修改时的产品的类别的值
 				pronum:'',//用于主表接修改时的产品的值
 				inistinspectproxy:'',//用于存储检测依据的子表数据
+				nodeState: ''
 			};
 		},
 		methods: {
@@ -1345,7 +1347,8 @@
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
 					CHECK_PROXY_CONTRACTList: [],
-				};	  
+					
+				};	
 			},
 			handleClick(tab, event) {
 		    },
@@ -1627,6 +1630,21 @@
 				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
+				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
+					if(res.code.resp_code == 0){
+						switch(res.code.datas){
+							case 'lrwts':
+								this.nodeState = '1';
+								break;
+							case 'jsfzr':
+								this.nodeState = '2';
+								break;
+							case 'wtsgly':
+								this.nodeState = '3';
+								break;
+						}
+					}
+				}).catch((err) => {});
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -1967,6 +1985,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.nodeState = '';
 				this.$emit('request');
 			},
 			open() {
@@ -2286,10 +2305,10 @@
 				    }
 				});
 				}else{
-						this.$message({
-										message: '未填写完整，请先填写',
-										type: 'warning'
-									});
+					this.$message({
+						message: '未填写完整，请先填写',
+						type: 'warning'
+					});
 				}
 				});
 			},
@@ -2321,7 +2340,7 @@
 											type: 'warning'
 										});
 									}else{
-									 	this.$refs.approvalChild.visible();
+									 	this.$refs.approvalChild.visible(this.nodeState);
 									}
 								})
 	    					}

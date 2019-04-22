@@ -1211,6 +1211,7 @@
 			//点击关闭按钮
 			close() {
 				this.show = false;
+				this.nodeState = '';
 				this.$emit('request');
 			},
 			open(){

@@ -148,7 +148,7 @@
 					this.NUM = NUM;
 					this.CJDW = CJDW;
 					this.dialogProduct = true;
-					this.requestData();
+					this.getData();
 			}else{
 				this.appname=NUM.appname;
 				this.NUM=NUM.P_NUM;
@@ -175,7 +175,7 @@
 	     setTimeout(() => {
 	       this.loadSign = true
 	     }, 1000)
-	     this.requestData();
+	     this.getData();
 	   }
 	},
 	getData(){
@@ -191,10 +191,8 @@
 			// var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+this.NUM;
 				if(this.appname=='inspectPro'){
 					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+this.NUM;
-					console.log(url);
 			}else{
 					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+this.NUM;
-					console.log(url);
 			}
 		}
 		this.$axios.get(url, {}).then((res) => {
@@ -210,13 +208,13 @@
 			this.loading = false;
 		}).catch((wrong) => {})
 	},
-	requestData(){
-		if(this.allDepts == '' && !this.CJDW){
-			this.getAllDepts();
-		}else{
-			this.getData();
-		}
-	},
+	// requestData(){
+	// 	// if(this.allDepts == '' && !this.CJDW){
+	// 	// 	this.getAllDepts();
+	// 	// }else{
+	// 		this.getData();
+	// 	// }
+	// },
 	determine(){
 		if(this.selUser.length == 0){
 			this.$message({
@@ -234,7 +232,7 @@
 			proarr.push(this.selUser[0].PRO_NAME);
 			proarr.push(this.selUser[0].VERSION);
 			this.$emit('appenddata',proarr);
-			this.requestData();
+			this.getData();
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},

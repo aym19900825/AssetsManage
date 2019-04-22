@@ -1860,7 +1860,7 @@
 						var data={
 							P_NUM:this.dataInfo.P_NUM,
 							PRO_NUM:this.dataInfo.PRO_NUM,
-							S_NUM:basisnums,
+							S_NUM:basisnums
 						}
 						this.$refs.standardchild.basislead(data);
 						this.main = 'main';
@@ -1893,7 +1893,6 @@
 			},
 			 //检验项目列表
 			addproject(value){
-				console.log(value);
 					for(var i = 0;i<value.length;i++){
 						var list={
 								P_NUM:value[i].P_NUM,
@@ -1903,7 +1902,13 @@
 								VERSION:value[i].VERSION,
 								QUATITY:0,
 						}	
+						this.RVENDORSelect();
 						this.dataInfo.INSPECT_PROXY_PROJECList.push(list);
+						var url = this.basic_url + '/api-apps/appSelection/professionGro/list?P_NUM_wheres='+value[0].P_NUM;
+							this.$axios.get(url, {}).then((res) => {
+								this.dataInfo.MAINGROUP=Number(res.data[0].PROF_NUM); 
+							}).catch((err) => {
+							});
 				}
 			},
 			//中心外机构

@@ -378,7 +378,13 @@
 					var data = {
 						ids: ids,
 					}
-					this.$confirm('确定删除此数据吗？', '提示', {
+					var text;
+					if(deleteid.length > 1){
+						text = '确定删除所有选择数据吗？';
+					}else{
+						text = '确定删除此数据吗？';
+					}
+					this.$confirm(text, '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
 					}).then(({
@@ -389,11 +395,11 @@
 						}).then((res) => {//.delete 传数据方法
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
+								this.requestData();
 								this.$message({
 									message: '删除成功',
 									type: 'success'
 								});
-								this.requestData();
 							}else{
 								this.$message({
 									message: res.data.resp_msg,

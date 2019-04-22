@@ -92,7 +92,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="联系地址" prop="address">
+											<el-form-item label="地址" prop="address">
 												<el-input v-model="adddeptForm.address" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>

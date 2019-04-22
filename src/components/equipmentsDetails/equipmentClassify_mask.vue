@@ -214,6 +214,11 @@
 						message:'请选择数据',
 						type:'warning'
 					})
+				}else if(this.checkedNodes.length > 1){
+        	this.$message({
+						message:'不可选择多条数据',
+						type:'warning'
+					})
 				}else{					
 					this.placetext = false;
 					// this.dialogVisible = false;	

@@ -347,6 +347,7 @@
 							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
 							this.$axios.post(url, this.CATEGORY).then((res) => {
 								//resp_code == 0是后台返回的请求成功的信息
+								console.log(res.data);
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '修订成功',
@@ -445,7 +446,10 @@
 							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
-								this.close();
+								this.show = true;
+								this.addtitle = false;
+				    			this.modifytitle = true;
+								// this.close();
 							});	
 						}else{
 							var url = this.basic_url + '/api-apps/app/productType/saveOrUpdate';

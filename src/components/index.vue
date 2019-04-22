@@ -416,7 +416,6 @@ export default {
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					this.$store.dispatch('setcurrentuserNavAct',res.data);
-					 console.log(this.$store.state.currentuser);
 						}).catch((err) => {
 						});
 			},

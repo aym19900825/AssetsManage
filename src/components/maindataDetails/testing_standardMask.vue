@@ -299,7 +299,7 @@
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					STARTETIME: [{required: true, trigger: 'blur',message: '必填',}],
 					editDataInfoProp: [
-						{required: true,trigger: 'blur',message: '必填',},
+						{required: true, trigger: 'blur', message: '必填',},
 						{validator: this.Validators.isSpecificKey,trigger: 'blur'}
 					],
 					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],

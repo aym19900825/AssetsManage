@@ -120,12 +120,9 @@
 		this.$refs.singleTable.toggleRowSelection(row);	
 	},
 	setSel(val) {
-			console.log(456);
 			this.selUser = val;
 			this.categoryList.forEach(item => {
 				// 排他,每次选择时把其他选项都清除
-				console.log(item);
-				console.log(item);
 				if (item.id !== val.id) {
 					item.checked = false
 				}
@@ -218,7 +215,6 @@
 		}).catch((wrong) => {})
 	},
 	getData(){
-		console.log(12345);
 		this.loading = true;
 		var data = {
 			page: this.page.currentPage,
@@ -228,14 +224,10 @@
 			VERSION:this.searchList.VERSION,
 		}
 		if(!!this.appname){
-			console.log(2345678);
-			console.log(this.appname);
 			if(this.appname=='inspectPro'){
 					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1;
-					console.log(url);
 			}else{
 					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2;
-					console.log(url);
 			}
 			
 			// var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';

@@ -21,7 +21,7 @@
 验证用户密码弱："^(?:\d+|[a-zA-Z]+|[!@#$%^&*]+)$"纯数字，纯字母，纯特殊字符
 同时验证手机号码和固定电话号码：“/^((1[3456789]))\d{9}$|^0\d{2,3}-?\d{7,8}$”
 验证是否含有^%&',;=?$\"等字符："[^%&',;=?$\x22]+"。 
-只能输入汉字："^[\u4e00-\u9fa5]{0,}$"
+只能输入中文："^[\u4e00-\u9fa5]{0,}$"
 以英文字母开头，只能包含英文字母、数字、下划线："^[a-zA-Z][a-zA-Z0-9_]*$"。
 只能输入汉字、英文字母和数字"/^[\u0391-\uFFE5A-Za-z0-9]+$/"。
 覆盖的优先级： 自定义规则 > 选项规则 > 默认规则
@@ -205,7 +205,7 @@ const validators = {
 
 	isPhones:function (rule, value, callback) {//验证座机和手机号
 		if(value && (!(/^((1[3456789]))\d{9}$|^0\d{2,3}-?\d{7,8}$/).test(value))) {
-			callback(new Error('请输入有效的座机号或手机号'))
+			callback(new Error('请输入带区号的座机号或手机号'))
 		} else {
 			callback();
 		}
@@ -297,7 +297,7 @@ const validators = {
 
 	isTelephone:function (rule, value, callback) {//验证电话号码/传真
 		if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
-			callback(new Error('请输入有效的固定电话格式'));
+			callback(new Error('请输入有效的固定电话格式000-000000'));
 		} else {
 			callback();
 		}
@@ -449,7 +449,12 @@ const validators = {
 					if(!validators.SpecificWord(value)) {
 						callback(new Error('不支持特殊符号'));
 					} else {
-						callback();
+						var regschinese = /^[\u4e00-\u9fa5]{0,}$/
+						if(!regschinese.test(value)) {
+							callback(new Error('不支持中文'));
+						} else {
+							callback();
+						}
 					}
 				}
 			}, 500);

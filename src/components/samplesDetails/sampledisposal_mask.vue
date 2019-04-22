@@ -65,6 +65,22 @@
 										</el-col>
 									</el-row>
 									<el-row>
+										<el-col :span="8">
+											<el-form-item label="样品处置" prop="ITEM_MANAGEMENT">
+												<el-radio-group v-model="samplesForm.ITEM_MANAGEMENT">
+													<el-radio label="1">入库</el-radio>
+													<el-radio label="2">返委托方</el-radio>
+													<el-radio label="3">其他</el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="16">
+											<el-form-item prop="other" v-show="samplesForm.ITEM_MANAGEMENT=='3'">
+												<el-input v-model="samplesForm.other"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
 												<el-input type="textarea" rows="3" v-model="samplesForm.MEMO" :disabled="noedit"></el-input>
@@ -561,6 +577,9 @@
 						}
 						var url = this.basic_url + '/api-apps/appCustom/saveDisposition';
 						this.samplesForm.child = this.selData;
+						if(samplesForm.ITEM_MANAGEMENT == '3'){
+							this.samplesForm.ITEM_MANAGEMENT = this.samplesForm.other;
+						}
 						this.$axios.post(url, this.samplesForm).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -575,10 +594,16 @@
 								this.$refs['samplesForm'].resetFields();
 							}
 						}).catch((err) => {
+							if(samplesForm.ITEM_MANAGEMENT != '1' && samplesForm.ITEM_MANAGEMENT != '2'){
+							this.samplesForm.ITEM_MANAGEMENT = '3';
+						}
 						});
 						this.falg = true;
 					} else {
 						this.show = true;
+						if(samplesForm.ITEM_MANAGEMENT != '1' && samplesForm.ITEM_MANAGEMENT != '2'){
+							this.samplesForm.ITEM_MANAGEMENT = '3';
+						}
 						this.$message({
 							message: '未填写完整，请填写',
 							type: 'warning'

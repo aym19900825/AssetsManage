@@ -297,7 +297,9 @@
 							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
-								this.close();
+								this.show = true;
+								this.addtitle = false;
+				    			this.modifytitle = true;
 							});	
 						}else{
 						var url = this.basic_url + '/api-apps/app/product/saveOrUpdate';
@@ -364,7 +366,7 @@
 								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {
 									this.$message({
-										message: '保存成功',
+										message: '修订成功',
 										type: 'success'
 									});
 									//重新加载数据

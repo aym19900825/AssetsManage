@@ -429,27 +429,29 @@
 				//输入检验结果必填
 				for (let i = 0; i < projectList.length; i++) {
 					var tmpList = projectList[i].WORKORDER_PROJECT_ITEMList;
-					for (let j = 0; j < tmpList.length; j++) {
-						if(!tmpList[j].MEMO || tmpList[j].MEMO==''){
-							this.$message({
-								message: '检测项目结果未录入完全！',
-								type: 'warning'
-							});
-							flag = false;
-						}
+					var projectFlag = tmpList.some(()=>{
+						return tmpList[j].MEMO!=''
+					});
+					if(!projectFlag){
+						this.$message({
+							message: '检测项目结果未录入！',
+							type: 'warning'
+						});
+						flag = false;
 					}
 				}
 
 				for (let i = 0; i < contractList.length; i++) {
 					var tmpList = contractList[i].WORKORDER_CONTRACT_ITEMList;
-					for (let j = 0; j < tmpList.length; j++) {
-						if(!tmpList[j].beizhu || tmpList[j].beizhu==''){
-							this.$message({
-								message: '分包项目结果未录入完全！',
-								type: 'warning'
-							});
-							flag = false;
-						}
+					var contractFlag = tmpList.some(()=>{
+						return tmpList[j].MEMO!=''
+					});
+					if(!contractFlag){
+						this.$message({
+							message: '分包项目结果未录入！',
+							type: 'warning'
+						});
+						flag = false;
 					}
 				}
 

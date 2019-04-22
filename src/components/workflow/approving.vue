@@ -11,10 +11,12 @@
     </el-row>
 
     <el-form-item size="medium" class="div-submit">
-      <el-button type="primary" v-show="nodeState=='4'" @click="submitForm">接收</el-button>
-      <el-button type="primary" v-show="nodeState!='4'" @click="submitForm">同意</el-button>
-      <el-button type="danger" v-show="nodeState=='4'" @click="rejectForm">回退</el-button>
-      <el-button type="danger" v-show="nodeState!='4'" @click="rejectForm">驳回</el-button>
+      <el-button type="primary" v-if="(nodeState=='4'&&approvingData.app == 'workNot')||(nodeState=='3'&&approvingData.app == 'inspectPro')" @click="submitForm">接收</el-button>
+      <el-button type="primary"  v-else-if="(nodeState=='4'||nodeState=='5')&&approvingData.app == 'workorder'" @click="submitForm">确认结束</el-button>
+      <el-button type="primary" v-else @click="submitForm">同意</el-button>
+
+      <el-button type="danger" v-if="(nodeState=='4'&&approvingData.app == 'workNot')||(nodeState=='3'&&approvingData.app == 'inspectPro')||(nodeState=='4'||nodeState=='5'&&approvingData.app == 'workorder')" @click="rejectForm">回退</el-button>
+      <el-button type="danger" v-else @click="rejectForm">驳回</el-button>
     </el-form-item>
   </el-form>
   </el-dialog>
@@ -42,38 +44,75 @@ export default {
           { min: 2, max: 255, message: '长度在 2 到 255 个字符', trigger: 'blur' }
         ],
 		 },
-		 tit: '',
-		 formLabel: ''
+		 tit: '审批',
+		 formLabel: '审批意见'
     }
   },
   methods: {
   	//点击关闭按钮
 			close() {
 				this.innerVisible = false;
+				this.tit = '审批';
+				this.formLabel = '审批意见';
 				this.approveForm={};
 			},
 			open() {
 				this.innerVisible = true;
 				this.approveForm={};
 			},
-			visible(nodeState) {
+			visible(nodeState,appName) {
 				this.nodeState = !!nodeState ? nodeState : '';
-				if(this.nodeState == '2'){
-					this.tit = '审核工作任务通知书';
-					this.formLabel = '审核意见';
-				}else if(this.nodeState == '3'){
-					this.tit = '审批工作任务通知书';
-					this.formLabel = '审批意见';
-				}else if(this.nodeState == '4'){
-					this.tit = '确认接收工作任务通知书';
-					this.formLabel = '接收意见';
-				}else if(this.nodeState == '5'){
-					this.tit = '审批工作任务通知书';
-					this.formLabel = '审批意见';
-				}else{
-					this.tit = '审批';
-					this.formLabel = '审批意见';
+				//工作任务通知书
+				if(this.approvingData.app == 'workNot'){
+					if(this.nodeState == '2'){
+						this.tit = '审核工作任务通知书';
+						this.formLabel = '审核意见';
+					}else if(this.nodeState == '3'){
+						this.tit = '审批工作任务通知书';
+						this.formLabel = '审批意见';
+					}else if(this.nodeState == '4'){
+						this.tit = '确认接收工作任务通知书';
+						this.formLabel = '接收意见';
+					}else if(this.nodeState == '5'){
+						this.tit = '审批工作任务通知书';
+						this.formLabel = '审批意见';
+					}else{
+						this.tit = '审批';
+						this.formLabel = '审批意见';
+					}
 				}
+				//任务委托书
+				if(this.approvingData.app == 'inspectPro'){
+					if(this.nodeState == '2'){
+						this.tit = '审批委托书';
+						this.formLabel = '审批意见';
+					}else if(this.nodeState == '3'){
+						this.tit = '接受委托书';
+						this.formLabel = '接收意见';
+					}else{
+						this.tit = '审批';
+						this.formLabel = '审批意见';
+					}
+				}
+
+				//工作任务单
+				if(this.approvingData.app == 'workorder'){
+					if(this.nodeState == '3'){
+						this.tit = '审核检测数据';
+						this.formLabel = '审核意见';
+					}else if(this.nodeState == '4'){
+						this.tit = '确认报告接收';
+						this.formLabel = '确认意见';
+					}else if(this.nodeState == '5'){
+						this.tit = '确认报告接收';
+						this.formLabel = '确认意见';
+					}else{
+						this.tit = '审批';
+						this.formLabel = '审批意见';
+					}
+				}
+			
+				
 				this.open();
 			},
 		    //同意

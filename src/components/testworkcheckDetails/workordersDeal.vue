@@ -436,8 +436,8 @@
 				//输入检验结果必填
 				for (let i = 0; i < projectList.length; i++) {
 					var tmpList = projectList[i].WORKORDER_PROJECT_ITEMList;
-					var projectFlag = tmpList.some(()=>{
-						return tmpList[j].MEMO!=''
+					var projectFlag = tmpList.some((item)=>{
+						return item.MEMO!=''
 					});
 					if(!projectFlag){
 						this.$message({
@@ -450,8 +450,8 @@
 
 				for (let i = 0; i < contractList.length; i++) {
 					var tmpList = contractList[i].WORKORDER_CONTRACT_ITEMList;
-					var contractFlag = tmpList.some(()=>{
-						return tmpList[j].MEMO!=''
+					var contractFlag = tmpList.some((item)=>{
+						return item.MEMO!=''
 					});
 					if(!contractFlag){
 						this.$message({

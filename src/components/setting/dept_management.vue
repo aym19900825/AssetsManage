@@ -125,7 +125,7 @@
 					},
 					{
 						text: '机构编号',
-						dataIndex: 'id',
+						dataIndex: 'code',
 						isShow:true,
 					},
 					{

@@ -39,22 +39,20 @@
 										</el-col> -->
 									</el-row>
 									<el-row :gutter="30">
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="机构序号" prop="step">
 												<el-input  v-model="adddeptForm.step" :disabled="noedit">
 												</el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="机构编码" prop="code">
-												<el-input v-model="adddeptForm.code" :disabled="edit">
-												</el-input>
+												<el-input v-model="adddeptForm.code" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构名称" prop="fullname">
-												<el-input v-model="adddeptForm.fullname" :disabled="noedit">
-												</el-input>
+												<el-input v-model="adddeptForm.fullname" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -68,7 +66,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构类型" prop="depttype">
-												<el-select v-model="adddeptForm.depttype" placeholder="请选择" style="width: 100%" :disabled="noedit">
+												<el-select v-model="adddeptForm.depttype" placeholder="请选择" style="width: 100%" :disabled="edit">
 													<el-option v-for="(data,index) in Selectsys_depttype" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -127,6 +125,18 @@
 										<el-col :span="8">
 											<el-form-item label="邮箱" prop="email">
 												<el-input v-model="adddeptForm.email" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										
+										<el-col :span="8" v-if="adddeptForm.pid==128" v-show="true">
+											<el-form-item label="机构简称" prop="simplename" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+												<el-input v-model="adddeptForm.simplename" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+
+										<el-col :span="8" v-else v-show="false">
+											<el-form-item label="机构简称" prop="simplename">
+												<el-input v-model="adddeptForm.simplename" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -253,6 +263,7 @@
 						telephone:'',
 						fax:'',
 						email:'',
+						simplename:'',
 						tips:'',
 						createUser:'',
 						createTime:'',
@@ -286,6 +297,7 @@
 				showcode:true,
 				views: false, //录入修改人信息
 				noviews:true,//按钮
+				deptview:false,//机构简称
 				selMenu:[],
 				selUser: [],
 				selData: [],//获取当前负责人
@@ -328,18 +340,20 @@
 					fullname: [
 						{required:true, trigger: 'blur', message: '必填',validator: this.Validators.isNickname}
 					],//机构名称
-					depttype: [{required:true,trigger: 'change',message: '请选择机构类型'}],//选择机构类型
-   					type: [{required:true,trigger: 'change',message: '请选择机构属性'}],//选择机构属性
-   					telephone: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
-					fax: [{required:false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
-					email:[{required:true, trigger: 'blur', validator: this.Validators.isEmail,}],//邮箱
+					depttype: [{required:true,trigger: 'change', message: '请选择机构类型'}],//选择机构类型
+   					type: [{required:true,trigger: 'change', message: '请选择机构属性'}],//选择机构属性
+   					telephone: [{required:false,trigger: 'blur', validator: this.Validators.isTelephone}],//电话
+					fax: [{required:false,trigger: 'blur', validator: this.Validators.isTelephone}],//传真
+					email:[
+						{required:true, trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isEmail}
+					],//邮箱
 					code:[{required: false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构属性
 					// address:[{required: true,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
 					address: [{required:true,trigger: 'blur',message: '请输入地址'}],//选择机构类型
 					zipcode:[{required:false,trigger: 'blur',message: '请输入邮编'}],//选择机构类型
 					telephone:[{required: true,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
 					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
-					email:[{required: true, trigger: 'blur', message: '请输入邮箱'}],//邮箱
 					tips:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//备注
 					leaderName:[{required: true,trigger: 'blur',message: '请输入负责人'}],
 				}
@@ -573,6 +587,11 @@
 					this.adddeptForm.pid = this.checkedNodes[0].id;
 					this.adddeptForm.parent = this.checkedNodes[0].fullname;
 					this.adddeptForm.pName = this.checkedNodes[0].fullname;
+					// if(this.adddeptForm.pid==128){
+					// 	this.deptview= true;
+					// }else{
+					// 	this.deptview= false;
+					// }
 				}				
 			},
 			getCheckedNodes() {
@@ -684,7 +703,7 @@
 						depttype: this.adddeptForm.depttype,
 						depttypeName: this.adddeptForm.depttypeName,
 						email: this.adddeptForm.email,
-
+						simplename: this.adddeptForm.simplename,
 						fullname: this.adddeptForm.fullname,
 						id: this.adddeptForm.id,
 						leaderName: this.adddeptForm.leaderName,

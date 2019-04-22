@@ -174,6 +174,7 @@
 															placeholder="请选择" 
 															style="width: 100%" 
 															value-format="yyyy-MM-dd" 
+															:picker-options="pickerOptions1"
 															:disabled="scope.row.ISUSE=='1'||pageDisable">
 														</el-date-picker>
 													</template>
@@ -186,6 +187,7 @@
 															placeholder="请选择" 
 															style="width: 100%" 
 															value-format="yyyy-MM-dd" 
+															:picker-options="pickerOptions1"
 															:disabled="scope.row.ISUSE=='1'||pageDisable">
 														</el-date-picker>
 													</template>
@@ -328,6 +330,11 @@
                 }
             };
 			return {
+				pickerOptions1: {
+					disabledDate(time) {
+						return time.getTime() < Date.now() - 8.64e7;
+					},
+				},  
 				sampleNumList: [],
 				Select_ITEM_CHECK_STATUS:[],//获取样品信息-样品检后状态
 				file_url: Config.file_url,

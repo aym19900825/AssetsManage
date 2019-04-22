@@ -480,7 +480,5 @@ export default {
 
 
 
-
-
 </style>
 

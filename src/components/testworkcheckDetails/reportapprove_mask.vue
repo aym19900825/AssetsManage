@@ -17,11 +17,11 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
+					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.report.STATE!=3" class="pr10">
-							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -30,31 +30,52 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告审批" name="1">
-									<el-row class="pb10">
-										<el-col :span="3" class="pull-right">
+									<el-row :gutter="10">
+										<el-col :span="4" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="report.TYPE" :disabled="true">
+												<template slot="prepend">检测类型</template>
+											</el-input>
+										</el-col>
 									</el-row>
 
-									<el-row>
-										<el-col :span="8">
-											<el-form-item label="编码" prop="REPORTNUM">
-												<el-input v-model="report.REPORTNUM" :disabled="true" placeholder="自动生成"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="16">
-											<el-form-item label="报告描述" prop="DESCRIPTION">
-												<el-input v-model="report.DESCRIPTION" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
+									<el-row class="reportbg">
+										<el-row>
+											<el-col :span="24" class="text-right">
+												报告编号：{{report.REPORTNUM}}
+											</el-col>
+
+											<el-col :span="24" class="text-center pt40">
+												<div class="h2">中国检验认证中心</div>
+												<div class="h1">检验报告</div>
+												<div class="h3">{{report.DESCRIPTION}}</div>
+											</el-col>
+										</el-row>
+										<el-row class="reportbotmbg">
+											<el-col :span="24">
+												报告名称：{{report.DESCRIPTION}}
+											</el-col>
+											<el-col :span="24">
+												委托单位：{{report.V_NAME}}
+											</el-col>
+											<el-col :span="24">
+												提交人：{{report.ENTERBYDesc}}
+											</el-col>
+											<el-col :span="24">
+												提交时间：{{report.ENTERDATE}}
+											</el-col>
+											<el-col :span="24">
+												文件大小:{{report.FILESIZE}}
+											</el-col>
+										</el-row>
 									</el-row>
+									
 								</el-collapse-item>
-								<el-collapse-item title="需审批的报告文件" name="1">
-									<el-row>
-										<el-col :span="24">
-											<el-table :data="report.WORKORDER_REPORTList" 
+								<!-- <el-table :data="report"
 												border 
 												stripe 
 												:fit="true" 
@@ -62,19 +83,18 @@
 												key="table4"
 												style="width: 100%;" 
 												@selection-change="selChange"
-												:default-sort="{prop:'report.WORKORDER_REPORTList', order: 'descending'}">
+												:default-sort="{prop:'report', order: 'descending'}">
 												<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
-												<!-- <el-table-column type="index" label="序号" width="50">
+												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
-														<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														<span> {{scope.$index+1}} </span>
 													</template>
-												</el-table-column> -->
-
-												<el-table-column label="报告编号" prop="DESCRIPTION">
+												</el-table-column>
+												<el-table-column label="报告编号" prop="REPORTNUM">
 												</el-table-column>
 
-												<el-table-column label="委托书编号" prop="PROXYNUM">
+												<el-table-column label="报告名称" prop="DESCRIPTION">
 												</el-table-column>
 
 												<el-table-column label="报告文件大小" prop="FILESIZE">
@@ -92,16 +112,9 @@
 															<i class="icon-eye"></i>
 															预览
 														</el-button>
-														<!-- <el-button type="text" title="编辑" @click="editReportFile(scope.row)" size="mini"> 
-															<i class="icon-edit"></i>
-															编辑
-														</el-button> -->
 													</template>
 												</el-table-column>
-											</el-table>
-										</el-col>
-									</el-row>
-								</el-collapse-item>
+											</el-table> -->
 								<!-- <el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
 										<el-col :span="8">
@@ -136,9 +149,9 @@
 								</el-collapse-item> -->
 							</el-collapse>
 						</div>
-						<!-- <div class="content-footer" v-show ="!addtitle">
-							<el-button title="查看文件" type="primary" @click="readAuth">查看文件</el-button>
-						</div> -->
+						<div class="content-footer" v-show ="!addtitle">
+							<el-button title="查看报告文件" type="primary" @click="readAuth">查看报告文件</el-button>
+						</div>
 					</el-form>
 				</div>
 			</div>
@@ -171,28 +184,6 @@
 			vewPoplemask,
 			},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
 			return {
 				approvingData:{},//审批的数据
 				falg:false,//保存验证需要的
@@ -218,10 +209,6 @@
 				activeNames: ['1','2'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
-				rules: {
-					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
-					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
-				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				category:{},//从父组件接过来的值
@@ -240,14 +227,20 @@
 				approval:false,
                 report:{
                     ID:'',	//报告ID
-                    REPORTNUM:'',	//编码
+					REPORTNUM:'',	//报告编码
+					// REPORTNAME:'',	//报告文件
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
                     STATUS:'',	//活动/不活动
                     STATE:'',//流程状态
 					STATEDesc:'',
-					WORKORDER_REPORTList: []
-					
+					V_NAME:'',//委托单位
+					TYPE:'',//检测类型
+					ENTERBY:'',//提交人
+					ENTERBYDesc:'',//提交人描述
+					ENTERDATE:'',//提交时间
+
+					// WORKORDER_REPORTList: []
                     // CHANGEBY:'',	//修改人
                     // CHANGEDATE:'',	//修改时间
                     // DEPTID:'',	//机构ID
@@ -304,11 +297,12 @@
 			},
 			//生成的报告文件列表
 			detailgetData(){
-				console.log('detailgetData');
+				// console.log('detailgetData');
 				var url = this.basic_url +'/api-apps/app/reportApprove/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					// this.report = res.data;
-					this.report.WORKORDER_REPORTList = !!this.report.WORKORDER_REPORTList?this.report.WORKORDER_REPORTList:[];
+					this.report = res.data;
+					console.log(res);
+					// this.report.WORKORDER_REPORTList = !!this.report.WORKORDER_REPORTList?this.report.WORKORDER_REPORTList:[];
 					this.report.WORKORDER_REPORTList.push(res.data);
 					this.show = true;
 				}).catch((err) => {
@@ -365,15 +359,17 @@
 				// this.show = true;
 			},
 			//这是查看
-			view(maindata) {
-				this.dataid = maindata.ID;
-				this.report.DESCRIPTION = maindata.DESCRIPTION;
-				this.report.STATEDesc = maindata.STATEDesc;
-				this.report.REPORTNUM = maindata.REPORTNUM;
+			view(data) {
+				this.dataid = data.ID;
+				console.log(data.ID);
+				// this.report.DESCRIPTION = data.DESCRIPTION;
+				// this.report.STATEDesc = data.STATEDesc;
+				// this.report.REPORTNUM = data.REPORTNUM;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
 				this.dept = true;
+				this.show = true;//弹出框打开
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
@@ -423,8 +419,9 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
+				$(".mask_divbg").css("top", "0px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
@@ -433,6 +430,7 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
+				$(".mask_divbg").css("top", "100px");
 			},
 			//启动流程
 			startup(){
@@ -606,7 +604,7 @@
 			//预览报告文件
 			readAuth(){
 				// this.detailgetData();
-            	var url = this.po_url+"/show?fileid=" + this.report.WORKORDER_REPORTList[0].FILEID
+            	var url = this.po_url+"/show?fileid=" + this.report.FILEID
 				+ '&userid=' +  this.userid
 				+ '&username=' + this.username
 				+ '&deptid=' + this.deptid
@@ -651,4 +649,20 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
+
+	.reportbg {
+		margin: 20px auto;
+		width: 750px;
+		padding: 50px 100px;
+		border: 1px solid #EEEEEE;
+		background-color: #FFF;
+		-webkit-box-shadow:0 10px 15px #97A3B4;  
+		-moz-box-shadow:0 10px 15px #97A3B4;  
+		box-shadow:0 10px 15px #97A3B4; 
+	}
+	.reportbg .h2,.reportbg .h3 {font-size: 22px; line-height: 40px; color: #666;}
+	.reportbg .h3 {font-size: 16px;}
+	.reportbg .h1 {font-size: 50px; line-height: 80px; letter-spacing:40px; font-weight: bold;}
+	.reportbotmbg { margin: 0px auto; width: 400px; padding-top:120px; font-size: 16px; line-height: 30px;}
+	.reportbotmbg .el-col { padding-top:10px; padding-bottom:10px;}
 </style>

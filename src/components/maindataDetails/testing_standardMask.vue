@@ -299,7 +299,7 @@
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					STARTETIME: [{required: true, trigger: 'blur',message: '必填',}],
 					editDataInfoProp: [
-						{required: true,trigger: 'blur',message: '必填',},
+						{required: true, trigger: 'blur', message: '必填',},
 						{validator: this.Validators.isSpecificKey,trigger: 'blur'}
 					],
 					RELEASETIME:[{required: true, message: '必填', trigger: 'change'}],
@@ -489,8 +489,9 @@
 				this.isok1 = false;
 				this.isok2 = true;
 				$(".mask_div").width(document.body.clientWidth);
-				$(".mask_div").height(document.body.clientHeight - 70);
-				$(".mask_div").css("top", "-40px");
+				$(".mask_div").height(document.body.clientHeight - 60);
+				$(".mask_div").css("top", "60px");
+				$(".mask_divbg").css("top", "0px");
 			},
 			//还原按钮
 			rebackDialog() { //大弹出框还原成默认大小
@@ -499,6 +500,7 @@
 				$(".mask_div").css("width", "80%");
 				$(".mask_div").css("height", "90%");
 				$(".mask_div").css("top", "0px");
+				$(".mask_divbg").css("top", "100px");
 			},
 			//修订
 			modifyversion(){

@@ -9,10 +9,11 @@
     left: 0px;
     right: 0px;
     z-index: 1000;
-    /*margin-top:60px;*/
+    /* margin-top:60px; */
 }
 .mask_divbg {
-	position: absolute;
+    position: absolute;
+    /* margin-top:100px; */
 	z-index: 1009;
 	width: 100%;
 	/* height: 100%; */

@@ -104,14 +104,14 @@
 										</div>
 									</div>
 									<div class="pull-right" style=" padding-top: 30px;">
-										<el-progress type="circle" :percentage="finishNumber" color="#9399F3"></el-progress>
-											<!-- <div class="wracircle" data-anim="base wracircle">
+										<el-progress type="circle" :percentage="complete" color="#9399F3"></el-progress>
+											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
 												<div class="circle_font">
-													<p class="font24">{{}}%</p>
+													<p class="font24">{{complete}}%</p>
 													<p>工作完成率</p>
 												</div>
-										</div> -->
+										</div>
 									</div>
 								</div>
 							</div>
@@ -178,6 +178,7 @@ export default {
 
     data() {
       return {
+				complete:0,
 				toDoNum: 0,
 				toDoDing: 0,
 				toDoFinish: 0,
@@ -200,12 +201,10 @@ export default {
 
       }
     },
-		computed: {
-			finishNumber:function () {//获取工作完成率
-				return this.toDoFinish/(this.toDoNum + this.toDoDing);
-			},
-		},
 		methods: {
+			getop(){
+        this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
+      },
 			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 				this.toDoNum = num;
 			},

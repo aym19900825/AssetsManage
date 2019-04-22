@@ -47,7 +47,7 @@
 				element-loading-background="rgba(255, 255, 255, 0.9)">
 				<el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column>
-				<el-table-column label="设备编号" width="155" sortable prop="DECRIPTION">
+				<el-table-column label="设备编号" width="155" sortable prop="ASSETNUM">
 				</el-table-column>
 				<el-table-column label="设备描述" sortable prop="DECRIPTION">
 				</el-table-column>

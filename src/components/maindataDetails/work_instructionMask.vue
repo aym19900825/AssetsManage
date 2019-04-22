@@ -449,7 +449,10 @@
 							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
-								this.close();
+								this.show = true;
+								this.addtitle = false;
+				    		this.modifytitle = true;
+								// this.close();
 							});	
 						}else{
 						var url = this.basic_url + '/api-apps/app/workIns/saveOrUpdate';

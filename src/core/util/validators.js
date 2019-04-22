@@ -64,9 +64,9 @@ const validators = {
 
 	Mandarin:function (str) {/* 仅限中文*/
 		if( str!=null||str != undefined){
-			var mandarins = "^[\u4e00-\u9fa5]{0,}$";
+			var mandarins = "[\u4e00-\u9fa5]";
 			for (var i = 0; i < str.length; i++) {
-				if (mandarins.indexOf(str.substr(i, 1)) != -1) {
+				if (mandarins.indexOf(str.substr(i, i.length-1)) != -1) {
 					return false;
 				}
 			}
@@ -449,12 +449,16 @@ const validators = {
 					if(!validators.SpecificWord(value)) {
 						callback(new Error('不支持特殊符号'));
 					} else {
+<<<<<<< HEAD
 						var regschinese = /^[\u4e00-\u9fa5]{0,}$/
 						if(!regschinese.test(value)) {
 							callback(new Error('不支持中文'));
 						} else {
 							callback();
 						}
+=======
+						callback();
+>>>>>>> b2a7dcb65db62056ded2f752cfb593bf61f86e8c
 					}
 				}
 			}, 500);

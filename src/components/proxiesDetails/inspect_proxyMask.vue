@@ -145,7 +145,7 @@
 											</el-col>
 											<el-col :span="5">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY"  @keyup.native="number" :disabled="special1">
+													<el-input v-model="dataInfo.ITEM_QUALITY"  :disabled="special1">
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -592,7 +592,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
-												<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -1010,7 +1010,6 @@
 					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
 					REPORT_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
 					],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
@@ -1053,10 +1052,10 @@
 			};
 		},
 		methods: {
-			number(){　　
-　　　 	this.famount=this.famount.replace(/[^\.\d]/g,'');
-        this.famount=this.famount.replace('.','');
-　　	},
+// 			number(){　　
+// 　　　 	this.famount=this.famount.replace(/[^\.\d]/g,'');
+//         this.famount=this.famount.replace('.','');
+// 　　	},
 			priceFormate(row, column) {
 				var money = row.UNITCOST;
 				return row.UNITCOST =  this.toFixedPrice(money);

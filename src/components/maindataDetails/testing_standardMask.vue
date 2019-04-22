@@ -294,7 +294,8 @@
 					}
 				],
 				rules: {
-					SS_NUM: [{required: true, trigger: 'blur',validator: this.Validators.isSpecificKey}],//标准编号
+					SS_NUM: [{required: true, trigger: 'blur', message: '请填写标准编号',},
+					        {validator: this.Validators.isSpecificKey, trigger: 'blur'}],//标准编号
 					S_NAME: [{required: true, trigger: 'blur',validator: this.Validators.isChinese}],//中文名称
 					S_ENGNAME: [{required: true, trigger: 'blur', validator: this.Validators.isEnglish}],//英文名称
 					STARTETIME: [{required: true, trigger: 'blur',message: '必填',}],
@@ -572,7 +573,10 @@
 							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
-								this.close();
+								this.show = true;
+								this.addtitle = false;
+				    			this.modifytitle = true;
+								// this.close();
 							});	
 						}else{
 						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';

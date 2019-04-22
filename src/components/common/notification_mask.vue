@@ -20,9 +20,11 @@
 				<div class="mask_content">
 					<el-form inline-message :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
 						<div class="text-center" v-show="viewtitle">
-						<span v-if="this.dataInfo.STATE!=3">	
-						<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-						<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+						<span v-show="this.dataInfo.STATE!='6'">	
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i>提交审核</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&this.nodeState=='2'"><i class="icon-edit-3"></i> 审核</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&this.nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button>
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&this.nodeState!='4'&&this.nodeState!='2'"><i class="icon-edit-3"></i> 审批</el-button>
 						</span>
 						<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 						<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -656,6 +658,7 @@
 				username:'',
 				users:'',//当前审批的人的name
 				sendchilddata:[],//子表已有的值
+				nodeState: '' //所属节点
 			};
 		},
 		methods: {
@@ -1136,6 +1139,29 @@
 				this.special=true;
 				this.detailgetData();
 				this.isEditing=false;
+
+				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
+					if(res.code.resp_code == 0){
+						switch(res.code.datas){
+							case 'cxlr':
+								this.nodeState = '1';
+								break;
+							case 'ywbfzr':
+								this.nodeState = '2';
+								break;
+							case 'jsfzr':
+								this.nodeState = '3';
+								break;
+							case 'zssh':
+								this.nodeState = '4';
+								break;
+							case 'wtsgly':
+								this.nodeState = '5';
+								break;
+						}
+					}
+				}).catch((err) => {});
+
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/workNot/flow/isStart/'+dataid;
 					this.$axios.get(url, {}).then((res) => {
@@ -1492,7 +1518,7 @@
 											type: 'warning'
 										});
 									}else{
-									 	this.$refs.approvalChild.visible();
+									 	this.$refs.approvalChild.visible(this.nodeState);
 									}
 								})
 								}

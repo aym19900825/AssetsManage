@@ -169,7 +169,7 @@
 									<el-row >
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="ITEM_QUALITY">
-												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="edit"></el-input-number>
+												<el-input-number type="number" v-model.number="workorderForm.ITEM_QUALITY" :min="1" :max="1000" label="描述文字" style="width: 100%" :disabled="edit"></el-input-number>
 											</el-form-item>
 										</el-col>
 										
@@ -260,10 +260,6 @@
 
 										<el-row>
 											<el-col :span="8">
-												<!-- <el-form-item label="样品承接人(专业组)" label-width="150px"> -->
-													<!-- <el-input v-model="workorderForm.ITEM_PROFESSIONAL_GROUP" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search" @click="addperson('2')" :disabled="noedit"></el-button>
-													</el-input> -->
 													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUPDesc" label-width="140px">
 														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUPDesc" placeholder="请选择" style="width: 100%;" :disabled="noedit">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
@@ -280,9 +276,6 @@
 											<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATU" label-width="120px">
 													<el-input v-model="workorderForm.ITEM_STATU" :disabled="noedit"></el-input>
-													<!--<el-select v-model="workorderForm.ITEM_STATUS" style="width: 100%">
-														<el-option v-for="(data,index) in Select_ITEM_STATUS" :key="index" :value="data.code" :label="data.name"></el-option>
-													</el-select>-->
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -290,7 +283,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回数量" label-width="140px">
-													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" @change="handleChangeQuality" :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
+													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY"  :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -305,9 +298,6 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回接收人" label-width="140px">
-													<!-- <el-select v-model="workorderForm.RETURN_ITEM_USER" style="width: 100%">
-														<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.nickname"></el-option>
-													</el-select> -->
 													<el-input v-model="workorderForm.RETURN_ITEM_USERDesc" :disabled="edit">
 														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
 													</el-input>
@@ -1375,71 +1365,7 @@
 				})
 			},
            
-			//更改样品数量
-			handleChangeQuality(value) {
-			},	
-      		//刪除新建行
-			deleteRow(index, row, listName){
-				var TableName = '';
-				if(listName =='basisList'){
-					TableName = 'WORKORDER_BASIS';
-				}else if(listName =='projectList'){
-					TableName = 'WORKORDER_PROJECT';
-				}else if(listName =='peopletList'){
-					TableName = 'WORKORDER_CHECKPERSON';
-				}else if(listName =='moduleList'){
-					TableName = 'WORKORDER_DATA_TEMPLATE';
-				}else{
-					TableName = 'WORKORDER_ASSET';
-				}
-				if(row.ID){
-					var url = this.basic_url + '/api-apps/app/workorder/' + TableName +'/' + row.ID;
-					this.$confirm('确定删除此数据吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-						this.$axios.delete(url, {}).then((res) => {
-							if(res.data.resp_code == 0){
-								this.workorderForm[TableName+'List'].splice(index,1);
-								this.$message({
-									message: '删除成功',
-									type: 'success'
-								});
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'error'
-								});
-							}
-						}).catch((err) => {
-						});
-					}).catch(() => {
-
-					});
-				}else{
-					this.workorderForm[TableName+'List'].splice(index,1);
-				}
-			},
-			//生成分包协议
-			proagree(row){
-				var data = {
-					"WORKORDER_CONTRACTID":row.ID.toString(),
-				};
-				var url = this.basic_url +"/api-apps/app/workorder/operate/subproject";
-				this.$axios.post(url,data).then((res) => {
-					
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '生成成功',
-							type: 'success'
-						});
-						this.showcreateagree = false;
-					}
-				}).catch((err) => {
-				});
-			},
+				
 			//启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/receivingTask?ID='+this.dataid;

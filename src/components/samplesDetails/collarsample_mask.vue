@@ -98,6 +98,14 @@
 
 									<el-row>
 										<el-col :span="8">
+											<el-form-item label="样品接收状态">
+												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS" :disabled="noedit">
+													<el-radio label="1">外观正常</el-radio>
+													<el-radio label="2">异常</el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="领样人" prop="GRANT_PERSONDesc">
 												<el-input v-model="samplesForm.GRANT_PERSONDesc" disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button>
@@ -108,14 +116,6 @@
 											<el-form-item label="领样日期" prop="GRANT_DATE">
 												<el-date-picker v-model="samplesForm.GRANT_DATE" type="date" placeholder="请选择领样日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
 												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="样品接收状态">
-												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS" :disabled="noedit">
-													<el-radio label="1">外观正常</el-radio>
-													<el-radio label="2">异常</el-radio>
-												</el-radio-group>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -319,7 +319,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 		methods: {
 			showInfo(){
 				var str = this.samplesForm.ITEMNUM;
-				if(str.indexOf('{')!=-1){
+				if(str.indexOf('#')!=-1){
 					this.sampleAutoInput = true;
 					this.getCodeInfo();
 				}else{
@@ -391,9 +391,12 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				if(this.samplesForm.ITEMNUM !== ''){
 					var sample = {};
 					var str = this.samplesForm.ITEMNUM;
-					if(str.indexOf('{')!=-1){
-						var sampleObj = str.slice(str.indexOf('{'),str.length);
-							sample = JSON.parse(sampleObj);
+					if(str.indexOf('#')!=-1){
+						var sampleObj = str.split('#');
+							sample = {
+								code: sampleObj[0],
+								step: sampleObj[1]
+							};
 						this.sampleAutoInput = true;
 					}else{
 						sample.code = this.samplesForm.ITEMNUM;
@@ -677,7 +680,9 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			saveAndSubmit(){
 				this.save('save');
 			},
-// 			getnumcode(e){
+			getnumcode(e){
+				console.log(e.keyCode);
+				
 // 				var that = this;
 //     			var nextTime = new Date().getTime();
 // 				if(this.lastTime != 0 && nextTime - this.lastTime <= 30) {
@@ -691,7 +696,12 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 // 					}
 // 				}
 //     			this.lastTime = nextTime;
-// 			}
+			}
+		},
+		mounted() {
+			$("#itemnumId").keydown(function(e){
+				console.log(e.keyCode);
+			});
 		},
 	}
 </script>

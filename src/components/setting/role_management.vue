@@ -55,16 +55,27 @@
 						<div class="col-sm-12">
 							<!-- 表格begin -->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
+								<!-- <el-table-column label="角色编码" sortable prop="code" v-if="this.checkedName.indexOf('角色编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.code}}</p>
 									</template>
-								</el-table-column>
+								</el-table-column> -->
 								<el-table-column label="角色名称" sortable prop="name" v-if="this.checkedName.indexOf('角色名称')!=-1">
+									<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}</p>
+									</template>
 								</el-table-column>
-								<el-table-column label="是否停用" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
+								<el-table-column label="是否停用" width="100" sortable prop="inactive" :formatter="judge" v-if="this.checkedName.indexOf('是否停用')!=-1">
 								</el-table-column>
 								<el-table-column label="备注" sortable prop="tips"  v-if="this.checkedName.indexOf('备注')!=-1">
+								</el-table-column>
+								<el-table-column label="机构" width="150" sortable prop="deptName"  v-if="this.checkedName.indexOf('机构')!=-1">
+								</el-table-column>
+								<el-table-column label="录入人" width="100" sortable prop="createbyName"  v-if="this.checkedName.indexOf('录入人')!=-1">
+								</el-table-column>
+								<el-table-column label="录入时间" width="100" sortable prop="createTime" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								</el-table-column>
+								<el-table-column label="修改时间" width="100" sortable prop="updateTime" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格end -->
@@ -117,16 +128,20 @@
 				}],
 				selUser: [],
 				checkedName: [//控制表格列的显示隐藏相关数据
-					'角色编码',
+					// '角色编码',
 					'角色名称',
 					'是否停用',
 					'备注',
+					'机构',
+					'录入人',
+					'录入时间',
+					'修改时间'
 				],
 				tableHeader: [//控制表格列的显示隐藏相关数据
-					{
-						label: '角色编码',
-						prop: 'code'
-					},
+					// {
+					// 	label: '角色编码',
+					// 	prop: 'code'
+					// },
 					{
 						label: '角色名称',
 						prop: 'name'
@@ -138,6 +153,22 @@
 					{
 						label: '备注',
 						prop: 'tips'
+					},
+					{
+						label: '机构',
+						prop: 'deptName'
+					},
+					{
+						label: '录入人',
+						prop: 'createbyName'
+					},
+					{
+						label: '录入时间',
+						prop: 'createTime'
+					},
+					{
+						label: '修改时间',
+						prop: 'updateTime'
 					}
 				],
 				buttons: [],//请求回的按钮

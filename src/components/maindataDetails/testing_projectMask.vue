@@ -309,7 +309,7 @@
 					ID: '',
 					P_NAME: '',
 					P_NUM: '',
-					UNIT: '1',//计量单位
+					UNIT: '',//计量单位
 					QUALIFICATION: '',
 					QUALIFICATIONList: [],
 					QUANTITY: '',
@@ -520,7 +520,7 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=mete_unit';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
-					this.testing_projectForm.UNIT = res.data[0].code;
+					this.testing_projectForm.UNIT = res.data[0].name;
 					// this.testing_projectForm.UNITDesc = res.data[0].name;
 					console.log(this.testing_projectForm.UNIT);
 
@@ -682,6 +682,11 @@
 									this.show = false;
 									this.$emit('request');
 									this.$emit('reset');
+								}else{
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'success'
+									});
 								}
 							}).catch((err) => {
 							});

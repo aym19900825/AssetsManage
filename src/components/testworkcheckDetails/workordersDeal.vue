@@ -65,7 +65,7 @@
 												</el-table-column>
 							            		<el-table-column prop="REMARKS" label="技术要求" width="220px" sortable>
 												</el-table-column>
-												<el-table-column prop="UNITDesc" label="计量单位" width="80px">
+												<el-table-column prop="UNIT" label="计量单位" width="80px">
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
@@ -107,7 +107,7 @@
 												</el-table-column>
 							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" width="220px" sortable>
 												</el-table-column>
-												<el-table-column prop="UNITDesc" label="计量单位" width="80px">
+												<el-table-column prop="UNIT" label="计量单位" width="80px">
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">

@@ -1169,13 +1169,13 @@
 						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
 						res.data.datas.WORKORDER_PROJECTList[i].LEADER = Number(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
-						res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
+						// res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 					}
 					for(let i = 0;i<res.data.datas.WORKORDER_CONTRACTList.length;i++){
 						res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
 						res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
-						res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+						// res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 					}
 					// this.getleader(WORKORDER_CONTRACTList.INSPECT_GROUP);
 							this.workorderForm = res.data.datas;

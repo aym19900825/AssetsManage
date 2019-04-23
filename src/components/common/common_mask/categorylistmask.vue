@@ -50,7 +50,7 @@
 					</el-table-column>
 					<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 					</el-table-column>
-					<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+					<el-table-column label="机构" width="185" sortable prop="FULLNAME">
 					</el-table-column>
 					<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
 					</el-table-column>
@@ -95,7 +95,7 @@
 		searchList: {
 			NUM:'',
 			VERSION:'',
-			DEPTID: '',
+			TYPE: '',
 		},
 		allDepts: []
     }
@@ -138,7 +138,7 @@
 		this.searchList = {
 			NUM:'',
 			VERSION:'',
-			DEPTID: '',
+			TYPE: '',
 		}
 	},
   	//点击关闭按钮

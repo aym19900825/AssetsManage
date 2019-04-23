@@ -668,12 +668,12 @@
 						<div class="content-footer" v-if="!viewtitle">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
-							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 						<div class="content-footer" v-show="viewtitle">
 							<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-							<el-button type="success" @click="sendback">回退成果数据</el-button>
+							<el-button type="warning" @click="sendback">回退成果数据</el-button>
+							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
 						</div>
 					</el-form>
 				</div>

@@ -147,6 +147,7 @@
 		var url = this.basic_url + '/api-apps/app/workorder/operate/queryWorkorder?ID='+dataid;
         this.$axios.get(url,{}).then((res) => {
             if(res.data.resp_code == 0) {
+				console.log(res.data);
                 this.selectData = res.data.datas;
                 this.dialogProduct = true;
             }else if(res.data.resp_code == 1){

@@ -493,7 +493,7 @@
 					});
 					return;
 				} else if(this.selMenu[0].STATE == '6') {//待生成
-					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID);
+					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID,this.selMenu[0].REPORTTEMPLATENUM);
 					// console.log(this.selMenu[0].ID);
 				}
 			},

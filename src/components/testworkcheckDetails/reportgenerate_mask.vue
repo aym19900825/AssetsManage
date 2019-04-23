@@ -74,10 +74,9 @@
 													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
 												</el-radio-group> -->
 
-												<!-- <el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
-														<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
-													</el-option>
-												</el-select> -->
+												<el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'&&item.type == 'select'" @change="selChange" :disabled="false">
+													<el-option v-for="(itemchild,index) in reportResultType" :key="index" :label="itemchild.title" :value="itemchild.value"></el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -314,6 +313,7 @@
 				inputData: {},
 				basic_url: Config.dev_url,
 				selectData: [],//报告模板类型
+				reportResultType: [],//获取报告结果类型
 				selectReportData: [],//获取报告数据
 				SelectIsQualified:[],//不合格类别
 				SelectIsSynthetical:[],//获取单项判定合格不合格
@@ -377,14 +377,19 @@
 			//TAbs页切换事件判断按钮显示
 			handleClick(tab, event) {
 				var activeName = event.target.getAttribute('id');//获取当前tabID名
-				if(activeName=='tab-0') {//判断按钮显示问题，封面都不显示
-					this.firstBtn = false;
+				if(activeName=='tab-0') {//判断按钮显示问题，封面显示保存和取消
+					this.firstBtn = true;
+					this.secondBtn = true;
+					this.thirdBtn = false;
+					this.fourthBtn = false;
+					this.fifthBtn = false;
 				}else if(activeName=='tab-1') {//判断按钮显示问题，首页显示保存和取消
 					this.firstBtn = true;
 					this.secondBtn = true;
 					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
+					this.getReportResultType();//报告结果类型，检验结论、检验结果
 				}else if(activeName=='tab-2') {//判断按钮显示问题，检查清单显示保存和取消
 					this.firstBtn = true;
 					this.secondBtn = true;
@@ -439,6 +444,14 @@
 					that.reportFileDate.splice(index,0, downDate);
 				}
 			},
+			//获取报告结果类型
+			getReportResultType(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_result_type';
+				this.$axios.get(url, {}).then((res) => {
+					this.reportResultType = res.data;
+				}).catch((wrong) => {
+				})	
+			},
 			//报告模板类型
 			getReportType() {
 				// var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=RE_TYPE';
@@ -446,8 +459,8 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 					this.reptemDetailId=res.data.data[0].ID;
-					// console.log(res.data.data[0].RE_NUM);
-					// console.log(res.data.data[0].ID);
+					console.log(res.data.data[0].RE_NUM);
+					console.log(res.data.data[0].ID);
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
@@ -810,10 +823,13 @@
 				// }
 			},
 			//打开弹出框页面
-			showDialog(id){
+			showDialog(id,teplateNum){
 				this.show = true;
 				this.dataid = id;
+				this.templateNum=teplateNum;
 				this.requestData();
+				this.firstBtn = true;//显示取消按钮
+				this.secondBtn = true;//显示保存按钮
 			},
 
 			sizeChange(val) {//分页，总页数
@@ -838,7 +854,7 @@
 								tranData.value = this.inputData[tranData.param];
 							}
 						}
-						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid;
+						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid+'/'+this.templateNum;
 						this.$axios.post(url,this.selectReportData).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {

@@ -1902,6 +1902,7 @@
 			},
 			 //检验项目列表
 			addproject(value){
+				console.log(value);
 					for(var i = 0;i<value.length;i++){
 						var list={
 								P_NUM:value[i].P_NUM,

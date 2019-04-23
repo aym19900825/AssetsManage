@@ -32,7 +32,7 @@
 							<el-row :gutter="5">
 								<el-col :span="7">
 									<el-form-item label="样品编号" prop="ITEMNUM">
-										<el-input v-model="searchList.ITEMNUM" @keyup.enter.native="searchinfo"></el-input>
+										<el-input v-model="searchList.ITEMNUM" @keyup.enter.native="searchinfo" id="sampleNum"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -394,7 +394,7 @@
 				var url = this.basic_url + '/api-apps/app/item/operate/buildbarcode4jcode?SIMPLE_CODE='
 						+ data.ITEMNUM
 						+'&SIMPLE_NAME='
-						+ data.DESCRIPTION
+						+ this.selMenu[0].DESCRIPTION
 						+'&CODE_TYPE='
 						+ this.codeType;
 				if(this.sampleType=='2'){
@@ -885,7 +885,8 @@
 						})
 					}
 				}).catch((wrong) => {})
-			}
+			},
+			
 		},
 		mounted() {
 			this.getKey();

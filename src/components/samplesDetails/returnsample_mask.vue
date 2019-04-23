@@ -84,6 +84,14 @@
 
 									<el-row>
 										<el-col :span="8">
+											<el-form-item label="样品接收状态">
+												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS" :disabled="noedit">
+													<el-radio label="1">外观正常</el-radio>
+													<el-radio label="2">异常</el-radio>
+												</el-radio-group>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="返样人" prop="RETURN_PERSONDesc">
 												<el-input v-model="samplesForm.RETURN_PERSONDesc" disabled v-if="samplesForm.ITEM_TYPE=='2'&&sampleAutoInput"></el-input>
 												<el-select v-model="samplesForm.RETURN_PERSON"  v-if="samplesForm.ITEM_TYPE=='1' || !sampleAutoInput" placeholder="请选择">
@@ -102,14 +110,7 @@
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="样品接收状态">
-												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS" :disabled="noedit">
-													<el-radio label="1">外观正常</el-radio>
-													<el-radio label="2">异常</el-radio>
-												</el-radio-group>
-											</el-form-item>
-										</el-col>
+										
 									</el-row>
 
 									<el-row>
@@ -326,9 +327,12 @@
 				if(this.samplesForm.ITEMNUM !== ''){
 					var sample = {};
 					var str = this.samplesForm.ITEMNUM;
-					if(str.indexOf('{')!=-1){
-						var sampleObj = str.slice(str.indexOf('{'),str.length);
-							sample = JSON.parse(sampleObj);
+					if(str.indexOf('#')!=-1){
+						var sampleObj = str.split('#');
+							sample = {
+								code: sampleObj[0],
+								step: sampleObj[1]
+							};
 						this.sampleAutoInput = true;
 					}else{
 						sample.code = this.samplesForm.ITEMNUM;

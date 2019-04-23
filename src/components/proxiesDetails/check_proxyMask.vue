@@ -20,8 +20,9 @@
 					<el-form inline-message :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.dataInfo.STATE!=3">
-								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 提交审批</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState=='3'"><i class="icon-edit-3"></i> 确认接收</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -1036,6 +1037,7 @@
 				pnum:'',//用于主表接修改时的产品的类别的值
 				pronum:'',//用于主表接修改时的产品的值
 				inistinspectproxy:'',//用于存储检测依据的子表数据
+				nodeState: ''
 			};
 		},
 		methods: {
@@ -1045,14 +1047,14 @@
 			},
 			//检验项目与要求单价列总和
 			getSummaries(param) {
-        //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = '总价';
-            return;
-          } else if(index === 4) {//计算第几列的减1
+					//param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
+				const { columns, data } = param;
+				const sums = [];
+				columns.forEach((column, index) => {
+					if (index === 0) {
+						sums[index] = '总价';
+						return;
+					} else if(index === 4) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));
@@ -1061,29 +1063,29 @@
 							}
 						});
 						//验证每个value值是否是数字，如果是执行if
-							if (!values.every(value => isNaN(value))) {
-								sums[index] = values.reduce((prev, curr) => {
-									return prev + curr;
-								}, 0);
-								sums[index] = this.toFixedPrice(sums[index]);
-								if(!!sums[index]){
-									this.ALLCOST = sums[index] += '元';
-								}else{
-									this.ALLCOST = '0.00元';
-								}
-								var paramData1 = this.INSPECTCOST;
-								if(paramData1==undefined){
-                 paramData1='0.00元';
-								}
-								var paramData2 = this.ALLCOST;
-								this.$forceUpdate();
-								this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
-							} else {
-								sums[index] = ' ';
+						if (!values.every(value => isNaN(value))) {
+							sums[index] = values.reduce((prev, curr) => {
+								return prev + curr;
+							}, 0);
+							sums[index] = this.toFixedPrice(sums[index]);
+							if(!!sums[index]){
+								this.ALLCOST = sums[index] += '元';
+							}else{
+								this.ALLCOST = '0.00元';
 							}
+							var paramData1 = this.INSPECTCOST;
+							if(paramData1==undefined){
+									paramData1='0.00元';
+							}
+							var paramData2 = this.ALLCOST;
+							this.$forceUpdate();
+							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
+						} else {
+							sums[index] = ' ';
+						}
 					}
 				});
-					return sums;
+				return sums;
 			},
 			//分包要求检测费用列的总和
 			getSummaries2(param) {
@@ -1595,6 +1597,21 @@
 				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
+				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro2/flow/NodeId/'+this.dataid, {}).then((res) => {
+					if(res.data.resp_code == 0){
+						switch(res.data.datas){
+							case 'lrwts':
+								this.nodeState = '1';
+								break;
+							case 'jsfzr':
+								this.nodeState = '2';
+								break;
+							case 'wtsgly':
+								this.nodeState = '3';
+								break;
+						}
+					}
+				}).catch((err) => {});
 				//判断启动流程和审批的按钮是否显示
 				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -2287,7 +2304,7 @@
 											type: 'warning'
 										});
 									}else{
-									 	this.$refs.approvalChild.visible();
+									 	this.$refs.approvalChild.visible(this.nodeState);
 									}
 								})
 	    					}

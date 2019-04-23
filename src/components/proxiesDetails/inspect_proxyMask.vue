@@ -624,12 +624,12 @@
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-input type="number" v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
+												<el-input  type="number" v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -897,8 +897,8 @@
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					P_NAME:'',
-					CHECK_COST:0,//合同费用
-					ACTUALCOST:0,//实收费用
+					CHECK_COST:'',//合同费用
+					ACTUALCOST:'',//实收费用
 					CONTRACTCOST:0,//标准费用
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
@@ -992,7 +992,7 @@
 					// ITEM_IDENT: [{ required: true, message: '必填', trigger: 'blur' }],//标识
 					ITEM_MODEL: [
 						{required: true, message: '必填', trigger: 'blur' },
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+						// {trigger: 'blur', validator:this.Validators.isSpecificKey}
 					],//型号
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
@@ -1341,8 +1341,8 @@
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					ACTUAL_PERCENT:0,
-					CHECK_COST:0,//合同费用
-					ACTUALCOST:0,//实收费用
+					CHECK_COST:'',//合同费用
+					ACTUALCOST:'',//实收费用
 					CONTRACTCOST:0,//标准费用
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],
@@ -1630,9 +1630,9 @@
 				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
-				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
-					if(res.code.resp_code == 0){
-						switch(res.code.datas){
+				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro/flow/NodeId/'+this.dataid, {}).then((res) => {
+					if(res.data.resp_code == 0){
+						switch(res.data.datas){
 							case 'lrwts':
 								this.nodeState = '1';
 								break;
@@ -2451,4 +2451,12 @@
     background: #FFF;
     padding: 5px 10px;
 }*/
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button{
+            -webkit-appearance: none !important;
+            margin: 0; 
+        }
+input{
+    -moz-appearance:textfield;
+}
 </style>

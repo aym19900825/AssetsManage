@@ -160,11 +160,10 @@
 			S_NUM: '',
 			SS_NUM: '',
             S_NAME: '',
-            VERSION: '',
-            DEPARTMENT: '',
+			VERSION: '',
+			S_ENGNAME: '',
             RELEASETIME: '',
             STARTETIME: '',
-            STATUS: '',
         },
         standardList:[],
 		selectData:[],
@@ -190,19 +189,13 @@
     //重置
     resetbtn(){
         this.searchList = {
-			S_NUM:'',
-			SS_NUM:'',
-            S_NAME:'',
-            VERSION:'',
-            DEPARTMENT:'',
-            RELEASETIME:'',
-            STARTETIME:'',
-            STATUS:'',
-            P_NUM:'',
-            DEPTID:'',
-            P_NAME:'',
-            VERSION:'',
-            STATUS:'',
+			S_NUM: '',
+			SS_NUM: '',
+            S_NAME: '',
+			VERSION: '',
+			S_ENGNAME: '',
+            RELEASETIME: '',
+            STARTETIME: '',
         };
     },
     //提出单位
@@ -334,14 +327,16 @@
             S_NAME: this.searchList.S_NAME,
             S_ENGNAME:this.searchList.S_ENGNAME,
             VERSION: this.searchList.VERSION,
-            DEPTID: this.searchList.DEPTID,
+            // DEPTID: this.searchList.DEPTID,
             RELEASETIME: this.searchList.RELEASETIME,
             STARTETIME: this.searchList.STARTETIME,
             // STATUS: this.searchList.STATUS,
 		};
 		// var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_not_in='+this.S_NUM;
-	   this.$axios.get(url, {}).then((res) => {
+	   this.$axios.get(url, {
+		   params: data
+	   }).then((res) => {
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

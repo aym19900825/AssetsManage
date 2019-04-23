@@ -1027,10 +1027,6 @@
 				    }
 				});
 			},
-			//回退按钮
-			sendback(){
-
-			},
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
@@ -1086,15 +1082,6 @@
 				this.approvingData.app=this.workorder;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-			// //获取导入表格勾选信息
-			// SelChange(val) {
-			// 	this.selMenu = val;
-			// },
-		
-			reprotids(val){
-
-			},
-	
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -1165,17 +1152,23 @@
 					this.$axios.get(url, { }).then((res) => {
 						console.log(res.data.datas);
 					res.data.datas.CJDW = Number(res.data.datas.CJDW);
-					for(let i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
+					for(var i = 0;i<res.data.datas.WORKORDER_PROJECTList.length;i++){
 						res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 						this.getleader(res.data.datas.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
-						res.data.datas.WORKORDER_PROJECTList[i].LEADER = Number(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
-						res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
+						res.data.datas.WORKORDER_PROJECTList[i].LEADER = parseInt(res.data.datas.WORKORDER_PROJECTList[i].LEADER);
+					  res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = parseInt(res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION);
+						// res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION = res.data.datas.WORKORDER_PROJECTList[i].ASSIST_PERSION.split(',');
+						this.visableleader(res.data.datas.WORKORDER_PROJECTList[i].LEADER,'PROJECTLIST',i);
 					}
-					for(let i = 0;i<res.data.datas.WORKORDER_CONTRACTList.length;i++){
-						res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
-						this.getleader(res.data.datas.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
-						res.data.datas.WORKORDER_CONTRACTList[i].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[i].LEADER);
-						res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = Number(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+					console.log(res.data.datas.WORKORDER_CONTRACTList.length);
+					for(var j = 0;j<res.data.datas.WORKORDER_CONTRACTList.length;j++){
+						console.log(123);
+						res.data.datas.WORKORDER_CONTRACTList[j].INSPECT_GROUP = Number(res.data.datas.WORKORDER_CONTRACTList[j].INSPECT_GROUP);
+						this.getleader(res.data.datas.WORKORDER_CONTRACTList[j].INSPECT_GROUP,'CONTRACTList',j);
+						res.data.datas.WORKORDER_CONTRACTList[j].LEADER = Number(res.data.datas.WORKORDER_CONTRACTList[j].LEADER);
+						res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION = parseInt(res.data.datas.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+						// res.data.datas.WORKORDER_CONTRACTList[j].ASSIST_PERSION = res.data.datas.WORKORDER_CONTRACTList[j].ASSIST_PERSION.split(',');
+						this.visableleader(res.data.datas.WORKORDER_CONTRACTList[j].LEADER,'CONTRACTList',j);
 					}
 					// this.getleader(WORKORDER_CONTRACTList.INSPECT_GROUP);
 							this.workorderForm = res.data.datas;

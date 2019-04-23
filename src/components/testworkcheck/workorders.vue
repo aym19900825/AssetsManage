@@ -111,8 +111,8 @@
 					</div>
 				</div>
 			<!--工作任务单详情/Houling-->
-			<workorders_mask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workorders_mask>
-			<!--工作任务单详情/Houling-->
+			<workordersmask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workordersmask>
+			<!--工作任务单下达任务/Houling-->
 			<sendtasklist ref="task" v-bind:page=page @refresh="refresh" @request="requestData"></sendtasklist>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
@@ -131,7 +131,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
-	import workorders_mask from '../testworkcheckDetails/workorders_mask.vue'//之前的详情页
+	import workordersmask from '../testworkcheckDetails/workorders_mask.vue'//之前的详情页
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'//下达任务
 	import reportmask from'../reportDetails/reportMask.vue'//报表
 	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'//任务处理
@@ -144,7 +144,7 @@
 			tree_grid,
 			navs_tabs,
 			navs_left,
-			workorders_mask,
+			workordersmask,
 			sendtasklist,//下达任务
 			reportmask,//报表
 			workordersDeal,//任务处理

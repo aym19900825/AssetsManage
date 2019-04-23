@@ -11,11 +11,11 @@
     </el-row>
 
     <el-form-item size="medium" class="div-submit">
-      <el-button type="primary" v-if="(nodeState=='4'&&approvingData.app == 'workNot')||(nodeState=='3'&&approvingData.app == 'inspectPro')" @click="submitForm">接收</el-button>
+      <el-button type="primary" v-if="(nodeState=='4'&&approvingData.app == 'workNot')||(nodeState=='3'&&(approvingData.app == 'inspectPro'||approvingData.app == 'inspectPro2'))" @click="submitForm">接收</el-button>
       <el-button type="primary"  v-else-if="(nodeState=='4'||nodeState=='5')&&approvingData.app == 'workorder'" @click="submitForm">确认结束</el-button>
       <el-button type="primary" v-else @click="submitForm">同意</el-button>
 
-      <el-button type="danger" v-if="(nodeState=='4'&&approvingData.app == 'workNot')||(nodeState=='3'&&approvingData.app == 'inspectPro')||(nodeState=='4'||nodeState=='5'&&approvingData.app == 'workorder')" @click="rejectForm">回退</el-button>
+      <el-button type="danger" v-if="(nodeState=='4'&&approvingData.app == 'workNot')||(nodeState=='3'&&(approvingData.app == 'inspectPro'||approvingData.app == 'inspectPro2'))||(nodeState=='4'||nodeState=='5'&&approvingData.app == 'workorder')" @click="rejectForm">回退</el-button>
       <el-button type="danger" v-else @click="rejectForm">驳回</el-button>
     </el-form-item>
   </el-form>
@@ -60,7 +60,7 @@ export default {
 				this.innerVisible = true;
 				this.approveForm={};
 			},
-			visible(nodeState,appName) {
+			visible(nodeState) {
 				this.nodeState = !!nodeState ? nodeState : '';
 				//工作任务通知书
 				if(this.approvingData.app == 'workNot'){
@@ -82,7 +82,7 @@ export default {
 					}
 				}
 				//任务委托书
-				if(this.approvingData.app == 'inspectPro'){
+				if(this.approvingData.app == 'inspectPro'||this.approvingData.app == 'inspectPro2'){
 					if(this.nodeState == '2'){
 						this.tit = '审批委托书';
 						this.formLabel = '审批意见';
@@ -111,8 +111,6 @@ export default {
 						this.formLabel = '审批意见';
 					}
 				}
-			
-				
 				this.open();
 			},
 		    //同意

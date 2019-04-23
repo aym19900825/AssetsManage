@@ -638,12 +638,12 @@
 			save(parameter) {
 				this.$refs.CUSTOMER.validate((valid) => {
 		          if (valid) {
-					if(this.CUSTOMER.CUSTOMER_QUALIFICATIONList.length==0 || this.CUSTOMER.CUSTOMER_PERSONList.length == 0){
-						this.$message({
-							message: '资质信息及客户联系人必填',
-							type: 'warning',
-						});
-					}else{
+					// if(this.CUSTOMER.CUSTOMER_QUALIFICATIONList.length==0 || this.CUSTOMER.CUSTOMER_PERSONList.length == 0){
+					// 	this.$message({
+					// 		message: '资质信息及客户联系人必填',
+					// 		type: 'warning',
+					// 	});
+					// }else{
 						this.CUSTOMER.STATUS=this.CUSTOMER.STATUS=="活动" ? '1' : '0';
 						var url = this.basic_url + '/api-apps/app/customer/saveOrUpdate';
 						this.$axios.post(url, this.CUSTOMER).then((res) => {
@@ -663,7 +663,7 @@
 							}
 						}).catch((err) => {
 						});
-					}
+					// }
 		          } else {
 		            this.show = true;
 						this.$message({

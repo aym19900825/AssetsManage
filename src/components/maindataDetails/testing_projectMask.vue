@@ -64,8 +64,8 @@
 										<el-col :span="8">
 											<el-form-item label="计量单位" prop="UNIT" label-width="100px">
 												<!-- <el-input v-model="testing_projectForm.UNIT" :disabled="noedit"></el-input> -->
-												<el-select v-model="testing_projectForm.UNIT" :disabled="noedit" filterable style="width: 100%">
-													<el-option v-for="item in selectData" :key="item.id" :value="item.code" :label="item.name" :class="item.name"></el-option>
+												<el-select v-model="testing_projectForm.UNIT" filterable allow-create :disabled="noedit" filterable style="width: 100%">
+													<el-option v-for="item in selectData" :key="item.id" :value="item.name" :label="item.name" :class="item.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -309,7 +309,7 @@
 					ID: '',
 					P_NAME: '',
 					P_NUM: '',
-					UNIT: '1',//计量单位
+					UNIT: '',//计量单位
 					QUALIFICATION: '',
 					QUALIFICATIONList: [],
 					QUANTITY: '',
@@ -520,7 +520,7 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=mete_unit';
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
-					this.testing_projectForm.UNIT = res.data[0].code;
+					this.testing_projectForm.UNIT = res.data[0].name;
 					// this.testing_projectForm.UNITDesc = res.data[0].name;
 					console.log(this.testing_projectForm.UNIT);
 
@@ -682,6 +682,11 @@
 									this.show = false;
 									this.$emit('request');
 									this.$emit('reset');
+								}else{
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'success'
+									});
 								}
 							}).catch((err) => {
 							});

@@ -114,12 +114,15 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="编码" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<!-- <el-table-column label="编码" width="120" sortable prop="S_NUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.S_NUM}}</p>
 									</template>
-								</el-table-column>
+								</el-table-column> -->
 								<el-table-column label="标准编号" width="120" sortable prop="SS_NUM" v-if="this.checkedName.indexOf('标准编号')!=-1">
+									<template slot-scope="scope">
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.SS_NUM}}</p>
+									</template>
 								</el-table-column>
 								<el-table-column label="标准名称" width="220" sortable prop="S_NAME" v-if="this.checkedName.indexOf('标准名称')!=-1">
 								</el-table-column>
@@ -192,7 +195,7 @@
 				}],
 				commentArr: {},
 				checkedName: [
-					'编码',
+					// '编码',
 					'标准编号',
 					'标准名称',
 					'英文名称',
@@ -205,10 +208,10 @@
 					'修改时间'
 				],
 				tableHeader: [
-					{
-						label: '编码',
-						prop: 'S_NUM'
-					},
+					// {
+					// 	label: '编码',
+					// 	prop: 'S_NUM'
+					// },
 					{
 						label: '标准编号',
 						prop: 'SS_NUM'

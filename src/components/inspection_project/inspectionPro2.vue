@@ -76,11 +76,11 @@
 			      </template>
 			    </el-table-column>
 
-					<el-table-column label="计量单位" sortable width="100" prop="UNITDesc">
+					<el-table-column label="计量单位" sortable width="100" prop="UNIT">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.UNITDesc'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNITDesc" :disabled="true" placeholder="自动生成">
-			        	</el-input><span v-else>{{scope.row.UNITDesc}}</span>
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.UNIT'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.UNIT" :disabled="true" placeholder="自动生成">
+			        	</el-input><span v-else>{{scope.row.UNIT}}</span>
 							</el-form-item>
 			      </template>
 			    </el-table-column>
@@ -183,7 +183,7 @@
 				</el-table-column>
 				<el-table-column label="单价" sortable align="right" prop="UNITCOST">
 				</el-table-column>
-				<el-table-column label="计量单位" sortable align="right" prop="UNITDesc">
+				<el-table-column label="计量单位" sortable align="right" prop="UNIT">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>

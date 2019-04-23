@@ -115,8 +115,7 @@
 
 												<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 												</el-table-column>
-
-												<el-table-column label="计量单位" width="100px" prop="UNITDesc">
+												<el-table-column label="计量单位" width="100px" prop="UNIT">
 												</el-table-column>
 
 												<el-table-column label="检测结果" width="200px">

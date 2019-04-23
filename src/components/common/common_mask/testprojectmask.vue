@@ -105,13 +105,13 @@
 			totalCount: 0
         },
         searchList: { //点击高级搜索后显示的内容
-            S_NUM: '',
-            S_NAME: '',
+            P_NUM: '',
+            P_NAME: '',
             VERSION: '',
-            DEPARTMENT: '',
-            RELEASETIME: '',
-            STARTETIME: '',
-            STATUS: '',
+            DEPTIDDesc: '',
+            // RELEASETIME: '',
+            // STARTETIME: '',
+            // STATUS: '',
         },
         projectList: [],//检测项目与要求
 		selectData:[],
@@ -135,18 +135,9 @@
     //重置
     resetbtn(){
         this.searchList = {
-            S_NUM:'',
-            S_NAME:'',
-            VERSION:'',
-            DEPARTMENT:'',
-            RELEASETIME:'',
-            STARTETIME:'',
-            STATUS:'',
-            P_NUM:'',
-            DEPTID:'',
-            P_NAME:'',
-            VERSION:'',
-            STATUS:'',
+            P_NUM: '',
+            P_NAME: '',
+            VERSION: '',
         };
     },
     //提出单位
@@ -271,17 +262,17 @@
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
-            S_NAME: this.searchList.S_NAME,
+            // S_NAME: this.searchList.S_NAME,
             VERSION: this.searchList.VERSION,
-            DEPARTMENT: this.searchList.DEPARTMENT,
-            RELEASETIME: this.searchList.RELEASETIME,
-            STARTETIME: this.searchList.STARTETIME,
-            STATUS: this.searchList.STATUS,
+            // DEPARTMENT: this.searchList.DEPARTMENT,
+            // RELEASETIME: this.searchList.RELEASETIME,
+            // STARTETIME: this.searchList.STARTETIME,
+            // STATUS: this.searchList.STATUS,
             P_NUM: this.searchList.P_NUM,
-            DEPTID: this.searchList.DEPTID,
+            // DEPTID: this.searchList.DEPTID,
             P_NAME: this.searchList.P_NAME,
-            VERSION: this.searchList.VERSION,
-            STATUS: this.searchList.STATUS,
+            // VERSION: this.searchList.VERSION,
+            // STATUS: this.searchList.STATUS,
 		};
 		// this.PRO_NUM = value.PRO_NUM;//产品编号
 		// this.P_NUM = value.P_NUM;//产品类别编号
@@ -289,7 +280,9 @@
 	    // var url=this.basic_url +'/api-apps/app/inspectionPro2?S_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums;
 		// var url=this.basic_url +'/api-apps/app/inspectionPro2?P_NUM_where_in='+this.projectnum+'&P_NUM_where_not_in='+this.projectpnums;
 		var url=this.basic_url +'/api-apps/app/inspectionPro2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_in='+this.S_NUM+'&P_NUM_where_not_in='+this.projectnum;
-		this.$axios.get(url,{}).then((res) => {
+		this.$axios.get(url,{
+			params: data
+		}).then((res) => {
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

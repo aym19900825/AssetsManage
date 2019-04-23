@@ -144,18 +144,18 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="用户有效期" prop="user_active_date" label-width="100px">
-												<el-date-picker v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="noedit">
+												<el-date-picker :disabled="disabled" v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" >
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许授权" prop="ispermit" label-width="100px">
-												<el-radio-group v-if="user.username == 'admin'" v-model="user.ispermit" :disabled="edit">
+												<el-radio-group v-if="user.username == 'admin'" v-model="user.ispermit" :disabled="disabled">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 
-												<el-radio-group v-else v-model="user.ispermit" :disabled="noedit">
+												<el-radio-group v-else v-model="user.ispermit" :disabled="edit">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
@@ -163,12 +163,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许登录" prop="islogin" label-width="100px">
-												<el-radio-group v-if="user.username == 'admin'" v-model="user.islogin" :disabled="edit">
+												<el-radio-group v-if="user.username == 'admin'" v-model="user.islogin" :disabled="disabled">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 
-												<el-radio-group v-else v-model="user.islogin" :disabled="noedit">
+												<el-radio-group v-else v-model="user.islogin" :disabled="edit">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
@@ -179,7 +179,7 @@
 										<el-col :span="8">
 											<el-form-item label="所属机构" prop="deptName" label-width="100px">
 												<el-input v-model="user.deptName" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="noedit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="disabled"></el-button>
 												</el-input>
 											</el-form-item>
 											<!--<el-form-item label="所属机构" prop="deptName" >
@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="!edit" default-first-option value-key="item.id" style="width: 100%;" @change="showUserRole">
+												<el-select v-model="user.roleId" multiple :disabled="disabled" default-first-option value-key="item.id" style="width: 100%;" @change="showUserRole">
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -602,6 +602,7 @@
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify:false,
+				disabled:true,
 				//default-expand-all:true,
 				i:0,
 				rules: {
@@ -763,6 +764,7 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.disabled = false;
 				// this.show = true;
 			},
 			addfield1() {
@@ -915,6 +917,7 @@
 				this.hintshow = false;
 				this.statusshow1 = true;
 				this.statusshow2 = false;
+				this.disabled = false;
 				// this.show = true;
 			},
 			// 这里是修改
@@ -930,6 +933,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
+					this.disabled = true;
 				//	$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
@@ -983,6 +987,7 @@
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				// this.CATEGORY = item;
+				this.disabled = true;
 				this.show = true;
 
 				var url = this.basic_url + '/api-user/users/' + dataid;

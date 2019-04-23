@@ -223,7 +223,7 @@
 					},
 					{
 						label: '计量单位',
-						prop: 'UNITDesc'
+						prop: 'UNIT'
 					},
 					{
 						label: '版本',

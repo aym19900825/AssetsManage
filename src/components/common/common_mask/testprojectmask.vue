@@ -58,6 +58,8 @@
 				</el-table-column>
 				<el-table-column label="单价" width="100" sortable prop="UNITCOST">
 				</el-table-column>
+				<el-table-column label="技术要求" width="100" sortable prop="TECHNICAL_REQUIRE">
+				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION">
 				</el-table-column>
 				<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
@@ -303,7 +305,8 @@
                 }
             }
             
-            this.projectList = newarr;
+						this.projectList = newarr;
+						console.log(this.projectList);
         }).catch((wrong) => {})
 	},
 	determine(){

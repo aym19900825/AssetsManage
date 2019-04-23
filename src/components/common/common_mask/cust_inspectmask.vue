@@ -80,9 +80,9 @@
 			totalCount: 0
 		},
 		searchList: {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
+			CODE:'',
+			NAME:'',
+			CONTACT_ADDRESS: '',
 		},
     }
   },
@@ -115,9 +115,9 @@
 	},
 	resetbtn(){
 		this.searchList = {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
+			CODE:'',
+			NAME:'',
+			CONTACT_ADDRESS: '',
 		}
 	},
   	//点击关闭按钮
@@ -186,9 +186,9 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
-			NUM:this.searchList.NUM,
-			TYPE: this.searchList.TYPE,
-			VERSION:this.searchList.VERSION,
+			CODE:this.searchList.CODE,
+			NAME: this.searchList.NAME,
+			CONTACT_ADDRESS:this.searchList.CONTACT_ADDRESS,
 		};
         var DEPTID=this.$store.state.currentcjdw[0].id;
 		var url = this.basic_url + '/api-apps/app/customer?DEPTID_WHERES='+DEPTID+'&TYPE_WHERE_IN=2,3';

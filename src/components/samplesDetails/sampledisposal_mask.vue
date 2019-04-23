@@ -65,8 +65,8 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">
-											<el-form-item label="样品处置" prop="ITEM_MANAGEMENT">
+										<el-col :span="12">
+											<el-form-item label="处置方式" prop="ITEM_MANAGEMENT">
 												<el-radio-group v-model="samplesForm.ITEM_MANAGEMENT">
 													<el-radio label="1">入库</el-radio>
 													<el-radio label="2">返委托方</el-radio>
@@ -74,6 +74,8 @@
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
+									</el-row>
+									<el-row>
 										<el-col :span="16">
 											<el-form-item prop="other" v-show="samplesForm.ITEM_MANAGEMENT=='3'">
 												<el-input v-model="samplesForm.other"></el-input>
@@ -166,7 +168,7 @@
 				</div>
 			</div>
 		</div>
-		<el-dialog :modal-append-to-body="false" title="样品编号" height="300px" :visible.sync="dialogsample" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="样品编号" height="300px" :visible.sync="dialogsample" width="80%" :before-close="resetSample">
 			<el-table :data="samplesList" 
 						:header-cell-style="rowClass" 
 						border 
@@ -461,9 +463,9 @@
 						done();
 					})
 					.catch(_ => {
-				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					console.log('取消关闭');
+					$('.v-modal').hide();
+				});
 			},
 			getCheckedNodes() { //小弹出框获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()

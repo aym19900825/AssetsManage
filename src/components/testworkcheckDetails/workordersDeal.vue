@@ -16,7 +16,7 @@
 				</div>
 				<div class="mask_content">
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
-					<el-form inline-message :model="workorderForm" :rules="rules" ref="workorderForm" label-width="110px">
+					<el-form inline-message :model="workorderForm" :rules="rules" ref="workorderForm">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 
@@ -24,7 +24,7 @@
 								<el-collapse-item title="检测要求与样品信息" name="1">
 									<el-row>
 										<el-col>
-											<el-form-item label="样品检后状态" label-width="150px" label-position="left" style="text-align: left;">
+											<el-form-item label="样品检后状态" label-width="110px" label-position="left" style="text-align: left;">
 												<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="noedit||pageDisable">
 													<el-radio v-for="(data,index) in Select_ITEM_CHECK_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 												</el-radio-group>
@@ -75,7 +75,7 @@
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" style="margin-left: 0px;">
-															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
+															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
 																<el-option key="0" label="无" value="0"></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
@@ -92,7 +92,7 @@
 												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable width="160px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.INSPECT_DATE'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
-															<div class="block" style="margin-left: -110px;">
+															<div class="block">
 																<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
 																</el-date-picker>
 															</div>
@@ -117,7 +117,7 @@
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.ISQUALIFIED'">
-															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" style="margin-left: -110px;" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
+															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
 																<el-option key="0" label="无" value="0"></el-option>
 																<el-option key="1" label="不合格" value="1"></el-option>
 																<el-option key="2" label="A类不合格" value="2"></el-option>
@@ -134,7 +134,7 @@
 												<el-table-column prop="INSPECT_DATE" label="检测日期" width="160px" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.INSPECT_DATE'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
-															<div class="block" style="margin-left: -110px;">
+															<div class="block" >
 																<el-date-picker v-model="scope.row.INSPECT_DATE" type="date" placeholder="请选择" style="width: 100%" value-format="yyyy-MM-dd" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_CONTRACT_ITEMList.length==0">
 																</el-date-picker>
 															</div>
@@ -361,7 +361,7 @@
 				noedit:false,
 				activeName: 'first', //tabs
 				activeNames: ['1','2','3','4','5','6','7'],//手风琴数量
-				labelPosition: 'right', //表格
+				// labelPosition: 'right', //表格
 				selectData:[],//承检单位
 				fileList:[],//上传附件数据
 				rules: {
@@ -790,7 +790,7 @@
 						});
 						var obj = {
 							FILEID: res.data.fileid,
-							FILENAME: res.data.filename,
+							FILENAME: res.data.filerealname,
 							FILESIZE: res.data.filesize,
 							FILEPATH: res.data.webUrl,
 							LIABLE_PERSONDesc: this.username,

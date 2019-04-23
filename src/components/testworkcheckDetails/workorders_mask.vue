@@ -556,47 +556,76 @@
 										<el-tab-pane label="成果数据" name="fifth">
 											<el-row>
 												<el-col :span="24">
-													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
-														  border 
-														  stripe 
-														  :fit="true" 
-														  max-height="260" 
-														  style="width: 100%;" 
-														  @cell-click="iconOperation" 
-														  :default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+													<el-table :data="workorderForm.list" 
+											border 
+											stripe
+											highlight-current-row
+											@selection-change="selChange"
+											style="width: 100%;">
+													<el-table-column type="expand">
+														<template slot-scope="props">
+															<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+																	border 
+																	stripe 
+																	:fit="true" 
+																	max-height="260" 
+																	style="width: 100%;" 
+																	@cell-click="iconOperation" 
+																	:default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
 
-														<el-table-column type="index" label="序号" width="50">
-															<template slot-scope="scope">
-																<span> {{scope.$index+1}} </span>
-															</template>
-														</el-table-column>
+																<el-table-column type="index" label="序号" width="50">
+																	<template slot-scope="scope">
+																		<span> {{scope.$index+1}} </span>
+																	</template>
+																</el-table-column>
 
-														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
-														</el-table-column>
+																<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+																</el-table-column>
 
-														<el-table-column label="文件名称" prop="FILENAME">
-														</el-table-column>
+																<el-table-column label="文件名称" prop="FILENAME">
+																</el-table-column>
 
-														<el-table-column label="文件大小" prop="FILESIZE">
-														</el-table-column>
+																<el-table-column label="文件大小" prop="FILESIZE">
+																</el-table-column>
+																
+																<el-table-column label="审核人" prop="CHECKER">
+																</el-table-column>
 
-														<el-table-column fixed="right" label="操作" width="120px">
-															<template slot-scope="scope">
-																<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																	<i class="icon-eye"></i>
-																</el-button>
-															</template>
-														</el-table-column>
+																<el-table-column label="审核时间" prop="CHECK_DATE">
+																</el-table-column>
 
-													</el-table>
+																<el-table-column fixed="right" label="操作" width="120px">
+																	<template slot-scope="scope">
+																		<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+																			<i class="icon-eye"></i>
+																		</el-button>
+																	</template>
+																</el-table-column>
+
+															</el-table>
+														</template>
+													</el-table-column>
+
+													<el-table-column type="selection" width="55">
+													</el-table-column>
+
+													<el-table-column type="index" label="序号" width="55">
+													</el-table-column>
+
+													<el-table-column label="统一信用代码" prop="CODE" sortable>
+													</el-table-column>
+
+													<el-table-column label="分包方名称" prop="NAME" sortable>
+													</el-table-column>
+												</el-table>
 												</el-col>
 											</el-row>
-											<el-row class="pt20 pb20">
+											<!-- <el-row class="pt20 pb20">
 												<el-col :span="24" class="text-center">
 													<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
 													<el-button type="success" @click="sendback">回退</el-button>
 												</el-col>
-											</el-row>
+											</el-row> -->
 										</el-tab-pane>
 										<!--成果数据 End-->
 									</el-tabs>
@@ -651,6 +680,10 @@
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
 							<el-button @click="close">取消</el-button>
+						</div>
+						<div class="content-footer" v-show="viewtitle">
+							<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
+							<el-button type="success" @click="sendback">回退成果数据</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -889,6 +922,7 @@
 			submitVerify(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -1623,14 +1657,14 @@
 			reportdatavalue(value){
 				this.reportvalue = value;//储存生成报告数据
 				this.workorderreportid = value.id;
-                var obj = {
+				var obj = {
 					ID:value.ID,
-                    REPORTNUM:value.reportnum,
-                    REPORTNAME:value.reportname,
-                    FILEID:value.fileid,
-                    VERSION:value.version,
-                }
-                this.workorderForm.WORKORDER_REPORTList.push(obj);
+					REPORTNUM:value.reportnum,
+					REPORTNAME:value.reportname,
+					FILEID:value.fileid,
+					VERSION:value.version,
+				}
+				this.workorderForm.WORKORDER_REPORTList.push(obj);
 			},
 			//点击添加，修改按钮显示弹窗
 			visible() {

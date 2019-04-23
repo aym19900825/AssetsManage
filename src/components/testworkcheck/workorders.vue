@@ -768,6 +768,7 @@
 				}).then((res) => {
 					this.loading = false;
 					let result=res.data.datas;
+					console.log(res.data.datas);
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
 							let subDepts=result[i].subDepts;

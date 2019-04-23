@@ -325,10 +325,19 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="技术要求" sortable>
+												<el-table-column prop="REMARKS" label="要求" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入" :disabled="noedit">
+                              </el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column>
+												
+												<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.TECHNICAL_REQUIRE'" >
+															<el-input size="small" v-model="scope.row.TECHNICAL_REQUIRE" placeholder="请输入" :disabled="edit">
                               </el-input> 
 														</el-form-item>	
 													</template>
@@ -1898,6 +1907,7 @@
 								P_NUM:value[i].P_NUM,
 								P_DESC:value[i].P_NAME,
 								REMARKS:'',
+								TECHNICAL_REQUIRE:value[i].TECHNICAL_REQUIRE,
 								UNITCOST:value[i].UNITCOST,
 								VERSION:value[i].VERSION,
 								QUATITY:0,

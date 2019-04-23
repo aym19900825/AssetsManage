@@ -19,7 +19,7 @@
 						<el-row>
 							<el-col :span="20">
 								<el-form inline-message :model="reportTemplate" ref="reportTemplate" :rules="rules" label-position="right">
-									<el-form-item label="请先选择报告模板" prop="RE_TYPE" label-width="160px">
+									<el-form-item label="报告模板" prop="RE_TYPE" label-width="160px">
 										<el-select clearable v-model="reportTemplate.RE_TYPE" placeholder="请选择" @change="requestData" :disabled="noedit" style="width:500px;">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.RE_NUM" :label="data.DECRIPTION"></el-option>
 										</el-select>
@@ -109,12 +109,15 @@
 												
 												<el-table-column label="项目名称" sortable prop="P_DESC">
 												</el-table-column>
+
 												<el-table-column label="不合格类别" sortable prop="ISQUALIFIEDDesc">
 												</el-table-column>
+
 												<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 												</el-table-column>
 												<el-table-column label="计量单位" width="100px" prop="UNIT">
 												</el-table-column>
+
 												<el-table-column label="检测结果" width="200px">
 													<template slot-scope="scope">
 														<el-table :data="scope.row.workorder_project_itemList" key="table3" row-key="ID" style="width: 100%;">
@@ -149,7 +152,11 @@
 											highlight-current-row
      										@current-change="singleTable"
 											@selection-change="selChange"
-											:default-sort="{prop:'reportData.List', order: 'descending'}">
+											:default-sort="{prop:'reportData.List', order: 'descending'}"
+											v-loading="loading"
+											element-loading-text="报告生成中…"
+											element-loading-spinner="el-icon-loading"
+											element-loading-background="rgba(255, 255, 255, 0.9)">
 											<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
 											<el-table-column type="index" label="序号" width="50">
@@ -165,6 +172,12 @@
 											</el-table-column>
 
 											<el-table-column label="文件大小" prop="FILESIZE">
+											</el-table-column>
+
+											<el-table-column label="审核人" prop="CHECKER">
+											</el-table-column>
+
+											<el-table-column label="审核时间" prop="CHECK_DATE">
 											</el-table-column>
 
 											<el-table-column label="排序" width="130px" prop="SORT">
@@ -295,6 +308,7 @@
 		},
 		data() {
 			return {
+				loading: false,//加载动画
 				file_url: Config.file_url,//文件URL
 				po_url: Config.po_url,//PageOffice-URL
 				inputData: {},
@@ -567,7 +581,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.dataInfo.userList.splice(index,1);
+							this.detailgetData();//重新加载报告生成列表数据
 						}else{
 							this.$message({
 								message: res.data.resp_msg,
@@ -581,7 +595,7 @@
 
 					});
 				}else{
-					this.dataInfo.userList.splice(index,1);
+					this.detailgetData();//重新加载报告生成列表数据
 				}
 			},
 
@@ -744,19 +758,21 @@
 							app: 'workorder',//应用名称
 							moduleList: this.moduleFileList
 						};
+						this.loading = true;
 						this.$axios.post(Url1, {
 							params: postData
 						}).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.show=true;//弹出框不开关闭
 								this.$message({
-									message: '报告生成成功',
+									message: '报告生成成功，请上【已生成的报告文件】中查看',
 									type: 'success'
 								});
 								this.detailgetData();//重新加载报告生成列表数据
+								this.loading = false;
 							}else{
 								this.$message({
-									message: '已经回退了此成果文件，请勿重复回退',
+									message: res.data.resp_msg,
 									type: 'warning'
 								});
 							}

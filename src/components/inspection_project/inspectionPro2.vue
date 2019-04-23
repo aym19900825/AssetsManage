@@ -85,6 +85,15 @@
 			      </template>
 			    </el-table-column>
 
+					<el-table-column label="技术要求" sortable width="100" prop="TECHNICAL_REQUIRE">
+			      <template slot-scope="scope">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.TECHNICAL_REQUIRE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TECHNICAL_REQUIRE" :disabled="true" placeholder="自动生成">
+			        	</el-input><span v-else>{{scope.row.TECHNICAL_REQUIRE}}</span>
+							</el-form-item>
+			      </template>
+			    </el-table-column>
+
 				<!-- <el-table-column prop="STATUS" label="信息状态" sortable width="100" :formatter="judge">
 			      <template slot-scope="scope">
 			         <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.STATUS" disabled></el-input><span v-else>{{scope.row.STATUS}}</span>
@@ -184,6 +193,8 @@
 				<el-table-column label="单价" sortable align="right" prop="UNITCOST">
 				</el-table-column>
 				<el-table-column label="计量单位" sortable align="right" prop="UNIT">
+				</el-table-column>
+				<el-table-column label="技术要求" sortable prop="TECHNICAL_REQUIRE">
 				</el-table-column>
 				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
 				</el-table-column>
@@ -506,6 +517,7 @@
 								"UNITCOST": '',
 								"UNITDesc": '',
 								"UNIT": '',
+								"TECHNICAL_REQUIRE": '',//技术要求
 								"STATUS": '',
 								"VERSION": '',
 								"DEPTID": '',
@@ -535,6 +547,7 @@
 						"UNITCOST":  row.UNITCOST,
 						"UNITDesc":  row.UNITDesc,
 						"UNIT":  row.UNIT,
+						"TECHNICAL_REQUIRE":  row.TECHNICAL_REQUIRE,//技术要求
 						"STATUS": row.STATUS,
 						"DEPTID": row.DEPTID,
 						"ENTERBY": row.CHANGEBY,
@@ -597,6 +610,7 @@
 					this.catedata.UNITCOST = val.UNITCOST;
 					this.catedata.UNITDesc = val.UNITDesc;
 					this.catedata.UNIT = val.UNIT;
+					this.catedata.TECHNICAL_REQUIRE = val.TECHNICAL_REQUIRE;//技术要求
 					this.catedata.DEPTID = val.DEPTID;
 					this.catedata.VERSION = val.VERSION;
 					this.$emit('request');

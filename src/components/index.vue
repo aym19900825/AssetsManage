@@ -479,7 +479,5 @@ export default {
 
 
 
-
-
 </style>
 

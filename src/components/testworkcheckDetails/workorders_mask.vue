@@ -22,7 +22,10 @@
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.workorderForm.STATE==3" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 结束</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else><i class="icon-edit-3"></i>审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -877,7 +880,8 @@
 				reportvalue:{},//储存生成报告数据
 				currentuserinfo:{},//储存当前用户信息
 				showcreateagree:true,//生成分包协议按钮
-				addPersonTable: ''
+				addPersonTable: '',
+				nodeState: ''
 			};
 		},
 		methods: {
@@ -1497,7 +1501,7 @@
 											type: 'warning'
 										});
 									}else{
-									 	this.$refs.approvalChild.visible();
+									 	this.$refs.approvalChild.visible(this.nodeState);
 									}
 								})
 								}
@@ -1747,6 +1751,21 @@
 				this.noedit = true;
 				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
+				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
+					if(res.code.resp_code == 0){
+						switch(res.code.datas){
+							case 'shjy':
+								this.nodeState = '3';
+								break;
+							case 'shy':
+								this.nodeState = '4';
+								break;
+							case 'zjy':
+								this.nodeState = '5';
+								break;
+						}
+					}
+				}).catch((err) => {});
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
 					

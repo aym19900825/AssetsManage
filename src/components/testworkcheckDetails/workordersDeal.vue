@@ -25,7 +25,7 @@
 									<el-row>
 										<el-col>
 											<el-form-item label="样品检后状态" label-width="150px" label-position="left" style="text-align: left;">
-												<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="noedit">
+												<el-radio-group v-model="workorderForm.ITEM_CHECK_STATUS" :disabled="noedit||pageDisable">
 													<el-radio v-for="(data,index) in Select_ITEM_CHECK_STATUS" :key="index" :label="data.code">{{data.name}}</el-radio>
 												</el-radio-group>
 											</el-form-item>
@@ -69,7 +69,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
@@ -111,7 +111,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">添加结果</el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
@@ -268,7 +268,7 @@
 				</el-table-column>
 				<el-table-column label="检测结果" sortable prop="OTHER">
 					<template slot-scope="scope">
-						<el-input size="small" v-model="scope.row.MEMO"></el-input>
+						<el-input size="small" v-model="scope.row.MEMO" :disabled="pageDisable"></el-input>
 					</template>
 				</el-table-column>
 			</el-table>	
@@ -436,8 +436,8 @@
 				//输入检验结果必填
 				for (let i = 0; i < projectList.length; i++) {
 					var tmpList = projectList[i].WORKORDER_PROJECT_ITEMList;
-					var projectFlag = tmpList.some(()=>{
-						return tmpList[j].MEMO!=''
+					var projectFlag = tmpList.some((item)=>{
+						return item.MEMO!=''
 					});
 					if(!projectFlag){
 						this.$message({
@@ -450,8 +450,8 @@
 
 				for (let i = 0; i < contractList.length; i++) {
 					var tmpList = contractList[i].WORKORDER_CONTRACT_ITEMList;
-					var contractFlag = tmpList.some(()=>{
-						return tmpList[j].MEMO!=''
+					var contractFlag = tmpList.some((item)=>{
+						return item.MEMO!=''
 					});
 					if(!contractFlag){
 						this.$message({

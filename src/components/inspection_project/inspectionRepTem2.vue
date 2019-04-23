@@ -139,7 +139,7 @@
 				</el-table-column>
 				<el-table-column label="报告编号" width="125" sortable prop="RE_NUM">
 				</el-table-column>
-				<el-table-column label="报告模板类型" width="125" sortable prop="RE_TYPEDesc">
+				<el-table-column label="报告模板类型" width="205" sortable prop="RE_TYPEDesc">
 				</el-table-column>
 				<el-table-column label="报告描述" sortable prop="DECRIPTION">
 				</el-table-column>
@@ -288,7 +288,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionRepTem', {
+				this.$axios.get(this.basic_url + '/api-apps/appSelection/inspectionRepTem/page?', {//appSelection显示所有数据
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

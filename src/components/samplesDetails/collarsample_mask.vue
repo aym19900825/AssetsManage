@@ -112,7 +112,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品接收状态">
-												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS">
+												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS" :disabled="noedit">
 													<el-radio label="1">外观正常</el-radio>
 													<el-radio label="2">异常</el-radio>
 												</el-radio-group>

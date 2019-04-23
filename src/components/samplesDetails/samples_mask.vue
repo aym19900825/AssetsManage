@@ -776,6 +776,9 @@
 					this.samplesForm.DEPUTE_TYPE = data.DEPUTE_TYPE;
 					this.samplesForm.PRODUCE_TYPE = data.PRODUCE_TYPE;
 
+					this.samplesForm.P_NUM = data.P_NUM;
+					this.samplesForm.PRO_NUM = data.PRO_NUM;
+
 					this.resetBasisInfo1();
 				}else if(this.selval.length > 1){
 					this.$message({

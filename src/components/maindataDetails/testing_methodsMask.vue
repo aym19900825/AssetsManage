@@ -193,12 +193,12 @@
 					}],
 					M_NAME: [
 						{ required: true, message: '请填写中文名称', trigger: 'blur' },
-						{ min: 5, max: 125, message: '长度在 5 到 125 个字符', trigger: 'blur' },
+						{ min: 1, max: 125, message: '长度在 1 到 125 个字符', trigger: 'blur' },
 						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 					M_ENAME: [
 						{ required: true, message: '请填写英文名称', trigger: 'blur' },
-						{ min: 5, max: 255, message: '长度在 5 到 255 个字符', trigger: 'blur' },
+						{ min: 1, max: 255, message: '长度在 1 到 255 个字符', trigger: 'blur' },
 						{validator: this.Validators.isSpecificKey, trigger: 'blur'},
 					],
 					M_TYPE: [

@@ -46,13 +46,13 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input v-model="samplesForm.ITEMNUM" @keyup.native.enter="showInfo"  ref="itemnum"></el-input>
+												<el-input v-model="samplesForm.ITEMNUM" @keyup.native.enter="showInfo"  ref="itemnum"  :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" v-if="samplesForm.ITEM_TYPE=='2'">
 											<el-form-item label="样品序号" prop="ITEM_STEPs">
 												<!-- <el-input v-model="samplesForm.ITEM_STEPs" disabled></el-input> -->
-												<el-select v-model="ITEM_STEPs" multiple  @change="showQuality">
+												<el-select v-model="ITEM_STEPs" multiple  @change="showQuality"  :disabled="noedit">
 													<el-option
 														v-for="item in sampleList"
 														:key="item.ITEM_STEP"
@@ -104,7 +104,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品接收状态">
-												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS">
+												<el-radio-group v-model="samplesForm.ITEM_RECEPT_STATUS" :disabled="noedit">
 													<el-radio label="1">外观正常</el-radio>
 													<el-radio label="2">异常</el-radio>
 												</el-radio-group>
@@ -377,7 +377,7 @@
 						if(JSON.stringify(res.data)!='{}'){
 							var data = res.data;
 							this.$forceUpdate();
-							this.samplesForm.TYPE = data.PRODUCT_TYPE;
+							this.samplesForm.TYPE = data.TYPE;
 							this.samplesForm.PRODUCT = data.PRODUCT;
 
 							this.samplesForm.PRO_NUM = data.PRO_NUM;
@@ -440,6 +440,11 @@
 				this.rePerson = [];
 
 				this.samplesForm.TYPE = '';
+				this.samplesForm.PRODUCT ='';
+
+				this.samplesForm.PRO_NUM ='';
+				this.samplesForm.P_NUM ='';
+				
 				this.samplesForm.DESCRIPTION = '';
 				this.samplesForm.RETURN_DATE = '';
 				this.samplesForm.RETURN_PERSON = '';
@@ -452,7 +457,6 @@
 			},
 			childMethods() {//添加内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-					
 					// this.samplesForm.DEPARTMENT=res.data.deptName;
 					this.samplesForm.DEPTID = res.data.deptId;
 					this.samplesForm.ENTERBY = res.data.id;

@@ -220,7 +220,7 @@ export default {
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
       }else if(this.appName == 'group'){
         var url = this.basic_url + '/api-user/groups';
-      }else {
+      }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }
       this.$axios.get(url, {

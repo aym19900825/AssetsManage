@@ -136,7 +136,7 @@
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
-										<h6>设备故障提报量</h6>
+										<h6>工作总计处理量</h6>
 									</div>
 									<el-dropdown class="pull-right font13 blue">
 										<span class="el-dropdown-link">
@@ -146,7 +146,7 @@
 											<el-dropdown-item>昨天</el-dropdown-item>
 											<el-dropdown-item>近一周</el-dropdown-item>
 											<el-dropdown-item>近一月</el-dropdown-item>
-											<el-dropdown-item class="">近一年</el-dropdown-item>
+											<el-dropdown-item>近一年</el-dropdown-item>
 										</el-dropdown-menu>
 									</el-dropdown>
 								</div>
@@ -220,8 +220,8 @@ export default {
     },
 		methods: {
 			getop(){
-        this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
-      },
+				this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
+			},
 			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 				this.toDoNum = num;
 			},

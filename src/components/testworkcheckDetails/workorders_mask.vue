@@ -20,7 +20,7 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.workorderForm.STATE==3" class="pr10">
+							<span v-if="this.workorderForm.STATE!=16" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button>
@@ -1752,8 +1752,8 @@
 				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
 				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
-					if(res.code.resp_code == 0){
-						switch(res.code.datas){
+					if(res.data.resp_code == 0){
+						switch(res.data.datas){
 							case 'shjy':
 								this.nodeState = '3';
 								break;

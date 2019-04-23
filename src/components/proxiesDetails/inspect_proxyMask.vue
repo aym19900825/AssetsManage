@@ -1630,9 +1630,9 @@
 				this.special=true;
 				this.isEditing=false;
 				this.detailgetData();
-				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
-					if(res.code.resp_code == 0){
-						switch(res.code.datas){
+				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro/flow/NodeId/'+this.dataid, {}).then((res) => {
+					if(res.data.resp_code == 0){
+						switch(res.data.datas){
 							case 'lrwts':
 								this.nodeState = '1';
 								break;

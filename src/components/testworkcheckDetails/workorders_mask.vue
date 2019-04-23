@@ -546,68 +546,45 @@
 										<el-tab-pane label="成果数据" name="fifth">
 											<el-row>
 												<el-col :span="24">
-													<el-table :data="workorderForm.list" 
-											border 
-											stripe
-											highlight-current-row
-											@selection-change="selChange"
-											style="width: 100%;">
-													<el-table-column type="expand">
-														<template slot-scope="props">
-															<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
-																	border 
-																	stripe 
-																	:fit="true" 
-																	max-height="260" 
-																	style="width: 100%;" 
-																	@cell-click="iconOperation" 
-																	:default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
+													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
+															border 
+															stripe 
+															:fit="true" 
+															max-height="260" 
+															style="width: 100%;" 
+															@cell-click="iconOperation" 
+															:default-sort="{prop:'WORKORDER_DATA_TEMPLATEList', order: 'descending'}">
 
-																<el-table-column type="index" label="序号" width="50">
-																	<template slot-scope="scope">
-																		<span> {{scope.$index+1}} </span>
-																	</template>
-																</el-table-column>
+														<el-table-column type="index" label="序号" width="50">
+															<template slot-scope="scope">
+																<span> {{scope.$index+1}} </span>
+															</template>
+														</el-table-column>
 
-																<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
-																</el-table-column>
+														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+														</el-table-column>
 
-																<el-table-column label="文件名称" prop="FILENAME">
-																</el-table-column>
+														<el-table-column label="文件名称" prop="FILENAME">
+														</el-table-column>
 
-																<el-table-column label="文件大小" prop="FILESIZE">
-																</el-table-column>
-																
-																<el-table-column label="审核人" prop="CHECKER">
-																</el-table-column>
+														<el-table-column label="文件大小" prop="FILESIZE">
+														</el-table-column>
+														
+														<el-table-column label="审核人" prop="CHECKER">
+														</el-table-column>
 
-																<el-table-column label="审核时间" prop="CHECK_DATE">
-																</el-table-column>
+														<el-table-column label="审核时间" prop="CHECK_DATE">
+														</el-table-column>
 
-																<el-table-column fixed="right" label="操作" width="120px">
-																	<template slot-scope="scope">
-																		<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																			<i class="icon-eye"></i>
-																		</el-button>
-																	</template>
-																</el-table-column>
+														<el-table-column fixed="right" label="操作" width="120px">
+															<template slot-scope="scope">
+																<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
+																	<i class="icon-eye"></i> 预览
+																</el-button>
+															</template>
+														</el-table-column>
 
-															</el-table>
-														</template>
-													</el-table-column>
-
-													<el-table-column type="selection" width="55">
-													</el-table-column>
-
-													<el-table-column type="index" label="序号" width="55">
-													</el-table-column>
-
-													<el-table-column label="统一信用代码" prop="CODE" sortable>
-													</el-table-column>
-
-													<el-table-column label="分包方名称" prop="NAME" sortable>
-													</el-table-column>
-												</el-table>
+													</el-table>
 												</el-col>
 											</el-row>
 											<!-- <el-row class="pt20 pb20">
@@ -944,7 +921,7 @@
 							});
 						}else{
 							this.$message({
-							message: '已经接收工作任务单，请勿重复接收',
+							message: res.data.resp_msg,
 							type: 'warning'
 						});
 						}

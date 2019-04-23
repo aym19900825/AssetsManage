@@ -33,25 +33,16 @@
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
 						<el-col :span="12">
-							<div class="statisticsbg">
-								<div class="echart_title clearfix">
-									<div class="pull-left">
-										<h6><el-badge :value="toDoNum" :max="99" class="item">待办任务</el-badge></h6>
-									</div>
-									<div class="pull-right font13 blue">
-										<router-link :to="{path:'/task'}">更多<i class="el-icon-arrow-right el-icon--right"></i></router-link>
-									</div>
-								</div>
-								<div id="todoLists" class="pt40" style="width:100%; height:260px;">
-									<!-- 表格 -->
+						<div class="statisticsbg">
+						<el-tabs type="border-card">
+							<el-tab-pane label="待办任务">
+								<div id="todoLists" style="width:100%; height:260px;">
+										<!-- 表格 -->
 									<el-table ref="table" :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}"
-										v-loadmore="loadMore"
 										v-loading="loading"
 										element-loading-text="加载中…"
 										element-loading-spinner="el-icon-loading"
 										element-loading-background="rgba(255, 255, 255, 0.9)">
-										<!-- <el-table-column label="数据id" sortable width="140px" prop="bizid">
-										</el-table-column> -->
 										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
 											<template slot-scope="scope">
 												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
@@ -62,16 +53,43 @@
 										</el-table-column>
 										<el-table-column label="当前环节" sortable prop="name">
 										</el-table-column>
-										<!-- <el-table-column label="任务状态" sortable width="140px" align="center" prop="state">
-										</el-table-column> -->
 										<el-table-column label="接收时间" sortable width="160px" prop="createTime">
 										</el-table-column>
 									</el-table>
 									<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 									</el-pagination>
-									<!-- 表格 -->
+										<!-- 表格 -->
 								</div>
-							</div>
+							</el-tab-pane>
+							<el-tab-pane label="已办任务">
+								<div id="todoLists" style="width:100%; height:260px;">
+										<!-- 表格 -->
+									<el-table ref="table" :data="completeList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'completeList', order: 'descending'}"
+
+										v-loading="loading"
+										element-loading-text="加载中…"
+										element-loading-spinner="el-icon-loading"
+										element-loading-background="rgba(255, 255, 255, 0.9)">
+										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
+											<template slot-scope="scope">
+												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
+												</p>
+											</template>
+										</el-table-column>
+										<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
+										</el-table-column>
+										<el-table-column label="当前环节" sortable prop="name">
+										</el-table-column>
+										<el-table-column label="接收时间" sortable width="160px" prop="createTime">
+										</el-table-column>
+									</el-table>
+									<el-pagination background class="text-right pt10" @size-change="sizeChanges" @current-change="currentChanges" :current-page="page.currentPages" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSizes" layout="total, sizes, prev, pager, next" :total="page.totalCounts">
+									</el-pagination>
+										<!-- 表格 -->
+								</div>
+							</el-tab-pane>
+						</el-tabs>
+						</div>
 						</el-col>
 						<el-col :span="6">
 							<div class="statisticsbg" style="height: 290px">
@@ -187,19 +205,20 @@ export default {
       	loadSign: true, //鼠标滚动加载数据
       	loading: false,//默认加载数据时显示loading动画
         show: false,
-			fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
-			applistdata: [],
-			todoList:[],
-			searchList: {
-				createTime:'',	
-			},
-			page: {
-				currentPage: 1,
-				pageSize: 20,
-				totalCount: 0
-			},
+				fullHeight: document.documentElement.clientHeight - 100+'px',//获取浏览器高度
+				applistdata: [],
+				todoList:[],
+				completeList:[],
+				searchList: {
+					createTime:'',	
+				},
+				page: {
+					currentPage: 1,
+					pageSize: 20,
+					totalCount: 0
+				},
 
-      }
+				}
     },
 		methods: {
 			getop(){
@@ -227,6 +246,7 @@ export default {
 			},
 			//Table默认加载数据
 			requestData() {
+				//已办任务
 				this.loading = true;//加载动画打开
 				var data = {
 					page: this.page.currentPage,
@@ -251,41 +271,108 @@ export default {
 					
 					
 				})
-			},
-			//表格滚动加载
-			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
+        //已办任务
+				this.loading = true;//加载动画打开
+				var datas = {
+					page: this.page.currentPages,
+					limit: this.page.pageSizes,
 				}
+				var url = this.basic_url + '/api-apps/app/flow/flow/completedItems';
+				this.$axios.get(url, {params: datas}).then((res) => {
+					this.page.totalCounts = res.data.count;
+					//总的页数
+					let totalPage = Math.ceil(this.page.totalCounts / this.page.pageSizes);
+					if(this.page.currentPages >= totalPage) {
+						this.loadSign = false
+					} else {
+						this.loadSign = true
+					}
+					this.completeList = res.data.data;
+				
+					this.loading = false;//加载动画关闭
+					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPages < totalPage){
+						$('.el-table__body-wrapper table').find('.filing').remove();
+					}//滚动加载数据判断filing
+				}).catch((wrong) => {
+					
+					
+				})
 			},
-			//改变页数
+			// //表格滚动加载
+			// loadMore() {
+			// 	let up2down = sessionStorage.getItem('up2down');
+			// 	if(this.loadSign) {					
+			// 		if(up2down=='down'){
+			// 			this.page.currentPage++;
+			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+			// 				this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+			// 				return false;
+			// 			}
+			// 			let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+			// 			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+			// 				$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+			// 				sessionStorage.setItem('toBtm','true');
+			// 			}
+			// 		}else{
+			// 			sessionStorage.setItem('toBtm','false');
+			// 			this.page.currentPage--;
+			// 			if(this.page.currentPage < 1) {
+			// 				this.page.currentPage=1;
+			// 				return false;
+			// 			}
+			// 		}
+			// 		this.loadSign = false;
+			// 		setTimeout(() => {
+			// 			this.loadSign = true;
+			// 		}, 1000)
+			// 		this.requestData();
+			// 	}
+			// },
+			// 	//表格滚动加载
+			// loadMores() {
+			// 	let up2down = sessionStorage.getItem('up2down');
+			// 	if(this.loadSign) {					
+			// 		if(up2down=='down'){
+			// 			this.page.currentPages++;
+			// 			if(this.page.currentPages > Math.ceil(this.page.totalCounts / this.page.pageSizes)) {
+			// 				this.page.currentPages = Math.ceil(this.page.totalCounts/ this.page.pageSizes)
+			// 				return false;
+			// 			}
+			// 			let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+			// 			if(this.page.currentPages == Math.ceil(this.page.totalCounts / this.page.pageSizes)){
+			// 				$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+			// 				sessionStorage.setItem('toBtm','true');
+			// 			}
+			// 		}else{
+			// 			sessionStorage.setItem('toBtm','false');
+			// 			this.page.currentPages--;
+			// 			if(this.page.currentPages < 1) {
+			// 				this.page.currentPages=1;
+			// 				return false;
+			// 			}
+			// 		}
+			// 		this.loadSign = false;
+			// 		setTimeout(() => {
+			// 			this.loadSign = true;
+			// 		}, 1000)
+			// 		this.requestData();
+			// 	}
+			// },
+			//代办改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//已办改变页数
+			sizeChanges(val) {
+				this.page.pageSizes = val;
+				if(this.page.currentPages == Math.ceil(this.page.totalCounts / this.page.pageSizes)){
 					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
@@ -297,6 +384,17 @@ export default {
 			currentChange(val) {
 				this.page.currentPage = val;
 				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
+					sessionStorage.setItem('toBtm','true');
+				}else{
+					sessionStorage.setItem('toBtm','false');
+				}
+				this.requestData();
+			},
+			//已办当前页数
+			currentChanges(val) {
+				this.page.currentPages = val;
+				if(this.page.currentPages == Math.ceil(this.page.totalCounts / this.page.pageSizes)){
 					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
 					sessionStorage.setItem('toBtm','true');
 				}else{
@@ -415,7 +513,6 @@ export default {
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					this.$store.dispatch('setcurrentuserNavAct',res.data);
-					 console.log(this.$store.state.currentuser);
 						}).catch((err) => {
 						});
 			},

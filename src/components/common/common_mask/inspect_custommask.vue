@@ -4,25 +4,26 @@
 			<el-form inline-message :model="searchList" label-width="70px">
 				<el-row :gutter="10">
 					<el-col :span="5">
-						<el-form-item label="统一社会信用代码" prop="CODE" label-width="100px">
-							<el-input v-model="searchList.CODE">
+						<el-form-item label="统一社会信用代码" prop="customercode" label-width="100px">
+							<el-input v-model="searchList.CUSTOMERCODE">
 							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="5">
-						<el-form-item label="单位名称" prop="NAME">
-							<el-input v-model="searchList.NAME">
+						<el-form-item label="单位名称" prop="customername">
+							<el-input v-model="searchList.CUSTOMERNAME">
 							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="5">
-						<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
-							<el-input v-model="searchList.CONTACT_ADDRESS">
+						<el-form-item label="联系地址" prop="customeraddress">
+							<el-input v-model="searchList.CUSTOMERADDRESS">
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="2">
+					<el-col :span="4">
 						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 					</el-col>
 				</el-row>
 			</el-form>
@@ -81,9 +82,9 @@
 			selUser: [],//接勾选的值
 			type:'',
 			searchList: {
-				NAME: '',
-				CODE: '',
-				CONTACT_ADDRESS: '',
+			CUSTOMERCODE: '',
+			CUSTOMERADDRESS: '',
+			CUSTOMERNAME: '',
 			},
 			page: {
 				currentPage: 1,
@@ -125,6 +126,13 @@
 		this.page.currentPage = 1;
 		this.page.pageSize = 20;
 		this.requestData();
+	},
+	resetbtn(){
+		this.searchList = {
+			CUSTOMERCODE: '',
+			CUSTOMERADDRESS: '',
+			CUSTOMERNAME: '',
+		}
 	},
   	//点击关闭按钮
 	close() {
@@ -192,7 +200,10 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
-			DEPTID:this.$store.state.currentcjdw[0].id,
+			// DEPTID:this.$store.state.currentcjdw[0].id,
+			CUSTOMERCODE:this.searchList.CUSTOMERCODE,
+			CUSTOMERADDRESS:this.searchList.CUSTOMERADDRESS,
+			CUSTOMERNAME:this.searchList.CUSTOMERNAME,
 			// NAME: this.searchList.NAME,
 			// CODE: this.searchList.CODE,
 			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,

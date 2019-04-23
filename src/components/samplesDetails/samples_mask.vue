@@ -522,6 +522,7 @@
 						{ required:true, trigger:'blur', message:'必填'},
 						{ trigger:'blur', validator: this.Validators.isSpecificKey}
 					],//样品名称
+					MODEL: [{ required:true, trigger:'blur', message:'必填'}],//型号
 					MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
 					// SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
 					// SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
@@ -537,7 +538,7 @@
 					STATUSDATE: [{required:true, message: '请选择', trigger:'change' }],
 					PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
 					PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
-					MODEL: [{ required:true, trigger:'change', validator: this.Validators.isSpecificKey}],//型号
+					// MODEL: [{ required:true, trigger:'change', validator: this.Validators.isSpecificKey}],//型号
 					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其他资料
 					MEMO: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//备注
 				},

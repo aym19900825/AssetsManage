@@ -311,6 +311,7 @@
 					P_NUM: '',
 					UNIT: '',//计量单位
 					QUALIFICATION: '',
+					TECHNICAL_REQUIRE:'',//技术要求
 					QUALIFICATIONList: [],
 					QUANTITY: '',
 					STATUS: '1',

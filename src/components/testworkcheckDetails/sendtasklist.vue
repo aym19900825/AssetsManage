@@ -286,7 +286,7 @@
 													<font>选择</font>
 												</el-button>
 											</div>
-											<el-table :data="dataInfo.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_BASISList', order: 'descending'}">
+											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
 												
 												<el-table-column prop="S_NUM" label="编码" sortable width="150px">
 													<template slot-scope="scope">
@@ -318,7 +318,7 @@
 														</el-form-item>	
 													</template>
 												</el-table-column>
-												
+
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
@@ -343,7 +343,7 @@
 											<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260"
 											 @cell-click="iconOperation" style="width: 100%;" 
 											 :summary-method="getSummaries" :show-summary="true"
-											 :default-sort="{prop:'workorderbasisList', order: 'descending'}" @selection-change="SelChange">
+											 :default-sort="{prop:'WORKORDER_PROJECTList', order: 'descending'}" @selection-change="SelChange">
 												<el-table-column type="selection" width="55" fixed align="center">
 												</el-table-column>
 
@@ -670,6 +670,7 @@
 					PROJ_NUM:'',
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CONTRACTList:[],//分包项目
+					WORKORDER_BASISList:[],
 				},
 				PROJECTLIST:[],
 				CONTRACTLIST:[],
@@ -1072,6 +1073,7 @@
 						this.workorderForm = res.data.datas;
 						var workorderForm=res.data.datas
 						workorderForm.CJDW = Number(workorderForm.CJDW);
+						this.show=true;
 						for(let i = 0;i<workorderForm.WORKORDER_PROJECTList.length;i++){
 							workorderForm.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(workorderForm.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 							this.getleader(workorderForm.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
@@ -1087,7 +1089,7 @@
 						}
 						for(let i = 0;i<workorderForm.WORKORDER_CONTRACTList.length;i++){
 							workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
-							this.getleader(workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
+							   this.getleader(workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
 							// workorderForm.WORKORDER_CONTRACTList[i].LEADER = Number(workorderForm.WORKORDER_CONTRACTList[i].LEADER);
 							// console.log(workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 							// this.visableleader(workorderForm.WORKORDER_CONTRACTList[i].LEADER,'CONTRACTList',i,'value');
@@ -1101,42 +1103,14 @@
 							// 	workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = [];
 							// }
 						}
-						this.show=true;
 					}).catch((wrong) => {
 
 					})
-				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
-				this.$axios.get(url, {}).then((res) => {
-					
-					if(res.data.resp_code==1){
-						this.start=true;
-						this.approval=false;
-					}else{
-						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
-						this.$axios.get(url, {}).then((res) => {
-							
-							res.data.CJDW = Number(res.data.CJDW);
-							var resullt=res.data.datas;
-							var users='';
-							for(var i=0;i<resullt.length;i++){
-								users = users + resullt[i].username+",";
-							}
-							if(users.indexOf(this.username) != -1){
-								this.approval=true;
-								this.start=false;
-							}else{
-								this.approval=false;
-								this.start=false;
-							}
-						});
-					}
-				});
 			},
 			// 保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
-								console.log(this.workorderForm);
 							//检验项目与要求的数据id
               var selectData= this.PROJECTLIST;
 		          var deleteid = [];
@@ -1163,15 +1137,12 @@
 									});
 							}else{
 									for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-										console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
-									console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.length);
 										this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.join(',');
 								}
 								
 							}
 							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-								console.log(this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION);
 								if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
 									this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
 								}
@@ -1179,7 +1150,6 @@
 				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
 					this.$axios.post(url,{WORKORDER:this.workorderForm,PROJECTLIST:ids,CONTRACTLIST:ides}).then((res) => {
-						console.log(this.workorderForm);
 						if(res.data.resp_code == 0) {
 							this.show = false;
 							this.$emit('request');

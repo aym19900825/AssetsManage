@@ -122,8 +122,8 @@
 										<div class="pt40">
 											<p class="middle_font pt10">
 												<span class="red">待办工作: {{toDoNum}}</span>
-												<span class="textblue">执行中: {{toDoDing}}</span>
-												<span class="green">已完成: {{toDoFinish}}</span>
+												<span class="textblue">已办工作: {{toDoDing}}</span>
+												<!-- <span class="green">已完成: {{toDoFinish}}</span> -->
 											</p>
 										</div>
 									</div>
@@ -131,8 +131,8 @@
 										<el-progress type="circle" :percentage="complete" color="#9399F3"></el-progress>
 											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
-												<div class="circle_font">
-													<p class="font24">{{complete}}%</p>
+												<div class="circle_font text-center">
+													<!-- <p class="font24">{{complete}}%</p> -->
 													<p>工作完成率</p>
 												</div>
 										</div>
@@ -201,8 +201,8 @@ export default {
     data() {
       return {
 				complete:0,
-				toDoNum: 0,
-				toDoDing: 0,
+				toDoNum: 0,//待办工作
+				toDoDing: 0,//已办任务
 				toDoFinish: 0,
       	roleid:1,
       	basic_url: Config.dev_url,
@@ -226,7 +226,9 @@ export default {
     },
 		methods: {
 			getop(){
-				this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
+				this.complete=parseInt(this.toDoDing/this.toDoNum);//工作完成率
+				console.log(this.complete);
+				// this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
 			},
 			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 				this.toDoNum = num;
@@ -529,6 +531,7 @@ export default {
 			this.requestData();
 			//一级菜单
 			// this.initEchart();//调用饼状图图表函数名称
+			// this.getop();
 			this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
 			this.getTodoDing();//打开页面就执行getTodoDing待办任务数函数
 			this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数

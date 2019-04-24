@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<el-form inline-message :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" class="demo-ruleForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATE!=3">
+							<span v-if="this.dataInfo.STATE!=3" class="pr10">
 								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 提交审批</el-button>
 								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'"><i class="icon-edit-3"></i> 审批</el-button>
 								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState=='3'"><i class="icon-edit-3"></i> 确认接收</el-button>
@@ -1339,8 +1339,8 @@
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					ACTUAL_PERCENT:0,
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
+					CHECK_COST:0,//合同费用
+					ACTUALCOST:0,//实收费用
 					CONTRACTCOST:0,//标准费用
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],

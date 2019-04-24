@@ -456,24 +456,23 @@
 									type: 'success'
 								});
 								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
+									this.docParm.recordid = res.data.datas.ID;
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
-									this.CATEGORY.ID = res.data.datas.id;
+									this.CATEGORY.ID = res.data.datas.ID;
 									this.CATEGORY.RE_NUM = res.data.datas.RE_NUM;
-								}else{
-									this.$emit('request');
-									this.$emit('reset');
-									this.visible();
 								}
 								if(opt == 'Update'){
 									this.show=false;
-								}else{
-									this.show=true;
+									this.$emit('request');
+									this.$emit('reset');
 								}
+								if(opt=='Submit'){
+									this.show=true;
 									this.$emit('request');
 									this.$emit('reset');
 									this.visible();
+								}
 							}else{
 								this.show = true;
 								if(res.data.resp_code == 1) {

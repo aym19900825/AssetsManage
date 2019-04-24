@@ -583,10 +583,10 @@
 						this.$axios.post(url, this.dataInfo).then((res) => {
 							if(res.data.resp_code == 0) {
 								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
+									this.docParm.recordid = res.data.datas.ID;
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
-									this.dataInfo.ID = res.data.datas.id;
+									this.dataInfo.ID = res.data.datas.ID;
 									this.dataInfo.S_NUM = res.data.datas.S_NUM;
 								}else{
 									this.$message({

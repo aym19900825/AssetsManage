@@ -25,7 +25,7 @@
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 结束</el-button>
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else><i class="icon-edit-3"></i>审批</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'"><i class="icon-edit-3"></i>审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -651,9 +651,9 @@
 							<el-button @click="close">取消</el-button>
 						</div>
 						<div class="content-footer" v-show="viewtitle">
-							<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-							<el-button type="warning" @click="sendback">回退成果数据</el-button>
-							<el-button type="success" @click="checkchildlist">查看子任务单</el-button>
+							<el-button type="primary" v-show="this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
+							<el-button type="warning" v-show="this.workorderForm.STATE==5" @click="sendback">回退成果数据</el-button>
+							<el-button type="success" v-show="this.workorderForm.STATE!=1&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="checkchildlist">查看子任务单</el-button>
 						</div>
 					</el-form>
 				</div>

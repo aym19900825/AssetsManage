@@ -184,7 +184,7 @@
 						 	<el-row :gutter="30">
 						 		<el-col :span="24">
 						 			<el-form-item label="备注" prop="tips" label-width="100px">
-								    	<el-input type="textarea" :rows="3" v-model="personinfo.tips"></el-input>
+								    	<el-input type="textarea" rows="3" v-model="personinfo.tips"></el-input>
 									</el-form-item>	
 						 		</el-col>
 						 	</el-row>

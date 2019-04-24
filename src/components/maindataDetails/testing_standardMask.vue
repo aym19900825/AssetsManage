@@ -139,7 +139,7 @@
 			<el-dialog :modal-append-to-body="false" title="信息" :visible.sync="dialogFormVisible" :before-close="resetEditBox">
 				<el-form >
 					<el-form-item label="英文名称" :label-width="formLabelWidth" prop="editDataInfo">
-						<el-input type="textarea" :rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
+						<el-input type="textarea" rows="4" v-model="editDataInfo" autocomplete="off"></el-input>
 					</el-form-item>
 					<el-form-item class="text-center pt20">
 						<el-button type="primary" @click="saveEditBox">确 定</el-button>

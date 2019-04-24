@@ -138,19 +138,6 @@
 		this.dialogCategory = true;
 		this.requestData();
   	},
-  	loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
-	},
 	requestData() {//高级查询字段
         this.loading = true;
         var url = this.basic_url + '/api-user/depts/treeMapAll';

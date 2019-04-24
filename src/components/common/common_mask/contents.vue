@@ -49,7 +49,7 @@
 			 :default-sort="{prop:'projectList', order: 'descending'}"
 			  @selection-change="SelChange"
 			  @current-change="setSel"
-			   v-loadmore="loadMore">
+			  >
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
 				<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
@@ -206,19 +206,6 @@
 		this.page.currentPage = 1;//页码信息重置
 		this.page.pageSize = 10;//页码信息重置
 	},
-    loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
-    },
     searchinfo(index) {
         this.page.currentPage = 1;
         this.page.pageSize = 10;

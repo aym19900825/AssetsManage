@@ -449,12 +449,7 @@ const validators = {
 					if(!validators.SpecificWord(value)) {
 						callback(new Error('不支持特殊符号'));
 					} else {
-						var regschinese = /^[\u4e00-\u9fa5]{0,}$/
-						if(!regschinese.test(value)) {
-							callback(new Error('不支持中文'));
-						} else {
-							callback();
-						}
+						callback();
 					}
 				}
 			}, 500);

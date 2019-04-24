@@ -204,8 +204,9 @@
 			data = {
 				page: this.page.currentPage,
 				limit: this.page.pageSize,
+				ISPM: '是'
 			};
-			url = this.basic_url + '/api-apps/app/rawDataAsset';
+			url = this.basic_url + '/api-apps/app/asset';
 		}
 		this.$axios.get(url, {
 			params: data

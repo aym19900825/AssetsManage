@@ -1524,9 +1524,15 @@
 			refresh(){
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
-							var resullt=res.data.datas;
-							for(var i=0;i<resullt.length;i++){
+						var resullt=res.data.datas;
+						for(var i=0;i<resullt.length;i++){
 							this.users =this.users + resullt[i].username+",";
+						}
+						if(res.data.datas.length == 0){
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+							return;
 						}
 						if(this.users.indexOf(this.username) != -1){
 							this.approval=true;
@@ -1536,7 +1542,7 @@
 							this.approval=false;
 							this.start=false;
 							this.detailgetData();
-					}
+						}
 				});	
 			},
 			// 这里是修改

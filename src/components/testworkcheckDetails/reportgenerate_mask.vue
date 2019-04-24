@@ -493,10 +493,17 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 					this.reptemDetailId=res.data.data[0].ID;
-					// console.log(res.data.data[0].RE_NUM);
+					if (this.datanum==undefined){
+						this.templateNum=res.data.data[0].RE_NUM;
+						this.reportTemplate.RE_TYPE=res.data.data[0].RE_NUM;
+					}else {
+						this.reportTemplate.RE_TYPE=this.datanum;
+					};
+					console.log(this.datanum);
 					// console.log(res.data.data[0].ID);
 					// this.reptemDetailNum=res.data.data[0].RE_NUM
-					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
+					
+					// this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
 					// this.templatefileid = res.data.data[0].ID;
@@ -900,15 +907,12 @@
 				this.show = true;
 				this.dataid = id;
 				this.datanum = teplateNum;//从工作任务单过来的模板编码
-				this.requestData();
 				this.firstBtn = true;//显示取消按钮
 				this.secondBtn = true;//显示保存按钮
 				//判断当前模板编号，如果从父组件传过来值则用传过来的，如果没有则用选的值this.reportTemplate.RE_TYPE;
-				if (!!this.datanum){
-						this.templateNum=this.reportTemplate.RE_TYPE;
-					}else {
-						this.reportTemplate.RE_TYPE=this.datanum;
-					};
+				// this.reportTemplate.RE_TYPE=this.datanum;
+				this.requestData();//加载数据
+				
 				console.log(this.templateNum);
 				console.log(this.reportTemplate.RE_TYPE);
 			},

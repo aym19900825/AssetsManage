@@ -573,10 +573,46 @@
 							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
-								this.show = true;
-								this.addtitle = false;
-				    			this.modifytitle = true;
-								// this.close();
+								var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';
+								this.$axios.post(url, this.dataInfo).then((res) => {
+									if(res.data.resp_code == 0) {
+										if(opt == 'docUpload'){
+											this.docParm.recordid = res.data.datas.ID;
+											this.docParm.model = 'edit';
+											this.$refs.docTable.autoLoad();
+											this.dataInfo.ID = res.data.datas.ID;
+											this.dataInfo.S_NUM = res.data.datas.S_NUM;
+										}else{
+											this.$message({
+												message: '保存成功',
+												type: 'success'
+											});
+											if(opt=='Update'){
+												this.show=false;
+											}else{
+												this.show=true;
+											}
+											this.$emit('request');
+											this.$emit('reset');
+											this.visible();
+										}
+									}else{
+										this.show = true;
+										if(res.data.resp_code == 1) {
+											this.$message({
+												message: res.data.resp_msg,
+												type: 'warning'
+											});
+										}else{
+											this.$message({
+												message:'相同数据不可重复添加！',
+												type: 'warning'
+											});
+										}
+									}						
+								}).catch((err) => {
+
+								});
 							});	
 						}else{
 						var url = this.basic_url + '/api-apps/app/inspectionSta/saveOrUpdate';

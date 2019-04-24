@@ -69,6 +69,13 @@ export default {
             if (event) event.preventDefault();
             var _this = this;
             var tabs = _this.tabs;
+            if(tab.name=='首页'){
+                this.$message({
+                    message: '首页tab页签不允许删除！',
+                    type: 'warning'
+                });
+                return;
+            }
             if(tabs.length == 1){
                 //只有一个选项卡
                 this.$router.push({path: '/index'});

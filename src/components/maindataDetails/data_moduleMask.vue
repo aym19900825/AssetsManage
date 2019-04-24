@@ -429,7 +429,7 @@
 				});
 			},
 			//这是查看
-			view() {
+			view(dataid) {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -440,13 +440,22 @@
 				this.show = true;	
 				
 				var _this = this;
-				setTimeout(function(){
-					_this.docParm.model = 'view';
-					_this.docParm.appname = '检验检测项目_原始数据模板';
-					_this.docParm.recordid = _this.CATEGORY.ID;
-					_this.docParm.appid = 17;
-					_this.$refs.docTable.getData();
-				},100);
+				var url = this.basic_url + '/api-apps/app/rawDataTem/' + dataid;
+				this.$axios.get(url, {}).then((res) => {
+					for(var i=0;i<res.data.RAW_DATA_TEMPATE_DETAILList.length;i++){
+						res.data.RAW_DATA_TEMPATE_DETAILList[i].isEditing = false;
+					}
+					this.CATEGORY = res.data;
+					setTimeout(function(){
+						_this.docParm.model = 'view';
+						_this.docParm.appname = '检验检测项目_原始数据模板';
+						_this.docParm.recordid = dataid;
+						_this.docParm.appid = 17;
+						_this.$refs.docTable.getData();
+					},100);
+					this.show = true;
+				}).catch((err) => {});
+				
 			},
 			//点击更新按钮
 			update(CATEGORY) {
@@ -666,19 +675,6 @@
                 }).catch(() => {
 
             	});
-			},
-			loadMore () {//表格滚动加载
-			    if (this.loadSign) {
-			        this.loadSign = false
-			     	this.page.currentPage++
-			     	if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       		return
-			     	}
-				    setTimeout(() => {
-				        this.loadSign = true
-				    }, 1000)
-			     	this.requestData_doclinks()
-			    }
 			},
 			//时间格式化
 			dateFormat(row, column) {

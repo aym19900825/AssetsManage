@@ -46,6 +46,7 @@
  
 												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 												
+												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0&&item.title=='检测结论'&&inputData[item.param]==1" v-show="true" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0&&item.title=='检测结论'&&inputData[item.param]==2" v-show="false" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" style="width:100%;">

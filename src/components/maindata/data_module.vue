@@ -336,7 +336,7 @@
 			//查看
 			 view(data) {
 			 	this.CATEGORY =data;
-				this.$refs.categorymask.view();
+				this.$refs.categorymask.view(this.CATEGORY.ID);
 			},
 			//高级查询
 			modestsearch() {

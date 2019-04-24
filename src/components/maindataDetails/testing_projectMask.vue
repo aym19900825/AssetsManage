@@ -219,7 +219,7 @@
 					style="width: 100%;" 
 					:default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" 
 					@selection-change="SelChange" 
-					v-loadmore="loadMore">
+					>
 					<el-table-column type="selection" fixed width="55">
 					</el-table-column>
 					<el-table-column label="分发号" width="155" sortable prop="NUM">
@@ -488,19 +488,6 @@
 					this.resourceData = res.data.data;
 				});
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
-			 },
 			getwork(){
 				this.requestData();
 				this.dialogVisible2 = true;

@@ -585,7 +585,7 @@
 					return;
 				}else if(this.selMenu[0].STATE == 1){
 					this.$message({
-						message: '此工作任务单未接受任务，不允许任务处理！',
+						message: '此任务单还未接收。',
 						type: 'warning'
 					});
 					return;

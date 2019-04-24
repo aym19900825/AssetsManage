@@ -25,7 +25,16 @@
             <font>删除行</font>
         </el-button>
     </div>
-    <el-table :data="doc" row-key="ID" border stripe highlight-current-row style="width: 100%;"  @selection-change="handleSelFile">
+    <el-table ref="table"
+              :data="doc" 
+              row-key="ID" 
+              border 
+              stripe 
+              highlight-current-row
+              style="width: 100%;"  
+              @selection-change="handleSelFile"
+              @current-change="singleTable"
+              >
         <el-table-column type="selection" width="55">
         </el-table-column>
         <el-table-column type="index" sortable label="序号" width="50">
@@ -105,6 +114,10 @@ export default {
     },
     props: ['docParm'],
     methods: {
+        singleTable(row){
+            this.$refs.table.clearSelection();
+            this.$refs.table.toggleRowSelection(row);
+        },
         autoLoad(){
             setTimeout(function(){
                 $('#excelFile').click();

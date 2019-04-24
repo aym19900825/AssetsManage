@@ -248,7 +248,7 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="资质信息" name="first">
-											<div class="table-func table-funcb" v-show="noviews">
+											<div v-if="!disabled" class="table-func table-funcb" v-show="noviews">
 												<el-button type="success" size="mini" :disabled="disabled" round @click="addfield1" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
@@ -316,8 +316,8 @@
 											<!-- </el-form> -->
 										</el-tab-pane>
 										<el-tab-pane label="培训" name="second">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" :disabled="disabled" round @click="addfield2" v-if="!viewtitle">
+											<div v-if="!disabled" class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield2" v-if="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -371,8 +371,8 @@
 										</el-tab-pane>
 
 										<el-tab-pane label="IP地址管理" name="third">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" :disabled="disabled" round @click="addfield3" v-if="!viewtitle">
+											<div v-if="!disabled" class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" round @click="addfield3" v-if="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>

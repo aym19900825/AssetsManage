@@ -41,14 +41,6 @@
 										</el-col>
 									</el-row>
 									<el-row>
-										<el-col :span="8">&nbsp;</el-col>
-										<el-col :span="16">
-											<el-form-item label="英文名称" prop="M_ENAME">
-												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="8">
 											<el-form-item label="类别" prop="M_TYPE">
 												<!-- <el-select v-model="testingForm.M_TYPE" placeholder="请选择类别" style="width: 100%;">
@@ -57,6 +49,14 @@
 												<el-input v-model="testingForm.M_TYPE" placeholder="请输入类别" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="16">
+											<el-form-item label="英文名称" prop="M_ENAME">
+												<el-input v-model="testingForm.M_ENAME" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										
 										<el-col :span="8" v-if="dept">
 											<el-form-item label="机构">
 												<el-input v-model="testingForm.DEPTIDDesc" :disabled="true"></el-input>

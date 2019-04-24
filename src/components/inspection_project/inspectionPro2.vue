@@ -87,7 +87,7 @@
 
 					<el-table-column label="技术要求" sortable width="100" prop="TECHNICAL_REQUIRE">
 			      <template slot-scope="scope">
-			        <el-form-item :prop="'inspectionList.'+scope.$index + '.TECHNICAL_REQUIRE'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+			        <el-form-item :prop="'inspectionList.'+scope.$index + '.TECHNICAL_REQUIRE'">
 			        	<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.TECHNICAL_REQUIRE" :disabled="true" placeholder="自动生成">
 			        	</el-input><span v-else>{{scope.row.TECHNICAL_REQUIRE}}</span>
 							</el-form-item>

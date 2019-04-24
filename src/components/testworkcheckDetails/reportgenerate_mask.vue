@@ -172,7 +172,7 @@
 											@selection-change="selChange"
 											:default-sort="{prop:'reportData.List', order: 'descending'}"
 											v-loading="loading"
-											element-loading-text="报告生成中，请稍等…"
+											element-loading-text="报告生成中，请勿关闭此窗口…"
 											element-loading-spinner="el-icon-loading"
 											element-loading-background="rgba(255, 255, 255, 0.9)">
 											<el-table-column type="selection" fixed width="55" align="center"></el-table-column>

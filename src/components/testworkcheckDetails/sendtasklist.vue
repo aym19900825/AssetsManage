@@ -599,9 +599,9 @@
 		data() {
 			return {
 				pickerOptions1: {
-          disabledDate(time) {
-            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
-          }
+					disabledDate: (time) => {
+						 return time.getTime() > new Date(this.workorderForm.COMPLETE_DATE).getTime()- 1*24*60*60*1000;
+					}
         },
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,

@@ -454,7 +454,6 @@
 				 style="width: 100%;" :default-sort="{prop:'gridDataList', order: 'descending'}"
 				  @selection-change="SelChange"
 					@current-change="setSel"
-					 v-loadmore="loadMore"
 				v-loading="loading"  
 				element-loading-text="加载中…"
 				element-loading-spinner="el-icon-loading"
@@ -1442,21 +1441,6 @@
 	    this.$refs.singleTable.clearSelection();
 		this.$refs.singleTable.toggleRowSelection(row);
   },
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData()
-			   }
-			 },
-		
-			
 			 //启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;

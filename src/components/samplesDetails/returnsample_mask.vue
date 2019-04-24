@@ -46,7 +46,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input v-model="samplesForm.ITEMNUM" @keyup.native.enter="showInfo"  ref="itemnum"  :disabled="noedit"></el-input>
+												<el-input v-model="samplesForm.ITEMNUM" @keyup.native="showInfo($event)"  ref="itemnum"  :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" v-if="samplesForm.ITEM_TYPE=='2'">
@@ -306,8 +306,10 @@
 			// removeStep(){
 			// 	this.samplesForm.QUALITY--;
 			// },
-			showInfo(){
-				this.getCodeInfo();
+			showInfo(e){
+				if(e.keyCode == '13' || e.keyCode == '86'){
+					this.getCodeInfo();
+				}
 			},
 			showQuality(){
 				this.samplesForm.QUALITY = this.ITEM_STEPs.length;

@@ -56,7 +56,8 @@
 										<el-col :span="8">
 											<!-- @input="getCodeInfo" -->
 											<el-form-item label="样品编号" prop="ITEMNUM">
-												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @keyup.native.enter="showInfo" :disabled="noedit"></el-input>
+												<el-input id="itemnumId" v-model="samplesForm.ITEMNUM" @keyup.native="showInfo($event)" :disabled="noedit"></el-input>
+												<!-- <input type="text" id="itemNumInput"@keyup="getnumcode($event)" /> -->
 											</el-form-item>
 											<!-- <input type="text" name="fname" id="idtest"/> -->
 										</el-col>
@@ -317,15 +318,17 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			}
 		},
 		methods: {
-			showInfo(){
-				var str = this.samplesForm.ITEMNUM;
-				if(str.indexOf('#')!=-1){
-					this.sampleAutoInput = true;
-					this.getCodeInfo();
-				}else{
-					this.sampleAutoInput = false;
-					this.getSampleList(str);
-					this.getSampleObj(str);
+			showInfo(e){
+				if(e.keyCode == '13' || e.keyCode == '86'){
+					var str = this.samplesForm.ITEMNUM;
+					if(str.indexOf('#')!=-1){
+						this.sampleAutoInput = true;
+						this.getCodeInfo();
+					}else{
+						this.sampleAutoInput = false;
+						this.getSampleList(str);
+						this.getSampleObj(str);
+					}
 				}
 			},
 			getSampleObj(itemnum){
@@ -682,26 +685,9 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			},
 			getnumcode(e){
 				console.log(e.keyCode);
-				
-// 				var that = this;
-//     			var nextTime = new Date().getTime();
-// 				if(this.lastTime != 0 && nextTime - this.lastTime <= 30) {
-// 					console.log('扫码枪输入');
-// 					that.getCodeInfo();
-// 				}
-// 				if( nextTime - this.lastTime > 1000){
-// 					console.log('键盘输入');
-// 					if(e.keycode == 13){
-// 						that.getCodeInfo();
-// 					}
-// 				}
-//     			this.lastTime = nextTime;
 			}
 		},
 		mounted() {
-			$("#itemnumId").keydown(function(e){
-				console.log(e.keyCode);
-			});
 		},
 	}
 </script>

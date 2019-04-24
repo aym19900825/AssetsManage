@@ -35,7 +35,7 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="检验检测项依据" name="first">
-											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="260" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
+											<el-table :data="workorderForm.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" max-height="360" @cell-click="iconOperation" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'workorderForm.WORKORDER_BASISList', order: 'descending'}">
 												<el-table-column type="index" label="序号" width="50">
 													<template slot-scope="scope">
 														<span> {{scope.$index+1}} </span>
@@ -60,7 +60,7 @@
 													<i class="icon-eye"></i> <font>所有模板</font>
 												</el-button>
 											</div>
-							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="360" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 												<el-table-column prop="P_DESC" label="检验检测项目名称" sortable>
 												</el-table-column>
 							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" width="220px" sortable>
@@ -91,7 +91,7 @@
 														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">查看模板</el-button>
 													</template>
 												</el-table-column>
-												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable width="160px">
+												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.INSPECT_DATE'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
 															<div class="block">
@@ -104,7 +104,7 @@
 							            	</el-table>
 										</el-tab-pane>
 										<el-tab-pane label="分包项目与要求" name="three">
-							            	<el-table :data="workorderForm.WORKORDER_CONTRACTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
+							            	<el-table :data="workorderForm.WORKORDER_CONTRACTList" border stripe :fit="true" max-height="360" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 												<el-table-column prop="P_REMARKS" label="检测项目名称" sortable>
 												</el-table-column>
 							            		<el-table-column prop="REQUIRES" label="要求" width="220px" sortable>
@@ -219,7 +219,7 @@
 														  border 
 														  stripe 
 														  :fit="true" 
-														  max-height="260" 
+														  max-height="360" 
 														  style="width: 100%;">
 														<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
 													    </el-table-column>

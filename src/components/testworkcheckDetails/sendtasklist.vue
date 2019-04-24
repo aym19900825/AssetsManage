@@ -310,14 +310,23 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="S_DESC" label="标准内容" sortable>
+												<el-table-column prop="S_NAME" label="标准内容" sortable>
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_DESC'" >
-															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入" :disabled="noedit">
-                              </el-input> 
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_NAME'" >
+															<el-input size="small" v-model="scope.row.S_NAME" placeholder="请输入" :disabled="noedit">
+															</el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
+
+												<!-- <el-table-column prop="S_DESC" label="标准内容" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_DESC'" >
+															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入" :disabled="noedit">
+															</el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column> -->
 
 												<el-table-column prop="VERSION" label="版本" sortable width="120px">
 													<template slot-scope="scope">

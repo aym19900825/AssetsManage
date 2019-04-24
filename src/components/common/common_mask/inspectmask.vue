@@ -42,7 +42,6 @@
 			  :default-sort="{prop:'inspectList', order: 'descending'}"
 				 @selection-change="SelChange" 
 				 @current-change="setSel"
-				 v-loadmore="loadMore('inspect')"
 			v-loading="loading" 
 			element-loading-text="加载中…"
 			element-loading-spinner="el-icon-loading"
@@ -163,19 +162,6 @@
   	visible() {
 		this.dialoginspect = true;
   	},
-  	loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
-	},
 	requestData(){
 		this.loading = true;
 		var data = {

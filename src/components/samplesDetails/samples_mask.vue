@@ -341,7 +341,6 @@
 					</el-form>
 				</div>
 				<el-table ref="table" :data="gridDataList" height="300px" @selection-change="SelChange"
-					v-loadmore="loadMore('proxy')"
 					v-loading="loading"
 					element-loading-text="加载中…"
 					element-loading-spinner="el-icon-loading"
@@ -392,7 +391,6 @@
 			<!-- 收样人、接样人-弹出框 Begin -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible3" height="300px" width="80%" :before-close="handleClose3">
 				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="300px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
-						v-loadmore="loadMore"
 						v-loading="loading"
 						element-loading-text="加载中…"
 						element-loading-spinner="el-icon-loading"

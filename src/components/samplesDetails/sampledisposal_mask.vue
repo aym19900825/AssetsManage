@@ -97,7 +97,7 @@
 											  stripe 
 											  height="400px" 
 											  style="width: 100%;"
-											  @selection-change="selDataChange" v-loadmore="loadMore">
+											  @selection-change="selDataChange" >
 										<el-table-column type="selection" width="55" fixed align="center">
 										</el-table-column>
 										<el-table-column label="产品类别" sortable prop="TYPE">
@@ -176,7 +176,7 @@
 						height="400px" 
 						style="width: 100%;" 
 						@selection-change="selChangeNum" 
-						v-loadmore="loadMore">
+					>
 				<el-table-column type="selection" width="55" fixed align="center">
 				</el-table-column>
 				<el-table-column label="样品编号" sortable  prop="ITEMNUM">
@@ -623,19 +623,19 @@
 				this.save('update');
 			},
 			//表格滚动加载
-			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
-						}
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-				}
-			},
+			// loadMore() {
+			// 	if(this.loadSign) {
+			// 		this.loadSign = false
+			// 		this.page.currentPage++
+			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+			// 				return
+			// 			}
+			// 		setTimeout(() => {
+			// 			this.loadSign = true
+			// 		}, 1000)
+			// 		this.requestData()
+			// 	}
+			// },
 			requestData(index) {//高级查询字段
 				var data = {
 					page: this.page.currentPage,

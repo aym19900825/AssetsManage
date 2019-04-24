@@ -654,6 +654,7 @@
 									type: 'success'
 								});
 								if(parameter=="Update"){
+									this.$emit('request');
 									this.show = false;
 								}else{
 									this.show = true;

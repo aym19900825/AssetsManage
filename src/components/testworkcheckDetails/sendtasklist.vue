@@ -1072,6 +1072,7 @@
 					this.$axios.get(url, { }).then((res) => {
 						this.workorderForm = res.data.datas;
 						var workorderForm=res.data.datas
+						console.log(res.data.datas);
 						workorderForm.CJDW = Number(workorderForm.CJDW);
 						this.show=true;
 						for(let i = 0;i<workorderForm.WORKORDER_PROJECTList.length;i++){
@@ -1295,7 +1296,7 @@
             sums[index] = '统计';
             return;
 					} 
-					else if(index === 7){
+					else if(index === 8){
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property]);

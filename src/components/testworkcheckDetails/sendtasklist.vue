@@ -302,7 +302,16 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="技术要求" sortable width="200px">
+												<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.TECHNICAL_REQUIRE'" >
+															<el-input size="small" v-model="scope.row.TECHNICAL_REQUIRE" placeholder="请输入">
+															</el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="REMARKS" label="要求" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
@@ -419,7 +428,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REQUIRES" label="检验检测项目要求" sortable  width="240px">
+												<el-table-column prop="REQUIRES" label="要求" sortable  width="240px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.REQUIRES'" >
 															<el-input size="small" v-model="scope.row.REQUIRES" placeholder="请输入"></el-input> 

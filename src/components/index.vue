@@ -32,7 +32,7 @@
 					</div>
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
-						<el-col :span="12">
+						<el-col :span="18">
 							<el-tabs type="border-card">
 								<el-tab-pane label="待办任务">
 									<div id="todoLists" style="width:100%; height:220px;">
@@ -51,6 +51,10 @@
 											<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
 											</el-table-column>
 											<el-table-column label="当前环节" sortable prop="name">
+											</el-table-column>
+											<el-table-column label="状态" sortable prop="name">
+											</el-table-column>
+											<el-table-column label="意见说明" sortable prop="name">
 											</el-table-column>
 											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
 											</el-table-column>
@@ -78,6 +82,10 @@
 											<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
 											</el-table-column>
 											<el-table-column label="当前环节" sortable prop="name">
+											</el-table-column>
+											<el-table-column label="状态" sortable prop="name">
+											</el-table-column>
+											<el-table-column label="意见说明" sortable prop="name">
 											</el-table-column>
 											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
 											</el-table-column>
@@ -132,7 +140,7 @@
 								</div>
 							</div>
 						</el-col>
-						<el-col :span="6">
+						<!-- <el-col :span="6">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
@@ -152,7 +160,7 @@
 								</div>
 								<div id="main" style="width: 100%; height: 260px;"></div>
 							</div>
-						</el-col>
+						</el-col> -->
 						<!-- <el-col :span="6">
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
@@ -168,8 +176,6 @@
 						<!--APPList End-->
 					</el-row>
 					<!--工作统计 End-->
-
-					
 				</div>
 			</div>
 				
@@ -183,7 +189,7 @@
 import Config from '../config.js'
 import vheader from './common/vheader.vue'
 import navs_tabs from './common/nav_tabs.vue'
-import  'echarts/theme/macarons.js'
+// import  'echarts/theme/macarons.js'
 
 export default {
 	name: 'index',
@@ -473,19 +479,19 @@ export default {
 								xAxis: {
 								type: 'category',
 								boundaryGap: false,
-								data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+								data: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 						},
 						yAxis: {
 								type: 'value'
 						},
 						series: [{
-								data: [820, 932, 901, 934, 1290, 1330, 1320],
+								data: [820, 932, 901, 934, 1290, 1330, 1320, 820, 932, 901, 934, 1290],
 								type: 'line',
 								areaStyle: {}
 						}]
-						};
-						// 使用刚指定的配置项和数据显示图表。
-						myChart.setOption(option);
+					};
+					// 使用刚指定的配置项和数据显示图表。
+					myChart.setOption(option);
 			},
 			getroId(roleid){
 				this.getFirstMenus(roleid);
@@ -522,7 +528,7 @@ export default {
 			//加载待办任务
 			this.requestData();
 			//一级菜单
-			this.initEchart();//调用饼状图图表函数名称
+			// this.initEchart();//调用饼状图图表函数名称
 			this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
 			this.getTodoDing();//打开页面就执行getTodoDing待办任务数函数
 			this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数

@@ -389,7 +389,10 @@
 													<el-table-column label="检验检测项目名称" prop="P_DESC" sortable width="240px">
 													</el-table-column>
 
-													<el-table-column label="技术要求" prop="REMARKS" sortable width="300px">
+													<el-table-column label="技术要求" prop="TECHNICAL_REQUIRE" sortable width="300px">
+													</el-table-column>
+
+													<el-table-column label="要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
 													
 													<el-table-column label="计量单位" prop="UNIT" width="100px">
@@ -448,7 +451,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REQUIRES" label="检验检测项目要求" sortable width="240px">
+												<el-table-column prop="REQUIRES" label="要求" sortable width="240px">
 													<template slot-scope="scope">
 														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.REQUIRES" placeholder="请输入">
 														</el-input>

@@ -45,6 +45,8 @@
 												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
 												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												
+												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0&&item.title=='检测结论'&&inputData[item.param]==2" v-show="false" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" style="width:100%;">
 												</el-date-picker>
@@ -169,7 +171,7 @@
 											@selection-change="selChange"
 											:default-sort="{prop:'reportData.List', order: 'descending'}"
 											v-loading="loading"
-											element-loading-text="报告生成中…"
+											element-loading-text="报告生成中，请稍等…"
 											element-loading-spinner="el-icon-loading"
 											element-loading-background="rgba(255, 255, 255, 0.9)">
 											<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
@@ -612,35 +614,42 @@
 
 			//删除生成报告文件
 			delKey(index,row){
-				if(row.ID!=''){
-					var url = this.basic_url + '/api-apps/app/workorder/WORKORDER_REPORT/' + row.ID;
-					this.$confirm('确定删除此数据吗？', '提示', {
-						confirmButtonText: '确定',
-						cancelButtonText: '取消',
-					}).then(({
-						value
-					}) => {
-					this.$axios.delete(url, {}).then((res) => {
-						if(res.data.resp_code == 0){
-							this.$message({
-								message: '删除成功',
-								type: 'success'
-							});
-							this.detailgetData();//重新加载报告生成列表数据
-						}else{
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'error'
-							});
-						}
-					}).catch((err) => {
-					});
-					
-					}).catch(() => {
-
+				if(row.ISCREATED==1){
+					this.$message({
+						message: '此文档已提交审核，不允许删除',
+						type: 'warning'
 					});
 				}else{
-					this.detailgetData();//重新加载报告生成列表数据
+					if(row.ID!=''){
+						var url = this.basic_url + '/api-apps/app/workorder/WORKORDER_REPORT/' + row.ID;
+						this.$confirm('确定删除此数据吗？', '提示', {
+							confirmButtonText: '确定',
+							cancelButtonText: '取消',
+						}).then(({
+							value
+						}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+								this.detailgetData();//重新加载报告生成列表数据
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
+						});
+						
+						}).catch(() => {
+
+						});
+					}else{
+						this.detailgetData();//重新加载报告生成列表数据
+					}
 				}
 			},
 
@@ -776,57 +785,88 @@
 			},
 			//生成报告
 			getreport(){
-				if(this.selData.length == 0){
-					this.$message({
-						message: '请选择要生成报告的成果文件',
-						type: 'warning'
-					});
-				}else{
-					var url = this.file_url + '/file/fileList?page=0&size=10';
-					this.$axios.post(url,{
-						'appname': '检验检测项目_检验/检测报告模板',
-						'recordid': this.reptemDetailId,
-					}).then((res) => {
-						this.moduleFileList = res.data.fileList;
-						var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
-						var path = [];
-						for(let j=0; j<this.selData.length;j++){
-							path.push(this.selData[j].FILEPATH);
+				this.$refs.reportGenerateForm.validate((valid) => {
+					if (valid) {
+						var paramData = this.selectReportData;
+						for(let i=0; i<paramData.length; i++){
+							var list = paramData[i].List;
+							for(let j=0; j<list.length; j++){
+								var tranData = list[j];
+								tranData.value = this.inputData[tranData.param];
+							}
 						}
-						var postData = {
-							proxynum: '',
-							templatecode: this.reportTemplate.RE_TYPE,
-							workorderid: this.dataid,//工作任务单ID
-							deptfullname: this.deptfullname,//部门名称
-							filePath: path.length>0?path.join(','):'',//文件路径
-							fileName: '',//文件名称
-							app: 'workorder',//应用名称
-							moduleList: this.moduleFileList
-						};
-						this.loading = true;
-						this.$axios.post(Url1, {
-							params: postData
-						}).then((res) => {
+						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid+'/'+ this.reportTemplate.RE_TYPE;
+						this.$axios.post(url,this.selectReportData).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
-								this.show=true;//弹出框不开关闭
-								this.$message({
-									message: '报告生成成功，请上【已生成的报告文件】中查看',
-									type: 'success'
-								});
-								this.detailgetData();//重新加载报告生成列表数据
-								this.loading = false;
-							}else{
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'warning'
-								});
+								//默认保存成功后执行生成报告
+								if(this.selData.length == 0){
+									this.$message({
+										message: '请选择要生成报告的成果文件',
+										type: 'warning'
+									});
+								}else{
+									this.thirdBtn = false;//生成报告按钮不显示
+									var url = this.file_url + '/file/fileList?page=0&size=10';
+									this.$axios.post(url,{
+										'appname': '检验检测项目_检验/检测报告模板',
+										'recordid': this.reptemDetailId,
+									}).then((res) => {
+										this.moduleFileList = res.data.fileList;
+										var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
+										var path = [];
+										for(let j=0; j<this.selData.length;j++){
+											path.push(this.selData[j].FILEPATH);
+										}
+										var postData = {
+											proxynum: '',
+											templatecode: this.reportTemplate.RE_TYPE,
+											workorderid: this.dataid,//工作任务单ID
+											deptfullname: this.deptfullname,//部门名称
+											filePath: path.length>0?path.join(','):'',//文件路径
+											fileName: '',//文件名称
+											app: 'workorder',//应用名称
+											moduleList: this.moduleFileList
+										};
+										this.loading = true;
+										this.$axios.post(Url1, {
+											params: postData
+										}).then((res) => {
+											if(res.data.resp_code == 0) {
+												this.show=true;//弹出框不开关闭
+												// this.activeName=6;//跳转到tabs6已生成的报告文件
+												this.$message({
+													message: '报告生成成功，请上【已生成的报告文件】中查看',
+													type: 'success'
+												});
+												this.thirdBtn = true;//生成报告按钮显示
+												this.detailgetData();//重新加载报告生成列表数据
+												this.loading = false;
+											}else{
+												this.$message({
+													message: res.data.resp_msg,
+													type: 'warning'
+												});
+											}
+										}).catch((err) => {
+										});
+
+									}).catch((err) => {
+									});
+								}
+								//重新加载数据
+								this.requestData();
 							}
 						}).catch((err) => {
 						});
-
-					}).catch((err) => {
-					});
-				}
+					} else {
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+						return false;
+					}
+				});
 			},
 			
 			//列出所有成果文件
@@ -894,7 +934,6 @@
 								tranData.value = this.inputData[tranData.param];
 							}
 						}
-						
 						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid+'/'+ this.reportTemplate.RE_TYPE;
 						this.$axios.post(url,this.selectReportData).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息

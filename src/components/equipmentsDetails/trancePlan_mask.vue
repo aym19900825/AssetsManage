@@ -856,19 +856,19 @@
 				this.page.pageSize = 20;
 				this.dialogVisname = false;
 			},
-			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
-						}
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-				}
-			},
+			// loadMore() {
+			// 	if(this.loadSign) {
+			// 		this.loadSign = false
+			// 		this.page.currentPage++
+			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+			// 				return
+			// 			}
+			// 		setTimeout(() => {
+			// 			this.loadSign = true
+			// 		}, 1000)
+			// 		this.requestData()
+			// 	}
+			// },
 			searchinfo(){
 				this.page.currentPage = 1;
 				this.requestData();

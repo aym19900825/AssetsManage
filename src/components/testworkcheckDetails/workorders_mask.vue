@@ -658,7 +658,7 @@
 			<!--人员信息 Begin-->
 			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
 				<div class="scrollbar" style="max-height: 360px;">
-					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore('user')">
+					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 						<el-table-column type="selection" width="55" fixed align="center">
 						</el-table-column>
 						<el-table-column type="index" label="序号" width="50">
@@ -1807,20 +1807,6 @@
 						$('.v-modal').hide();
 					});
 			},
-			loadMore (item) {
-			    if (this.loadSign) {
-			      this.loadSign = false;
-			      this.page.currentPage++
-			      if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			        return
-			    	}
-					setTimeout(() => {
-					this.loadSign = true;
-					}, 1000)
-					this.getuser();
-			    }
-			},	
-			
 			getuser(){
 				var data = {
 					page: this.page.currentPage,

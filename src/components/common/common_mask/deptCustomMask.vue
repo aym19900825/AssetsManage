@@ -174,33 +174,33 @@
 			},
 			//表格滚动加载
 			loadMore() {
-				let up2down = sessionStorage.getItem('up2down');
-				if(this.loadSign) {					
-					if(up2down=='down'){
-						this.page.currentPage++;
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-							return false;
-						}
-						let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-						if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-							$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-							sessionStorage.setItem('toBtm','true');
-						}
-					}else{
-						sessionStorage.setItem('toBtm','false');
-						this.page.currentPage--;
-						if(this.page.currentPage < 1) {
-							this.page.currentPage=1;
-							return false;
-						}
-					}
-					this.loadSign = false;
-					setTimeout(() => {
-						this.loadSign = true;
-					}, 1000)
-					this.requestData();
-				}
+				// let up2down = sessionStorage.getItem('up2down');
+				// if(this.loadSign) {					
+				// 	if(up2down=='down'){
+				// 		this.page.currentPage++;
+				// 		if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+				// 			this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+				// 			return false;
+				// 		}
+				// 		let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
+				// 		if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
+				// 			$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
+				// 			sessionStorage.setItem('toBtm','true');
+				// 		}
+				// 	}else{
+				// 		sessionStorage.setItem('toBtm','false');
+				// 		this.page.currentPage--;
+				// 		if(this.page.currentPage < 1) {
+				// 			this.page.currentPage=1;
+				// 			return false;
+				// 		}
+				// 	}
+				// 	this.loadSign = false;
+				// 	setTimeout(() => {
+				// 		this.loadSign = true;
+				// 	}, 1000)
+				// 	this.requestData();
+				// }
 			},
 			//改变页数
 			sizeChange(val) {

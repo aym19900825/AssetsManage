@@ -81,14 +81,14 @@
 									<el-row>
 										<el-col :span="16">
 											<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="130px">
-												<el-input v-model="samplesForm.P_NAMEDesc" disabled>
+												<el-input v-model="samplesForm.P_NAMEDesc" :disabled="noedit || (!!samplesForm.PROXYNUM)">
 													<el-button slot="append" icon="el-icon-search"  @click="getVname('P_NAME')"  :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="生产单位统一社会信用代码" prop="PRODUCT_COMPANY" label-width="220px">
-												<el-input v-model="samplesForm.PRODUCT_COMPANY" disabled></el-input>
+												<el-input v-model="samplesForm.PRODUCT_COMPANY" :disabled="noedit || (!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

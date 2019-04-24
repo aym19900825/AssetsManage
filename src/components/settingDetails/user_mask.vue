@@ -248,8 +248,8 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane label="资质信息" name="first">
-											<div class="table-func table-funcb" v-show="noviews">
-												<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
+											<div v-if="!disabled" class="table-func table-funcb" v-show="noviews">
+												<el-button type="success" size="mini" :disabled="disabled" round @click="addfield1" v-show="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
 												</el-button>
@@ -257,7 +257,7 @@
 													<el-button type="primary" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i>
 														<font>上传</font>
-														<input id="excelFile" type="file" name="uploadFile" @change="upload" />
+														<input id="excelFile" type="file" :disabled="disabled" name="uploadFile" @change="upload" />
 													</el-button>
 												</form>
 											</div>
@@ -316,7 +316,7 @@
 											<!-- </el-form> -->
 										</el-tab-pane>
 										<el-tab-pane label="培训" name="second">
-											<div class="table-func table-funcb" v-show="noviews">
+											<div v-if="!disabled" class="table-func table-funcb" v-show="noviews">
 												<el-button type="success" size="mini" round @click="addfield2" v-if="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
@@ -371,7 +371,7 @@
 										</el-tab-pane>
 
 										<el-tab-pane label="IP地址管理" name="third">
-											<div class="table-func table-funcb" v-show="noviews">
+											<div v-if="!disabled" class="table-func table-funcb" v-show="noviews">
 												<el-button type="success" size="mini" round @click="addfield3" v-if="!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建行</font>
@@ -576,6 +576,7 @@
 					ips: [],
 					deptName:'',
 					nickname:'',
+					username:'',
 				},
 				customerList: [],
 				searchList: {
@@ -933,17 +934,23 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-					this.disabled = true;
 				//	$('.usernames .el-input__inner').attr('disabled',true);
 				var usersUrl = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.user.changeby = res.data.nickname;
+					this.user.username = res.data.username;
+					console.log(this.user.username);
 					this.docParam = {
 						username: res.data.username,
 						userid:  res.data.id,
 						deptid: res.data.deptId,
 						deptfullname: res.data.deptName,
 					};
+					if(this.user.username == 'admin'){
+						this.disabled = false;
+					}else{
+						this.disabled = true;
+					}
 					var date = new Date();
 					this.user.changedate = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {

@@ -341,7 +341,7 @@
 			},
 			//Table默认加载数据
 			requestData(opt) {//高级查询字段
-				this.refs.table.requestData(opt);
+				this.$refs.table.requestData(opt);
 			},
 			//左侧菜单传来
 		    childvalue:function ( childvalue) {

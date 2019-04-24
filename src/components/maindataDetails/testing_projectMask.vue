@@ -64,7 +64,7 @@
 										<el-col :span="8">
 											<el-form-item label="计量单位" prop="UNIT" label-width="100px">
 												<!-- <el-input v-model="testing_projectForm.UNIT" :disabled="noedit"></el-input> -->
-												<el-select v-model="testing_projectForm.UNIT" filterable allow-create :disabled="noedit" filterable style="width: 100%">
+												<el-select v-model="testing_projectForm.UNIT" filterable default-first-option allow-create :disabled="noedit" style="width: 100%">
 													<el-option v-for="item in selectData" :key="item.id" :value="item.name" :label="item.name" :class="item.name"></el-option>
 												</el-select>
 											</el-form-item>

@@ -176,13 +176,13 @@
 				this.requestData();
 			},
 			searchinfo() {
-				this.requestData('init');
+				this.requestData();
 			},
 			resetbtn(){
 				this.searchList = { //点击高级搜索后显示的内容
-					NAME: '',
+					name: '',
 				};
-				this.requestData('init');
+				this.requestData();
 			},
 			//请求点击
 		    getbtn(item){
@@ -350,9 +350,10 @@
 				
 				this.selMenu = val;
 			},
-			requestData(index) {
+			requestData() {
 				this.loading = true;
 				var data = {
+					name: this.searchList.name,
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}

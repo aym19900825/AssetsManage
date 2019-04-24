@@ -596,9 +596,9 @@
 					});
 					return;
 				}else{
-					this.$refs.task.view(this.selMenu[0].ID);	
 					var url = this.basic_url +'/api-apps/app/workorder/' +this.selMenu[0].ID;
 					this.$axios.get(url, {}).then((res) => {
+						console.log(res);
 						if(res.data.WORKORDER_PROJECTList.length==0&&res.data.WORKORDER_CONTRACTList.length==0){
 							this.$message({
 								message: '此任务单没有任务可下达,请确认。',

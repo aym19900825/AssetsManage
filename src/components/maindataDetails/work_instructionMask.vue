@@ -210,19 +210,6 @@
 			rand(min, max) {
 				return Math.floor(Math.random() * (max - min)) + min;
 			},
-			loadMore () {//表格滚动加载
-			    if (this.loadSign) {
-			        this.loadSign = false
-			     	this.page.currentPage++
-			     	if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       		return
-			     	}
-				    setTimeout(() => {
-				        this.loadSign = true
-				    }, 1000)
-			     	this.requestData_doclinks()
-			    }
-			},
 			getUser(opt){
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.WORK_INSTRUCTION.DEPARTMENT = '';

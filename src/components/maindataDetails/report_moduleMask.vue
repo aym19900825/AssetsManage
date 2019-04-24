@@ -303,19 +303,6 @@
 					row.isEditing = !row.isEditing
 				}
 			},
-			loadMore () {//表格滚动加载
-			    if (this.loadSign) {
-			        this.loadSign = false
-			     	this.page.currentPage++
-			     	if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       		return
-			     	}
-				    setTimeout(() => {
-				        this.loadSign = true
-				    }, 1000)
-			     	this.requestData_doclinks()
-			    }
-			},
 			addfield_doclinks() { //插入行到文件文件Table中
 				var isEditingflag=false;
 				for(var i=0;i<this.testing_filesForm.inspectionList.length; i++){

@@ -90,7 +90,7 @@
 			height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}"
 			 @selection-change="SelChange" 
 			 @current-change="setSel"
-			 v-loadmore="loadMore">
+			 >
 				<el-table-column type="selection" width="55" fixed>
 				</el-table-column>
 				<el-table-column label="主键编号" width="120" sortable prop="ID">
@@ -259,19 +259,6 @@
 		this.page.currentPage = 1;//页码信息重置
 		this.page.pageSize = 10;//页码信息重置
 	},
-    loadMore () {
-	   if (this.loadSign) {
-	     this.loadSign = false
-	     this.page.currentPage++
-	     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-	       return
-	     }
-	     setTimeout(() => {
-	       this.loadSign = true
-	     }, 1000)
-	     this.requestData();
-	   }
-    },
     searchinfo(index) {
         this.page.currentPage = 1;
         this.page.pageSize = 10;

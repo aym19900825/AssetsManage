@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="50%" :before-close="handleClose" >
-            <div class="scrollbar" style="max-height:360px;">
+		<el-dialog :modal-append-to-body="false" title="子任务单成果数据文件" :visible.sync="dialogProduct" width="70%" :before-close="handleClose">
+            <div class="scrollbar" style="height:360px;">
                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion v-for="item in selectData" :key="item.WONUM">
                     <el-row :gutter="20">
                         <el-col :span="11" class="pull-right pb10">
@@ -11,11 +11,24 @@
                         </el-col>
                     </el-row>
                     <el-table ref="table" :data="item.TEMPLATELiST" row-key="ID" border max-height="360" stripe :fit="true" style="width: 100%;" :default-sort="{prop:'workorderForm.TEMPLATELiST', order: 'descending'}">
-                        <el-table-column prop="D_DESC" label="描述" sortable>
-                        </el-table-column>
-                        <el-table-column fixed="right" label="操作" width="100">
+							<el-table-column prop="LIABLE_PERSONDesc" label="检验责任人" sortable>
+							</el-table-column>
+
+							<el-table-column prop="FILENAME" label="成果数据文件名" sortable>
+							</el-table-column>
+
+							<el-table-column prop="FILESIZE" label="文件大小" sortable>
+							</el-table-column>
+							
+							<el-table-column prop="CHECKER" label="审核人">
+							</el-table-column>
+
+							<el-table-column prop="CHECK_DATE" label="审核时间">
+							</el-table-column>
+
+							<el-table-column fixed="right" label="操作" width="100">
                             <template slot-scope="scope">
-                                <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
+                                <el-button title="预览" @click="readFile(scope.row)" type="text" size="small"><i class="icon-eye"></i> 预览</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -36,11 +49,14 @@
   
   data() {
     return {
+		file_url: Config.file_url,//文件路径名称
+		po_url: Config.po_url,//文件路径名称
 		basic_url: Config.dev_url,
 		dialogProduct: false,
 		loadSign: true, //鼠标滚动加载数据
 		loading: false,//默认加载数据时显示loading动画
 		commentArr:{},
+		docParm: {},//成果文件
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -58,8 +74,6 @@
   },
 
   methods: {
-    handleClick(row) {
-    },
 	handleClose(done) {
 		this.$confirm('确认关闭？')
 			.then(_ => {
@@ -76,8 +90,6 @@
 			return "";
 		}
 		return this.$moment(date).format("YYYY-MM-DD");
-    },
-    handleClick(tab, event) {
     },
   	//表头居中
 	rowClass({ row, rowIndex}) {
@@ -141,7 +153,20 @@
 	},
   	visible(dataid) {
 		this.requestData(dataid);
-    },
+		this.dataid=dataid;	
+	},
+	//预览文件
+	readFile(row){
+		var url = this.po_url+"/show?filename=" +row.filename
+			+ '&fileid=' +  row.FILEID
+			+ '&userid=' +  this.docParm.userid
+			+ '&username=' + this.docParm.username
+			+ '&deptid=' + this.docParm.deptid
+			+ '&deptfullname=' + this.docParm.deptfullname
+			+ '&recordid=' + this.dataid
+			+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+			window.open(url); 
+	},
     //查看子任务单
 	requestData(dataid){
 		var url = this.basic_url + '/api-apps/app/workorder/operate/queryWorkorder?ID='+dataid;

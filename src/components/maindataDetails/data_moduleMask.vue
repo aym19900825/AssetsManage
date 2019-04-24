@@ -676,19 +676,6 @@
 
             	});
 			},
-			loadMore () {//表格滚动加载
-			    if (this.loadSign) {
-			        this.loadSign = false
-			     	this.page.currentPage++
-			     	if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       		return
-			     	}
-				    setTimeout(() => {
-				        this.loadSign = true
-				    }, 1000)
-			     	this.requestData_doclinks()
-			    }
-			},
 			//时间格式化
 			dateFormat(row, column) {
 				var date = row[column.property];

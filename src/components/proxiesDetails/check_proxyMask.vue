@@ -121,8 +121,8 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit1" >
-														<el-button slot="append" icon="el-icon-search" :disabled="noedit1" @click="getCustomer('pname')"></el-button>
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="special" >
+														<el-button slot="append" icon="el-icon-search" :disabled="special1" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -750,7 +750,7 @@
 			</div>
 			<!-- 客户联系人\姓名 Begin -->
 			<el-dialog :modal-append-to-body="false" title="客户联系人" :visible.sync="dialogVisibleuser" width="80%" :before-close="handleClose2">
-				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}" v-loadmore="loadMore"
+				<el-table :header-cell-style="rowClass" :data="CUSTOMER_PERSONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @selection-change="SelChange" @cell-click="iconOperation" :default-sort="{prop:'CUSTOMER_PERSONList', order: 'descending'}"
 				v-loading="loading" 
 				element-loading-text="加载中…"
 				element-loading-spinner="el-icon-loading"
@@ -975,7 +975,7 @@
 						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托方名称名称
 					V_ADDRESS: [{required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
-					V_PERSON: [{required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
+					V_PERSON: [{required: true, validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话
 					R_VENDORDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托方名称编号
@@ -1062,7 +1062,7 @@
 					if (index === 0) {
 						sums[index] = '总价';
 						return;
-					} else if(index === 4) {//计算第几列的减1
+					} else if(index === 5) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));
@@ -1235,19 +1235,6 @@
 			getCheckedNodes() {
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
-			loadMore () {
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData();
-			   }
-			 },	
 			toNum(str) {
 				if(Object.prototype.toString.call(str)!="[object String]"){
 					str = str.toString();

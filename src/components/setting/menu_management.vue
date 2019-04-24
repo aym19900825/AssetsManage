@@ -38,6 +38,24 @@
 							</div>
 						</div>
 					</div>
+									<!-- 高级查询划出 Begin-->
+								<div v-show="search">
+									<el-form inline-message :model="searchList" label-width="80px">
+										<el-row :gutter="10">
+											<el-col :span="6">
+												<el-form-item label="菜单名称" prop="name" >
+													<el-input v-model="searchList.name" @keyup.enter.native="searchinfo">
+													</el-input>
+												</el-form-item>
+											</el-col>
+											<el-col :span="3">
+												<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+												<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+											</el-col>
+										</el-row>
+									</el-form>
+								</div>
+				<!-- 高级查询划出 End-->
 					<el-row :gutter="10">
 						<el-col :span="24">
 							<tree_grid :columns="columns" :loading="loading" :tree-structure="true" :data-source="menuList" v-on:classByValue="childByValue" @getDetail="getDetail"></tree_grid>
@@ -128,6 +146,9 @@
 					pageSize: 20,
 					totalCount: 0
 				},
+				searchList: {
+					NAME: '',
+				},
 				menu: {},//修改子组件时传递数据
 				buttons:[],
 			}
@@ -153,6 +174,15 @@
 			currentChange(val) {
 				this.page.currentPage = val;
 				this.requestData();
+			},
+			searchinfo() {
+				this.requestData('init');
+			},
+			resetbtn(){
+				this.searchList = { //点击高级搜索后显示的内容
+					NAME: '',
+				};
+				this.requestData('init');
 			},
 			//请求点击
 		    getbtn(item){
@@ -259,6 +289,10 @@
 			view(data) {
 			 	this.menu = data;
 				this.$refs.child.view();
+			},
+			//高级查询
+			modestsearch() {
+				this.search = !this.search;
 			},
 			// 删除
 			delmenu() {

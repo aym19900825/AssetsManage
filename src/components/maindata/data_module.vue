@@ -312,7 +312,6 @@
 				this.reset();
 				this.$refs.categorymask.open(); // 方法1
 				this.$refs.categorymask.visible();
-				
 			},
 			//修改
 			modify() {
@@ -336,7 +335,7 @@
 			//查看
 			 view(data) {
 			 	this.CATEGORY =data;
-				this.$refs.categorymask.view(this.CATEGORY.ID);
+				this.$refs.categorymask.view(data.ID);
 			},
 			//高级查询
 			modestsearch() {

@@ -382,6 +382,7 @@
 					'recordid': 1,
 					'appid': 17
 				};
+				this.$emit('reset');
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -550,6 +551,7 @@
 									if(opt == 'update'){
 										this.show = true;
 										this.visible();
+										this.$emit('reset');
 									}
 									this.emit('request');
 									this.$emit('reset');

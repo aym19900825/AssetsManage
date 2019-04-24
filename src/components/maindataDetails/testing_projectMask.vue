@@ -729,10 +729,33 @@
 							this.$confirm('是否需要修订版本？').then(_ => {
 								this.modifyversion();
 							}).catch(_ => {
-								this.show = true;
-								this.addtitle = false;
-				    		this.modifytitle = true;
-								// this.close();
+								var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';
+								this.$axios.post(url, _this.testing_projectForm).then((res) => {
+									if(res.data.resp_code == 0) {
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										if(parameter='Update'){
+											this.show=false;
+										}else{
+											this.show=true;
+										}
+										this.$emit('reset');
+										this.$emit('request');
+										this.visible();
+									}else{
+										this.show = true;
+										if(res.data.resp_code != 0) {
+											this.$message({
+												message: res.data.resp_msg,
+												type: 'warning'
+											});
+										}
+									}
+									//清空表单验证
+									}).catch((err) => {
+									});
 							});	
 					}else{
 						var url = this.basic_url + '/api-apps/app/inspectionPro/saveOrUpdate';

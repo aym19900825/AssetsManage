@@ -661,8 +661,14 @@
 									this.$emit('request');
 								};
 						   this.$refs["CUSTOMER"].resetFields();
+							}else{
+								this.$message({
+									message:res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
+							console.log(err);
 						});
 					// }
 		          } else {

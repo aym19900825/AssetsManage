@@ -34,10 +34,12 @@
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-select v-model="samplesForm.ITEM_TYPE" placeholder="样品类型" :disabled="sampleAutoInput || noedit">
-												<el-option key="1" label="样品批次" value="1"></el-option>
-												<el-option key="2" label="样品序号" value="2"></el-option>
-											</el-select>
+											<el-form-item label="产品类别" prop="ITEM_TYPE">
+												<el-select v-model="samplesForm.ITEM_TYPE" placeholder="样品类型" :disabled="sampleAutoInput || noedit">
+													<el-option key="1" label="样品批次" value="1"></el-option>
+													<el-option key="2" label="样品序号" value="2"></el-option>
+												</el-select>
+											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="6" class="pull-right">
 											<el-select v-model="sampleInput" placeholder="选择输入方式" disabled>
@@ -256,6 +258,9 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				isEditing: '',
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
+					ITEM_TYPE: [//样品编号
+						{ required: true, message: '必填', trigger: 'blur' }
+					],
 					ITEMNUM: [//样品编号
 						{ required: true, message: '必填', trigger: 'change' }
 					],

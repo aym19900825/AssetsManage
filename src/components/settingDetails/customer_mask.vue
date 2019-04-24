@@ -360,6 +360,9 @@
 						{required: true,message: '必填',trigger: 'blur'},
 						{validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
+					TYPE:[
+						{required: true,message: '必填',trigger: 'change'},
+					],
 					MEMO:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
 					ZIPCODE:[{required: false,trigger: 'blur',validator: this.Validators.isZipcode}],
 				},
@@ -654,14 +657,21 @@
 									type: 'success'
 								});
 								if(parameter=="Update"){
+									this.$emit('request');
 									this.show = false;
 								}else{
 									this.show = true;
 									this.$emit('request');
 								};
 						   this.$refs["CUSTOMER"].resetFields();
+							}else{
+								this.$message({
+									message:res.data.resp_msg,
+									type: 'warning'
+								});
 							}
 						}).catch((err) => {
+							console.log(err);
 						});
 					// }
 		          } else {

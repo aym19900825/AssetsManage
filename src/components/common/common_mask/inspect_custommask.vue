@@ -177,7 +177,7 @@
 			// CODE: this.searchList.CODE,
 			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
 		};
-		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer';//如果父组件没有传CJDW承检单位侧显示所有数
+		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=' + this.$store.state.currentcjdw[0].id;//如果父组件没有传CJDW承检单位侧显示所有数
 		this.$axios.get(url, {params: data}).then((res) => {
 			this.page.totalCount = res.data.count;	
 			//总的页数

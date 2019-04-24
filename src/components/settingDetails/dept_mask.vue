@@ -386,7 +386,7 @@
 				//  }).catch((err) => {
 				// });	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
-				this.adddeptForm.depttype='1';
+				this.adddeptForm.depttype='2';
 				this.show = true;
 				this.addtitle = true;
 				this.modifytitle = false;
@@ -454,19 +454,19 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			loadMore() {
-				if(this.loadSign) {
-					this.loadSign = false
-					this.page.currentPage++
-						if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-							return
-						}
-					setTimeout(() => {
-						this.loadSign = true
-					}, 1000)
-					this.requestData()
-				}
-			},
+			// loadMore() {
+			// 	if(this.loadSign) {
+			// 		this.loadSign = false
+			// 		this.page.currentPage++
+			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
+			// 				return
+			// 			}
+			// 		setTimeout(() => {
+			// 			this.loadSign = true
+			// 		}, 1000)
+			// 		this.requestData()
+			// 	}
+			// },
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -613,7 +613,6 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
 					this.Selectsys_depttype = res.data;
-					 adddeptForm.depttype='2'
 				}).catch(error => {
 				})
 			},

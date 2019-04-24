@@ -46,7 +46,7 @@
 										<el-col :span="24">
 											<el-form-item label="样品名称" prop="ITEM_NAME" label-width="110px">
 												<el-input v-model="workorderForm.ITEM_NAME" :disabled="edit">
-													<el-button slot="append" icon="el-icon-search" :disabled="edit"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="addsample('workorder')" :disabled="edit"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -114,14 +114,14 @@
 										<el-col :span="8" >
 											<el-form-item label="产品类别" prop="PRODUCT_TYPE"  label-width="110px">
 												<el-input v-model="workorderForm.PRODUCT_TYPE" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search"></el-button>
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addcategory"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" >
 											<el-form-item label="产品名称" prop="PRODUCT"  label-width="110px">
 												<el-input v-model="workorderForm.PRODUCT" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search"></el-button>
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addproduct"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -147,12 +147,12 @@
 										<el-row>
 											<el-col :span="24">
 												<el-form-item label="委托方提供技术资料" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noviews"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="24">
 												<el-form-item label="特殊要求" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="noviews"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -160,7 +160,7 @@
 											<el-col :span="8">
 												<el-form-item label="样品接收人" label-width="140px">
 													<el-input v-model="workorderForm.ITEM_RECCEPT_USERDesc" :disabled="true">
-														<el-button slot="append" icon="el-icon-search" :disabled="noedit"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('ITEM_RECCEPT_USER')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -199,7 +199,7 @@
 										<el-row>
 											<el-col :span="8">
 													<el-form-item label="样品承接人(专业组)" prop="ITEM_PROFESSIONAL_GROUPDesc" label-width="140px">
-														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUPDesc" placeholder="请选择" style="width: 100%;" :disabled="noedit" >
+														<el-select clearable v-model="workorderForm.ITEM_PROFESSIONAL_GROUPDesc" placeholder="请选择" style="width: 100%;" :disabled="noedit"  @change="getgroup($event)">
 															<el-option v-for="(data,index) in maingroup" :key="index" :value="data.id" :label="data.fullname"></el-option>
 														</el-select>
 													</el-form-item>
@@ -237,7 +237,7 @@
 											<el-col :span="8">
 												<el-form-item label="样品返回接收人" label-width="140px">
 													<el-input v-model="workorderForm.RETURN_ITEM_USERDesc" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search"  :disabled="noedit"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('3')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -261,14 +261,14 @@
 											<el-col :span="8">
 												<el-form-item label="样品承接人" label-width="140px">
 													<el-input v-model="workorderForm.ITEM_UNDERTAKE_USERDesc" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search"  :disabled="noedit"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('sampleget')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
 												<el-form-item label="专业技术/质量负责人" label-width="150px">
 													<el-input v-model="workorderForm.PROFESSIONALDesc" :disabled="edit">
-														<el-button slot="append" icon="el-icon-search"  :disabled="noedit"></el-button>
+														<el-button slot="append" icon="el-icon-search" @click="addperson('qualityperson')" :disabled="noedit"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -302,7 +302,16 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REMARKS" label="技术要求" sortable width="200px">
+												<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable width="200px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.TECHNICAL_REQUIRE'" >
+															<el-input size="small" v-model="scope.row.TECHNICAL_REQUIRE" placeholder="请输入">
+															</el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="REMARKS" label="要求" sortable width="200px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.REMARKS'" >
 															<el-input size="small" v-model="scope.row.REMARKS" placeholder="请输入">
@@ -324,7 +333,7 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER"  placeholder="请选择" @change="visableleader($event,'PROJECTLIST',scope.$index,'null')" >
+															<el-select clearable v-model="scope.row.LEADER"  placeholder="请选择" @change="visableleader($event,'PROJECTLIST',scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -419,7 +428,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="REQUIRES" label="检验检测项目要求" sortable  width="240px">
+												<el-table-column prop="REQUIRES" label="要求" sortable  width="240px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.REQUIRES'" >
 															<el-input size="small" v-model="scope.row.REQUIRES" placeholder="请输入"></el-input> 
@@ -440,7 +449,7 @@
 												<el-table-column prop="LEADER" label="责任人" sortable width="150px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_CONTRACTList.'+scope.$index + '.LEADER'" >
-															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择" @change="visableleader($event,'CONTRACTList',scope.$index,'null')" >
+															<el-select clearable v-model="scope.row.LEADER" placeholder="请选择" @change="visableleader($event,'CONTRACTList',scope.$index)" >
 																<el-option v-for="data in leader" :key="data.id" :value="data.id" :label="data.nickname" :disabled="data.id==nowUser.id?true:false"></el-option>
 															</el-select>
 														</el-form-item>	
@@ -490,21 +499,74 @@
 									<el-row class="pt10">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="45px">
-												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="noviews"></el-input>
+												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 									<!-- 备注 End-->
 								</div>
+								
+								<!-- 录入人信息 Begin-->
+								<!-- <el-collapse-item title="其他" name="7" v-show="views">
+									<el-row >
+										<el-col :span="8">
+											<el-form-item label="录入人" prop="ENTERBYDesc">
+												<el-input v-model="workorderForm.ENTERBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="录入时间" prop="ENTERDATE">
+												<el-input v-model="workorderForm.ENTERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="机构" prop="DEPTIDDesc">
+												<el-input v-model="workorderForm.DEPTIDDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row >
+										<el-col :span="8">
+											<el-form-item label="修改人" prop="CHANGEBYDesc">
+												<el-input v-model="workorderForm.CHANGEBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="修改时间" prop="CHANGEDATE">
+												<el-input v-model="workorderForm.CHANGEDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item> -->
+								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="content-footer">
+						<div class="content-footer" v-show="views">
 							<el-button type="primary" @click="submitForm">确定</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
+			
+			<!--委托书编号-->
+			<inspectmask ref="inspectchild" @appendpro="appendpro" @appendver="appendver"></inspectmask>
+			<!-- 样品名称  -->
+			<sampletmask ref="samplechild" @appendname="appendname" @appendmod="appendmod" @appendsta="appendsta" @appendite="appendite"></sampletmask>
+			<!-- 原始模版  -->
+			<!-- <templatemask ref="templatechild" @showModule="showModule"></templatemask> -->
+			<!-- 产品类别  -->
+			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
+			<!-- 产品名称  -->
+			<productmask ref="productchild" @appenddata="appenddata"></productmask>
+			<!-- 检验依据  -->
+			<!-- <teststandardmask ref="standardchild" @testbasis="addbasis"></teststandardmask> -->
+			<!-- 检验项目 -->
+      		<testprojectmask ref="projectchild" @testproject="addproject"></testprojectmask>
+			<!-- 查看子任务单  -->
+			<!-- <checkchildlist ref="checkchildlist"></checkchildlist> -->
+			<!-- 生成报告弹出显示数据  -->
+			<!-- <reportdata ref="reportdata" @reportdatavalue = "reportdatavalue"></reportdata> -->
 		</div>
 	</div>
 </template>
@@ -517,7 +579,9 @@
 	import { Loading } from 'element-ui'
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
+	// import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
+	// import checkchildlist from './checkchildlist.vue'//查看子任务单
 	import reportdata from './reportdata.vue'//生成报告弹出显示数据
 	export default {
 		name: 'masks',
@@ -527,7 +591,9 @@
 			 templatemask,
 			 categorymask,
 			 productmask,
+			//  teststandardmask,
 			 testprojectmask,
+			//  checkchildlist,
 			 reportdata
 		},
 		data() {
@@ -648,6 +714,7 @@
 				docParm: {},
 				reportname:'',//生成报告名称
 				workorderreportid:'',//存放生成报告id
+				btnshow:true,//报告提交按钮
 				sendchilddata:[],//子表已有的值
 				pronums:[],
 				showcreatereoprt:false,//生成报告按钮
@@ -658,7 +725,6 @@
 			};
 		},
 		computed: {
-			//当前用户的信息
 			nowUser: function(){
 				return this.$store.state.currentuser;
 			}
@@ -679,6 +745,36 @@
 					row.isEditing = !row.isEditing;
 				}
 			},	
+			appendpro(value){
+				this.workorderForm.P_REMARKS =value;
+					
+			},
+			appendver(value){
+				this.workorderForm.PROXY_VERSION =value;
+			},
+			//样品
+			addsample(type){
+				this.$refs.samplechild.visible(type);
+			},
+			appendname(value){
+				this.workorderForm.ITEM_NAME = value;//样品名称
+			},
+			appendmod(value){
+				this.workorderForm.ITEM_MODEL = value;//样品名称
+			},
+			appendsta(value){
+				this.workorderForm.ITEM_STATUS = value;//样品名称
+			},
+			appendite(value){
+				this.workorderForm.ITEMNUM = value;//样品名称
+			},
+			addperson(num,opt){
+				//opt主要是区是哪个子表添加人员
+				this.getuser();
+				this.numtips = num;
+				this.addPersonTable = opt;
+				this.dialogVisible2 = true;
+			},
 			//检测依据弹出框数据置空
 			resetBasisInfo2(){
 				this.dialogVisible2 = false;
@@ -701,8 +797,146 @@
 				this.workorderForm.S_NUM = '';
 				this.workorderForm.WORKORDER_PROJECTList = [];
 				ITEM_PROFESSIONAL_GROUP:'';//清空承接人数据
-			},  	
-      //刪除新建行
+			},
+			//产品类别放大镜
+			addcategory(){
+				if(this.workorderForm.CJDW == null || this.workorderForm.CJDW == '' || this.workorderForm.CJDW == undefined){
+					this.$message({
+						message: '请先选择承检单位',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.categorychild.visible(this.workorderForm.CJDW);
+				}
+			},
+			//接到产品类别的值
+			categorydata(value){
+				this.workorderForm.P_NUM = value[0];
+				this.workorderForm.PRODUCT_TYPE  = value[1];
+				this.workorderForm.PRODUCT = '';
+				this.workorderForm.PRO_NUM = '';
+				this.workorderForm.S_NUM = '';
+				this.workorderForm.WORKORDER_PROJECTList = [];
+			},
+			addproduct(){//受检产品名称
+				if(this.workorderForm.P_NUM == null || this.workorderForm.P_NUM == '' || this.workorderForm.P_NUM == undefined){
+					this.$message({
+						message: '请先选择产品类别',
+						type: 'warning'
+					});
+				}else{
+					this.$refs.productchild.visible(this.workorderForm.P_NUM);
+				}
+			},
+			//接到产品的值
+			appenddata(value){
+				this.workorderForm.PRO_NUM = value[0];
+				this.workorderForm.PRODUCT = value[1];
+				this.workorderForm.S_NUM = '';
+				this.workorderForm.WORKORDER_PROJECTList = [];
+			},
+			//检验依据放大镜
+			basisleadbtn(){
+				if(this.workorderForm.PRO_NUM == null || this.workorderForm.PRO_NUM == '' || this.workorderForm.PRO_NUM == undefined){
+					this.$message({
+						message: '请先选择产品名称',
+						type: 'warning'
+					});
+				}else{
+					this.sendchilddata.push(this.workorderForm.PRO_NUM);
+					this.$refs.standardchild.basislead(this.sendchilddata);
+					this.sendchilddata = [];
+				}
+			},
+			// //检验依据列表
+			// addbasis(value){
+			// 	this.workorderForm.S_NUM = value[0];
+			// 	for(var i = 1;i<value.length;i++){
+			// 		value[i].S_DESC = value[i].S_NAME;
+			// 	}
+			// 	this.workorderForm.WORKORDER_PROJECTList = [];
+			// },
+		
+			 //检验项目列表
+			addproject(value){
+				for(var i = 0;i<value.length;i++){
+					value[i].P_DESC = value[i].P_NAME;
+					this.workorderForm.WORKORDER_PROJECTList.push(value[i]);
+				}
+				for(var i = 0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
+					this.pronums.push(this.workorderForm.WORKORDER_PROJECTList[i].P_NUM);
+				}
+				this.workorderForm.PROJ_NUM = this.pronums.toString(',');
+			},
+			 
+			// showModule(data){
+			// 	this.modulenum.D_NUM = data.num;
+			// 	this.modulenum.D_DESC = data.desc;
+			// 	var url = this.file_url + '/file/fileList?page=0&size=10';
+			// 	this.$axios.post(url,{
+			// 		'appname': '检验检测项目_原始数据模板',
+			// 		'recordid': data.id,
+			// 	}).then((res) => {
+			// 		this.modulenum.FILESIZE_ORG = res.data.fileList[0].filesize;
+			// 		this.modulenum.FILEPATH_ORG = res.data.fileList[0].filepath;
+			// 		this.modulenum.FILEID_ORG = res.data.fileList[0].fileid;
+			// 	}).catch((err) => {
+			// 	});
+			// },
+   			//获取样品信息-样品状态
+			getITEM_STATUS() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_ITEM_STATUS = res.data;
+				}).catch(error => {
+				})
+			},
+			//获取样品信息-样品来源
+			getITEM_SOURCE() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_SOURCE';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_ITEM_SOURCE = res.data;
+				}).catch(error => {
+				})
+			},
+			//获取样品信息-完成方式
+			getCOMPLETE_MODE() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=COMPLETE_MODE';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_COMPLETE_MODE = res.data;
+				}).catch(error => {
+				})
+			},
+			//获取样品信息-样品接收状态
+			getITEM_RECEPT_STATUS() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_RECEPT_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_ITEM_RECEPT_STATUS = res.data;
+				}).catch(error => {
+				})
+			},
+		
+			//获取样品信息-样品检后状态
+			getITEM_CHECK_STATUS() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_CHECK_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_ITEM_CHECK_STATUS = res.data;
+				}).catch(error => {
+				})
+			},
+			//获取样品信息-样品处置
+			getITEM_MANAGEMENT() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=ITEM_MANAGEMENT';
+				this.$axios.get(url, {}).then((res) => {
+					this.Select_ITEM_MANAGEMENT = res.data;
+				}).catch(error => {
+				})
+			},
+           
+			//更改样品数量
+			handleChangeQuality(value) {
+			},	
+      		//刪除新建行
 			deleteRow(index, row, listName){
 				var TableName = '';
 				if(listName =='basisList'){
@@ -745,6 +979,24 @@
 				}else{
 					this.workorderForm[TableName+'List'].splice(index,1);
 				}
+			},
+			//生成分包协议
+			proagree(row){
+				var data = {
+					"WORKORDER_CONTRACTID":row.ID.toString(),
+				};
+				var url = this.basic_url +"/api-apps/app/workorder/operate/subproject";
+				this.$axios.post(url,data).then((res) => {
+					
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '生成成功',
+							type: 'success'
+						});
+						this.showcreateagree = false;
+					}
+				}).catch((err) => {
+				});
 			},
 			//这是查看
 			view(dataid) {
@@ -794,48 +1046,78 @@
 					}).catch((wrong) => {
 
 					})
+				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
+				this.$axios.get(url, {}).then((res) => {
+					
+					if(res.data.resp_code==1){
+						this.start=true;
+						this.approval=false;
+					}else{
+						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+dataid;
+						this.$axios.get(url, {}).then((res) => {
+							
+							res.data.CJDW = Number(res.data.CJDW);
+							var resullt=res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								users = users + resullt[i].username+",";
+							}
+							if(users.indexOf(this.username) != -1){
+								this.approval=true;
+								this.start=false;
+							}else{
+								this.approval=false;
+								this.start=false;
+							}
+						});
+					}
+				});
 			},
 			// 保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
-					if (valid) {
-						console.log(this.workorderForm);
-					//检验项目与要求的数据id
+		          if (valid) {
+								console.log(this.workorderForm);
+							//检验项目与要求的数据id
               var selectData= this.PROJECTLIST;
-          var deleteid = [];
-          var ids;
-          for(let i = 0; i < selectData.length; i++) {
-            deleteid.push(selectData[i].ID);
-          }
-          //ids为deleteid数组用逗号拼接的字符串
-          ids = deleteid.toString(',');
-					// 分包项目的数据id
-					var selectDatas= this.CONTRACTLIST;
-					 //deleteid为id的数组
-          var deleteids = [];
-          var ides;
-          for(let i = 0; i < selectDatas.length; i++) {
-            deleteids.push(selectDatas[i].ID);
-          }
-          //ids为deleteid数组用逗号拼接的字符串
-          ides = deleteids.toString(',');
-					if(deleteids.length==0&&deleteid.length==0){
-							this.$message({
-								message: '请先选择需要下达的项目',
-								type: 'warning'
-							});
-					}else{
-							for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+		          var deleteid = [];
+		          var ids;
+		          for(let i = 0; i < selectData.length; i++) {
+		            deleteid.push(selectData[i].ID);
+		          }
+		          //ids为deleteid数组用逗号拼接的字符串
+		          ids = deleteid.toString(',');
+							// 分包项目的数据id
+							var selectDatas= this.CONTRACTLIST;
+							 //deleteid为id的数组
+		          var deleteids = [];
+		          var ides;
+		          for(let i = 0; i < selectDatas.length; i++) {
+		            deleteids.push(selectDatas[i].ID);
+		          }
+		          //ids为deleteid数组用逗号拼接的字符串
+		          ides = deleteids.toString(',');
+		          if(deleteids.length==0&&deleteid.length==0){
+									this.$message({
+										message: '请先选择需要下达的项目',
+										type: 'warning'
+									});
+							}else{
+									for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
+										console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
 								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
+									console.log(this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.length);
 										this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.join(',');
 								}
-						
-					}
-					for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-						if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
-							this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
-						}
-					}
+								
+							}
+							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
+								console.log(this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION);
+								if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
+									this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
+								}
+							}
+				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
 					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
 					this.$axios.post(url,{WORKORDER:this.workorderForm,PROJECTLIST:ids,CONTRACTLIST:ides}).then((res) => {
 						console.log(this.workorderForm);
@@ -887,6 +1169,43 @@
 				$(".mask_divbg").css("top", "100px");
 			},
 			
+			//时间格式化  
+			dateFormat(row, column) {
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
+			handleClose(done) {
+				this.$confirm('确认关闭？')
+					.then(_ => {
+						this.resetBasisInfo2();
+					})
+					.catch(_ => {
+						console.log('取消关闭');
+						$('.v-modal').hide();
+					});
+			},
+			getUser(){//获取当前用户信息
+					var url = this.basic_url + '/api-user/users/currentMap';
+					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					this.currentuserinfo = res.data;
+				 	this.userid = res.data.id;
+	        this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
+	            }).catch((err) => {
+	            });
+			},
+			getgroup(){//获取专业组信息
+			var url = this.basic_url + '/api-user/depts/findDeptList/'+this.$store.state.currentcjdw[0].id;
+			this.$axios.get(url, {}).then((res) => {
+			this.maingroups=res.data;
+	    	}).catch((err) => {
+	      });
+				
+			},
 			//承检单位
 			getCompany() {
 				var url = this.basic_url + '/api-user/depts/treeByType';
@@ -916,30 +1235,27 @@
 				}).catch((err) => {
 				});		
 			},
-			//筛选助手
-			visableleader(leader,PROJECTLIST,index,value){
+			visableleader(leader,PROJECTLIST,index){
 				if(!leader){
 						return;
 				}
-				if(value=='null'){
-					if(PROJECTLIST=='PROJECTLIST'){
-						this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
-					}else{
-						this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
-					}
+				if(PROJECTLIST=='PROJECTLIST'){
+					this.workorderForm.WORKORDER_PROJECTList[index].ASSIST_PERSION=[];
 				}else{
-					var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.maingroupid;
-					this.$axios.get(url, {}).then((res) => {
+					this.workorderForm.WORKORDER_CONTRACTList[index].ASSIST_PERSION=[];
+				}
+				var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.maingroupid;
+				this.$axios.get(url, {}).then((res) => {
 					var leaders = res.data.data;
 					for(var i=0;i<leaders.length;i++){
-						if(leader==leaders[i].id){
-								leaders.splice(i, 1); //删除下标为i的元素                
-						}
+          if(leader==leaders[i].id){
+						  leaders.splice(i, 1); //删除下标为i的元素                
 					}
-					this.assistant=leaders;
-					}).catch((err) => {
-					});
 				}
+				this.assistant=leaders;
+				}).catch((err) => {
+				});
+				
 			},
 			getSummaries(param) {
         //param 是固定的对象，里面包含 columns与 data参数的对象 {columns: Array[4], data: Array[5]},包含了表格的所有的列与数据信息
@@ -1024,7 +1340,16 @@
 		},
 		
 		mounted() {
-		   this.getCompany();//承检单位
+			this.getgroup();
+			this.getITEM_STATUS();//页面打开加载-样品状态
+			this.getITEM_SOURCE();//页面打开加载-样品来源
+			this.getCOMPLETE_MODE();//页面打开加载-完成方式
+			this.getITEM_RECEPT_STATUS();//页面打开加载-样品接收状态
+			this.getITEM_CHECK_STATUS();//页面打开加载-样品检后状态
+			this.getITEM_MANAGEMENT();//页面打开加载-样品处置
+			this.getCompany();//承检单位
+			this.getUser();
+			
 		},
 	}
 </script>

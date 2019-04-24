@@ -63,7 +63,9 @@
 							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 												<el-table-column prop="P_DESC" label="检验检测项目名称" sortable>
 												</el-table-column>
-							            		<el-table-column prop="REMARKS" label="技术要求" width="220px" sortable>
+							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" width="220px" sortable>
+												</el-table-column>
+							            		<el-table-column prop="REMARKS" label="要求" width="220px" sortable>
 												</el-table-column>
 												<el-table-column prop="UNIT" label="计量单位" width="80px">
 												</el-table-column>
@@ -105,7 +107,7 @@
 							            	<el-table :data="workorderForm.WORKORDER_CONTRACTList" border stripe :fit="true" max-height="260" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
 												<el-table-column prop="P_REMARKS" label="检测项目名称" sortable>
 												</el-table-column>
-							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" width="220px" sortable>
+							            		<el-table-column prop="REQUIRES" label="要求" width="220px" sortable>
 												</el-table-column>
 												<el-table-column prop="UNIT" label="计量单位" width="80px">
 												</el-table-column>

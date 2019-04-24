@@ -319,6 +319,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 		},
 		methods: {
 			showInfo(e){
+				console.log(e.keyCode);
 				if(e.keyCode == '13' || e.keyCode == '86'){
 					var str = this.samplesForm.ITEMNUM;
 					if(str.indexOf('#')!=-1){

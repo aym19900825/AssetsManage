@@ -5,7 +5,7 @@
     <el-row :gutter="30">
       <el-col :span="23" :offset="0">
         <el-form-item :label="formLabel" prop="opinion">
-          <el-input type="textarea" :rows="5" placeholder="请输入内容" v-model="approveForm.opinion"></el-input>
+          <el-input type="textarea" rows="5" placeholder="请输入内容" v-model="approveForm.opinion"></el-input>
         </el-form-item>
       </el-col>
     </el-row>

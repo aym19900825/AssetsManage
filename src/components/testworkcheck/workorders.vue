@@ -494,7 +494,8 @@
 					return;
 				} else if(this.selMenu[0].STATE == '6') {//待生成
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID,this.selMenu[0].REPORTTEMPLATENUM);
-					// console.log(this.selMenu[0].ID);
+					console.log(this.selMenu[0].ID);
+					console.log(this.selMenu[0].REPORTTEMPLATENUM);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息

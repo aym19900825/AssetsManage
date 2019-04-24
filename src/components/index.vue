@@ -33,63 +33,61 @@
 					<el-row :gutter="20" class="applist">
 						<!--APPList Begin-->
 						<el-col :span="12">
-						<div class="statisticsbg">
-						<el-tabs type="border-card">
-							<el-tab-pane label="待办任务">
-								<div id="todoLists" style="width:100%; height:260px;">
-										<!-- 表格 -->
-									<el-table ref="table" :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}"
-										v-loading="loading"
-										element-loading-text="加载中…"
-										element-loading-spinner="el-icon-loading"
-										element-loading-background="rgba(255, 255, 255, 0.9)">
-										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
-											<template slot-scope="scope">
-												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
-												</p>
-											</template>
-										</el-table-column>
-										<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
-										</el-table-column>
-										<el-table-column label="当前环节" sortable prop="name">
-										</el-table-column>
-										<el-table-column label="接收时间" sortable width="160px" prop="createTime">
-										</el-table-column>
-									</el-table>
-									<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-									</el-pagination>
-										<!-- 表格 -->
-								</div>
-							</el-tab-pane>
-							<el-tab-pane label="已办任务">
-								<div id="todoLists" style="width:100%; height:260px;">
-										<!-- 表格 -->
-									<el-table ref="table" :data="completeList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'completeList', order: 'descending'}"
+							<el-tabs type="border-card">
+								<el-tab-pane label="待办任务">
+									<div id="todoLists" style="width:100%; height:220px;">
+											<!-- 表格 -->
+										<el-table ref="table" :data="todoList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'todoList', order: 'descending'}"
+											v-loading="loading"
+											element-loading-text="加载中…"
+											element-loading-spinner="el-icon-loading"
+											element-loading-background="rgba(255, 255, 255, 0.9)">
+											<el-table-column label="单据号" sortable width="160px" prop="bizNum">
+												<template slot-scope="scope">
+													<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
+													</p>
+												</template>
+											</el-table-column>
+											<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
+											</el-table-column>
+											<el-table-column label="当前环节" sortable prop="name">
+											</el-table-column>
+											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
+											</el-table-column>
+										</el-table>
+										<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+										</el-pagination>
+											<!-- 表格 -->
+									</div>
+								</el-tab-pane>
+								<el-tab-pane label="已办任务">
+									<div id="todoLists" style="width:100%; height:220px;">
+											<!-- 表格 -->
+										<el-table ref="table" :data="completeList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'completeList', order: 'descending'}"
 
-										v-loading="loading"
-										element-loading-text="加载中…"
-										element-loading-spinner="el-icon-loading"
-										element-loading-background="rgba(255, 255, 255, 0.9)">
-										<el-table-column label="单据号" sortable width="160px" prop="bizNum">
-											<template slot-scope="scope">
-												<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
-												</p>
-											</template>
-										</el-table-column>
-										<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
-										</el-table-column>
-										<el-table-column label="当前环节" sortable prop="name">
-										</el-table-column>
-										<el-table-column label="接收时间" sortable width="160px" prop="createTime">
-										</el-table-column>
-									</el-table>
-									<el-pagination background class="text-right pt10" @size-change="sizeChanges" @current-change="currentChanges" :current-page="page.currentPages" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSizes" layout="total, sizes, prev, pager, next" :total="page.totalCounts">
-									</el-pagination>
-										<!-- 表格 -->
-								</div>
-							</el-tab-pane>
-						</el-tabs>
-						</div>
+											v-loading="loading"
+											element-loading-text="加载中…"
+											element-loading-spinner="el-icon-loading"
+											element-loading-background="rgba(255, 255, 255, 0.9)">
+											<el-table-column label="单据号" sortable width="160px" prop="bizNum">
+												<template slot-scope="scope">
+													<p class="blue" title="点击查看详情" @click=audit(scope.row)>{{scope.row.bizNum}}
+													</p>
+												</template>
+											</el-table-column>
+											<el-table-column label="任务类型" sortable width="160px" prop="appDesc">
+											</el-table-column>
+											<el-table-column label="当前环节" sortable prop="name">
+											</el-table-column>
+											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
+											</el-table-column>
+										</el-table>
+										<el-pagination background class="text-right pt10" @size-change="sizeChanges" @current-change="currentChanges" :current-page="page.currentPages" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSizes" layout="total, sizes, prev, pager, next" :total="page.totalCounts">
+										</el-pagination>
+											<!-- 表格 -->
+									</div>
+								</el-tab-pane>
+							</el-tabs>
 						</el-col>
 						<el-col :span="6">
 							<div class="statisticsbg" style="height: 290px">
@@ -138,7 +136,7 @@
 							<div class="statisticsbg">
 								<div class="echart_title clearfix">
 									<div class="pull-left">
-										<h6>设备故障提报量</h6>
+										<h6>工作总计处理量</h6>
 									</div>
 									<el-dropdown class="pull-right font13 blue">
 										<span class="el-dropdown-link">
@@ -148,7 +146,7 @@
 											<el-dropdown-item>昨天</el-dropdown-item>
 											<el-dropdown-item>近一周</el-dropdown-item>
 											<el-dropdown-item>近一月</el-dropdown-item>
-											<el-dropdown-item class="">近一年</el-dropdown-item>
+											<el-dropdown-item>近一年</el-dropdown-item>
 										</el-dropdown-menu>
 									</el-dropdown>
 								</div>
@@ -222,8 +220,8 @@ export default {
     },
 		methods: {
 			getop(){
-        this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
-      },
+				this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
+			},
 			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 				this.toDoNum = num;
 			},
@@ -573,8 +571,20 @@ export default {
 .small_font { color: #999999; font-size:13px; line-height:18px;}
 .middle_font { color: #121958; font-size: 14px;  line-height:28px;}
 .middle_font span {display: block;}
-
-
-
+.el-tabs--border-card {
+		-webkit-box-shadow: 0px 1px 15px 1px rgba(176,192,237,0.42);
+    box-shadow: 0px 1px 15px 1px rgba(176,192,237,0.42);
+    border-radius: 6px;
+		border:none;
+}
+.el-tabs--border-card>.el-tabs__header {background-color: #f2f5fb; border-bottom: 1px solid #d9e0ee; border-top-right-radius: 6px; border-top-left-radius: 6px;}
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active {
+	border-right-color: #d9e0ee;
+	border-top-color: #d9e0ee;
+	border-left-color: #d9e0ee;
+}
+.el-tabs--border-card>.el-tabs__header .el-tabs__item:first-child,.el-tabs--border-card>.el-tabs__header .el-tabs__item:first-child.is-active{
+	 border-top-left-radius: 6px;
+}
 </style>
 

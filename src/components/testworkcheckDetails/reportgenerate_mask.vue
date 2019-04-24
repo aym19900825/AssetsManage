@@ -35,57 +35,73 @@
 							<el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
 								<!-- 报告生成与编辑 Begin-->
 								<el-tab-pane v-for="(reportData,index) in selectReportData" :key="index" :label="reportData.name" :name="reportData.typeid">
-									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'">
+									<el-row v-if="reportData.name=='封面'||reportData.name=='首页'||reportData.name=='封底'">
 										<el-col :span="8" v-for="(item,index) in selectReportData[index].List" :key="index">
 											<el-form-item v-if="item.required == 0" :label="item.title" :prop="item.param" label-width="150px">
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
+												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" style="width:100%;">
 												</el-date-picker>
 
-												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
-													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
-												</el-radio-group> -->
+												<div class="fdtext" v-if="item.type=='matters'" v-html="item.value">{{item.title}}</div>
 
-												<!-- <el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false">
-													<el-option v-for="(itemchild,index) in assets" :key="index" :label="itemchild.title" :value="itemchild.value">
-													</el-option>
-												</el-select> -->
+												<!--item.name == '检测结果'-->
+												<el-radio-group v-model="inputData[item.param]" v-if="item.type=='radio'" v-show="true" :disabled="false">
+													<el-radio v-for="(its,index) in optsData" :key="index" :label="its.name"></el-radio>
+												</el-radio-group>
+
+												<!--item.name == '检测结论'-->
+												<el-select v-model="inputData[item.param]" filterable :placeholder="item.name" v-show="true" v-if="item.type == 'select'" @change="selChange" :disabled="false" style="width:100%;">
+													<el-option v-for="(itemchild,index) in reportResultType" :key="index" :value="itemchild.code" :label="itemchild.name"></el-option>
+												</el-select>
 											</el-form-item>
+
 											<el-form-item v-else :label="item.title" :prop="item.param" label-width="150px" :rules="{required: true, message: '请填写', trigger: 'change'}">
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='input'" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
 												<el-input v-model="inputData[item.param]" :type="item.type" v-if="item.type=='text'" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-input v-model="inputData[item.param]" :type="item.type" autosize v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==1" :disabled="true" :placeholder="item.name">{{item.title}}</el-input>
  
-												<el-input v-model="inputData[item.param]" :type="item.type" autosize v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
+												<el-input v-model="inputData[item.param]" :type="item.type" rows="2" v-if="item.type=='textarea'&&item.isdatabase==0" :disabled="false" :placeholder="item.name">{{item.title}}</el-input>
 
-												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" styel="width:100%;">
+												<el-date-picker v-model="inputData[item.param]" :type="item.type" v-if="item.type=='date'" value-format="yyyy-MM-dd" :disabled="false" :placeholder="item.name" style="width:100%;">
 												</el-date-picker>
-												
-												<!-- <el-radio-group v-model="item.value" v-if="item.type=='radio'" :disabled="false">
-													<el-radio :label="it.title" v-for="it in item.opts" :key="it.id"></el-radio>
-												</el-radio-group> -->
 
-												<el-select v-model="item.value" filterable :placeholder="item.name" v-if="item.type == 'select'&&item.type == 'select'" @change="selChange" :disabled="false">
-													<el-option v-for="(itemchild,index) in reportResultType" :key="index" :label="itemchild.title" :value="itemchild.value"></el-option>
+												<!--item.name == '注意事项'-->
+												<div class="fdtext clearfix" v-if="item.type=='matters'" v-html="item.value">{{item.title}}</div>
+
+												<!--item.name == '检测结果'-->
+												<el-radio-group v-model="inputData[item.param]" v-if="item.type=='radio'" :disabled="false">
+													<el-radio v-for="(it,index) in optsData" :key="index" :label="it.name"></el-radio>
+												</el-radio-group>
+
+												<!--item.name == '检测结论'-->
+												<el-select v-model="inputData[item.param]" filterable :placeholder="item.name" v-if="item.type == 'select'" @change="selChange" :disabled="false" style="width:100%;">
+													<el-option v-for="(itemchild,index) in reportResultType" :key="index" :value="itemchild.code" :label="itemchild.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
+										<div class="clearfix"></div>
+										<div class="clearfix">
+											<div class="pt20 pb20" v-show="reportData.name=='首页'&&reportTemplate.RE_TYPE==1006||reportTemplate.RE_TYPE==1011||reportTemplate.RE_TYPE==1010">
+												注：下结论时，如需下检测结论请选择【检测结论】，无需下结论时，请选择【检测结果】。
+											</div>
+										</div>
+										
 									</el-row>
 									
-									<el-row v-else-if="reportData.name=='封底'">
+									<!-- <el-row v-else-if="reportData.name=='封底'">
 										<el-col :span="24" v-for="(itemfd,index) in selectReportData[index].List" :key="index">
 											<div class="fdtext" v-if="itemfd.type=='matters'" v-html="itemfd.value">{{itemfd.title}}</div>
 										</el-col>
-									</el-row>
+									</el-row> -->
 
 									<el-row v-else-if="reportData.name=='产品质量检测报告'">
 										<el-col :span="24">
@@ -164,19 +180,19 @@
 												</template>
 											</el-table-column>
 
-											<el-table-column label="检验责任人" sortable prop="LIABLE_PERSONDesc">
+											<el-table-column label="检验责任人" width="120px" sortable prop="LIABLE_PERSONDesc">
 											</el-table-column>
 
 											<el-table-column label="结果文件名称" prop="FILENAME">
 											</el-table-column>
 
-											<el-table-column label="文件大小" prop="FILESIZE">
+											<el-table-column label="审核人" width="100px" prop="CHECKER">
 											</el-table-column>
 
-											<el-table-column label="审核人" prop="CHECKER">
+											<el-table-column label="审核时间" width="120px" prop="CHECK_DATE">
 											</el-table-column>
 
-											<el-table-column label="审核时间" prop="CHECK_DATE">
+											<el-table-column label="文件大小" width="120px" prop="FILESIZE">
 											</el-table-column>
 
 											<el-table-column label="排序" width="130px" prop="SORT">
@@ -186,16 +202,16 @@
 												</template>
 											</el-table-column>
 
-											<el-table-column label="操作">
+											<el-table-column label="操作" width="80px">
 												<template slot-scope="scope">
 													<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
 														<i class="icon-eye"></i>
 														预览
 													</el-button>
-													<el-button title="编辑" @click="editFile(scope.row)" type="text" size="small"> 
+													<!-- <el-button title="编辑" @click="editFile(scope.row)" type="text" size="small"> 
 														<i class="icon-edit"></i>
 														编辑
-													</el-button>
+													</el-button> -->
 													<!-- <el-button class="orange" title="回退" type="text" size="small" @click="sendback(scope.row)">
 														<i class="icon-back orange"></i>
 														回退
@@ -314,6 +330,7 @@
 				basic_url: Config.dev_url,
 				selectData: [],//报告模板类型
 				reportResultType: [],//获取报告结果类型
+				optsData: [],//检验结果
 				selectReportData: [],//获取报告数据
 				SelectIsQualified:[],//不合格类别
 				SelectIsSynthetical:[],//获取单项判定合格不合格
@@ -321,8 +338,10 @@
 				selData: [],//点击table行选中Checkbox
 				isshift: false,//点击table行选中Checkbox
 				isctrl: false,//点击table行选中Checkbox
+				templateNum:0,//模板编码
+				// reptemDetailNum:'',//模板编码默认加载的时候
 				reportTemplate:{
-					RE_TYPE: '1010',
+					RE_TYPE: '',
 				},
 				reportGenerateForm:{
 					WORKORDER_REPORTList:[],//查看生成的报告列表
@@ -390,6 +409,7 @@
 					this.fourthBtn = false;
 					this.fifthBtn = false;
 					this.getReportResultType();//报告结果类型，检验结论、检验结果
+					this.getOptsData();//检验结果
 				}else if(activeName=='tab-2') {//判断按钮显示问题，检查清单显示保存和取消
 					this.firstBtn = true;
 					this.secondBtn = true;
@@ -408,8 +428,8 @@
 						}
 					}
 				}else if(activeName=='tab-4') {//判断按钮显示问题，封底显示生成生成检验/检测报告和取消
-					this.firstBtn = false;
-					this.secondBtn = false;
+					this.firstBtn = true;
+					this.secondBtn = true;
 					this.thirdBtn = false;
 					this.fourthBtn = false;
 					this.fifthBtn = false;
@@ -449,9 +469,20 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_result_type';
 				this.$axios.get(url, {}).then((res) => {
 					this.reportResultType = res.data;
+					// console.log(res.data);
 				}).catch((wrong) => {
 				})	
 			},
+			//获取检验结果
+			getOptsData(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=isSynthetical';
+				this.$axios.get(url, {}).then((res) => {
+					this.optsData = res.data;
+					console.log(res.data);
+				}).catch((wrong) => {
+				})	
+			},
+			
 			//报告模板类型
 			getReportType() {
 				// var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=RE_TYPE';
@@ -459,8 +490,9 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data.data;
 					this.reptemDetailId=res.data.data[0].ID;
-					console.log(res.data.data[0].RE_NUM);
-					console.log(res.data.data[0].ID);
+					// console.log(res.data.data[0].RE_NUM);
+					// console.log(res.data.data[0].ID);
+					// this.reptemDetailNum=res.data.data[0].RE_NUM
 					this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
 					// this.templatefileid = res.data.data[0].RE_NUM;
 					// this.templatefileid = 1010;
@@ -475,11 +507,11 @@
 						// console.log(this.reptemDetailId);
 					}
 				});
-				this.reportTemplate.RE_TYPE
+				// console.log(this.reportTemplate.RE_TYPE);
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
-					console.log(res.data);
+					// console.log(res.data);
 					// console.log(this.reportTemplate.RE_TYPE);
 					// console.log(this.dataid);
 					// this.reportGenerateForm.inspect_date = this.getToday();
@@ -826,10 +858,18 @@
 			showDialog(id,teplateNum){
 				this.show = true;
 				this.dataid = id;
-				this.templateNum=teplateNum;
+				this.datanum = teplateNum;//从工作任务单过来的模板编码
 				this.requestData();
 				this.firstBtn = true;//显示取消按钮
 				this.secondBtn = true;//显示保存按钮
+				//判断当前模板编号，如果从父组件传过来值则用传过来的，如果没有则用选的值this.reportTemplate.RE_TYPE;
+				if (!!this.datanum){
+						this.templateNum=this.reportTemplate.RE_TYPE;
+					}else {
+						this.reportTemplate.RE_TYPE=this.datanum;
+					};
+				console.log(this.templateNum);
+				console.log(this.reportTemplate.RE_TYPE);
 			},
 
 			sizeChange(val) {//分页，总页数
@@ -854,7 +894,8 @@
 								tranData.value = this.inputData[tranData.param];
 							}
 						}
-						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid+'/'+this.templateNum;
+						
+						var url = this.basic_url + '/api-merge/templateConfig/saveOrUpdateData/'+this.dataid+'/'+ this.reportTemplate.RE_TYPE;
 						this.$axios.post(url,this.selectReportData).then((res) => {
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -864,6 +905,7 @@
 								});
 								//重新加载数据
 								this.$emit('requests');
+								this.requestData();
 							}
 						}).catch((err) => {
 						});

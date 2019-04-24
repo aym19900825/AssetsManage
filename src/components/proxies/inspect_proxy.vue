@@ -85,12 +85,12 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="130px">
+									<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="130px">
 										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="检测委托书编号" prop="PROXYNUM" label-width="130px">
+									<el-form-item label="检验委托书编号" prop="PROXYNUM" label-width="130px">
 										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>

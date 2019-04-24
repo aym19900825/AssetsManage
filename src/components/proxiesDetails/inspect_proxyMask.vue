@@ -121,8 +121,8 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="noedit1" >
-														<el-button slot="append" icon="el-icon-search" :disabled="noedit1" @click="getCustomer('pname')"></el-button>
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="special" >
+														<el-button slot="append" icon="el-icon-search" :disabled="special1" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -990,7 +990,7 @@
 						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托方名称名称
 					V_ADDRESS: [{required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
-					V_PERSON: [{required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
+					V_PERSON: [{required: true, validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话
 					R_VENDORDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
 					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托方名称编号
@@ -1080,7 +1080,7 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 4) {//计算第几列的减1
+          } else if(index === 5) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));

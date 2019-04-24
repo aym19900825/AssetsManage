@@ -274,16 +274,11 @@
 		})	
 	},
     getCompany() {
-		// var url = this.basic_url + '/api-user/depts/treeByType';
-		var data = {
-					DEPTID: this.$store.state.currentcjdw[0].id,
-					TYPE: 'dept'
-				};
-		var url=this.basic_url+'/api-apps/app/inspectPro/operate/proxycustomer';
-        this.$axios.get(url, {params: data}).then((res) => {
-			this.selectData = res.data.datas;
-			this.searchList.dept = res.data.datas[0].id;
-			this.defaultdept= res.data.datas[0].id;
+		var url=this.basic_url+'/api-user/depts/findStation/2';
+        this.$axios.get(url, {}).then((res) => {
+			this.selectData = res.data;
+			this.searchList.dept = res.data[0].id;
+			this.defaultdept= res.data[0].id;
         });
     },
   },

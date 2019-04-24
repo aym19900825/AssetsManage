@@ -279,8 +279,67 @@
 								
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">
+										<el-tab-pane label="检验依据" name="first">
+											<div class="table-func table-funcb">
+												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
+													<i class="icon-search"></i>
+													<font>选择</font>
+												</el-button>
+											</div>
+											<el-table :data="dataInfo.WORKORDER_BASISList" row-key="ID" border stripe :fit="true" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'dataInfo.WORKORDER_BASISList', order: 'descending'}">
+												
+												<el-table-column prop="S_NUM" label="编码" sortable width="150px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
+															   <el-button slot="append" icon="el-icon-search"></el-button>
+														</el-input>
+														<span v-else>{{scope.row.S_NUM}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="SS_NUM" label="标准编号" sortable width="150px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.SS_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" placeholder="请输入">
+															   <el-button slot="append" icon="el-icon-search"></el-button>
+														</el-input>
+														<span v-else>{{scope.row.SS_NUM}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+
+												<el-table-column prop="S_DESC" label="标准内容" sortable>
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_DESC'" >
+															<el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入" :disabled="noedit">
+                              </el-input> 
+														</el-form-item>	
+													</template>
+												</el-table-column>
+												
+												<el-table-column prop="VERSION" label="版本" sortable width="120px">
+													<template slot-scope="scope">
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入">
+														</el-input>
+														<span v-else>{{scope.row.VERSION}}</span>
+														</el-form-item>
+													</template>
+												</el-table-column>
+												
+												<el-table-column fixed="right" label="操作" width="120px">
+													<template slot-scope="scope">
+														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'basisList')" type="text" size="small" v-if="!viewtitle">
+															 <i class="icon-trash red"></i>
+														</el-button>
+													</template>
+												</el-table-column>
+											</el-table>
+									    </el-tab-pane>
 										<!--检测项目与要求 Begin-->
-										<el-tab-pane label="检验检测项目与要求" name="first">
+										<el-tab-pane label="检验检测项目与要求" name="second">
 											<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="260"
 											 @cell-click="iconOperation" style="width: 100%;" 
 											 :summary-method="getSummaries" :show-summary="true"
@@ -379,7 +438,7 @@
 										</el-tab-pane>
 										<!--检测项目与要求 End-->
 										<!--分包项目与要求 Begin-->
-										<el-tab-pane label="分包项目与要求" name="second">
+										<el-tab-pane label="分包项目与要求" name="third">
 											<el-table :data="workorderForm.WORKORDER_CONTRACTList" row-key="ID"
 											 border stripe :fit="true" highlight-current-row="highlight-current-row" 
 											 :summary-method="getSummarie" :show-summary="true" 
@@ -1016,31 +1075,31 @@
 						for(let i = 0;i<workorderForm.WORKORDER_PROJECTList.length;i++){
 							workorderForm.WORKORDER_PROJECTList[i].INSPECT_GROUP = Number(workorderForm.WORKORDER_PROJECTList[i].INSPECT_GROUP);
 							this.getleader(workorderForm.WORKORDER_PROJECTList[i].INSPECT_GROUP,'PROJECTLIST',i);
-							workorderForm.WORKORDER_PROJECTList[i].LEADER = Number(workorderForm.WORKORDER_PROJECTList[i].LEADER);
-							if(!!workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
-								this.visableleader(workorderForm.WORKORDER_PROJECTList[i].LEADER,'PROJECTLIST',i,'value');
-								let arr = workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.split(',');
-								for(let m=0; m<arr.length; m++){
-									arr[m] = Number(arr[m]);
-								}
-								workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = arr;
-							}
+							// workorderForm.WORKORDER_PROJECTList[i].LEADER = Number(workorderForm.WORKORDER_PROJECTList[i].LEADER);
+							// if(!!workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
+							// 	this.visableleader(workorderForm.WORKORDER_PROJECTList[i].LEADER,'PROJECTLIST',i,'value');
+							// 	let arr = workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.split(',');
+							// 	for(let m=0; m<arr.length; m++){
+							// 		arr[m] = Number(arr[m]);
+							// 	}
+							// 	workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = arr;
+							// }
 						}
 						for(let i = 0;i<workorderForm.WORKORDER_CONTRACTList.length;i++){
 							workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP = Number(workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP);
 							this.getleader(workorderForm.WORKORDER_CONTRACTList[i].INSPECT_GROUP,'CONTRACTList',i);
-							workorderForm.WORKORDER_CONTRACTList[i].LEADER = Number(workorderForm.WORKORDER_CONTRACTList[i].LEADER);
-							console.log(workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
-							this.visableleader(workorderForm.WORKORDER_CONTRACTList[i].LEADER,'CONTRACTList',i,'value');
-							if(!!workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
-								let arr = workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.split(',');
-								for(let m=0; m<arr.length; m++){
-									arr[m] = Number(arr[m]);
-								}
-								workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = arr;
-							}else{
-								workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = [];
-							}
+							// workorderForm.WORKORDER_CONTRACTList[i].LEADER = Number(workorderForm.WORKORDER_CONTRACTList[i].LEADER);
+							// console.log(workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION);
+							// this.visableleader(workorderForm.WORKORDER_CONTRACTList[i].LEADER,'CONTRACTList',i,'value');
+							// if(!!workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
+							// 	let arr = workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.split(',');
+							// 	for(let m=0; m<arr.length; m++){
+							// 		arr[m] = Number(arr[m]);
+							// 	}
+							// 	workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = arr;
+							// }else{
+							// 	workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = [];
+							// }
 						}
 						this.show=true;
 					}).catch((wrong) => {

@@ -906,10 +906,10 @@
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					P_NAME:'',
-					CHECK_COST:'',//合同费用
-					ACTUALCOST:'',//实收费用
+					CHECK_COST:0.00,//合同费用
+					ACTUALCOST:0.00,//实收费用
 					CONTRACTCOST:0,//标准费用
-					ACTUAL_PERCENT:0,
+					ACTUAL_PERCENT:0.00,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
 					CHECK_PROXY_CONTRACTList: [//分包要求
@@ -979,6 +979,8 @@
 				views: false,
 				noviews: true, //保存的按钮
 				modify: false,
+				PNAME:false,
+				PNAME1:false,
 				start:false,
 				approval:false,
 				DataInfo:'',
@@ -1499,14 +1501,14 @@
 					 		this.special=true;
 							this.special1=true;
 							this.noedit1=true;
-							this.PNAME1=true;
+							this.PNAME=true;
 							this.PNAME1=true;
 					}else if(res.data.ISRECEIVE=='2'){//2，委托方名称不能动；
 							this.noedit2=true
 							this.special=true;
 							this.special1=true;
 							this.noedit1=true;
-							this.PNAME1=true;
+							this.PNAME=true;
 							this.PNAME1=true;
 					}
 					this.dataInfo = res.data;
@@ -1628,8 +1630,8 @@
 				this.noedit1 = true;
 				this.noedit2 = true;
 				this.special=true;
-				this.PNAME1=true;//生产单位
-        this.PNAME2=true;
+				this.PNAME=true;//生产单位
+        this.PNAME1=true;
 				this.isEditing=false;
 				this.detailgetData();
 				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro/flow/NodeId/'+this.dataid, {}).then((res) => {
@@ -1756,8 +1758,8 @@
 				// this.dataInfo.ITEM_DISPOSITION='';
 				this.special1=false;
 				this.special=true;
-				this.PNAME1=false;//生产单位
-        this.PNAME2=false;
+				this.PNAME=false;//生产单位
+        this.PNAME1=false;
 				this.dataInfo.ISRECEIVE=0;
 				}else{
 				//样品有值的时候
@@ -1778,8 +1780,8 @@
 				this.special1=true;
 				this.special=true;
 				this.special2=true;//样品名称
-				this.PNAME1=true;//生产单位
-        this.PNAME2=true;
+				this.PNAME=true;//生产单位
+        this.PNAME1=true;
 				this.dataInfo.ISRECEIVE=1;
 				}
 			},

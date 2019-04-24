@@ -109,7 +109,7 @@
 									width="200">
 									<template slot-scope="scope">
 										<el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
-										<el-button @click="delFile(scope.$index,scope.row,)" type="text" size="small">删除</el-button>
+										<!-- <el-button @click="delFile(scope.$index,scope.row,)" type="text" size="small">删除</el-button> -->
 									</template>
 								</el-table-column>
 							</el-table>

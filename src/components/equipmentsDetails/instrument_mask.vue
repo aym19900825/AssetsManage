@@ -152,7 +152,6 @@
 			<!--设备保管人 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
 				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
-						v-loadmore="loadMore"
 						v-loading="loading"
 						element-loading-text="加载中…"
 						element-loading-spinner="el-icon-loading"
@@ -284,7 +283,7 @@
 						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
 					],
 					KEEPERDesc: [//设备保管人
-						{ required: true, trigger: 'blur', validator: this.Validators.isChoosedata},
+						{ required: true,  validator: this.Validators.isChoosedata},
 					],
 					ACCEPT_DATE: [//接收日期
 						{ required: true, message: '请选择日期', trigger: 'blur' },

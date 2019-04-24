@@ -121,8 +121,8 @@
 										<el-row>
 											<el-col :span="12">
 												<el-form-item label="生产单位名称" prop="P_NAMEDesc" label-width="110px">
-													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="special" >
-														<el-button slot="append" icon="el-icon-search" :disabled="special1" @click="getCustomer('pname')"></el-button>
+													<el-input v-model="dataInfo.P_NAMEDesc" :disabled="PNAME" >
+														<el-button slot="append" icon="el-icon-search" :disabled="PNAME1" @click="getCustomer('pname')"></el-button>
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -1499,11 +1499,15 @@
 					 		this.special=true;
 							this.special1=true;
 							this.noedit1=true;
+							this.PNAME1=true;
+							this.PNAME1=true;
 					}else if(res.data.ISRECEIVE=='2'){//2，委托方名称不能动；
 							this.noedit2=true
 							this.special=true;
 							this.special1=true;
 							this.noedit1=true;
+							this.PNAME1=true;
+							this.PNAME1=true;
 					}
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
@@ -1624,6 +1628,8 @@
 				this.noedit1 = true;
 				this.noedit2 = true;
 				this.special=true;
+				this.PNAME1=true;//生产单位
+        this.PNAME2=true;
 				this.isEditing=false;
 				this.detailgetData();
 				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro/flow/NodeId/'+this.dataid, {}).then((res) => {
@@ -1750,6 +1756,8 @@
 				// this.dataInfo.ITEM_DISPOSITION='';
 				this.special1=false;
 				this.special=true;
+				this.PNAME1=false;//生产单位
+        this.PNAME2=false;
 				this.dataInfo.ISRECEIVE=0;
 				}else{
 				//样品有值的时候
@@ -1770,6 +1778,8 @@
 				this.special1=true;
 				this.special=true;
 				this.special2=true;//样品名称
+				this.PNAME1=true;//生产单位
+        this.PNAME2=true;
 				this.dataInfo.ISRECEIVE=1;
 				}
 			},

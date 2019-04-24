@@ -143,7 +143,7 @@
 									<el-row :gutter="30">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="tips">
-												<el-input :rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入" :disabled="noedit"></el-input>
+												<el-input rows="3" type="textarea" v-model="adddeptForm.tips" placeholder="请输入" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

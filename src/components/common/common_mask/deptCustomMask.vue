@@ -56,7 +56,7 @@
 								height="270px" 
 								style="width: 100%;" 
 								:default-sort="{prop:'list', order: 'descending'}"
-								v-loadmore="loadMore"
+								
 								v-loading="loading"  
 								element-loading-text="加载中…"
 								element-loading-spinner="el-icon-loading"

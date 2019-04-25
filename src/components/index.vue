@@ -531,7 +531,7 @@ export default {
 			this.requestData();
 			//一级菜单
 			// this.initEchart();//调用饼状图图表函数名称
-			this.getop();//完成率
+			// this.getop();//完成率
 			this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
 			this.getTodoDing();//打开页面就执行getTodoDing待办任务数函数
 			this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数

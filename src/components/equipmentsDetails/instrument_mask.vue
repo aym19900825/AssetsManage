@@ -443,11 +443,11 @@
                         opts: [
                             {
 								label: '是',
-								val: '是'
+								val: '1'
                             },
                             {
 								label: '否',
-								val: '否'
+								val: '0'
                             }
                         ]
 					},
@@ -460,11 +460,11 @@
                         opts: [
                             {
 								label: '是',
-								val: '是'
+								val: '1'
                             },
                             {
 								label: '否',
-								val: '否'
+								val: '0'
                             }
                         ]
 					},
@@ -476,12 +476,12 @@
 						displayType: 'inline-block',
                         opts: [
                             {
-								label: '外委',
-								val: '外委'
+								label: '外维',
+								val: '1'
                             },
                             {
 								label: '自维',
-								val: '自维'
+								val: '2'
                             }
                         ]
 					},
@@ -494,11 +494,11 @@
                         opts: [
                             {
 								label: '送检',
-								val: '送检'
+								val: '1'
                             },
                             {
 								label: '自检',
-								val: '自检'
+								val: '2'
                             }
                         ]
 					},
@@ -511,19 +511,19 @@
                         opts: [
                             {
 								label: '全新',
-								val: '全新'
+								val: '1'
                             },
                             {
 								label: '已使用过',
-								val: '已使用过'
+								val: '2'
                             },
                             {
 								label: '改装过',
-								val: '改装过'
+								val: '3'
                             },
                             {
 								label: '大修过',
-								val: '大修过'
+								val: '4'
                             }
                         ]
 					},

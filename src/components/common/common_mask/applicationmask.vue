@@ -34,7 +34,7 @@
 									:default-sort="{prop:'applicationList', order: 'descending'}" 
 									@selection-change="SelChange" 
 									@current-change="setSel"
-									v-loadmore="loadMore"
+							
 									v-loading="loading"  
 									element-loading-text="加载中…"
 									element-loading-spinner="el-icon-loading"

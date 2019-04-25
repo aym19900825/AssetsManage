@@ -283,7 +283,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回数量" label-width="140px">
-													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY"  :min="1" :max="1000" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
+													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">

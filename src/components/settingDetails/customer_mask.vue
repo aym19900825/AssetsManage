@@ -360,6 +360,9 @@
 						{required: true,message: '必填',trigger: 'blur'},
 						{validator: this.Validators.isSpecificKey, trigger: 'blur'}
 					],
+					TYPE:[
+						{required: true,message: '必填',trigger: 'change'},
+					],
 					MEMO:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],
 					ZIPCODE:[{required: false,trigger: 'blur',validator: this.Validators.isZipcode}],
 				},

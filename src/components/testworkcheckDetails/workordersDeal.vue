@@ -576,7 +576,7 @@
 			setEquipt(data){
 				var index = this.editEquptIndex;
 				this.workorderForm.WORKORDER_ASSETList[index].ASSETNUM = data.ASSETNUM;
-				this.workorderForm.WORKORDER_ASSETList[index].DESCRIPTION = data.DECRIPTION;
+				this.workorderForm.WORKORDER_ASSETList[index].DESCRIPTION = !!data.DECRIPTION?data.DECRIPTION:data.DESCRIPTION;
 			},
 			viewModule(){
 				this.$refs.dataTemplate.showData(this.deptid);

@@ -140,7 +140,7 @@
 							</el-table-column>						
 							<el-table-column label="配置地址" width="140" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
 							</el-table-column>
-							<el-table-column label="接收状态" width="120" sortable prop="A_STATUS" v-if="this.checkedName.indexOf('接收状态')!=-1">
+							<el-table-column label="接收状态" width="120" sortable prop="A_STATUSDescDesc" v-if="this.checkedName.indexOf('接收状态')!=-1">
 							</el-table-column>
 							<el-table-column label="保管人" width="200" sortable prop="KEEPERDesc" v-if="this.checkedName.indexOf('保管人')!=-1">
 							</el-table-column>						
@@ -275,7 +275,7 @@
 					},
 					{
 						label: '接收状态',
-						prop: 'A_STATUS'
+						prop: 'A_STATUSDesc'
 					},
 					{
 						label: '保管人',

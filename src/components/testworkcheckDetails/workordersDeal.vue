@@ -429,7 +429,6 @@
 			},
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/submitApproval?ID='+this.detailId;
-
 				var projectList = this.workorderForm.WORKORDER_PROJECTList;
 				var contractList = this.workorderForm.WORKORDER_CONTRACTList;
 				var fileList = this.workorderForm.WORKORDER_DATA_TEMPLATEList;

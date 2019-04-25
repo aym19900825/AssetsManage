@@ -147,12 +147,12 @@
 										<el-row>
 											<el-col :span="24">
 												<el-form-item label="委托方提供技术资料" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="noedit"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="viewtitle"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="24">
 												<el-form-item label="特殊要求" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="noedit"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="viewtitle"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -290,7 +290,7 @@
 												
 												<el-table-column prop="S_NUM" label="编码" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_NUM'"  >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
@@ -301,7 +301,7 @@
 
 												<el-table-column prop="SS_NUM" label="标准编号" sortable width="150px">
 													<template slot-scope="scope">
-														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.SS_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.SS_NUM'"  >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.SS_NUM" placeholder="请输入">
 															   <el-button slot="append" icon="el-icon-search"></el-button>
 														</el-input>
@@ -313,8 +313,9 @@
 												<el-table-column prop="S_NAME" label="标准内容" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_BASISList.'+scope.$index + '.S_NAME'" >
-															<el-input size="small" v-model="scope.row.S_NAME" placeholder="请输入" :disabled="noedit">
+															<el-input  v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NAME" placeholder="请输入" :disabled="noedit">
 															</el-input> 
+															<span v-else>{{scope.row.S_NAME}}</span>
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -567,7 +568,7 @@
 									<el-row class="pt10">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="45px">
-												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="noedit"></el-input>
+												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="viewtitle"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

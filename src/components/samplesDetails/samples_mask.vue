@@ -460,7 +460,6 @@
 				proxy_search: {},
 				vName: '',
 				commentArr:{},
-				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -804,7 +803,6 @@
 					this.findDeptId();
 				}).catch((err)=>{})
 				this.reset();
-				console.log(this.$store.state.currentcjdw);
 				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -1047,12 +1045,21 @@
 										this.$emit('request');
 										this.show = false;
 									}
+									if(opt=='update'){
+										this.show =true;
+										this.visible();
+									}
 									this.reset();
+								}else{
+									this.message({
+										message: res.data.resp_msg,
+										type: 'warning'
+									});
+									this.show = false;
 								}
 							}).catch((err) => {
 							});
 							this.show = false;
-							this.falg = true;
 						}
 					} else {
 						this.show = true;
@@ -1060,7 +1067,6 @@
 							message: '未填写完整，请填写',
 							type: 'warning'
 						});
-						this.falg = false;
 					}
 				});
 			},
@@ -1239,36 +1245,15 @@
 			},
 
 			handleClose1(done) { //大弹出框确定关闭按钮
-				this.$confirm('确认关闭？')
-				.then(_ => {
-					this.resetBasisInfo1();
-				})
-				.catch(_ => {
-					console.log('取消关闭');
-					$('.v-modal').hide();
-				});
+				this.resetBasisInfo1();
 			},
 			//小弹出框关闭按钮事件
 			handleClose2(done) {
-				this.$confirm('确认关闭？')
-				.then(_ => {
-					this.resetBasisInfo2();
-				})
-				.catch(_ => {
-					console.log('取消关闭');
-					$('.v-modal').hide();
-				});
+				this.resetBasisInfo2();
 			},
 			//小弹出框关闭按钮事件
 			handleClose3(done) {
-				this.$confirm('确认关闭？')
-				.then(_ => {
-					this.resetBasisInfo3();
-				})
-				.catch(_ => {
-					console.log('取消关闭');
-					$('.v-modal').hide();
-				});
+				this.resetBasisInfo3();
 			},
 		},
 		mounted() {

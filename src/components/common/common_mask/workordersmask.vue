@@ -51,7 +51,7 @@
              height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}"
               @selection-change="SelChange" 
               @current-change="setSel"
-              v-loadmore="loadMore"
+             
             v-loading="loading" 
             element-loading-text="加载中…"
             element-loading-spinner="el-icon-loading"
@@ -180,19 +180,19 @@
             visible() {
                 this.dialogwork = true;
             },
-            loadMore () {
-            if (this.loadSign) {
-                this.loadSign = false
-                this.page.currentPage++
-                if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-                return
-                }
-                setTimeout(() => {
-                this.loadSign = true
-                }, 1000)
-                this.requestData();
-            }
-            },
+            // loadMore () {
+            // if (this.loadSign) {
+            //     this.loadSign = false
+            //     this.page.currentPage++
+            //     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+            //     return
+            //     }
+            //     setTimeout(() => {
+            //     this.loadSign = true
+            //     }, 1000)
+            //     this.requestData();
+            // }
+            // },
             requestData() {
                 this.loading = true;
                 var data = {

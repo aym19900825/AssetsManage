@@ -50,7 +50,7 @@
 										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
 										</el-date-picker>
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
-											<el-radio :label="it.label" v-for="it in item.opts" :key="it.id"></el-radio>
+											<el-radio :label="it.label" v-for="it in item.opts" :value="it.val" :key="it.id"></el-radio>
 										</el-radio-group>
 										<el-select clearable v-model="dataInfo[item.prop]"  v-if="item.type=='select'" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
@@ -248,33 +248,33 @@
 				rules: {
 					DESCRIPTION: [//设备名称
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					CONFIG_UNIT: [//配置单位
 						{ required: true, message: '必填', trigger: 'blur'},
 					],
 					INS_SITE: [//安装地点
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					VENDOR: [//制造商
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					MODEL: [//规格型号
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					ASSET_KPI: [//技术指标
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					SUPPORT_ASSET: [//配套设备
 						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					OPTION_STATUS: [//设备使用状态
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					ISMETER: [//是否计量器具
 						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},
@@ -296,7 +296,7 @@
 					],
 					C_ADDRESS: [//配置地址
 						{ required: true, message: '必填', trigger: 'blur' },
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+						// { trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
 					MODE1: [//检定/验证
 						{ required: true, trigger: 'change', validator: this.Validators.isChoosedata},

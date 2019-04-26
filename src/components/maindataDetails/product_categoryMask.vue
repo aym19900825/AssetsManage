@@ -333,19 +333,26 @@
 			},
 			//点击修订按钮
 			modifyversion() {
+				console.log(123);
 				this.$refs.CATEGORY.validate((valid) => {
 					if(valid) {
-						var category=JSON.stringify(this.category); 
-	 					var CATEGORY=JSON.stringify(this.CATEGORY);
-					 	if(category==CATEGORY){
-					  	this.$message({
-								message: '没有修改内容，不允许修订！',
-								type: 'warning'
-							});
-							return false;
-					    }else{
+						// var category=JSON.stringify(this.category); 
+						// console.log(this.CATEGORY); 
+						// console.log(this.category); 
+						// var CATEGORY=JSON.stringify(this.CATEGORY);
+						
+					 	// if(category==CATEGORY){
+					  	// this.$message({
+						// 		message: '没有修改内容，不允许修订！',
+						// 		type: 'warning'
+						// 	});
+						// 	return false;
+					    // }else{
 							var url = this.basic_url + '/api-apps/app/productType/operate/upgraded';
+							console.log(url);
+							console.log(this.CATEGORY);
 							this.$axios.post(url, this.CATEGORY).then((res) => {
+								console.log(res);
 								//resp_code == 0是后台返回的请求成功的信息
 								console.log(res.data);
 								if(res.data.resp_code == 0) {
@@ -375,7 +382,7 @@
 							}		
 							}).catch((err) => {
 							});
-						}
+						// }
 					} else {
 						this.$message({
 							message: '未填写完整，请填写',

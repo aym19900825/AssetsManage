@@ -178,7 +178,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="所属机构" prop="deptName" label-width="100px">
-												<el-input v-model="user.deptName" :disabled="edit">
+												<el-input v-model="user.deptName" :disabled="noedit">
 													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="disabled"></el-button>
 												</el-input>
 											</el-form-item>
@@ -191,7 +191,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
-												<el-select v-model="user.roleId" multiple :disabled="disabled" default-first-option value-key="item.id" style="width: 100%;" @change="showUserRole">
+												<el-select v-model="user.roleId" multiple  default-first-option value-key="item.id" style="width: 100%;" @change="showUserRole">
 													<el-option v-for="(item,index) in selectData" :key="index" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>

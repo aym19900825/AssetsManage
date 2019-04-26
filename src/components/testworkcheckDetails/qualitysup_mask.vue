@@ -20,7 +20,7 @@
 					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.report.STATE!=3">
-							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>

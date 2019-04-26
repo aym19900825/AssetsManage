@@ -34,7 +34,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="6" class="pull-right">
-											<el-form-item label="产品类别" prop="ITEM_TYPE">
+											<el-form-item label="样品类型" prop="ITEM_TYPE">
 												<el-select v-model="samplesForm.ITEM_TYPE" placeholder="样品类型" :disabled="sampleAutoInput || noedit">
 													<el-option key="1" label="样品批次" value="1"></el-option>
 													<el-option key="2" label="样品序号" value="2"></el-option>
@@ -190,39 +190,39 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 		components: {
 			'usermask': usermask
 		},
-		props: {
-			samplesForm: { //接收主表单中填写的数据信息
-				type: Object,
-				default: function() {
-					return {
-						ITEMNUM: '',//样品子表ID
-						ITEM_TYPE: [],
-						ITEM_STEPs: [],//样品序号
-						TYPE: '',//样品类别
-						VENDOR: '',//样品编号编号
-						DESCRIPTION: '',//样品名称
-						MODEL: '',//型号
-						QUATITY: '',//数量
-						PRODUCT_CODE: '',//产品标识代码
-						OTHER: '',//其他资料
-						MEMO: '',//备注
-						ACCEPTDATE: '',//入库时间
-						ACCEPT_PERSON: '',//收样人
-						ACCEPT_DATE: '',//收样日期
-						GRANT_PERSONDesc: '',//领样人
-						GRANT_PERSON: '',//领样人
-						GRANT_DATE: '',//领样日期
-						STATE: '',//状态
-						STATUSDATE: '',//状态日期
-						ENTERBY: '',//录入人
-						ENTERDATE: '',//录入时间
-						CHANGEBY: '',//修改人
-						CHANGEDATE: '',//修改时间
-						STATUS: '1',//信息状态
-					}
-				}
-			}
-		},
+		// props: {
+		// 	samplesForm: { //接收主表单中填写的数据信息
+		// 		type: Object,
+		// 		default: function() {
+		// 			return {
+		// 				ITEMNUM: '',//样品子表ID
+		// 				ITEM_TYPE: [],
+		// 				ITEM_STEPs: [],//样品序号
+		// 				TYPE: '',//样品类别
+		// 				VENDOR: '',//样品编号编号
+		// 				DESCRIPTION: '',//样品名称
+		// 				MODEL: '',//型号
+		// 				QUATITY: '',//数量
+		// 				PRODUCT_CODE: '',//产品标识代码
+		// 				OTHER: '',//其他资料
+		// 				MEMO: '',//备注
+		// 				ACCEPTDATE: '',//入库时间
+		// 				ACCEPT_PERSON: '',//收样人
+		// 				ACCEPT_DATE: '',//收样日期
+		// 				GRANT_PERSONDesc: '',//领样人
+		// 				GRANT_PERSON: '',//领样人
+		// 				GRANT_DATE: '',//领样日期
+		// 				STATE: '',//状态
+		// 				STATUSDATE: '',//状态日期
+		// 				ENTERBY: '',//录入人
+		// 				ENTERDATE: '',//录入时间
+		// 				CHANGEBY: '',//修改人
+		// 				CHANGEDATE: '',//修改时间
+		// 				STATUS: '1',//信息状态
+		// 			}
+		// 		}
+		// 	}
+		// },
 		data() {
 			return {
 				userMakeTit: '领样人',
@@ -259,7 +259,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				commentArr:{},//下拉加载
 				rules: { //定义需要校验数据的名称
 					ITEM_TYPE: [//样品编号
-						{ required: true, message: '必填', trigger: 'blur' }
+						{ required: true, message: '必填', trigger: 'change' }
 					],
 					ITEMNUM: [//样品编号
 						{ required: true, message: '必填', trigger: 'change' }
@@ -278,21 +278,25 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 						{ required: true, message: '必填', trigger: 'blur' },
 						{trigger: 'blur', validator: this.Validators.isInteger}
 					],
-					ACCEPT_PERSON: [//收样人
-						{ required: true, message: '必填', trigger: 'blur' },
-						{trigger: 'blur', validator: this.Validators.isNickname}
-					],
-					ACCEPT_DATE: [//收样时间
+					// ACCEPT_PERSON: [//收样人
+					// 	{ required: false, message: '必填', trigger: 'change' },
+					// 	{trigger: 'blur', validator: this.Validators.isNickname}
+					// ],
+					ACCEPT_DATE: [
 						{required: true, message: '请选择', trigger: 'change' }
 					],
-					GRANT_DATE: [//领样时间
+					GRANT_DATE: [
 						{ required: true, message: '请选择', trigger: 'change' }
 					],
 					GRANT_PERSONDesc: [
-						{ required: false, message: '必填', trigger: 'change'}
+						{ required: true, message: '必填', trigger: 'change'}
 					],
-					OTHER: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//其他资料
-					MEMO: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
+					OTHER: [
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
+					MEMO: [
+						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}
+					],
 				},
 				dialogVisible3: false, //对话框
 				categoryList:[],
@@ -311,6 +315,32 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				ITEM_STEPs: [],
 				lastTime: 0,
 				noedit: false,
+				samplesForm: {
+					ITEMNUM: '',//样品子表ID
+						ITEM_TYPE: '',
+						ITEM_STEPs: [],//样品序号
+						TYPE: '',//样品类别
+						VENDOR: '',//样品编号编号
+						DESCRIPTION: '',//样品名称
+						MODEL: '',//型号
+						QUATITY: '',//数量
+						PRODUCT_CODE: '',//产品标识代码
+						OTHER: '',//其他资料
+						MEMO: '',//备注
+						ACCEPTDATE: '',//入库时间
+						ACCEPT_PERSON: '',//收样人
+						ACCEPT_DATE: '',//收样日期
+						GRANT_PERSONDesc: '',//领样人
+						GRANT_PERSON: '',//领样人
+						GRANT_DATE: '',//领样日期
+						STATE: '',//状态
+						STATUSDATE: '',//状态日期
+						ENTERBY: '',//录入人
+						ENTERDATE: '',//录入时间
+						CHANGEBY: '',//修改人
+						CHANGEDATE: '',//修改时间
+						STATUS: '1',//信息状态
+				},
 				sampleAutoInput: false //扫描枪输入
 			};
 		},
@@ -516,7 +546,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.ITEM_STEPs = [];
 				this.firstItem = true;
 				this.beforeItemNum = '';
-
+				this.samplesForm = {};
 				this.sampleList = [];
 
 				this.samplesForm.TYPE = '';
@@ -577,23 +607,26 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					}
 				}).catch((wrong) => {})
 			},
-			detail(ITEM_NUM, ITEM_STEP, QUATITY) { //修改内容时从父组件带过来的
+			detail(dataid) { //修改内容时从父组件带过来的
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.samplesForm.CHANGEBY = res.data.id;
 					var date=new Date();
 					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{})
+				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant/' + dataid, {}).then((res) => {
+					this.samplesForm = res.data;
+					this.$forceUpdate();
+					if(this.samplesForm.ITEM_STEP!=-1){
+						this.ITEM_STEPs = this.samplesForm.ITEM_STEP.split(',');
+					}else{
+						this.getMaxNum(this.samplesForm.ITEM_NUM,this.samplesForm.QUATITY);
+					}
+					this.getSampleList(this.samplesForm.ITEM_NUM);
+				}).catch((err) => {});
 				this.pageState = 'detail';
 				this.show = true;
 				this.edit = true;
 				this.noedit = false;
-				this.$forceUpdate();
-				if(ITEM_STEP!=-1){
-					this.ITEM_STEPs = ITEM_STEP.split(',');
-				}else{
-					this.getMaxNum(ITEM_NUM,QUATITY);
-				}
-				this.getSampleList(ITEM_NUM);
 			},
 			//时间格式化  
 			dateFormat(row, column) {

@@ -239,7 +239,13 @@ export default {
 			getTodoFinish(finishnum){//获取vheader子组件里面的getTodoFinish函数值
 				this.toDoFinish = finishnum;
 			},
-			
+			// getTodoNumber() {//获取当前用户待办任务数
+      //       var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
+      //       this.$axios.get(url, {}).then((res) => {
+      //           this.toDoNumber = res.data.datas;
+      //       }).catch(error => {
+      //       });
+      // },
 			//表头居中
 			rowClass({ row, rowIndex}) {
 					return 'text-align:center'

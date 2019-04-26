@@ -24,7 +24,7 @@
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button>
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 结束</el-button>
+								<el-button class="approval" type="success" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.workorderForm.STATE!=2"><i class="icon-edit-3"></i>审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
@@ -662,10 +662,10 @@
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div> -->
-						<div class="content-footer" v-show="viewtitle&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
-							<el-button type="primary" v-show="this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-							<el-button type="warning" v-show="this.workorderForm.STATE==5" @click="sendback">回退成果数据</el-button>
-							<el-button type="success" v-show="this.workorderForm.STATE!=1" @click="checkchildlist">查看子任务单</el-button>
+						<div class="content-footer" v-show="viewtitle"><!--this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1&&-->
+							<el-button type="primary" v-show="this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
+							<el-button type="warning" v-show="this.workorderForm.STATE==5&&this.MASTER_INSPECTOR==!this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
+							<el-button type="success" v-show="this.workorderForm.STATE!=1&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="checkchildlist">查看子任务单</el-button>
 						</div>
 					</el-form>
 				</div>

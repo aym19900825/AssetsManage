@@ -12,6 +12,7 @@ const state={//要设置的全局访问的state对象
    currentcjdw:null,//当前承建单位
    currentuser:null,//当前登陆人的信息
    firstselectnav:{},//当只有一级菜单
+   toDoNumber:0,//铃铛上的数量
    selectedNav:{
       css: 'icon-user',
       name: '首页',
@@ -59,6 +60,9 @@ const getters = {   //实时监听state值的变化(最新状态)
    getcurrentuser(state){
       return state.currentuser;
    },
+   gettoDoNumber(state){
+      return state.toDoNumber;
+   },
 };
    //修改 state 用 vuex 的 mutation 
 const mutations = {
@@ -97,6 +101,9 @@ const mutations = {
    setcurrentuser(state,currentuser){
       state.currentuser=currentuser;
    },
+   settoDoNumber(state,toDoNumber){
+      state.toDoNumber=toDoNumber;
+   },
 };
 
 //组件触发动作用 vuex 的 action
@@ -131,6 +138,9 @@ const actions = {
    },
    setcurrentuserNavAct(context,currentuser){
       context.commit('setcurrentuser',currentuser);
+   },
+   settoDoNumberNavAct(context,toDoNumber){
+      context.commit('settoDoNumber',toDoNumber);
    },
 };
 

@@ -78,6 +78,17 @@ export default {
             GetRoles:[],//获取当前角色
         }
     },
+    // computed: {
+    //     toDoNumber: function(){
+    //         return this.$store.state.toDoNumber;
+    //         console.log(this.$store.state.toDoNumber);
+    //     }
+    // },
+    // watch: {
+    // toDoNumber:  this.$store.state.toDoNumber
+    // },
+
+
     methods: {
     	cleanAll(){
             this.$router.push({ path: '/',name: 'Login',});

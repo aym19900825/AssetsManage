@@ -169,7 +169,6 @@
 			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList.filter(data => !search || data.P_NAME.toLowerCase().includes(search.toLowerCase()))" border stripe height="300px"
 				highlight-current-row
 				@current-change="addproclass"
-				v-loadmore="loadMore"
 				v-loading="loading"
 				element-loading-text="加载中…"
 				element-loading-spinner="el-icon-loading"
@@ -345,7 +344,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionPro', {
+				this.$axios.get(this.basic_url + '/api-apps/appSelection/inspectionPro/pageForStation', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

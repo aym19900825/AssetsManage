@@ -1001,10 +1001,6 @@
 					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
 					ITEM_NAME: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
 					// ITEM_IDENT: [{ required: true, message: '必填', trigger: 'blur' }],//标识
-					ITEM_MODEL: [
-						{required: true, message: '必填', trigger: 'blur' },
-						// {trigger: 'blur', validator:this.Validators.isSpecificKey}
-					],//型号
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
 						{ trigger: 'blur', validator: this.Validators.isInteger}
@@ -1522,6 +1518,7 @@
 			},	
 			//刷新页面的审批按钮
 			refresh(){
+				this.getTodoNumber();
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 						var resullt=res.data.datas;
@@ -1543,8 +1540,18 @@
 							this.start=false;
 							this.detailgetData();
 						}
-				});	
+					});	
+					
 			},
+			//
+			getTodoNumber() {//获取当前用户待办任务数
+				var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
+				this.$axios.get(url, {}).then((res) => {
+						this.$store.dispatch('settoDoNumberNavAct',res.data.datas);
+				}).catch(error => {
+				});
+      },
+
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;

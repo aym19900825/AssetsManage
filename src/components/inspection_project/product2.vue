@@ -279,10 +279,13 @@
 			 	this.catedata = row;//弹出框中选中的数据赋值给到table行中
 				this.dialogVisible3 = true;
 				var data = {
+					// PRO_NUM: '',
+					// PRO_NAME: '',
+					// VERSION: '',
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/product', {
+				this.$axios.get(this.basic_url + '/api-apps/appSelection/product/pageForStation', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

@@ -327,7 +327,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/inspectionSta', {
+				this.$axios.get(this.basic_url + '/api-apps/appSelection/inspectionSta/pageForStation', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

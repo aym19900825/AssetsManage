@@ -198,10 +198,10 @@
 				commentArr:{},//下拉加载
 				value: '',
 				searchData: {
-			        page: 1,
-			        limit: 10,//分页显示数
-			        enabled: '',//信息状态
-		        },
+					page: 1,
+					limit: 10,//分页显示数
+					enabled: '',//信息状态
+				},
 				search: '',//搜索
 				page: {//分页显示
 					currentPage: 1,
@@ -284,7 +284,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				};
-				this.$axios.get(this.basic_url + '/api-apps/app/rawDataTem', {
+				this.$axios.get(this.basic_url + '/api-apps/appSelection/rawDataTem/pageForStation', {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;

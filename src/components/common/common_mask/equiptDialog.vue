@@ -49,7 +49,9 @@
 				</el-table-column>
 				<el-table-column label="设备编号" width="155" sortable prop="ASSETNUM">
 				</el-table-column>
-				<el-table-column label="设备描述" sortable prop="DECRIPTION">
+				<el-table-column label="设备描述" v-show="searchList.project.length==0" sortable prop="DESCRIPTION">
+				</el-table-column>
+				<el-table-column label="设备描述" v-show="searchList.project.length>0" sortable prop="DECRIPTION">
 				</el-table-column>
 			</el-table>
 			<el-pagination background 
@@ -198,7 +200,7 @@
 				// PRO_NUM_wheres: this.pro_num,
 				// NUM_wheres: this.num,
 				// S_NUM_wheres: sNum.join(','),
-				P_NUM_wheres: pNum.join(',')
+				P_NUM_where_in: pNum.join(',')
 			}
 		}else{
 			data = {
@@ -244,7 +246,8 @@
         this.dialogVisible = false;//关闭弹出框
         this.list = [];//列表数据置空
         this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 20;//页码重新传值
+		this.page.pageSize = 20;//页码重新传值
+		this.searchList.project = [];
     },
   }
 }

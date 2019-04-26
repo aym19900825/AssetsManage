@@ -429,7 +429,6 @@
 			},
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/submitApproval?ID='+this.detailId;
-
 				var projectList = this.workorderForm.WORKORDER_PROJECTList;
 				var contractList = this.workorderForm.WORKORDER_CONTRACTList;
 				var fileList = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
@@ -576,7 +575,7 @@
 			setEquipt(data){
 				var index = this.editEquptIndex;
 				this.workorderForm.WORKORDER_ASSETList[index].ASSETNUM = data.ASSETNUM;
-				this.workorderForm.WORKORDER_ASSETList[index].DESCRIPTION = data.DECRIPTION;
+				this.workorderForm.WORKORDER_ASSETList[index].DESCRIPTION = !!data.DECRIPTION?data.DECRIPTION:data.DESCRIPTION;
 			},
 			viewModule(){
 				this.$refs.dataTemplate.showData(this.deptid);

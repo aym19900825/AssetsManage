@@ -236,7 +236,7 @@
 					},
 					{
 						text: '样品状态',
-						dataIndex: 'ITEM_STATUS',
+						dataIndex: 'ITEM_STATUSDesc',
 					 	width: '120',
 						isShow:true,
 					},

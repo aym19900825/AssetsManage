@@ -34,8 +34,8 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<!-- 样品信息 Begin-->
-								<el-collapse-item title="样品信息" name="1">
-									<div v-if="this.workorderForm.STATE==1" class="text-right pb10">
+								<el-collapse-item title="样品信息" name="1"><!--this.$store.state.currentuser.id//全局通用当前用户ID-->
+									<div v-if="this.workorderForm.STATE==1&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" class="text-right pb10">
 										<!-- <el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button> -->
 										<el-button class="start" type="primary" round size="mini" @click="startup" ><i class="icon-check"></i> 接收此任务</el-button>
 										<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
@@ -283,7 +283,7 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品返回数量" label-width="140px">
-													<el-input-number type="number" v-model.number="workorderForm.ITEM_RETURN_QUALITY" label="描述文字" style="width: 100%;" :disabled="noedit"></el-input-number>
+													<el-input v-model="workorderForm.ITEM_RETURN_QUALITY" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -395,6 +395,12 @@
 													<el-table-column label="要求" prop="REMARKS" sortable width="300px">
 													</el-table-column>
 													
+													<el-table-column label="检测结果" width="100px" sortable>
+														<template slot-scope="scope">
+															<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														</template>
+													</el-table-column>
+
 													<el-table-column label="计量单位" prop="UNIT" width="100px">
 													</el-table-column>
 
@@ -459,6 +465,12 @@
 													</template>
 												</el-table-column>
 
+												<el-table-column label="检测结果" width="100px" sortable>
+														<template slot-scope="scope">
+															<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="true||scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														</template>
+													</el-table-column>
+
 												<el-table-column prop="INSPECT_GROUPDDesc" label="专业组" sortable width="120px">
 													<template slot-scope="scope">
 														<el-select clearable v-model="scope.row.INSPECT_GROUPDesc" filterable allow-create default-first-option placeholder="请选择" :disabled="noedit" @change="getmaingroup($event)" @visible-change="visablemaingroup($event)" >
@@ -490,7 +502,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="COMPLETE_MODED" label="完成方式" sortable width="200px">
+												<el-table-column prop="COMPLETE_MODE" label="完成方式" sortable width="200px">
 													<template slot-scope="scope">
 															<el-radio-group v-if="scope.row.isEditing" v-model="scope.row.COMPLETE_MODE">
 																<el-radio label="加急" class="red"></el-radio>
@@ -645,15 +657,15 @@
 								<!-- 录入人信息 End -->
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-if="!viewtitle">
+						<!-- <div class="content-footer" v-if="!viewtitle">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
-						</div>
-						<div class="content-footer" v-show="viewtitle">
+						</div> -->
+						<div class="content-footer" v-show="viewtitle&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
 							<el-button type="primary" v-show="this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
 							<el-button type="warning" v-show="this.workorderForm.STATE==5" @click="sendback">回退成果数据</el-button>
-							<el-button type="success" v-show="this.workorderForm.STATE!=1&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="checkchildlist">查看子任务单</el-button>
+							<el-button type="success" v-show="this.workorderForm.STATE!=1" @click="checkchildlist">查看子任务单</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -687,6 +699,28 @@
 					<el-button type="primary" @click="addpersonname">确 定</el-button>
 					<el-button @click="resetBasisInfo2">取 消</el-button>
 				</span>   
+			</el-dialog>
+
+			<!-- 样品检验查看结果 -->
+			<el-dialog :modal-append-to-body="false" :visible.sync="sampleListVisible" width="60%" :before-close="resetSample">
+				<el-table ref="table" 
+					:data="sampleNumList" 
+					border 
+					stripe 
+					:fit="true" 
+					style="width: 100%;" 
+					:default-sort="{prop:'workorderbasisList', order: 'descending'}">
+					<el-table-column label="样品序号" sortable prop="ITEM_STEP" >
+					</el-table-column>
+					<el-table-column label="检测结果" sortable prop="OTHER">
+						<template slot-scope="scope">
+							<el-input size="small" v-model="scope.row.MEMO" :disabled="true"></el-input>
+						</template>
+					</el-table-column>
+				</el-table>	
+				<div slot="footer">
+					<el-button @click="resetSample">取 消</el-button>
+				</div>
 			</el-dialog>
 			<!--主检员 End-->
 			
@@ -755,6 +789,7 @@
 		},
 		data() {
 			return {
+				sampleNumList: [],//样品检验查看结果数据
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
 				po_url: Config.po_url,
@@ -884,10 +919,46 @@
 				currentuserinfo:{},//储存当前用户信息
 				showcreateagree:true,//生成分包协议按钮
 				addPersonTable: '',
+				sampleListVisible: false,//样品检验查看结果
 				nodeState: ''
 			};
 		},
 		methods: {
+			//查看样品检验查看结果弹出框
+			addRemark(index, row, opt){
+				var flag = false;
+				if(opt == 'contract'){
+					this.sampleNumList = row.WORKORDER_CONTRACT_ITEMList;
+					if(row.WORKORDER_CONTRACT_ITEMList.length == 0){
+						this.$message({
+							message: '请先领取样品',
+							type: 'warning'
+						});
+						flag = true;
+					}
+				}else{
+					this.sampleNumList = row.WORKORDER_PROJECT_ITEMList;
+					if(row.WORKORDER_PROJECT_ITEMList.length == 0){
+						this.$message({
+							message: '请先领取样品',
+							type: 'warning'
+						});
+						flag = true;
+					}
+				}
+				if(flag){
+					return;
+				}
+				this.editStepIndex = index;
+				this.sampleListVisible = true;
+				this.stepType = opt;
+				
+			},
+			//关闭样品检验查看结果弹出框
+			resetSample(){
+				this.sampleListVisible = false;
+				this.sampleNumList = [];
+			},
 			//确认检测数据通过
 			submitVerify(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.dataid;
@@ -1598,6 +1669,7 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					this.MASTER_INSPECTOR=res.data.MASTER_INSPECTOR;//当前责任人ID
 					res.data.CJDW = parseInt(res.data.CJDW);
 					//依据
 					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){

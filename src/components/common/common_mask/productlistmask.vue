@@ -142,7 +142,7 @@
 			this.categoryList = newarr;
 		}).catch((wrong) => {})
 	},
-  	visible(NUM,CJDW) {
+  visible(NUM,CJDW) {
 			if(!!CJDW){
 					this.NUM = NUM;
 					this.CJDW = CJDW;
@@ -156,7 +156,7 @@
 			}
   	},
 
-		getAllDepts(){
+	getAllDepts(){
 			var url = this.basic_url + '/api-user/depts/findSubStrsById/'+this.CJDW;
 			this.$axios.get(url, {
 			}).then((res) => {
@@ -176,31 +176,36 @@
 			// var url = this.basic_url + '/api-apps/app/product2?authfrom='+this.appname+'&authfliter=true&NUM_wheres='+this.NUM;
 			// var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+this.NUM;
 				if(this.appname=='inspectPro'){
-					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+this.NUM;
+					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+this.NUM;
 			}else{
-					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+this.NUM;
+					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+this.NUM;
 			}
 		}
 		this.$axios.get(url, {}).then((res) => {
 			this.page.totalCount = res.data.count;
-			//总的页数
-			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-			if(this.page.currentPage >= totalPage) {
-				this.loadSign = false
-			} else {
-				this.loadSign = true
-			}
 			this.productList = res.data.data;
 			this.loading = false;
 		}).catch((wrong) => {})
 	},
-	// requestData(){
-	// 	// if(this.allDepts == '' && !this.CJDW){
-	// 	// 	this.getAllDepts();
-	// 	// }else{
-	// 		this.getData();
-	// 	// }
-	// },
+	getproduct(val){
+		console.log(val);
+			var data = {
+			page: this.page.currentPage,
+			limit: this.page.pageSize,
+		};
+			if(val.appname=='inspectPro'){
+					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+null;
+			}else{
+					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+null;
+			}
+		this.$axios.get(url, {}).then((res) => {
+			console.log(res);
+			this.page.totalCount = res.data.count;
+			this.productList = res.data.data;
+			this.dialogProduct = true;
+			this.loading = false;
+		}).catch((wrong) => {})
+	},
 	determine(){
 		if(this.selUser.length == 0){
 			this.$message({

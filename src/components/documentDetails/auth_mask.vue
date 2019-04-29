@@ -104,7 +104,6 @@
 				authOptions: ['显示','编辑','删除','打印','下载','复制'],
 				checkAuth: [],
 				selBefore: [],
-
 				chooseParam: {
 					visible: false,
 					title: "用户列表",
@@ -121,17 +120,14 @@
 						}
 
 					],
-					// search: [
-					// 	{
-					// 		name: 'deptId',
-					// 		val: ''
-					// 	}
-					// ],
 					url: '/api-user/users'
 				},
 				rules: {
 					userid: [
 						{ required: true, message: '请选择用户', trigger: 'blur' },
+					],
+					username: [
+						{ required: true, message: '请选择用户', trigger: 'change' },
 					],
 					authority: [
 						{ required: true, message: '请选择授权类型', trigger: 'blur' },
@@ -152,14 +148,6 @@
 						type: 'input',
 						displayType: 'inline-block'
 					},
-					// ,
-					// {
-					// 	label: '授权',
-					// 	prop: 'authority',
-					// 	width: '100%',
-					// 	type: 'checkbox',
-					// 	displayType: 'inline-block'
-					// }
 				],
 				authorities: [
 					{

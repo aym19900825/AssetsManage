@@ -104,7 +104,7 @@
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
 										<el-tab-pane name="first">
-											<span slot="label"><i class="red">*</i> 资质信息</span>
+											<span slot="label"> 资质信息</span>
 											<div class="table-func table-funcb" >
 												<el-button type="success" size="mini" round @click="addfield" v-show="!viewtitle">
 													<i class="icon-add"></i>
@@ -185,7 +185,7 @@
 									  <!-- </el-form> -->
 										</el-tab-pane>
 										<el-tab-pane name="second">
-											<span slot="label"><i class="red">*</i> 客户联系人</span>
+											<span slot="label"> 客户联系人</span>
 											<div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addrela" v-show="!viewtitle">
 													<i class="icon-add"></i>

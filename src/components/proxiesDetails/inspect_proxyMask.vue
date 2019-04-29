@@ -1458,6 +1458,8 @@
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					this.RVENDORSelect();	
+				  this.getmaingroup(res.data.MAINGROUP);
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
@@ -1476,10 +1478,9 @@
 							}
 						}
 						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
-					}		
-				
+					}	
+					
 					res.data.LEADER = Number(res.data.LEADER);
-					this.getmaingroup(res.data.MAINGROUP);
 					if(res.data.CNAS_OR_CMA_ID=='1'){
 						 res.data.CNAS_OR_CMA_ID=true;
 					}
@@ -1508,7 +1509,7 @@
 							this.PNAME1=true;
 					}
 					this.dataInfo = res.data;
-					this.RVENDORSelect();
+				
 					this.show = true;
 					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
@@ -2200,6 +2201,7 @@
 			RVENDORSelect(){
 				var url = this.basic_url + '/api-user/depts/findByPid/'+this.$store.state.currentcjdw[0].id;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data);
 					this.maingroup = res.data;
 				}).catch((err) => {
 				});
@@ -2454,6 +2456,7 @@
 			this.getCompany();
 			this.getuser();
 			this.RVENDORSelect();
+ 
 		},
 
 	}

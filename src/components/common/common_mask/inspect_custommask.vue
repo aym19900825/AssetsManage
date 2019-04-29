@@ -203,7 +203,6 @@
 		})
 	},
 	determine(){
-		console.log(this.selUser[0]);
 		if(this.selUser.length == 0){
 			this.$message({
 				message: '请选择数据',
@@ -246,8 +245,7 @@
 				// 		this.$emit('vendor',vendor);
 				// 	}
 				// }
-				//样品模块赋值
-				console.log(this.selUser[0].itemid);
+				//样品模块赋
 				if(this.selUser[0].itemid!=null&&this.selUser[0].itemid!=undefined&&this.selUser[0].itemid!=''){
 						var url=this.basic_url + '/api-apps/app/item/' + itemid;
 						this.$axios.get(url, {}).then((res) => {
@@ -269,7 +267,6 @@
 								this.$emit('custarr',custarr);
 						});
 				}else{
-					console.log(this.selUser[0].itemid);
 							var custarr = [];
 							custarr.push('falg');
 							this.$emit('custarr',custarr);

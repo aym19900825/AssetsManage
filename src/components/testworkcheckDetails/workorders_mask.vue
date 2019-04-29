@@ -610,9 +610,9 @@
 										</el-tab-pane>
 										<!--成果数据 End-->
 
-										<el-tab-pane label="已生成的报告文件" v-show="this.workorderForm.STATE!==1||this.workorderForm.STATE!==2||this.workorderForm.STATE!==3||this.workorderForm.STATE!==5&&this.workorderForm.IS_MAIN==1" name="sixth">
+										<el-tab-pane label="已生成的报告文件" name="sixth">
 											<!--生成的报告列表 Begin-->
-											<el-row>
+											<el-row v-show="this.workorderForm.STATE!=1||this.workorderForm.STATE!=2||this.workorderForm.STATE!=3||this.workorderForm.STATE!=5&&this.workorderForm.IS_MAIN==1">
 												<el-col :span="24">
 													<!-- <el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px"> -->
 														<el-table :data="workorderForm.WORKORDER_REPORTList" 
@@ -622,9 +622,7 @@
 															max-height="260" 
 															key="table4"
 															style="width: 100%;" 
-															@selection-change="selChange"
 															:default-sort="{prop:'workorderForm.WORKORDER_REPORTList', order: 'descending'}">
-															<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
 															<el-table-column type="index" label="序号" width="50">
 																<template slot-scope="scope">
@@ -719,9 +717,9 @@
 						<div class="content-footer" v-show="viewtitle">
 							<!--this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1&&-->
 							<!-- <el-button title="查看报告文件" type="primary" @click="lookoverreport">查看报告文件</el-button> -->
-							<el-button type="primary" v-show="this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
-							<el-button type="warning" v-show="this.workorderForm.STATE==5&&this.MASTER_INSPECTOR==!this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
-							<el-button type="success" v-show="this.workorderForm.STATE!=1&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="checkchildlist">查看子任务单</el-button>
+							<el-button type="primary" v-show="this.workorderForm.STATE==5||this.workorderForm.STATE==3||this.workorderForm.STATE==0||this.workorderForm.STATE==7||this.workorderForm.STATE==8&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
+							<el-button type="warning" v-show="this.workorderForm.STATE==5||this.workorderForm.STATE==3||this.workorderForm.STATE==0||this.workorderForm.STATE==7||this.workorderForm.STATE==8&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
+							<el-button type="success" v-show="this.workorderForm.STATE!=1||this.workorderForm.STATE!=2&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id&&this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length!=0" @click="checkchildlist">查看子任务单</el-button><!--判断还要修改-->
 						</div>
 					</el-form>
 				</div>
@@ -1734,7 +1732,7 @@
 				this.edit = true;
 				this.noedit = false;
 			},
-			//查看数据
+			//查看数据showDialog
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {

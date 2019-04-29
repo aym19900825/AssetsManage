@@ -147,8 +147,8 @@
 										</el-tab-pane>
 										
 										<el-tab-pane label="检验检测设备" name="four">
-											<div class="table-func table-funcb">
-												<el-button style="float:left;" type="success" size="mini" round @click="addEquiptLine" v-show="!pageDisable">
+											<div class="table-func table-funcb" v-show="!pageDisable&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
+												<el-button style="float:left;" type="success" size="mini" round @click="addEquiptLine">
 													<i class="icon-add"></i> <font>新建行</font>
 												</el-button>
 											</div>
@@ -205,9 +205,9 @@
 										</el-tab-pane>
 
 										<el-tab-pane label="成果数据" name="fifth">
-											<div class="table-func table-funcb">
+											<div class="table-func table-funcb" v-show="!pageDisable&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
-													<el-button type="success" size="mini" round class="a-upload" v-show="!pageDisable">
+													<el-button type="success" size="mini" round class="a-upload">
 														<i class="el-icon-upload2"></i><font>上传</font>
 														<input id="excelFile" type="file" name="uploadFile" @change="upload"/>
 													</el-button>
@@ -248,7 +248,7 @@
 								</div>
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-show="!pageDisable">
+						<div class="content-footer" v-show="!pageDisable&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
 							<el-button type="primary" @click="submitForm">保存</el-button>
 							<el-button type="success" @click="startup">提交审核</el-button>
 							<el-button @click="close">取消</el-button>
@@ -640,11 +640,14 @@
 			showDialog(id){
 				this.detailId = id;
 				this.requestData('showDialog');
+				
 			},
 			requestData(opt){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/taskdeal?WORKORDERID='+this.detailId;
 				this.$axios.get(url, {}).then((res) => {
 					this.workorderForm = res.data.datas;
+					this.MASTER_INSPECTOR=res.data.datas.MASTER_INSPECTOR;//当前责任人ID
+					console.log(res.data.datas);
 					// var data = res.data.datas;
 					// for (let i = 0; i < data.workorderForm.WORKORDER_CONTRACTList; i++) {
 					// 	if(data.WORKORDER_CONTRACTList[i].ISQUALIFIED == '0'){

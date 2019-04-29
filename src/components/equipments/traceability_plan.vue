@@ -58,11 +58,11 @@
 									<el-input v-model="searchList.PMNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="5">
+							<!-- <el-col :span="5">
 								<el-form-item label="计划描述" prop="DESCRIPTION">
 									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 							<el-col :span="6">
 								<el-form-item label="设备编号" prop="ASSETNUM" label-width="100px">
 									<el-input v-model="searchList.ASSETNUM" @keyup.enter.native="searchinfo"></el-input>
@@ -367,15 +367,16 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].ISCREATED == '1'){
-						this.$message({
-							message: '此溯源计划已有确认的溯源记录，不可修改！',
-							type: 'warning'
-						});
-						return;
-					}else{
-						this.$refs.child.detail();
-					}
+					// if(this.selUser[0].ISCREATED == '1'){
+					// 	this.$message({
+					// 		message: '此溯源计划已有确认的溯源记录，不可修改！',
+					// 		type: 'warning'
+					// 	});
+					// 	return;
+					// }else{
+					// 	this.$refs.child.detail();
+					// }
+					this.$refs.child.detail();
 				}
 			},
 			//查看

@@ -59,11 +59,11 @@
 									<el-input v-model="searchList.C_PLANNUM" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="5">
+							<!-- <el-col :span="5">
 								<el-form-item label="计划描述" prop="DESCRIPTION">
 									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 							<el-col :span="5">
 								<el-form-item label="录入时间" prop="ENTERDATE">
 									<div class="block">

@@ -121,7 +121,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="样品数量" prop="QUATITY" label-width="130px">
-												<el-input-number v-model="samplesForm.QUATITY" :min="1" :step="1" :max="200" label="描述文字" @change="changeNum" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input-number>
+												<el-input v-model="samplesForm.QUATITY" label="描述文字" @change="changeNum" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -511,33 +511,33 @@
 				tips:'1',
 				rules: { //定义需要校验数据的名称
 					// PROXYNUM: [{ required:true, trigger:'blur', message:'必填'}],//委托书编号
-					VENDOR: [{ required:false, trigger:'blur', message:'必填'}],//委托方名称编号
-					V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托方名称名称
-					PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
-					P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
+					// VENDOR: [{ required:false, trigger:'blur', message:'必填'}],//委托方名称编号
+					// V_NAME: [{ required:true, trigger:'blur', message:'必填'}],//委托方名称名称
+					// PRODUCT_COMPANY: [{ required: false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产单位编号
+					// P_NAME: [{ required:true, trigger:'blur', message:'必填'}],//生产单位名称
 					DESCRIPTION: [
 						{ required:true, trigger:'blur', message:'必填'},
 						{ trigger:'blur', validator: this.Validators.isSpecificKey}
 					],//样品名称
-					MODEL: [{ required:true, trigger:'blur', message:'必填'}],//型号
-					MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
+					// MODEL: [{ required:true, trigger:'blur', message:'必填'}],//型号
+					// MANUFACTURE_DATE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//生产日期/批
 					// SAMPLE_PERSON: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样人
 					// SAMPLE_PLACE: [{ required:false, trigger:'blur', validator: this.Validators.isSpecificKey}],//抽样地点
-					PRODUCT_CODE: [
-						{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
-					],//产品标识代码
-					SN: [{ required:true, message:'必填', trigger:'blur' }],
-					TYPE: [{ required:true, trigger:'blur', message:'必填'}],//类别
+					// PRODUCT_CODE: [
+					// 	{ required:false, trigger:'change', validator: this.Validators.isWorknumber},
+					// ],//产品标识代码
+					// SN: [{ required:true, message:'必填', trigger:'blur' }],
+					// TYPE: [{ required:true, trigger:'blur', message:'必填'}],//类别
 					QUATITY: [{ required:true, trigger:'blur', validator: this.Validators.isInteger}],
 					ACCEPTDATE: [{required:true, message: '请选择', trigger:'change' }],
 					ACCEPT_DATE: [{required:true, message: '请选择', trigger:'change' }],
-					RECIP_DATE: [{ required:true, message: '请选择', trigger:'change' }],
-					STATUSDATE: [{required:true, message: '请选择', trigger:'change' }],
-					PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
-					PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
+					// RECIP_DATE: [{ required:true, message: '请选择', trigger:'change' }],
+					// STATUSDATE: [{required:true, message: '请选择', trigger:'change' }],
+					// PRODUCT_TYPE: [{required:true, message: '请选择', trigger:'blur' }],
+					// PRODUCT: [{required:true, message: '请选择', trigger:'blur' }],
 					// MODEL: [{ required:true, trigger:'change', validator: this.Validators.isSpecificKey}],//型号
-					OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其他资料
-					MEMO: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//备注
+					// OTHER: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//其他资料
+					// MEMO: [{ required:false, trigger:'change', validator: this.Validators.isSpecificKey}],//备注
 				},
 				selectDept:[],//承检单位
 			};

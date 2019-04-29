@@ -200,10 +200,10 @@
 					C_PLANNUM: [
 						{ required: false, trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
-					DESCRIPTION: [
-						{required: true,trigger: 'blur', message: '必填'},
-						{trigger: 'blur', validator: this.Validators.isSpecificKey}
-					],
+					// DESCRIPTION: [
+					// 	{required: true,trigger: 'blur', message: '必填'},
+					// 	{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					// ],
 					STATE: [
 						{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
 					],
@@ -217,14 +217,14 @@
 						displayType: 'inline-block',
 						disabled: true
 					},
-					{
-						label: '计划描述',
-						prop: 'DESCRIPTION',
-						width: '30%',
-						type: 'input',
-						displayType: 'inline-block',
-						disabled: false
-					},
+					// {
+					// 	label: '计划描述',
+					// 	prop: 'DESCRIPTION',
+					// 	width: '30%',
+					// 	type: 'input',
+					// 	displayType: 'inline-block',
+					// 	disabled: false
+					// },
 					{
 						label: '状态',
 						prop: 'STATE',

@@ -57,7 +57,7 @@
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 
-										<el-select clearable v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'sel'" style="width: 70px;" :disabled="noedit">
+										<el-select clearable v-model="dataInfo[item.prop]" filterable :placeholder="item.placeholder" v-if="item.type == 'sel'" style="width: 70px; margin-left:-160px; margin-right: 300px;" :disabled="noedit">
 											<el-option v-for="item in time"
 											:key="item"
 											:label="item"
@@ -257,10 +257,10 @@
 					PMNUM: [//溯源计划编号
 						{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber},
 					],
-					DESCRIPTION: [//计划描述
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ trigger: 'blur', validator: this.Validators.isSpecificKey},
-					],
+					// DESCRIPTION: [//计划描述
+					// 	{ required: true, message: '必填', trigger: 'blur'},
+					// 	{ trigger: 'blur', validator: this.Validators.isSpecificKey},
+					// ],
 					A_NAME: [//设备名称
 						{ required: true, message: '请选择', trigger: 'blur',},
 					],
@@ -318,14 +318,14 @@
 				},
 				assets: [],
 				basicInfo: [
-					{
-						label: '计划描述',
-						prop: 'DESCRIPTION',
-						width: '50%',
-						type: 'input',
-						placeholder: '请填写',
-						displayType: 'inline-block',
-					},
+					// {
+					// 	label: '计划描述',
+					// 	prop: 'DESCRIPTION',
+					// 	width: '50%',
+					// 	type: 'input',
+					// 	placeholder: '请填写',
+					// 	displayType: 'inline-block',
+					// },
 					{
 						label: '设备名称',
 						prop: 'A_NAME',
@@ -389,7 +389,7 @@
 						label: '溯源机构',
 						prop: 'PM_MECHANISM',
 						width: '50%',
-						type: 'seldept',
+						type: 'input',
 						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
@@ -399,22 +399,6 @@
 						width: '50%',
 						type: 'date',
 						disabled: true,
-						placeholder: '请选择',
-						displayType: 'inline-block'
-					},
-					{
-						label: '溯源周期',
-						prop: 'FREQUENCY',
-						width: '20%',
-						type: 'input',
-						placeholder: '请填写',
-						displayType: 'inline-block'
-					},
-					{
-						// label: '溯源周期单位',
-						prop: 'FREQUENCYUNIT',
-						width: '100',
-						type: 'sel',
 						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
@@ -438,6 +422,22 @@
 						prop: 'COMP_DATE',
 						width: '50%',
 						type: 'date',
+						placeholder: '请选择',
+						displayType: 'inline-block'
+					},
+					{
+						label: '溯源周期',
+						prop: 'FREQUENCY',
+						width: '20%',
+						type: 'input',
+						placeholder: '请填写',
+						displayType: 'inline-block'
+					},
+					{
+						// label: '溯源周期单位',
+						prop: 'FREQUENCYUNIT',
+						width: '100',
+						type: 'sel',
 						placeholder: '请选择',
 						displayType: 'inline-block'
 					},
@@ -690,7 +690,15 @@
 					'appid': 50
 				};
 				this.getUser('new');
+				this.findDeptId();
 				this.show = true;
+			},
+			findDeptId(){
+				this.$axios.get(this.basic_url + '/api-user/users/findUsersDeptofSta',{}).then((res)=>{
+					var data = res.data[0];
+					this.$forceUpdate();
+					this.dataInfo.PM_MECHANISM = data.fullname;
+				}).catch((err)=>{})
 			},
 			// 这里是修改
 			detail(dataid) {

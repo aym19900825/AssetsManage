@@ -193,7 +193,7 @@
 										</el-row>
 								</el-collapse-item>
 
-								<el-collapse-item title="检验" name="3">
+								<el-collapse-item title="检测" name="3">
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
@@ -216,7 +216,7 @@
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-									    <el-tab-pane label="检验依据" name="first">
+									    <el-tab-pane label="检测依据" name="first">
 												<div class="table-func table-funcb">
 													<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
 														<i class="icon-search"></i>
@@ -276,7 +276,7 @@
 												</el-table>
 									    </el-tab-pane>
 
-									    <el-tab-pane label="检验项目与要求" name="second">
+									    <el-tab-pane label="检测项目与要求" name="second">
 												<div class="table-func table-funcb">
 													<el-button type="primary" size="mini" round @click="basisleadbtn2('maintable')"  v-show="!viewtitle">
 														<i class="icon-search"></i>
@@ -295,7 +295,7 @@
 														</span>
 													</el-table-column>
 
-													<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
+													<el-table-column prop="P_NUM" label="检测项目编号" sortable width="120px">
 														<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">
@@ -306,7 +306,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="P_DESC" label="检验项目描述" sortable>
+													<el-table-column prop="P_DESC" label="检测项目描述" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
@@ -438,7 +438,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
+													<el-table-column prop="BASIS" label="检测技术依据" sortable width="150px">
 														<template slot-scope="scope">
 															<!--委托书新建时事中心的不可输 2 -->
 															<el-input v-show="!viewtitle&&scope.row.DEPTTYPE==1&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入" >
@@ -456,7 +456,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
+													<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="200px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
 																<!--委托书新建时事中心的不可输 2 -->
@@ -495,7 +495,7 @@
 														</template>
 													</el-table-column>
 									
-													<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="160px">
+													<el-table-column prop="CHECKCOST" label="检测费用(元)" sortable width="160px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
 																<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
@@ -518,7 +518,7 @@
 								<el-collapse-item name="7">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
+											<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
@@ -1351,8 +1351,8 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.TYPE = '1';
-					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.TYPE = '2';
+					this.dataInfo.TYPEDesc = '检测';
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;
@@ -1758,7 +1758,7 @@
 				if(val == 'maintable'){
 					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
-							message: '请先选择检验依据列表数据',
+							message: '请先选择检测依据列表数据',
 							type: 'warning'
 						});
 					}else{
@@ -2014,7 +2014,7 @@
 			    if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
-								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
+								message: '检测依据和检验项目与要求和分包要求是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;

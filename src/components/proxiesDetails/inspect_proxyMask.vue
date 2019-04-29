@@ -738,6 +738,8 @@
 			<categorymask ref="categorychild" @categorydata="categorydata"></categorymask>
 			<!-- 产品名称  -->
 			<productmask ref="productchild" @appenddata="appenddata"></productmask>
+			<!-- 先选产品名称  -->
+			<productmasks ref="product" @productdata="productdata"></productmasks>
 			<!-- 检验依据  -->
 			<teststandardmask ref="standardchild" @testbasis="addbasis" @testbasisnum="testbasisnum" @testbasisname="testbasisname" @testbasisprover="testbasisprover"></teststandardmask>
 			<!-- 检验项目  -->
@@ -769,6 +771,7 @@
 	import deptmask from '../common/common_mask/deptmask.vue'//机构
 	import categorymask from '../common/common_mask/categorylistmask.vue'//产品类别
 	import productmask from '../common/common_mask/productlistmask.vue'//产品
+	import productmasks from '../common/common_mask/productsmask.vue'//首先选产品
 	import teststandardmask from '../common/common_mask/teststandardmask.vue'//检验依据
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
 	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//中心外机构
@@ -787,6 +790,7 @@
 			 deptmask,
 			 categorymask,
 			 productmask,
+			 productmasks,
 			 teststandardmask,
 			 testprojectmask,
 			 inspectcustommask,
@@ -1631,14 +1635,9 @@
 					var data={appname:this.appname,P_NUM:this.dataInfo.P_NUM};
 					this.$refs.productchild.visible(data);
 				}else{
-				    // this.$message({
-						// 	message: '请先选择产品类别',
-						// 	type: 'warning'
-						// });
-						console.log(123);
+					//先选择样品的时候
 						var data={appname:this.appname,P_NUM:null};
-						this.$refs.productchild.getproduct(data);
-						console.log(1789);
+						this.$refs.product.getproduct(data);
 				}
 				
 			},
@@ -1650,7 +1649,7 @@
 		
 			//接到产品类别的值
 			categorydata(val){
-				if(this.pnum!=val[0]){
+				console.log(this.pnum);
 					this.dataInfo.PRO_NUM='';
 					this.dataInfo.PRODUCT='';
 					this.dataInfo.PRO_VERSION='';
@@ -1659,20 +1658,29 @@
 					this.dataInfo.P_NUM=val[0];
 					this.dataInfo.PRODUCT_TYPE=val[1];
 					this.dataInfo.P_VERSION=val[2];
-				}
 			},
 			//接到产品的值
 			appenddata(val){
-				if(this.pronum!=val[0]){
 					this.dataInfo.INSPECT_PROXY_PROJECList=[];
 					this.dataInfo.INSPECT_PROXY_BASISList=[];
 					this.dataInfo.PRO_NUM=val[0];
 					this.dataInfo.PRODUCT=val[1];
 					this.dataInfo.PRO_VERSION=val[2];
 					this.dataInfo.ITEM_NAME=val[1];
-				}
 			},
-			
+
+			//如果先选产品的时候
+			productdata(val){
+					this.dataInfo.INSPECT_PROXY_PROJECList=[];
+					this.dataInfo.INSPECT_PROXY_BASISList=[];
+					this.dataInfo.PRO_NUM=val[0];
+					this.dataInfo.PRODUCT=val[1];
+					this.dataInfo.P_NUM=val[2];
+					this.dataInfo.PRODUCT_TYPE=val[3];
+					this.dataInfo.PRO_VERSION=val[4];
+					this.dataInfo.P_VERSION=val[5];
+					this.dataInfo.ITEM_NAME=val[1];
+			},
 			 
 			//委托方名称
 			customarr(val){

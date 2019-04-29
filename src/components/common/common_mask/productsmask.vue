@@ -26,13 +26,13 @@
 				</el-table-column>
 				<el-table-column label="名称" sortable prop="PRO_NAME">
 				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION" align="right">
+				<el-table-column label="产品版本" width="100" sortable prop="PRO_VERSION" align="right">
 				</el-table-column>
-				<el-table-column label="机构" width="185" sortable prop="DEPTIDDesc">
+				<el-table-column label="产品类别" width="120" prop="TYPE" sortable >
 				</el-table-column>
-				<el-table-column label="录入时间" width="120" prop="ENTERDATE" sortable :formatter="dateFormat">
+				<el-table-column label="产品类别编号" width="120" prop="NUM" sortable >
 				</el-table-column>
-				<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable :formatter="dateFormat">
+                <el-table-column label="产品类别版本" width="100" sortable prop="P_VERSION" align="right">
 				</el-table-column>
 			</el-table>
 				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -107,88 +107,7 @@
 	close() {
 		this.dialogProduct = false;
 	},
-	addprobtn(){
-		this.dialogVisible3 = true;
-		this.requestnum = '1';
-		this.requesCategory();
-	},
-	//产品类别数据
-	requesCategory(){
-		this.loading = true;
-		var data = {
-			page: this.page.currentPage,
-			limit: this.page.pageSize,
-		};
-		this.$axios.get(this.basic_url + '/api-apps/app/productType2?DEPTID='+this.WORKPLAN.PROP_UNIT, {
-			params: data
-		}).then((res) => {
-			this.page.totalCount = res.data.count;
-			//总的页数
-			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-			if(this.page.currentPage >= totalPage) {
-				this.loadSign = false
-			} else {
-				this.loadSign = true
-			}
-			this.commentArr[this.page.currentPage] = res.data.data
-			let newarr = []
-			for(var i = 1; i <= totalPage; i++) {
-				if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-					for(var j = 0; j < this.commentArr[i].length; j++) {
-						newarr.push(this.commentArr[i][j])
-					}
-				}
-			}
-			this.categoryList = newarr;
-		}).catch((wrong) => {})
-	},
-  visible(NUM,CJDW) {
-			if(!!CJDW){
-					this.NUM = NUM;
-					this.CJDW = CJDW;
-					this.dialogProduct = true;
-					this.getData();
-			}else{
-				this.appname=NUM.appname;
-				this.NUM=NUM.P_NUM;
-				this.dialogProduct = true;
-				this.getData();
-			}
-  	},
-
-	getAllDepts(){
-			var url = this.basic_url + '/api-user/depts/findSubStrsById/'+this.CJDW;
-			this.$axios.get(url, {
-			}).then((res) => {
-				this.allDepts = res.data;
-				this.getData();
-			}).catch((wrong) => {})
-		},
-	getData(){
-		var data = {
-			page: this.page.currentPage,
-			limit: this.page.pageSize,
-		};
-		if(!!this.CJDW){
-				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_where_in='+this.allDepts;
-		}else{
-			// /api-apps/appCustom/findProductTypebyAuthandDept/{deptId}/{type}/{pdtypenum}
-			// var url = this.basic_url + '/api-apps/app/product2?authfrom='+this.appname+'&authfliter=true&NUM_wheres='+this.NUM;
-			// var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+this.NUM;
-				if(this.appname=='inspectPro'){
-					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+this.NUM;
-			}else{
-					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+this.NUM;
-			}
-		}
-		this.$axios.get(url, {}).then((res) => {
-			this.page.totalCount = res.data.count;
-			this.productList = res.data.data;
-			this.loading = false;
-		}).catch((wrong) => {})
-	},
 	getproduct(val){
-		console.log(val);
 			var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
@@ -199,7 +118,6 @@
 					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+null;
 			}
 		this.$axios.get(url, {}).then((res) => {
-			console.log(res);
 			this.page.totalCount = res.data.count;
 			this.productList = res.data.data;
 			this.dialogProduct = true;
@@ -219,11 +137,13 @@
 			});
 		}else{
 			var proarr = [];
-			proarr.push(this.selUser[0].PRO_NUM);
-			proarr.push(this.selUser[0].PRO_NAME);
-			proarr.push(this.selUser[0].VERSION);
-			this.$emit('appenddata',proarr);
-			this.getData();
+			proarr.push(this.selUser[0].PRO_NUM);//产品编号
+            proarr.push(this.selUser[0].PRO_NAME);//产品名称
+            proarr.push(this.selUser[0].NUM);//产品类别编号
+			proarr.push(this.selUser[0].TYPE);//产品类别名称
+            proarr.push(this.selUser[0].PRO_VERSION);//产品名称版本
+            proarr.push(this.selUser[0].P_VERSION);//产品类别版本
+			this.$emit('productdata',proarr);
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
 	},

@@ -202,6 +202,7 @@
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	import checkassignmask from '../proxiesDetails/checkassignmask.vue'//下达任务的弹出
+	
 	export default {
 		name: 'inspectPro2',
 		components: {
@@ -211,7 +212,7 @@
 		 	inspectmask,
 			reportmask,
 			checkassignmask,
-			vTable
+			vTable,
 		},
 		data() {
 			return {

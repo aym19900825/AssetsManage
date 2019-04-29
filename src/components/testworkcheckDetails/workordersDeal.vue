@@ -162,6 +162,8 @@
 												</el-table-column>
 												<el-table-column prop="DESCRIPTION" label="设备名称" sortable >
 												</el-table-column>
+												<el-table-column prop="TRACE_TIME" label="溯源日期" sortable >
+												</el-table-column>
 												<el-table-column prop="ASSET_MOVESTATUS" label="设备运行情况" sortable width="200px">
 													<template slot-scope="scope">
 														<el-input size="small" v-model="scope.row.ASSET_MOVESTATUS" placeholder="请输入" :disabled="pageDisable">	
@@ -566,6 +568,7 @@
 				var index = this.editEquptIndex;
 				this.workorderForm.WORKORDER_ASSETList[index].ASSETNUM = data.ASSETNUM;
 				this.workorderForm.WORKORDER_ASSETList[index].DESCRIPTION = !!data.DECRIPTION?data.DECRIPTION:data.DESCRIPTION;
+				this.workorderForm.WORKORDER_ASSETList[index].TRACE_TIME = data.TRACE_TIME;
 			},
 			viewModule(){
 				this.$refs.dataTemplate.showData(this.deptid);

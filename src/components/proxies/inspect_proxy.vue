@@ -116,7 +116,7 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-                <el-col :span="4">
+								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
 								</el-col>

@@ -325,14 +325,14 @@
 														</template>
 													</el-table-column>
 													
-													<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable>
+													<!-- <el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.TECHNICAL_REQUIRE'" >
 																<el-input size="small" v-model="scope.row.TECHNICAL_REQUIRE" placeholder="请输入" :disabled="noedit">
 																</el-input>
 															</el-form-item>	
 														</template>
-													</el-table-column>
+													</el-table-column> -->
 
 													<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
 														<template slot-scope="scope">
@@ -1001,7 +1001,7 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-          } else if(index === 5) {//计算第几列的减1
+          } else if(index === 4) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));

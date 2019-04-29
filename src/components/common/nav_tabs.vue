@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="content-tabs">
-            <button class="roll-nav roll-left J_tabLeft"  @click="tabLeft"><i class="icon-previous"></i></button>
+            <button class="roll-nav roll-left J_tabLeft" @click="tabLeft"><i class="icon-previous"></i></button>
             <div class="page-tabs J_menuTabs">
                 <div class="page-tabs-content">
                     <span v-for="item in tabs" :class="item.name==selectedTab.name ? 'active':'J_menuTab'" @click="showSelected(item)">{{item.name}}<i class="icon-close2" @click.stop="closeTab(item, $event)"></i></span>
@@ -25,7 +25,7 @@
             </button>
             </div>
             <div v-else>
-                <button class="roll-nav roll-right J_tabRight"  @click="tabRight"><i class="icon-next"></i></button>
+                <button class="roll-nav roll-right J_tabRight" @click="tabRight"><i class="icon-next"></i></button>
                 <button class="btn-group roll-nav roll-right">
                     <el-dropdown placement="top" trigger="click">
                       <span class="el-dropdown-link">

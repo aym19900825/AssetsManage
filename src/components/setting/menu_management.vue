@@ -20,7 +20,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh" @click="this.commonNew.winReload"><i class="icon-refresh"></i></div>
 							<div class="keep-open btn-group" title="列">
 								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 									<span class="el-dropdown-link">
@@ -38,7 +38,7 @@
 							</div>
 						</div>
 					</div>
-									<!-- 高级查询划出 Begin-->
+							<!-- 高级查询划出 Begin-->
 								<div v-show="search">
 									<el-form inline-message :model="searchList" label-width="80px">
 										<el-row :gutter="10">
@@ -147,7 +147,7 @@
 					totalCount: 0
 				},
 				searchList: {
-					NAME: '',
+					name: '',
 				},
 				menu: {},//修改子组件时传递数据
 				buttons:[],
@@ -357,7 +357,7 @@
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				var url = this.basic_url + '/api-user/menus/findTreeAlls';
+				var url = this.basic_url + '/api-user/menus/findTreeMap';//把findTreeAlls修改了成了findTreeMap接口，之前那个高级查询不能使用。
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {

@@ -43,8 +43,10 @@ const sample_disposal  = r => require.ensure([], () => r(require('@/components/s
 
 
 const workorders  = r => require.ensure([], () => r(require('@/components/testworkcheck/workorders')), 'workorders')//工作任务单
-const report_approve  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve')), 'report_approve')//报告审批
+const report_approve  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve')), 'report_approve')//报告审核
+const report_approve2  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve2')), 'report_approve2')//报告审批
 const useseal_management  = r => require.ensure([], () => r(require('@/components/testworkcheck/useseal_management')), 'useseal_management')//用印管理
+const quality_supervision2  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision2')), 'quality_supervision2')//质量监督抽查审核
 const quality_supervision  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision')), 'quality_supervision')//质量监督抽查审批
 const reportarchiving  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving')), 'reportarchiving')//报告归档
 const devices  = r => require.ensure([], () => r(require('@/components/devices')), 'devices')//设备管理
@@ -346,20 +348,30 @@ Vue.use(Router)
       name: 'workorders',
       component: workorders
     },
-    {//报告审批
+    {//报告审核
       path: '/report_approve',
       name: 'report_approve',
       component: report_approve
+    },
+    {//报告审批
+      path: '/report_approve2',
+      name: 'report_approve2',
+      component: report_approve2
     },
     {//用印管理
       path: '/useseal_management',
       name: 'useseal_management',
       component: useseal_management
     },
-    {//质量监督抽查审批
+    {//质量监督抽查审核
       path: '/quality_supervision',
       name: 'quality_supervision',
       component: quality_supervision
+    },
+    {//质量监督抽查审批
+      path: '/quality_supervision2',
+      name: 'quality_supervision2',
+      component: quality_supervision2
     },
      {//报告归档
       path: '/reportarchiving',

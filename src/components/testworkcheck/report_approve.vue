@@ -21,7 +21,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div id="refresh" title="刷新" class="btn btn-default btn-refresh">
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh" @click="this.commonNew.winReload">
 								<i class="icon-refresh"></i>
 							</div>
 							<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
@@ -55,15 +55,18 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-                                <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
+                                <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
 										</p>
 									</template>
+								</el-table-column> -->
+								<el-table-column label="报告名称" width="220" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告名称')!=-1">
+									<template slot-scope="scope">
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}</p>
+									</template>
 								</el-table-column>
-								<el-table-column label="报告名称" width="160" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告名称')!=-1">
-								</el-table-column>
-								<el-table-column label="委托单位" width="255" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
 								<el-table-column label="检测类型" width="140" sortable prop="TYPE" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
@@ -177,7 +180,9 @@
 				buttons:[],
 			}
 		},
+		
 		methods: {
+			//选择数据
 			setSelData(val){
 				this.selUser = val;
 			},

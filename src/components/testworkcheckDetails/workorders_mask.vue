@@ -232,7 +232,6 @@
 													</el-date-picker>
 												</el-form-item>
 											</el-col>
-											
 										</el-row>
 
 										<el-row>
@@ -610,6 +609,61 @@
 											</el-row> -->
 										</el-tab-pane>
 										<!--成果数据 End-->
+
+										<el-tab-pane label="已生成的报告文件" v-show="this.workorderForm.STATE!==1||this.workorderForm.STATE!==2||this.workorderForm.STATE!==3||this.workorderForm.STATE!==5&&this.workorderForm.IS_MAIN==1" name="sixth">
+											<!--生成的报告列表 Begin-->
+											<el-row>
+												<el-col :span="24">
+													<!-- <el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px"> -->
+														<el-table :data="workorderForm.WORKORDER_REPORTList" 
+															border 
+															stripe 
+															:fit="true" 
+															max-height="260" 
+															key="table4"
+															style="width: 100%;" 
+															@selection-change="selChange"
+															:default-sort="{prop:'workorderForm.WORKORDER_REPORTList', order: 'descending'}">
+															<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+
+															<el-table-column type="index" label="序号" width="50">
+																<template slot-scope="scope">
+																	<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+																</template>
+															</el-table-column>
+
+															<!-- <el-table-column label="报告文件ID" prop="FILEID">
+															</el-table-column> -->
+
+															<el-table-column label="报告文件编号" prop="REPORTNUM">
+															</el-table-column>
+
+															<el-table-column label="文件名称" prop="REPORTNAME">
+															</el-table-column>
+
+															<el-table-column label="报告文件大小" width="100px" prop="FILESIZE">
+															</el-table-column>
+															
+															<el-table-column label="报告生成时间" width="160px" prop="ENTERDATE">
+															</el-table-column>
+
+															<el-table-column label="是否提交审核" width="100px" prop="ISCREATEDDesc">
+															</el-table-column>
+
+															<el-table-column label="操作" width="180px">
+																<template slot-scope="scope">
+																	<el-button type="text" title="预览" @click="readReportFile(scope.row)" size="mini"> 
+																		<i class="icon-eye"></i>
+																		预览
+																	</el-button>
+																</template>
+															</el-table-column>
+														</el-table>
+													<!-- </el-form> -->
+												</el-col>
+											</el-row>
+											<!--生成的报告列表 End-->
+										</el-tab-pane>
 									</el-tabs>
 									<!-- 备注 Begin-->
 									<el-row class="pt10">
@@ -662,7 +716,9 @@
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div> -->
-						<div class="content-footer" v-show="viewtitle"><!--this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1&&-->
+						<div class="content-footer" v-show="viewtitle">
+							<!--this.workorderForm.STATE==5&&workorderForm.IS_MAIN!=1&&-->
+							<!-- <el-button title="查看报告文件" type="primary" @click="lookoverreport">查看报告文件</el-button> -->
 							<el-button type="primary" v-show="this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
 							<el-button type="warning" v-show="this.workorderForm.STATE==5&&this.MASTER_INSPECTOR==!this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
 							<el-button type="success" v-show="this.workorderForm.STATE!=1&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="checkchildlist">查看子任务单</el-button>
@@ -1139,7 +1195,7 @@
 			},
 			//预览文件
 			readFile(row){
-				var url = this.po_url+"/show?filename=" +row.filename
+				var url = this.po_url+"/show?filename=" +row.FILENAME
 					+ '&fileid=' +  row.FILEID
 					+ '&userid=' +  this.docParm.userid
 					+ '&username=' + this.docParm.username
@@ -1232,22 +1288,20 @@
 				this.page.pageSize = 10;//页码重新传值
 			},
 			//主任务单时，确定报告按钮
-			admirereport(){
-				var url = this.basic_url + '/api-apps/app/workorder/operate/createreportapprove?workorderreportid='+this.workorderForm.WORKORDER_REPORTList[0].ID;
-				this.$axios.get(url, {
-						
-				}).then((res) => {
-					
-					//成功后给出提示信息并隐藏按钮
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '提交成功',
-							type: 'success'
-						});
-						this.btnshow = false;//隐藏报告提交按钮
-					}
-				});
-			},
+			// admirereport(){
+			// 	var url = this.basic_url + '/api-apps/app/workorder/operate/createreportapprove?workorderreportid='+this.workorderForm.WORKORDER_REPORTList[0].ID;
+			// 	this.$axios.get(url, {
+			// 	}).then((res) => {
+			// 		//成功后给出提示信息并隐藏按钮
+			// 		if(res.data.resp_code == 0) {
+			// 			this.$message({
+			// 				message: '提交成功',
+			// 				type: 'success'
+			// 			});
+			// 			this.btnshow = false;//隐藏报告提交按钮
+			// 		}
+			// 	});
+			// },
 			//承建单位
 			getCompany() {
 				var url = this.basic_url + '/api-user/depts/treeByType';
@@ -1450,7 +1504,7 @@
 				})
 			},
            
-				
+			
 			//启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/receivingTask?ID='+this.dataid;
@@ -1620,19 +1674,34 @@
 				this.workorderForm.WORKORDER_ASSETList.push(obj);
 			},
 		
-			
-			//查看报告
-			lookoverreport(item){
-				this.detailgetData();
-				var url = this.po_url+"/show?fileid=" +item.FILEID
-				+ '&userid=' + this.currentuserinfo.id
-				+ '&username=' + this.currentuserinfo.username
-				+ '&deptid=' + this.currentuserinfo.deptId
-				+ '&deptfullname=' + this.currentuserinfo.deptName
-				window.open(url); 
+			//预览生成报告文件
+			readReportFile(row){
+				var url = this.po_url+"/show?filename=" +row.filename
+					+ '&fileid=' +  row.FILEID
+					+ '&userid=' +  this.docParm.userid
+					+ '&username=' + this.docParm.username
+					+ '&deptid=' + this.docParm.deptid
+					+ '&deptfullname=' + this.docParm.deptfullname
+					+ '&recordid=' + this.dataid
+					+ '&appname=工作任务单&appid=38fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+				// var url = this.po_url+"/show?filename=&fileid=234&appname=工作任务单&appid=38&fileedit=0&fileprint=0&fileread=1&fileduplicate=0";
+				 window.open(url); 
 			},
+
+			//查看报告文件
+			// lookoverreport(){
+			// 	// this.detailgetData();
+			// 	var url = this.po_url+"/show?fileid=" +this.workorderForm.WORKORDER_REPORTList[0].FILEID
+			// 	+ '&userid=' + this.currentuserinfo.id
+			// 	+ '&username=' + this.currentuserinfo.username
+			// 	+ '&deptid=' + this.currentuserinfo.deptId
+			// 	+ '&deptfullname=' + this.currentuserinfo.deptName
+			// 	window.open(url); 
+			// },
+					
+			//储存生成报告数据
 			reportdatavalue(value){
-				this.reportvalue = value;//储存生成报告数据
+				this.reportvalue = value;
 				this.workorderreportid = value.id;
 				var obj = {
 					ID:value.ID,
@@ -1694,7 +1763,7 @@
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].isEditing = false;
 					}
-					
+					//生成的报告文件
 					for(var i = 0;i<res.data.WORKORDER_REPORTList.length;i++){
 						if(res.data.WORKORDER_REPORTList[0].ISCREATED == '1'){
 							this.btnshow = false;
@@ -1921,8 +1990,8 @@
 				}).catch((wrong) => {})	
 			},
 			getUser(){//获取当前用户信息
-	            var url = this.basic_url + '/api-user/users/currentMap';
-	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
+					var url = this.basic_url + '/api-user/users/currentMap';
+					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					this.currentuserinfo = res.data;
 				 	this.userid = res.data.id;
 	        this.username = res.data.username;

@@ -15,23 +15,9 @@
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
 							<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button type="button" class="btn btn-green" @click="openAddMgr" id="">
-	                        	<i class="icon-add"></i>添加
-	              			</button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-purple button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<!-- <button type="button" class="btn btn-red button-margin" @click="physicsDel">
-							    <i class="icon-trash1"></i>彻底删除
-							</button> -->
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<!-- <i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i> -->
-							</button>
+								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
+									<i :class="item.icon"></i>{{item.name}}
+								</button>
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
@@ -45,23 +31,21 @@
 
 					<!-- 高级查询划出 Begin-->
 					<div v-show="search">
-						<el-form inline-message :model="searchList" label-width="95px">
+						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
-								<el-col :span="6">
-									<el-form-item label="按钮名称" prop="name">
-										<el-input v-model="searchList.name" @keyup.enter.native="searchinfo"></el-input>
+                                <el-col :span="7">
+									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">
+										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="6">
-									<el-form-item label="所属菜单" prop="menuIdDesc">
-										<el-select v-model="searchList.menuIdDesc" filterable style="width: 100%">
-											<el-option v-for="item in selectDataMenu" :key="item.id" :value="item.id" :label="item.name" :class="item.name"></el-option>
-										</el-select>
+								<el-col :span="7">
+									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
+										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -71,29 +55,15 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="按钮名称" width="160" sortable prop="name" v-if="this.checkedName.indexOf('按钮名称')!=-1">
+								<el-table-column label="编码" width="155" sortable prop="REPORTNUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.name}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="所属菜单" width="180" sortable prop="menuIdDesc" v-if="this.checkedName.indexOf('所属菜单')!=-1" align="center">
+                                <el-table-column label="报告描述" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('报告描述')!=-1">
 								</el-table-column>
-								<el-table-column label="按钮图标" width="125" align="center" sortable prop="icon" v-if="this.checkedName.indexOf('按钮图标')!=-1">
-									<template slot-scope="scope">
-										<i :class="scope.row.icon"></i> <!-- {{scope.row.icon}} -->
-									</template>
-								</el-table-column>
-								<el-table-column label="按钮颜色" sortable prop="style" v-if="this.checkedName.indexOf('按钮颜色')!=-1">
-									<template slot-scope="scope">
-										<button type="button" :class="'btn '+ scope.row.style">{{scope.row.style}}</button>
-									</template>
-								</el-table-column>
-								<el-table-column label="排序" width="100" sortable prop="sort" v-if="this.checkedName.indexOf('排序')!=-1">
-								</el-table-column>
-								<el-table-column label="录入时间" width="160" prop="createTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
-								</el-table-column>
-								<el-table-column label="修改时间" width="160" prop="updateTime" sortable :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+								<el-table-column label="流程状态" sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -102,7 +72,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<btnconfigmask :CATEGORY="CATEGORY" ref="btnconfigmask" @request="requestData" @reset="reset" v-bind:page=page></btnconfigmask>
+			<qualitysup  ref="qualitysup" @request="requestData" v-bind:page=page></qualitysup>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -113,99 +83,76 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import btnconfigmask from '../settingDetails/buttonconfigure_mask.vue'
-	import tableControle from '../plugin/table-controle/controle.vue'
+	import qualitysup from '../testworkcheckDetails/qualitysup_mask2.vue'
+    import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
-		name: 'button_configure',
+		name: 'reportachiving',
 		components: {
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
+			'qualitysup': qualitysup,
 			'tableControle': tableControle,
-			'btnconfigmask': btnconfigmask,
 			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
-				appName:'apppermissions',
-				reportData:{},//报表的数据
-				scroll_old:0,
-				selectDataMenu: [],
-				// up2down:'down',
+				appName:'qualitySupApp',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
-				commentArr: {},
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
-				fileList:[],
+				commentArr: {},
 				value: '',
-				permissions:'permissions',//appname
+				options: [{
+					value: '1',
+					label: '活动'
+				}, {
+					value: '0',
+					label: '不活动'
+				}],
 				checkedName: [
-					'按钮名称',
-					'所属菜单',
-					'按钮图标',
-					'按钮颜色',
-					'排序',
-					'录入时间',
-					'修改时间'
+                    '编码',
+					'报告描述',
+                    '流程状态',
 				],
-				tableHeader: [{
-						label: '按钮名称',
-						prop: 'name'
+				tableHeader: [
+                    {
+						label: '编码',
+						prop: 'REPORTNUM'
 					},{
-						label: '所属菜单',
-						prop: 'menuIdDesc'
-					},
-					
-					{
-						label: '按钮图标',
-						prop: 'icon'
+						label: '报告描述',
+						prop: 'DESCRIPTION'
 					},
 					{
-						label: '按钮颜色',
-						prop: 'style'
+						label: '流程状态',
+						prop: 'STATE'
 					},
-					{
-						label: '排序',
-						prop: 'sort'
-					},
-					{
-						label: '录入时间',
-						prop: 'createTime'
-					},
-					{
-						label: '修改时间',
-						prop: 'updateTime'
-					}
 				],
 				selUser: [],
-				categoryList: [],
+				USESEAL: [],
 				search: false,
 				show: false,
 				isShow: false,
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
-				searchList: { //点击高级搜索后显示的内容
-					name: '',
-					menuIdDesc:''
+                searchList: { //点击高级搜索后显示的内容
+					REPORTNUM:'',
+					DESCRIPTION:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
 				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
-				resourceProps: {
-					btnconfigmaskren: "subDepts",
-					label: "simplename"
-				},
 				page: { //分页显示
 					currentPage: 1,
 					pageSize: 20,
 					totalCount: 0
 				},
-				CATEGORY: {},//修改子组件时传递数据
+				buttons:[],
 			}
 		},
 		methods: {
@@ -215,55 +162,23 @@
 			tableControle(data) {
 				this.checkedName = data;
 			},
-			//所属菜单
-			getMenuId(){
-				var url = this.basic_url + '/api-user/menus/findAllMenu';
-				this.$axios.get(url, {}).then((res) => {
-					// 
-					this.selectDataMenu = res.data;
-				}).catch((wrong) => {
-				})	
-			},
 			//重置
 			resetbtn(){
 				this.searchList = {
-					name:'',
-					menuIdDesc:'',
+					REPORTNUM:'',
+					DESCRIPTION:'',
 				};
 				this.requestData('init');
 			},
 			//搜索
-			searchinfo() {
+			searchinfo(index) {
 				this.requestData('init');
 			},
-			//清空
-			reset() {
-				this.CATEGORY = {
-					id: '',
-					name: '',//按钮名称
-					// menuIdDesc: '',//所属菜单
-					menuId: '',//所属菜单
-					icon: '',//图标
-					style: '',//按钮颜色
-					sort: '',//排序
-					deptid: '',//部门ID
-					permission: '',//按钮事件名称
-					creatUser: '',//录入人
-					createTime: '',//录入时间
-					updateUser: '',//修改人
-					updateTime: '',//修改时间
-				};
-				if(this.$refs['CATEGORY'] !== undefined) {
-					this.$refs['CATEGORY'].resetFields();
-				}
-			},
-			//添加按钮配置
+			//添加类别
 			openAddMgr() {
-				this.reset();
-				this.$refs.btnconfigmask.open(); // 方法1
-				this.$refs.btnconfigmask.visible();
+				this.$refs.qualitysup.visible();
 			},
-			//修改按钮配置
+			//修改
 			modify() {
 				if(this.selUser.length == 0) {
 					this.$message({
@@ -278,19 +193,41 @@
 					});
 					return;
 				} else {
-					console.log(this.selUser[0]);
-					this.CATEGORY = this.selUser[0];
-					this.$refs.btnconfigmask.detail();
+					this.$refs.qualitysup.detail(this.selUser[0].ID);
 				}
 			},
 			//查看
-			view(data) {
-			 	this.CATEGORY =data;
-				this.$refs.btnconfigmask.view();
+			 view(data) {
+				this.$refs.qualitysup.view(data.ID);
 			},
 			//高级查询
 			modestsearch() {
 				this.search = !this.search;
+			},
+			//请求点击
+		    getbtn(item){
+		    	if(item.name=="添加"){
+                 this.openAddMgr();
+                }else if(item.name=="修改"){
+		    	 this.modify();
+		    	}else if(item.name=="彻底删除"){
+		    	 this.physicsDel();
+		    	}else if(item.name=="高级查询"){
+		    	 this.modestsearch();
+		    	}else if(item.name=="导入"){
+		    	 this.download();
+		    	}else if(item.name=="删除"){
+		    	 this.deluserinfo();
+		    	}else if(item.name=="生成子任务单"){
+		    	 this.tasklist();
+		    	}else if(item.name=="报表"){
+			     this.reportdata();
+				}
+		    },
+			//报表
+			reportdata(){
+				this.reportData.app=this.productType;
+				this.$refs.reportChild.visible();
 			},
 			// 删除
 			deluserinfo() {
@@ -302,14 +239,14 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-user/permissions/deletes';
+					var url = this.basic_url + '/api-apps/app/qualitySupApp/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].id);
+						deleteid.push(changeUser[i].ID);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -340,8 +277,8 @@
 					});
 				}
 			},
-			//彻底删除
-			physicsDel(){
+			// physicsDel
+			physicsDel() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -350,21 +287,20 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-user/permissions/physicsDel';
+					var url = this.basic_url + '/api-apps/app/qualitySupApp/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
 					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].id);
+						deleteid.push(changeUser[i].ID);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
 					var data = {
 						ids: ids,
 					}
-					console.log(data);
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -388,13 +324,20 @@
 
 					});
 				}
+            },
+            
+			// 导入
+			importData() {
+
 			},
-			handleSuccess(response, file, fileList){
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
+			// 导出
+			exportData() {
+
 			},
-		
+			// 打印
+			Printing() {
+
+			},
 			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -403,16 +346,29 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
-			requestData(opt) {
+			//Table默认加载数据
+			requestData(opt){
 				this.$refs.table.requestData(opt);
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
-        		this.$refs.navsTabs.showClick(childValue);
-      		}
-		},
-		mounted() {
-			this.getMenuId();
+				this.$refs.navsTabs.showClick(childValue);
+				this.getbutton(childValue);
+			},
+			  //请求页面的button接口
+		    getbutton(childByValue){
+		    	var data = {
+					menuId: childByValue.id,
+					roleId: this.$store.state.roleid,
+				};
+				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
+				this.$axios.get(url, {params: data}).then((res) => {
+					// 
+					this.buttons = res.data;
+					
+				}).catch((wrong) => {
+				})
+		    },
 		}
 	}
 </script>

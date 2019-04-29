@@ -346,10 +346,9 @@
 													<el-table-column prop="REALITY_PRICE" label="实际单价(元)" sortable width="120px" :formatter="priceFormate">
 														<template slot-scope="scope">
 															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REALITY_PRICE'" >
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REALITY_PRICE"  @blur="checkMoney(scope.row.REALITY_PRICE)" placeholder="请输入实际单价">
+																<el-input  size="small" v-model="scope.row.REALITY_PRICE" @blur="testPrice(scope.row)" placeholder="请输入实际单价">
 																</el-input>
 															</el-form-item>
-																<span>{{scope.row.REALITY_PRICE}}</span>
 														</template>
 													</el-table-column>
 													<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
@@ -390,7 +389,6 @@
 													:default-sort="{prop:'dataInfo.CHECK_PROXY_CONTRACTList', order: 'descending'}">
 														<span v-show="!viewtitle">
 															<el-table-column prop="iconOperation" fixed label="" width="50px" >
-																<template slot-scope="scope"></template>
 															</el-table-column>
 														</span>
 
@@ -544,7 +542,7 @@
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
+											<el-form-item label="报告份数" prop="REPORT_QUALITY" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -933,22 +931,17 @@
 				labelPositions: 'right',
 				rules: {
 					V_NAME: [
-						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托方名称名称
-					V_ADDRESS: [{required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
-					V_ZIPCODE: [{required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
+						{required: true, message: '必填', trigger: 'change',validator:this.Validators.isSpecificKey }],//委托方名称名称
+					V_ADDRESS: [{required: true, trigger: 'change', validator: this.Validators.isAddress}],//地址
+					V_ZIPCODE: [{required: false, trigger: 'change', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{required: true, validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话
 					R_VENDORDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
-					// VENDOR: [{ required: true, message: '必填', trigger: 'blur' }],//委托方名称编号
-					P_NAMEDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
-					PRODUCT: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
-					// PRODUCT_UNIT:[{required: true, message: '必填', trigger: 'blur'}],//生成单位编号
-					ITEM_NAME: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
-					// ITEM_IDENT: [{ required: true, message: '必填', trigger: 'blur' }],//标识
+					P_NAMEDesc: [{required: false, validator: this.Validators.isSpecificKey}],//生产单位名称
+					PRODUCT: [{required: false, trigger: 'change', validator: this.Validators.isSpecificKey}],//产品名称
+					ITEM_NAME: [{required: false,  validator: this.Validators.isSpecificKey}],//样品名称
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'}],//数量
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
-					//ITEM_STATUS: [{ required: true, message: '必填', trigger: 'blur' }],//样品信息状态
-					// ITEM_SECRECY: [{ required: true, message: '必填', trigger: 'blur' }],//保密要求
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
@@ -956,23 +949,16 @@
 						{trigger: 'blur', validator:this.Validators.isSpecificKey}
 					],//抽样方案/判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
-					// PROXYNUM: [{ required: true, message: '必填', trigger: 'blur' }],//编号
-					REPORT_QUALITY: [
-						{ required: true, message: '必填', trigger: 'blur'},
-					],//交委托方分数
+					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式
-					// MAINGROUP: [{required: true, message: '必填', trigger: 'change' }],//主检组
-					// LEADER: [{required: true, message: '必填', trigger: 'change' }],//主检负责人
-					// ACTUAL_PERCENT: [{ required: true, trigger:'blur', validator:this.Validators.isSpecificKey}],//实收比例(%)
-					// MEMO: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 					CHECK_COST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//合同收费(元)
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUS: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
 					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
 					ITEM_SECRECY: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//保密要求
-					CONTRACTNUM: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//合同编号
+					CONTRACTNUM: [{ required: false, trigger: 'blur',}],//合同编号
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -995,17 +981,13 @@
 				deptindex:{},//分包方名称
 				main:'',
 				sendchilddata:[],//检测依据子表已有的值
-				pnum:'',//用于主表接修改时的产品的类别的值
-				pronum:'',//用于主表接修改时的产品的值
+				// pnum:'',//用于主表接修改时的产品的类别的值
+				// pronum:'',//用于主表接修改时的产品的值
 				inistinspectproxy:'',//用于存储检测依据的子表数据
 				nodeState: ''
 			};
 		},
 		methods: {
-// 			number(){　　
-// 　　　 	this.famount=this.famount.replace(/[^\.\d]/g,'');
-//         this.famount=this.famount.replace('.','');
-// 　　	},
 			priceFormate(row, column) {
 				var money = row.UNITCOST;
 				return row.UNITCOST =  this.toFixedPrice(money);
@@ -1151,13 +1133,15 @@
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
 			},	
-			// toNum(str) {
-			// 	return str.replace(/\,|\￥/g, "");
-			// },
-			//金额两位小数点千位分隔符，四舍五入
+			//子表的价钱
 			testPrice(item){
-				var money = item.CHECKCOST;
-				item.CHECKCOST = this.toFixedPrice(money);
+				if(!!item.REALITY_PRICE){
+					var money = item.REALITY_PRICE;
+					item.REALITY_PRICE = this.toFixedPrice(money);
+				}else{
+					var money = item.CHECKCOST;
+				  item.CHECKCOST = this.toFixedPrice(money);
+				}
 			},	
 			toFixedPrice(price){
 				var res = 0;
@@ -1200,16 +1184,6 @@
 					str = str.toString();
 				}
 				return str.replace(/\,|\￥/g, "");
-			},
-			checkMoney(obj){
-				var tempValue=obj.value.replace(/(^s+)|(s+$)/g,'').replace('￥','');
-				if(!tempValue){return}
-				if(/^-?d+(.d+)?$/.test(tempValue)){
-					obj.value="￥"+parseFloat(tempValue).toFixed(2);
-				}else{
-					alert('请输入合法的货币值！');
-				return
-				}
 			},
 			//金额两位小数点千位分隔符，四舍五入
 			toPrice(){
@@ -1649,7 +1623,6 @@
 		
 			//接到产品类别的值
 			categorydata(val){
-				console.log(this.pnum);
 					this.dataInfo.PRO_NUM='';
 					this.dataInfo.PRODUCT='';
 					this.dataInfo.PRO_VERSION='';
@@ -1787,8 +1760,6 @@
 							type: 'warning'
 						});
 					}else{
-						// this.sendchilddata.push(this.dataInfo.S_NUM);
-						// this.sendchilddata.push(this.dataInfo.INSPECT_PROXY_PROJECList);
 						var arr=[];
 						var proxy=[];
 						var proxylist=this.dataInfo.INSPECT_PROXY_PROJECList;
@@ -1806,9 +1777,6 @@
 							proxypnum:proxypnum
 						}
 						this.$refs.projectchild.projectlead(data);
-						// this.main = 'main';
-						// this.sendchilddata = [];
-					  //   this.deptindex = {};
 					}
 				}
 			},
@@ -1852,8 +1820,6 @@
 			},
 			//检验依据列表赋值
 			addbasis(val){
-				// this.dataInfo.INSPECT_PROXY_BASISList=[];
-				// this.dataInfo.INSPECT_PROXY_PROJECList=[];
 				for(var i = 0;i<val.length;i++){
 						var List={
 								S_NUM: val[i].S_NUM,
@@ -2026,27 +1992,6 @@
 				this.dataInfo.LEADER = '';
 				this.RVENDORSelect();
 			},
-			//委托方名称
-			// appendname(value){
-			// 	this.dataInfo.V_NAME = value;//名称
-			// 	if(this.dataInfo.CHECK_PROXY_CONTRACTList == null || this.dataInfo.CHECK_PROXY_CONTRACTList==undefined||this.dataInfo.CHECK_PROXY_CONTRACTList==''){
-
-			// 	}else{//更新子表委托方名称
-			// 		for(var i = 0;i<this.dataInfo.CHECK_PROXY_CONTRACTList.length;i++){
-			// 			this.dataInfo.CHECK_PROXY_CONTRACTList[i].V_NAME = value;
-			// 		}
-			// 	}
-			// },
-			// appendadd(value){
-				
-			// 	this.dataInfo.V_ADDRESS=value;
-			// },
-			// appendzip(value){
-			// 	this.dataInfo.V_ZIPCODE=value;
-			// },
-			// appendid(value){
-			// 	this.customid=value;
-			// },
 			//生产单位名称
 			appendnames(value){
 				if(value.TYPE==1){
@@ -2063,19 +2008,6 @@
 			},
 			// 保存users/saveOrUpdate
 			save(parameter) {
-				// var projectgroup = "";
-				// for(var i=0;i<this.dataInfo.INSPECT_PROXY_PROJECList.length;i++){
-				// 	projectgroup = projectgroup + this.dataInfo.INSPECT_PROXY_PROJECList[i].INSPECT_GROUP+",";
-				// }
-				// //检验项目与要求中专业组至少有一条与主检组值相同
-				// if(projectgroup.indexOf(this.dataInfo.MAINGROUP)==-1){
-				// 	this.$message({
-				// 		message: '检验项目与要求中专业组至少有一条与主检组值相同！'
-				
-				// 		type: 'warning'
-				// 	});
-				// 	return false;
-				// }
 				this.$refs.dataInfo.validate((valid) => {
 			    if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
@@ -2123,7 +2055,6 @@
 						this.resetBasisInfo2();
 					})
 					.catch(_ => {
-				console.log('取消关闭');
 					$('.v-modal').hide();
 				});
 			},
@@ -2154,15 +2085,6 @@
 					this.maingroup = res.data;
 				}).catch((err) => {
 				});
-				// this.dataInfo.PRODUCT_TYPE = '';
-				// this.dataInfo.P_NUM = '';
-				// this.dataInfo.PRODUCT = '';
-				// this.dataInfo.PRO_NUM = '';
-				// this.dataInfo.S_NUM = '';
-				// this.dataInfo.INSPECT_PROXY_BASISList = [];
-				// this.dataInfo.INSPECT_PROXY_PROJECList = [];
-				// this.dataInfo.MAINGROUP = '';
-				// this.dataInfo.LEADER = '';
 			},
 			//主检组带出主检负责人
 			getmaingroup(maingroupid){
@@ -2208,7 +2130,7 @@
 					this.$axios.get(url, {
 						params: data
 					}).then((res) => {
-						if(val=='default'&&!!res.data.CUSTOMER_PERSONList){
+						if(val=='default'){
 							this.dataInfo.V_PERSON = res.data.CUSTOMER_PERSONList[0].PERSON;
 							this.dataInfo.V_PHONE = res.data.CUSTOMER_PERSONList[0].PHONE;
 						}else{
@@ -2418,17 +2340,11 @@
 #stacost{text-align: right}
 #actualcost{text-align: right}
 .table-func-middle button:hover {width:100px;}
-/*.el-form-item__error {
-	top: 18%;
-    left: 5px;
-    background: #FFF;
-    padding: 5px 10px;
-}*/
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button{
-            -webkit-appearance: none !important;
-            margin: 0; 
-        }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+		-webkit-appearance: none !important;
+		margin: 0; 
+}
 input{
     -moz-appearance:textfield;
 }

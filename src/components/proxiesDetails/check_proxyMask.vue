@@ -532,8 +532,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
-											<el-form-item label="标识" prop="CNAS_OR_CMA_ID2" label-width="110px">
-												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID2" :disabled="noedit">
+											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
+												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
     											<el-checkbox label="CNAS"></el-checkbox>
 													<el-checkbox label="CMA"></el-checkbox>
 												</el-checkbox-group>
@@ -838,6 +838,7 @@
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					P_NAME:'',
+					CNAS_OR_CMA_ID:[],
 					CHECK_COST:0.00,//合同费用
 					ACTUALCOST:0.00,//实收费用
 					CONTRACTCOST:0,//标准费用
@@ -946,7 +947,7 @@
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUS: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
-					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
+					// CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
 					ITEM_SECRECY: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//保密要求
 					CONTRACTNUM: [{ required: false, trigger: 'blur',}],//合同编号
 				},
@@ -1249,6 +1250,7 @@
 					V_NAME:'',//委托方名称名称
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
+					CNAS_OR_CMA_ID:[],
 					ACTUAL_PERCENT:0,
 					CHECK_COST:0,//合同费用
 					ACTUALCOST:0,//实收费用

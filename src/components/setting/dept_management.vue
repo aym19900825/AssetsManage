@@ -107,6 +107,7 @@
 					'机构编号',
 					'上级机构',
 					'机构类型',
+					'排序',
 					'负责人',
 					'版本',
 					'备注',
@@ -139,6 +140,12 @@
 						isShow:true,
 					},
 					{
+						text: '排序',
+						dataIndex: 'sort',
+						width: '80px',
+						isShow:true,
+					},
+					{
 						text: '机构属性',
 						dataIndex: 'typeName',
 						isShow:true,
@@ -151,6 +158,7 @@
 					{
 						text: '版本',
 						dataIndex: 'version',
+						width: '80px',
 						isShow:true,
 					},
 					{
@@ -159,7 +167,6 @@
 						isShow:true,
 					},
 				],
-
 				companyId: '',
 				deptId: '',
 				selDept: [],
@@ -200,13 +207,16 @@
 			//清空
 			reset(){
 				this.adddeptForm = {
+						"id":'',
 						"version":'1',
 						"status":'活动',
 						"step":'',
-						"id":'',
+						"sort":0,
+						"pid":this.$store.state.currentcjdw[0].id,//上级机构ID
+						"pName":this.$store.state.currentcjdw[0].fullname,//上级机构名称
 						"fullname":'',
 						"org_range":'2',
-						"type":'',
+						"type":""+this.$store.state.currentcjdw[0].type+"",//机构属性
 						"inactive":'否',
 						"address":'',
 						"zipcode":'',
@@ -215,13 +225,14 @@
 						"fax":'',
 						"email":'',
 						"tips":'',
-						"pid":'',
 						"enterby":'',
 						"enterdate":'',
 						"changeby":'',
 						"changedate":'',
-						"depttype":'2',
+						"depttype":'2',//机构类型
 					};
+					console.log(this.$store.state.currentcjdw[0].type);
+					console.log(this.$store.state.currentcjdw);
 			},
 			//请求页面的button接口
 		    getbutton(childvalue){
@@ -231,9 +242,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// 
 					this.buttons = res.data;
-					
 				}).catch((wrong) => {})
 
 		    },
@@ -250,12 +259,12 @@
 			},
 			//表格传过来
 			childByValue: function (childByValue) {
-		        // childValue就是子组件传过来的
-		        this.selMenu = childByValue
-		    },
+				// childValue就是子组件传过来的
+				this.selMenu = childByValue
+			},
 			//左侧菜单传来
-		    childvalue:function ( childvalue) {
-		    	 this.getbutton( childvalue);
+			childvalue:function ( childvalue) {
+					this.getbutton( childvalue);
 			},
 			getDetail(data){
 				this.view(data);
@@ -272,10 +281,10 @@
 		      this.page.pageSize = val;
 		      this.requestData();
 		    },
-		    currentChange(val) {//分页，当前页
-		      this.page.currentPage = val;
-		      this.requestData();
-		    },
+			currentChange(val) {//分页，当前页
+				this.page.currentPage = val;
+				this.requestData();
+			},
 			currentTree(val){
 			},
 			//分页功能
@@ -300,7 +309,7 @@
 					}
 					this.deptList = result;
 					this.loading = false;
-				}).catch((wrong) => {
+				}).catch((wrong) => {//通用后端数据提示信息
 					this.$message({
 							message: wrong.resp_msg,
 							type: 'warning'
@@ -404,6 +413,11 @@
 										type: 'success'
 									});
 									this.requestData();
+								}else{
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'warning'
+									});
 								}
 							}).catch((err) => {
 							});
@@ -460,6 +474,11 @@
 										type: 'success'
 									});
 									this.requestData();
+								}else{
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'warning'
+									});
 								}
 							}).catch((err) => {
 							});

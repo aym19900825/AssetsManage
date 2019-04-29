@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<div class="mask" v-if="show"></div>
-		<div class="mask_divbg" v-if="show">
+		<div class="mask" v-show="show"></div>
+		<div class="mask_divbg" v-show="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
 					<div class="mask_title" v-show="addtitle">添加机构</div>
@@ -39,12 +39,6 @@
 										</el-col> -->
 									</el-row>
 									<el-row :gutter="30">
-										<!-- <el-col :span="8">
-											<el-form-item label="机构序号" prop="step">
-												<el-input  v-model="adddeptForm.step" :disabled="noedit">
-												</el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="机构编码" prop="code">
 												<el-input v-model="adddeptForm.code" placeholder="自动生成" :disabled="edit"></el-input>
@@ -73,7 +67,12 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构属性" prop="type">
-												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" :disabled="noedit">
+
+												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" v-if="this.$store.state.currentcjdw[0].type==1||this.$store.state.currentcjdw[0].type==4||this.$store.state.currentcjdw[0].type==5" :disabled="noedit">
+													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
+												</el-select>
+
+												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" v-else :disabled="edit">
 													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
 											</el-form-item>
@@ -95,9 +94,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="邮政编码">
-												<el-input v-model="adddeptForm.zipcode" :disabled="noedit">
-												</el-input>
+											<el-form-item label="邮政编码" prop="zipcode">
+												<el-input v-model="adddeptForm.zipcode" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -128,7 +126,7 @@
 											</el-form-item>
 										</el-col>
 										
-										<el-col :span="8" v-if="adddeptForm.pid==128" v-show="true">
+										<el-col :span="8" v-if="adddeptForm.type==1||adddeptForm.type==4||adddeptForm.type==5&&adddeptForm.del_flag==0" v-show="true">
 											<el-form-item label="机构简称" prop="simplename" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 												<el-input v-model="adddeptForm.simplename" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -137,6 +135,13 @@
 										<el-col :span="8" v-else v-show="false">
 											<el-form-item label="机构简称" prop="simplename">
 												<el-input v-model="adddeptForm.simplename" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										
+										<el-col :span="8">
+											<el-form-item label="排序" prop="sort">
+												<el-input  v-model="adddeptForm.sort" :disabled="noedit">
+												</el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -199,7 +204,7 @@
 					</el-tree>
 				</div>
 				<div slot="footer">
-			       <el-button type="primary" @click="queding();" >确 定</el-button>
+			       <el-button type="primary" @click="queding" >确 定</el-button>
 			       <el-button @click="dialogVisible = false">取 消</el-button>
 			    </div>
 			</el-dialog>
@@ -207,7 +212,7 @@
 			<!--负责人 Begin-->
 			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
 					<!-- 第二层弹出的表格 -->
-						<el-table :data="userList" border stripe height="420px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" v-loadmore="loadMore">
+						<el-table :data="userList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 								<el-table-column type="selection" width="55" fixed>
 								</el-table-column>
 								<el-table-column label="账号" sortable width="140px" prop="username">
@@ -250,6 +255,7 @@
 						status:'',
 						step:'',
 						code:'',
+						sort: 0,//排序
 						fullname:'',
 						pName:'',
 						pid:'',
@@ -336,13 +342,15 @@
 					label: "fullname"
 				},
 				rules:{
-   					step: [{required:false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
+					step: [{required:false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构序号
+					pName: [
+						{required:true, message: '请选择上级机构'},
+					],
 					fullname: [
 						{required:true, trigger: 'blur', message: '必填',validator: this.Validators.isNickname}
 					],//机构名称
 					depttype: [{required:true,trigger: 'change', message: '请选择机构类型'}],//选择机构类型
    					type: [{required:true,trigger: 'change', message: '请选择机构属性'}],//选择机构属性
-   					telephone: [{required:false,trigger: 'blur', validator: this.Validators.isTelephone}],//电话
 					fax: [{required:false,trigger: 'blur', validator: this.Validators.isTelephone}],//传真
 					email:[
 						{required:true, trigger: 'blur', message: '必填'},
@@ -350,12 +358,11 @@
 					],//邮箱
 					code:[{required: false,trigger: 'blur',validator: this.Validators.isWorknumber}],//机构属性
 					// address:[{required: true,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
-					address: [{required:true,trigger: 'blur',message: '请输入地址'}],//选择机构类型
-					zipcode:[{required:false,trigger: 'blur',message: '请输入邮编'}],//选择机构类型
-					telephone:[{required: true,trigger: 'blur',validator: this.Validators.isTelephone}],//电话
-					fax:[{required: false,trigger: 'blur',validator: this.Validators.isTelephone}],//传真
-					tips:[{required: false,trigger: 'blur',validator: this.Validators.isSpecificKey}],//备注
-					leaderName:[{required: true,trigger: 'blur',message: '请输入负责人'}],
+					address: [{required:true, trigger: 'blur', message: '请输入地址'}],//选择机构类型
+					zipcode: [{required:false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
+					telephone:[{required: true, trigger: 'blur', validator: this.Validators.isPhones}],//电话
+					tips:[{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
+					leaderName:[{required: true, trigger: 'blur', message: '请输入负责人'}],
 				}
 			}
 		},
@@ -386,6 +393,7 @@
 				//  }).catch((err) => {
 				// });	
 				// this.$refs["adddeptForm"].resetFields();//清空表单验证
+				this.currentcjdw=this.$store.state.currentcjdw[0].type;
 				this.adddeptForm.depttype='2';
 				this.show = true;
 				this.addtitle = true;
@@ -414,6 +422,7 @@
 	    			this.adddeptForm.updatebyName = res.data.nickname;
 					var date=new Date();
 					this.adddeptForm.updateTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+
 					for(var key in this.adddeptForm){ 
 						this.adddeptForm.hasOwnProperty('_expanded');
 						this.adddeptForm.hasOwnProperty('_level');
@@ -423,7 +432,6 @@
 						delete this.adddeptForm._level;
 						delete this.adddeptForm._parent;
 						delete this.adddeptForm._show;
-						
 					}
 					//深拷贝数据
 					// let obj = JSON.parse(JSON.stringfy(this.adddeptForm));
@@ -454,23 +462,12 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-			// loadMore() {
-			// 	if(this.loadSign) {
-			// 		this.loadSign = false
-			// 		this.page.currentPage++
-			// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-			// 				return
-			// 			}
-			// 		setTimeout(() => {
-			// 			this.loadSign = true
-			// 		}, 1000)
-			// 		this.requestData()
-			// 	}
-			// },
+			//分页页码
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
 			},
+			//当前页
 			currentChange(val) {
 				this.page.currentPage = val;
 				this.requestData();
@@ -557,7 +554,6 @@
 					}
 				});
 			},
-
 			//所属上级
 			getDept() {
 				var page = this.page.currentPage;
@@ -574,6 +570,7 @@
 					this.dialogVisible = true;
 				});
 			},
+			//上级机构选择后确定
 			queding() {
 				this.getCheckedNodes(this.checkedNodes);
 				if(this.checkedNodes == undefined){
@@ -603,8 +600,9 @@
 		        return Math.floor(Math.random()*(max-min))+min;
 		    },
 			getDEPT_TYPE() {//获取机构属性
-				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE';
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE&code_where_not_in=1';
 				this.$axios.get(url, {}).then((res) => {
+					// console.log(res);
 					this.SelectDEPT_TYPE = res.data;
 				}).catch(error => {
 				})
@@ -672,15 +670,12 @@
 					this.commentArr[this.page.currentPage] = res.data.data
 					let newarr = []
 					for(var i = 1; i <= totalPage; i++) {
-
 						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
 							for(var j = 0; j < this.commentArr[i].length; j++) {
 								newarr.push(this.commentArr[i][j])
 							}
 						}
 					}
-
 					this.userList = newarr;
 				}).catch((wrong) => {})
 			},
@@ -691,10 +686,12 @@
 		          if (valid) {
 		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
 					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
+					console.log(url);
 					this.$axios.post(url, {
 						address: this.adddeptForm.address,
 						children: this.adddeptForm.children,
 						code: this.adddeptForm.code,
+						sort: this.adddeptForm.sort,//排序
 						createTime: this.adddeptForm.createTime,
 						createUser: this.adddeptForm.createUser,
 						createbyName: this.adddeptForm.createbyName,
@@ -707,6 +704,7 @@
 						id: this.adddeptForm.id,
 						leaderName: this.adddeptForm.leaderName,
 						pid:this.adddeptForm.pid,
+						parent:this.adddeptForm.parent,
 						pName: this.adddeptForm.pName,
 						status: this.adddeptForm.status,
 						telephone: this.adddeptForm.telephone,
@@ -717,6 +715,7 @@
 						// updatebyName:this.adddeptForm.updatebyName,
 					}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
+						console.log(res)
 						if(res.data.resp_code == 0) {
 							this.$message({
 								message: '保存成功',

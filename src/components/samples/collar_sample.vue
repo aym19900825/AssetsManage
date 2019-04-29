@@ -380,7 +380,7 @@
 						return;
 					}
 					this.samplesForm = this.selMenu[0]; 
-					this.$refs.child.detail(this.selMenu[0].ITEMNUM,this.selMenu[0].ITEM_STEP,this.selMenu[0].QUALITY);
+					this.$refs.child.detail(this.selMenu[0].ID);
 				}
 			},
 			//查看

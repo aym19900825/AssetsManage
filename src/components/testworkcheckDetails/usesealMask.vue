@@ -18,7 +18,7 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="USESEAL" :rules="rules" ref="USESEAL" label-width="110px" class="demo-adduserForm">
-						<div class="text-center" v-show="viewtitle">
+						<!-- <div class="text-center" v-show="viewtitle">
 							<span v-if="this.USESEAL.STATE!=3">
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
@@ -26,7 +26,7 @@
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
+						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="用印管理" name="1">
@@ -240,6 +240,12 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
+					USERDesc:[//用印人
+						{required: true, message: '请选择', trigger: 'change'}
+					],
+					USETIME:[//用印时间
+						{required: true, message: '请选择', trigger: 'change'}
+					],
 					// NUM: [{required: false,trigger: 'change',validator: validateNum,}],
 					// TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
 				},
@@ -758,7 +764,7 @@
 			},
 			//已确认盖章
 			submited(){
-				var url = this.basic_url + '/api-apps/app/workorder/operate/createReportData?id='+this.dataid;
+				var url = this.basic_url + '/api-apps/app/sealUse/operate/createReportData?id='+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 						// console.log(repotFileId);
 						//resp_code == 0是后台返回的请求成功的信息

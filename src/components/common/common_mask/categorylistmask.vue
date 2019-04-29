@@ -193,11 +193,17 @@
 			VERSION:this.searchList.VERSION,
 		}
 		if(!!this.appname){
-			if(this.appname=='inspectPro'){
-					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1;
+			///api-apps/appSelection/inspectionSta/pageForStation（光哥的接口）
+			if(this.appname=='inspectPro'){//按站室显示产品数据
+					var url = this.basic_url +'/api-apps/appSelection/productType2/pageForStation/';
 			}else{
-					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2;
+					var url = this.basic_url +'/api-apps/appSelection/productType2/pageForStation/';
 			}
+			// if(this.appname=='inspectPro'){
+			// 		var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1;
+			// }else{
+			// 		var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2;
+			// }
 			
 			// var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
 		}else{

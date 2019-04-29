@@ -39,10 +39,10 @@ export default {
       },
      innerVisible: false,
      rules: {
-        opinion: [
-          { required: true, message: '请输入内容', trigger: 'blur' },
-          { min: 2, max: 255, message: '长度在 2 到 255 个字符', trigger: 'blur' }
-        ],
+        // opinion: [
+        //   { required: true, message: '请输入内容', trigger: 'blur' },
+        //   { min: 2, max: 255, message: '长度在 2 到 255 个字符', trigger: 'blur' }
+        // ],
 		 },
 		 tit: '审批',
 		 formLabel: '审批意见'
@@ -148,35 +148,42 @@ export default {
 		    },
 		    //驳回
 		    rejectForm(){
-		    	this.id=this.approvingData.id;
-		    	this.appname=this.approvingData.app;
-		    	this.$refs.approveForm.validate((valid) => {	
-		    	var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;	
-				this.approveForm = {
-							"end":false,
-					 		"flag": false,
-							"opinion":this.approveForm.opinion,
-					}
-				this.$axios.post(url, this.approveForm).then((res) => {
-				
-					if(res.data.resp_code == 1) {
+					if(!!this.approveForm.opinion){
+						this.$message({
+								message:res.data.resp_msg,
+								type: 'warning'
+							});
+					}else{
+						this.id=this.approvingData.id;
+						this.appname=this.approvingData.app;
+						this.$refs.approveForm.validate((valid) => {	
+						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;
+						this.approveForm = {
+								"end":false,
+								"flag": false,
+								"opinion":this.approveForm.opinion,
+						}
+						this.$axios.post(url, this.approveForm).then((res) => {
+					
+						if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,
 								type: 'warning'
 							});
 							this.close();
-				    }else{
-				    	this.$message({
+						}else{
+							this.$message({
 								message:res.data.resp_msg,
 								type: 'success'
 							});
 							this.close();
 							//调用父页面的方法刷新页面
 							this.$emit('detail');
-				    }
+						}
+					});
 				});
-		    });
-		   },
+			}
+		},
   }
 }
 

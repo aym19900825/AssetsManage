@@ -788,7 +788,7 @@
 			 inspectcustommask,
 			 custinspectmask,
 			 withdepetmask,
-			 docTable
+			 docTable,
 			 contents,
 			 basis,
 		},

@@ -27,7 +27,8 @@ import vueztree from 'vue-ztree-2.0/dist/vue-ztree-2.0.umd.min.js'
 import common from './assets/js/common.js'
 import store from './store.js'
 import 'babel-polyfill'
-import Validators from './core/util/validators.js'
+import Validators from './assets/js/validators.js'//表单验证
+import commonNew from './assets/js/commonnew.js'//全站通用JS方法文件
 
 
 //import './jquery/dist/jquery.min.js'
@@ -65,8 +66,8 @@ Vue.directive('loadmore', {
 					}
 				}
 			}
-	      	let sign = 1
-	      	const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
+				let sign = 1
+				const scrollDistance = this.scrollHeight - this.scrollTop - this.clientHeight;
 		    if (scrollDistance <= sign) {
 				sessionStorage.setItem('up2down','down');
 				binding.value();
@@ -85,7 +86,8 @@ Vue.directive('loadmore', {
 Vue.prototype.$echarts = echarts
 Vue.prototype.$moment = moment//赋值使用
 Vue.prototype.common = common
-Vue.prototype.Validators = Validators
+Vue.prototype.Validators = Validators//表单验证
+Vue.prototype.commonNew = commonNew//全站通用JS方法文件
 Vue.use(ElementUI)
 Vue.use(vueztree)
 
@@ -97,7 +99,7 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+	template: '<App/>',
 })
  
 

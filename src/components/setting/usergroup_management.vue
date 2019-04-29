@@ -21,7 +21,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-						<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+						<div id="refresh" title="刷新" class="btn btn-default btn-refresh" @click="this.commonNew.winReload"><i class="icon-refresh"></i></div>
 						<tableControle :tableHeader="tableHeader" :checkedName="checkedName" @tableControle="tableControle" ref="tableControle"></tableControle>
 					</div>
 					</div>

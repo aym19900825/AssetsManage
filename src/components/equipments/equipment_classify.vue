@@ -22,7 +22,7 @@
 							</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
-							<div id="refresh" title="刷新" class="btn btn-default btn-refresh"><i class="icon-refresh"></i></div>
+							<div id="refresh" title="刷新" class="btn btn-default btn-refresh" @click="this.commonNew.winReload"><i class="icon-refresh"></i></div>
 							<div class="keep-open btn-group" title="列">
 								<el-dropdown :hide-on-click="false" class="pl10 btn btn-default btn-outline">
 									<span class="el-dropdown-link">

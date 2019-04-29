@@ -312,11 +312,12 @@ const validators = {
 			if (!regs.test(value)) {
 				callback(new Error('内容不少于3位且不能大于200位'));
 			} else {
-				if(!validators.URL(value)) {
-					callback(new Error('输入有效的URL'));
-				} else {
-					callback();
-				}
+				callback();
+				// if(!validators.URL(value)) {
+				// 	callback(new Error('输入有效的URL'));
+				// } else {
+				// 	callback();
+				// }
 			}
 		}, 500);
 	},

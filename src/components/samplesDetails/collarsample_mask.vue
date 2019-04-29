@@ -94,7 +94,8 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="数量" prop="QUALITY">
-												<el-input-number v-model="samplesForm.QUALITY" :min="0" :max="maxNum" :disabled="noedit || samplesForm.ITEM_TYPE=='2'" style="width: 100%"></el-input-number>
+												<el-input-number v-model="samplesForm.QUALITY" :min="0" :max="maxNum" :disabled="noedit || samplesForm.ITEM_TYPE=='2'" v-show="isQualityNum" style="width: 100%"></el-input-number>
+												<el-input v-model="samplesForm.QUALITY" :disabled="noedit || samplesForm.ITEM_TYPE=='2'" style="width: 100%" v-show="!isQualityNum"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -341,6 +342,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 						CHANGEDATE: '',//修改时间
 						STATUS: '1',//信息状态
 				},
+				isQualityNum: false,
 				sampleAutoInput: false //扫描枪输入
 			};
 		},
@@ -385,7 +387,11 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 							return;
 						}
 						this.$forceUpdate();
-
+						if(/.*[\u4e00-\u9fa5]+.*$/.test(data.QUALITY)){
+							this.isQualityNum = false;
+						}else{
+							this.isQualityNum = true;
+						}
 						if(data.ISRECEIVE == '1'){
 							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
 							this.sampleAutoInput = true;
@@ -490,6 +496,11 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 									type: 'warning'
 								});
 								return;
+							}
+							if(/.*[\u4e00-\u9fa5]+.*$/.test(data.QUALITY)){
+								this.isQualityNum = false;
+							}else{
+								this.isQualityNum = true;
 							}
 							if(data.ITEM_TYPE == '1'){
 								this.samplesForm.QUALITY = 1;
@@ -671,13 +682,16 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			save(opt) {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						if(this.samplesForm.QUALITY == 0){
-							this.$message({
-								message: '数量为零，不可保存！',
-								type: 'warning'
-							});
-							return;
+						if(isQualityNum){
+							if(this.samplesForm.QUALITY == 0){
+								this.$message({
+									message: '数量为零，不可保存！',
+									type: 'warning'
+								});
+								return;
+							}
 						}
+						
 						if(this.samplesForm.ITEM_TYPE == '2'){
 							this.samplesForm.ITEM_STEP = this.ITEM_STEPs.join(',');
 						}

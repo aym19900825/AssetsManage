@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加质量监督抽查审核</div>
-					<div class="mask_title" v-show="modifytitle">修改质量监督抽查审核</div>
-					<div class="mask_title" v-show="viewtitle">查看质量监督抽查审核</div>
+					<div class="mask_title" v-show="addtitle">添加质量监督抽查审批</div>
+					<div class="mask_title" v-show="modifytitle">修改质量监督抽查审批</div>
+					<div class="mask_title" v-show="viewtitle">查看质量监督抽查审批</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -20,8 +20,8 @@
 					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.report.STATE!=3">
-							<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
-							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审核</el-button>
+							<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审批</el-button> -->
+							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -29,7 +29,7 @@
 							</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="质量监督抽查审核" name="1">
+								<el-collapse-item title="质量监督抽查审批" name="1">
 									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">

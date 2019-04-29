@@ -433,6 +433,9 @@
 				var contractList = this.workorderForm.WORKORDER_CONTRACTList;
 				var fileList = this.workorderForm.WORKORDER_DATA_TEMPLATEList;
 				var flag = true;
+				var projectFlag = true;
+				var contractFlag = true;
+				var fileFlag = true;
 				//数据验证
 				//输入检验结果必填
 				for (let i = 0; i < projectList.length; i++) {
@@ -440,13 +443,6 @@
 					var projectFlag = tmpList.some((item)=>{
 						return item.MEMO!=''
 					});
-					if(!projectFlag){
-						this.$message({
-							message: '检测项目结果未录入！',
-							type: 'warning'
-						});
-						flag = false;
-					}
 				}
 
 				for (let i = 0; i < contractList.length; i++) {
@@ -454,24 +450,18 @@
 					var contractFlag = tmpList.some((item)=>{
 						return item.MEMO!=''
 					});
-					if(!contractFlag){
-						this.$message({
-							message: '分包项目结果未录入！',
-							type: 'warning'
-						});
-						flag = false;
-					}
 				}
 
 				//当检测项目或者分包项目不为空时，必须上传成果文件
-				if(projectList.length>0||contractList.length.length>0){
-					if(fileList.length==0){
-						this.$message({
-							message: '请上传成果文件',
-							type: 'warning'
-						});
-						flag = false;
-					}
+				if(fileList.length == 0){
+					fileFlag = false;
+				}
+				if(!fileFlag && !(projectFlag && contractFlag)){
+					this.$message({
+						message: '请录入检测项目结果或上传成果文件！',
+						type: 'warning'
+					});
+					flag = false;
 				}
 				if(!flag){
 					return;

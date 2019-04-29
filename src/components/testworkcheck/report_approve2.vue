@@ -56,14 +56,11 @@
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
                                 <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
-									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
-										</p>
-									</template>
 								</el-table-column> -->
 								<el-table-column label="报告名称" width="220" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告名称')!=-1">
 									<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}
+										</p>
 									</template>
 								</el-table-column>
 								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位')!=-1">
@@ -94,7 +91,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import reportapprovemask from '../testworkcheckDetails/reportapprove_mask.vue'
+	import reportapprovemask from '../testworkcheckDetails/reportapprove_mask2.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
@@ -180,7 +177,6 @@
 				buttons:[],
 			}
 		},
-		
 		methods: {
 			//选择数据
 			setSelData(val){

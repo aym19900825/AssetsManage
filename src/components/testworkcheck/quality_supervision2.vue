@@ -39,7 +39,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="报告编号" prop="DESCRIPTION"  label-width="80px">
+									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
 										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
@@ -55,26 +55,15 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-                                <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="编码" width="155" sortable prop="REPORTNUM" v-if="this.checkedName.indexOf('编码')!=-1">
 									<template slot-scope="scope">
 										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
 										</p>
 									</template>
-								</el-table-column> -->
-								<el-table-column label="报告名称" width="220" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告名称')!=-1">
-									<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}</p>
-									</template>
 								</el-table-column>
-								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位')!=-1">
+                                <el-table-column label="报告描述" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('报告描述')!=-1">
 								</el-table-column>
-								<el-table-column label="检测类型" width="140" sortable prop="TYPE" v-if="checkedName.indexOf('检测类型')!=-1">
-								</el-table-column>
-								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
-								</el-table-column>
-								<el-table-column label="提交人" width="120" sortable prop="ENTERBYDesc" v-if="checkedName.indexOf('提交人')!=-1">
-								</el-table-column>
-								<el-table-column label="提交时间" width="160" sortable prop="ENTERDATE" v-if="checkedName.indexOf('提交时间')!=-1">
+								<el-table-column label="流程状态" sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -83,7 +72,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<reportapprovemask  ref="reportapprove" @request="requestData" v-bind:page=page></reportapprovemask>
+			<qualitysup  ref="qualitysup" @request="requestData" v-bind:page=page></qualitysup>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -94,7 +83,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import reportapprovemask from '../testworkcheckDetails/reportapprove_mask.vue'
+	import qualitysup from '../testworkcheckDetails/qualitysup_mask2.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
@@ -104,19 +93,19 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
-			'reportapprovemask': reportapprovemask,
+			'qualitysup': qualitysup,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
-				appName: 'reportApprove',
+				appName:'qualitySupApp',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
-				commentArr: {},
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				commentArr: {},
 				value: '',
 				options: [{
 					value: '1',
@@ -126,35 +115,21 @@
 					label: '不活动'
 				}],
 				checkedName: [
-					'报告编号',
-					'报告名称',
-                    '委托单位',
-					'检测类型',
-					'流程状态',
-					'提交人',
-					'提交时间',
+                    '编码',
+					'报告描述',
+                    '流程状态',
 				],
-				tableHeader: [{
-						label: '报告编号',
+				tableHeader: [
+                    {
+						label: '编码',
+						prop: 'REPORTNUM'
+					},{
+						label: '报告描述',
 						prop: 'DESCRIPTION'
-					},{
-						label: '报告名称',
-						prop: 'FILENAME'
-					},{
-						label: '委托单位',
-						prop: 'V_NAME'
-					},{
-						label: '检测类型',
-						prop: 'TYPE'
-					},{
+					},
+					{
 						label: '流程状态',
 						prop: 'STATE'
-					},{
-						label: '提交人',
-						prop: 'ENTERBYDesc'
-					},{
-						label: '提交时间',
-						prop: 'ENTERDATE'
 					},
 				],
 				selUser: [],
@@ -180,9 +155,7 @@
 				buttons:[],
 			}
 		},
-		
 		methods: {
-			//选择数据
 			setSelData(val){
 				this.selUser = val;
 			},
@@ -198,8 +171,38 @@
 				this.requestData('init');
 			},
 			//搜索
-			searchinfo() {
+			searchinfo(index) {
 				this.requestData('init');
+			},
+			//添加类别
+			openAddMgr() {
+				this.$refs.qualitysup.visible();
+			},
+			//修改
+			modify() {
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修改的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时修改多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					this.$refs.qualitysup.detail(this.selUser[0].ID);
+				}
+			},
+			//查看
+			 view(data) {
+				this.$refs.qualitysup.view(data.ID);
+			},
+			//高级查询
+			modestsearch() {
+				this.search = !this.search;
 			},
 			//请求点击
 		    getbtn(item){
@@ -221,69 +224,6 @@
 			     this.reportdata();
 				}
 		    },
-			//添加类别
-			openAddMgr() {
-				this.$refs.reportapprove.visible();
-			},
-			//修改
-			modify() {
-				if(this.selUser.length == 0) {
-					this.$message({
-						message: '请您选择要修改的数据',
-						type: 'warning'
-					});
-					return;
-				} else if(this.selUser.length > 1) {
-					this.$message({
-						message: '不可同时修改多个数据',
-						type: 'warning'
-					});
-					return;
-				} else {
-					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
-						this.$message({
-							message: '已启动的流程，不允许修改数据，只可以查看。',
-							type: 'warning'
-						});
-						this.$refs.reportapprove.view(this.selUser[0]);
-					}
-					//驳回
-					else if(this.selUser[0].STATE == 0) {
-						var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/' + this.selUser[0].ID;
-						this.$axios.get(url, {}).then((res) => {
-							if(res.data.resp_code == 0) {
-								var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isPromoterNode/' + this.selMenu[0].ID;
-								this.$axios.get(url, {}).then((res) => {
-									if(res.data.resp_code == 0) {
-										this.$refs.child.detail(this.selMenu[0]);
-									} else {
-										this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-										});
-									}
-								});
-							} else {
-								this.$message({
-									message: res.data.resp_msg,
-									type: 'warning'
-									});
-							}
-						});
-					}else{
-						this.$refs.reportapprove.detail(this.selUser[0]);	
-					}
-				}
-			},
-			//查看
-			view(data) {
-				console.log(data);
-				this.$refs.reportapprove.view(data);
-			},
-			//高级查询
-			modestsearch() {
-				this.search = !this.search;
-			},
 			//报表
 			reportdata(){
 				this.reportData.app=this.productType;
@@ -299,7 +239,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/reportApprove/deletes';
+					var url = this.basic_url + '/api-apps/app/qualitySupApp/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -333,11 +273,12 @@
 						}).catch((err) => {
 						});
 					}).catch(() => {
+
 					});
 				}
-            },
-            //彻底删除
-			physicsDel(){
+			},
+			// physicsDel
+			physicsDel() {
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({
@@ -346,7 +287,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/reportApprove/physicsDel';
+					var url = this.basic_url + '/api-apps/app/qualitySupApp/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -380,9 +321,11 @@
 						}).catch((err) => {
 						});
 					}).catch(() => {
+
 					});
 				}
-			},
+            },
+            
 			// 导入
 			importData() {
 
@@ -404,7 +347,7 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//Table默认加载数据
-			requestData(opt) {
+			requestData(opt){
 				this.$refs.table.requestData(opt);
 			},
 			childByValue:function(childValue) {
@@ -420,7 +363,7 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					
+					// 
 					this.buttons = res.data;
 					
 				}).catch((wrong) => {
@@ -429,3 +372,7 @@
 		}
 	}
 </script>
+
+<style scoped>
+
+</style>

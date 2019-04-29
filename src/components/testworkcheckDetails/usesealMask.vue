@@ -240,10 +240,10 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					USERDesc:[//用印人
+					USERDesc:[
 						{required: true, message: '请选择', trigger: 'change'}
 					],
-					USETIME:[//用印时间
+					USETIME:[
 						{required: true, message: '请选择', trigger: 'change'}
 					],
 					// NUM: [{required: false,trigger: 'change',validator: validateNum,}],

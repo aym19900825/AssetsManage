@@ -89,7 +89,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="型号" prop="MODEL">
-												<el-input v-model="samplesForm.MODEL" disabled></el-input>
+												<el-input v-model="samplesForm.MODEL"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -111,7 +111,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="领样人" prop="GRANT_PERSONDesc">
-												<el-input v-model="samplesForm.GRANT_PERSONDesc" disabled="true">
+												<el-input v-model="samplesForm.GRANT_PERSONDesc" :disabled="true">
 													<el-button slot="append" icon="el-icon-search" @click="getReceive" :disabled="noedit"></el-button>
 												</el-input>
 											</el-form-item>
@@ -132,7 +132,7 @@
 										</el-col>
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO">
-												<el-input type="textarea" rows="5" v-model="samplesForm.MEMO":disabled="noedit"></el-input>
+												<el-input type="textarea" rows="5" v-model="samplesForm.MEMO" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -312,6 +312,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				sampleList: [],
 				samplesList:[],//样品编号
 				firstItem: true,
+				isQualityNum: false,
 				beforeItemNum: '',
 				ITEM_STEPs: [],
 				lastTime: 0,
@@ -334,7 +335,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 						GRANT_PERSONDesc: '',//领样人
 						GRANT_PERSON: '',//领样人
 						GRANT_DATE: '',//领样日期
-						STATE: '',//状态
+						STATE: 1,//状态
 						STATUSDATE: '',//状态日期
 						ENTERBY: '',//录入人
 						ENTERDATE: '',//录入时间
@@ -342,7 +343,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 						CHANGEDATE: '',//修改时间
 						STATUS: '1',//信息状态
 				},
-				isQualityNum: false,
 				sampleAutoInput: false //扫描枪输入
 			};
 		},
@@ -682,7 +682,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			save(opt) {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						if(isQualityNum){
+						if(this.isQualityNum){
 							if(this.samplesForm.QUALITY == 0){
 								this.$message({
 									message: '数量为零，不可保存！',

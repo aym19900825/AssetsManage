@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="headerbg">
-			<vheader></vheader>
+			<vheader ref="vheader"></vheader>
 			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
@@ -167,7 +167,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<notificationsmask @request="requestData" ref="child"></notificationsmask>
+			<notificationsmask @request="requestData" ref="child" @realtime="realtime"></notificationsmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -808,7 +808,11 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
-			}
+			},
+			//触发header中的方法
+			realtime(){
+				 this.$refs.vheader.getTodoNumber();
+			},
 		},
 		
 

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="headerbg">
-			<vheader></vheader>
+			<vheader ref="vheader"></vheader>
 			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
@@ -190,7 +190,7 @@
 				</div>
 			</div>
 		</div>
-		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></inspectmask>
+		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page @realtime="realtime"></inspectmask>
 		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
 					<!--报表-->
@@ -940,7 +940,12 @@
 				})
 				.catch(function(err){
 				})
-			}
+			},
+			//触发header中的方法
+			realtime(){
+				console.log(1);
+				 this.$refs.vheader.getTodoNumber();
+			},
 		},
 		beforeMount() {
 			this.getKey();

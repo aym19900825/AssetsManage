@@ -1083,6 +1083,7 @@
 			},
 			//刷新页面的审批按钮
 			refresh(){
+				this.$emit('realtime');
 				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<div class="headerbg">
-			<vheader></vheader>
+			<vheader ref="vheader"></vheader>
 			<navs_tabs ref="navsTabs"></navs_tabs>
 		</div>
 		<div class="contentbg">
@@ -112,7 +112,7 @@
 					</div>
 				</div>
 			<!--工作任务单详情/Houling-->
-			<workordersmask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page></workordersmask>
+			<workordersmask :workorderForm="workorderForm" ref="child" @request="requestData" @requestTree="getKey" @realtime="realtime" v-bind:page=page></workordersmask>
 			<!--工作任务单下达任务/Houling-->
 			<sendtasklist ref="task" v-bind:page=page @refresh="refresh" @request="requestData"></sendtasklist>
 			<!--报表-->
@@ -915,7 +915,11 @@
 					middle.setCapture && middle.setCapture(); 
 					return false 
 				}; 
-			}
+			},
+			//触发header中的方法
+			realtime(){
+				 this.$refs.vheader.getTodoNumber();
+			},
 		},
 		mounted() {
 			this.treeDrag();//调用树和表单之间拖拽改变宽度

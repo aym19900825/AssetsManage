@@ -227,7 +227,6 @@ export default {
 		methods: {
 			getop(){
 				this.complete=parseInt(this.toDoDing/this.toDoNum);//工作完成率
-				console.log(this.complete);
 				// this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
 			},
 			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值

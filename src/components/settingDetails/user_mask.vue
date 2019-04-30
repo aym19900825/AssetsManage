@@ -227,7 +227,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
-												<el-input v-model="user.macaddress" :disabled="noedit"></el-input>
+												<el-input v-model="user.macaddress" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">

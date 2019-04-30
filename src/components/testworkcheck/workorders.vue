@@ -13,11 +13,12 @@
 					<!--<navs_button></navs_button>-->
 					<div class="fixed-table-toolbar clearfix">
 						<div class="bs-bars pull-left">
-							<div class="hidden-xs" id="roleTableToolbar" role="group">
+							<div class="hidden-xs" id="roleTableToolbar" role="group" v-if="buttons.length!=0">
 								<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 								</button>
 							</div>
+							<div class="gray" v-else>无查看按钮权限，如有需要请联系管理员配置</div>
 						</div>
 						<div class="columns columns-right btn-group pull-right">
 							<div id="refresh" title="刷新" class="btn btn-default btn-refresh" @click="this.commonNew.winReload"><i class="icon-refresh"></i></div>
@@ -591,7 +592,7 @@
 					return;
 				}else if(this.selMenu[0].STATE !=2){
 					this.$message({
-						message: '此工作任务单已经执行中，请勿再次下达任务！',
+						message: '此工作任务单的状态不属于执行中，暂不能使用。',
 						type: 'warning'
 					});
 					return;
@@ -864,7 +865,22 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
+					// console.log(res.data);
 					this.buttons = res.data;
+					// if(res.data.length==0){
+					// 	this.buttons=[{
+					// 		icon: "icon-task",
+					// 		id: 1,
+					// 		name: '暂无查看按钮权限',
+					// 		style: "btn-green",
+					// 	}]
+					// 	// this.$message({
+					// 	// 	message:'无查看按钮权限，如有需要请联系管理员配置',
+					// 	// 	type: 'warning'
+					// 	// });
+					// }else{
+					// 	this.buttons = res.data;
+					// }
 				}).catch((wrong) => {
 				})
 

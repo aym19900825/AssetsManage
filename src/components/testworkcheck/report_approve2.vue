@@ -108,7 +108,7 @@
 		},
 		data() {
 			return {
-				appName: 'reportApprove',
+				appName: 'reportApprove2',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				commentArr: {},

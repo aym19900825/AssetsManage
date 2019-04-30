@@ -229,6 +229,10 @@ export default {
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
       }else if(this.appName == 'group'){
         var url = this.basic_url + '/api-user/groups';
+      }else if(this.appName == 'reportApprove'){
+        var url = this.basic_url + '/api-apps/app/reportApprove';
+      }else if(this.appName == 'reportApprove2'){
+        var url = this.basic_url + '/api-apps/app/reportApprove?STATEAPPROVAL_where_in=8,0,17';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

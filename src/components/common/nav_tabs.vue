@@ -17,7 +17,7 @@
                     <i class="el-icon-arrow-down icon-arrow2-down"></i>
                   </span>
                   <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item class="divider"><span @click="closeSel">关闭当前选项卡</span></el-dropdown-item>
+                    <el-dropdown-item class="divider"><span @click="this.commonNew.closeSel">关闭当前选项卡</span></el-dropdown-item>
                     <el-dropdown-item class="J_tabCloseAll border-lineb"><span @click="closeAll">关闭全部选项卡</span></el-dropdown-item>
                     <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
                   </el-dropdown-menu>
@@ -33,7 +33,7 @@
                         <i class="el-icon-arrow-down icon-arrow2-down"></i>
                       </span>
                       <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item class="divider"><span @click="closeSel">关闭当前选项卡</span></el-dropdown-item>
+                        <el-dropdown-item class="divider"><span @click="this.commonNew.closeSel">关闭当前选项卡</span></el-dropdown-item>
                         <el-dropdown-item class="J_tabCloseAll border-lineb"><span @click="closeAll">关闭全部选项卡</span></el-dropdown-item>
                         <el-dropdown-item class="J_tabCloseOther"><span @click="closeOther">关闭其他选项卡</span></el-dropdown-item>
                       </el-dropdown-menu>
@@ -139,9 +139,9 @@ export default {
 //              return false;
             }
         },
-        closeSel(){
-            this.closeTab( this.selectedTab);
-        },
+        // closeSel(){
+        //     this.closeTab( this.selectedTab);
+        // },
         closeAll(){
             this.$store.dispatch('setClickedNavAct',[{
                 css: 'icon-user',

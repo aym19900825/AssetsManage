@@ -4,7 +4,10 @@ const commonNew = {
     window.location.reload();
   },
 
-
+  //关闭当前选项卡
+  closeSel:function(){
+      this.closeTab( this.selectedTab);
+  },
 
 
 };

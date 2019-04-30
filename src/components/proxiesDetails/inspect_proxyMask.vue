@@ -572,14 +572,17 @@
 										</el-tab-pane>
 									</el-tabs>
 								</div>
-								<el-collapse-item name="7">
+								<el-collapse-item title="文件" name="7">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+								</el-collapse-item>
+								<el-collapse-item name="8">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
-                    <el-col :span="8">
+                   						 <el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
 													<el-radio label="认证中心"></el-radio>
@@ -825,6 +828,9 @@
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检测依据
 	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//中心外机构
 	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//中心内机构
+	import contents from'../common/common_mask/contents.vue'//分包要求中的检验项目内容
+	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检测依据
+	import docTable from '../common/doc.vue'
 	export default {
 		name: 'masks',
 		components: {
@@ -842,6 +848,9 @@
 			 inspectcustommask,
 			 custinspectmask,
 			 withdepetmask,
+			 contents,
+			 basis,
+			 docTable
 		},
 		data() {
 			return {
@@ -1045,7 +1054,17 @@
 				pnum:'',//用于主表接修改时的产品的类别的值
 				pronum:'',//用于主表接修改时的产品的值
 				inistinspectproxy:'',//用于存储检测依据的子表数据
-				nodeState: ''
+				nodeState: '',
+				docParm: {
+					'model': 'new',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 			};
 		},
 		methods: {
@@ -1133,35 +1152,35 @@
 				});
 					return sums;
 			},
-		number_format(number, decimals, dec_point, thousands_sep) {
-		　　/*
+			/*
 		　　 * 参数说明：
 		　　 * number：要格式化的数字
 		　　 * decimals：保留几位小数
 		　　 * dec_point：小数点符号
 		　　 * thousands_sep：千分位符号
 		　　 * */
-		　　 number = (number + '').replace(/[^0-9+-Ee.]/g, '');
-		　　 var n = !isFinite(+number) ? 0 : +number,
-		　　 prec = !isFinite(+decimals) ? 2 : Math.abs(decimals),
-		　　 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-		　　 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-			　　s = '',
+			number_format(number, decimals, dec_point, thousands_sep) {
+			　　 number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+			　　 var n = !isFinite(+number) ? 0 : +number,
+			　　 prec = !isFinite(+decimals) ? 2 : Math.abs(decimals),
+			　　 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+			　　 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+			　　 s = '',
 			　　 toFixedFix = function(n, prec) {
 			　　　　var k = Math.pow(10, prec);
 			　　　　return '' + Math.ceil(n * k) / k;
-			　　};
-					s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+			　　 };
+				s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
 			　　 var re = /(-?\d+)(\d{3})/;
 			　　 while(re.test(s[0])) {
-			　　　　s[0] = s[0].replace(re, "$1" + sep + "$2");
-			　　}
+			　　 　　s[0] = s[0].replace(re, "$1" + sep + "$2");
+			　　 }
 			　　if((s[1] || '').length < prec) {
-			　　 s[1] = s[1] || '';
+			　　 	s[1] = s[1] || '';
 				　　s[1] += new Array(prec - s[1].length + 1).join('0');
 			　　}
-		　　　return s.join(dec);
-		},
+		　　　  return s.join(dec);
+			},
 			
 			// 中心内机构
 			withindept(){
@@ -1171,22 +1190,19 @@
 			outdept(){
 				this.$refs.custinspectchild.visible();
 			},
-			handleNodeClick(data) { //获取勾选树菜单节点
-			},
+			handleNodeClick(data) {},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-           		 this.i++;
-            		if(this.i%2==0){
-                	if(checked){
-                    	this.$refs.tree.setCheckedNodes([]);
-                    	this.$refs.tree.setCheckedNodes([data]);
-                    	//交叉点击节点
-               		 }else{
-                     this.$refs.tree.setCheckedNodes([]);
-                    	//点击已经选中的节点，置空
-                	 }
-            		}
-      },
+				this.i++;
+				if(this.i%2==0){
+					if(checked){
+						this.$refs.tree.setCheckedNodes([]);
+						this.$refs.tree.setCheckedNodes([data]);
+					}else{
+						this.$refs.tree.setCheckedNodes([]);
+					}
+				}
+     		 },
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1204,9 +1220,9 @@
 				var money = price;
 				var re = /^[0-9]+.?[0-9]*$/;
 				if (!re.test(money)||money == '') {
-	　　　　 res = 0.00;
-	　　　　 return;
-		　　}else{
+			　　　　 res = 0.00;
+			　　　　 return;
+			　　}else{
 					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 					res = num.join(".");
@@ -1336,9 +1352,10 @@
 							message: '已经生成工作任务单，请勿重复生成',
 							type: 'warning'
 						});
-						}
-					}).catch((err) => {
-					});
+						this.show=false;
+						this.$emit('request');
+				}
+					}).catch((err) => {});
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -1407,10 +1424,21 @@
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;
+					this.docParm = {
+						'model': 'new',
+						'appname': '检验委托书',
+						'recordid': 1,
+						'appid': 27
+					};
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					
 				}).catch((err) => {
 				})
 				this.dataInfo.STATUS = 0;
-        this.addtitle = true;
+       			this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.views = false; //
@@ -1424,8 +1452,10 @@
 			},
 			//
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/inspectPro2/' + this.dataid;
+				var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					this.RVENDORSelect();	
+					this.getmaingroup(res.data.MAINGROUP);
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
@@ -1449,32 +1479,36 @@
 					res.data.LEADER = Number(res.data.LEADER);
 					this.getmaingroup(res.data.MAINGROUP);
 					if(res.data.CNAS_OR_CMA_ID=='1'){
-						 res.data.CNAS_OR_CMA_ID=true;
+						res.data.CNAS_OR_CMA_ID=true;
 					}
 					if(res.data.MAINGROUP==''){
-						 res.data.MAINGROUP='';
+						res.data.MAINGROUP='';
 					}else{
 						res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					}
 					if(res.data.LEADER==''){
-						 res.data.LEADER='';
+						res.data.LEADER='';
 					}else{
 						res.data.LEADER = Number(res.data.LEADER);
 					}
-					if(res.data.ISRECEIVE=='1'){//这是先有样品时判断能不能修改
-					 		this.special=true;
-							this.special1=true;
-							this.noedit1=true;
-					}else if(res.data.ISRECEIVE=='2'){//2，委托方名称不能动；
-							this.noedit2=true
-							this.special=true;
-							this.special1=true;
-							this.noedit1=true;
-					}
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
+					if(res.data.ISRECEIVE=='1'){//这是先有样品时判断能不能修改
+						this.special=true;
+						this.special1=true;
+						this.noedit1=true;
+						this.PNAME=true;
+						this.PNAME1=true;
+					}else if(res.data.ISRECEIVE=='2'){//2，委托方名称不能动；
+						this.noedit2=true
+						this.special=true;
+						this.special1=true;
+						this.noedit1=true;
+						this.PNAME=true;
+						this.PNAME1=true;
+					}
+					this.dataInfo = res.data;
 					this.show = true;
-					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
         			this.DataInfo = JSON.parse(_obj);
 				}).catch((err) => {
@@ -1502,11 +1536,24 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
+				var _this = this;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
+					this.docParm = {
+						'model': 'edit',
+						'appname': '检验委托书',
+						'recordid': 1,
+						'appid': 27
+					};
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					this.docParm.recordid = this.dataid;
+					this.$refs.docTable.getData('edit');
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
@@ -2070,7 +2117,13 @@
 				// 	return false;
 				// }
 				this.$refs.dataInfo.validate((valid) => {
-			    if (valid) {
+					if(!valid && parameter == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
+					if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
 								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
@@ -2078,24 +2131,34 @@
 							});
 							return false;
 			        	}else{
-							var url = this.basic_url + '/api-apps/app/inspectPro2/saveOrUpdate';
+							if(this.dataInfo.CNAS_OR_CMA_ID){
+								this.dataInfo.CNAS_OR_CMA_ID=1;
+							}
+							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '保存成功',
-										type: 'success'
-									});
-									if(parameter=="Update"){
-										this.show = false;
+									if(parameter == 'docUpload'){
+										this.docParm.recordid = res.data.datas.ID;
+										this.docParm.model = 'edit';
+										this.$refs.docTable.autoLoad();
+										this.dataInfo.ID = res.data.datas.ID;
+										this.dataInfo.PROXYNUM = res.data.datas.PROXYNUM;
 									}else{
-										this.show = true;
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										if(parameter=="Update"){
+											this.show = false;
+										}else{
+											this.show = true;
+										}
+										//重新加载数据
+										this.$emit('request');
+										this.reset();
 									}
-									//重新加载数据
-									this.$emit('request');
-									this.reset();
 								}
-							}).catch((err) => {
-							});
+							}).catch((err) => {});
 						}
 			        }else{
 			          	this.show = true;

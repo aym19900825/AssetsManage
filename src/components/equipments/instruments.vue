@@ -137,6 +137,8 @@
 							<el-table-column label="接受日期" width="140" sortable prop="ACCEPT_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接受日期')!=-1">
 							</el-table-column>
 							<el-table-column label="启用日期" width="140" sortable prop="S_DATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('启用日期')!=-1">
+							</el-table-column>	
+							<el-table-column label="溯源日期" width="140" sortable prop="TRACE_TIME" :formatter="dateFormat" v-if="this.checkedName.indexOf('溯源日期')!=-1">
 							</el-table-column>						
 							<el-table-column label="配置地址" width="140" sortable prop="C_ADDRESS" v-if="this.checkedName.indexOf('配置地址')!=-1">
 							</el-table-column>
@@ -227,6 +229,7 @@
 					'接收状态',
 					'保管人',
 					'备注',
+					'溯源日期'
 				],
 				tableHeader: [
 					{
@@ -284,6 +287,10 @@
 					{
 						label: '备注',
 						prop: 'MEMO'
+					},
+					{
+						label: '溯源日期',
+						prop: 'TRACE_TIME'
 					}
 				],
 				

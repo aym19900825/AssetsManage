@@ -39,6 +39,7 @@
 				@selection-change="setSel"
 				height="360px" 
 				style="width: 100%;" 
+				:row-class-name="tableRowClassName"
 				:default-sort="{prop:'productList', order: 'descending'}"
 			
 				v-loading="loading"  
@@ -53,15 +54,17 @@
 				</el-table-column>
 				<el-table-column label="设备描述" v-show="searchList.project.length>0" sortable prop="DECRIPTION">
 				</el-table-column>
+				<el-table-column label="溯源日期" sortable prop="TRACE_TIME">
+				</el-table-column>
 			</el-table>
 			<el-pagination background 
-						   class="text-right pt10" 
-						   @size-change="sizeChange" 
-						   @current-change="currentChange" 
-						   :current-page="page.currentPage" 
-						   :page-sizes="[10, 20, 30, 40,100]" 
-						   layout="total, sizes, prev, pager, next" 
-						   :total="page.totalCount">
+				class="text-right pt10" 
+				@size-change="sizeChange" 
+				@current-change="currentChange" 
+				:current-page="page.currentPage" 
+				:page-sizes="[10, 20, 30, 40,100]" 
+				layout="total, sizes, prev, pager, next" 
+				:total="page.totalCount">
 			</el-pagination>
 			<div slot="footer">
 				<el-button type="primary" @click="submit">确 定</el-button>
@@ -75,38 +78,48 @@
 	import Config from '../../../config.js';
 	export default {
 //	props:["approvingData"],//第一种方式
-  name: 'product',
-  props: ['projectList','pro_num','num'],
-  data() {
-    return {
-		searchList: {
-			project: []
-		},
-		dialogVisible: false,
-		basic_url: Config.dev_url,
-		file_url: Config.file_url,
-		loading: false,
-		loadSign:true,//加载
-		list: [],
-		dialogProduct: false,
-		commentArr:{},
-		selUser: [],//接勾选的值
-		page: {
-			currentPage: 1,
-			pageSize: 20,
-			totalCount: 0
-		},
-		allDepts: '',
-		DEPTID:'',//当前选择的机构值
-		CJDW:'',//机构编号
-		NUM:'',//产品类别编号
-		appname:'',//appname
-		NUM:'',//产品类别的编号
-		docParm: {}
-    }
-  },
+		name: 'product',
+		props: ['projectList','pro_num','num'],
+  		data() {
+			return {
+				searchList: {
+					project: []
+				},
+				dialogVisible: false,
+				basic_url: Config.dev_url,
+				file_url: Config.file_url,
+				loading: false,
+				loadSign:true,//加载
+				list: [],
+				dialogProduct: false,
+				commentArr:{},
+				selUser: [],//接勾选的值
+				page: {
+					currentPage: 1,
+					pageSize: 20,
+					totalCount: 0
+				},
+				allDepts: '',
+				DEPTID:'',//当前选择的机构值
+				CJDW:'',//机构编号
+				NUM:'',//产品类别编号
+				appname:'',//appname
+				NUM:'',//产品类别的编号
+				docParm: {}
+			}
+  		},
 
   methods: {
+	tableRowClassName({row, rowIndex}) {
+		var now = (new Date()).getTime();
+		var tranceTime = (new Date(row.TRACE_TIME)).getTime();
+		if (!!row.TRACE_TIME && (tranceTime-now<=0)) {
+			return 'warning-row';
+		}
+		if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60)){
+			return 'yellow-row';
+		}
+    },
 	resetbtn(){
 		this.searchList = {
 			project: []
@@ -252,3 +265,11 @@
   }
 }
 </script>
+<style scoped>
+.el-table .warning-row .cell {
+	color: #cb4040;
+}
+.el-table .yellow-row .cell {
+	color: #FF8000;
+}
+</style>

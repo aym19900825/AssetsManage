@@ -4,7 +4,7 @@
             <div class="scrollbar" style="height:360px;">
                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion v-for="item in selectData" :key="item.WONUM">
                     <el-row :gutter="20">
-                        <el-col :span="11" class="pull-right pb10">
+                        <el-col :span="9" class="pull-right pb10">
                             <el-input v-model="item.WONUM" :disabled="true">
 								<template slot="prepend">子任务单编号</template>
                             </el-input>
@@ -175,7 +175,7 @@
 				console.log(res.data);
                 this.selectData = res.data.datas;
                 this.dialogProduct = true;
-            }else if(res.data.resp_code == 1){
+            }else{
                 this.$message({
                     message: res.data.resp_msg,
                     type: 'warning'

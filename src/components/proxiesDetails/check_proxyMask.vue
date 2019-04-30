@@ -515,6 +515,9 @@
 										</el-tab-pane>
 									</el-tabs>
 								</div>
+								<el-collapse-item title="文件" name="6">
+									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
+								</el-collapse-item>
 								<el-collapse-item name="7">
 									<el-row>
 										<el-col :span="8">
@@ -522,7 +525,7 @@
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
-                    <el-col :span="8">
+										<el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
 													<el-radio label="国家中心"></el-radio>
@@ -764,6 +767,7 @@
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
 	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//中心外机构
 	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//中心内机构
+	import docTable from '../common/doc.vue'
 	import contents from'../common/common_mask/contents.vue'//分包要求中的检验项目内容
 	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检测依据
 	export default {
@@ -784,16 +788,17 @@
 			 inspectcustommask,
 			 custinspectmask,
 			 withdepetmask,
+			 docTable,
 			 contents,
 			 basis,
 		},
 		data() {
 			return {
 				pickerOptions1: {
-          disabledDate(time) {
-            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
-          }
-        },
+         			disabledDate(time) {
+           			 	return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+					}
+				},
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载
@@ -975,7 +980,17 @@
 				// pnum:'',//用于主表接修改时的产品的类别的值
 				// pronum:'',//用于主表接修改时的产品的值
 				inistinspectproxy:'',//用于存储检测依据的子表数据
-				nodeState: ''
+				nodeState: '',
+				docParm: {
+					'model': 'new',
+					'recordid': 1,
+					'userid': 1,
+					'username': '',
+					'deptid': 1,
+					'deptfullname': '',
+					'appname': '',
+					'appid': 1
+				},
 			};
 		},
 		methods: {
@@ -1356,10 +1371,20 @@
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;
+					this.docParm = {
+						'model': 'new',
+						'appname': '检测委托书',
+						'recordid': 1,
+						'appid': 95
+					};
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 				})
 				this.dataInfo.STATUS = 0;
-        this.addtitle = true;
+				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.views = false; //
@@ -1373,7 +1398,7 @@
 			},
 			//
 			detailgetData() {
-			var url = this.basic_url +'/api-apps/app/inspectPro2/' + this.dataid;
+				var url = this.basic_url +'/api-apps/app/inspectPro2/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.RVENDORSelect();	
 				  this.getmaingroup(res.data.MAINGROUP);
@@ -1470,6 +1495,18 @@
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					this.docParm = {
+						'model': 'edit',
+						'appname': '检测委托书',
+						'recordid': 1,
+						'appid': 95
+					};
+					this.docParm.userid = res.data.id;
+					this.docParm.username = res.data.username;
+					this.docParm.deptid = res.data.deptId;
+					this.docParm.deptfullname = res.data.deptName;
+					this.docParm.recordid = this.dataid;
+					this.$refs.docTable.getData('edit');
 				}).catch((err) => {
 				});
 				this.detailgetData();
@@ -2002,7 +2039,13 @@
 			// 保存users/saveOrUpdate
 			save(parameter) {
 				this.$refs.dataInfo.validate((valid) => {
-			    if (valid) {
+					if(!valid && parameter == 'docUpload'){
+						this.$message({
+							message: '请先正确填写信息，再进行文档上传',
+							type: 'warning'
+						});
+					}
+					if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
 								message: '检测依据和检验项目与要求和分包要求是必填项，请填写！',
@@ -2016,18 +2059,26 @@
 							var url = this.basic_url + '/api-apps/app/inspectPro2/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '保存成功',
-										type: 'success'
-									});
-									if(parameter=="Update"){
-										this.show = false;
+									if(parameter == 'docUpload'){
+										this.docParm.recordid = res.data.datas.ID;
+										this.docParm.model = 'edit';
+										this.$refs.docTable.autoLoad();
+										this.dataInfo.ID = res.data.datas.ID;
+										this.dataInfo.PROXYNUM = res.data.datas.PROXYNUM;
 									}else{
-										this.show = true;
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										if(parameter=="Update"){
+											this.show = false;
+										}else{
+											this.show = true;
+										}
+										//重新加载数据
+										this.$emit('request');
+										this.reset();
 									}
-									//重新加载数据
-									this.$emit('request');
-									this.reset();
 								}
 							}).catch((err) => {
 							});

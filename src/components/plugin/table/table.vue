@@ -67,6 +67,16 @@ export default {
           return 'warning-row';
         }
       }
+      if(this.appName == 'asset'){
+        var now = (new Date()).getTime();
+        var tranceTime = (new Date(row.TRACE_TIME)).getTime();
+        if (!!row.TRACE_TIME && (tranceTime-now<=0)) {
+          return 'warning-row';
+        }
+        if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60)){
+          return 'yellow-row';
+        }
+      }
     },
     tableSortChange(column){
       this.page.currentPage = 1;
@@ -283,6 +293,9 @@ export default {
   }
   .el-table .warning-row .cell {
     color: #cb4040;
+  }
+  .el-table .yellow-row .cell {
+    color: #FF8000;
   }
   .el-table .success-row {
     background: #bdfdd0;

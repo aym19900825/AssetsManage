@@ -1436,7 +1436,7 @@
 			},	
 			//刷新页面的审批按钮
 			refresh(){
-				this.getTodoNumber();
+				this.$emit('realtime');
 				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 						var resullt=res.data.datas;
@@ -1461,15 +1461,6 @@
 					});	
 					
 			},
-			//
-			getTodoNumber() {//获取当前用户待办任务数
-				var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
-				this.$axios.get(url, {}).then((res) => {
-						this.$store.dispatch('settoDoNumberNavAct',res.data.datas);
-				}).catch(error => {
-				});
-      },
-
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;

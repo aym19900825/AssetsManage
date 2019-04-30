@@ -30,7 +30,7 @@
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="委托方名称" name="1">
+								<el-collapse-item title="委托方" name="1">
 									<el-row :gutter="5" class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="dataInfo.VERSION" :disabled="edit">

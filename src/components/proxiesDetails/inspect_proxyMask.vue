@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加检测托书</div>
-					<div class="mask_title" v-show="modifytitle">修改检测委托书</div>
-					<div class="mask_title" v-show="viewtitle">查看检测托书</div>
+					<div class="mask_title" v-show="addtitle">添加检验托书</div>
+					<div class="mask_title" v-show="modifytitle">修改检验委托书</div>
+					<div class="mask_title" v-show="viewtitle">查看检验托书</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -193,7 +193,7 @@
 										</el-row>
 								</el-collapse-item>
 
-								<el-collapse-item title="检测" name="3">
+								<el-collapse-item title="检验" name="3">
 									<el-row>
 									<el-col :span="8">
 										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
@@ -216,7 +216,7 @@
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
-									    <el-tab-pane label="检测依据" name="first">
+									    <el-tab-pane label="检验依据" name="first">
 												<div class="table-func table-funcb">
 													<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
 														<i class="icon-search"></i>
@@ -276,7 +276,7 @@
 												</el-table>
 									    </el-tab-pane>
 
-									    <el-tab-pane label="检测项目与要求" name="second">
+									    <el-tab-pane label="检验项目与要求" name="second">
 												<div class="table-func table-funcb">
 													<el-button type="primary" size="mini" round @click="basisleadbtn2('maintable')"  v-show="!viewtitle">
 														<i class="icon-search"></i>
@@ -295,7 +295,7 @@
 														</span>
 													</el-table-column>
 
-													<el-table-column prop="P_NUM" label="检测项目编号" sortable width="120px">
+													<el-table-column prop="P_NUM" label="检验项目编号" sortable width="120px">
 														<template slot-scope="scope">
 														<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 															<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" placeholder="请输入">
@@ -306,7 +306,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="P_DESC" label="检测项目描述" sortable>
+													<el-table-column prop="P_DESC" label="检验项目描述" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.P_DESC'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" placeholder="请输入">
@@ -438,7 +438,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="BASIS" label="检测技术依据" sortable width="150px">
+													<el-table-column prop="BASIS" label="检验技术依据" sortable width="150px">
 														<template slot-scope="scope">
 															<!--委托书新建时事中心的不可输 2 -->
 															<el-input v-show="!viewtitle&&scope.row.DEPTTYPE==1&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入" >
@@ -456,7 +456,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="P_REMARKS" label="检测项目内容" sortable width="200px">
+													<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.P_REMARKS'" :rules="[{required: true, message: '请输入', trigger: 'change'}]" >
 																<!--委托书新建时事中心的不可输 2 -->
@@ -495,7 +495,7 @@
 														</template>
 													</el-table-column>
 									
-													<el-table-column prop="CHECKCOST" label="检测费用(元)" sortable width="160px">
+													<el-table-column prop="CHECKCOST" label="检验费用(元)" sortable width="160px">
 														<template slot-scope="scope">
 															<el-form-item :prop="'CHECK_PROXY_CONTRACTList.'+scope.$index + '.CHECKCOST'" :rules="[{required: true, message: '请输入数字', trigger: 'change'}]" >
 																<el-input v-if="scope.row.isEditing" id="testprice" @blur="testPrice(scope.row)" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入内容"></el-input>
@@ -521,7 +521,7 @@
 								<el-collapse-item name="7">
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="检测报告编号" prop="REPORT_NUM" label-width="110px">
+											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
@@ -740,7 +740,7 @@
 			<custinspectmask ref="custinspectchild" @cusinspect="cusinspect"></custinspectmask>
 			<!--分包要求 中心内机构-->
 			<withdepetmask ref="withinspectchild" @withdepet="withdepet"></withdepetmask>
-			<!-- 分包要求中的检验检测依据 -->
+			<!-- 分包要求中的检验检验依据 -->
 			<basis ref='basis' @addBasis='addBasis'></basis>		
 			<!-- 分包要求中的检验项目内容 -->
 			<contents ref='contents' @add='add'></contents>
@@ -768,7 +768,7 @@
 	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//中心内机构
 	import docTable from '../common/doc.vue'
 	import contents from'../common/common_mask/contents.vue'//分包要求中的检验项目内容
-	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检测依据
+	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检验依据
 	export default {
 		name: 'masks',
 		components: {
@@ -814,7 +814,7 @@
 					LEADER_STATUS:'1',
 					LEADER_STATUSDesc:'未开始',
 					VERSION:'1',//版本
-					DETECTIONTYPE:'1',//检测
+					DETECTIONTYPE:'1',//检验
 					DETECTIONTYPEDesc:'检验',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
@@ -858,12 +858,12 @@
 							PRODUCT_TYPE:'',//产品类别
 							PRO_NUM:'',//产品编号
 							PRODUCT:'',//产品名称
-							S_NUM:'',//检验检测依据编码
-							SS_NUM:'',//检验检测依据编号
-							BASIS: '',//检验检测依据
-							PROJ_NUM:'',//检测项目编号
-							PROJECT_ID:'',//检测项目ID
-							P_REMARKS: '',//检测项目
+							S_NUM:'',//检验检验依据编码
+							SS_NUM:'',//检验检验依据编号
+							BASIS: '',//检验检验依据
+							PROJ_NUM:'',//检验项目编号
+							PROJECT_ID:'',//检验项目ID
+							P_REMARKS: '',//检验项目
 							P_VERSIONNUM:'',	//产品类别编号+版本
 							PRO_VERSIONNUM:'',	//产品名称编号+版本
 							S_VERSIONNUM:'',	//检验检测依据编号+版本

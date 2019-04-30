@@ -30,7 +30,7 @@
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="委托方名称" name="1">
+								<el-collapse-item title="委托方" name="1">
 									<el-row :gutter="5" class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="dataInfo.VERSION" :disabled="edit">
@@ -60,10 +60,10 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
+											<el-form-item label="委托方名称" prop="V_NAMEDesc" label-width="110px">
 												<el-input v-model="dataInfo.V_NAMEDesc" :disabled="edit" width="100%">
-													<el-button slot="append" :disabled="noedit2" icon="el-icon-search" @click="getinspect_cust()">
-													</el-button>
+													<el-button slot="prepend" :disabled="noedit2" icon="icon-add" @click="getinspect_cust()"></el-button>
+													<el-button slot="append" :disabled="noedit2" icon="icon-search" @click="getinspect_cust()"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -753,7 +753,7 @@
 	// import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
-	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托方名称
+	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托方单位
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'

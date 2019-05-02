@@ -469,7 +469,7 @@
 					return;
 				}
 				this.$refs.workorderForm.validate((valid)=>{
-					if(valid){
+					if(valid || (!valid && fileFlag)){
 						this.submitForm('apply');
 						this.$axios.get(url, {}).then((res) => {
 							if(res.data.resp_code == 1) {

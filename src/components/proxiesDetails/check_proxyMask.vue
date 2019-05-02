@@ -1497,25 +1497,26 @@
 
 			// 这里是修改
 			detail(dataid) {
+				var _this = this;
 				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
-					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-					this.dataInfo.CHANGEBY = res.data.id;
+					_this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
+					_this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.docParm = {
+					_this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+					_this.docParm = {
 						'model': 'edit',
 						'appname': '检测委托书',
 						'recordid': 1,
 						'appid': 95
 					};
-					this.docParm.userid = res.data.id;
-					this.docParm.username = res.data.username;
-					this.docParm.deptid = res.data.deptId;
-					this.docParm.deptfullname = res.data.deptName;
-					this.docParm.recordid = this.dataid;
-					this.$refs.docTable.getData('edit');
+					_this.docParm.userid = res.data.id;
+					_this.docParm.username = res.data.username;
+					_this.docParm.deptid = res.data.deptId;
+					_this.docParm.deptfullname = res.data.deptName;
+					_this.docParm.recordid = _this.dataid;
+					_this.$refs.docTable.getData('edit');
 				}).catch((err) => {
 				});
 				this.detailgetData();
@@ -1542,9 +1543,9 @@
 							});
 							return false;
 					    }else{
-								  if(this.dataInfo.CNAS_OR_CMA_ID){
-                      this.dataInfo.CNAS_OR_CMA_ID=1;
-                  }
+						    if(this.dataInfo.CNAS_OR_CMA_ID){
+                      			this.dataInfo.CNAS_OR_CMA_ID=1;
+                  			}
 							var url = this.basic_url+ '/api-apps/app/inspectPro2/operate/upgraded'
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								//resp_code == 0是后台返回的请求成功的信息
@@ -1599,7 +1600,7 @@
 				this.noedit2 = true;
 				this.special=true;
 				this.PNAME=true;//生产单位
-        this.PNAME1=true;
+ 				this.PNAME1=true;
 				this.isEditing=false;
 				this.detailgetData();
 				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro2/flow/NodeId/'+this.dataid, {}).then((res) => {
@@ -1641,6 +1642,14 @@
 						});
 					}
 				});
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检测委托书';
+					_this.docParm.recordid = dataid;
+					_this.docParm.appid = 95;
+					_this.$refs.docTable.getData();
+				},100);	
 			},
 			//产品
 			mianproduct(){

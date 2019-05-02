@@ -300,6 +300,7 @@
 								});
 								this.resetForm();
 								this.$emit('request');
+								this.$emit('getTree');
 							}else{
 								this.$message({
 									message: res.data.resp_msg,

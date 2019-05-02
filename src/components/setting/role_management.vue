@@ -230,8 +230,38 @@
 		    		this.menu();
 		    	}else if(item.name=="数据范围"){
 		    		this.datalimit();
-		    	}
-		    },
+		    	}else if(item.name=="复制"){
+					this.copyRole();
+				}
+			},
+			copyRole(){
+				this.selData = this.selUser;
+				if(this.selData.length == 0) {
+					this.$message({
+						message: '请您选择要复制的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selData.length > 1) {
+					this.$message({
+						message: '不可同时复制多个数据',
+						type: 'warning'
+					});
+					return;
+				} else {
+					var url = this.basic_url + '/api-user/roles/copyRole/' + this.selData[0].id;
+					this.$axios.get(url, {
+					}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '复制成功',
+								type: 'success'
+							});
+						this.requestData();
+						}
+					}).catch((err) => {});
+				}
+			},
 			//添加用戶
 			openAddMgr() {
 				this.$refs.child.resetNew();

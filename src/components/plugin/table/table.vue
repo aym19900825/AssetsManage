@@ -73,7 +73,8 @@ export default {
         if (!!row.TRACE_TIME && (tranceTime-now<=0)) {
           return 'warning-row';
         }
-        if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60)){
+        console.log(tranceTime-now);
+        if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60*1000)){
           return 'yellow-row';
         }
       }

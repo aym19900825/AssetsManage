@@ -109,7 +109,7 @@
 									width="200">
 									<template slot-scope="scope">
 										<el-button @click="showAuth(scope.row)" type="text" size="small">关键字</el-button>
-										<!-- <el-button @click="delFile(scope.$index,scope.row,)" type="text" size="small">删除</el-button> -->
+										<el-button @click="delFile(scope.$index,scope.row,)" type="text" size="small" v-show="!scope.row.appname||scope.row.appname==''">删除</el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -395,6 +395,13 @@
 						this.progress = completeProgress;
 					}
 				};
+				if(this.docId == 0){
+					this.$message({
+						message: '请选择上传路径！',
+						type: 'warning'
+					});
+					return;
+				}
 				var url = this.file_url + '/file/uploadfile?userid=' 
 						+ this.docParm.userid 
 						+ '&username=' + this.docParm.username

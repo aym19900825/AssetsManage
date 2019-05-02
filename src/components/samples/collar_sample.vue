@@ -386,7 +386,7 @@
 			//查看
 			view(data) {
 				this.samplesForm = data; 
-				this.$refs.child.view();
+				this.$refs.child.view(data.ID);
 			},
 
 			//高级查询

@@ -271,14 +271,14 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 					TYPE: [//类别
 						{ required: true, message: '必填', trigger: 'change' }
 					],
-					MODEL: [//型号
-						{ required: true, message: '必填', trigger: 'change' },
-						{trigger: 'blur', validator: this.Validators.isSpecificKey}
-					],
-					QUALITY: [//数量
-						{ required: true, message: '必填', trigger: 'blur' },
-						{trigger: 'blur', validator: this.Validators.isInteger}
-					],
+					// MODEL: [//型号
+					// 	{ required: false, message: '必填', trigger: 'change' },
+					// 	{trigger: 'blur', validator: this.Validators.isSpecificKey}
+					// ],
+					// QUALITY: [//数量
+					// 	{ required: true, message: '必填', trigger: 'blur' },
+					// 	{trigger: 'blur', validator: this.Validators.isInteger}
+					// ],
 					// ACCEPT_PERSON: [//收样人
 					// 	{ required: false, message: '必填', trigger: 'change' },
 					// 	{trigger: 'blur', validator: this.Validators.isNickname}
@@ -356,7 +356,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 		},
 		methods: {
 			showInfo(e){
-				console.log(e.keyCode);
 				if(e.keyCode == '13' || e.keyCode == '86'){
 					var str = this.samplesForm.ITEMNUM;
 					if(str.indexOf('#')!=-1){
@@ -387,7 +386,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 							return;
 						}
 						this.$forceUpdate();
-						if(/.*[\u4e00-\u9fa5]+.*$/.test(data.QUALITY)){
+						if(/.*[\u4e00-\u9fa5]+.*$/.test(data.QUATITY)){
 							this.isQualityNum = false;
 						}else{
 							this.isQualityNum = true;
@@ -578,8 +577,23 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			//这是查看
-			view() {
+			view(dataid) {
 				this.pageState = 'view';
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
+					this.samplesForm.CHANGEBY = res.data.id;
+					var date=new Date();
+					this.samplesForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+				}).catch((err)=>{})
+				this.$axios.get(this.basic_url + '/api-apps/app/itemgrant/' + dataid, {}).then((res) => {
+					this.samplesForm = res.data;
+					this.$forceUpdate();
+					if(this.samplesForm.ITEM_STEP!=-1){
+						this.ITEM_STEPs = this.samplesForm.ITEM_STEP.split(',');
+					}else{
+						this.getMaxNum(this.samplesForm.ITEM_NUM,this.samplesForm.QUATITY);
+					}
+					this.getSampleList(this.samplesForm.ITEM_NUM);
+				}).catch((err) => {});
 				this.edit = true;
 				this.noedit = true;
 				this.show=true;
@@ -682,7 +696,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 			save(opt) {
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						if(isQualityNum){
+						if(this.isQualityNum){
 							if(this.samplesForm.QUALITY == 0){
 								this.$message({
 									message: '数量为零，不可保存！',
@@ -737,7 +751,6 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.save('save');
 			},
 			getnumcode(e){
-				console.log(e.keyCode);
 			}
 		},
 		mounted() {

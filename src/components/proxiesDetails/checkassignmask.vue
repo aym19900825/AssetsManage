@@ -839,8 +839,7 @@
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
 				labelPositions: 'right',
 				rules: {
-					V_NAME: [
-						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托方名称名称
+					V_NAME: [{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey }],//委托方名称名称
 					V_ADDRESS: [{required: true, trigger: 'blur', validator: this.Validators.isAddress}],//地址
 					V_ZIPCODE: [{required: false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{required: true, trigger: 'blur', validator: this.Validators.isNickname}],//联系人姓名
@@ -849,14 +848,14 @@
 					P_NAMEDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//生产单位名称
 					PRODUCT: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
 					ITEM_NAME: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
-					ITEM_MODEL: [
-						{required: true, message: '必填', trigger: 'blur' },
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
-					],//型号
+					// ITEM_MODEL: [
+					// 	{required: false, message: '必填', trigger: 'blur' },
+					// 	{trigger: 'blur', validator:this.Validators.isSpecificKey}
+					// ],//型号
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
+						{ trigger: 'blur', validator:this.Validators.isInteger}
 					],//数量
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
@@ -867,7 +866,7 @@
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					REPORT_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
+						{ trigger: 'blur', validator:this.Validators.isInteger}
 					],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式

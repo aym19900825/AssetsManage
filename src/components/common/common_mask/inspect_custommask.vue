@@ -3,13 +3,13 @@
 		<el-dialog :modal-append-to-body="false" title="客户单位列表" :visible.sync="dialogCustomer" width="80%">
 			<el-form inline-message :model="searchList" label-width="70px">
 				<el-row :gutter="10">
-					<el-col :span="5">
-						<el-form-item label="统一社会信用代码" prop="customercode" label-width="100px">
+					<el-col :span="6">
+						<el-form-item label="统一社会信用代码" prop="customercode" label-width="140px">
 							<el-input v-model="searchList.CUSTOMERCODE">
 							</el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :span="5">
+					<el-col :span="6">
 						<el-form-item label="单位名称" prop="customername">
 							<el-input v-model="searchList.CUSTOMERNAME">
 							</el-input>

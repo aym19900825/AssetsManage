@@ -12,7 +12,7 @@ const state={//要设置的全局访问的state对象
    currentcjdw:null,//当前承建单位
    currentuser:null,//当前登陆人的信息
    firstselectnav:{},//当只有一级菜单
-   toDoNumber:0,//铃铛上的数量
+   toDoNumber:0,//铃铛上的数量//（占时没有用到）
    selectedNav:{
       css: 'icon-user',
       name: '首页',

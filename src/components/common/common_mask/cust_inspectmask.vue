@@ -1,56 +1,56 @@
 
 <template>
 <div>
-    <el-dialog :modal-append-to-body="false" title="客户" height="400px" :visible.sync="dialogcustom" width="80%" :before-close="handleClose">
-    <div class="scrollbar" style="height:380px;">
-        <el-form inline-message :model="searchList" label-width="90px">
-            <el-row>
-                <el-col :span="6">
-                    <el-form-item label="统一社会信用代码" prop="CODE" label-width="140px">
-                        <el-input v-model="searchList.CODE">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                    <el-form-item label="单位名称" prop="NAME">
-                        <el-input v-model="searchList.NAME">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="5">
-                    <el-form-item label="联系地址" prop="CONTACT_ADDRESS">
-                        <el-input v-model="searchList.CONTACT_ADDRESS">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="2" class="text-center">
-                    <el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-                </el-col>
-            </el-row>
-        </el-form>
-        <el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="270px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
-            v-loading="loading"  
-            element-loading-text="加载中…"
-            element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(255, 255, 255, 0.9)"
-            @selection-change="SelChange"
-			@current-change="setSel">
-            <el-table-column type="selection" width="55" fixed align="center">
-            </el-table-column>
-            <el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
-            </el-table-column>
-            <el-table-column label="单位名称" sortable prop="NAME" >
-            </el-table-column>
-            <el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
-            </el-table-column>
-            <el-table-column label="类型" sortable prop="TYPEDesc">
-            </el-table-column>
-            <el-table-column label="备注" sortable prop="MEMO" >
-            </el-table-column>
-        </el-table>
-            <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-            </el-pagination>
-        </div>
+    <el-dialog :modal-append-to-body="false" title="客户" :visible.sync="dialogcustom" height="400px" width="80%" :before-close="handleClose">
+		<div class="pt10">
+			<el-form inline-message :model="searchList" label-width="90px">
+				<el-row>
+					<el-col :span="6">
+						<el-form-item label="统一社会信用代码" prop="CODE" label-width="140px">
+							<el-input v-model="searchList.CODE">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="单位名称" prop="NAME">
+							<el-input v-model="searchList.NAME">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="联系地址" prop="CONTACT_ADDRESS">
+							<el-input v-model="searchList.CONTACT_ADDRESS">
+							</el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="2" class="text-center">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+					</el-col>
+				</el-row>
+			</el-form>
+			<el-table ref="table" :header-cell-style="rowClass" :data="customerList" line-center border stripe height="270px" style="width: 100%;" :default-sort="{prop:'customerList', order: 'descending'}"
+				v-loading="loading"  
+				element-loading-text="加载中…"
+				element-loading-spinner="el-icon-loading"
+				element-loading-background="rgba(255, 255, 255, 0.9)"
+				@selection-change="SelChange"
+				@current-change="setSel">
+				<el-table-column type="selection" width="55" fixed align="center">
+				</el-table-column>
+				<el-table-column label="统一社会信用代码" width="200" sortable prop="CODE">
+				</el-table-column>
+				<el-table-column label="单位名称" sortable prop="NAME" >
+				</el-table-column>
+				<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
+				</el-table-column>
+				<el-table-column label="类型" sortable prop="TYPEDesc">
+				</el-table-column>
+				<el-table-column label="备注" sortable prop="MEMO" >
+				</el-table-column>
+			</el-table>
+			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			</el-pagination>
+		</div>
         <div slot="footer">
             <el-button type="primary" @click="determine">确 定</el-button>
             <el-button @click="resetBasisInfo">取 消</el-button>

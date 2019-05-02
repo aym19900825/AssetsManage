@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加检验委托书</div>
+					<div class="mask_title" v-show="addtitle">添加检验托书</div>
 					<div class="mask_title" v-show="modifytitle">修改检验委托书</div>
-					<div class="mask_title" v-show="viewtitle">查看检验委托书</div>
+					<div class="mask_title" v-show="viewtitle">查看检验托书</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -30,7 +30,7 @@
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="委托方名称" name="1">
+								<el-collapse-item title="委托方" name="1">
 									<el-row :gutter="5" class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="dataInfo.VERSION" :disabled="edit">
@@ -438,7 +438,7 @@
 														</template>
 													</el-table-column>
 
-													<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
+													<el-table-column prop="BASIS" label="检验技术依据" sortable width="150px">
 														<template slot-scope="scope">
 															<!--委托书新建时事中心的不可输 2 -->
 															<el-input v-show="!viewtitle&&scope.row.DEPTTYPE==1&&dataInfo.N_CODE==null" size="small" v-model="scope.row.BASIS" placeholder="请输入" >
@@ -515,17 +515,17 @@
 										</el-tab-pane>
 									</el-tabs>
 								</div>
-								<el-collapse-item title="文件" name="7">
+								<el-collapse-item title="文件" name="6">
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save"></doc-table>
 								</el-collapse-item>
-								<el-collapse-item name="8">
+								<el-collapse-item name="7">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="检验报告编号" prop="REPORT_NUM" label-width="110px">
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
-                   						 <el-col :span="8">
+										<el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
 													<el-radio label="国家中心"></el-radio>
@@ -610,17 +610,6 @@
 										</el-col>
 									</el-row> -->
 									<el-row>
-										<!--<el-col :span="8">
-											<el-form-item label="信息状态" prop="MESSSTATUS">
-												<el-input v-model="dataInfo.MESSSTATUS"></el-input>
-											</el-form-item>
-										</el-col>-->
-										
-										<!-- <el-col :span="8" style="display:none;" label-width="110px">
-											<el-form-item label="生产单位编号" prop="PRODUCT_UNIT">
-												<el-input v-model="dataInfo.PRODUCT_UNIT" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col> -->
 										<el-col :span="8">
 											<el-form-item label="合同编号" prop="CONTRACTNUM" label-width="110px">
 												<el-input v-model="dataInfo.CONTRACTNUM" :disabled="noedit"></el-input>
@@ -751,7 +740,7 @@
 			<custinspectmask ref="custinspectchild" @cusinspect="cusinspect"></custinspectmask>
 			<!--分包要求 中心内机构-->
 			<withdepetmask ref="withinspectchild" @withdepet="withdepet"></withdepetmask>
-			<!-- 分包要求中的检验检测依据 -->
+			<!-- 分包要求中的检验检验依据 -->
 			<basis ref='basis' @addBasis='addBasis'></basis>		
 			<!-- 分包要求中的检验项目内容 -->
 			<contents ref='contents' @add='add'></contents>
@@ -777,9 +766,9 @@
 	import testprojectmask from '../common/common_mask/testprojectmask.vue'//检验依据
 	import custinspectmask from '../common/common_mask/cust_inspectmask.vue'//中心外机构
 	import withdepetmask from '../common/common_mask/withdepet_mask.vue'//中心内机构
-	import contents from'../common/common_mask/contents.vue'//分包要求中的检验项目内容
-	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检测依据
 	import docTable from '../common/doc.vue'
+	import contents from'../common/common_mask/contents.vue'//分包要求中的检验项目内容
+	import basis from'../common/common_mask/basis.vue'//分包要求中的检验检验依据
 	export default {
 		name: 'masks',
 		components: {
@@ -798,17 +787,17 @@
 			 inspectcustommask,
 			 custinspectmask,
 			 withdepetmask,
+			 docTable,
 			 contents,
 			 basis,
-			 docTable
 		},
 		data() {
 			return {
 				pickerOptions1: {
-          disabledDate(time) {
-            return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
-          }
-        },
+         			disabledDate(time) {
+           			 	return time.getTime() < new Date(new Date().toLocaleDateString()).getTime();
+					}
+				},
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载
@@ -853,6 +842,7 @@
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
 					P_NAME:'',
+					CNAS_OR_CMA_ID:'',
 					CHECK_COST:0.00,//合同费用
 					ACTUALCOST:0.00,//实收费用
 					CONTRACTCOST:0,//标准费用
@@ -868,12 +858,12 @@
 							PRODUCT_TYPE:'',//产品类别
 							PRO_NUM:'',//产品编号
 							PRODUCT:'',//产品名称
-							S_NUM:'',//检验检测依据编码
-							SS_NUM:'',//检验检测依据编号
-							BASIS: '',//检验检测依据
-							PROJ_NUM:'',//检测项目编号
-							PROJECT_ID:'',//检测项目ID
-							P_REMARKS: '',//检测项目
+							S_NUM:'',//检验检验依据编码
+							SS_NUM:'',//检验检验依据编号
+							BASIS: '',//检验检验依据
+							PROJ_NUM:'',//检验项目编号
+							PROJECT_ID:'',//检验项目ID
+							P_REMARKS: '',//检验项目
 							P_VERSIONNUM:'',	//产品类别编号+版本
 							PRO_VERSIONNUM:'',	//产品名称编号+版本
 							S_VERSIONNUM:'',	//检验检测依据编号+版本
@@ -961,7 +951,7 @@
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUS: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
-					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
+					// CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
 					ITEM_SECRECY: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//保密要求
 					CONTRACTNUM: [{ required: false, trigger: 'blur',}],//合同编号
 				},
@@ -1090,35 +1080,35 @@
 				});
 					return sums;
 			},
-			/*
+		number_format(number, decimals, dec_point, thousands_sep) {
+		　　/*
 		　　 * 参数说明：
 		　　 * number：要格式化的数字
 		　　 * decimals：保留几位小数
 		　　 * dec_point：小数点符号
 		　　 * thousands_sep：千分位符号
 		　　 * */
-			number_format(number, decimals, dec_point, thousands_sep) {
-			　　 number = (number + '').replace(/[^0-9+-Ee.]/g, '');
-			　　 var n = !isFinite(+number) ? 0 : +number,
-			　　 prec = !isFinite(+decimals) ? 2 : Math.abs(decimals),
-			　　 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
-			　　 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
-			　　 s = '',
+		　　 number = (number + '').replace(/[^0-9+-Ee.]/g, '');
+		　　 var n = !isFinite(+number) ? 0 : +number,
+		　　 prec = !isFinite(+decimals) ? 2 : Math.abs(decimals),
+		　　 sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+		　　 dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+			　　s = '',
 			　　 toFixedFix = function(n, prec) {
 			　　　　var k = Math.pow(10, prec);
 			　　　　return '' + Math.ceil(n * k) / k;
-			　　 };
-				s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+			　　};
+					s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
 			　　 var re = /(-?\d+)(\d{3})/;
 			　　 while(re.test(s[0])) {
-			　　 　　s[0] = s[0].replace(re, "$1" + sep + "$2");
-			　　 }
+			　　　　s[0] = s[0].replace(re, "$1" + sep + "$2");
+			　　}
 			　　if((s[1] || '').length < prec) {
-			　　 	s[1] = s[1] || '';
+			　　 s[1] = s[1] || '';
 				　　s[1] += new Array(prec - s[1].length + 1).join('0');
 			　　}
-		　　　  return s.join(dec);
-			},
+		　　　return s.join(dec);
+		},
 			
 			// 中心内机构
 			withindept(){
@@ -1128,19 +1118,22 @@
 			outdept(){
 				this.$refs.custinspectchild.visible();
 			},
-			handleNodeClick(data) {},
+			handleNodeClick(data) { //获取勾选树菜单节点
+			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-				this.i++;
-				if(this.i%2==0){
-					if(checked){
-						this.$refs.tree.setCheckedNodes([]);
-						this.$refs.tree.setCheckedNodes([data]);
-					}else{
-						this.$refs.tree.setCheckedNodes([]);
-					}
-				}
-     		 },
+           		 this.i++;
+            		if(this.i%2==0){
+                	if(checked){
+                    	this.$refs.tree.setCheckedNodes([]);
+                    	this.$refs.tree.setCheckedNodes([data]);
+                    	//交叉点击节点
+               		 }else{
+                     this.$refs.tree.setCheckedNodes([]);
+                    	//点击已经选中的节点，置空
+                	 }
+            		}
+      },
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -1160,9 +1153,9 @@
 				var money = price;
 				var re = /^[0-9]+.?[0-9]*$/;
 				if (!re.test(money)||money == '') {
-			　　　　 res = 0.00;
-			　　　　 return;
-			　　}else{
+	　　　　 res = 0.00;
+	　　　　 return;
+		　　}else{
 					var num = parseFloat(this.toNum(money)).toFixed(2).toString().split(".");
 					num[0] = num[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)','ig'),"$1,");
 					res = num.join(".");
@@ -1271,6 +1264,7 @@
 					V_NAME:'',//委托方名称名称
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
+					CNAS_OR_CMA_ID:'',
 					ACTUAL_PERCENT:0,
 					CHECK_COST:0,//合同费用
 					ACTUALCOST:0,//实收费用
@@ -1291,22 +1285,23 @@
 			//生成工作任务单
 			build(){
 				var dataid = this.dataInfo.ID;
-				var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
-				this.$axios.get(Url, {}).then((res) => {
-					if(res.data.resp_code == 0) {
-						this.$message({
-							message: '生成工作任务单成功',
-							type: 'success'
+					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder?ID='+dataid+'&fileUrl='+Config.file_url;
+					this.$axios.get(Url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '生成工作任务单成功',
+								type: 'success'
+							});
+							this.show=false;
+							this.$emit('request');
+						}else{
+							this.$message({
+							message: '已经生成工作任务单，请勿重复生成',
+							type: 'warning'
 						});
-						this.show=false;
-						this.$emit('request');
-					}else{
-						this.$message({
-						message: '已经生成工作任务单，请勿重复生成',
-						type: 'warning'
+						}
+					}).catch((err) => {
 					});
-					}
-				}).catch((err) => {});
 			},
 			sizeChange(val) {
 				this.page.pageSize = val;
@@ -1370,26 +1365,25 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.TYPE = '1';
-					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.TYPE = '2';
+					this.dataInfo.TYPEDesc = '检测';
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;
 					this.docParm = {
 						'model': 'new',
-						'appname': '检验委托书',
+						'appname': '检测委托书',
 						'recordid': 1,
-						'appid': 27
+						'appid': 95
 					};
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
 					this.docParm.deptfullname = res.data.deptName;
-					
 				}).catch((err) => {
 				})
 				this.dataInfo.STATUS = 0;
-       			this.addtitle = true;
+				this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.views = false; //
@@ -1406,7 +1400,7 @@
 				var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.RVENDORSelect();	
-					this.getmaingroup(res.data.MAINGROUP);
+				  this.getmaingroup(res.data.MAINGROUP);
 					// 依据
 					for(var i = 0;i<res.data.INSPECT_PROXY_BASISList.length;i++){
 						res.data.INSPECT_PROXY_BASISList[i].isEditing = false;
@@ -1429,41 +1423,44 @@
 					
 					res.data.LEADER = Number(res.data.LEADER);
 					if(res.data.CNAS_OR_CMA_ID=='1'){
-						res.data.CNAS_OR_CMA_ID=true;
+						 res.data.CNAS_OR_CMA_ID=true;
 					}
 					if(res.data.MAINGROUP==''){
-						res.data.MAINGROUP='';
+						 res.data.MAINGROUP='';
 					}else{
 						res.data.MAINGROUP = Number(res.data.MAINGROUP);
 					}
 					if(res.data.LEADER==''){
-						res.data.LEADER='';
+						 res.data.LEADER='';
 					}else{
 						res.data.LEADER = Number(res.data.LEADER);
 					}
-					if(res.data.ISRECEIVE=='1'){//这是先有样品时判断能不能修改
-						this.special=true;
-						this.special1=true;
-						this.noedit1=true;
-						this.PNAME=true;
-						this.PNAME1=true;
+				 if(res.data.ISRECEIVE=='1'){//这是先有样品时判断能不能修改
+					 		this.special=true;
+							this.special1=true;
+							this.noedit1=true;
+							this.PNAME=true;
+							this.PNAME1=true;
 					}else if(res.data.ISRECEIVE=='2'){//2，委托方名称不能动；
-						this.noedit2=true
-						this.special=true;
-						this.special1=true;
-						this.noedit1=true;
-						this.PNAME=true;
-						this.PNAME1=true;
+							this.noedit2=true
+							this.special=true;
+							this.special1=true;
+							this.noedit1=true;
+							this.PNAME=true;
+							this.PNAME1=true;
 					}
 					this.dataInfo = res.data;
+				
 					this.show = true;
+					//深拷贝数据
 					let _obj = JSON.stringify(this.dataInfo);
-					this.DataInfo = JSON.parse(_obj);
-				}).catch((err) => {});
+        	this.DataInfo = JSON.parse(_obj);
+				}).catch((err) => {
+				});
 			},	
 			//刷新页面的审批按钮
 			refresh(){
-				this.getTodoNumber();
+				this.$emit('realtime');
 				var url = this.basic_url + '/api-apps/app/inspectPro/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 						var resullt=res.data.datas;
@@ -1488,29 +1485,20 @@
 					});	
 					
 			},
-			//
-			getTodoNumber() {//获取当前用户待办任务数
-				var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
-				this.$axios.get(url, {}).then((res) => {
-						this.$store.dispatch('settoDoNumberNavAct',res.data.datas);
-				}).catch(error => {
-				});
-      },
-
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
-				var _this = this;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
 					var date = new Date();
+					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 					this.docParm = {
 						'model': 'edit',
-						'appname': '检验委托书',
+						'appname': '检测委托书',
 						'recordid': 1,
-						'appid': 27
+						'appid': 95
 					};
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
@@ -1518,7 +1506,6 @@
 					this.docParm.deptfullname = res.data.deptName;
 					this.docParm.recordid = this.dataid;
 					this.$refs.docTable.getData('edit');
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
 				});
 				this.detailgetData();
@@ -1806,7 +1793,7 @@
 				if(val == 'maintable'){
 					if(this.dataInfo.INSPECT_PROXY_BASISList.length==0 ){
 						this.$message({
-							message: '请先选择检验依据列表数据',
+							message: '请先选择检测依据列表数据',
 							type: 'warning'
 						});
 					}else{
@@ -2068,14 +2055,14 @@
 					if (valid) {
 						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
 							this.$message({
-								message: '检验依据和检验项目与要求和分包要求是必填项，请填写！',
+								message: '检测依据和检验项目与要求和分包要求是必填项，请填写！',
 								type: 'warning'
 							});
 							return false;
 			        	}else{
-							if(this.dataInfo.CNAS_OR_CMA_ID){
-								this.dataInfo.CNAS_OR_CMA_ID=1;
-							}
+									if(this.dataInfo.CNAS_OR_CMA_ID){
+											this.dataInfo.CNAS_OR_CMA_ID=1;
+									}
 							var url = this.basic_url + '/api-apps/app/inspectPro/saveOrUpdate';
 							this.$axios.post(url, this.dataInfo).then((res) => {
 								if(res.data.resp_code == 0) {
@@ -2100,14 +2087,15 @@
 										this.reset();
 									}
 								}
-							}).catch((err) => {});
+							}).catch((err) => {
+							});
 						}
 			        }else{
 			          	this.show = true;
 			            this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
+										message: '未填写完整，请填写',
+										type: 'warning'
+									});
 			        }
 				});
 			},

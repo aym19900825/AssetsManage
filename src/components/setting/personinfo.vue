@@ -171,12 +171,12 @@
 						 	<el-row :gutter="30">
 								<el-col :span="8">
 									<el-form-item label="MAC地址" prop="macaddress" label-width="100px">
-										<el-input v-model="personinfo.macaddress"></el-input>
+										<el-input v-model="personinfo.macaddress" :disabled="true"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="8">
 									<el-form-item label="ERP机构" prop="erp_orgname" label-width="100px">
-										<el-input v-model="personinfo.erp_orgname" :disabled="false"></el-input>
+										<el-input v-model="personinfo.erp_orgname" :disabled="true"></el-input>
 									</el-form-item>
 								</el-col>
 							</el-row>

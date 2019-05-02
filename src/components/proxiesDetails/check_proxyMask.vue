@@ -21,7 +21,7 @@
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.dataInfo.STATE!=3" class="pr10">
 								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 提交审批</el-button>
-								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'"><i class="icon-edit-3"></i> 提交审批</el-button>
 								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState=='3'"><i class="icon-edit-3"></i> 确认接收</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
@@ -30,7 +30,7 @@
 						</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="委托方名称" name="1">
+								<el-collapse-item title="委托方" name="1">
 									<el-row :gutter="5" class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="dataInfo.VERSION" :disabled="edit">
@@ -60,10 +60,10 @@
 									</el-row>
 									<el-row>
 										<el-col :span="16">
-											<el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
+											<el-form-item label="委托方名称" prop="V_NAMEDesc" label-width="110px">
 												<el-input v-model="dataInfo.V_NAMEDesc" :disabled="edit" width="100%">
-													<el-button slot="append" :disabled="noedit2" icon="el-icon-search" @click="getinspect_cust()">
-													</el-button>
+													<el-button slot="prepend" :disabled="noedit2" icon="icon-add" @click="getinspect_cust()"></el-button>
+													<el-button slot="append" :disabled="noedit2" icon="icon-search" @click="getinspect_cust()"></el-button>
 												</el-input>
 											</el-form-item>
 										</el-col>
@@ -753,7 +753,7 @@
 	// import { Loading } from 'element-ui'
 	import Config from '../../config.js';
 	import sampletmask from '../common/common_mask/samplemask.vue'//样品名称
-	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托方名称
+	import inspectcustommask from '../common/common_mask/inspect_custommask.vue'//委托方单位
 	import enterprisemask from '../common/common_mask/enterprisemask.vue'//企业
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
@@ -1461,7 +1461,7 @@
 			},	
 			//刷新页面的审批按钮
 			refresh(){
-				this.getTodoNumber();
+				this.$emit('realtime');
 				var url = this.basic_url + '/api-apps/app/inspectPro2/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 						var resullt=res.data.datas;
@@ -1486,15 +1486,6 @@
 					});	
 					
 			},
-			//
-			getTodoNumber() {//获取当前用户待办任务数
-				var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
-				this.$axios.get(url, {}).then((res) => {
-						this.$store.dispatch('settoDoNumberNavAct',res.data.datas);
-				}).catch(error => {
-				});
-      },
-
 			// 这里是修改
 			detail(dataid) {
 				var _this = this;

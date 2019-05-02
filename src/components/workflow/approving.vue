@@ -45,7 +45,7 @@ export default {
         // ],
 		 },
 		 tit: '审批',
-		 formLabel: '审批意见'
+		 formLabel: '原因'
     }
   },
   methods: {
@@ -53,7 +53,7 @@ export default {
 			close() {
 				this.innerVisible = false;
 				this.tit = '审批';
-				this.formLabel = '审批意见';
+				this.formLabel = '原因';
 				this.approveForm={};
 			},
 			open() {
@@ -78,7 +78,7 @@ export default {
 						this.formLabel = '审批意见';
 					}else{
 						this.tit = '审批';
-						this.formLabel = '审批意见';
+						this.formLabel = '原因';
 					}
 				}
 				//任务委托书
@@ -88,10 +88,10 @@ export default {
 						this.formLabel = '审批意见';
 					}else if(this.nodeState == '3'){
 						this.tit = '接受委托书';
-						this.formLabel = '接收意见';
+						this.formLabel = '接收备注';
 					}else{
 						this.tit = '审批';
-						this.formLabel = '审批意见';
+						this.formLabel = '原因';
 					}
 				}
 
@@ -102,13 +102,13 @@ export default {
 						this.formLabel = '审核意见';
 					}else if(this.nodeState == '4'){
 						this.tit = '确认报告接收';
-						this.formLabel = '确认意见';
+						this.formLabel = '接收备注';
 					}else if(this.nodeState == '5'){
 						this.tit = '确认报告接收';
-						this.formLabel = '确认意见';
+						this.formLabel = '接收备注';
 					}else{
 						this.tit = '审批';
-						this.formLabel = '审批意见';
+						this.formLabel = '原因';
 					}
 				}
 				this.open();
@@ -148,40 +148,40 @@ export default {
 		    },
 		    //驳回
 		    rejectForm(){
-					if(!!this.approveForm.opinion){
-						this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
-							});
-					}else{
+					if(!!this.approveForm.opinion){//判断驳回意见不为空时
 						this.id=this.approvingData.id;
 						this.appname=this.approvingData.app;
-						this.$refs.approveForm.validate((valid) => {	
-						var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;
-						this.approveForm = {
-								"end":false,
-								"flag": false,
-								"opinion":this.approveForm.opinion,
-						}
-						this.$axios.post(url, this.approveForm).then((res) => {
-					
-						if(res.data.resp_code == 1) {
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
+						this.$refs.approveForm.validate((valid) => {
+							var url = this.basic_url + '/api-apps/app/'+this.appname+'/flow/'+this. id;
+							this.approveForm = {
+									"end":false,
+									"flag": false,
+									"opinion":this.approveForm.opinion,
+							}
+							this.$axios.post(url, this.approveForm).then((res) => {
+								console.log(res);
+								if(res.data.resp_code == 1) {
+									this.$message({
+										message:res.data.resp_msg,
+										type: 'warning'
+									});
+									this.close();
+								}else{
+									this.$message({
+										message:res.data.resp_msg,
+										type: 'success'
+									});
+									this.close();
+									//调用父页面的方法刷新页面
+									this.$emit('detail');
+								}
 							});
-							this.close();
-						}else{
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'success'
-							});
-							this.close();
-							//调用父页面的方法刷新页面
-							this.$emit('detail');
-						}
+						});
+					}else{
+					this.$message({
+						message:'请输入驳回原因',
+						type: 'warning'
 					});
-				});
 			}
 		},
   }

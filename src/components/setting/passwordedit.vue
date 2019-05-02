@@ -47,8 +47,8 @@
 					</el-collapse-item>
 				</el-collapse>
 				<div class="text-center pt20 pb20">
-				    <button class="btn btn-default btn-large" @click="tips('passwordedit')">重置</button>
-				    <button class="btn btn-primarys btn-large" @click="submitForm('passwordedit')">保存</button>
+					<el-button type="primary" @click="submitForm('passwordedit')">确 定</el-button>
+					<el-button @click="tips('passwordedit')">重置</el-button>
 				</div>
 			</div>
 		</div>

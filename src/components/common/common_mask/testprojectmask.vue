@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<!-- 检测项目与要求弹出框 Begin -->
-		<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible" height="400px" width="80%" :before-close="handleClose">
 			<!-- 高级查询划出 Begin-->
-			<div class="pb10">
+			<div class="pt10">
 				<el-form inline-message :model="searchList" label-width="70px">
 					<el-row :gutter="10">
 						<el-col :span="5">
@@ -41,44 +41,39 @@
 						</el-col>
 					</el-row>
 				</el-form>
+				<!-- 高级查询划出 End-->
+				<!-- 第二层弹出的表格 Begin-->
+				<el-table :data="projectList" height="270px" border stripe ref="singleTable" style="width: 100%;" :default-sort="{prop:'projectList', order: 'descending'}" @selection-change="SelChange" @current-change="setSel">
+					<el-table-column type="selection" width="55" fixed>
+					</el-table-column>
+					<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
+					</el-table-column>
+					<el-table-column label="项目名称" width="220" sortable prop="P_NAME">
+					</el-table-column>
+					<el-table-column label="单价" width="100" sortable prop="UNITCOST">
+					</el-table-column>
+					<el-table-column label="技术要求" width="100" sortable prop="TECHNICAL_REQUIRE">
+					</el-table-column>
+					<el-table-column label="版本" width="100" sortable prop="VERSION">
+					</el-table-column>
+					<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
+					</el-table-column>
+					<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+					<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="text-right pt10"
+					@size-change="sizeChange"
+					@current-change="currentChange"
+					:current-page="page.currentPage"
+					:page-sizes="[10, 20, 30, 40]"
+					:page-size="page.pageSize"
+					layout="total, sizes, prev, pager, next"
+					:total="page.totalCount">
+				</el-pagination>
+				<!-- 表格 End-->
 			</div>
-			<!-- 高级查询划出 End-->
-			<!-- 第二层弹出的表格 Begin-->
-			<el-table :data="projectList" height="400px" border stripe ref="singleTable"
-			 style="width: 100%;" 
-			 :default-sort="{prop:'projectList', order: 'descending'}"
-			  @selection-change="SelChange"
-			  @current-change="setSel"
-			  >
-				<el-table-column type="selection" width="55" fixed>
-				</el-table-column>
-				<el-table-column label="检验/检测项编号" width="150" sortable prop="P_NUM">
-				</el-table-column>
-				<el-table-column label="项目名称" width="220" sortable prop="P_NAME">
-				</el-table-column>
-				<el-table-column label="单价" width="100" sortable prop="UNITCOST">
-				</el-table-column>
-				<el-table-column label="技术要求" width="100" sortable prop="TECHNICAL_REQUIRE">
-				</el-table-column>
-				<el-table-column label="版本" width="100" sortable prop="VERSION">
-				</el-table-column>
-				<el-table-column label="机构" width="180" sortable prop="DEPTIDDesc">
-				</el-table-column>
-				<el-table-column label="录入时间" width="160" prop="ENTERDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-				<el-table-column label="修改时间" width="160" prop="CHANGEDATE" sortable :formatter="dateFormat">
-				</el-table-column>
-			</el-table>
-			<el-pagination background class="text-right pt10"
-				@size-change="sizeChange"
-				@current-change="currentChange"
-				:current-page="page.currentPage"
-				:page-sizes="[10, 20, 30, 40]"
-				:page-size="page.pageSize"
-				layout="total, sizes, prev, pager, next"
-				:total="page.totalCount">
-			</el-pagination>
-			<!-- 表格 End-->
 			<div slot="footer">
 				<el-button type="primary" @click="addbasis">确 定</el-button>
 				<el-button @click="resetBasisInfo">取 消</el-button>

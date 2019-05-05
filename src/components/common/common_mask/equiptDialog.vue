@@ -30,6 +30,7 @@
 				</el-form>
 			</div>
 			<el-table ref="singleTable" 
+				id="equiptTable"
 				:data="list" 
 				line-center 
 				border 
@@ -50,9 +51,9 @@
 				</el-table-column>
 				<el-table-column label="设备编号" width="155" sortable prop="ASSETNUM">
 				</el-table-column>
-				<el-table-column label="设备描述" v-show="searchList.project.length==0" sortable prop="DESCRIPTION">
+				<el-table-column label="设备描述" v-if="searchList.project.length==0" sortable prop="DESCRIPTION">
 				</el-table-column>
-				<el-table-column label="设备描述" v-show="searchList.project.length>0" sortable prop="DECRIPTION">
+				<el-table-column label="设备描述" v-else sortable prop="DECRIPTION">
 				</el-table-column>
 				<el-table-column label="溯源日期" sortable prop="TRACE_TIME">
 				</el-table-column>
@@ -116,7 +117,7 @@
 		if (!!row.TRACE_TIME && (tranceTime-now<=0)) {
 			return 'warning-row';
 		}
-		if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60)){
+		if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60*1000)){
 			return 'yellow-row';
 		}
     },
@@ -176,6 +177,7 @@
 	showData(id){
 		this.dialogVisible = true;
 		this.deptId = id;
+		console.log(this.searchList.project.length);
 		this.requestData();
 	},
   // 	loadMore () {
@@ -265,11 +267,11 @@
   }
 }
 </script>
-<style scoped>
-.el-table .warning-row .cell {
+<style>
+.el-table tr.warning-row .cell{
 	color: #cb4040;
 }
-.el-table .yellow-row .cell {
+.el-table tr.yellow-row .cell{
 	color: #FF8000;
 }
 </style>

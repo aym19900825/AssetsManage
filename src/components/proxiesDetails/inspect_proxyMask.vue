@@ -1589,7 +1589,7 @@
 				this.noedit2 = true;
 				this.special=true;
 				this.PNAME=true;//生产单位
-        this.PNAME1=true;
+				this.PNAME1=true;
 				this.isEditing=false;
 				this.detailgetData();
 				this.$axios.get(this.basic_url+'/api-apps/app/inspectPro/flow/NodeId/'+this.dataid, {}).then((res) => {
@@ -1631,6 +1631,14 @@
 						});
 					}
 				});
+				var _this = this;
+				setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检验委托书';
+					_this.docParm.recordid = dataid;
+					_this.docParm.appid = 27;
+					_this.$refs.docTable.getData();
+				},100);	
 			},
 			//产品
 			mianproduct(){

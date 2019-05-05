@@ -62,6 +62,13 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
+								<el-col :span="5">
+									<el-form-item label="角色名称" prop="roleId" label-width="70px">
+										<el-select clearable v-model="searchList.roleId" filterable allow-create default-first-option placeholder="请选择" style="width: 90%;border-radius:none">
+										    <el-option v-for="(data,index) in selectRoleData" :key="index" :value="data.id" :label="data.name"></el-option>
+										</el-select>
+									</el-form-item>
+								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
 									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
@@ -330,7 +337,8 @@
 					totalCount: 0
 				},
 				user: {},//修改子组件时传递数据
-				selectData: [],
+				selectData: [],//机构数据
+				selectRoleData: [],//角色数据
 			}
 		},
 		methods: {
@@ -364,6 +372,14 @@
 					},
 				}).then((res) => {
 					this.selectData = res.data;
+				});
+			},
+			//所有角色
+			getRole() {
+				var url = this.basic_url + '/api-user/roles';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res.data.data);
+					this.selectRoleData = res.data.data;
 				});
 			},
 			renderContent(h, {node,data,store}) { //自定义Element树菜单显示图标
@@ -1070,7 +1086,8 @@
 		mounted() {	
 			// 在页面挂载前就发起请求
 			this.getKey();
-			this.getCompany();
+			this.getCompany();//机构
+			this.getRole();//角色
 			this.treeDrag();//调用树和表单之间拖拽改变宽度
 		}
 	}

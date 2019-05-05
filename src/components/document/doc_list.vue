@@ -234,8 +234,7 @@
 					if(this.resourceData!=null){
 						this.resourceData = this.transformTree(this.resourceData);
 					}
-				}).catch((wrong) => {
-				});
+				}).catch((wrong) => {});
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
@@ -467,7 +466,6 @@
 				this.requestData();
 			}).catch((err) => {
 			});
-			
 		},
 	}
 </script>

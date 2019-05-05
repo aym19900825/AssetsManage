@@ -19,9 +19,9 @@
 				<div class="mask_content">
 					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.report.STATE!=3" class="pr10">
+							<span v-show="this.report.STATE==7" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审核</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告审核</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -239,7 +239,6 @@
 					ENTERBY:'',//提交人
 					ENTERBYDesc:'',//提交人描述
 					ENTERDATE:'',//提交时间
-
 					// WORKORDER_REPORTList: []
                     // CHANGEBY:'',	//修改人
                     // CHANGEDATE:'',	//修改时间
@@ -331,7 +330,6 @@
 					this.report.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-
 					this.docParm.userid = res.data.id;
 					this.docParm.username = res.data.username;
 					this.docParm.deptid = res.data.deptId;
@@ -436,7 +434,6 @@
 			startup(){
 				var url = this.basic_url + '/api-apps/app/reportApprove/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					if(res.data.resp_code == 1) {
 							this.$message({
 								message:res.data.resp_msg,

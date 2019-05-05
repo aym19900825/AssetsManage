@@ -2,68 +2,50 @@
 	<div>
 		<!-- 检测依据弹出框begin -->
 			<el-dialog :modal-append-to-body="false" 
-					title="检测依据" 
-					:visible.sync="dialogVisible" 
-					width="80%" 
-					:before-close="handleClose">
+				title="检测依据" 
+				:visible.sync="dialogVisible" 
+				height="400px"
+				width="80%" 
+				:before-close="handleClose">
+			<div class="pt10">
 				<!-- 高级查询划出 Begin-->
-				<div class="pb10">
-					<el-form inline-message :model="searchList" label-width="70px">
-						<el-row :gutter="10">
-							<el-col :span="6">
-								<el-form-item label="编码" prop="S_NUM">
-									<el-input v-model="searchList.S_NUM"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="标准编号" prop="SS_NUM">
-									<el-input v-model="searchList.SS_NUM"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="标准名称" prop="S_NAME">
-									<el-input v-model="searchList.S_NAME"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="英文名称" prop="S_ENGNAME">
-									<el-input v-model="searchList.S_ENGNAME"></el-input>
-								</el-form-item>
-							</el-col>
-						</el-row>
-						<el-row :gutter="10">
-							<!-- <el-col :span="6">
-								<el-form-item label="机构" prop="DEPTID">
-									<el-input v-model="searchList.DEPTID" :disabled="true"></el-input>
-									<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
-										<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-									</el-select>
-								</el-form-item>
-							</el-col> -->
-							<el-col :span="6">
-								<el-form-item label="版本" prop="VERSION">
-									<el-input v-model="searchList.VERSION"></el-input>
-								</el-form-item>
-							</el-col>		
-							<el-col :span="6">
-								<el-form-item label="发布时间" prop="RELEASETIME">
-									<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<el-col :span="6">
-								<el-form-item label="启用时间" prop="STARTETIME">
-									<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
-									</el-date-picker>
-								</el-form-item>
-							</el-col>
-							<!-- <el-col :span="3">
-								<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
-									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-									</el-option>
-								</el-select>
+				<el-form inline-message :model="searchList" label-width="70px">
+					<el-row :gutter="10">
+						<el-col :span="6">
+							<el-form-item label="编码" prop="S_NUM">
+								<el-input v-model="searchList.S_NUM"></el-input>
 							</el-form-item>
 						</el-col>
+						<el-col :span="6">
+							<el-form-item label="标准编号" prop="SS_NUM">
+								<el-input v-model="searchList.SS_NUM"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="标准名称" prop="S_NAME">
+								<el-input v-model="searchList.S_NAME"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="英文名称" prop="S_ENGNAME">
+								<el-input v-model="searchList.S_ENGNAME"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+					<el-row :gutter="10">
+						<!-- <el-col :span="6">
+							<el-form-item label="机构" prop="DEPTID">
+								<el-input v-model="searchList.DEPTID" :disabled="true"></el-input>
+								<el-select clearable v-model="searchList.DEPTID" filterable allow-create default-first-option placeholder="请选择">
+									<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col> -->
+						<el-col :span="6">
+							<el-form-item label="版本" prop="VERSION">
+								<el-input v-model="searchList.VERSION"></el-input>
+							</el-form-item>
+						</el-col>		
 						<el-col :span="6">
 							<el-form-item label="发布时间" prop="RELEASETIME">
 								<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
@@ -76,59 +58,75 @@
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<el-col :span="3">
+						<!-- <el-col :span="3">
 							<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
 								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 								</el-option>
 							</el-select>
-						</el-col> -->
-						<el-col :span="4">
-							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
-						</el-col>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="发布时间" prop="RELEASETIME">
+							<el-date-picker style="width: 100%" v-model="searchList.RELEASETIME" type="date" placeholder="发布时间" value-format="yyyy-MM-dd">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="启用时间" prop="STARTETIME">
+							<el-date-picker style="width: 100%" v-model="searchList.STARTETIME" type="date" placeholder="启用时间" value-format="yyyy-MM-dd">
+							</el-date-picker>
+						</el-form-item>
+					</el-col>
+					<el-col :span="3">
+						<el-select style="width: 120%" v-model="searchList.STATUS" placeholder="请选择信息状态">
+							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+					</el-col> -->
+					<el-col :span="4">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+					</el-col>
 					</el-row>
 				</el-form>
+				<!-- 高级查询划出 End-->
+
+				<!-- 第二层弹出的表格 Begin -->
+				<el-table :data="standardList" ref="singleTable" height="270px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}" @selection-change="SelChange" @current-change="setSel">
+					<el-table-column type="selection" width="55" fixed>
+					</el-table-column>
+					<el-table-column type="index" label="序号" width="50">
+						<template slot-scope="scope">
+							<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+						</template>
+					</el-table-column>
+					<el-table-column label="编码" width="120" sortable prop="S_NUM">
+					</el-table-column>
+					<el-table-column label="标准编号" width="120" sortable prop="SS_NUM">
+					</el-table-column>
+					<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
+					</el-table-column>
+					<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+					</el-table-column>
+					<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
+					</el-table-column> -->
+					<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
+					</el-table-column> -->
+					<el-table-column label="发布时间" width="100" sortable prop="RELEASETIME">
+					</el-table-column>
+					<el-table-column label="启用时间" width="100" sortable prop="STARTETIME">
+					</el-table-column>
+					<el-table-column label="停用时间" width="100" sortable prop="STOPTIME">
+					</el-table-column>
+					<el-table-column label="版本" width="80" sortable prop="VERSION">
+					</el-table-column>
+					<el-table-column label="机构" sortable prop="DEPTIDDesc">
+					</el-table-column>
+				</el-table>
+				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+				</el-pagination>
+				<!-- 第二层弹出的表格 End -->
 			</div>
-			<!-- 高级查询划出 End-->
-			<!-- 第二层弹出的表格 Begin -->
-			<el-table :data="standardList" ref="singleTable"
-			height="400px" border stripe style="width: 100%;" :default-sort="{prop:'standardList', order: 'descending'}"
-			 @selection-change="SelChange" 
-			 @current-change="setSel"
-			 >
-				<el-table-column type="selection" width="55" fixed>
-				</el-table-column>
-				<el-table-column type="index" label="序号" width="50">
-					<template slot-scope="scope">
-						<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
-					</template>
-				</el-table-column>
-				<el-table-column label="编码" width="120" sortable prop="S_NUM">
-				</el-table-column>
-				<el-table-column label="标准编号" width="120" sortable prop="SS_NUM">
-				</el-table-column>
-				<el-table-column label="标准名称" width="220" sortable prop="S_NAME">
-				</el-table-column>
-				<el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-				</el-table-column>
-				<!-- <el-table-column label="英文名称" width="220" sortable prop="S_ENGNAME">
-				</el-table-column> -->
-				<!-- <el-table-column label="状态" width="100" sortable prop="STATUS">
-				</el-table-column> -->
-				<el-table-column label="发布时间" width="100" sortable prop="RELEASETIME">
-				</el-table-column>
-				<el-table-column label="启用时间" width="100" sortable prop="STARTETIME">
-				</el-table-column>
-				<el-table-column label="停用时间" width="100" sortable prop="STOPTIME">
-				</el-table-column>
-				<el-table-column label="版本" width="80" sortable prop="VERSION">
-				</el-table-column>
-				<el-table-column label="机构" sortable prop="DEPTIDDesc">
-				</el-table-column>
-			</el-table>
-			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-			</el-pagination>
-			<!-- 第二层弹出的表格 End -->
 			<div slot="footer">
 				<el-button type="primary" @click="addbasis">确 定</el-button>
 		       <el-button @click="resetBasisInfo">取 消</el-button>

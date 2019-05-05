@@ -112,7 +112,6 @@
                             @click="getinspect_cust()"
                           ></el-button>
                         </el-input>
-												
                       </el-form-item> -->
                       <el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
 											<el-autocomplete 
@@ -123,7 +122,6 @@
 											>
 												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()"></el-button>
 											</el-autocomplete>
-
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -1262,10 +1260,10 @@ export default {
         V_ZIPCODE: "",
         P_NAME: "",
         CNAS_OR_CMA_ID: [],
-        CHECK_COST: 0.0, //合同费用
-        ACTUALCOST: 0.0, //实收费用
+        CHECK_COST: 0, //合同费用
+        ACTUALCOST: 0, //实收费用
         CONTRACTCOST: 0, //标准费用
-        ACTUAL_PERCENT: 0.0,
+        ACTUAL_PERCENT: 0,
         INSPECT_PROXY_PROJECList: [],
         INSPECT_PROXY_BASISList: [], //
         CHECK_PROXY_CONTRACTList: [

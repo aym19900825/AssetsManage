@@ -1122,60 +1122,63 @@
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
 		          if (valid) {
-							//检验项目与要求的数据id
-              var selectData= this.PROJECTLIST;
-		          var deleteid = [];
-		          var ids;
-		          for(let i = 0; i < selectData.length; i++) {
-		            deleteid.push(selectData[i].ID);
-		          }
-		          //ids为deleteid数组用逗号拼接的字符串
-		          ids = deleteid.toString(',');
-							// 分包项目的数据id
-							var selectDatas= this.CONTRACTLIST;
-							 //deleteid为id的数组
-		          var deleteids = [];
-		          var ides;
-		          for(let i = 0; i < selectDatas.length; i++) {
-		            deleteids.push(selectDatas[i].ID);
-		          }
-		          //ids为deleteid数组用逗号拼接的字符串
-		          ides = deleteids.toString(',');
-		          if(deleteids.length==0&&deleteid.length==0){
-									this.$message({
-										message: '请先选择需要下达的项目',
-										type: 'warning'
-									});
-							}else{
+								//检验项目与要求的数据id
+								var selectData= this.PROJECTLIST;
+								var deleteid = [];
+								var ids;
+								for(let i = 0; i < selectData.length; i++) {
+									deleteid.push(selectData[i].ID);
+								}
+								//ids为deleteid数组用逗号拼接的字符串
+								ids = deleteid.toString(',');
+								// 分包项目的数据id
+								var selectDatas= this.CONTRACTLIST;
+								 //deleteid为id的数组
+								var deleteids = [];
+								var ides;
+								for(let i = 0; i < selectDatas.length; i++) {
+									deleteids.push(selectDatas[i].ID);
+								}
+								//ids为deleteid数组用逗号拼接的字符串
+								ides = deleteids.toString(',');
+								if(deleteids.length==0&&deleteid.length==0){
+										this.$message({
+											message: '请先选择需要下达的项目',
+											type: 'warning'
+										});
+								}else{
 									for(let i=0;i<this.workorderForm.WORKORDER_CONTRACTList.length;i++){
-								if(!!this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
-										this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.join(',');
+										if(!!this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION){
+											this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_CONTRACTList[i].ASSIST_PERSION.join(',');
+										}
+									}
+									for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
+										if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
+											this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
+										}
+									}
+									// /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
+									var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
+									this.workorderForm.ISCHILDREN='1';//下达子任务的时候标记ISCHILDREN为1。
+									this.$axios.post(url,{
+										WORKORDER:this.workorderForm,
+										PROJECTLIST:ids,
+										CONTRACTLIST:ides
+									}).then((res) => {
+										if(res.data.resp_code == 0) {
+											this.show = false;
+											this.$emit('request');
+											this.$message({
+												message: '下达成功',//下达成功前ISCHILDREN
+												type: 'success'
+											});
+										}	
+									}).catch((err) => {
+									});
 								}
-								
+						} else {
+								return false;
 							}
-							for(let i=0;i<this.workorderForm.WORKORDER_PROJECTList.length;i++){
-								if(!!this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION){
-									this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION = 	this.workorderForm.WORKORDER_PROJECTList[i].ASSIST_PERSION.join(',');	
-								}
-							}
-				  // /app/workorder/operate/subtask?WORKORDER=this.dataInfo&PROJECTLIST&CONTRACTLIST
-					var url = this.basic_url + '/api-apps/app/workorder/operate/subtask';
-					this.$axios.post(url,{WORKORDER:this.workorderForm,PROJECTLIST:ids,CONTRACTLIST:ides}).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.show = false;
-							this.$emit('request');
-							this.$message({
-								message: '下达成功',
-								type: 'success'
-							});
-						}	
-					}).catch((err) => {
-					});
-				}
-							
-			    } else {
-							return false;
-						}
 					});
 			},
 			//点击关闭按钮
@@ -1235,8 +1238,8 @@
 	        this.username = res.data.username;
 					this.deptid = res.data.deptId;
 					this.deptfullname = res.data.deptName;
-	            }).catch((err) => {
-	            });
+					}).catch((err) => {
+				});
 			},
 			getgroup(){//获取专业组信息
 			var url = this.basic_url + '/api-user/depts/findDeptList/'+this.$store.state.currentcjdw[0].id;

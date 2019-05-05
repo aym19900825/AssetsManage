@@ -118,6 +118,7 @@
 					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+null;
 			}
 		this.$axios.get(url, {}).then((res) => {
+			console.log(res);
 			this.page.totalCount = res.data.count;
 			this.productList = res.data.data;
 			this.dialogProduct = true;

@@ -195,6 +195,7 @@
 		<!--右侧内容显示 End-->
 					<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+
 	</div>
 </template>
 <script>
@@ -204,7 +205,8 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
 	import assignmissionmask from '../proxiesDetails/assignmissionmask.vue'//下达任务的弹出
-	import reportmask from'../reportDetails/reportMask.vue'
+	// import reportmask from'../reportDetails/reportMask.vue'
+	import reportmask from'../common/common_mask/report.vue'
 	import vTable from '../plugin/table/table.vue'
 
 	export default {
@@ -685,9 +687,26 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.inspectPro;
-			  this.$refs.reportChild.visible();
-				// this.$router.push({path: '/report'})
+			
+				// this.reportData.app=this.inspectPro;
+				// this.$refs.reportChild.visible();
+				var file='inspectproxyjiance_table.ureport.xml';
+					if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择要修中止的数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时中止多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					this.$router.push({path: '/report' ,query: {appname: this.inspectPro,id:this.selUser[0].ID,file:file,}});
+				}
+			
 			},
 			// 删除
 			delinfo() {

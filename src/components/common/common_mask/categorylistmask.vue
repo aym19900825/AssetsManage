@@ -156,23 +156,11 @@
 		//改变页数
 		sizeChange(val) {
 			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
 			this.requestData();
 		},
 		//当前页数
 		currentChange(val) {
 			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
 			this.requestData();
 		},
 	//Table默认加载数据
@@ -194,17 +182,16 @@
 		}
 		if(!!this.appname){
 			///api-apps/appSelection/inspectionSta/pageForStation（光哥的接口）
-			if(this.appname=='inspectPro'){//按站室显示产品数据
-					var url = this.basic_url +'/api-apps/appSelection/productType2/pageForStation/';
-			}else{
-					var url = this.basic_url +'/api-apps/appSelection/productType2/pageForStation/';
-			}
-			// if(this.appname=='inspectPro'){
-			// 		var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1;
+			// if(this.appname=='inspectPro'){//按站室显示产品数据
+			// 		var url = this.basic_url +'/api-apps/appSelection/productType2/pageForStation/';
 			// }else{
-			// 		var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2;
+			// 		var url = this.basic_url +'/api-apps/appSelection/productType2/pageForStation/';
 			// }
-			
+			if(this.appname=='inspectPro'){
+					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1;
+			}else{
+					var url = this.basic_url +'/api-apps/appCustom/findProductTypebyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2;
+			}
 			// var url = this.basic_url + '/api-apps/app/productType2?authfrom='+this.appname+'&authfliter=true';
 		}else{
 			var url = this.basic_url + '/api-apps/app/productType2?DEPTID_where_in='+this.allDepts;

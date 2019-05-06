@@ -190,12 +190,12 @@
 					//应用英文名称
 					code: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{trigger: 'blur', validator: this.Validators.isEnglish}
+						// {trigger: 'blur', validator: this.Validators.isEnglish}
 					],
 					//数据库表
 					object_id: [
 						{required: true, message: '请填写', trigger: 'blur'},
-						{trigger: 'blur', validator: this.Validators.isEnglish}
+						// {trigger: 'blur', validator: this.Validators.isEnglish}
 					],
 					//应用名称
 					name: [

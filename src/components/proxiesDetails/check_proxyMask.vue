@@ -856,7 +856,7 @@
                         <el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
                           <!-- <el-checkbox label="CNAS"></el-checkbox>
                           <el-checkbox label="CMA"></el-checkbox> -->
-													 <el-checkbox v-for="item in logos" :key="item.id" :label="item.code">{{item.name}}</el-checkbox>
+													 <el-checkbox v-for="item in logos" :key="item.id" :label="item.code" :value="item.name" >{{item.name}}</el-checkbox>
                         </el-checkbox-group>
                       </el-form-item>
                     </el-col>
@@ -1964,10 +1964,17 @@ export default {
             );
           }
 
-          res.data.LEADER = Number(res.data.LEADER);
-          if (res.data.CNAS_OR_CMA_ID == "1") {
-            res.data.CNAS_OR_CMA_ID = true;
-          }
+					res.data.LEADER = Number(res.data.LEADER);
+					res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(',');
+					console.log(res.data.CNAS_OR_CMA_ID);
+					let CNAS_OR_CMA_ID  = res.data.CNAS_OR_CMA_ID;
+					for(var i=0; i< CNAS_OR_CMA_ID.length; i++){
+						CNAS_OR_CMA_ID[i] =  parseInt(CNAS_OR_CMA_ID[i]);
+					}
+						console.log(res.data.CNAS_OR_CMA_ID);
+          // if (res.data.CNAS_OR_CMA_ID == "1") {
+          //   res.data.CNAS_OR_CMA_ID = true;
+          // }
           if (res.data.MAINGROUP == "") {
             res.data.MAINGROUP = "";
           } else {
@@ -1993,8 +2000,9 @@ export default {
             this.noedit1 = true;
             this.PNAME = true;
             this.PNAME1 = true;
-          }
-          this.dataInfo = res.data;
+					}
+					console.log( res.data);
+					this.dataInfo = res.data;
 
           this.show = true;
           //深拷贝数据
@@ -2251,7 +2259,6 @@ export default {
 
     //委托方名称
     customarr(val) {
-      console.log(val);
       this.dataInfo.V_NAME = val[0];
       this.dataInfo.V_NAMEDesc = val[1]; //
       this.dataInfo.V_ADDRESS = val[2];
@@ -2641,9 +2648,13 @@ export default {
             });
             return false;
           } else {
-            if (this.dataInfo.CNAS_OR_CMA_ID) {
-              this.dataInfo.CNAS_OR_CMA_ID = 1;
-            }
+						// var logos = [];
+						// user.roleId = user.roleId.join(',');
+					this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
+					
+            // if (this.dataInfo.CNAS_OR_CMA_ID) {
+            //   this.dataInfo.CNAS_OR_CMA_ID = 1;
+            // }
             var url = this.basic_url + "/api-apps/app/inspectPro2/saveOrUpdate";
             this.$axios
               .post(url, this.dataInfo)
@@ -2784,7 +2795,6 @@ export default {
           params: data
         })
         .then(res => {
-					console.log(res);
 					if(!!res.data){
 						if (val == "default") {
 							this.dataInfo.V_PERSON = res.data.CUSTOMER_PERSONList[0].PERSON;
@@ -3025,7 +3035,6 @@ export default {
 						pageSize: 9999,
 						key: queryString
 			} 
-			console.log(this.weituoname); 
 			this.weituoname.forEach(function(item,i){
               if(item.indexOf(queryString) != -1){
                     list.push({"value":item});   
@@ -3038,12 +3047,9 @@ export default {
 		},
 		// 模糊查询下拉框 鼠标键盘选中点击触发
     handleSelect(item){
-			console.log(item);
 				 this.accountSearch = item.value;
 				for(let i=0;i<this.weituodata.length;i++){
-					console.log(this.weituodata[i].customername);
           if(item.value==this.weituodata[i].customername){
-						console.log(this.weituodata[i].customername);
           //委托方赋值
 						this.dataInfo.V_NAME = this.weituodata[i].customerid;//委托方名称id
 						this.dataInfo.V_NAMEDesc =this.weituodata[i].customername; //委托方名称名称
@@ -3110,7 +3116,7 @@ export default {
       this.$axios
         .get(url, {})
         .then(res => {
-          console.log(res.data);
+					console.log(res.data);
           this.logos = res.data;
           this.loading = false; //加载动画关闭
         })

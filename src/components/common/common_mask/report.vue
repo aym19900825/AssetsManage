@@ -1,7 +1,7 @@
 <template>
 <div class="el-collapse-item pt10 pl10 pr10 pb10">
     <el-tabs v-model="activeName">
-        <el-tab-pane label="单据报表" name="first">
+        <el-tab-pane label="单据报表" name="first" >
             <el-tabs :tab-position="tabPosition" @tab-click="handleClick1">
                 <el-tab-pane v-for="item in reportList" :key='item.id' :label='item.code'>
                   <div class="pull-left" style="width:86%; float: left;">
@@ -21,7 +21,7 @@
                       <el-col :span="6" v-for="(item,index) in pramList" :key="index" v-if="item.label!=''">
                         <!--必填情况-->
                         <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input>
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'&&item.type!='6'"></el-input>
 
                           <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd"></el-date-picker>
 
@@ -32,6 +32,10 @@
                           <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
                             <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
                           </el-input>
+
+                          <el-select v-model="dataInfo[item.param]" placeholder="请选择" v-show="item.type=='6'" :disabled="noedit" >
+                            <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.code" ></el-option>
+                          </el-select>
                         </el-form-item>
                         <!--非必填情况-->
                         <el-form-item :label="item.label" :prop="item.param" v-else>
@@ -107,6 +111,7 @@ import Config from '../../../config.js';
         pramList:[],
         dataInfo:{},
         userList:[],//人名
+        options:[],//检验检测类型
         activeName: 'first',
         tabPosition: 'left',
         noedit:false,//可编辑
@@ -263,7 +268,10 @@ import Config from '../../../config.js';
           this.appname=this.$route.query.appname;
            var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=单据类';
             this.$axios.get(url, {}).then((res) => {
+              console.log(res.data.datas);
               this.reportList = res.data.datas; 
+              console.log(123);
+              console.log(res.data.datas);
               var file=this.reportList[0].file;
               var token = sessionStorage.getItem('access_token');
               // this.appname=this.$route.query.appname;
@@ -343,11 +351,21 @@ import Config from '../../../config.js';
 				  this.dataInfo[value]=this.selval[0].username;
 					this.dialogVisibleuser = false;
 				}
+      },
+      //检验检测类型
+      inspectproType(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BOOK_TYPE';
+				this.$axios.get(url, {}).then((res) => {
+          this.options = res.data;
+          console.log(res.data);
+				}).catch((wrong) => {
+				})	
 			},
     },
     mounted(){
         this.single();
         this.Statistics();
+        this.inspectproType();
         // this.singleRun();
     }
     

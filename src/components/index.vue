@@ -52,9 +52,9 @@
 											</el-table-column>
 											<el-table-column label="当前环节" sortable prop="name">
 											</el-table-column>
-											<el-table-column label="状态" sortable prop="name">
+											<el-table-column label="状态" sortable prop="bizDesc">
 											</el-table-column>
-											<el-table-column label="意见说明" sortable prop="name">
+											<el-table-column label="意见说明" sortable prop="description">
 											</el-table-column>
 											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
 											</el-table-column>
@@ -83,9 +83,9 @@
 											</el-table-column>
 											<el-table-column label="当前环节" sortable prop="name">
 											</el-table-column>
-											<el-table-column label="状态" sortable prop="name">
+											<el-table-column label="状态" sortable prop="bizDesc">
 											</el-table-column>
-											<el-table-column label="意见说明" sortable prop="name">
+											<el-table-column label="意见说明" sortable prop="description">
 											</el-table-column>
 											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
 											</el-table-column>

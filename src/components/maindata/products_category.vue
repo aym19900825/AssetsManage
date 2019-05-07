@@ -122,7 +122,8 @@
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
+	// import reportmask from'../reportDetails/reportMask.vue'
+	import reportmask from'../common/common_mask/report.vue'
 	
 	export default {
 		name: 'customer_management',

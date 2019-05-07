@@ -227,11 +227,10 @@
 				customarr.push(this.selUser[0].customerzipcode);//邮编
 				customarr.push(this.selUser[0].customercode);//信用代码
 				customarr.push(this.selUser[0].depttype);//中心内（中心外）
-				customarr.push(this.selUser[0].customername);
 				this.$emit('customarr',customarr);
-				if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
-						customarr.push(falg);
-				}
+				// if(this.selUser[0].customername==null||this.selUser[0].customername==undefined){
+				// 		customarr.push(falg);
+				// }
 				// var code=this.selUser[0].CODE;//统一社会信用代码
 				// this.$emit('customname',name);//传到主页面
 				// this.$emit('customadd',address);//传到主页面

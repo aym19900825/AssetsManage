@@ -354,8 +354,6 @@
 				this.loading = true;
 				var data = {
 					name: this.searchList.name,
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
 				}
 				var url = this.basic_url + '/api-user/menus/findTreeMap';//把findTreeAlls修改了成了findTreeMap接口，之前那个高级查询不能使用。heliping20190429
 				this.$axios.get(url, {

@@ -153,7 +153,7 @@
 								 var url = this.url+"/ureport/preview?_u=mysql:" +file+'&access_token='+token;
              					window.open(url); 
 						}else{
-							
+							console.log(res.data.datas);
 							this.$refs.reportpramchild.visible(res.data.datas,file);
 						}
 					}).catch((wrong) => {
@@ -165,6 +165,7 @@
 				console.log(this.reportData.app);
 				this.appname=this.reportData.app;
 				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
+				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
 					this.reportsList = res.data.datas;
 					console.log(res.data.datas);

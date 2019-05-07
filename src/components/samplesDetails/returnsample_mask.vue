@@ -274,10 +274,10 @@
 					APPR_DATE: [
 						{ required: true, message: '请选择类别', trigger: 'change' }
 					],
-					QUALITY: [
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ trigger: 'blur', validator: this.Validators.isInteger}
-					],
+					// QUALITY: [
+					// 	{ required: true, message: '必填', trigger: 'blur'},
+					// 	{ trigger: 'blur', validator: this.Validators.isInteger}
+					// ],
 					DO_PERSON: [
 						{ required: true, message: '处理人不能为空', trigger: 'blur' }
 					],
@@ -394,7 +394,7 @@
 							this.samplesForm.DESCRIPTION = data.DESCRIPTION;
 							this.samplesForm.MODEL = data.MODEL;
 							this.samplesForm.ITEM_TYPE = data.ITEM_TYPE;
-							if(/.*[\u4e00-\u9fa5]+.*$/.test(data.QUALITY)){
+							if(/.*[\u4e00-\u9fa5]+.*$/.test(data.QUATITY)){
 								this.isQualityNum = false;
 							}else{
 								this.isQualityNum = true;
@@ -545,7 +545,7 @@
 			save(opt){
 				this.$refs.samplesForm.validate((valid) => {
 					if (valid) {
-						if(isQualityNum){
+						if(this.isQualityNum){
 							if(this.samplesForm.QUALITY == 0){
 								this.$message({
 									message: '数量为零，不可保存！',

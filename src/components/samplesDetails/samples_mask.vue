@@ -528,7 +528,7 @@
 					// ],//产品标识代码
 					// SN: [{ required:true, message:'必填', trigger:'blur' }],
 					// TYPE: [{ required:true, trigger:'blur', message:'必填'}],//类别
-					QUATITY: [{ required:true, trigger:'blur', validator: this.Validators.isInteger}],
+					QUATITY: [{ required:true, trigger:'blur', trigger:'change' }],
 					ACCEPTDATE: [{required:true, message: '请选择', trigger:'change' }],
 					ACCEPT_DATE: [{required:true, message: '请选择', trigger:'change' }],
 					// RECIP_DATE: [{ required:true, message: '请选择', trigger:'change' }],
@@ -974,10 +974,10 @@
 				this.samplesForm.ITEM_LINEList = [];
 				var date=new Date();
 				var time = this.$moment(date).format("YYYY-MM-DD");
-				for(var i = 0;i<this.samplesForm.QUATITY;i++){
+				if(/.*[\u4e00-\u9fa5]+.*$/.test(this.samplesForm.QUATITY)){
 					var obj = {
 						ITEMNUM:'',
-						ITEM_STEP:i+1,
+						ITEM_STEP:1,
 						SN:'',
 						STATE:'1',
 						STATEDesc:'待检',
@@ -987,7 +987,23 @@
 						isEditing: true
 					};
 					this.samplesForm.ITEM_LINEList.push(obj);
+				}else{
+					for(var i = 0;i<this.samplesForm.QUATITY;i++){
+						var obj = {
+							ITEMNUM:'',
+							ITEM_STEP:i+1,
+							SN:'',
+							STATE:'1',
+							STATEDesc:'待检',
+							ENTERBY:'',
+							ENTERDATE:time,
+							CHANGEBY:'',
+							isEditing: true
+						};
+						this.samplesForm.ITEM_LINEList.push(obj);
+					}
 				}
+				
 			},
 
 			//点击关闭按钮

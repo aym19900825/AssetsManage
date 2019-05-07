@@ -156,7 +156,6 @@
 
 			//添加显示弹窗
 			visible(pramList,file) {	
-				console.log(pramList);
 				this.file=file;
 				for(var i=0;i<pramList.length;i++){
 					pramList[i].width="40%"
@@ -218,7 +217,6 @@
 			},
 			determine(){
 				var token = sessionStorage.getItem('access_token');
-				console.log(this.dataInfo);
 		  		var str=JSON.stringify(this.dataInfo);
 				for(var j=0;j<str.length;j++){
 					str=str.replace("\":\"",'=');

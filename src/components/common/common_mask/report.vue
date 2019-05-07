@@ -3,10 +3,10 @@
     <el-tabs v-model="activeName">
         <el-tab-pane label="单据报表" name="first">
             <el-tabs :tab-position="tabPosition" @tab-click="handleClick1">
-                <!-- <el-tab-pane v-for="item in reportsList" :key='item.id' :label='item.code'> -->
+                <el-tab-pane v-for="item in reportList" :key='item.id' :label='item.code'>
                     <iframe :src="url" width="100%" height="1000px" frameborder="0" scrolling="no" >
 				   	        </iframe>    
-                <!-- </el-tab-pane> -->
+                </el-tab-pane>
                 
             </el-tabs>
         </el-tab-pane>
@@ -57,7 +57,6 @@
         </el-tabs>
     </el-tab-pane>
   </el-tabs>
-  </el-dialog>
 		  <el-dialog :modal-append-to-body="false" title="用户" :visible.sync="dialogVisibleuser" width="80%" >
 		  	<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" >
 				<el-table-column type="selection" width="55" fixed align="center">
@@ -101,7 +100,8 @@ import Config from '../../../config.js';
     data() {
       return {
         basic_url: Config.dev_url,
-        reportsList:[],
+        reportsList:[],//统计类
+        reportList:[],//单据类
         pramList:[],
         dataInfo:{},
         userList:[],//人名
@@ -230,6 +230,7 @@ import Config from '../../../config.js';
           }).catch((wrong) => {
 				  })
       },
+    //统计报表
         Statistics() {
             // var token = sessionStorage.getItem('access_token');
              this.appname=this.$route.query.appname;
@@ -239,17 +240,11 @@ import Config from '../../../config.js';
             // var file=this.$route.query.file;
              var id=this.$route.query.id;
             //单据报表
-            var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
+            // var url = this.basic_url + '/api-apps/app/'+this.appname+'/report'?type=统计类;
+            var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=统计类';
             this.$axios.get(url, {}).then((res) => { 
-              var reportname=res.data.datas;
-              // var reportnamesize=res.data.datas.length;
-              //   for(let i=0;i<reportnamesize;i++){
-              //       if(reportname[i].type=="单据类"){
-              //       reportname.remove(reportname[i]);
-              //       }
-              //   }
+              console.log(res);
               this.reportsList = res.data.datas;  
-               consoel.log(this.reportsList);
                 	}).catch((wrong) => {
 				       });
             var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
@@ -260,15 +255,36 @@ import Config from '../../../config.js';
         },
         //单据
         single(){
-          var token = sessionStorage.getItem('access_token');
+          // work-task.ureport.xml
           this.appname=this.$route.query.appname;
-          var file=this.$route.query.file;
-          var id=this.$route.query.id;
-          var url=this.basic_url;
-          var pos = url.lastIndexOf(':');
-          url=url.substring(0,pos+1); 
-          this.url=url+"5300";
-          this.url = this.url+"/ureport/preview?_u=mysql:" +file+'&id='+ id+'&access_token='+token;
+           var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=单据类';
+            this.$axios.get(url, {}).then((res) => {
+              this.reportList = res.data.datas; 
+              var file=this.reportList[0].file;
+              var token = sessionStorage.getItem('access_token');
+              // this.appname=this.$route.query.appname;
+              // var file=this.$route.query.file;
+              var id=this.$route.query.id;
+              var url=this.basic_url;
+              var pos = url.lastIndexOf(':');
+              url=url.substring(0,pos+1); 
+              this.url=url+"5300";
+              this.url = this.url+"/ureport/preview?_u=mysql:" +file+'&id='+ id+'&access_token='+token;
+              console.log(this.url);
+                	}).catch((wrong) => {
+               });
+        },
+        //单据的运行
+        singlerun(){
+              var file=this.reportList[0].file;
+              console.log(file);
+              var token = sessionStorage.getItem('access_token');
+              var id=this.$route.query.id;
+              var url=this.basic_url;
+              var pos = url.lastIndexOf(':');
+              url=url.substring(0,pos+1); 
+              this.url=url+"5300";
+              this.url = this.url+"/ureport/preview?_u=mysql:" +file+'&id='+ id+'&access_token='+token;
         },
         //运行统计报表确定
         determine(){
@@ -289,6 +305,7 @@ import Config from '../../../config.js';
 					src=src.substring(0,pos+1); 
 					this.src=src+"5300";
           this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
+          console.log(this.src);
       },
       requestData(){
 				var data = {
@@ -327,6 +344,7 @@ import Config from '../../../config.js';
     mounted(){
         this.single();
         this.Statistics();
+        // this.singleRun();
     }
     
   };

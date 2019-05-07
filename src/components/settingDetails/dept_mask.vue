@@ -67,7 +67,6 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构属性" prop="type">
-
 												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" v-if="this.$store.state.currentcjdw[0].type==1||this.$store.state.currentcjdw[0].type==4||this.$store.state.currentcjdw[0].type==5" :disabled="noedit">
 													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>

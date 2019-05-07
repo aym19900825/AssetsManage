@@ -67,7 +67,6 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="机构属性" prop="type">
-
 												<el-select v-model="adddeptForm.type" placeholder="请选择" style="width: 100%" v-if="this.$store.state.currentcjdw[0].type==1||this.$store.state.currentcjdw[0].type==4||this.$store.state.currentcjdw[0].type==5" :disabled="noedit">
 													<el-option v-for="(data,index) in SelectDEPT_TYPE" :key="index" :value="data.code" :label="data.name"></el-option>
 												</el-select>
@@ -360,7 +359,10 @@
 					// address:[{required: true,trigger: 'blur',validator: this.Validators.isSpecificKey}],//联系地址
 					address: [{required:true, trigger: 'blur', message: '请输入地址'}],//选择机构类型
 					zipcode: [{required:false, trigger: 'blur', validator: this.Validators.isZipcode}],//邮编
-					telephone:[{required: true, trigger: 'blur', validator: this.Validators.isPhones}],//电话
+					telephone:[
+						{required: true, trigger: 'blur', message: '必填'},
+						{trigger: 'blur', validator: this.Validators.isPhones}
+					],//电话
 					tips:[{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//备注
 					leaderName:[{required: true, trigger: 'blur', message: '请输入负责人'}],
 				}
@@ -700,7 +702,7 @@
 						depttypeName: this.adddeptForm.depttypeName,
 						email: this.adddeptForm.email,
 						simplename: this.adddeptForm.simplename,
-						fullname: this.adddeptForm.fullname,
+						fullname: this.adddeptForm.fullname,//机构名称
 						id: this.adddeptForm.id,
 						leaderName: this.adddeptForm.leaderName,
 						pid:this.adddeptForm.pid,
@@ -708,27 +710,36 @@
 						pName: this.adddeptForm.pName,
 						status: this.adddeptForm.status,
 						telephone: this.adddeptForm.telephone,
-						type: this.adddeptForm.type,
+						type: this.adddeptForm.type,//机构属性
 						typeName: this.adddeptForm.typeName,
 						// updateTime: this.adddeptForm.updateTime,
 						// updateUser: this.adddeptForm.updateUser,
 						// updatebyName:this.adddeptForm.updatebyName,
 					}).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
-						console.log(res)
-						if(res.data.resp_code == 0) {
+						// console.log(res)
+						console.log(this.adddeptForm.fullname);
+						console.log(this.adddeptForm.pName);
+						if (this.adddeptForm.fullname==this.adddeptForm.pName){
 							this.$message({
-								message: '保存成功',
-								type: 'success'
+								message: '上级机构不能选自己',
+								type: 'warning'
 							});
-							if(parameter=="Update"){
-								this.$emit('request');
-								this.show = false;
-							}else{
-								this.$emit('reset');
-								this.show = true;
+						} else{
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								if(parameter=="Update"){
+									this.$emit('request');
+									this.show = false;
+								}else{
+									this.$emit('reset');
+									this.show = true;
+								}
+								this.$refs["adddeptForm"].resetFields();//清空验证							 
 							}
-							this.$refs["adddeptForm"].resetFields();//清空验证							 
 						}
 					}).catch((err) => {
 						this.$message({

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<!-- 检测项目与要求弹出框 Begin -->
-		<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="检测项目测试与要求" :visible.sync="dialogVisible" width="80%">
 			<!-- 高级查询划出 Begin-->
 			<div class="pb10">
 				<el-form inline-message :model="searchList" label-width="70px">

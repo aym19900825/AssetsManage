@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="子任务单成果数据文件" :visible.sync="dialogProduct" width="70%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="子任务单成果数据文件" :visible.sync="dialogProduct" width="70%">
             <div class="scrollbar" style="height:360px;">
                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion v-for="item in selectData" :key="item.WONUM">
                     <el-row :gutter="20">

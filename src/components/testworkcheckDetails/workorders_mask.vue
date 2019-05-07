@@ -727,7 +727,7 @@
 				</div>
 			</div>
 			<!--人员信息 Begin-->
-			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="人员信息" :visible.sync="dialogVisible2" width="80%">
 				<div class="scrollbar" style="max-height: 360px;">
 					<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
 						<el-table-column type="selection" width="55" fixed align="center">

@@ -469,7 +469,7 @@
 			</div>
 			<!--弹出-->
 
-			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%">
 				<div class="el-collapse-item pb10" aria-expanded="true" accordion>
 					<el-tabs v-model="activeName" @tab-click="depthandleClick">
 						<el-tab-pane label="中心内机构" name="first">

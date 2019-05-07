@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogapp" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogapp" width="80%">
 			<el-form inline-message :model="searchList" label-width="45px">
 				<el-row :gutter="10">
 					<el-col :span="5">
@@ -26,19 +26,19 @@
 			</el-form>
 
 			<el-table ref="table" :header-cell-style="rowClass" 
-									:data="applicationList" 
-									border 
-									stripe 
-									:height="fullHeight" 
-									style="width: 100%;" 
-									:default-sort="{prop:'applicationList', order: 'descending'}" 
-									@selection-change="SelChange" 
-									@current-change="setSel"
-							
-									v-loading="loading"  
-									element-loading-text="加载中…"
-									element-loading-spinner="el-icon-loading"
-									element-loading-background="rgba(255, 255, 255, 0.9)">
+						:data="applicationList" 
+						border 
+						stripe 
+						:height="fullHeight" 
+						style="width: 100%;" 
+						:default-sort="{prop:'applicationList', order: 'descending'}" 
+						@selection-change="SelChange" 
+						@current-change="setSel"
+				
+						v-loading="loading"  
+						element-loading-text="加载中…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
 					<el-table-column label="应用英文名称" width="155" sortable prop="code" >

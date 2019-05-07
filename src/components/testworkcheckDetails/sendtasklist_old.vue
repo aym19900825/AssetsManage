@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="" :visible.sync="dialogProduct" width="80%">
 			<div class="mask_content">
 				<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 					<div class="content-accordion scrollbar" id="information" style="height:360px;">

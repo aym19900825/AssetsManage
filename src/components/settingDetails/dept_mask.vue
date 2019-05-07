@@ -197,7 +197,7 @@
 				</div>
 			</div>
 			<!-- 弹出 -->
-			<el-dialog :modal-append-to-body="false" title="上级机构" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="上级机构" :visible.sync="dialogVisible" width="30%">
 				<div class="scrollbar" style="height:400px;">
 					<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 					</el-tree>
@@ -209,27 +209,27 @@
 			</el-dialog>
 
 			<!--负责人 Begin-->
-			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%" :before-close="handleClose">
-					<!-- 第二层弹出的表格 -->
-						<el-table :data="userList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
-								<el-table-column type="selection" width="55" fixed>
-								</el-table-column>
-								<el-table-column label="账号" sortable width="140px" prop="username">
-								</el-table-column>
-								<el-table-column label="姓名" sortable width="200px" prop="nickname">
-								</el-table-column>
-								<el-table-column label="机构" sortable width="150px" prop="deptName">
-								</el-table-column>
-								<el-table-column label="公司" sortable prop="companyName">
-								</el-table-column>
-								<!-- <el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
-								</el-table-column> -->
-								<el-table-column label="录入时间" width="150px" prop="createTime" sortable :formatter="dateFormat">
-								</el-table-column>
-							</el-table>
-							<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination>
-						<!-- 表格 -->
+			<el-dialog :modal-append-to-body="false" title="选择负责人" :visible.sync="dialogLeader" width="80%">
+				<!-- 第二层弹出的表格 -->
+				<el-table :data="userList" border stripe height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange">
+						<el-table-column type="selection" width="55" fixed>
+						</el-table-column>
+						<el-table-column label="账号" sortable width="140px" prop="username">
+						</el-table-column>
+						<el-table-column label="姓名" sortable width="200px" prop="nickname">
+						</el-table-column>
+						<el-table-column label="机构" sortable width="150px" prop="deptName">
+						</el-table-column>
+						<el-table-column label="公司" sortable prop="companyName">
+						</el-table-column>
+						<!-- <el-table-column label="信息状态" sortable width="200px" prop="enabled" :formatter="judge">
+						</el-table-column> -->
+						<el-table-column label="录入时间" width="150px" prop="createTime" sortable :formatter="dateFormat">
+						</el-table-column>
+					</el-table>
+					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+					</el-pagination>
+					<!-- 表格 -->
 					
 					<div slot="footer">
 				       <el-button type="primary" @click="addleader">确 定</el-button>
@@ -764,8 +764,8 @@
 					})
 					.catch(_ => {
 				console.log('取消关闭');
-				$('.v-modal').hide();
-			});
+					$('.v-modal').hide();
+				});
 			}
 		},
 		mounted() {

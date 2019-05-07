@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogsample" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="样品名称" :visible.sync="dialogsample" width="80%">
 			<el-form inline-message :model="searchList" label-width="70px">
 				<el-row>
 					<el-col :span="7">

@@ -150,7 +150,7 @@
 			<!--设备分类 End-->
 
 			<!--设备保管人 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%">
 				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
 						v-loading="loading"
 						element-loading-text="加载中…"

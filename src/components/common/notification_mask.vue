@@ -428,7 +428,7 @@
 				</div>
 			</div>
 			<!-- 人员 -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose" title="用户信息">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" title="用户信息">
 				<el-form inline-message :model="searchList">
 					<el-row :gutter="10">
 						<el-col :span="5">

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="" height="400px" :visible.sync="dialogCategory" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="" height="400px" :visible.sync="dialogCategory" width="80%">
 			<tree_grid :columns="columns" :tree-structure="true" :data-source="deptList" v-on:classByValue="childByValue" v-loading="loading" 
                 element-loading-text="加载中…"
                 element-loading-spinner="el-icon-loading"

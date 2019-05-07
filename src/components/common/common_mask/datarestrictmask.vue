@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogapp" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="产品类别" height="360px" :visible.sync="dialogapp" width="80%">
 			<el-table ref="table" :header-cell-style="rowClass"
 				:data="categoryList"
 					border

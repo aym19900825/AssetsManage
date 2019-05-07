@@ -145,7 +145,7 @@
 		      </span>
         </el-dialog>
 		<!-- 权限管理 -->
-		<el-dialog :modal-append-to-body="false" title="数据配置" :visible.sync="Access" width="30%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="数据配置" :visible.sync="Access" width="30%">
 			<!--年度计划查询类别-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="work" :data="workData"  v-show="workData.length>0" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourework" >
@@ -165,7 +165,7 @@
 				</div>
 		</el-dialog>
 		<!-- 查看权限 -->
-		<el-dialog :modal-append-to-body="false" title="应用模块权限查看" :visible.sync="permissions" width="30%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="应用模块权限查看" :visible.sync="permissions" width="30%">
 			<!--设置产品类别和产品-->
 			<div class="scrollbar" style="max-height: 400px;">
 				<el-tree ref="permissions" :data="permissionsData" node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourepermissions" >

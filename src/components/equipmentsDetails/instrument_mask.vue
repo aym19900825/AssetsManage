@@ -113,7 +113,7 @@
 			</div>
 
 			<!--设备分类 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%">
 				<!-- 高级查询划出 Begin-->
 				<div class="clearfix">
 					<el-form inline-message :model="searchList" label-width="45px">

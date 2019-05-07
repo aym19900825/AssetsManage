@@ -473,7 +473,7 @@
 			<!-- 检测依据弹出框 End -->
 
 			<!-- 检测项目与要求弹出框 Begin -->
-			<el-dialog :modal-append-to-body="false" title="检测项目" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose2">
+			<el-dialog :modal-append-to-body="false" title="检测项目" :visible.sync="dialogVisible2" width="80%">
 				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
 					<el-form inline-message :model="searchList" label-width="70px">

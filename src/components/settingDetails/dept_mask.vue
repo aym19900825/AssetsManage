@@ -198,7 +198,7 @@
 			</div>
 			<!-- 弹出 -->
 			<el-dialog :modal-append-to-body="false" title="上级机构" :visible.sync="dialogVisible" width="30%">
-				<div class="scrollbar" style="height:400px;">
+				<div class="scrollbar" style="height:360px;">
 					<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
 					</el-tree>
 				</div>

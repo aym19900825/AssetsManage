@@ -1063,8 +1063,7 @@
         title="客户联系人"
         :visible.sync="dialogVisibleuser"
         width="80%"
-        :before-close="handleClose2"
-      >
+       >
         <el-table
           :header-cell-style="rowClass"
           :data="CUSTOMER_PERSONList"

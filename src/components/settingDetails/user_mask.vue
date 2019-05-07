@@ -54,13 +54,6 @@
 									</el-row>
 								</el-collapse-item>-->
 								<el-collapse-item title="用户基本资料" name="1">
-									<!-- <el-row :gutter="20" class="pb10">
-										<el-col :span="5" class="pull-right">
-											<el-input v-model="user.enabled" :disabled="edit">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>
-									</el-row> -->
 									<!-- 第一行 -->
 									<el-row>
 										<el-col :span="8">

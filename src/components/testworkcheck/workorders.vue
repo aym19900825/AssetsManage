@@ -134,7 +134,8 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import workordersmask from '../testworkcheckDetails/workorders_mask.vue'//之前的详情页
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'//下达任务
-	import reportmask from'../reportDetails/reportMask.vue'//报表
+	// import reportmask from'../reportDetails/reportMask.vue'//报表
+	import reportmask from'../common/common_mask/report.vue'
 	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'//任务处理
 	import makeprotocolmask from'../testworkcheckDetails/makeprotocol_mask.vue'//生成分包协议
 	import reportgeneratemask from'../testworkcheckDetails/reportgenerate_mask.vue'//报告生成与编辑
@@ -614,8 +615,24 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.workorder;
-				this.$refs.reportChild.visible();
+				// this.reportData.app=this.workorder;
+				// this.$refs.reportChild.visible();
+				// var file='inspectproxyjiance_table.ureport.xml';
+				if(this.selMenu.length == 0) {
+				this.$message({
+					message: '请您选择数据',
+					type: 'warning'
+				});
+				return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					this.$router.push({path: '/report' ,query: {appname: this.workorder,id:this.selMenu[0].ID}});
+				}
 			},
 			
 			getDetail(data){

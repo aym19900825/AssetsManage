@@ -854,8 +854,6 @@
                     <el-col :span="6">
                       <el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
                         <el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-                          <!-- <el-checkbox label="CNAS"></el-checkbox>
-                          <el-checkbox label="CMA"></el-checkbox> -->
 													 <el-checkbox v-for="item in logos" :key="item.id" :label="item.code" :value="item.name" >{{item.name}}</el-checkbox>
                         </el-checkbox-group>
                       </el-form-item>
@@ -1964,17 +1962,9 @@ export default {
             );
           }
 
-					res.data.LEADER = Number(res.data.LEADER);
+          res.data.LEADER = Number(res.data.LEADER);
+          // 标识的渲染
 					res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(',');
-					console.log(res.data.CNAS_OR_CMA_ID);
-					let CNAS_OR_CMA_ID  = res.data.CNAS_OR_CMA_ID;
-					for(var i=0; i< CNAS_OR_CMA_ID.length; i++){
-						CNAS_OR_CMA_ID[i] =  parseInt(CNAS_OR_CMA_ID[i]);
-					}
-						console.log(res.data.CNAS_OR_CMA_ID);
-          // if (res.data.CNAS_OR_CMA_ID == "1") {
-          //   res.data.CNAS_OR_CMA_ID = true;
-          // }
           if (res.data.MAINGROUP == "") {
             res.data.MAINGROUP = "";
           } else {
@@ -2091,9 +2081,6 @@ export default {
             });
             return false;
           } else {
-            if (this.dataInfo.CNAS_OR_CMA_ID) {
-              this.dataInfo.CNAS_OR_CMA_ID = 1;
-            }
             var url =
               this.basic_url + "/api-apps/app/inspectPro2/operate/upgraded";
             this.$axios
@@ -2648,13 +2635,7 @@ export default {
             });
             return false;
           } else {
-						// var logos = [];
-						// user.roleId = user.roleId.join(',');
-					this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
-					
-            // if (this.dataInfo.CNAS_OR_CMA_ID) {
-            //   this.dataInfo.CNAS_OR_CMA_ID = 1;
-            // }
+          this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
             var url = this.basic_url + "/api-apps/app/inspectPro2/saveOrUpdate";
             this.$axios
               .post(url, this.dataInfo)

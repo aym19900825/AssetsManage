@@ -143,6 +143,7 @@
 					var file=this.selreport[0].file;
 					this.appname=this.reportData.app;
 					var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
+					
 				
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.datas==null){
@@ -164,7 +165,8 @@
 			requestData() {
 				console.log(this.reportData.app);
 				this.appname=this.reportData.app;
-				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report';
+				// var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=统计类';
+				var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=统计类';
 				console.log(url);
 				this.$axios.get(url, {}).then((res) => {
 					this.reportsList = res.data.datas;

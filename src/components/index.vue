@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader @clickfun='getroId' ref="vheader" @getTodoNum="getTodoNum" @getTodoDing="getTodoDing" @getTodoFinish="getTodoFinish"></vheader>
+		<vheader @clickfun='getroId' ref="vheader" @getTodoNum="getTodoNum" @getTodoDing="getTodoDing"></vheader>
 		<navs_tabs ref='navsTabs'></navs_tabs>
 	</div>
 
@@ -128,11 +128,10 @@
 										</div>
 									</div>
 									<div class="pull-right" style=" padding-top: 30px;">
-										<el-progress type="circle" :percentage="complete" color="#9399F3"></el-progress>
+										<el-progress type="circle" :percentage="toDoNum/(toDoNum + toDoDing)*100" color="#9399F3"></el-progress>
 											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
 												<div class="circle_font text-center">
-													<!-- <p class="font24">{{complete}}%</p> -->
 													<p>工作完成率</p>
 												</div>
 										</div>
@@ -200,7 +199,6 @@ export default {
 
     data() {
       return {
-				complete:0,
 				toDoNum: 0,//待办工作
 				toDoDing: 0,//已办任务
 				toDoFinish: 0,
@@ -225,26 +223,14 @@ export default {
 				}
     },
 		methods: {
-			getop(){
-				this.complete=parseInt(this.toDoDing/this.toDoNum);//工作完成率
-				// this.complete=parseInt(this.toDoFinish/(this.toDoNum + this.toDoDing));
-			},
+		
 			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
 				this.toDoNum = num;
 			},
 			getTodoDing(doingnum){//获取vheader子组件里面的getTodoDing函数值
 				this.toDoDing = doingnum;
 			},
-			getTodoFinish(finishnum){//获取vheader子组件里面的getTodoFinish函数值
-				this.toDoFinish = finishnum;
-			},
-			// getTodoNumber() {//获取当前用户待办任务数
-      //       var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
-      //       this.$axios.get(url, {}).then((res) => {
-      //           this.toDoNumber = res.data.datas;
-      //       }).catch(error => {
-      //       });
-      // },
+			
 			//表头居中
 			rowClass({ row, rowIndex}) {
 					return 'text-align:center'
@@ -536,10 +522,9 @@ export default {
 			this.requestData();
 			//一级菜单
 			// this.initEchart();//调用饼状图图表函数名称
-			// this.getop();//完成率
 			this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
 			this.getTodoDing();//打开页面就执行getTodoDing待办任务数函数
-			this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数
+			// this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数
 			this.$refs.navsTabs.showClick({
 				css: 'icon-user',
 				name: '首页',
@@ -563,6 +548,7 @@ export default {
 						})
 			};
 		},
+	
 }
 
 </script>

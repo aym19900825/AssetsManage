@@ -87,7 +87,7 @@
 				</div>
 			</div>
 			<!--选择所属上级弹出框 Begin-->
-			<el-dialog :modal-append-to-body="false" title="选择所属上级" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="选择所属上级" :visible.sync="dialogVisible" width="30%">
 				<el-tree ref="tree" :data="resourceData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps">
 				</el-tree>
 				<div slot="footer">

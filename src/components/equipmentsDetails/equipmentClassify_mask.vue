@@ -88,7 +88,7 @@
 				</div>
 			</div>
 			<!-- 弹出 -->
-			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="设备分类" :visible.sync="dialogVisible" width="30%">
 				<el-tree ref="tree" 
 					    :data="resourceData" 
 						show-checkbox 

@@ -54,13 +54,6 @@
 									</el-row>
 								</el-collapse-item>-->
 								<el-collapse-item title="用户基本资料" name="1">
-									<!-- <el-row :gutter="20" class="pb10">
-										<el-col :span="5" class="pull-right">
-											<el-input v-model="user.enabled" :disabled="edit">
-												<template slot="prepend">信息状态</template>
-											</el-input>
-										</el-col>
-									</el-row> -->
 									<!-- 第一行 -->
 									<el-row>
 										<el-col :span="8">
@@ -469,7 +462,7 @@
 			</div>
 			<!--弹出-->
 
-			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="80%">
 				<div class="el-collapse-item pb10" aria-expanded="true" accordion>
 					<el-tabs v-model="activeName" @tab-click="depthandleClick">
 						<el-tab-pane label="中心内机构" name="first">

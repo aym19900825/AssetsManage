@@ -113,7 +113,7 @@
 			</div>
 
 			<!--设备分类 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%" :before-close="handleClose2">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%">
 				<!-- 高级查询划出 Begin-->
 				<div class="clearfix">
 					<el-form inline-message :model="searchList" label-width="45px">
@@ -150,7 +150,7 @@
 			<!--设备分类 End-->
 
 			<!--设备保管人 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%">
 				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
 						v-loading="loading"
 						element-loading-text="加载中…"

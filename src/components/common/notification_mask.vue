@@ -20,8 +20,8 @@
 				<div class="mask_content">
 					<el-form inline-message :model="dataInfo" :label-position="labelPosition" :rules="rules" ref="dataInfo" class="demo-form-inline">
 						<div class="text-center" v-show="viewtitle">
-						<span v-show="this.dataInfo.STATE!='6'">	
-							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i>提交审核</el-button>
+						<span v-show="this.dataInfo.STATE!='6'" class="pr10">	
+							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 提交审核</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&this.nodeState=='2'"><i class="icon-edit-3"></i> 审核</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&this.nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button>
 							<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&this.nodeState!='4'&&this.nodeState!='2'"><i class="icon-edit-3"></i> 审批</el-button>
@@ -428,7 +428,7 @@
 				</div>
 			</div>
 			<!-- 人员 -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose" title="用户信息">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" title="用户信息">
 				<el-form inline-message :model="searchList">
 					<el-row :gutter="10">
 						<el-col :span="5">

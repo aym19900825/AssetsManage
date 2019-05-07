@@ -118,7 +118,7 @@
 					  :modal-append-to-body="false" 
 					  :visible.sync="dialogVisname" 
 					  width="80%" 
-					  :before-close="handleClose">
+					 >
 				<div>
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">

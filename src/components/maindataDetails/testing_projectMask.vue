@@ -189,7 +189,7 @@
 					</el-form>
 				</div>
 			</div>
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%">
 				<el-table :data="gridDataList" @selection-change="SelChange" height="400px">
 					<el-table-column type="selection" width="55" fixed>
 					</el-table-column>
@@ -209,7 +209,7 @@
 			</el-dialog>
 
 			<!-- 作业指导书 Begin -->
-			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%" :before-close="handleClose">
+			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%">
 				<el-table ref="table" 
 					:header-cell-style="rowClass" 
 					:data="WORK_INSTRUCTIONList" 

@@ -111,7 +111,7 @@
 	</div>
 
 	<!-- 检测仪器 Begin -->
-		<el-dialog :modal-append-to-body="false" title="选择基础数据——检测仪器" height="300px" :visible.sync="dialogVisible3" width="80%" :before-close="handleClose">
+		<el-dialog :modal-append-to-body="false" title="选择基础数据——检测仪器" height="300px" :visible.sync="dialogVisible3" width="80%">
 			<!-- 第二层弹出的表格 Begin-->
 			<el-table ref="table2" :header-cell-style="rowClass" :data="categoryList" border stripe height="300px"
 				highlight-current-row

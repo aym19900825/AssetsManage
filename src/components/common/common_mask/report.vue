@@ -1,58 +1,60 @@
 <template>
-<div>
+<div class="el-collapse-item pt10 pl10 pr10 pb10">
     <el-tabs v-model="activeName">
         <el-tab-pane label="单据报表" name="first">
             <el-tabs :tab-position="tabPosition" @tab-click="handleClick1">
                 <el-tab-pane v-for="item in reportList" :key='item.id' :label='item.code'>
-                    <iframe :src="url" width="100%" height="1000px" frameborder="0" scrolling="no" >
-				   	        </iframe>    
+                  <div class="pull-left" style="width:86%; float: left;">
+                    <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
+                  </div>
                 </el-tab-pane>
                 
             </el-tabs>
         </el-tab-pane>
         <el-tab-pane label="统计报表" name="second">
-            <el-tabs :tab-position="tabPosition"  @tab-click="handleClick1">
-              <el-tab-pane v-for="item in reportsList" :key='item.id' :label='item.code'>
-                <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="100px" >
+            <el-tabs :tab-position="tabPosition" @tab-click="handleClick1">
+              <el-tab-pane v-for="(itemlist,index) in reportsList" :key='index' :label='itemlist.code'>
+                <div class="pull-left" style="width:82%;">
+                  <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="100px" >
                     <!-- 报表信息 -->
-                  <el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required != 0" :rules="{required: true, message: '请填写', trigger: 'blur'}">
-                    <el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
-                    </el-input> 
-                    <el-date-picker v-model="dataInfo[item.param]" value-format="yyyy-MM-dd" v-if="item.type==1" >
-                    </el-date-picker>
-                    
-                    <el-input v-model="dataInfo[item.param]" v-if="item.type==3"  :disabled="true">
-                        <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-                    </el-input>
-                    <!-- 当是chuanid时不显示 -->
-                    <!-- <el-input v-model="dataInfo[item.param]" v-if="item.type==4"  :disabled="true">
-                        <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="getDept(item)"></el-button>
-                    </el-input> -->
-                    <el-input v-model="dataInfo[item.param]" v-if="item.type==4 && item.add==1"  :disabled="true">
-                        <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="getDept(item)"></el-button>
-                    </el-input>
-                  </el-form-item>
-                  
-                  <el-form-item v-for="item in pramList" :key="item.id" :label="item.label" :prop="item.param"  :style="{ width: item.width}" :id="item.label" v-if="item.required!='1'">
-                    <el-input v-model="dataInfo[item.param]" v-if="item.type!='1'&&item.type!='4'&&item.type!='3'">
-                    </el-input> 
-                    <el-date-picker v-model="dataInfo[item.param]" value-format="yyyy-MM-dd" v-if="item.type==1" >
-                    </el-date-picker>
-                    
-                    <el-input v-model="dataInfo[item.param]" v-if="item.type==3"  :disabled="true">
-                        <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-                    </el-input>
-                    <el-input v-model="dataInfo[item.param]" v-if="item.type==4 && item.add==1"  :disabled="true">
-                        <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="getDept(item)"></el-button>
-                    </el-input>
-                  </el-form-item>
-              <div class="el-dialog__footer">
-                <el-button type="primary" @click="determine">确定</el-button>
-              </div>
-            </el-form>
+                    <el-row>
+                      <el-col :span="6" v-for="(item,index) in pramList" :key="index" v-if="item.label!=''">
+                        <!--必填情况-->
+                        <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input>
 
-            <iframe :src="src" width="100%" height="1000px" frameborder="0" scrolling="no" >
-            </iframe>    
+                          <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd"></el-date-picker>
+
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
+                            <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+                          </el-input>
+                         
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
+                            <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
+                          </el-input>
+                        </el-form-item>
+                        <!--非必填情况-->
+                        <el-form-item :label="item.label" :prop="item.param" v-else>
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input> 
+
+                          <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd"></el-date-picker>
+
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
+                            <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
+                          </el-input>
+
+                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
+                            <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
+                          </el-input>
+                        </el-form-item>
+                      </el-col>
+                    </el-row>
+                    <div class="el-dialog__footer">
+                      <el-button type="primary" @click="determine">确定</el-button>
+                    </div>
+                  </el-form>
+                  <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
+                </div>
           </el-tab-pane>
         </el-tabs>
     </el-tab-pane>
@@ -105,7 +107,7 @@ import Config from '../../../config.js';
         pramList:[],
         dataInfo:{},
         userList:[],//人名
-        activeName: 'second',
+        activeName: 'first',
         tabPosition: 'left',
         noedit:false,//可编辑
         appname:'',
@@ -118,7 +120,8 @@ import Config from '../../../config.js';
 					currentPage: 1,
 					pageSize: 20,
 					totalCount: 0
-				},
+        },
+        fullHeight: document.documentElement.clientHeight - 80 + 'px', //获取浏览器高度
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -157,17 +160,17 @@ import Config from '../../../config.js';
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-           		 this.i++;
-            		if(this.i%2==0){
-                	if(checked){
-                    	this.$refs.tree.setCheckedNodes([]);
-                    	this.$refs.tree.setCheckedNodes([data]);
-                    	//交叉点击节点
-               		 }else{
-                     this.$refs.tree.setCheckedNodes([]);
-                    	//点击已经选中的节点，置空
-                	 }
-            		}
+          this.i++;
+          if(this.i%2==0){
+            if(checked){
+                this.$refs.tree.setCheckedNodes([]);
+                this.$refs.tree.setCheckedNodes([data]);
+                //交叉点击节点
+              }else{
+                this.$refs.tree.setCheckedNodes([]);
+                //点击已经选中的节点，置空
+              }
+          }
     	},
       dailogconfirm() { //小弹出框确认按钮事件
           var value1 = sessionStorage.getItem("prop");
@@ -227,6 +230,7 @@ import Config from '../../../config.js';
                 }
               }
             this.pramList = list;
+            console.log(this.pramList);
           }).catch((wrong) => {
 				  })
       },

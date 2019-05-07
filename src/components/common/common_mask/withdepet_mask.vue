@@ -1,7 +1,7 @@
 
 <template>
 <div>
-    <el-dialog :modal-append-to-body="false" title="分包" height="400px" :visible.sync="dialogcustom" width="80%" :before-close="handleClose">
+    <el-dialog :modal-append-to-body="false" title="分包" height="400px" :visible.sync="dialogcustom" width="80%">
         <el-form inline-message :model="searchList" label-width="90px">
             <el-row>
                 <el-col :span="5">

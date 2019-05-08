@@ -1365,14 +1365,14 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.TYPE = '2';
-					this.dataInfo.TYPEDesc = '检测';
+					this.dataInfo.DETECTIONTYPE = '1';
+					this.dataInfo.DETECTIONTYPEDesc = '检验';
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;
 					this.docParm = {
 						'model': 'new',
-						'appname': '检测委托书',
+						'appname': '检验委托书',
 						'recordid': 1,
 						'appid': 95
 					};

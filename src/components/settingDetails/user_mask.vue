@@ -57,27 +57,19 @@
 									<!-- 第一行 -->
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="用户名" v-if="modify" label-width="100px">
-												<el-input v-model="user.username" :disabled="true"></el-input>
-											</el-form-item>
-											<el-form-item label="用户名" prop="username" v-else label-width="100px">
-												<el-input v-model="user.username" :disabled="noedit"></el-input>
+											<el-form-item label="用户名" prop="username" label-width="100px">
+												<el-input v-model="user.username" :disabled="true" v-if="modify"></el-input>
+												<el-input v-model="user.username" :disabled="noedit" v-else></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" v-if="addtitle">
-											<!--<el-form-item label="密码" v-if="modify" label-width="100px">
-												<el-input type="password" v-model="user.password" :disabled="true">
-													<el-button slot="append" icon="icon-edit" @click="editpassword"></el-button>
-												</el-input>
-											</el-form-item>-->
 											<el-form-item label="密码" prop="password" label-width="100px">
 												<el-input type="password" v-model="user.password" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="姓名" prop="nickname" label-width="100px">
-												<el-input v-if="user.username == 'admin'" v-model="user.nickname" :disabled="edit"></el-input>
-												<el-input v-else v-model="user.nickname" :disabled="noedit"></el-input>
+												<el-input v-model="user.nickname" :disabled="noedit"></el-input>
 												<span class="error"></span>
 											</el-form-item>
 										</el-col>
@@ -137,18 +129,20 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="用户有效期" prop="user_active_date" label-width="100px">
-												<el-date-picker :disabled="disabled" v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" >
+												<el-date-picker v-if="this.user.userid == this.$store.state.currentuser.id" :disabled="true" v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%">
+												</el-date-picker>
+												<el-date-picker v-else :disabled="false" v-model="user.user_active_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许授权" prop="ispermit" label-width="100px">
-												<el-radio-group v-if="user.username == 'admin'" v-model="user.ispermit" :disabled="disabled">
+												<el-radio-group v-if="this.user.userid == this.$store.state.currentuser.id" :disabled="true" v-model="user.ispermit">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 
-												<el-radio-group v-else v-model="user.ispermit" :disabled="edit">
+												<el-radio-group v-else :disabled="false" v-model="user.ispermit">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
@@ -156,12 +150,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="允许登录" prop="islogin" label-width="100px">
-												<el-radio-group v-if="user.username == 'admin'" v-model="user.islogin" :disabled="disabled">
-													<el-radio label="1">是</el-radio>
-													<el-radio label="2">否</el-radio>
-												</el-radio-group>
-
-												<el-radio-group v-else v-model="user.islogin" :disabled="edit">
+												<el-radio-group :disabled="this.user.userid==nowUser.id?true:false" v-model="user.islogin">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
@@ -172,15 +161,9 @@
 										<el-col :span="8">
 											<el-form-item label="所属机构" prop="deptName" label-width="100px">
 												<el-input v-model="user.deptName" :disabled="noedit">
-													<el-button slot="append" icon="el-icon-search" @click="getDept" :disabled="disabled"></el-button>
+													<el-button slot="append" icon="el-icon-search" @click="getDept"></el-button>
 												</el-input>
 											</el-form-item>
-											<!--<el-form-item label="所属机构" prop="deptName" >
-													<el-select v-model="user.deptName" placeholder="请选择">
-														<el-option v-for="item in option1" :key="item.value" :label="item.label" :value="item.value">
-														</el-option>
-													</el-select>
-											</el-form-item>-->
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="角色" prop="roleId" label-width="100px">
@@ -932,6 +915,9 @@
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.user.changeby = res.data.nickname;
 					this.user.username = res.data.username;
+					this.user.userid = res.data.id;
+					console.log(this.user.userid);
+					console.log(this.$store.state.currentuser.id);
 					console.log(this.user.username);
 					this.docParam = {
 						username: res.data.username,
@@ -1379,6 +1365,11 @@
 				})
 			}
 
+		},
+		computed: {
+			nowUser: function(){
+				return this.$store.state.currentuser;
+			}
 		},
 		mounted() {
 			this.getRole();

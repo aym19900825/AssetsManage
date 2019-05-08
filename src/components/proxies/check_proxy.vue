@@ -698,7 +698,15 @@
 					});
 					return;
 				}else{
-					this.$router.push({path: '/report' ,query: {appname: this.inspectPro2,id:this.selUser[0].ID}});
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname: this.inspectPro2,
+					id:this.selUser[0].ID
+					}
+					});
+					window.open(routeData.href, '_blank');
+					// this.$router.push({path: '/report' ,query: {appname: this.inspectPro2,id:this.selUser[0].ID}});
 				}
 			},
 			// 删除

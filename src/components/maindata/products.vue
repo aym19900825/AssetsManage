@@ -545,8 +545,31 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.product;
-				this.$refs.reportChild.visible();
+				// this.reportData.app=this.product;
+				// this.$refs.reportChild.visible();
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+						path: "/report",
+						query: {
+						appname: this.product,
+						id:this.selMenu[0].ID
+						}
+					});
+					window.open(routeData.href, '_blank');
+					// this.$router.push({path: '/report' ,query: {appname: this.productType,id:this.selMenu[0].ID,}});
+				}
 			},
 			requestData() {
 				this.$refs.table.requestData();

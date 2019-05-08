@@ -1,24 +1,25 @@
 <template>
   <div class="content-accordion">
     <div class="el-collapse-item pt10 pl10 pr10 pb10">
-        <el-tabs v-model="activeName">
-            <el-tab-pane label="单据报表" name="first">
+        <el-tabs v-model="activeName" @tab-click="handleClick" >
+            <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].title" name="first" v-if="bigtitle[index].title=='单据类'">
                 <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
-                    <el-tab-pane v-for="item in reportList" :key='item.id' :label='item.code'>
+                    <el-tab-pane v-for="item in bigtitle[index].list" :key='item.id' :label='item.code'>
                       <div class="pull-left" style="width:86%;">
                         <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
                       </div>
                     </el-tab-pane>
                 </el-tabs>
             </el-tab-pane>
-            <el-tab-pane label="统计报表" name="second">
+            <!-- <el-tab-pane label="统计报表" name="second"> -->
+              <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].title" name="second" v-if="bigtitle[index].title!='单据类'">
                 <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
-                  <el-tab-pane v-for="(itemlist,index) in reportsList" :key='index' :label='itemlist.code'>
+                  <el-tab-pane v-for="(itemlist,index) in bigtitle[index].list" :key='index' :label='itemlist.code'>
                     <div class="pull-left" style="width:82%;">
-                      <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px">
+                      <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px" v-if="xianshi">
                         <!-- 报表信息 -->
                         <el-row>
-                          <el-col :span="5" v-for="(item,index) in pramList" :key="index" v-if="item.label!=''">
+                          <el-col :span="5" v-for="(item,index) in pramList" :key="index" v-show="item.label!=''" >
                             <!--必填情况-->
                             <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
                               <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input>
@@ -111,9 +112,11 @@ import Config from '../../../config.js';
         dataInfo:{},
         userList:[],//人名
         options:[],//检验检测类型
-        activeName: 'first',
+        bigtitle:[],//统计类&&单据类
+        activeName: '',
         tabPosition: 'left',
         noedit:false,//可编辑
+        xianshi:false,
         appname:'',
         url:'',//单据
         src:'',//统计
@@ -208,9 +211,14 @@ import Config from '../../../config.js';
 				}else{
 					this.requestData(item.param);
 				}
-			},
+      },
+      //单据和统计的切换
+      handleClick(){
+       
+      },
       handleClick1(tab,event) {
         this.src="";
+        // this.pramList="";//清空form表
         for(var i=0;i<this.reportsList.length;i++){
           if(this.reportsList[i].code==tab.label){
              var id=this.reportsList[i].id;
@@ -222,6 +230,11 @@ import Config from '../../../config.js';
          var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
             this.$axios.get(url, {}).then((res) => {
               var list = res.data.datas;
+              if(!!list){
+                  this.xianshi = true;
+              }else{
+                  this.xianshi = fale;
+              }
               var plistsize = res.data.datas.length;
               for(var i=0;i<plistsize;i++){
                 if(list[i].type=='4'){
@@ -245,18 +258,11 @@ import Config from '../../../config.js';
       },
     //统计报表
         Statistics() {
-            // var token = sessionStorage.getItem('access_token');
              this.appname=this.$route.query.appname;
-            // console.log(this.$route.query.appname);
-            // console.log(this.$route.query.id);
-            // console.log(this.$route.query.file);
-            // var file=this.$route.query.file;
              var id=this.$route.query.id;
             //单据报表
-            // var url = this.basic_url + '/api-apps/app/'+this.appname+'/report'?type=统计类;
             var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=统计类';
             this.$axios.get(url, {}).then((res) => { 
-              console.log(res);
               this.reportsList = res.data.datas;  
                 	}).catch((wrong) => {
 				       });
@@ -272,10 +278,7 @@ import Config from '../../../config.js';
           this.appname=this.$route.query.appname;
            var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=单据类';
             this.$axios.get(url, {}).then((res) => {
-              console.log(res.data.datas);
               this.reportList = res.data.datas; 
-              console.log(123);
-              console.log(res.data.datas);
               var file=this.reportList[0].file;
               var token = sessionStorage.getItem('access_token');
               // this.appname=this.$route.query.appname;
@@ -286,14 +289,12 @@ import Config from '../../../config.js';
               url=url.substring(0,pos+1); 
               this.url=url+"5300";
               this.url = this.url+"/ureport/preview?_u=mysql:" +file+'&id='+ id+'&access_token='+token;
-              console.log(this.url);
                 	}).catch((wrong) => {
                });
         },
         //单据的运行
         singlerun(){
               var file=this.reportList[0].file;
-              console.log(file);
               var token = sessionStorage.getItem('access_token');
               var id=this.$route.query.id;
               var url=this.basic_url;
@@ -321,7 +322,6 @@ import Config from '../../../config.js';
 					src=src.substring(0,pos+1); 
 					this.src=src+"5300";
           this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
-          console.log(this.src);
       },
       requestData(){
 				var data = {
@@ -361,15 +361,74 @@ import Config from '../../../config.js';
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BOOK_TYPE';
 				this.$axios.get(url, {}).then((res) => {
           this.options = res.data;
-          console.log(res.data);
 				}).catch((wrong) => {
 				})	
-			},
+      },
+      //默认加载/api-apps/app/inspectPro/reportList
+       singleAndStatistics(){
+        // var url = this.basic_url + '/api-apps/app/inspectPro/reportList';
+        var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportList';
+				this.$axios.get(url, {}).then((res) => {
+          this.bigtitle=res.data.datas;
+          var bigtitle=this.bigtitle
+          if(bigtitle[0].title!="单据类"){
+             this.activeName="second"
+            }else{
+             this.activeName="first"
+            }  
+        for(let m=0;m<bigtitle.length;m++){
+           if(bigtitle[m].title=="统计类"){
+              var list=bigtitle[m].list;
+              
+            for(var i=0;i<list.length;i++){
+              var id=list[0].id;
+              var files=list[0].file;
+            } 
+            var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
+              console.log(url);
+            this.$axios.get(url, {}).then((res) => {
+              console.log(res);
+              var list = res.data.datas;
+              if(!!list){
+                this.xianshi = true;
+                  var plistsize = res.data.datas.length;
+              for(var i=0;i<plistsize;i++){
+                if(list[i].type=='4'){
+                  var param =list[i];
+                  var newparam = {};
+                     newparam.label=param.label;
+                     newparam.param=param.param+"Desc";
+                     newparam.required=param.required;
+                     newparam.type=param.type;
+                     newparam.status=param.status;
+                     newparam.add=1;
+                     list.push(newparam);
+                     list[i].label='';
+                }
+              }
+            this.pramList = list;
+              console.log(this.pramList);
+              }else{
+                this.xianshi = false;
+                var token = sessionStorage.getItem('access_token');
+                var url=this.basic_url;
+								var pos = url.lastIndexOf(':');
+								url=url.substring(0,pos+1); 
+                this.src = url+"5300/ureport/preview?_u=mysql:" +files+'&access_token='+token;
+              }
+          }).catch((wrong) => {
+				  })
+          }
+        }
+				}).catch((wrong) => {
+				})	
+      },
     },
     mounted(){
         this.single();
         this.Statistics();
         this.inspectproType();
+        this.singleAndStatistics();
         // this.singleRun();
     }
     

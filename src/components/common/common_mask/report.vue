@@ -1,104 +1,103 @@
 <template>
-<div class="el-collapse-item pt10 pl10 pr10 pb10">
-    <el-tabs v-model="activeName">
-        <el-tab-pane label="单据报表" name="first" >
-            <el-tabs :tab-position="tabPosition" @tab-click="handleClick1">
-                <el-tab-pane v-for="item in reportList" :key='item.id' :label='item.code'>
-                  <div class="pull-left" style="width:86%; float: left;">
-                    <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
-                  </div>
-                </el-tab-pane>
-                
+  <div class="content-accordion">
+    <div class="el-collapse-item pt10 pl10 pr10 pb10">
+        <el-tabs v-model="activeName">
+            <el-tab-pane label="单据报表" name="first">
+                <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
+                    <el-tab-pane v-for="item in reportList" :key='item.id' :label='item.code'>
+                      <div class="pull-left" style="width:86%;">
+                        <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
+                      </div>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-tab-pane>
+            <el-tab-pane label="统计报表" name="second">
+                <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
+                  <el-tab-pane v-for="(itemlist,index) in reportsList" :key='index' :label='itemlist.code'>
+                    <div class="pull-left" style="width:82%;">
+                      <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px">
+                        <!-- 报表信息 -->
+                        <el-row>
+                          <el-col :span="5" v-for="(item,index) in pramList" :key="index" v-if="item.label!=''">
+                            <!--必填情况-->
+                            <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input>
+
+                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
+
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
+                                <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+                              </el-input>
+                            
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
+                                <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
+                              </el-input>
+                            </el-form-item>
+                            <!--非必填情况-->
+                            <el-form-item :label="item.label" :prop="item.param" v-else>
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input> 
+
+                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
+
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
+                                <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
+                              </el-input>
+
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
+                                <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
+                              </el-input>
+                            </el-form-item>
+                          </el-col>
+                          <el-col :span="3" class="text-center">
+                            <el-button type="primary" size="small" @click="determine">搜索</el-button>
+                          </el-col>
+                        </el-row>
+
+                      </el-form>
+                      <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto" style="overflow-x:scroll"></iframe>
+                    </div>
+              </el-tab-pane>
             </el-tabs>
         </el-tab-pane>
-        <el-tab-pane label="统计报表" name="second">
-            <el-tabs :tab-position="tabPosition" @tab-click="handleClick1">
-              <el-tab-pane v-for="(itemlist,index) in reportsList" :key='index' :label='itemlist.code'>
-                <div class="pull-left" style="width:82%;">
-                  <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="100px" >
-                    <!-- 报表信息 -->
-                    <el-row>
-                      <el-col :span="6" v-for="(item,index) in pramList" :key="index" v-if="item.label!=''">
-                        <!--必填情况-->
-                        <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'&&item.type!='6'"></el-input>
-
-                          <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd"></el-date-picker>
-
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
-                            <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-                          </el-input>
-                         
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
-                            <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
-                          </el-input>
-
-                          <el-select v-model="dataInfo[item.param]" placeholder="请选择" v-show="item.type=='6'" :disabled="noedit" >
-                            <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.code" ></el-option>
-                          </el-select>
-                        </el-form-item>
-                        <!--非必填情况-->
-                        <el-form-item :label="item.label" :prop="item.param" v-else>
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input> 
-
-                          <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd"></el-date-picker>
-
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
-                            <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
-                          </el-input>
-
-                          <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
-                            <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
-                          </el-input>
-                        </el-form-item>
-                      </el-col>
-                    </el-row>
-                    <div class="el-dialog__footer">
-                      <el-button type="primary" @click="determine">确定</el-button>
-                    </div>
-                  </el-form>
-                  <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
-                </div>
-          </el-tab-pane>
-        </el-tabs>
-    </el-tab-pane>
-  </el-tabs>
-		  <el-dialog :modal-append-to-body="false" title="用户" :visible.sync="dialogVisibleuser" width="80%" >
-		  	<el-table :data="userList" border stripe :header-cell-style="rowClass"  style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" >
-				<el-table-column type="selection" width="55" fixed align="center">
-				</el-table-column>
-				<el-table-column label="用户名" sortable width="140px" prop="username">
-				</el-table-column>
-				<el-table-column label="姓名" sortable width="200px" prop="nickname" >
-				</el-table-column>
-				<el-table-column label="性别" sortable width="100px" prop="sexName" >
-				</el-table-column>
-				<el-table-column label="机构" sortable width="150px" prop="deptName" >
-				</el-table-column>
-				<el-table-column label="手机号" sortable width="150px" prop="phone" >
-				</el-table-column>
-				<el-table-column label="员工号" sortable width="150px" prop="worknumber">
-				</el-table-column>
-				<el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat">
-				</el-table-column>
-			</el-table>
-					<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-					</el-pagination>
-				<span slot="footer" class="dialog-footer">
-			       <el-button type="primary" @click="addcusname">确 定</el-button>
-			       <el-button @click="dialogVisibleuser = false">取 消</el-button>
-			    </span>
-		  </el-dialog>
-		  <el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" >
-			<el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-			</el-tree>
-			<span slot="footer" class="dialog-footer">
-		       <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
-		       <el-button @click="dialogVisible = false">取 消</el-button>
-		    </span>
-		</el-dialog>
+      </el-tabs>
+        <el-dialog :modal-append-to-body="false" title="用户" :visible.sync="dialogVisibleuser" width="80%" >
+          <el-table :data="userList" border stripe :header-cell-style="rowClass" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" >
+          <el-table-column type="selection" width="55" fixed align="center">
+          </el-table-column>
+          <el-table-column label="用户名" sortable width="140px" prop="username">
+          </el-table-column>
+          <el-table-column label="姓名" sortable width="200px" prop="nickname" >
+          </el-table-column>
+          <el-table-column label="性别" sortable width="100px" prop="sexName" >
+          </el-table-column>
+          <el-table-column label="机构" sortable width="150px" prop="deptName" >
+          </el-table-column>
+          <el-table-column label="手机号" sortable width="150px" prop="phone" >
+          </el-table-column>
+          <el-table-column label="员工号" sortable width="150px" prop="worknumber">
+          </el-table-column>
+          <el-table-column label="用户有效期" prop="user_active_date" width="150px" sortable :formatter="dateFormat">
+          </el-table-column>
+        </el-table>
+            <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+            </el-pagination>
+          <span slot="footer" class="dialog-footer">
+              <el-button type="primary" @click="addcusname">确 定</el-button>
+              <el-button @click="dialogVisibleuser = false">取 消</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" >
+        <el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+        </el-tree>
+        <span slot="footer" class="dialog-footer">
+            <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
+            <el-button @click="dialogVisible = false">取 消</el-button>
+          </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
+
 <script>
 import Config from '../../../config.js';
   export default {
@@ -126,7 +125,12 @@ import Config from '../../../config.js';
 					pageSize: 20,
 					totalCount: 0
         },
-        fullHeight: document.documentElement.clientHeight - 80 + 'px', //获取浏览器高度
+        //获取浏览器高度
+        fullHeight: document.documentElement.clientHeight - 110 + 'px',
+        //样式高度
+        styleHeight: {
+          height: document.documentElement.clientHeight - 110 + 'px',
+        },
 				//tree树菜单
 				resourceData: [], //数组，我这里是通过接口获取数据，
 				resourceDialogisShow: false,
@@ -371,3 +375,9 @@ import Config from '../../../config.js';
     
   };
 </script>
+
+<style scoped>
+  .content-accordion{
+    margin: 15px;
+  }
+</style>

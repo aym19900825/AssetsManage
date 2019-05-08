@@ -1,7 +1,7 @@
 <template>
 <div>
 	<div class="headerbg">
-		<vheader @clickfun='getroId' ref="vheader" @getTodoNum="getTodoNum" @getTodoDing="getTodoDing"></vheader>
+		<vheader @clickfun='getroId' ref="vheader"></vheader>
 		<navs_tabs ref='navsTabs'></navs_tabs>
 	</div>
 
@@ -117,18 +117,18 @@
 								</div>
 								<div class="pt40 clearfix">
 									<div class="pull-left">
-										<p class="big_numb">{{toDoNum + toDoDing+ toDoFinish}}</p>
+										<p class="big_numb">{{this.toDoNumber +this.toDoFinish}}</p>
 										<p class="small_font">工作总计</p>
 										<div class="pt40">
 											<p class="middle_font pt10">
-												<span class="red">待办工作: {{toDoNum}}</span>
-												<span class="textblue">已办工作: {{toDoDing}}</span>
-												<!-- <span class="green">已完成: {{toDoFinish}}</span> -->
+												<span class="red">待办工作: {{this.toDoNumber}}</span>
+												<span class="textblue">已办工作: {{this.toDoFinish}}</span>
 											</p>
 										</div>
 									</div>
 									<div class="pull-right" style=" padding-top: 30px;">
-										<el-progress type="circle" :percentage="toDoNum/(toDoNum + toDoDing)*100" color="#9399F3"></el-progress>
+										<!-- <el-progress type="circle" :percentage="toDoNum/(toDoNum + toDoDing)*100" color="#9399F3"></el-progress> -->
+											<el-progress type="circle" :percentage="this.ItemRate" color="#9399F3"></el-progress>
 											<div class="wracircle" data-anim="base wracircle">
 												<div class="circle" data-anim="base left" style=""></div>
 												<div class="circle_font text-center">
@@ -199,9 +199,10 @@ export default {
 
     data() {
       return {
-				toDoNum: 0,//待办工作
-				toDoDing: 0,//已办任务
-				toDoFinish: 0,
+				toDoNumber: 0,//待办工作
+				total: 0,//总计
+				toDoFinish: 0,//已办任务
+				ItemRate:0,//完成率
       	roleid:1,
       	basic_url: Config.dev_url,
       	loadSign: true, //鼠标滚动加载数据
@@ -223,14 +224,29 @@ export default {
 				}
     },
 		methods: {
-		
-			getTodoNum(num){//获取vheader子组件里面的getTodoNumber函数值
-				this.toDoNum = num;
+			getTodoNumber() {//获取当前用户待办任务数
+            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts';
+            this.$axios.get(url, {}).then((res) => {
+                this.toDoNumber = res.data.datas;
+            }).catch(error => {
+						});
+						
 			},
-			getTodoDing(doingnum){//获取vheader子组件里面的getTodoDing函数值
-				this.toDoDing = doingnum;
+			getTodoFinish() {//获取当前用户已完成
+					var url = this.basic_url + '/api-apps/app/flow/flow/completedItemCounts';
+            this.$axios.get(url, {}).then((res) => {
+                this.toDoFinish = res.data.datas;
+            }).catch(error => {
+            });
 			},
-			
+			//完成率
+			CompletedItemRate(){
+				var url = this.basic_url + '/api-apps/app/flow/flow/findCompletedItemRate';
+					this.$axios.get(url, {}).then((res) => {
+							this.ItemRate = res.data.datas;
+					}).catch(error => {
+					});
+			}	,
 			//表头居中
 			rowClass({ row, rowIndex}) {
 					return 'text-align:center'
@@ -519,11 +535,13 @@ export default {
 			this.getcjdw();
 			this.getUser();
 			//加载待办任务
-			this.requestData();
+			// this.requestData();
+      this.timer = setInterval(this.requestData(), 1000);//定时调用代办和已办的列表
 			//一级菜单
 			// this.initEchart();//调用饼状图图表函数名称
-			this.getTodoNum();//打开页面就执行getTodoNum待办任务数函数
-			this.getTodoDing();//打开页面就执行getTodoDing待办任务数函数
+			this.getTodoNumber();//打开页面就执行getTodoNum待办任务数函数
+			this.getTodoFinish();//打开页面就执行getTodoDing待办任务数函数
+			this.CompletedItemRate();
 			// this.getTodoFinish();//打开页面就执行getTodoFinish待办任务数函数
 			this.$refs.navsTabs.showClick({
 				css: 'icon-user',
@@ -548,6 +566,9 @@ export default {
 						})
 			};
 		},
+		beforeDestroy() {
+      clearInterval(this.timer);
+    }
 	
 }
 

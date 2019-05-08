@@ -249,6 +249,7 @@ export default {
           this.loadSign = true;
         }
         this.list = res.data.data;
+        console.log(res.data.data);
         this.page.totalCount = res.data.count;
 
         this.loading = false;//加载动画关闭

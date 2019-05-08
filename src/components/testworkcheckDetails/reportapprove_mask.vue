@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="report.TYPE" :disabled="true">
+											<el-input v-model="report.DETECTIONTYPE" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
@@ -235,7 +235,7 @@
                     STATE:'',//流程状态
 					STATEDesc:'',
 					V_NAME:'',//委托单位
-					TYPE:'',//检测类型
+					DETECTIONTYPE:'',//检测类型
 					ENTERBY:'',//提交人
 					ENTERBYDesc:'',//提交人描述
 					ENTERDATE:'',//提交时间

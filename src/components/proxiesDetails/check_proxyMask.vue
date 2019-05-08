@@ -1893,8 +1893,8 @@ export default {
           this.dataInfo.ENTERDATE = this.$moment(date).format(
             "YYYY-MM-DD HH:mm:ss"
           );
-          this.dataInfo.TYPE = "2";
-          this.dataInfo.TYPEDesc = "检测";
+          this.dataInfo.DETECTIONTYPE = "2";
+          this.dataInfo.DETECTIONTYPEDesc = "检测";
           this.dataInfo.R_VENDORDesc = this.$store.state.currentcjdw[0].fullname;
           this.dataInfo.R_VENDOR = this.$store.state.currentcjdw[0].id;
           this.show = true;

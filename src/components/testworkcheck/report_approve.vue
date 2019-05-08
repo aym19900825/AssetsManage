@@ -68,13 +68,15 @@
 								</el-table-column>
 								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
-								<el-table-column label="检测类型" width="140" sortable prop="TYPE" v-if="checkedName.indexOf('检测类型')!=-1">
+								<el-table-column label="检测类型" width="140" sortable prop="DETECTIONTYPE" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
+								<el-table-column label="当前责任人" width="120" sortable prop="ENTERBYDesc" v-if="checkedName.indexOf('当前责任人')!=-1">
+								</el-table-column>
 								<el-table-column label="提交人" width="120" sortable prop="ENTERBYDesc" v-if="checkedName.indexOf('提交人')!=-1">
 								</el-table-column>
-								<el-table-column label="提交时间" width="160" sortable prop="ENTERDATE" v-if="checkedName.indexOf('提交时间')!=-1">
+								<el-table-column label="提交时间" width="160" sortable prop="ENTERDATE" v-if="checkedName.indexOf('提交时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -131,6 +133,7 @@
                     '委托单位',
 					'检测类型',
 					'流程状态',
+					'当前责任人',
 					'提交人',
 					'提交时间',
 				],
@@ -145,10 +148,13 @@
 						prop: 'V_NAME'
 					},{
 						label: '检测类型',
-						prop: 'TYPE'
+						prop: 'DETECTIONTYPE'
 					},{
 						label: '流程状态',
 						prop: 'STATE'
+					},{
+						label: '当前责任人',
+						prop: 'ENTERBYDesc'
 					},{
 						label: '提交人',
 						prop: 'ENTERBYDesc'

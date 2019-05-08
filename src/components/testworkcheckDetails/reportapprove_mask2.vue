@@ -20,8 +20,7 @@
 					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.report.STATE!=3" class="pr10">
-								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i>审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -37,7 +36,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="report.TYPE" :disabled="true">
+											<el-input v-model="report.DETECTIONTYPE" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
@@ -235,7 +234,7 @@
                     STATE:'',//流程状态
 					STATEDesc:'',
 					V_NAME:'',//委托单位
-					TYPE:'',//检测类型
+					DETECTIONTYPE:'',//检测类型
 					ENTERBY:'',//提交人
 					ENTERBYDesc:'',//提交人描述
 					ENTERDATE:'',//提交时间
@@ -361,7 +360,6 @@
 			//这是查看
 			view(data) {
 				this.dataid = data.ID;
-				console.log(data.ID);
 				// this.report.DESCRIPTION = data.DESCRIPTION;
 				// this.report.STATEDesc = data.STATEDesc;
 				// this.report.REPORTNUM = data.REPORTNUM;

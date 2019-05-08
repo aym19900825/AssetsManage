@@ -34,12 +34,12 @@
 						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row :gutter="10">
                                 <el-col :span="7">
-									<el-form-item label="工作任务单编号" prop="WONUM" label-width="110px">
+									<el-form-item label="报告编号" prop="WONUM" label-width="110px">
 										<el-input v-model="searchList.WONUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托书编号" prop="PROXYNUM" label-width="100px">
+									<el-form-item label="委托单位名称" prop="PROXYNUM" label-width="100px">
 										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
@@ -56,13 +56,13 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="归还时间" prop="GHTIME" label-width="110px">
+									<el-form-item label="完成日期" prop="GHTIME" label-width="110px">
 										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="归还接收人" prop="GHUSER" label-width="100px">
+									<el-form-item label="完成方式" prop="GHUSER" label-width="100px">
 										<!-- <el-input v-model="searchList.GHUSER" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.GHUSER" 
@@ -85,14 +85,24 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="工作任务单编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('工作任务单编号')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="REPORT_NUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
 									</template>
+								</el-table-column>
+                                <el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
                                 <el-table-column label="委托书编号" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
 								<el-table-column label="委托书版本" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('委托书版本')!=-1">
+								</el-table-column>
+								<el-table-column label="检测类型" sortable prop="PROXY_TYPE" v-if="this.checkedName.indexOf('检测类型')!=-1">
+								</el-table-column>
+								<el-table-column label="签发人" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('签发人')!=-1">
+								</el-table-column>
+								<el-table-column label="签发时间" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('签发时间')!=-1">
+								</el-table-column>
+								<el-table-column label="报告份数" sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('报告份数')!=-1">
 								</el-table-column>
 								<el-table-column label="用印人" width="100" sortable prop="USERDesc" v-if="this.checkedName.indexOf('用印人')!=-1">
 								</el-table-column>
@@ -100,9 +110,9 @@
 								</el-table-column>
                                 <el-table-column label="用印人机构" width="120" sortable prop="SEAL_DEPARTMENTDesc" v-if="this.checkedName.indexOf('用印人机构')!=-1">
 								</el-table-column>
-                                <el-table-column label="归还时间" width="100" sortable prop="GHTIME" v-if="this.checkedName.indexOf('归还时间')!=-1" :formatter="dateFormat">
+                                <el-table-column label="完成日期" width="100" sortable prop="COMPDATE" v-if="this.checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
-                                <el-table-column label="归还接收人" width="120" sortable prop="GHUSERDesc" v-if="this.checkedName.indexOf('归还接收人')!=-1">
+                                <el-table-column label="完成方式" width="120" sortable prop="COMPMODEDesc" v-if="this.checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -154,46 +164,60 @@
 					label: '不活动'
 				}],
 				checkedName: [
-                    '工作任务单编号',
+                    '报告编号',
+					'委托单位名称',
 					'委托书编号',
-                    '委托书版本',
+					'委托书版本',
+					'检测类型',
+					'签发人',
+					'签发时间',
+					'报告份数',
                     '用印人',
                     '用印时间',
                     '用印人机构',
-                    '归还时间',
-                    '归还接收人',
+                    '完成日期',
+                    '完成方式',
 				],
 				tableHeader: [
                     {
-						label: '工作任务单编号',
-						prop: 'WONUM'
+						label: '报告编号',
+						prop: 'REPORT_NUM'
+					},{
+						label: '委托单位名称',
+						prop: 'V_NAME'
 					},{
 						label: '委托书编号',
 						prop: 'PROXYNUM'
-					},
-					{
+					},{
 						label: '委托书版本',
 						prop: 'PROXY_VERSION'
-					},
-					{
+					},{
+						label: '检测类型',
+						prop: 'PROXY_TYPE'
+					},{
+						label: '签发人',
+						prop: 'ENTERBY'
+					},{
+						label: '签发时间',
+						prop: 'ENTERDATE'
+					},{
+						label: '报告份数',
+						prop: 'REPORT_QUALITY'
+					},{
 						label: '用印人',
 						prop: 'USERDesc'
-					},
-					{
+					},{
 						label: '用印时间',
 						prop: 'USETIME'
-					},
-					{
+					},{
 						label: '用印人机构',
 						prop: 'SEAL_DEPARTMENTDesc'
-					},
-					{
-						label: '归还时间',
-						prop: 'GHTIME'
-					},
-					{
-						label: '归还接收人',
-						prop: 'GHUSERDesc'
+					},{
+						label: '完成日期',
+						prop: 'COMPDATE'
+					},{
+						label: '完成方式',
+						prop: 'COMPMODEDesc'
 					}
 				],
 				selUser: [],

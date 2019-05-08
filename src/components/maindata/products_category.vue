@@ -591,7 +591,15 @@
 					});
 					return;
 				}else{
-					this.$router.push({path: '/report' ,query: {appname: this.productType,id:this.selMenu[0].ID,}});
+					let routeData = this.$router.resolve({
+						path: "/report",
+						query: {
+						appname: this.productType,
+						id:this.selMenu[0].ID
+						}
+					});
+					window.open(routeData.href, '_blank');
+					// this.$router.push({path: '/report' ,query: {appname: this.productType,id:this.selMenu[0].ID,}});
 				}
 			},
 			// 配置关系

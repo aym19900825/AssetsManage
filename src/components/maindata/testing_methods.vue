@@ -565,8 +565,30 @@
 			},
 			// 报表
 			reportdata(){
-				this.reportData.app=this.inspectionMet;
-				this.$refs.reportChild.visible();
+				// this.reportData.app=this.inspectionMet;
+				// this.$refs.reportChild.visible();
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+						path: "/report",
+						query: {
+						appname: this.inspectionPro,
+						id:this.selMenu[0].ID
+						}
+					});
+					window.open(routeData.href, '_blank');
+				}
 			},
 			//时间格式化  
 			dateFormat(row, column) {

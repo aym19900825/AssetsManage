@@ -612,7 +612,7 @@
 						}
 						xhr.send();
 				}
-			// var selData = this.selMenu;
+			// var selData = this.selUser;
 			// if(selData.length == 0){
 			// 	this.message({
 			// 		message: '请选择导出数据',
@@ -646,6 +646,28 @@
 		reportdata(){
 			this.reportData.app=this.workplan;
 			this.$refs.reportChild.visible();
+			if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+						path: "/report",
+						query: {
+						appname: this.workplan,
+						id:this.selUser[0].ID
+						}
+					});
+					window.open(routeData.href, '_blank');
+				}
 		},
 		//发布
 		releasebtn(){

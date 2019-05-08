@@ -119,6 +119,7 @@
 												:fetch-suggestions="querySearchAsync" 
 												@select="handleSelect"
 												placeholder="请输入内容"
+                         :disabled="edit" 
 											>
 												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()"></el-button>
 											</el-autocomplete>

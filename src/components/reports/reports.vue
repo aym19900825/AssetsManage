@@ -220,7 +220,7 @@
 		    	}else if(item.name=="导入"){
 		    	 this.download();
 		    	}else if(item.name=="删除"){
-		    	 this.del();
+		    	 this.deluserinfo();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
 				}else if(item.name=="打印"){

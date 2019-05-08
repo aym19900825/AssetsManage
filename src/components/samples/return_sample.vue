@@ -351,10 +351,30 @@
 			modestsearch() {
 				this.search = !this.search;
 			},
-						//报表
+		    //报表
 			reportdata(){
-				this.reportData.app=this.itemreturn;
-				this.$refs.reportChild.visible();
+				if(this.selMenu.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selMenu.length > 1) {
+					this.$message({
+						message: '不可同时选择数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname: this.itemreturn,
+					id:this.selMenu[0].ID
+					}
+					});
+					window.open(routeData.href, '_blank');
+				}
 			},
 			// 删除
 			deluserinfo() {

@@ -703,7 +703,19 @@
 					});
 					return;
 				}else{
-					this.$router.push({path: '/report' ,query: {appname: this.inspectPro,id:this.selUser[0].ID,}});
+					// this.$router.push({path: '/report' ,query: {appname: this.inspectPro,id:this.selUser[0].ID,}});
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname: this.inspectPro,
+					id:this.selUser[0].ID
+					}
+					});
+					window.open(routeData.href, '_blank');
+					// 	var token = sessionStorage.getItem('access_token');
+					//  var url=this.basic_url + '/report?access_token='+token;
+					// // var url='http://baidu.com'
+					// window.open(url);
 				}
 			
 			},
@@ -764,6 +776,7 @@
 			},
 			// 删除
 			physicsDel() {
+				console.log(this.selUser[0]);
 				var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({

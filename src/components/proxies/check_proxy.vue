@@ -683,23 +683,22 @@
 			reportdata(){
 				// this.reportData.app=this.inspectPro2;
 				// this.$refs.reportChild.visible();
-					var file='inspectproxyjianyan_table.ureport.xml';
 				// this.reportData.app=this.inspectPro;
 				// this.$refs.reportChild.visible();
 					if(this.selUser.length == 0) {
 					this.$message({
-						message: '请您选择要修中止的数据',
+						message: '请您选择数据',
 						type: 'warning'
 					});
 					return;
 				} else if(this.selUser.length > 1) {
 					this.$message({
-						message: '不可同时中止多个数据',
+						message: '不可同时选择数据',
 						type: 'warning'
 					});
 					return;
 				}else{
-					this.$router.push({path: '/report' ,query: {appname: this.inspectPro2,id:this.selUser[0].ID,file:file,}});
+					this.$router.push({path: '/report' ,query: {appname: this.inspectPro2,id:this.selUser[0].ID}});
 				}
 			},
 			// 删除

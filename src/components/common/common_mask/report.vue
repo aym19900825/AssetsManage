@@ -110,6 +110,7 @@ import Config from '../../../config.js';
         pramList:[],
         dataInfo:{},
         userList:[],//人名
+        options:[],//检验检测类型
         activeName: 'first',
         tabPosition: 'left',
         noedit:false,//可编辑
@@ -271,7 +272,10 @@ import Config from '../../../config.js';
           this.appname=this.$route.query.appname;
            var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=单据类';
             this.$axios.get(url, {}).then((res) => {
+              console.log(res.data.datas);
               this.reportList = res.data.datas; 
+              console.log(123);
+              console.log(res.data.datas);
               var file=this.reportList[0].file;
               var token = sessionStorage.getItem('access_token');
               // this.appname=this.$route.query.appname;
@@ -351,11 +355,21 @@ import Config from '../../../config.js';
 				  this.dataInfo[value]=this.selval[0].username;
 					this.dialogVisibleuser = false;
 				}
+      },
+      //检验检测类型
+      inspectproType(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=BOOK_TYPE';
+				this.$axios.get(url, {}).then((res) => {
+          this.options = res.data;
+          console.log(res.data);
+				}).catch((wrong) => {
+				})	
 			},
     },
     mounted(){
         this.single();
         this.Statistics();
+        this.inspectproType();
         // this.singleRun();
     }
     

@@ -118,19 +118,8 @@ export default {
             }).catch(error => {
             });
         },
-        getTodoDing() {//获取当前用户执行中
-            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts?BizState=2';
-            this.$axios.get(url, {}).then((res) => {
-                this.toDoDing = res.data.datas;
-                var url = window.location.href;
-                if(url.indexOf('index') != -1){
-                    this.$emit('getTodoDing',this.toDoDing);
-                }
-            }).catch(error => {
-            });
-        },
         getTodoFinish() {//获取当前用户已完成
-            var url = this.basic_url + '/api-apps/app/flow/flow/todoCounts?BizState=3';
+            var url = this.basic_url + '/api-apps/app/flow/flow/completedItemCounts';
             this.$axios.get(url, {}).then((res) => {
                 this.toDoFinish = res.data.datas;
                 var url = window.location.href;
@@ -215,7 +204,6 @@ export default {
         this.getData();//调用getData
         this.getITEM_Roles();
         this.getTodoNumber();//待办工作
-        this.getTodoDing();//执行中
         this.getTodoFinish();//已完成
     }
 }

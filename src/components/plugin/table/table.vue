@@ -234,6 +234,14 @@ export default {
         var url = this.basic_url + '/api-apps/app/reportApprove';
       }else if(this.appName == 'reportApprove2'){
         var url = this.basic_url + '/api-apps/app/reportApprove?STATEAPPROVAL_where_in=8,0,17';
+      }else if(this.appName == 'qualitySupApp'){
+        var url = this.basic_url + '/api-apps/app/qualitySupApp';
+      }else if(this.appName == 'qualitySupApp2'){
+        var url = this.basic_url + '/api-apps/app/qualitySupApp?STATEAPPROVAL_where_in=8,0,17';
+      }else if(this.appName == 'reportOnhole'){
+        var url = this.basic_url + '/api-apps/app/reportOnhole?REPORT_TYPE_where_in=1';
+      }else if(this.appName == 'reportOnhole2'){
+        var url = this.basic_url + '/api-apps/app/reportOnhole?REPORT_TYPE_where_in=2';
       }else{
         var url = this.basic_url + '/api-apps/app/' + this.appName;
       }

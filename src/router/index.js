@@ -50,6 +50,7 @@ const useseal_management  = r => require.ensure([], () => r(require('@/component
 const quality_supervision2  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision2')), 'quality_supervision2')//质量监督抽查审核
 const quality_supervision  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision')), 'quality_supervision')//质量监督抽查审批
 const reportarchiving  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving')), 'reportarchiving')//报告归档
+const reportarchiving2  = r => require.ensure([], () => r(require('@/components/testworkcheck/reportarchiving2')), 'reportarchiving2')//检后报告归档
 const devices  = r => require.ensure([], () => r(require('@/components/devices')), 'devices')//设备管理
 const inspection_project  = r => require.ensure([], () => r(require('@/components/inspection_project')), 'inspection_project')//检验/检测项目管理
 const test  = r => require.ensure([], () => r(require('@/components/test')), 'test')//检验/检测项目管理
@@ -379,10 +380,15 @@ Vue.use(Router)
       name: 'quality_supervision2',
       component: quality_supervision2
     },
-     {//报告归档
+    {//报告归档
       path: '/reportarchiving',
       name: 'reportarchiving',
       component: reportarchiving
+    },
+    {//检后果报告归档
+      path: '/reportarchiving2',
+      name: 'reportarchiving2',
+      component: reportarchiving2
     },
     {//设备管理
       path: '/devices',

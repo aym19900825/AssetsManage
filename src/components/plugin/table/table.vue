@@ -74,7 +74,6 @@ export default {
         if (!!row.TRACE_TIME && (tranceTime-now<=0)) {
           return 'warning-row';
         }
-        console.log(tranceTime-now);
         if(!!row.TRACE_TIME && (tranceTime-now<=2*30*24*60*60*1000)){
           return 'yellow-row';
         }
@@ -171,7 +170,6 @@ export default {
       this.requestData();
     },
     requestData(opt){
-      console.log(this.searchList);
       this.loadding = true;
       var data = this.searchList;
       if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){
@@ -230,7 +228,8 @@ export default {
       }else if(this.appName == 'inspectionRepTem') {//检验/检测报告模板
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
       }else if(this.appName == 'group'){
-        var url = this.basic_url + '/api-user/groups';
+        // var url = this.basic_url + '/api-user/groups';
+        var url= this.basic_url + '/api-flow/flow/group';
       }else if(this.appName == 'reportApprove'){
         var url = this.basic_url + '/api-apps/app/reportApprove';
       }else if(this.appName == 'reportApprove2'){
@@ -258,7 +257,6 @@ export default {
           this.loadSign = true;
         }
         this.list = res.data.data;
-        console.log(res.data.data);
         this.page.totalCount = res.data.count;
 
         this.loading = false;//加载动画关闭

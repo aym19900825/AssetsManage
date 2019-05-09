@@ -52,7 +52,7 @@
 							<v-table ref="vtable" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="编号" width="250" sortable prop="num" v-if="this.checkedName.indexOf('编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.num}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.num}}</p>
 									</template>
 								</el-table-column>
 
@@ -245,14 +245,12 @@
 					});
 					return;
 				} else {
-					this.detailData = this.selUser[0];
-					this.$refs.usergroupmask.detail(this.selUser[0]);
+					this.$refs.usergroupmask.detail(this.selUser[0].id);
 				}
 			},
 			//查看用戶
-			view(data) {
-				this.detailData = data;
-				this.$refs.usergroupmask.view(this.detailData);
+			view(id) {
+				this.$refs.usergroupmask.view(id);
 			},
 		
 			//高级查询
@@ -270,7 +268,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-user/groups/deletes';
+					var url = this.basic_url + '/api-flow/flow/group/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -319,7 +317,7 @@
 					});
 					return;
 				}  else {
-					var url = this.basic_url + '/api-user/groups/physicsDel';
+					var url = this.basic_url + '/api-flow/flow/group/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

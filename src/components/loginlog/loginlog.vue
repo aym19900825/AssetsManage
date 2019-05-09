@@ -35,7 +35,7 @@
 						<el-form inline-message :model="searchList" label-width="100px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="日志描述" prop="logname">
+									<el-form-item label="登录描述" prop="logname">
 										<el-input v-model="searchList.logname" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
@@ -64,7 +64,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="日志描述" width="300" prop="logname" v-if="checkedName.indexOf('登录日志描述')!=-1">
+								<el-table-column label="登录描述" width="300" prop="logname" v-if="checkedName.indexOf('登录描述')!=-1">
 								</el-table-column>
 								<el-table-column label="登录账号" width="200" sortable prop="username" v-if="checkedName.indexOf('登录账号')!=-1">
 								</el-table-column>
@@ -114,13 +114,13 @@
 				commentArr: {},
 				value: '',
 				checkedName: [
-					'日志描述',
+					'登录描述',
 					'登录账号',
 					'登录IP',
 					'登录时间',
 				],
 				tableHeader: [{
-						label: '日志描述',
+						label: '登录描述',
 						prop: 'logname'
 					},
 					{

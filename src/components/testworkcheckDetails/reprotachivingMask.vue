@@ -30,27 +30,71 @@
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告归档" name="1">
-									<!-- <el-row :gutter="20" class="pb10">
-										<el-col :span="4" class="pull-right">
-												<el-input  v-model="report.STATEDesc" :disabled="edit">
-														<template slot="prepend">状态</template>
-												</el-input>
+									<el-row :gutter="20" class="pb10">
+										<el-col :span="5" class="pull-right pr10">
+											<el-input  v-model="report.STATEDesc" :disabled="edit">
+												<template slot="prepend">流程状态</template>
+											</el-input>
 										</el-col>
-									</el-row> -->
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="report.PROXY_TYPEDesc" :disabled="edit">
+												<template slot="prepend">检测类型</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="report.REPORT_NUM" :disabled="edit">
+												<template slot="prepend">报告编号</template>
+											</el-input>
+										</el-col>
+									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="报告编号" prop="REPORTNUM">
-												<el-input v-model="report.REPORTNUM" :disabled="true" placeholder="自动生成"></el-input>
+											<el-form-item label="委托单位名称" prop="V_NAME">
+												<el-input v-model="report.V_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="报告名称" prop="REPORTNAME">
-												<el-input v-model="report.REPORTNAME" :disabled="noedit"></el-input>
+											<el-form-item label="委托书编号" prop="PROXYNUM">
+												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="委托书版本" prop="PROXY_VERSION">
+												<el-input v-model="report.PROXY_VERSION" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-input v-model="report.COMPDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="委托书编号" prop="PROXYNUM">
-												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											<el-form-item label="完成方式" prop="COMPMODEDesc">
+												<el-input v-model="report.COMPMODEDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="报告份数" prop="REPORT_QUALITY">
+												<el-input v-model="report.REPORT_QUALITY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="承检单位" prop="CJDWDesc">
+												<el-input v-model="report.CJDWDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检负责人" prop="LEADERDesc">
+												<el-input v-model="report.LEADERDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="报告页数" prop="REPORT_PAGES">
+												<el-input v-model="report.REPORT_PAGES"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -131,28 +175,6 @@
 			docTable,
 			},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
 			return {
 				approvingData:{},//流程传的数据
 				falg:false,//保存验证需要的
@@ -178,8 +200,8 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
-					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
+					ONHOLEPERSON: [{required: true, trigger: 'change', message: '请选择'}],//归档人
+					ONHOLTIME: [{required: true, trigger: 'change', message: '请选择'}],//归档时间
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -199,7 +221,7 @@
 				start:false,//流程按钮
                 report:{
                     id:'',	//报告ID
-                    REPORTNUM:'',	//报告编号
+                    REPORT_NUM:'',	//报告编号
                     REPORTNAME:'',	//报告名称
                     PROXYNUM:'',	//委托书编号
                     ONHOLEPERSON:'',	//归档人
@@ -397,7 +419,7 @@
 									this.docParm.model = 'edit';
 									this.$refs.docTable.autoLoad();
 									this.report.id = res.data.datas.id;
-									this.report.REPORTNUM = res.data.datas.REPORTNUM;
+									this.report.REPORT_NUM = res.data.datas.REPORT_NUM;
 								}else{
 									this.$message({
 										message: '保存成功',
@@ -452,7 +474,7 @@
 			reset(){
 				this.report = {
                     ID:'',	//报告ID
-                    REPORTNUM:'',	//报告编号
+                    REPORT_NUM:'',	//报告编号
                     REPORTNAME:'',	//报告名称
                     PROXYNUM:'',	//委托书编号
                     ONHOLEPERSON:'',	//归档人

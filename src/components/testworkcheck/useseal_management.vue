@@ -85,9 +85,9 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="报告编号" width="155" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}</p>
 									</template>
 								</el-table-column>
                                 <el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
@@ -100,11 +100,11 @@
 								</el-table-column>
 								<el-table-column label="流程状态" width="140"  sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
-								<el-table-column label="签发人" width="100"  sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('签发人')!=-1">
+								<el-table-column label="签发人" width="100"  sortable prop="ENTERBYDesc" v-if="this.checkedName.indexOf('签发人')!=-1">
 								</el-table-column>
-								<el-table-column label="签发时间" width="140"  sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('签发时间')!=-1">
+								<el-table-column label="签发时间" width="140"  sortable prop="ENTERDATE" v-if="this.checkedName.indexOf('签发时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="报告份数" width="100"  sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('报告份数')!=-1">
+								<el-table-column label="报告份数" width="100"  sortable prop="REPORT_QUALITY" v-if="this.checkedName.indexOf('报告份数')!=-1">
 								</el-table-column>
 								<el-table-column label="用印人" width="100" sortable prop="USERDesc" v-if="this.checkedName.indexOf('用印人')!=-1">
 								</el-table-column>
@@ -202,7 +202,7 @@
 						prop: 'STATEDesc'
 					},{
 						label: '签发人',
-						prop: 'ENTERBY'
+						prop: 'ENTERBYDesc'
 					},{
 						label: '签发时间',
 						prop: 'ENTERDATE'

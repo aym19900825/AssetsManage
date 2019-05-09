@@ -14,6 +14,7 @@
       element-loading-text="加载中…"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.9)" :row-class-name="tableRowClassName">
+      
       <el-table-column type="selection" fixed width="55" align="center">
       </el-table-column>
       <el-table-column type="index" label="序号" width="50">

@@ -4,7 +4,7 @@
 			<el-form inline-message :model="searchList">
 				<el-row :gutter="5">
 					<el-col :span="6">
-						<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="100px">
+						<el-form-item label="委托方名称名称" prop="V_NAME"  label-width="120px">
 							<el-input v-model="searchList.V_NAME"></el-input>
 						</el-form-item>
 					</el-col>
@@ -26,7 +26,7 @@
 				</el-row>
 				<el-row :gutter="5">
 					<el-col :span="6">
-						<el-form-item label="完成日期" prop="COMPDATE" label-width="100px">
+						<el-form-item label="完成日期" prop="COMPDATE" label-width="120px">
 							<el-date-picker v-model="searchList.COMPDATE" type="date" placeholder="完成日期" value-format="yyyy-MM-dd HH:mm:ss" style="width: 100%">
 						</el-date-picker>
 						</el-form-item>
@@ -38,7 +38,7 @@
 				</el-row>
 			</el-form>
 			<el-table  ref="table" :data="inspectList" border stripe :header-cell-style="rowClass"
-			 style="width: 100%;" height="360px"
+			 style="width: 100%;" height="300px"
 			  :default-sort="{prop:'inspectList', order: 'descending'}"
 				 @selection-change="SelChange" 
 				 @current-change="setSel"

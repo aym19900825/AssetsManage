@@ -29,32 +29,33 @@
 						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="用印管理" name="1">
+								<el-collapse-item title="用印信息" name="1">
 									<el-row class="pb10">
-										<el-col :span="3" class="pull-right">
+										<el-col :span="5" class="pull-right pr10">
 											<el-input v-model="USESEAL.STATEDesc" :disabled="true">
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="3" class="pull-right">
-											<el-input v-model="USESEAL.STATEDesc" :disabled="true">
-												<template slot="prepend">委托书</template>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="USESEAL.PROXY_TYPE" :disabled="true">
+												<template slot="prepend">检测类型</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="USESEAL.REPORT_NUM" :disabled="true">
+												<template slot="prepend">报告编号</template>
 											</el-input>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="工作任务单编号" prop="WONUM">
-												<el-input v-model="USESEAL.WONUM" :disabled="true" placeholder="自动生成">
-                                                    <el-button slot="append" icon="el-icon-search" @click="addworkorder"></el-button>
-                                                </el-input>
+											<el-form-item label="委托单位名称" prop="V_NAME">
+												<el-input v-model="USESEAL.V_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM">
-												<el-input v-model="USESEAL.PROXYNUM" :disabled="true">
-                                                    <el-button slot="append" icon="el-icon-search" @click="addinspect"></el-button>
-                                                </el-input>
+												<el-input v-model="USESEAL.PROXYNUM" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -63,6 +64,26 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
+
+									
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-input v-model="USESEAL.COMPDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+                                        <el-col :span="8">
+											<el-form-item label="完成方式" prop="COMPMODEDesc">
+												<el-input v-model="USESEAL.COMPMODEDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="报告份数" prop="REPORT_QUALITY">
+												<el-input v-model="USESEAL.REPORT_QUALITY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
                                     <el-row>
                                          <el-col :span="8">
 											<el-form-item label="用印人" prop="USERDesc">
@@ -78,14 +99,33 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-                                            <el-form-item label="用印人机构" prop="SEAL_DEPARTMENT">
-                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENT" filterable allow-create default-first-option placeholder="请选择">
+                                            <el-form-item label="用印人机构" prop="SEAL_DEPARTMENTDesc">
+                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENTDesc" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;">
                                                     <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
                                                 </el-select>
                                             </el-form-item>
 										</el-col>
 									</el-row>
-                                    <el-row>
+
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="签发人" prop="ENTERBYDesc">
+												<el-input v-model="USESEAL.ENTERBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+                                        <el-col :span="8">
+											<el-form-item label="签发日期" prop="ENTERDATE">
+												<el-input v-model="USESEAL.ENTERDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="用印管理员" prop="ENTERBYDesc">
+												<el-input v-model="USESEAL.ENTERBYDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+                                    <!-- <el-row>
                                         <el-col :span="8">
 											<el-form-item label="归还时间" prop="GHTIME">
 												<el-date-picker v-model="USESEAL.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;">
@@ -99,7 +139,7 @@
                                                 </el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
+									</el-row> -->
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
@@ -132,12 +172,10 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer">
-							<el-button type="primary" @click="saveAndUpdate()" v-show="!viewtitle">保存</el-button>
-							<el-button type="success" @click="submited()" v-show="!addtitle">已确认盖章</el-button>
-							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
-							<el-button type="primary" @click="readAuth()" v-show ="!addtitle">查看文件</el-button>
-							<el-button @click="close" v-show="!viewtitle">取消</el-button>
+						<div class="content-footer" v-show="!addtitle">
+							<el-button type="success" @click="submited">确认盖章</el-button>
+							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -145,48 +183,57 @@
             <!-- 人员 -->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogPerson" width="60%"  title="用户信息" >
 				<el-form inline-message :model="searchList">
-							<el-row :gutter="10">
-								<!-- <el-col :span="5">
-									<el-form-item label="用户名" prop="username" label-width="55px">
-										<el-input v-model="searchList.username">
-										</el-input>
-									</el-form-item>
-								</el-col> -->
-								<el-col :span="5">
-									<el-form-item label="姓名" prop="nickname" label-width="45px">
-										<el-input v-model="searchList.nickname">
-										</el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="4">
-                                    <el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-                                    <el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
-                                </el-col>
-							</el-row>
-						</el-form>
+						<el-row :gutter="10">
+							<el-col :span="5">
+								<el-form-item label="用户名" prop="username" label-width="55px">
+									<el-input v-model="searchList.username">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="5">
+								<el-form-item label="姓名" prop="nickname" label-width="45px">
+									<el-input v-model="searchList.nickname">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
 
-					<el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="350px" style="width: 100%;" :default-sort="{prop:'gridDataList', order: 'descending'}" @selection-change="SelChange"
-					v-loadmore="loadMore"
-					v-loading="loading"  
-					element-loading-text="加载中…"
-					element-loading-spinner="el-icon-loading"
-					element-loading-background="rgba(255, 255, 255, 0.9)">
-
-					<el-table-column type="selection" width="55" fixed>
-					</el-table-column>
-					<el-table-column label="ID" sortable width="150px" prop="id">
-					</el-table-column>
-					<el-table-column label="姓名" sortable prop="nickname">
-					</el-table-column>
-					<el-table-column label="机构" sortable width="200px" prop="deptName">
-					</el-table-column>
-					<el-table-column label="公司" sortable width="200px" prop="companyName">
-					</el-table-column>
-				</el-table>
-
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-
+					<el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="350px" style="width: 100%;"
+					:default-sort="{prop:'gridDataList', order: 'descending'}"
+					@selection-change="SelChange"
+						v-loading="loading"
+						element-loading-text="加载中…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
+						<el-table-column type="selection" width="55" fixed></el-table-column>
+						<el-table-column type="index" label="序号" width="50">
+							<template slot-scope="scope">
+							<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+							</template>
+						</el-table-column>
+						<el-table-column label="用户名" sortable width="200px" prop="username">
+						</el-table-column>
+						<el-table-column label="姓名" sortable prop="nickname">
+						</el-table-column>
+						<el-table-column label="机构" sortable width="200px" prop="deptName">
+						</el-table-column>
+					</el-table>
+					<el-pagination
+						background
+						class="text-right pt10"
+						@size-change="sizeChange"
+						@current-change="currentChange"
+						:current-page="page.currentPage"
+						:page-sizes="[10, 20, 30, 40]"
+						:page-size="page.pageSize"
+						layout="total, sizes, prev, pager, next"
+						:total="page.totalCount">
+					</el-pagination>
 				<span slot="footer" class="dialog-footer">
 	    			<el-button type="primary" @click="confirmPerson">确 定</el-button>
 	    			<el-button @click="DialogClose">取 消</el-button>
@@ -251,8 +298,9 @@
 					USETIME:[
 						{required: true, message: '请选择', trigger: 'change'}
 					],
-					// NUM: [{required: false,trigger: 'change',validator: validateNum,}],
-					// TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
+					SEAL_DEPARTMENTDesc:[
+						{required: true, message: '请选择', trigger: 'change'}
+					],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -294,6 +342,7 @@
                 pertips:'',//选择人员参数
                 gridDataList: [], //人员彈出框的數據
                 searchList:{
+					username:'',
                     nickname:''
                 },
                 page: {
@@ -340,7 +389,8 @@
 				});
             },
             resetbtn(){
-                this.searchList =  { //点击高级搜索后显示的内容
+				this.searchList =  { //点击高级搜索后显示的内容
+					username:'',
                     nickname:''
                 };
             },
@@ -455,12 +505,29 @@
 						});
 					}
 				});			
-            },
+			},
+			loadMore () {//滚动加载数据
+			   if (this.loadSign) {
+			     this.loadSign = false
+			     this.page.currentPage++
+			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
+			       return
+			     }
+			     setTimeout(() => {
+			       this.loadSign = true
+			     }, 1000)
+			     this.addperson();//用户列表数据
+			   }
+			},
+			//分页
             sizeChange(val) {
 				this.page.pageSize = val;
+				this.addperson();//用户列表数据
 			},
+			//当前页
 			currentChange(val) {
 				this.page.currentPage = val;
+				this.addperson();//用户列表数据
             },
             addworkorder(){//工作任务单
                 this.$refs.workorderchild.visible();
@@ -489,8 +556,8 @@
                 var data = {
 					page: this.page.currentPage,
                     limit: this.page.pageSize,
-                    nickname: this.searchList.nickname,
 					username: this.searchList.username,
+                    nickname: this.searchList.nickname,
 				}
                 var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
@@ -569,19 +636,7 @@
 				this.$emit('request');
 				this.reset();//关闭弹框去掉勾选
 			},
-			loadMore () {//滚动加载数据
-			   if (this.loadSign) {
-			     this.loadSign = false
-			     this.page.currentPage++
-			     if (this.page.currentPage > Math.ceil(this.page.totalCount/this.page.pageSize)) {
-			       return
-			     }
-			     setTimeout(() => {
-			       this.loadSign = true
-			     }, 1000)
-			     this.requestData();
-			   }
-			},
+			
 			open(){
 				this.show = true;
 			},
@@ -754,19 +809,7 @@
 				});
 			},
 			
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save();
-				this.reset();
-				this.show = true;
-			},
+			
 			//已确认盖章
 			submited(){
 				var url = this.basic_url + '/api-apps/app/sealUse/operate/createReportData?id='+this.dataid;

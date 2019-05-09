@@ -149,7 +149,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
-							<el-button title="查看报告文件" type="primary" @click="readAuth">查看报告文件</el-button>
+							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>

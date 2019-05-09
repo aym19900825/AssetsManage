@@ -33,14 +33,14 @@
 					<div v-show="search">
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
-                                <el-col :span="7">
+                                <!-- <el-col :span="7">
 									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">
 										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
-								</el-col>
+								</el-col> -->
 								<el-col :span="7">
-									<el-form-item label="报告编号" prop="DESCRIPTION"  label-width="80px">
-										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="报告编号" prop="REPORT_NUM" label-width="80px">
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -57,23 +57,28 @@
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
                                 <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
 								</el-table-column> -->
-								<el-table-column label="报告编号" width="220" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告编号" width="220" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}
-										</p>
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位名称" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">
+								<el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="检测类型" width="140" sortable prop="DETECTIONTYPE" v-if="checkedName.indexOf('检测类型')!=-1">
+								<el-table-column label="委托书编号" width="140" sortable prop="PROXYNUM" v-if="checkedName.indexOf('委托书编号')!=-1">
+								</el-table-column>
+								<el-table-column label="委托书版本" width="100" prop="VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
+								</el-table-column>
+								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
-								<el-table-column label="当前责任人" width="120" sortable prop="EXECUTOR" v-if="checkedName.indexOf('当前责任人')!=-1">
+								<el-table-column label="承检单位" width="140" sortable prop="CJDW" v-if="checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
-								<el-table-column label="提交人" width="120" sortable prop="ENTERBYDesc" v-if="checkedName.indexOf('提交人')!=-1">
+								<el-table-column label="主检负责人" width="120" sortable prop="LEADER" v-if="checkedName.indexOf('主检负责人')!=-1">
 								</el-table-column>
-								<el-table-column label="提交时间" width="160" sortable prop="ENTERDATE" v-if="checkedName.indexOf('提交时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
+								</el-table-column>
+								<el-table-column label="完成方式" width="120" sortable prop="COMPMODEDesc" v-if="checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -82,7 +87,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<reportapprovemask  ref="reportapprove" @request="requestData" v-bind:page=page></reportapprovemask>
+			<reportsendmask ref="reportsend" @request="requestData" v-bind:page=page></reportsendmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -93,7 +98,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import reportapprovemask from '../testworkcheckDetails/reportapprove_mask2.vue'
+	import reportsendmask from '../testworkcheckDetails/reportsend_mask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
@@ -103,14 +108,14 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
-			'reportapprovemask': reportapprovemask,
+			'reportsendmask': reportsendmask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
-				appName: 'reportApprove2',
+				appName: 'reportSend',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				commentArr: {},
@@ -126,38 +131,46 @@
 				}],
 				checkedName: [
 					'报告编号',
-					'报告名称',
-                    '委托单位名称',
+					'委托单位名称',
+                    '委托书编号',
+					'委托书版本',
 					'检测类型',
 					'流程状态',
-					'当前责任人',
-					'提交人',
-					'提交时间',
+					'承检单位',
+					'主检负责人',
+					'完成日期',
+					'完成方式',
 				],
 				tableHeader: [{
 						label: '报告编号',
-						prop: 'DESCRIPTION'
-					},{
-						label: '报告名称',
-						prop: 'FILENAME'
+						prop: 'REPORT_NUM'
 					},{
 						label: '委托单位名称',
 						prop: 'V_NAME'
 					},{
+						label: '委托书编号',
+						prop: 'PROXYNUM'
+					},{
+						label: '委托书版本',
+						prop: 'VERSION'
+					},{
 						label: '检测类型',
-						prop: 'DETECTIONTYPE'
+						prop: 'PROXY_TYPEDesc'
 					},{
 						label: '流程状态',
-						prop: 'STATE'
+						prop: 'STATEDesc'
 					},{
-						label: '当前责任人',
-						prop: 'EXECUTOR'
+						label: '承检单位',
+						prop: 'CJDWDesc'
 					},{
-						label: '提交人',
-						prop: 'ENTERBYDesc'
+						label: '主检负责人',
+						prop: 'LEADERDesc'
 					},{
-						label: '提交时间',
-						prop: 'ENTERDATE'
+						label: '完成日期',
+						prop: 'COMPDATE'
+					},{
+						label: '完成方式',
+						prop: 'COMPMODEDesc'
 					},
 				],
 				selUser: [],
@@ -183,6 +196,7 @@
 				buttons:[],
 			}
 		},
+		
 		methods: {
 			//选择数据
 			setSelData(val){
@@ -225,7 +239,7 @@
 		    },
 			//添加类别
 			openAddMgr() {
-				this.$refs.reportapprove.visible();
+				this.$refs.reportsend.visible();
 			},
 			//修改
 			modify() {
@@ -247,7 +261,7 @@
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
 						});
-						this.$refs.reportapprove.view(this.selUser[0]);
+						this.$refs.reportsend.view(this.selUser[0]);
 					}
 					//驳回
 					else if(this.selUser[0].STATE == 0) {
@@ -273,14 +287,14 @@
 							}
 						});
 					}else{
-						this.$refs.reportapprove.detail(this.selUser[0]);	
+						this.$refs.reportsend.detail(this.selUser[0]);	
 					}
 				}
 			},
 			//查看
 			view(data) {
 				console.log(data);
-				this.$refs.reportapprove.view(data);
+				this.$refs.reportsend.view(data);
 			},
 			//高级查询
 			modestsearch() {
@@ -301,7 +315,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/reportApprove/deletes';
+					var url = this.basic_url + '/api-apps/app/reportSend/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -348,7 +362,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/reportApprove/physicsDel';
+					var url = this.basic_url + '/api-apps/app/reportSend/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

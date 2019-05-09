@@ -35,7 +35,7 @@
 						<el-form inline-message :model="searchList" label-width="100px">
 							<el-row :gutter="10">
 								<el-col :span="5">
-									<el-form-item label="日志名称" prop="logname">
+									<el-form-item label="日志描述" prop="logname">
 										<el-input v-model="searchList.logname" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
@@ -47,7 +47,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="用户账号" prop="username">
+									<el-form-item label="操作用户" prop="username">
 										<el-input v-model="searchList.username" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
@@ -64,11 +64,13 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="日志名称" sortable="logname" prop="logname" v-if="checkedName.indexOf('日志名称')!=-1">
+								<el-table-column label="日志描述" sortable prop="logname" v-if="checkedName.indexOf('日志描述')!=-1">
 								</el-table-column>
-								<el-table-column label="日志类型" width="100" sortable="custom" prop="logtype" v-if="checkedName.indexOf('登录ip')!=-1">
+								<el-table-column label="日志类型" width="120" sortable prop="logtype" v-if="checkedName.indexOf('日志类型')!=-1">
 								</el-table-column>
-								<el-table-column label="用户账号" sortable="custom" prop="username" v-if="checkedName.indexOf('用户账号')!=-1">
+								<el-table-column label="操作用户" width="200" sortable prop="username" v-if="checkedName.indexOf('操作用户')!=-1">
+								</el-table-column>
+								<el-table-column label="操作时间" width="180" sortable prop="createtime" v-if="checkedName.indexOf('操作时间')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -112,24 +114,29 @@
 				commentArr: {},
 				value: '',
 				checkedName: [
-					'日志名称',
-					'用户账号',
-					'登录ip',
+					'日志描述',
+					'日志类型',
+					'操作用户',
+					'操作时间',
 					// '登录开始时间',
 					// '登录截止时间',
 					// '修改时间'
 				],
 				tableHeader: [{
-						label: '日志名称',
+						label: '日志描述',
 						prop: 'logname'
 					},
 					{
-						label: '用户账号',
+						label: '日志类型',
 						prop: 'username'
 					},
 					{
-						label: '登录ip',
-						prop: 'ip'
+						label: '操作用户',
+						prop: 'username'
+					},
+					{
+						label: '操作时间',
+						prop: 'createtime'
 					},
 					// {
 					// 	label: '登录开始时间',

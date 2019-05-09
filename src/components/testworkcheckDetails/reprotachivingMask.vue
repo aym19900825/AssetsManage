@@ -36,21 +36,65 @@
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="report.PROXY_TYPEDesc" :disabled="edit">
+												<template slot="prepend">检测类型</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="report.REPORT_NUM" :disabled="edit">
+												<template slot="prepend">报告编号</template>
+											</el-input>
+										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="报告编号" prop="REPORT_NUM">
-												<el-input v-model="report.REPORT_NUM" :disabled="true" placeholder="自动生成"></el-input>
+											<el-form-item label="委托单位名称" prop="V_NAME">
+												<el-input v-model="report.V_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="报告名称" prop="REPORTNAME">
-												<el-input v-model="report.REPORTNAME" :disabled="noedit"></el-input>
+											<el-form-item label="委托书编号" prop="PROXYNUM">
+												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="委托书版本" prop="PROXY_VERSION">
+												<el-input v-model="report.PROXY_VERSION" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-input v-model="report.COMPDATE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="委托书编号" prop="PROXYNUM">
-												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											<el-form-item label="完成方式" prop="COMPMODEDesc">
+												<el-input v-model="report.COMPMODEDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="报告份数" prop="REPORT_QUALITY">
+												<el-input v-model="report.REPORT_QUALITY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="承检单位" prop="CJDWDesc">
+												<el-input v-model="report.CJDWDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检负责人" prop="LEADERDesc">
+												<el-input v-model="report.LEADERDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="报告页数" prop="REPORT_PAGES">
+												<el-input v-model="report.REPORT_PAGES"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

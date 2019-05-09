@@ -79,15 +79,27 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
+								<el-table-column label="委托单位名称" width="280" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
+								</el-table-column>
+								<el-table-column label="委托书编号" width="140" sortable prop="PROXYNUM" v-if="this.checkedName.indexOf('委托书编号')!=-1">
+								</el-table-column>
+								<el-table-column label="委托书版本" width="140" sortable prop="VERSION" v-if="this.checkedName.indexOf('委托书版本')!=-1">
+								</el-table-column>
+								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
+								</el-table-column>
+								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
+								</el-table-column>
+								<el-table-column label="承检单位" width="140" sortable prop="CJDWDesc" v-if="checkedName.indexOf('承检单位')!=-1">
+								</el-table-column>
+								<el-table-column label="主检负责人" width="120" sortable prop="LEADERDesc" v-if="checkedName.indexOf('主检负责人')!=-1">
 								</el-table-column>
 								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSON" v-if="this.checkedName.indexOf('归档人')!=-1">
 								</el-table-column>
 								<el-table-column label="归档时间" width="185" sortable prop="ONHOLTIME" v-if="this.checkedName.indexOf('归档时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-                                <el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" v-if="this.checkedName.indexOf('修改时间')!=-1" :formatter="dateFormat">
+								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
-                                <el-table-column label="机构" width="100" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('机构')!=-1">
+								<el-table-column label="完成方式" width="120" sortable prop="COMPMODEDesc" v-if="checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -140,19 +152,43 @@
 				}],
 				checkedName: [
                     '报告编号',
-                    '委托单位',
+					'委托单位名称',
+					'委托书编号',
+					'委托书版本',
+					'检测类型',
+					'流程状态',
+					'承检单位',
+					'主检负责人',
                     '归档人',
                     '归档时间',
-                    '修改时间',
-                    '机构',
+                    '完成日期',
+                    '完成方式',
 				],
 				tableHeader: [
                     {
 						label: '报告编号',
 						prop: 'REPORT_NUM'
 					},{
-						label: '委托单位',
+						label: '委托单位名称',
 						prop: 'V_NAME'
+					},{
+						label: '委托书编号',
+						prop: 'PROXYNUM'
+					},{
+						label: '委托书版本',
+						prop: 'VERSION'
+					},{
+						label: '检测类型',
+						prop: 'PROXY_TYPEDesc'
+					},{
+						label: '流程状态',
+						prop: 'STATEDesc'
+					},{
+						label: '承检单位',
+						prop: 'CJDWDesc'
+					},{
+						label: '主检负责人',
+						prop: 'LEADERDesc'
 					},{
 						label: '归档人',
 						prop: 'ONHOLEPERSON'
@@ -160,11 +196,11 @@
 						label: '归档时间',
 						prop: 'ONHOLTIME'
 					},{
-						label: '修改时间',
-						prop: 'CHANGEDATE'
+						label: '完成日期',
+						prop: 'COMPDATE'
 					},{
-						label: '机构',
-						prop: 'DEPTIDDesc'
+						label: '完成方式',
+						prop: 'COMPMODEDesc'
 					},
 				],
 				selUser: [],

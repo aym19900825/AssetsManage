@@ -72,9 +72,9 @@
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
-								<el-table-column label="承检单位" width="140" sortable prop="CJDW" v-if="checkedName.indexOf('承检单位')!=-1">
+								<el-table-column label="承检单位" width="140" sortable prop="CJDWDesc" v-if="checkedName.indexOf('承检单位')!=-1">
 								</el-table-column>
-								<el-table-column label="主检负责人" width="120" sortable prop="LEADER" v-if="checkedName.indexOf('主检负责人')!=-1">
+								<el-table-column label="主检负责人" width="120" sortable prop="LEADERDesc" v-if="checkedName.indexOf('主检负责人')!=-1">
 								</el-table-column>
 								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
 								</el-table-column>

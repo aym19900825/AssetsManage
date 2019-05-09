@@ -39,13 +39,13 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
-										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="委托单位名称" prop="V_NAME" label-width="80px">
+										<el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left:2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -57,8 +57,7 @@
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="报告编号" width="155" sortable prop="REPORT_NUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
 									</template>
 								</el-table-column>
 								<el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">

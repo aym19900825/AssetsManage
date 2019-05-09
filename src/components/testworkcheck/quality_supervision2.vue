@@ -55,15 +55,26 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="编码" width="155" sortable prop="REPORTNUM" v-if="this.checkedName.indexOf('编码')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="REPORT_NUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
-										</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
 									</template>
 								</el-table-column>
-                                <el-table-column label="报告描述" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('报告描述')!=-1">
+								<el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="流程状态" sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
+								<el-table-column label="委托书编号" width="140" sortable prop="PROXYNUM" v-if="checkedName.indexOf('委托书编号')!=-1">
+								</el-table-column>
+								<el-table-column label="委托书版本" width="100" prop="VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
+								</el-table-column>
+								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
+								</el-table-column>
+								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
+								</el-table-column>
+                                <el-table-column label="检测结果" width="140" sortable prop="SYNTHETICAL" v-if="this.checkedName.indexOf('检测结果')!=-1">
+								</el-table-column>
+								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
+								</el-table-column>
+								<el-table-column label="完成方式" width="120" sortable prop="COMPMODEDesc" v-if="checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -115,21 +126,43 @@
 					label: '不活动'
 				}],
 				checkedName: [
-                    '编码',
-					'报告描述',
-                    '流程状态',
+					'报告编号',
+					'委托单位名称',
+                    '委托书编号',
+					'委托书版本',
+					'检测类型',
+					'流程状态',
+					'检测结果',
+					'完成日期',
+					'完成方式',
 				],
-				tableHeader: [
-                    {
-						label: '编码',
-						prop: 'REPORTNUM'
+				tableHeader: [{
+                    	label: '报告编号',
+						prop: 'REPORT_NUM'
 					},{
-						label: '报告描述',
-						prop: 'DESCRIPTION'
-					},
-					{
+						label: '委托单位名称',
+						prop: 'V_NAME'
+					},{
+						label: '委托书编号',
+						prop: 'PROXYNUM'
+					},{
+						label: '委托书版本',
+						prop: 'VERSION'
+					},{
+						label: '检测类型',
+						prop: 'PROXY_TYPEDesc'
+					},{
 						label: '流程状态',
-						prop: 'STATE'
+						prop: 'STATEDesc'
+					},{
+						label: '检测结果',
+						prop: 'SYNTHETICAL'
+					},{
+						label: '完成日期',
+						prop: 'COMPDATE'
+					},{
+						label: '完成方式',
+						prop: 'COMPMODEDesc'
 					},
 				],
 				selUser: [],

@@ -15,32 +15,9 @@
 				<div class="fixed-table-toolbar clearfix">
 					<div class="bs-bars pull-left">
 						<div class="hidden-xs" id="roleTableToolbar" role="group">
-							<button v-for="item in buttons" class="btn mr5" :class="item.style" @click="getbtn(item)">
+							<button v-for="item in buttons" :key='item.id' :class="'btn mr5 '+ item.style" @click="getbtn(item)">
 									<i :class="item.icon"></i>{{item.name}}
 							</button>
-							<!-- <button type="button" class="btn btn-green" @click="openAddMgr">
-	                        	<i class="icon-add"></i>添加
-	              			 </button>
-							<button type="button" class="btn btn-blue button-margin" @click="modify">
-							    <i class="icon-edit"></i>修改
-							</button>
-							<button type="button" class="btn btn-red button-margin" @click="deluserinfo">
-							    <i class="icon-trash"></i>删除
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="importData">
-							    <i class="icon-upload-cloud"></i>导入
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="exportData">
-							    <i class="icon-download-cloud"></i>导出
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="Printing">
-							    <i class="icon-print"></i>打印
-							</button>
-							<button type="button" class="btn btn-primarys button-margin" @click="modestsearch">
-					    		<i class="icon-search"></i>高级查询
-					    		<i class="icon-arrow1-down" v-show="down"></i>
-					    		<i class="icon-arrow1-up" v-show="up"></i>
-							</button> -->
 						</div>
 					</div>
 					<div class="columns columns-right btn-group pull-right">
@@ -69,12 +46,6 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-							<!-- <el-table-column label="序号" sortable prop="id" v-if="checkedName.indexOf('序号')!=-1">
-								<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.id}}
-									</p>
-								</template>
-							</el-table-column> -->
 							<el-table-column label="报表名称" width="200" sortable prop="code" v-if="checkedName.indexOf('报表名称')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.code}}
@@ -83,18 +54,12 @@
 							</el-table-column>
 							<el-table-column label="报表文件" width="220" sortable prop="name" v-if="checkedName.indexOf('报表文件')!=-1">
 							</el-table-column>
-							<!-- <el-table-column label="报表文件" width="230" sortable prop="file" v-if="this.checkedName.indexOf('报表文件')!=-1">
-							</el-table-column> -->
 							<el-table-column label="备注" sortable prop="remarks" v-if="checkedName.indexOf('备注')!=-1">
 							</el-table-column>
 							<el-table-column label="类型" sortable width="140" prop="type" v-if="checkedName.indexOf('类型')!=-1">
 							</el-table-column>						
-							<!-- <el-table-column label="录入人" sortable width="120" prop="createby" v-if="this.checkedName.indexOf('录入人')!=-1">
-							</el-table-column>	 -->
 							<el-table-column label="录入时间" width="160" sortable prop="createdate" v-if="checkedName.indexOf('录入时间')!=-1">
 							</el-table-column>	
-							<!-- <el-table-column label="修改人" width="120" sortable prop="updateby" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column> -->
 							<el-table-column label="修改时间" width="160" sortable prop="updatedate" v-if="checkedName.indexOf('修改时间')!=-1">
 							</el-table-column>
 						</v-table>
@@ -165,18 +130,10 @@
 						label: '类型',
 						prop: 'type'
 					},
-					// {
-					// 	label: '录入人',
-					// 	prop: 'createby'
-					// },
 					{
 						label: '录入时间',
 						prop: 'createdate'
 					},
-					// {
-					// 	label: '修改人',
-					// 	prop: 'updateby'
-					// },
 					{
 						label: '修改时间',
 						prop: 'updatedate'
@@ -259,14 +216,11 @@
 					});
 					return;
 				} else {
-					// console.log(this.selUser[0]);
 					this.$refs.child.detail(this.selUser[0].id);
 				}
 			},
 			//查看
 			view(dataid) {
-				// console.log(dataid);
-			 	// this.reportsList =data;
 				this.$refs.child.view(dataid);
 			},
 			//高级查询
@@ -287,12 +241,11 @@
 				} else {
 					var url = this.basic_url + '/api-report/report/deletes';
 					//changeUser为勾选的数据
-					var changeUser = selData;
 					//deleteid为id的数组
 					var deleteid = [];
 					var ids;
-					for(var i = 0; i < changeUser.length; i++) {
-						deleteid.push(changeUser[i].ID);
+					for(var i = 0; i < selData.length; i++) {
+						deleteid.push(selData[i].id);
 					}
 					//ids为deleteid数组用逗号拼接的字符串
 					ids = deleteid.toString(',');
@@ -307,8 +260,7 @@
 					}) => {
 						this.$axios.delete(url, {
 							params: data
-						}).then((res) => { //.delete 传数据方法
-							//resp_code == 0是后台返回的请求成功的信息
+						}).then((res) => {
 							if(res.data.resp_code == 0) {
 								this.$message({
 									message: '删除成功',
@@ -355,7 +307,6 @@
 			},
 			//请求页面的button接口
 		    getbutton(childByValue){
-		    	// console.log(childByValue);
 		    	var data = {
 					menuId: childByValue.id,
 					roleId: this.$store.state.roleid,

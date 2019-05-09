@@ -34,8 +34,8 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
                                 <!-- <el-col :span="7">
-									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">
-										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="编码" prop="REPORT_NUM" label-width="45px">
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col> -->
 								<el-col :span="7">
@@ -55,7 +55,7 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-                                <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORTNUM" v-if="checkedName.indexOf('报告编号')!=-1">
+                                <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 								</el-table-column> -->
 								<el-table-column label="报告编号" width="220" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
@@ -181,7 +181,7 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
-					REPORTNUM:'',
+					REPORT_NUM:'',
 					DESCRIPTION:'',
 				},
 				//tree
@@ -208,7 +208,7 @@
 			//重置
 			resetbtn(){
 				this.searchList = {
-					REPORTNUM:'',
+					REPORT_NUM:'',
 					DESCRIPTION:'',
 				};
 				this.requestData('init');

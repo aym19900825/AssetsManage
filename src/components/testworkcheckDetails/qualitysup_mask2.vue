@@ -33,15 +33,15 @@
 									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
-												<template slot="prepend">状态</template>
+												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
 									</el-row>
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="编码" prop="REPORTNUM">
-												<el-input v-model="report.REPORTNUM" :disabled="true" placeholder="自动生成"></el-input>
+											<el-form-item label="报告编码" prop="REPORT_NUM">
+												<el-input v-model="report.REPORT_NUM" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="16">
@@ -86,7 +86,8 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="!addtitle">
-							<el-button title="查看文件" type="primary" @click="readAuth()">查看文件</el-button>
+							<el-button type="primary" @click="readAuth()">查看报告文件</el-button>
+							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -120,28 +121,7 @@
 			vewPoplemask,
 			},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
+			
 			return {
 				approvingData:{},//流程传的数据
 				falg:false,//保存验证需要的
@@ -167,8 +147,8 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
-					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
+					NUM:  [{required: true, trigger: 'change', message: '请选择'}],
+					TYPE: [{required: true, trigger: 'change', message: '请选择'}],
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
@@ -188,7 +168,7 @@
 				approval:false,//流程按钮
                 report:{
                     ID:'',	//报告ID
-                    REPORTNUM:'',	//编码
+                    REPORT_NUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
                     STATUS:'1',	//活动/不活动
@@ -533,7 +513,7 @@
 			reset(){
 				this.report = {
                     ID:'',	//报告ID
-                    REPORTNUM:'',	//编码
+                    REPORT_NUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
                     STATUS:'1',	//活动/不活动

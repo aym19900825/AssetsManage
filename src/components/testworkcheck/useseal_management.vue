@@ -100,11 +100,11 @@
 								</el-table-column>
 								<el-table-column label="流程状态" width="140"  sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
-								<el-table-column label="签发人" width="100"  sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('签发人')!=-1">
+								<el-table-column label="签发人" width="100"  sortable prop="ENTERBYDesc" v-if="this.checkedName.indexOf('签发人')!=-1">
 								</el-table-column>
-								<el-table-column label="签发时间" width="140"  sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('签发时间')!=-1">
+								<el-table-column label="签发时间" width="140"  sortable prop="ENTERDATE" v-if="this.checkedName.indexOf('签发时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="报告份数" width="100"  sortable prop="PROXY_VERSION" v-if="this.checkedName.indexOf('报告份数')!=-1">
+								<el-table-column label="报告份数" width="100"  sortable prop="REPORT_QUALITY" v-if="this.checkedName.indexOf('报告份数')!=-1">
 								</el-table-column>
 								<el-table-column label="用印人" width="100" sortable prop="USERDesc" v-if="this.checkedName.indexOf('用印人')!=-1">
 								</el-table-column>
@@ -202,7 +202,7 @@
 						prop: 'STATEDesc'
 					},{
 						label: '签发人',
-						prop: 'ENTERBY'
+						prop: 'ENTERBYDesc'
 					},{
 						label: '签发时间',
 						prop: 'ENTERDATE'

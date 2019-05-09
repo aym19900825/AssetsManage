@@ -34,8 +34,8 @@
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="10">
                                 <el-col :span="7">
-									<el-form-item label="报告编号" prop="REPORTNUM">
-										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="报告编号" prop="REPORT_NUM">
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -73,13 +73,11 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="报告编号" width="155" sortable prop="REPORTNUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="REPORT_NUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORTNUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}
 										</p>
 									</template>
-								</el-table-column>
-                                <el-table-column label="报告名称" sortable prop="REPORTNAME" v-if="this.checkedName.indexOf('报告名称')!=-1">
 								</el-table-column>
 								<el-table-column label="委托单位" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位')!=-1">
 								</el-table-column>
@@ -98,7 +96,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<usesealmask  ref="usesealmask" @request="requestData" v-bind:page=page></usesealmask>
+			<reprotachivingmask ref="reprotachivingmask" @request="requestData" v-bind:page=page></reprotachivingmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -109,7 +107,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import usesealmask from '../testworkcheckDetails/reprotachivingMask.vue'
+	import reprotachivingmask from '../testworkcheckDetails/reprotachivingMask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
@@ -119,7 +117,7 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
-			'usesealmask': usesealmask,
+			'reprotachivingmask': reprotachivingmask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
 			'v-table': vTable
@@ -142,7 +140,6 @@
 				}],
 				checkedName: [
                     '报告编号',
-					'报告名称',
                     '委托单位',
                     '归档人',
                     '归档时间',
@@ -152,28 +149,20 @@
 				tableHeader: [
                     {
 						label: '报告编号',
-						prop: 'REPORTNUM'
+						prop: 'REPORT_NUM'
 					},{
-						label: '报告名称',
-						prop: 'REPORTNAME'
-					},
-					{
 						label: '委托单位',
 						prop: 'V_NAME'
-					},
-					{
+					},{
 						label: '归档人',
 						prop: 'ONHOLEPERSON'
-					},
-					{
+					},{
 						label: '归档时间',
 						prop: 'ONHOLTIME'
-					},
-					{
+					},{
 						label: '修改时间',
 						prop: 'CHANGEDATE'
-					},
-					{
+					},{
 						label: '机构',
 						prop: 'DEPTIDDesc'
 					},
@@ -186,7 +175,7 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
-					REPORTNUM:'',
+					REPORT_NUM:'',
 					REPORTNAME:'',
 					V_NAME:'',
 					ONHOLEPERSON: '',
@@ -214,7 +203,7 @@
 			//重置
 			resetbtn(){
 				this.searchList = {
-					REPORTNUM:'',
+					REPORT_NUM:'',
 					REPORTNAME:'',
 					V_NAME:'',
 					ONHOLEPERSON: '',
@@ -244,8 +233,8 @@
 		    },
 			//添加类别
 			openAddMgr() {
-				// this.$refs.usesealmask.open(); // 方法1
-				this.$refs.usesealmask.visible();
+				// this.$refs.reprotachivingmask.open(); // 方法1
+				this.$refs.reprotachivingmask.visible();
 				
 			},
 			//修改
@@ -268,7 +257,7 @@
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
 						});
-						this.$refs.usesealmask.view(this.selUser[0].ID);
+						this.$refs.reprotachivingmask.view(this.selUser[0].ID);
 					}
 					//驳回
 					else if(this.selUser[0].STATE == 0) {
@@ -278,7 +267,7 @@
 								var url = this.basic_url + '/api-apps/app/reportOnhole/flow/isPromoterNode/' + this.selUser[0].ID;
 								this.$axios.get(url, {}).then((res) => {
 									if(res.data.resp_code == 0) {
-										this.$refs.usesealmask.detail(this.selUser[0].ID);
+										this.$refs.reprotachivingmask.detail(this.selUser[0].ID);
 									} else {
 										this.$message({
 											message: res.data.resp_msg,
@@ -294,13 +283,13 @@
 							}
 						});
 					}else{
-						this.$refs.usesealmask.detail(this.selUser[0].ID);	
+						this.$refs.reprotachivingmask.detail(this.selUser[0].ID);	
 					}
 				}
 			},
 			//查看
 			 view(data) {
-				this.$refs.usesealmask.view(data.ID);
+				this.$refs.reprotachivingmask.view(data.ID);
 			},
 			//高级查询
 			modestsearch() {

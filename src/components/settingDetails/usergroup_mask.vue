@@ -27,11 +27,11 @@
 												<el-input v-model="dataInfo.num" placeholder="自动生成" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="6">
+										<!-- <el-col :span="6">
 											<el-form-item label="所属机构" label-width="100px">
 												<el-input v-model="dataInfo.deptName" :disabled="edit"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										<el-col :span="12">
 											<el-form-item label="组名" prop="name" label-width="100px">
 												<el-input v-model="dataInfo.name" :disabled="noedit"></el-input>
@@ -54,20 +54,27 @@
 											<font>选择</font>
 										</el-button>
 									</div>
-									<el-table :data="dataInfo.userList" border stripe :fit="true" highlight-current-row style="width: 100% ;" max-height="260" :default-sort="{prop:'dataInfo.userList', order: 'descending'}">
+									<el-table :data="dataInfo.membershipList" border stripe :fit="true" highlight-current-row style="width: 100% ;" max-height="260" :default-sort="{prop:'dataInfo.membershipList', order: 'descending'}">
 										<el-table-column type="index" label="序号" width="50">
 											<template slot-scope="scope">
 												<span> {{scope.$index+1}} </span>
 											</template>
 										</el-table-column>
-										<el-table-column label="用户名" prop="username" sortable>
+										<el-table-column label="用户名" prop="useridDesc" sortable>
 										</el-table-column>
-										<el-table-column label="用户姓名" prop="nickname" sortable>
+										<!-- <el-table-column label="用户姓名" prop="nickname" sortable>
+										</el-table-column> -->
+										<!-- <el-table-column label="所属机构" prop="deptName" sortable>
+										</el-table-column> -->
+										<el-table-column label="机构" prop="superviseIdsDesc" sortable>
+											<template slot-scope="scope">
+												<el-input v-model="scope.row.superviseIdsDesc" :disabled="edit" placeholder="请选择">
+													<el-button slot="append" icon="el-icon-search" @click="adddeptbtn(scope.$index)" :disabled="noedit"></el-button>
+												</el-input>
+										    </template>
 										</el-table-column>
-										<el-table-column label="所属机构" prop="deptName" sortable>
-										</el-table-column>
-										<el-table-column label="手机号" prop="phone" sortable>
-										</el-table-column>
+										<!-- <el-table-column label="手机号" prop="phone" sortable>
+										</el-table-column> -->
 										<el-table-column fixed="right" width="120" label="操作">
 											<template slot-scope="scope">
 												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">
@@ -123,6 +130,16 @@
 		</div>
 		<vchoose ref="choose" :chooseParam = "chooseParam" @tranFormData = 'getChoose'></vchoose>
 		<usermask ref="usermask" @getSelData="getUserData" :dialogTit="dialogTit"></usermask>
+		<el-dialog :modal-append-to-body="false" title="机构范围" :visible.sync="deptdialogVisible" width="30%">
+			<div class="scrollbar" style="max-height: 400px;">
+				<el-tree class="tree" ref="tree" :data="depetData" show-checkbox node-key="id" :default-checked-keys="resourceCheckedKey" :props="resourceProps" default-expand-all>
+				</el-tree>
+			</div>
+			<div slot="footer">
+				<el-button type="primary" @click="determine" >确 定</el-button>
+				<el-button @click="cancel">取 消</el-button>
+			</div>
+		</el-dialog>
 	</div>
 </template>
 
@@ -132,7 +149,6 @@
 	import usermask from'../common/common_mask/currentUserMask.vue'
 	export default {
 		name: 'masks',
-		// props: ['detailData'],
 		components: {
 			vchoose,
 			usermask
@@ -160,13 +176,20 @@
 				noviews:true,//按钮
 				down: true,
 				up: false,
+				index:'',//子表的索引
+				id:'',//修改时用的id
 				activeNames: ['1', '2','3','4'], //手风琴数量
 				dialogVisible: false, //对话框
+				deptdialogVisible: false, //机构对话框
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				modify:false,
-				selectData: [], 
-				getCheckboxData: {},
+				depetData: [], //数组，我这里是通过接口获取数据
+				resourceCheckedKey: [], //通过接口获取的需要默认展示的数组 [1,3,15,18,...]
+				resourceProps: {
+					children: "children",
+					label: "fullname"
+				},
 				dataInfo: {
 					"id":'',
 					"name":'',
@@ -178,7 +201,7 @@
 					"updateby":'',
 					"updatedate":'',
 					"del_flag":0,
-					'userList': []
+					'membershipList': []
 				},
 				chooseParam: {},
 				editUserIndex: 1
@@ -187,38 +210,28 @@
 		methods: {
 			//选择多条用户数据插入到行列表中
 			getUserData(val){
-				console.log(val);
 				for(var i=0;i<val.length;i++){
-					var userList={
-						groupid:this.detailData.id,
-						// id: val[i].id,
+					var membershipList={
 						userid:val[i].id,
-						username:val[i].username,
-						nickname:val[i].nickname,
-						deptName:val[i].deptName,
-						phone:val[i].phone,
-						isEditing: true,
+						useridDesc:val[i].username,
+						// nickname:val[i].nickname,
+						// deptName:val[i].deptName,
+						superviseIds:'',
+						superviseIdsDesc:'',
+						// phone:val[i].phone,
+						// isEditing: true,
 					};
-					this.dataInfo.userList.push(userList);
+					this.dataInfo.membershipList.push(membershipList);
 					
 				}
 			},
 			//选择用户带回来值
 			chooseUser(){
-			// 	var snum=this.dataInfo.INSPECT_PROXY_BASISList;
-			// 	var basislist=[];
-			// 	for(var i=0;i<snum.length;i++){
-          	// basislist.push(snum[i].S_NUM);
-			// 	}
-			// 	var basisnums=basislist.join(',');
 			    var arr=[];
-				for(var i=0;i<this.dataInfo.userList.length; i++){
-                     arr.push(this.dataInfo.userList[i].userid);
+				for(var i=0;i<this.dataInfo.membershipList.length; i++){
+                     arr.push(this.dataInfo.membershipList[i].userid);
 				}
-				console.log(arr);
-				console.log(this.dataInfo.userList);
 				arr=arr.join(',');
-				console.log(arr);
 				this.$refs.usermask.requestData('groups',arr);
 			},
 			//获取用户
@@ -226,7 +239,7 @@
 				var selData = data.data;
 				this.dataInfo.id = selData[0].id;
 				this.dataInfo.categoryname = selData[0].categoryname;
-				this.getData(this.dataInfo.id);
+				// this.getData(this.dataInfo.id);
 			},
 			//删除用户
 			delKey(index,row){
@@ -244,7 +257,7 @@
 								message: '删除成功',
 								type: 'success'
 							});
-							this.dataInfo.userList.splice(index,1);
+							this.dataInfo.membershipList.splice(index,1);
 						}else{
 							this.$message({
 								message: res.data.resp_msg,
@@ -258,12 +271,8 @@
 
 					});
 				}else{
-					this.dataInfo.userList.splice(index,1);
+					this.dataInfo.membershipList.splice(index,1);
 				}
-			},
-			//判断当前行是否可编辑
-			changeState(data){
-				data.isEditing = !data.isEditing;
 			},
 			//获取当前用户信息
 			getUser(opt){
@@ -301,23 +310,29 @@
 				// this.show = true;
 				this.getUser('new');
 			},
+			request(id){
+				var url = this.basic_url + '/api-flow/flow/group/' + id;
+				this.$axios.get(url, {
+				}).then((res) => {
+					this.dataInfo = res.data;
+					this.show = true;
+				}).catch((wrong) => {})
+			},
 			//这里是修改
-			detail(val) {
+			detail(id) {
+				this.id=id;//修改时用的id
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
 				this.noedit = false;//表单内容
 				this.views = false;//录入修改人信息
 				this.noviews = true;//按钮
-
-				this.detailData = val;
-				var id = this.detailData.id;
-				this.getData(id);
-				this.show = true;
+                this.request(id);
 				this.getUser('');
 			},
+
 			//这是查看
-			view(val) {
+			view(id) {
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -325,11 +340,7 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
-
-				this.detailData = val;
-				var id = this.detailData.id;
-				this.getData(id);
-				this.show = true;
+				this.request(id);
 				this.getUser('');
 			},
 			//点击关闭按钮
@@ -351,17 +362,9 @@
 					"updateby":'',
 					"updatedate":'',
 					"del_flag":'',
-					"userList": []
+					"membershipList": []
 				};
 				// this.show = false;
-			},
-			//获取当前组信息
-			getData(id){
-				var url = this.basic_url + '/api-user/groups/' + id;
-				this.$axios.get(url, {
-				}).then((res) => {
-					this.dataInfo = res.data;
-				}).catch((wrong) => {})
 			},
 			open(){
 				this.show = true;
@@ -393,7 +396,7 @@
 			//提交保存
 			save(parameter) {
 				var _this = this;
-				var url = this.basic_url + '/api-user/groups/saveOrUpdate';
+				var url = this.basic_url + '/api-flow/flow/group/saveOrUpdate';
 				this.$refs.dataInfo.validate((valid) => {
 					if (valid) {
 						this.$axios.post(url, this.dataInfo).then((res) => {
@@ -423,6 +426,58 @@
 					}
 				});
 			},
+			//确定
+			determine() { 
+				var index=this.index;
+				var permissionIds = [];
+				var deptIds = [];
+				var deptnames=[];
+				var permission = this.$refs.tree.getCheckedNodes(); // 获取当前的选中的数据{对象}
+				for(var i = 0; i < permission.length; i++) {
+					deptIds.push(permission[i].id);
+					deptnames.push(permission[i].fullname);
+				}
+				deptIds= deptIds.join(','); 
+				deptnames= deptnames.join(','); 
+				this.dataInfo.membershipList[index].superviseIds=deptIds;
+				this.dataInfo.membershipList[index].superviseIdsDesc=deptnames;
+				this.deptdialogVisible = false;
+			},
+			//取消
+			cancel(){
+				this.deptdialogVisible = false;
+				this.$emit('request');
+			},
+			adddeptbtn(index){
+				this.index=index;
+				this.depet();
+			},
+			depet() {
+				var arr = [];
+				var url = this.basic_url + '/api-user/depts/treeMap';
+				this.$axios.get(url, {}).then((res) => {
+					this.depetData = res.data;
+					if(!!this.dataInfo.id){
+						var membershipList=this.dataInfo.membershipList;
+							for(var m=0;m<membershipList[this.index].superviseDepts.length;m++){
+								arr.push(membershipList[this.index].superviseDepts[m].id);
+							}
+						this.$nextTick(function() {
+							this.$refs.tree.setCheckedKeys(arr)
+						})
+					 	this.deptdialogVisible = true;
+					}else{
+	                    this.$nextTick(function() {
+							this.$refs.tree.setCheckedKeys([]);
+						})
+						this.deptdialogVisible = true;
+					}
+				}).catch((err) => {
+				});
+			},
+		},
+		mouted(){
+           this.depet();
 		},
 	}
 </script>

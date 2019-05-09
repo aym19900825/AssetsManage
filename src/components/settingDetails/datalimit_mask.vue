@@ -65,6 +65,7 @@
 			},
 			
 			depet(id) {
+				console.log(id);
 				this.roId = id;
 				var arr = [];
 				var url = this.basic_url + '/api-user/depts/getTreeMapByRoleId/'+id;

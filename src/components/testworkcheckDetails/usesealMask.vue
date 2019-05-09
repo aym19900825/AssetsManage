@@ -42,15 +42,15 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right pr10">
-											<el-input v-model="USESEAL.WONUM" :disabled="true">
+											<el-input v-model="USESEAL.REPORT_NUM" :disabled="true">
 												<template slot="prepend">报告编号</template>
 											</el-input>
 										</el-col>
 									</el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="委托单位名称" prop="PROXYNUM">
-												<el-input v-model="USESEAL.PROXYNUM" :disabled="true"></el-input>
+											<el-form-item label="委托单位名称" prop="V_NAME">
+												<el-input v-model="USESEAL.V_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
@@ -79,7 +79,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="报告份数" prop="REPORT_QUALITY">
-												<el-input v-model="USESEAL.PROXY_VERSION" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.REPORT_QUALITY" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

@@ -34,13 +34,13 @@
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
                                 <el-col :span="7">
-									<el-form-item label="编码" prop="REPORT_NUM" label-width="45px">
+									<el-form-item label="报告编号" prop="REPORT_NUM" label-width="85px">
 										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="报告编号" prop="DESCRIPTION"  label-width="80px">
-										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="委托单位名称" prop="V_NAME" label-width="120px">
+										<el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -57,9 +57,9 @@
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
                                 <!-- <el-table-column label="报告编号" width="200" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 								</el-table-column> -->
-								<el-table-column label="报告编号" width="220" sortable prop="DESCRIPTION" v-if="checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告编号" width="220" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}</p>
+									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
 									</template>
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">

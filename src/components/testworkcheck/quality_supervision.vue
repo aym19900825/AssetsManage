@@ -71,7 +71,7 @@
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
-                                <el-table-column label="检测结果" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('检测结果')!=-1">
+                                <el-table-column label="检测结果" width="140" sortable prop="SYNTHETICAL" v-if="this.checkedName.indexOf('检测结果')!=-1">
 								</el-table-column>
 								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
@@ -157,7 +157,7 @@
 						prop: 'STATEDesc'
 					},{
 						label: '检测结果',
-						prop: 'CJDWDesc'
+						prop: 'SYNTHETICAL'
 					},{
 						label: '完成日期',
 						prop: 'COMPDATE'

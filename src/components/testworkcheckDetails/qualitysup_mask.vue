@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加质量监督抽查审核</div>
-					<div class="mask_title" v-show="modifytitle">修改质量监督抽查审核</div>
-					<div class="mask_title" v-show="viewtitle">查看质量监督抽查审核</div>
+					<div class="mask_title" v-show="addtitle">添加检后报告审核</div>
+					<div class="mask_title" v-show="modifytitle">修改检后报告审核</div>
+					<div class="mask_title" v-show="viewtitle">查看检后报告审核</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -29,29 +29,72 @@
 							</div>
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="质量监督抽查审核" name="1">
+								<el-collapse-item title="检后报告审核" name="1">
 									<el-row class="pb10">
-										<el-col :span="3" class="pull-right">
+										<el-col :span="5" class="pull-right pr10">
 											<el-input v-model="report.STATEDesc" :disabled="true">
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="report.PROXY_TYPEDesc" :disabled="true">
+												<template slot="prepend">检测类型</template>
+											</el-input>
+										</el-col>
+										<el-col :span="5" class="pull-right pr10">
+											<el-input v-model="report.REPORT_NUM" :disabled="true">
+												<template slot="prepend">报告编号</template>
+											</el-input>
+										</el-col>
 									</el-row>
-
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="报告编码" prop="REPORT_NUM">
-												<el-input v-model="report.REPORT_NUM" :disabled="true"></el-input>
+											<el-form-item label="委托单位名称" prop="V_NAME">
+												<el-input v-model="report.V_NAME" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="16">
-											<el-form-item label="报告描述" prop="DESCRIPTION">
-												<el-input v-model="report.DESCRIPTION" :disabled="noedit"></el-input>
+										<el-col :span="8">
+											<el-form-item label="委托书编号" prop="PROXYNUM">
+												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="委托书版本" prop="PROXY_VERSION">
+												<el-input v-model="report.PROXY_VERSION" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-input v-model="report.COMPDATE" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+                                        <el-col :span="8">
+											<el-form-item label="完成方式" prop="COMPMODEDesc">
+												<el-input v-model="report.COMPMODEDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="报告份数" prop="REPORT_QUALITY">
+												<el-input v-model="report.REPORT_QUALITY" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="承检单位" prop="CJDWDesc">
+												<el-input v-model="report.CJDWDesc" :disabled="true"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="主检负责人" prop="LEADERDesc">
+												<el-input v-model="report.LEADERDesc" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-								<!-- <el-collapse-item title="其他" name="2" v-show="views">
+								<el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -70,16 +113,16 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改人" prop="CHANGEBYDesc">
-												<el-input v-model="report.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+												<el-input v-model="report.CHANGEBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="report.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+												<el-input v-model="report.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</el-collapse-item> -->
+								</el-collapse-item>
 								<!-- <el-collapse-item title="文件" name="2">
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
 								</el-collapse-item> -->

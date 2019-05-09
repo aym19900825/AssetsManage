@@ -41,7 +41,7 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="日志类型" prop="logtype">
+									<el-form-item label="操作类型" prop="logtype">
 										<el-input v-model="searchList.logtype" @keyup.enter.native="searchinfo">
 										</el-input>
 									</el-form-item>
@@ -66,7 +66,7 @@
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 								<el-table-column label="操作描述" sortable prop="logname" v-if="checkedName.indexOf('操作描述')!=-1">
 								</el-table-column>
-								<el-table-column label="日志类型" width="120" sortable prop="logtype" v-if="checkedName.indexOf('日志类型')!=-1">
+								<el-table-column label="操作类型" width="120" sortable prop="logtype" v-if="checkedName.indexOf('操作类型')!=-1">
 								</el-table-column>
 								<el-table-column label="操作用户" width="200" sortable prop="username" v-if="checkedName.indexOf('操作用户')!=-1">
 								</el-table-column>
@@ -115,7 +115,7 @@
 				value: '',
 				checkedName: [
 					'操作描述',
-					'日志类型',
+					'操作类型',
 					'操作用户',
 					'操作时间',
 					// '登录开始时间',
@@ -127,7 +127,7 @@
 						prop: 'logname'
 					},
 					{
-						label: '日志类型',
+						label: '操作类型',
 						prop: 'username'
 					},
 					{

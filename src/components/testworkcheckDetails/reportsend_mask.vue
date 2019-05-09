@@ -33,19 +33,19 @@
 									<el-row :gutter="10">
 										<el-col :span="4" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
-												<template slot="prepend">状态</template>
+												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="report.DETECTIONTYPE" :disabled="true">
+											<el-input v-model="report.PROXY_TYPEDesc" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
 									</el-row>
 									<el-row class="pt10">
 										<el-col :span="8">
-											<el-form-item label="报告编号" prop="DESCRIPTION">
-												<el-input v-model="report.DESCRIPTION" :disabled="noedit"></el-input>
+											<el-form-item label="报告编号" prop="REPORT_NUM">
+												<el-input v-model="report.REPORT_NUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -54,8 +54,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="委托书编号" prop="REPORT_NUM">
-												<el-input v-model="report.REPORT_NUM" :disabled="noedit"></el-input>
+											<el-form-item label="委托书编号" prop="PROXYNUM">
+												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -66,34 +66,34 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="承检单位" prop="DEPARTMENTDesc">
-												<el-input v-model="report.DEPARTMENTDesc" :disabled="noedit"></el-input>
+											<el-form-item label="承检单位" prop="CJDWDesc">
+												<el-input v-model="report.CJDWDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="主检负责人" prop="LEADER">
-												<el-input v-model="report.LEADER" :disabled="noedit"></el-input>
+											<el-form-item label="主检负责人" prop="LEADERDesc">
+												<el-input v-model="report.LEADERDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="是否寄出" prop="PROXY_VERSION">
-												<el-radio-group v-model="report.PROXY_VERSION">
+											<el-form-item label="是否寄出" prop="ISSEND">
+												<el-radio-group v-model="report.ISSEND">
 													<el-radio label="1">是</el-radio>
 													<el-radio label="2">否</el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="寄出人" prop="ENTERBYDesc">
-												<el-input v-model="report.ENTERBYDesc" :disabled="noedit"></el-input>
+											<el-form-item label="寄出人" prop="SENDPERSONDesc">
+												<el-input v-model="report.SENDPERSONDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="寄出时间" prop="ENTERDATE">
-												<el-input v-model="report.ENTERDATE" :disabled="noedit"></el-input>
+											<el-form-item label="寄出时间" prop="SENDDATE">
+												<el-input v-model="report.SENDDATE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>

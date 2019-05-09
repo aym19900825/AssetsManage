@@ -33,7 +33,12 @@
 									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="USESEAL.STATEDesc" :disabled="true">
-												<template slot="prepend">状态</template>
+												<template slot="prepend">流程状态</template>
+											</el-input>
+										</el-col>
+										<el-col :span="3" class="pull-right">
+											<el-input v-model="USESEAL.STATEDesc" :disabled="true">
+												<template slot="prepend">委托书</template>
 											</el-input>
 										</el-col>
 									</el-row>

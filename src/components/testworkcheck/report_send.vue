@@ -68,7 +68,7 @@
 								</el-table-column>
 								<el-table-column label="委托书版本" width="100" prop="VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
 								</el-table-column>
-								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPE" v-if="checkedName.indexOf('检测类型')!=-1">
+								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
@@ -143,7 +143,7 @@
 				],
 				tableHeader: [{
 						label: '报告编号',
-						prop: 'DESCRIPTION'
+						prop: 'REPORT_NUM'
 					},{
 						label: '委托单位名称',
 						prop: 'V_NAME'
@@ -155,22 +155,22 @@
 						prop: 'VERSION'
 					},{
 						label: '检测类型',
-						prop: 'DETECTIONTYPE'
+						prop: 'PROXY_TYPEDesc'
 					},{
 						label: '流程状态',
-						prop: 'STATE'
+						prop: 'STATEDesc'
 					},{
 						label: '承检单位',
-						prop: 'CJDW'
+						prop: 'CJDWDesc'
 					},{
 						label: '主检负责人',
-						prop: 'LEADER'
+						prop: 'LEADERDesc'
 					},{
 						label: '完成日期',
 						prop: 'COMPDATE'
 					},{
 						label: '完成方式',
-						prop: 'prop="COMPMODEDesc" '
+						prop: 'COMPMODEDesc'
 					},
 				],
 				selUser: [],

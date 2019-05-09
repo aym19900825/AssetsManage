@@ -85,9 +85,9 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="报告编号" width="155" sortable prop="DESCRIPTION" v-if="this.checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.DESCRIPTION}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}</p>
 									</template>
 								</el-table-column>
                                 <el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">

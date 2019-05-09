@@ -29,7 +29,7 @@
 						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="用印管理" name="1">
+								<el-collapse-item title="用印信息" name="1">
 									<el-row class="pb10">
 										<el-col :span="3" class="pull-right">
 											<el-input v-model="USESEAL.STATEDesc" :disabled="true">

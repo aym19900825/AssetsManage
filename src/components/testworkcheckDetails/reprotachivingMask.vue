@@ -154,9 +154,11 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="saveAndUpdate()">保存</el-button>
-							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
+						<div class="content-footer" v-show="!addtitle">
+							<!-- <el-button type="primary" @click="saveAndUpdate()">保存</el-button> -->
+							<!-- <el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button> -->
+							<el-button type="success" @click="submited">确认报告归档</el-button>
+							<el-button type="primary" @click="readAuth()">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>

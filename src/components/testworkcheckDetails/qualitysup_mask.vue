@@ -129,7 +129,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="!addtitle">
-							<el-button type="primary" @click="readAuth()">查看报告文件</el-button>
+							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -168,6 +168,7 @@
 				approvingData:{},//流程传的数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				po_url:Config.po_url,//pageoffice 服务路径
 				selUser: [],
 				edit: true, //禁填
 				show: false,
@@ -542,25 +543,24 @@
 				this.show = true;
 				this.reset();
 			},
-			//查看
+			//查看报告文件
 			readAuth(){
-			this.detailgetData();
-            var url = this.po_url+"/show?fileid=" +this.report.FILEID
-				+ '&userid=' +  this.userid
-				+ '&username=' + this.username
-				+ '&deptid=' + this.deptid
-				+ '&deptfullname=' + this.deptfullname
-             window.open(url); 
+				this.detailgetData();
+				var url = this.po_url+"/show?fileid=" +this.report.FILEID
+					+ '&userid=' +  this.userid
+					+ '&username=' + this.username
+					+ '&deptid=' + this.deptid
+					+ '&deptfullname=' + this.deptfullname
+				window.open(url);
         	},
 			reset(){
 				this.report = {
-                    ID:'',	//报告ID
                     REPORT_NUM:'',	//编码
                     DESCRIPTION:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
-                    STATUS:'1',	//活动/不活动
-                    STATE:'1',//流程状态
-                    STATEDesc:'草稿',
+                    STATUS:'',	//活动/不活动
+                    STATE:'',//流程状态
+                    STATEDesc:'',
                 }
 			},
 			//时间格式化

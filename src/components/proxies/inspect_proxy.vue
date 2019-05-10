@@ -116,9 +116,9 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="4">
+								<el-col :span="4" class="text-center">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -150,7 +150,7 @@
 									</template>
 								</el-table-column>
 								<el-table-column label="委托方名称名称" sortable width="140px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称名称')!=-1">
-							</el-table-column>
+								</el-table-column>
 								<!-- <el-table-column label="生产单位名称" sortable width="140px" prop="P_NAME" v-if="this.checkedName.indexOf('生产单位名称')!=-1">
 								</el-table-column> -->
 								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
@@ -190,12 +190,11 @@
 				</div>
 			</div>
 		</div>
-		<inspectmask  ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page @realtime="realtime"></inspectmask>
+		<inspectmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page @realtime="realtime"></inspectmask>
 		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
-					<!--报表-->
+		<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-
 	</div>
 </template>
 <script>

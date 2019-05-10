@@ -5,8 +5,7 @@
       @sort-change='tableSortChange'
       border
       :stripe="stripe"
-      :height="fullHeight"
-      style="width: 100%;"
+      :style="{width: fullWidth,height: fullHeight}"
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
@@ -42,7 +41,7 @@
 <script>
 import config from '../../../config.js'
 export default {
-  props: ['appName','searchList'],
+  props: ['appName','newHeight','searchList'],
   data(){
     return{
       basic_url: config.dev_url,
@@ -56,12 +55,22 @@ export default {
       isshift: false,
       isctrl: false,
       stripe: true,//table表格是否需要奇偶区别斑马线，true是false否
+      fullWidth:'100%',
       fullHeight: document.documentElement.clientHeight - 210 + 'px',
+      // fullHeight: '',
       loading: false,
       loadSign: true
     }
   },
   methods:{
+    //判断高度
+    isHeight(){
+      if(!!this.newHeight){
+        this.fullHeight = this.newHeight + 'px';
+      }else{
+        this.fullHeight = document.documentElement.clientHeight - 210 + 'px';
+      }
+    },
     tableRowClassName({row, rowIndex}) {
       if(this.appName == 'inspectPro2'||this.appName == 'inspectPro'){
         if (row.COMPMODE =="加急") {
@@ -170,6 +179,10 @@ export default {
       this.requestData();
     },
     requestData(opt){
+      console.log(90);
+      this.isHeight();//获取高度
+      console.log(this.newHeight);
+      console.log(this.appName);
       this.loadding = true;
       var data = this.searchList;
       if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){
@@ -211,6 +224,8 @@ export default {
 				}
       }else if(this.appName == 'dataRestrict'){
         var url = this.basic_url + '/api-user/dataRestrict';
+      }else if(this.appName == 'qualifications'){//资质证书
+        var url = this.basic_url + '/api-user/users/qualifications';
       }else if(this.appName == 'appRoles'){
         var url = this.basic_url + '/api-user/roles';
       }else if(this.appName == 'objectcfg'){
@@ -263,6 +278,7 @@ export default {
         if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
           $('.el-table__body-wrapper table').find('.filing').remove();
         }
+        this.isHeight();//获取高度
       }).catch((wrong) => {})
     },
     
@@ -297,21 +313,5 @@ export default {
 }
 </script>
 <style scope>
-  .fixed-table-toolbar .columns{
-    width: 120px;
-  }
-  .el-table .warning-row {
-    background:#ffecee;
-    font-weight: bold;
-  }
-  .el-table .warning-row .cell {
-    color: #cb4040;
-  }
-  .el-table .yellow-row .cell {
-    color: #FF8000;
-  }
-  .el-table .success-row {
-    background: #bdfdd0;
-  }
+  
 </style>
-

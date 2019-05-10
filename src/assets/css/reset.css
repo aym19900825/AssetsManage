@@ -490,7 +490,23 @@ h6 {
 .el-table__body tr.hover-row.el-table__row--striped>td,
 .el-table__body tr.hover-row>td{background-color:#F5F7FA}*/
 
-
+/*table行颜色标记*/
+.fixed-table-toolbar .columns{
+    width: 120px;
+  }
+  .el-table .warning-row {
+    background:#ffecee;
+    font-weight: bold;
+  }
+  .el-table .warning-row .cell {
+    color: #cb4040;
+  }
+  .el-table .yellow-row .cell {
+    color: #FF8000;
+  }
+  .el-table .success-row {
+    background: #bdfdd0;
+  }
 
 /*表单提交按钮居中显示*/
 .el-dialog {

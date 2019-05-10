@@ -223,8 +223,6 @@
 			//选择多条用户数据插入到行列表中
 			
 			getUserData(val){
-				console.log(val);
-				console.log()
 				for(var i=0;i<val.length;i++){
 					var membershipList={}
 					membershipList={
@@ -244,7 +242,6 @@
 						// phone:val[i].phone,
 						// isEditing: true,
 					};
-					console.log(membershipList);
 					this.dataInfo.membershipList.push(membershipList);
 					
 				}
@@ -339,7 +336,6 @@
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.dataInfo = res.data;
-					console.log(res.data);
 					this.show = true;
 				}).catch((wrong) => {})
 			},

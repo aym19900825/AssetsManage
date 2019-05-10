@@ -16,6 +16,7 @@
 					<el-collapse v-model="activeNames">
 						 <el-collapse-item title="流程节点" name="1">
 							<el-tabs v-model="activeName" >
+
 								<el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
 									<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
 										<el-row>
@@ -50,82 +51,60 @@
 									border
 									row-key="id">
 									<el-table-column
-										prop="bigtitle[index].actionLis.flag"
-										label="事件"
+										prop="flag"
+										label="操作"
 										sortable
 										width="180">
+										<template slot-scope="scope">
+											<el-select v-model="scope.row.flag" placeholder="请选择">
+												<el-option
+												v-for="item in flag_valoptions"
+												:key="item.code"
+												:label="item.name"
+												:value="item.code">
+												</el-option>
+											</el-select>
+                                        </template>
 									</el-table-column>
 									<el-table-column
-										prop="bigtitle[index].actionLis.type"
+										prop="type"
 										label="类型变更"
 										sortable
 										width="180">
+										<template slot-scope="scope">
+												<el-select v-model="scope.row.type" placeholder="请选择">
+												<el-option
+												v-for="item in action_typeoptions"
+												:key="item.code"
+												:label="item.name"
+												:value="item.code">
+												</el-option>
+											</el-select>
+										</template>
 									</el-table-column>
 									<el-table-column
-										prop="address"
-										label="地址">
+										prop="event"
+										label="事件"
+										sortable
+										width="180" >
+										<template slot-scope="scope">
+											<el-input v-model="scope.row.event"  :disabled="scope.row.type=='0'?false:true" placeholder="请选择">
+											</el-input>
+										</template>
+									</el-table-column>
+									<el-table-column
+										prop="classpath"
+										label="处理类"
+										sortable
+										width="180">
+										<template slot-scope="scope">
+											<el-input v-model="scope.row.classpath" :disabled="scope.row.type=='1'?false:true" placeholder="请选择">
+											</el-input>
+										</template>
 									</el-table-column>
 									</el-table>
-									<!-- <el-table
-									:data="bigtitle[index].actionList"
-									row-key="ID"
-									border
-									stripe
-									:fit="true"
-									highlight-current-row="highlight-current-row"
-									style="width: 100%;"
-									:default-sort="{prop:'bigtitle[index].actionList', order: 'descending'}"
-								>
-									<el-table-column prop="bigtitle[index].actionLis.flag" label="事件"  width="150px">
-									<template slot-scope="scope">
-										<el-form-item
-										:prop="'bigtitle[index].actionLis.'+scope.$index + '.flag'"
-										:rules="[{required: true, message: '请输入', trigger: 'blur'}]"
-										>
-										<el-input
-											size="small"
-											v-model="scope.row.flag"
-											placeholder="请输入"
-										>
-											<el-button slot="append" icon="el-icon-search"></el-button>
-										</el-input>
-										</el-form-item>
-									</template>
-									</el-table-column>
-
-									<el-table-column prop="bigtitle[index].actionLis.type" label="类型变更"  width="150px">
-									<template slot-scope="scope">
-										<el-form-item
-										:prop="'bigtitle[index].actionLis.'+scope.$index + '.type'"
-										:rules="[{required: true, message: '请输入', trigger: 'blur'}]"
-										>
-										<el-input
-											size="small"
-											v-model="scope.row.type"
-											placeholder="请输入"
-										>
-											<el-button slot="append" icon="el-icon-search"></el-button>
-										</el-input>
-										</el-form-item>
-									</template>
-									</el-table-column>
-									<el-table-column fixed="right" label="操作" width="120px">
-									<template slot-scope="scope">
-										<el-button
-										
-										type="text"
-										size="small"
-										>
-										<i class="icon-trash red"></i>
-										</el-button>
-									</template>
-									</el-table-column>
-								</el-table> -->
 								</el-tab-pane>  
 							</el-tabs>
-                            
-							
-
 						</el-collapse-item>	
 					</el-collapse>
 					</div>
@@ -137,12 +116,8 @@
 
 <script>
 	import Config from '../../config.js'
-	import iframemask from '../flowDetails/ifram.vue'
 	export default {
 		name: 'masks',
-		components: {
-			iframemask
-		},
 		data() {
 			return {
 				falg:false,//保存验证需要的
@@ -152,6 +127,8 @@
 				bigtitle:[],//保存节点数据
 				dataInfo:{},//
 				options:[],//流程节点类型
+				action_typeoptions:[],//流程事件类型
+				flag_valoptions:[],//流程执行标识
 				edit: true, //禁填
 				noedit:false,
 				show: false,
@@ -167,11 +144,27 @@
 			cadidate_type(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=cadidate_type';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
           			this.options = res.data;
 				}).catch((wrong) => {
 				})	
-      		},
+			},
+			//流程事件类型
+			action_type(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=action_type';
+				this.$axios.get(url, {}).then((res) => {
+          			this.action_typeoptions = res.data;
+				}).catch((wrong) => {
+				})	
+			},
+			//流程执行标识
+			flag_val(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=flag_val';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+          			this.flag_valoptions = res.data;
+				}).catch((wrong) => {
+				})	
+			},
 			//添加显示弹窗
 			visible(id) {
                 this.show = true;
@@ -253,7 +246,9 @@
 			
 		},
 		mounted() {
-			this.cadidate_type();	
+			this.cadidate_type();
+			this.action_type();	
+			this.flag_val();
 		},
 		
 	}

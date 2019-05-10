@@ -315,6 +315,7 @@
 				this.$axios.get(url, {
 				}).then((res) => {
 					this.dataInfo = res.data;
+					console.log(res.data);
 					this.show = true;
 				}).catch((wrong) => {})
 			},
@@ -459,9 +460,12 @@
 					this.depetData = res.data;
 					if(!!this.dataInfo.id){
 						var membershipList=this.dataInfo.membershipList;
+						if(!!membershipList[this.index].superviseDepts){
 							for(var m=0;m<membershipList[this.index].superviseDepts.length;m++){
 								arr.push(membershipList[this.index].superviseDepts[m].id);
 							}
+						}
+							
 						this.$nextTick(function() {
 							this.$refs.tree.setCheckedKeys(arr)
 						})

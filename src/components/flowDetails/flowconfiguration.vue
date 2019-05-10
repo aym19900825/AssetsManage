@@ -12,10 +12,41 @@
 					</div>
 				</div>
 				<div class="mask_content pt10 pl10 pr10 pb10">
+					<div class="accordion">
+					<el-collapse>
 					<el-tabs v-model="activeName" >
-                        <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" name="first">
+                        <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
+							<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
+								<el-row>
+                        			<el-col :span="5">
+										<el-select v-model="bigtitle[index].type" placeholder="请选择">
+											<el-option
+											v-for="item in options"
+											:key="item.code"
+											:label="item.name"
+											:value="item.code">
+											</el-option>
+										</el-select>
+									</el-col>
+									<el-col :span="5">
+										<el-input v-model="bigtitle[index].executer" v-show="bigtitle[index].type=='0'" :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+										</el-input>
+										<!--  -->
+										<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='1'" :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+										</el-input>
+
+										<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='2'" :disabled="true">
+											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+										</el-input>
+                        			</el-col>
+								</el-row>
+							</el-form>
                         </el-tab-pane>  
                     </el-tabs>
+					</el-collapse>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -36,24 +67,37 @@
 				basic_url: Config.dev_url,
 				show:false,
                 selUser: [],
-                bigtitle:[],//保存节点数据
+				bigtitle:[],//保存节点数据
+				dataInfo:{},//
+				options:[],//流程节点类型
 				edit: true, //禁填
+				noedit:false,
 				show: false,
 				isok1: true,
 				isok2: false,
                 modelId:'',
-                activeName: 'first'
+                activeName: 'tab0'
 			};
 		},
 		methods: {
+			//流程节点类型
+			cadidate_type(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=cadidate_type';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+          			this.options = res.data;
+				}).catch((wrong) => {
+				})	
+      		},
 			//添加显示弹窗
 			visible(id) {
                 this.show = true;
                 var url = this.basic_url + '/api-flow/flow/process/'+id;
                     this.$axios.get(url, {}).then((res) => {
+						console.log(res);
                         for(var i=0;i<res.data.candidateList.length;i++){
-                             res.data.candidateList[i].name=i;   
-                        }
+                             res.data.candidateList[i].name='tab'+i;   
+						}
                         this.bigtitle=res.data.candidateList;
                         console.log(this.bigtitle);
                     }).catch((err) => {
@@ -126,7 +170,7 @@
 			
 		},
 		mounted() {
-			
+			this.cadidate_type();	
 		},
 		
 	}

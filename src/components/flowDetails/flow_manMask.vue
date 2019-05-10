@@ -102,6 +102,15 @@
 			//添加显示弹窗
 			visible() {
 				this.show = true;
+				var url = this.basic_url + '/api-flow/flow/process/id';
+						this.$axios.get(url, {}).then((res) => {
+							this.modelId=res.data.modelId;
+							
+							if(res.status ==200) {
+     						this.$refs.child.visible();
+							}
+						}).catch((err) => {
+						});
 			},
 			//点击关闭按钮
 			close() {

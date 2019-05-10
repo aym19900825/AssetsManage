@@ -113,7 +113,6 @@
 					</el-row>
 				</div>
 			</div>
-		</div>
 		<flowmanmask ref="child" @request="requestData" ></flowmanmask>
 		<iframemask ref="childIframe" ></iframemask>
 	</div>		
@@ -199,7 +198,7 @@ export default {
 		//请求点击
 		getbtn(item){
 			if(item.name=="添加"){
-					this.openAddMgr();
+			    this.openAddMgr();
 			}else if(item.name=="修改"){
 				this.editor();
 			}else if(item.name=="彻底删除"){

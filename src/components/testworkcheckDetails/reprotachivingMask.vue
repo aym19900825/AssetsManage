@@ -158,7 +158,7 @@
 							<!-- <el-button type="primary" @click="saveAndUpdate()">保存</el-button> -->
 							<!-- <el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button> -->
 							<el-button type="success" @click="submited">确认报告归档</el-button>
-							<el-button type="primary" @click="readAuth()">查看报告文件</el-button>
+							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -181,6 +181,7 @@
 				approvingData:{},//流程传的数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
+				po_url:Config.po_url,//pageoffice 服务路径
 				selUser: [],
 				edit: true, //禁填
 				show: false,
@@ -325,7 +326,6 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/reportOnhole/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					this.report = res.data;
 					this.show = true;
 				}).catch((err) => {
@@ -473,6 +473,16 @@
 				this.show = true;
 				this.reset();
 			},
+			//查看报告文件
+			readAuth(){
+				this.detailgetData();
+				var url = this.po_url+"/show?fileid=" +this.report.FILEID
+					+ '&userid=' +  this.userid
+					+ '&username=' + this.username
+					+ '&deptid=' + this.deptid
+					+ '&deptfullname=' + this.deptfullname
+				window.open(url);
+        	},
 			reset(){
 				this.report = {
                     ID:'',	//报告ID

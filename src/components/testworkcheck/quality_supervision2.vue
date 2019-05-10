@@ -114,6 +114,7 @@
 				appName:'qualitySupApp2',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
+				po_url:Config.po_url,//pageoffice 服务路径
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},

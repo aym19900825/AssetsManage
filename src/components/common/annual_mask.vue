@@ -51,11 +51,11 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="类别" prop="TYPE"  label-width="85px">
-												<el-select v-model="WORKPLAN.TYPE" placeholder="请选择" :disabled="noedit" style="width: 100%">
+											<el-form-item label="类别" prop="PROXY_TYPE"  label-width="85px">
+												<el-select v-model="WORKPLAN.PROXY_TYPE" placeholder="请选择" :disabled="noedit" style="width: 100%">
 													<el-option v-for="item in selectDataType" :key="item.id" :value="item.code" :label="item.name"></el-option>
 												</el-select>
-												<!-- <el-select v-model="WORKPLAN.TYPE" placeholder="请选择" :disabled="noedit" style="width: 100%">
+												<!-- <el-select v-model="WORKPLAN.PROXY_TYPE" placeholder="请选择" :disabled="noedit" style="width: 100%">
 													<el-option label="监督抽查" value="1"></el-option>
 													<el-option label="质量抽查" value="2"></el-option>
 												</el-select> -->
@@ -789,7 +789,7 @@
 				rules: {
 					PROP_UNIT:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//提出单位
 					CJDW:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}], //承检单位
-					TYPE:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//类别
+					PROXY_TYPE:[{required: true, trigger: 'change', validator: this.Validators.isChoosedata}],//类别
 					COMPACTOR:[//编制人
 						{required: true, trigger: 'blur',message: '必填' },
 						{trigger: 'blur', validator: this.Validators.isNickname},
@@ -1742,7 +1742,7 @@
 					'WP_NUM': '',
 					'DESCRIPTION': '',
 					'YEAR': year,	
-					'TYPE': '1',
+					'PROXY_TYPE': '1',
 					'STATUS': '1',
 					'STATUSDesc': '草稿',
 					'LEADER_STATUS': '1',
@@ -2037,7 +2037,7 @@
 					'WP_NUM': '',
 					'DESCRIPTION': '',
 					'YEAR': year,	
-					'TYPE': '1',
+					'PROXY_TYPE': '1',
 					'STATUS': '1',
 					'LEADER_STATUS': '1',
 					'STATUSDATE': date,

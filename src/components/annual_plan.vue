@@ -120,8 +120,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="类型" prop="TYPE" label-width="45px">
-										<el-select clearable v-model="searchList.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" @keyup.enter.native="searchinfo">
+									<el-form-item label="类型" prop="PROXY_TYPE" label-width="45px">
+										<el-select clearable v-model="searchList.PROXY_TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" @keyup.enter.native="searchinfo">
 											<el-option label="监督抽查" value="1"></el-option>
 											<el-option label="质量抽查" value="2"></el-option>
 										</el-select>
@@ -129,7 +129,7 @@
 								</el-col>
 									<el-col :span="4">
 									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;    margin-left: 2px">重置</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 								</el-col>
 							</el-row>
 						</el-form>
@@ -163,7 +163,7 @@
 								</el-table-column>
 								<el-table-column label="年度" sortable width="80px" prop="YEAR" v-if="checkedName.indexOf('年度')!=-1">
 								</el-table-column>
-								<el-table-column label="类型" sortable  width="180px" prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" sortable  width="180px" prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<!-- <el-table-column label="产品类别" sortable width="200px" prop="ITEMTYPE" v-if="checkedName.indexOf('产品类别')!=-1">
 								</el-table-column> -->
@@ -250,7 +250,7 @@
 					},
 					{
 						label: '类型',
-						prop: 'TYPE'
+						prop: 'PROXY_TYPEDesc'
 					},
 					// {
 					// 	label: '产品类别',
@@ -292,7 +292,7 @@
 				searchList: {
 					WP_NUM: '',
 					DESCRIPTION: '',
-					TYPE: '',
+					PROXY_TYPE: '',
 					YEAR: '',
 					ENTERDATE:'',
 					ENTERBY:'',
@@ -343,7 +343,7 @@
 			this.searchList =  { //点击高级搜索后显示的内容
 				WP_NUM: '',
 				DESCRIPTION: '',
-				TYPE: '',
+				PROXY_TYPE: '',
 				YEAR: '',
 				ENTERDATE:'',
 				ENTERBY:'',
@@ -815,7 +815,7 @@
 		handleNodeClick(data) {
 			for(var i = 0; i < this.resourceData.length; i++) {
 				if(data.name == this.resourceData[i].name) {
-					this.searchList.TYPE = this.resourceData[i].code;
+					this.searchList.PROXY_TYPE = this.resourceData[i].code;
 				}
 			}
 			this.requestData();

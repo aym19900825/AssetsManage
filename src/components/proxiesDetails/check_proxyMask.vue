@@ -2602,7 +2602,7 @@ export default {
     },
     //生产单位名称
     appendnames(value) {
-      if (value.TYPE == 1) {
+      if (value.PROXY_TYPE == 1) {
         this.dataInfo.V_NAME = value.ID;
         this.dataInfo.PRODUCT_UNIT = value.CODE;
         this.dataInfo.P_NAMEDesc = value.NAME;

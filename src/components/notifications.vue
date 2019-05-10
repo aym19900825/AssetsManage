@@ -76,8 +76,8 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="5">
-									<el-form-item label="类型" prop="TYPE" label-width="45px">
-										<el-select clearable v-model="searchList.TYPE" placeholder="请选择类别" style="width: 100%;">
+									<el-form-item label="类型" prop="PROXY_TYPE" label-width="45px">
+										<el-select clearable v-model="searchList.PROXY_TYPE" placeholder="请选择类别" style="width: 100%;">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.code" :label="data.name"></el-option>
 										</el-select>
 									</el-form-item>
@@ -140,7 +140,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="类型" width="140" sortable prop="TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
+								<el-table-column label="类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('类型')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" width="130" prop="STATEDesc" sortable v-if="checkedName.indexOf('状态')!=-1">
 								</el-table-column>
@@ -231,7 +231,7 @@
 					},
 					{
 						label: '类型',
-						prop: 'TYPE'
+						prop: 'PROXY_TYPEDesc'
 					},
 					{
 						label: '下达日期',
@@ -283,7 +283,7 @@
 					N_CODE: '',
 					ITEM_NAME: '',
 					CJDW: '',
-					TYPE: '',
+					PROXY_TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
 					STATUS: ''
@@ -348,7 +348,7 @@
 					N_CODE: '',
 					ITEM_NAME: '',
 					CJDW: '',
-					TYPE: '',
+					PROXY_TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
 					STATUS: ''
@@ -708,7 +708,7 @@
 			handleNodeClick(data) {
 				for(var i = 0; i < this.resourceData.length; i++) {
 					if(data.name == this.resourceData[i].name) {
-						this.searchList.TYPE = this.resourceData[i].code;
+						this.searchList.PROXY_TYPE = this.resourceData[i].code;
 					}
 				}
 				this.requestData();

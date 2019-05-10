@@ -836,7 +836,6 @@
 			//查看
 			readAuth(){
 				this.detailgetData();
-				console.log(this.USESEAL);
             	var url = this.po_url+"/show?fileid=" +this.USESEAL.FILEID
 					+ '&userid=' +  this.userid
 					+ '&username=' + this.username

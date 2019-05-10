@@ -12,39 +12,121 @@
 					</div>
 				</div>
 				<div class="mask_content pt10 pl10 pr10 pb10">
-					<div class="accordion">
-					<el-collapse>
-					<el-tabs v-model="activeName" >
-                        <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
-							<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
-								<el-row>
-                        			<el-col :span="5">
-										<el-select v-model="bigtitle[index].type" placeholder="请选择">
-											<el-option
-											v-for="item in options"
-											:key="item.code"
-											:label="item.name"
-											:value="item.code">
-											</el-option>
-										</el-select>
-									</el-col>
-									<el-col :span="5">
-										<el-input v-model="bigtitle[index].executer" v-show="bigtitle[index].type=='0'" :disabled="true">
-											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-										</el-input>
-										<!--  -->
-										<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='1'" :disabled="true">
-											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-										</el-input>
+					<div class="content-accordion">
+					<el-collapse v-model="activeNames">
+						 <el-collapse-item title="流程节点" name="1">
+							<el-tabs v-model="activeName" >
+								<el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
+									<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
+										<el-row>
+											<el-col :span="5">
+												<el-select v-model="bigtitle[index].type" placeholder="请选择">
+													<el-option
+													v-for="item in options"
+													:key="item.code"
+													:label="item.name"
+													:value="item.code">
+													</el-option>
+												</el-select>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="bigtitle[index].executer" v-show="bigtitle[index].type=='0'" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												</el-input>
+												<!--  -->
+												<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='1'" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												</el-input>
 
-										<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='2'" :disabled="true">
-											<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='2'" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												</el-input>
+											</el-col>
+										</el-row>
+									</el-form>
+									 <el-table
+									:data="bigtitle[index].actionList"
+									style="width: 100%;margin-bottom: 20px;"
+									border
+									row-key="id">
+									<el-table-column
+										prop="bigtitle[index].actionLis.flag"
+										label="事件"
+										sortable
+										width="180">
+									</el-table-column>
+									<el-table-column
+										prop="bigtitle[index].actionLis.type"
+										label="类型变更"
+										sortable
+										width="180">
+									</el-table-column>
+									<el-table-column
+										prop="address"
+										label="地址">
+									</el-table-column>
+									</el-table>
+									<!-- <el-table
+									:data="bigtitle[index].actionList"
+									row-key="ID"
+									border
+									stripe
+									:fit="true"
+									highlight-current-row="highlight-current-row"
+									style="width: 100%;"
+									:default-sort="{prop:'bigtitle[index].actionList', order: 'descending'}"
+								>
+									<el-table-column prop="bigtitle[index].actionLis.flag" label="事件"  width="150px">
+									<template slot-scope="scope">
+										<el-form-item
+										:prop="'bigtitle[index].actionLis.'+scope.$index + '.flag'"
+										:rules="[{required: true, message: '请输入', trigger: 'blur'}]"
+										>
+										<el-input
+											size="small"
+											v-model="scope.row.flag"
+											placeholder="请输入"
+										>
+											<el-button slot="append" icon="el-icon-search"></el-button>
 										</el-input>
-                        			</el-col>
-								</el-row>
-							</el-form>
-                        </el-tab-pane>  
-                    </el-tabs>
+										</el-form-item>
+									</template>
+									</el-table-column>
+
+									<el-table-column prop="bigtitle[index].actionLis.type" label="类型变更"  width="150px">
+									<template slot-scope="scope">
+										<el-form-item
+										:prop="'bigtitle[index].actionLis.'+scope.$index + '.type'"
+										:rules="[{required: true, message: '请输入', trigger: 'blur'}]"
+										>
+										<el-input
+											size="small"
+											v-model="scope.row.type"
+											placeholder="请输入"
+										>
+											<el-button slot="append" icon="el-icon-search"></el-button>
+										</el-input>
+										</el-form-item>
+									</template>
+									</el-table-column>
+									<el-table-column fixed="right" label="操作" width="120px">
+									<template slot-scope="scope">
+										<el-button
+										
+										type="text"
+										size="small"
+										>
+										<i class="icon-trash red"></i>
+										</el-button>
+									</template>
+									</el-table-column>
+								</el-table> -->
+								</el-tab-pane>  
+							</el-tabs>
+                            
+							
+
+						</el-collapse-item>	
 					</el-collapse>
 					</div>
 				</div>
@@ -76,7 +158,8 @@
 				isok1: true,
 				isok2: false,
                 modelId:'',
-                activeName: 'tab0'
+				activeName: 'tab0',//节点
+				activeNames: ['1'],//手风琴
 			};
 		},
 		methods: {

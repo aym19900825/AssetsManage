@@ -194,7 +194,6 @@
 		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
 					<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 
 	</div>
 </template>
@@ -205,8 +204,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
 	import assignmissionmask from '../proxiesDetails/assignmissionmask.vue'//下达任务的弹出
-	// import reportmask from'../reportDetails/reportMask.vue'
-	import reportmask from'../common/common_mask/report.vue'
 	import vTable from '../plugin/table/table.vue'
 
 	export default {
@@ -217,7 +214,6 @@
 			navs_tabs,
 			inspectmask,
 			assignmissionmask,
-			reportmask,
 			vTable,
 			
 		},

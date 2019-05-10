@@ -45,8 +45,8 @@
 										</el-input>
 									</el-col>
 								</el-row>
-								<el-form-item label="" prop="TYPE">
-									<el-radio-group v-model="dataInfo.TYPE" :disabled="special || dataInfo.WP_NUM!=''" style="width:100%">
+								<el-form-item label="" prop="PROXY_TYPE">
+									<el-radio-group v-model="dataInfo.PROXY_TYPE" :disabled="special || dataInfo.WP_NUM!=''" style="width:100%">
 										<el-row v-if="!addtitle">
 											<el-col :span="6" v-if="!addtitle" >
 												<el-radio label="1">监督抽查</el-radio>
@@ -92,7 +92,7 @@
 									<el-col :span="8">
 										<el-form-item label="计划编号" prop="WP_NUM" label-width="110px">
 											<el-input v-model="dataInfo.WP_NUM" :disabled="edit">
-													<el-button slot="append" :disabled="false ||( dataInfo.TYPE!='2' && dataInfo.TYPE!='4')" icon="el-icon-search"></el-button>
+													<el-button slot="append" :disabled="false ||( dataInfo.PROXY_TYPE!='2' && dataInfo.PROXY_TYPE!='4')" icon="el-icon-search"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -114,7 +114,7 @@
 											<el-select	v-model="dataInfo.CJDW" 
 														default-first-option 
 														placeholder="请选择" 
-														:disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4' || dataInfo.WP_NUM!=''" 
+														:disabled="special || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4' || dataInfo.WP_NUM!=''" 
 														style="width: 100%"
 														@change="changeCJDW">
 												<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
@@ -124,14 +124,14 @@
 									<el-col :span="8">
 										<el-form-item label="产品类别" prop="PRODUCT_TYPE" label-width="110px">
 											<el-input v-model="dataInfo.PRODUCT_TYPE" disabled>
-												   <el-button slot="append" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addcategory"></el-button>
+												   <el-button slot="append" :disabled="special || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addcategory"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="受检产品名称" prop="ITEM_NAME" label-width="110px">
 											<el-input v-model="dataInfo.ITEM_NAME" disabled>
-												   <el-button slot="append" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addproduct"></el-button>
+												   <el-button slot="append" :disabled="special || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="addproduct"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -139,13 +139,13 @@
 								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检产品型号" prop="ITEM_MODEL" label-width="110px">
-											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''"></el-input>
+											<el-input v-model="dataInfo.ITEM_MODEL" :disabled="special || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="项目负责人" prop="P_LEADERDesc" label-width="110px">
 											<el-input v-model="dataInfo.P_LEADERDesc" :disabled="true">
-												<el-button :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'" slot="append" icon="el-icon-search" @click="addperbtn('leader')"></el-button>
+												<el-button :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'" slot="append" icon="el-icon-search" @click="addperbtn('leader')"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -156,7 +156,7 @@
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAMEDesc" label-width="140px">
 											<el-input v-model="dataInfo.V_NAMEDesc" disabled>
-												<el-button slot="append" :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
+												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -167,8 +167,8 @@
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="接收人" prop="ACCEPT_PERSONDesc" label-width="110px">
-											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'">
-												<el-button slot="append" icon="el-icon-search" @click="addperbtn('accept')" :disabled="noedit || dataInfo.TYPE=='2' || dataInfo.TYPE=='4'"></el-button>
+											<el-input v-model="dataInfo.ACCEPT_PERSONDesc" :disabled="edit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'">
+												<el-button slot="append" icon="el-icon-search" @click="addperbtn('accept')" :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'"></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -183,11 +183,11 @@
 								<el-tabs v-model="activeName">
 									<el-tab-pane label="检验检测依据" name="first">
 										<div class="table-func table-funcb table-funcW100">
-											<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
+											<el-button type="success" size="mini" round @click="addfieldBasis" v-show="!(dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建中心外</font>
 											</el-button>
-											<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
+											<el-button type="primary" size="mini" round @click="basisleadbtn" v-show="!(dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 												<i class="icon-search"></i>
 												<font>选择中心内</font>
 											</el-button>
@@ -253,11 +253,11 @@
 
 									<el-tab-pane label="检验检测项目与要求" name="second">
 											<div class="table-func table-funcb table-funcW100">
-											<el-button type="success" size="mini" round @click="addfieldProject" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
+											<el-button type="success" size="mini" round @click="addfieldProject" v-show="!(dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 													<i class="icon-add"></i>
 													<font>新建中心外</font>
 											</el-button>
-											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="!(dataInfo.TYPE=='2' || dataInfo.TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
+											<el-button type="primary" size="mini" round @click="basisleadbtn2" v-show="!(dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!='')&&!viewtitle">
 												<i class="icon-search"></i>
 												<font>选择中心内</font>
 											</el-button>
@@ -593,7 +593,7 @@
 				dialogVisible: false, //对话框
 				dataInfo: { //添加数据库列表信息
 					N_CODE: '',
-					TYPE: '',
+					PROXY_TYPE: '',
 					XD_DATE: '',
 					PRODUCT_TYPE:'',
 					ITEM_NAME: '',
@@ -620,7 +620,7 @@
 					WORK_NOTICE_CHECKPROJECTList: [],
 				},
 				rules: {
-					TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
+					PROXY_TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
 					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
 					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
 					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
@@ -744,7 +744,7 @@
 				this.dataInfo = {
 					WP_NUM: '',
 					N_CODE: '',
-					TYPE: '',
+					PROXY_TYPE: '',
 					XD_DATE: '',
 					PRODUCT_TYPE:'',
 					ITEM_NAME: '',
@@ -1071,7 +1071,7 @@
 					}
 					res.data.CJDW=Number(res.data.CJDW);
 					this.dataInfo = res.data; 
-					if(this.dataInfo.TYPE==2||this.dataInfo.TYPE==4){
+					if(this.dataInfo.PROXY_TYPE==2||this.dataInfo.PROXY_TYPE==4){
 						this.reviewtitle = true;
 					}else{
 						this.reviewtitle  = false;
@@ -1263,11 +1263,11 @@
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 		appendnames(value){
-				if(value.TYPE==1||value.TYPE==3){
+				if(value.PROXY_TYPE==1||value.PROXY_TYPE==3){
 					this.dataInfo.V_NAME=value.ID;
 					this.dataInfo.V_NAMEDesc=value.NAME;
 					this.dataInfo.DEPUTE_TYPE=1;
-				}else if(value.TYPE==2){
+				}else if(value.PROXY_TYPE==2){
 					this.dataInfo.V_NAMEDesc=value.fullname;
 					this.dataInfo.V_NAME=value.id;
 					this.dataInfo.DEPUTE_TYPE=2;

@@ -858,8 +858,8 @@
 			},
 			transformTree(data) {
 				for(var i = 0; i < data.length; i++) {
-					data[i].name = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
-					data[i].lable = data[i].fullname || data[i].TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].name = data[i].fullname || data[i].PROXY_TYPE || data[i].pName || data[i].PRO_NAME;
+					data[i].lable = data[i].fullname || data[i].PROXY_TYPE || data[i].pName || data[i].PRO_NAME;
 					if($.isArray(data[i].children)) {
 						data[i].iconClass = 'icon-file-normal';
 					} else {

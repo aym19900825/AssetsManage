@@ -4,20 +4,20 @@
 			<el-form inline-message :model="searchList" label-width="70px">
 				<el-row :gutter="10">
 					<el-col :span="6">
-						<el-form-item label="统一社会信用代码" prop="customercode" label-width="140px">
-							<el-input v-model="searchList.customercode">
+						<el-form-item label="统一社会信用代码" prop="CUSTOMERCODE" label-width="140px">
+							<el-input v-model="searchList.CUSTOMERCODE">
 							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
-						<el-form-item label="单位名称" prop="customername">
-							<el-input v-model="searchList.customername">
+						<el-form-item label="单位名称" prop="CUSTOMERNAME">
+							<el-input v-model="searchList.CUSTOMERNAME">
 							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="5">
-						<el-form-item label="联系地址" prop="customeraddress">
-							<el-input v-model="searchList.customeraddress">
+						<el-form-item label="联系地址" prop="CUSTOMERADDRESS">
+							<el-input v-model="searchList.CUSTOMERADDRESS">
 							</el-input>
 						</el-form-item>
 					</el-col>
@@ -81,9 +81,9 @@
 			selUser: [],//接勾选的值
 			type:'',
 			searchList: {
-			customercode: '',
-			customeraddress: '',
-			customername: '',
+			CUSTOMERCODE: '',
+			CUSTOMERADDRESS: '',
+			CUSTOMERNAME: '',
 			},
 			page: {
 				currentPage: 1,
@@ -157,9 +157,9 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
-			customername: this.searchList.customername,
-			customercode: this.searchList.customercode,
-			customeraddress: this.searchList.customeraddress,
+			CUSTOMERNAME: this.searchList.CUSTOMERNAME,
+			CUSTOMERCODE: this.searchList.CUSTOMERCODE,
+			CUSTOMERADDRESS: this.searchList.CUSTOMERADDRESS,
 		};
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=' + this.$store.state.currentcjdw[0].id;//如果父组件没有传CJDW承检单位侧显示所有数
 		this.$axios.get(url, {params: data}).then((res) => {

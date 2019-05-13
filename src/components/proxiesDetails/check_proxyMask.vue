@@ -27,26 +27,10 @@
           >
             <div class="text-center" v-show="viewtitle">
               <span v-if="this.dataInfo.STATE!=3" class="pr10">
-                <el-button
-                  id="start"
-                  type="success"
-                  round
-                  plain
-                  size="mini"
-                  @click="startup"
-                  v-show="start"
-                >
+                <el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start">
                   <i class="icon-start"></i> 提交审批
                 </el-button>
-                <el-button
-                  id="approval"
-                  type="warning"
-                  round
-                  plain
-                  size="mini"
-                  @click="approvals"
-                  v-show="approval&&nodeState!='3'"
-                >
+                <el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'">
                   <i class="icon-edit-3"></i> 审批
                 </el-button>
                 <el-button
@@ -1892,11 +1876,10 @@ export default {
           this.dataInfo.DEPTID = res.data.deptId;
           this.dataInfo.ENTERBY = res.data.id;
           var date = new Date();
-          this.dataInfo.ENTERDATE = this.$moment(date).format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
-          this.dataInfo.DETECTIONTYPE = "2";
+          this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
+          this.dataInfo.DETECTIONTYPE = "2";//委托书类别
           this.dataInfo.DETECTIONTYPEDesc = "检测";
+          this.dataInfo.PROXY_TYPE = "12";//检验检测类型，12为第三方委托
           this.dataInfo.R_VENDORDesc = this.$store.state.currentcjdw[0].fullname;
           this.dataInfo.R_VENDOR = this.$store.state.currentcjdw[0].id;
           this.show = true;

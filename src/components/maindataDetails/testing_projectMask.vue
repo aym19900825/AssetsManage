@@ -65,7 +65,7 @@
 											<el-form-item label="计量单位" prop="UNIT" label-width="100px">
 												<!-- <el-input v-model="testing_projectForm.UNIT" :disabled="noedit"></el-input> -->
 												<el-select v-model="testing_projectForm.UNIT" filterable default-first-option allow-create :disabled="noedit" style="width: 100%">
-													<el-option v-for="item in selectData" :key="item.id" :value="item.name" :label="item.name" :class="item.name"></el-option>
+													<el-option v-for="(item,index) in selectData" :key="index" :value="item.name" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>
@@ -76,14 +76,6 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<!-- <el-col :span="8">
-										<el-col :span="8">
-											<el-form-item label="人员资质" prop="QUALIFICATION" label-width="100px">
-												<el-input v-model="testing_projectForm.QUALIFICATION" :disabled="true">
-													<el-button slot="append" icon="el-icon-search" @click="getpepole"></el-button>
-												</el-input>
-											</el-form-item>
-										</el-col> -->
 									</el-row>
 									<el-row>
 										<el-col :span="8">
@@ -118,7 +110,16 @@
 										</el-button>
 									</div>
 									<div class="pt10">
-										<el-table ref="table" :header-cell-style="rowClass" :fit="true" :data="testing_projectForm.QUALIFICATIONList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" @cell-click="iconOperation" :default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
+										<el-table ref="qualification" :header-cell-style="rowClass" :fit="true"
+										:data="testing_projectForm.QUALIFICATIONList"
+										row-key="ID"
+										border
+										stripe
+										max-height="260"
+										highlight-current-row
+										style="width: 100%;"
+										@cell-click="iconOperation"
+										:default-sort="{prop:'testing_projectForm.QUALIFICATIONList', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
@@ -131,7 +132,7 @@
 												<template slot-scope="scope">
 													<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 														<el-input v-if="scope.row.isEditing" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
-															<el-button slot="append" icon="icon-search" @click="getpepole(scope.row)" :disabled="noedit"></el-button>
+															<el-button slot="append" icon="icon-search" @click="getqualication(scope.row)" :disabled="noedit"></el-button>
 														</el-input>
 														<span v-else>{{scope.row.C_NAME}}</span>
 													</el-form-item>
@@ -189,44 +190,35 @@
 					</el-form>
 				</div>
 			</div>
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%">
-				<el-table :data="gridDataList" @selection-change="SelChange" height="400px">
-					<el-table-column type="selection" width="55" fixed>
-					</el-table-column>
-					<!-- <el-table-column label="用户名" sortable width="100px" prop="user">
-					</el-table-column> -->
-					<el-table-column label="证书名称" sortable width="200px" prop="c_name">
-					</el-table-column>
-					<el-table-column label="资质有效期" sortable prop="c_date">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="text-right" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
-				<span slot="footer" class="dialog-footer">
-	    			<el-button @click="dialogVisible = false">取 消</el-button>
-	    			<el-button type="primary" @click="dailogconfirm()">确 定</el-button>
-	  			</span>
-			</el-dialog>
 
 			<!-- 作业指导书 Begin -->
-			<el-dialog :modal-append-to-body="false" title="作业指导书" :visible.sync="dialogVisible2" width="80%">
-				<el-table ref="table" 
-					:header-cell-style="rowClass" 
-					:data="WORK_INSTRUCTIONList" 
-					border 
-					stripe 
-					height="400" 
-					style="width: 100%;" 
-					:default-sort="{prop:'WORK_INSTRUCTIONList', order: 'descending'}" 
-					@selection-change="SelChange" 
-					>
-					<el-table-column type="selection" fixed width="55">
-					</el-table-column>
+			<el-dialog title="作业指导书" :modal-append-to-body="false" :visible.sync="dialogVisible" width="80%">
+				<!-- 高级查询划出 Begin-->
+				<div class="pb10">
+					<el-form inline-message :model="searchList" label-width="100px">
+						<el-row :gutter="10">
+							<el-col :span="8">
+								<el-form-item label="分发号" prop="NUM">
+									<el-input v-model="searchList.NUM" @keyup.enter.native="searchinfo">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="文件名称" prop="DESCRIPTION">
+									<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
+				<!-- 高级查询划出 End-->
+				<v-table ref="tablePlugin" :appName="appName" :newHeight="newHeight" :searchList="searchList" @getSelData="setSelData">
 					<el-table-column label="分发号" width="155" sortable prop="NUM">
-						<template slot-scope="scope">
-							<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.NUM}}
-							</p>
-						</template>
 					</el-table-column>
 					<el-table-column label="文件名称" sortable prop="DESCRIPTION">
 					</el-table-column>
@@ -236,10 +228,7 @@
 					</el-table-column>
 					<el-table-column label="机构" width="120" prop="DEPTIDDesc" sortable>
 					</el-table-column>
-				</el-table>
-
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-				</el-pagination>
+				</v-table>
 
 				<span slot="footer" class="dialog-footer">
 			       <el-button type="primary" @click="addwork">确 定</el-button>
@@ -248,56 +237,61 @@
 			</el-dialog>
 			<!-- 作业指导书 End -->
 
+			<!-- 资质证书 Begin -->
+			<el-dialog title="资质证书" :modal-append-to-body="false" :visible.sync="dialogVisible2" width="70%">
+				<!-- 高级查询划出 Begin-->
+				<div class="pb10">
+					<el-form inline-message :model="searchList2" label-width="100px">
+						<el-row :gutter="10">
+							<el-col :span="8">
+								<el-form-item label="证书名称" prop="c_name">
+									<el-input v-model="searchList2.c_name" @keyup.enter.native="searchinfo2">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="8">
+								<el-form-item label="资质有效期" prop="c_date">
+									<el-input v-model="searchList2.c_date" @keyup.enter.native="searchinfo2">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchinfo2" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetbtn2" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+							</el-col>
+						</el-row>
+					</el-form>
+				</div>
+				<!-- 高级查询划出 End-->
+				<v-table ref="tableQualification" :appName="appName2" :newHeight="newHeight" :searchList="searchList2" @getSelData="setSelData">
+					<el-table-column label="证书名称" sortable width="200px" prop="c_name">
+					</el-table-column>
+					<el-table-column label="资质有效期" sortable prop="c_date">
+					</el-table-column>
+				</v-table>
+				<span slot="footer" class="dialog-footer">
+	    			<el-button type="primary" @click="dailogconfirm">确定</el-button>
+	    			<el-button @click="dialogVisible2 = false">取消</el-button>
+	  			</span>
+			</el-dialog>
+			<!-- 资质证书 End -->
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'masks',
+		components: {
+			'v-table': vTable
+		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateP_NAME = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写项目名称'));
-				} else {
-					callback();
-				}
-			};
-			var validateQUANTITY = (rule, value, callback) => {
-				if(value === ""){
-					 callback(new Error("请填写数字"));
-				}else{
-		             callback();
-		        }
-			};
-			var validateQUALIFICATION = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写人员资质'));
-				} else {
-					callback();
-				}
-			};
-			var validateDOCLINKS_NUM = (rule, value, callback) => {
-				if(this.testing_projectForm.DOCLINKS_NUM === '') {
-					callback(new Error('请选择作业指导书'));
-				} else {
-					callback();
-				}
-			};
-			
 			return {
+				appName: 'workIns',//作业指导书
+				appName2: 'qualifications',//资质证书
+				newHeight: '300',//传给弹出框表格高度
 				testing_projectForm:{
 					CHANGEBY: '',
 					CHILD_FIELD:'',
@@ -318,7 +312,14 @@
 					VERSION: 1,
 					WORK_INSTRUCTIONList: []
 				},
-				
+				searchList: { //点击[作业指导书]搜索
+					NUM: '',
+					DESCRIPTION: '',
+				},
+				searchList2: { //点击[资质证书]搜索
+					c_name: '',
+					c_date: '',
+				},
 				basic_url: Config.dev_url,
 				editSearch: '',
 				value: '',
@@ -337,7 +338,6 @@
 				down: true,
 				up: false,
 				activeNames: ['1','2','3'], //手风琴数量
-				dialogVisible: false, //对话框
 				rules: { //需要验证的字段
 					P_NUM: [{
 						required: false,
@@ -392,7 +392,8 @@
 				hintshow:false,
 				statusshow1:true,
 				statusshow2:false,
-				dialogVisible2:false,//作业指导书弹出框
+				dialogVisible: false, //对话框
+				dialogVisible2: false,//作业指导书弹出框
 				WORK_INSTRUCTIONList:[],
 				fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
 				isEditing: true,
@@ -400,13 +401,34 @@
 			};
 		},
 		methods: {
+			//点击重置[作业指导书]搜索
+			resetbtn(){
+				this.searchList =  { 
+					NUM: '',
+					DESCRIPTION: '',
+				};
+				this.workInsData();
+			},
+			//点击搜索[作业指导书]查询
+			searchinfo() {
+				this.workInsData();
+			},
+			//点击重置[资质证书]搜索
+			resetbtn2(){
+				this.searchList2 =  { 
+					c_name: '',
+					c_date: '',
+				};
+				this.qualicationData();
+			},
+			//点击搜索[资质证书]查询
+			searchinfo2() {
+				this.qualicationData();
+			},
+			//人员资质-新建行
 			addfield() {
 				var obj = {
-					ID:'',
-					STEP: '',
-					C_NUM: '',
 					C_NAME: '',
-					C_DATE: '',
 					isEditing: true
 				};
 				this.testing_projectForm.QUALIFICATIONList.push(obj);
@@ -488,16 +510,60 @@
 					this.resourceData = res.data.data;
 				});
 			},
+			//点击作业指导书放大镱
 			getwork(){
-				this.requestData();
-				this.dialogVisible2 = true;
+				this.dialogVisible = true;
+				this.workInsData();//作业指导书数据
 			},
+			//弹出框-作业指导书
+			workInsData(opt) {
+				if(!this.$refs.tablePlugin){
+					setTimeout(()=>{
+						this.$refs.tablePlugin.requestData();//requestData子组件中接收数据的方法名
+					}, 2000);
+				}else{
+					this.$refs.tablePlugin.requestData();
+				}
+			},
+			//人员资质证书
+			getqualication(rowID){
+				this.rowID = rowID;
+				this.dialogVisible2 = true;
+				this.qualicationData();//资质证书数据
+			},
+			//资质证书
+			qualicationData(opt) {
+				if(!this.$refs.tableQualification){
+					setTimeout(()=>{
+						this.$refs.tableQualification.requestData();//requestData子组件中接收数据的方法名
+					}, 2000);
+				}else{
+					this.$refs.tableQualification.requestData();
+				}
+			},
+			// qualicationData(item) {
+			// 	var data = {
+			// 		c_name: this.searchList2.c_name,
+			// 		c_date: this.searchList2.c_date,
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	}
+			// 	this.peoplegrid = item;
+			// 	var url = this.basic_url + '/api-user/users/qualifications';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;
+			// 		this.gridDataList = res.data.data;
+			// 		this.dialogVisible2 = true;
+			// 	});
+			// },
 			getCheckedNodes() { //获取树菜单节点
 				this.checkedNodes = this.$refs.tree.getCheckedNodes()
 			},
 			confirms() { //弹出框确定按钮调用数据
 				this.getCheckedNodes();
-				this.dialogVisible = false;
+				this.dialogVisible2 = false;
 				if(this.editSearch == 'DOCLINKS') {
 					this.testing_projectForm.DOCLINKSId = this.checkedNodes[0].id;
 					this.testing_projectForm.DOCLINKS_NUM = this.checkedNodes[0].simplename;
@@ -509,23 +575,13 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.selectData = res.data;
 					this.testing_projectForm.UNIT = res.data[0].name;
-					// this.testing_projectForm.UNITDesc = res.data[0].name;
-					console.log(this.testing_projectForm.UNIT);
-
 				}).catch((wrong) => {
 				})	
 			},
-			SelChange(val) {
+			setSelData(val) {
 				this.selval = val;
 			},
-			sizeChange(val) {
-				this.page.pageSize = val;
-				this.requestData();
-			},
-			currentChange(val) {
-				this.page.currentPage = val;
-				this.requestData();
-			},
+		
 			handleClose(done) { //确认框关闭
 				this.$confirm('确认关闭？')
 					.then(_ => {
@@ -613,7 +669,8 @@
 			},
 			//这是查看
 			view(dataid) {
-				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid;
+				console.log(dataid);
+				var url = this.basic_url + '/api-apps/app/inspectionPro/' + dataid.ID;
 				this.$axios.get(url, {}).then((res) => {
 					this.testing_projectForm = res.data;
 				}).catch((err) => {
@@ -646,6 +703,7 @@
 				}).catch((err) => {
 				});
 			},
+			//修订
 			modifyversion() {
 				this.$refs.testing_projectForm.validate((valid) => {
 					if(valid) {
@@ -795,18 +853,8 @@
 						}
 				});
 			},
-			getpepole(item) {
-				this.peoplegrid = item;
-				var url = this.basic_url + '/api-user/users/qualifications';
-				this.$axios.get(url, {
-					
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					this.gridDataList = res.data.data;
-					this.dialogVisible = true;
-				});
-			},
-			dailogconfirm() { //小弹出框确认按钮事件
+			//证书名称-小弹出框确认按钮事件
+			dailogconfirm(rowID) {
 				if(this.selval.length == 0){
 					this.$message({
 						message: '请选择数据',
@@ -818,8 +866,8 @@
 						type: 'warning'
 					});
 				}else{
-					this.peoplegrid.C_NAME = this.selval[0].c_name;
-					this.dialogVisible = false;
+					this.rowID.C_NAME = this.selval[0].c_name;
+					this.dialogVisible2 = false;
 				}
 			},
 			addwork() { //小弹出框确认按钮事件
@@ -855,7 +903,7 @@
 				this.resetBasisInfo();//调用resetBasisInfo函数
 			},
 			resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
-				this.dialogVisible2 = false;//关闭弹出框
+				this.dialogVisible = false;//关闭弹出框
 				this.WORK_INSTRUCTIONList = [];//列表数据置空
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
@@ -870,37 +918,39 @@
 				$('.v-modal').hide();
 			});
 			},
-			requestData(index) {
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				}
-				var url = this.basic_url + '/api-apps/app/workIns';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.commentArr[this.page.currentPage] = res.data.data
-					let newarr = []
-					for(var i = 1; i <= totalPage; i++) {
-
-						if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
-
-							for(var j = 0; j < this.commentArr[i].length; j++) {
-								newarr.push(this.commentArr[i][j])
-							}
-						}
-					}
-					this.WORK_INSTRUCTIONList = newarr;
-				}).catch((wrong) => {})
-			},
+			
+			// //作业指导书
+			// workInsData() {
+			// 	var data = {
+			// 		NUM: this.searchList.NUM,
+			// 		DESCRIPTION: this.searchList.DESCRIPTION,
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/workIns';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;
+			// 		//总的页数
+			// 		let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage) {
+			// 			this.loadSign = false
+			// 		} else {
+			// 			this.loadSign = true
+			// 		}
+			// 		this.commentArr[this.page.currentPage] = res.data.data
+			// 		let newarr = []
+			// 		for(var i = 1; i <= totalPage; i++) {
+			// 			if(typeof(this.commentArr[i]) != 'undefined' && this.commentArr[i].length > 0) {
+			// 				for(var j = 0; j < this.commentArr[i].length; j++) {
+			// 					newarr.push(this.commentArr[i][j])
+			// 				}
+			// 			}
+			// 		}
+			// 		this.WORK_INSTRUCTIONList = newarr;
+			// 	}).catch((wrong) => {})
+			// },
 		},
 		mounted() {
 			this.getMeteUnit();//计量单位

@@ -1365,8 +1365,9 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.DETECTIONTYPE = '1';
+					this.dataInfo.DETECTIONTYPE = '1';//委托书类别
 					this.dataInfo.DETECTIONTYPEDesc = '检验';
+					this.dataInfo.PROXY_TYPE = "12";//检验检测类型，12为第三方委托
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;

@@ -5,7 +5,8 @@
       @sort-change='tableSortChange'
       border
       :stripe="stripe"
-      :style="{width: fullWidth,height: fullHeight}"
+      :height="fullHeight"
+      style="width: 100%;"
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
@@ -55,7 +56,6 @@ export default {
       isshift: false,
       isctrl: false,
       stripe: true,//table表格是否需要奇偶区别斑马线，true是false否
-      fullWidth:'100%',
       fullHeight: document.documentElement.clientHeight - 210 + 'px',
       // fullHeight: '',
       loading: false,
@@ -66,7 +66,8 @@ export default {
     //判断高度
     isHeight(){
       if(!!this.newHeight){
-        this.fullHeight = this.newHeight + 'px';
+        this.newHeight.replace('px','');
+        $('.el-table').height(this.newHeight);
       }else{
         this.fullHeight = document.documentElement.clientHeight - 210 + 'px';
       }
@@ -179,8 +180,6 @@ export default {
       this.requestData();
     },
     requestData(opt){
-      console.log(90);
-      this.isHeight();//获取高度
       console.log(this.newHeight);
       console.log(this.appName);
       this.loadding = true;

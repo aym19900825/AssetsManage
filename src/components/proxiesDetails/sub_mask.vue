@@ -18,15 +18,14 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="170px" class="demo-adduserForm">
-						<div class="text-center" v-show="viewtitle">
+						<!-- <div class="text-center" v-show="viewtitle">
 							<span v-if="this.report.STATE!=3" class="pr10">
-							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 确认接收</el-button>
-							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
+						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="承包方分包协议" name="1">
@@ -173,7 +172,8 @@
 							<el-button @click="close">取消</el-button>
 						</div> -->
                         <div class="content-footer" v-show="viewtitle">
-							<el-button type="primary" @click="createinspect()">生成委托书</el-button>
+							<el-button type="success" @click="confirmReceipt" v-show="this.report.STATE=='1'"><i class="icon-check"></i> 确认接收此分包协议</el-button>
+							<el-button type="primary" @click="createInspect" v-show="this.report.STATE=='2'">生成委托书</el-button>
 						</div>
 					</el-form>
 				</div>
@@ -270,8 +270,8 @@
 					V_NAME:'',//委托方名称
 					VENDOR:'',  //单位名称
 					CONTRACT_NATURE:'',//分包性质
-					STATE:'1',//流程状态
-					STATEDesc:'草稿',
+					STATE:'',//流程状态
+					STATEDesc:'',
 					ITEM_STATUS:'',//样品状态
 					TYPE:'',    //分包协议类别
 					ITEMNAME :'',//样品名称
@@ -433,10 +433,10 @@
 		    				var url = this.basic_url + '/api-apps/app/subcontrac/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
-										this.$message({
-											message:res.data.resp_msg,
-											type: 'warning'
-										});
+									this.$message({
+										message:res.data.resp_msg,
+										type: 'warning'
+									});
 								}else{
 									this.$refs.approvalChild.visible();
 								}
@@ -551,8 +551,28 @@
 			saveAndSubmit() {
 				this.save();
 				this.show = true;
-            },
-            createinspect(){
+			},
+			//确认接收此分包协议
+			confirmReceipt(){
+                var dataid = this.report.ID;
+                var url=this.basic_url + '  /api-apps/app/subcontrac/operate/confirmReceive?id=' + dataid;
+                this.$axios.get(url, {}).then((res) => {
+                    if(res.data.resp_code == 0) {
+                        this.$message({
+                            message: '分包协议接收成功',
+                            type: 'success'
+                        });
+                    }else{
+                        this.$message({
+                        message: '已接收此分包协议，请勿重复操作',
+                        type: 'warning'
+                        });
+                    }
+                }).catch((err) => {
+                });
+			},
+			//生成委托书
+            createInspect(){
                 var dataid = this.report.ID;
                 var url=this.basic_url + '/api-apps/app/subcontrac/operate/createInspectProxy?ID=' + dataid;
                 this.$axios.get(url, {}).then((res) => {

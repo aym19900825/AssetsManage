@@ -52,13 +52,13 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								  <el-form-item label="录入时间" prop="ENTERDATE" label-width="70px">
+								  <el-form-item label="发出时间" prop="ENTERDATE" label-width="70px">
 									<div class="block">
 									    <el-date-picker
 									      	v-model="searchList.ENTERDATE"
 									      	type="date" 
 										  	style="width: 100%;"
-									      	placeholder="录入时间" 
+									      	placeholder="发出时间" 
 										  	value-format="yyyy-MM-dd"
 										  	@keyup.enter.native="searchinfo">
 									    </el-date-picker>
@@ -92,7 +92,6 @@
 					<div id="middle"></div>
 					<el-col :span="19" class="leftcont" id="right">
 						<!-- 表格 Begin-->
-						
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="分包协议编号" width="150" sortable prop="PROXY_CONTRACT_NUM" v-if="this.checkedName.indexOf('分包协议编号')!=-1">
 								<template slot-scope="scope">
@@ -104,27 +103,21 @@
 							</el-table-column>
 							<el-table-column label="委托方名称" width="150" sortable prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称')!=-1">
 							</el-table-column>
-							<el-table-column label="状态" width="150" sortable prop="state" v-if="this.checkedName.indexOf('状态')!=-1">
+							<el-table-column label="流程状态" width="150" sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 							</el-table-column>
 							<el-table-column label="分包单位" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('分包单位')!=-1">
 							</el-table-column>
-							<el-table-column label="检验/检测项目内容" width="150" sortable prop="P_REMARKS" v-if="this.checkedName.indexOf('检验/检测项目内容')!=-1">
-							</el-table-column>						
-							<el-table-column label="对环境和操作人员要求" width="180" sortable prop="REQUIRE" v-if="this.checkedName.indexOf('对环境和操作人员要求')!=-1">
-							</el-table-column>
-							<el-table-column label="对分包报告/证书的要求" width="180" sortable prop="Q_TYPE" v-if="this.checkedName.indexOf('对分包报告/证书的要求')!=-1">
+							<el-table-column label="分包协议类别" width="150" sortable prop="TYPEDesc" v-if="checkedName.indexOf('分包协议类别')!=-1">
 							</el-table-column>
 							<el-table-column label="检验检测费用" width="120" sortable prop="CHECKCOST" v-if="this.checkedName.indexOf('检验检测费用')!=-1">
 							</el-table-column>
-							<el-table-column label="信息状态" width="100" sortable prop="STATUS" v-if="this.checkedName.indexOf('信息状态')!=-1">
+							<el-table-column label="发出人" width="100" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('发出人')!=-1">
 							</el-table-column>
-							<el-table-column label="录入人" width="100" sortable prop="ENTERBY" v-if="this.checkedName.indexOf('录入人')!=-1">
+							<el-table-column label="发出时间" width="120" sortable prop="ENTERDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('发出时间')!=-1">
 							</el-table-column>
-							<el-table-column label="录入时间" width="120" sortable prop="ENTERDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('录入时间')!=-1">
+							<el-table-column label="接收人" width="100" sortable prop="CHANGEBY" v-if="this.checkedName.indexOf('接收人')!=-1">
 							</el-table-column>
-							<el-table-column label="修改人" width="100" sortable prop="CHANGEBY" v-if="this.checkedName.indexOf('修改人')!=-1">
-							</el-table-column>
-							<el-table-column label="修改时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('修改时间')!=-1">
+							<el-table-column label="接收时间" width="120" sortable prop="CHANGEDATE" :formatter="dateFormat" v-if="this.checkedName.indexOf('接收时间')!=-1">
 							</el-table-column>
 						</v-table>
 						<!-- 表格 End-->
@@ -164,18 +157,14 @@
 					'分包协议编号',
 					'委托书编号',
 					'委托方名称',
-					'状态',
 					'分包单位',
-					'检验/检测项目内容',
-					'检验检测项目依据',
-					'对环境和操作人员要求',
-					'对分包报告/证书的要求',
+					'流程状态',
+					'分包协议类别',
 					'检验检测费用',
-					'信息状态',
-					'录入人',
-					'录入时间',
-					'修改人',
-					'修改时间'
+					'发出人',
+					'发出时间',
+					'接收人',
+					'接收时间'
 				],
 				tableHeader: [
 					{
@@ -191,51 +180,35 @@
 						prop: 'V_NAMEDesc'
 					},
 					{
-						label: '状态',
-						prop: 'state'
+						label: '流程状态',
+						prop: 'STATEDesc'
 					},
 					{
 						label: '分包单位',
 						prop: 'VENDOR'
 					},
 					{
-						label: '检验/检测项目内容',
-						prop: 'P_REMARKS'
-					},
-					{
-						label: '检验检测项目依据',
-						prop: 'BASIS'
-					},
-					{
-						label: '对环境和操作人员要求',
-						prop: 'REQUIRE'
-					},
-					{
-						label: '对分包报告/证书的要求',
-						prop: 'Q_TYPE'
+						label: '分包协议类别',
+						prop: 'TYPE'
 					},
 					{
 						label: '检验检测费用',
 						prop: 'CHECKCOST'
 					},
 					{
-						label: '信息状态',
-						prop: 'STATUS'
-					},
-					{
-						label: '录入人',
+						label: '发出人',
 						prop: 'ENTERBY'
 					},
 					{
-						label: '录入时间',
+						label: '发出时间',
 						prop: 'ENTERDATE'
 					},
 					{
-						label: '修改人',
+						label: '接收人',
 						prop: 'CHANGEBY'
 					},
 					{
-						label: '修改时间',
+						label: '接收时间',
 						prop: 'CHANGEDATE'
 					}
 				],

@@ -17,155 +17,166 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
-						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.report.STATE!=3">
-							<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-							<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
+					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="170px" class="demo-adduserForm">
+						<!-- <div class="text-center" v-show="viewtitle">
+							<span v-if="this.report.STATE!=3" class="pr10">
+								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
+								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
+						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="承包方分包协议" name="1">
 									<el-row class="pb10">
-                                        <el-col :span="3" class="pull-right">
-                                            <el-input v-model="report.STATEDesc" :disabled="true">
-                                                <template slot="prepend">状态</template>
-                                            </el-input>
-                                        </el-col>
-                                    </el-row>
-
+										<el-col :span="5" class="pull-right">
+											<el-input v-model="report.STATEDesc" :disabled="true">
+												<template slot="prepend">状态</template>
+											</el-input>
+										</el-col>
+										
+										<el-col :span="6" class="pull-right pr10">
+											<el-input v-model="report.TYPEDesc" :disabled="true">
+												<template slot="prepend">委托书类型</template>
+											</el-input>
+										</el-col>
+									</el-row>
 									<el-row  :gutter="20">
-										<el-col :span="12">
-											<el-form-item label="委托方名称" prop="V_NAME">
-												<el-input v-model="report.V_NAME " :disabled="noedit"></el-input>
+										<el-col :span="8">
+											<el-form-item label="委托方名称" prop="V_NAMEDesc">
+												<el-input v-model="report.V_NAMEDesc " :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<!-- <el-col :span="8">
-											<el-form-item label="分包方名称" prop="DEPTIDDesc">
+										<el-col :span="8">
+											<el-form-item label="分包方名称" prop="DEPTIDDesc" label-width="100px">
 												<el-input v-model="report.DEPTIDDesc" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col> -->
-                                        <el-col :span="12">
-											<el-form-item label="分包性质" prop="CONTRACT_NATURE">
-												<el-select clearable v-model="report.CONTRACT_NATURE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
-													<el-option label="固定" value="1"></el-option>
-													<el-option label="临时" value="2"></el-option>
-												</el-select>
+										</el-col>
+                                        <el-col :span="8">
+											<el-form-item label="分包性质" prop="CONTRACT_NATUREDesc" label-width="100px">
+												<el-input v-model="report.CONTRACT_NATUREDesc" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+                                    <el-row :gutter="20">
+                                        <el-col :span="24">
+											<el-form-item label="检验检测项目内容" prop="P_REMARKS">
+												<el-input type="textarea" rows="3" v-model="report.P_REMARKS" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+                                    <el-row :gutter="20">
+                                        <el-col :span="24">
+											<el-form-item label="检验检测技术依据" prop="BASIS">
+												<el-input type="textarea" rows="3" v-model="report.BASIS" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+                                    <el-row :gutter="20">
+                                        <el-col :span="24">
+											<el-form-item label="对环境和操作人员要求" prop="REQUIRES">
+												<el-input type="textarea" rows="3" v-model="report.REQUIRES" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
                                     <el-row  :gutter="20">
-										<el-col :span="12">
-											<el-form-item label="委托书类型" prop="TYPE">
-												<el-select clearable v-model="report.TYPE" filterable allow-create default-first-option placeholder="请选择" style="width:100%" :disabled="noedit">
-													<el-option label="检验" value="1"></el-option>
-													<el-option label="检测" value="2"></el-option>
-												</el-select>
+                                       <el-col :span="24">
+											<el-form-item label="分包方资质证明及有效期" prop="ONHOLTIME">
+												<el-input type="textarea" rows="3" v-model="report.ONHOLTIME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="12">
+									</el-row>
+									<el-row :gutter="20">
+                                       <el-col :span="8">
+											<el-form-item label="完成日期" prop="COMPDATE">
+												<el-date-picker v-model="report.COMPDATE" type="date" placeholder="无" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												</el-date-picker>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="检验检测费用(元)" prop="CHECKCOST" label-width="130px">
+												<el-input v-model="report.CHECKCOST" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+                                    <el-row :gutter="20">
+										<el-col :span="24">
+											<el-form-item label="对分包报告/证书的要求" prop="Q_TYPE">
+												<el-input type="textarea" rows="3" v-model="report.Q_TYPE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+                                    <el-row  :gutter="20">
+										<el-col :span="8">
 											<el-form-item label="样品名称" prop="ITEMNAME">
 												<el-input v-model="report.ITEMNAME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-                                    <el-row  :gutter="20">
-										<el-col :span="12">
-											<el-form-item label="样品状态" prop="ITEM_STATUS">
+										<el-col :span="8">
+											<el-form-item label="样品数量" prop="ITEMQUANTITY" label-width="130px">
+												<el-input v-model="report.ITEMQUANTITY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="样品状态" prop="ITEM_STATUS" label-width="100px">
 												<el-input v-model="report.ITEM_STATUS" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="12">
-											<el-form-item label="检验检测项目内容" prop="P_REMARKS" label-width="180px">
-												<el-input v-model="report.P_REMARKS" :disabled="noedit"></el-input>
+									</el-row>
+									<el-row :gutter="20">
+										<el-col :span="24">
+											<el-form-item label="双方的责任和义务">
+												<p><b>委托方：</b>提供分包检验检测项目的有关技术资料，负担检验检测费用，拥有报告/证书的所有权；</p>
+												<p><b>分包方：</b>保证检验检测质量，按时完成检验检测工作，对样品的完整性、检验检测结果的保密、安全负责，未经委托方的同意不引用分包检验检测数据和结果，对样品不进行照相、测绘，不复制样品及检验检测资料。</p>
 											</el-form-item>
 										</el-col>
 									</el-row>
-                                    <el-row  :gutter="20">
-										<el-col :span="12">
-											<el-form-item label="检验检测技术依据" prop="BASIS" label-width="180px">
-												<el-input v-model="report.BASIS" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="12">
-											<el-form-item label="对环境和操作人员要求" prop="REQUIRES" label-width="180px">
-												<el-input v-model="report.REQUIRES" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-                                       
-									</el-row>
-                                    <el-row  :gutter="20">
-										<el-col :span="12">
-											<el-form-item label="分包方资质证明及有效期" prop="ONHOLTIME" label-width="180px">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-										<el-col :span="12">
-											<el-form-item label="对分包报告/证书的要求" prop="Q_TYPE" label-width="180px">
-												<el-input v-model="report.Q_TYPE" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row  :gutter="20">
-										<el-col :span="12">
-											<el-form-item label="检验检测费用" prop="CHECKCOST">
-												<el-input v-model="report.CHECKCOST" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-                                       <el-col :span="12">
-											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-date-picker v-model="report.COMPDATE" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
-												</el-date-picker>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row  :gutter="20">
-										<el-col :span="12" v-if="dept">
-											<el-form-item label="机构" prop="DEPTIDDesc">
-												<el-input v-model="report.DEPTIDDesc" :disabled="edit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
+									
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="2" v-show="views">
+
+								<el-collapse-item title="其他" name="2" v-show="viewtitle">
 									<el-row  :gutter="20">
 										<el-col :span="8">
-											<el-form-item label="录入人" prop="ENTERBYDesc">
+											<el-form-item label="发出人" prop="ENTERBYDesc" label-width="100px">
 												<el-input v-model="report.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="录入时间" prop="ENTERDATE">
+											<el-form-item label="发出时间" prop="ENTERDATE" label-width="100px">
 												<el-input v-model="report.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改人" prop="CHANGEBYDesc">
-												<el-input v-model="report.CHANGEBYDesc" placeholder="当前修改人" :disabled="edit"></el-input>
+											<el-form-item label="发出人机构" prop="DEPTIDDesc" label-width="100px">
+												<el-input v-model="report.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="修改时间" prop="CHANGEDATE">
-												<el-input v-model="report.CHANGEDATE" placeholder="当前修改时间" :disabled="edit"></el-input>
+											<el-form-item label="接收人" prop="CHANGEBYDesc" label-width="100px">
+												<el-input v-model="report.CHANGEBYDesc" :disabled="edit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="接收时间" prop="CHANGEDATE" label-width="100px">
+												<el-input v-model="report.CHANGEDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<div class="content-footer" v-show="noviews">
+						<!-- <div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="saveAndUpdate()">保存</el-button>
 							<el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
-						</div>
-                        <div class="content-footer" v-show="viewtitle">
+						</div> -->
+                        <!-- <div class="content-footer" v-show="viewtitle">
 							<el-button type="primary" @click="createinspect()">生成委托书</el-button>
-						</div>
+						</div> -->
 					</el-form>
 				</div>
 			</div>

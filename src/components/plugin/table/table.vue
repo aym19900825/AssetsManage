@@ -5,7 +5,7 @@
       @sort-change='tableSortChange'
       border
       :stripe="stripe"
-      :style="{width: fullWidth,height: fullHeight}"
+      :style="{width:fullWidth, height:fullHeight}"
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
@@ -16,7 +16,7 @@
       element-loading-background="rgba(255, 255, 255, 0.9)" :row-class-name="tableRowClassName">
 
       <el-table-column label="单选" fixed width="55" align="center" v-if="!!this.selectWay">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-radio class="radioData" :label="scope.$index" v-model="radioData"> </el-radio>
         </template>
       </el-table-column>

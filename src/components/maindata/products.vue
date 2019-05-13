@@ -113,7 +113,6 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<productmask :PRODUCT="PRODUCT" ref="child" @request="requestData" @reset="reset" v-bind:page=page></productmask>
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -124,7 +123,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import productmask from '../maindataDetails/product_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'customer_management',
@@ -134,7 +132,6 @@
 			'navs_tabs': navs_tabs,
 			'productmask': productmask,
 			'tableControle': tableControle,
-			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
@@ -545,8 +542,6 @@
 			},
 			//报表
 			reportdata(){
-				// this.reportData.app=this.product;
-				// this.$refs.reportChild.visible();
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择数据',

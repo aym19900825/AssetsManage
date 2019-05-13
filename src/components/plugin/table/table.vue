@@ -17,7 +17,7 @@
 
       <el-table-column label="单选" fixed width="55" align="center" v-if="!!this.selectWay">
         <template slot-scope="scope">
-          <el-radio class="radioData" :label="scope.$index" v-model="radioData"> </el-radio>
+          <el-radio class="radioData" :label="scope.$index" v-model="radioData">&nbsp;</el-radio>
         </template>
       </el-table-column>
 

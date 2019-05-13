@@ -116,7 +116,7 @@
 			<!--工作任务单下达任务/Houling-->
 			<sendtasklist ref="task" v-bind:page=page @refresh="refresh" @request="requestData"></sendtasklist>
 			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+			<!-- <reportmask :reportData="reportData" ref="reportChild" ></reportmask> -->
 			<!--任务处理/Aiyamin-->
 			<workordersDeal ref="workDeal"></workordersDeal>
 			<!--分包协议/Heliping-->
@@ -135,7 +135,7 @@
 	import workordersmask from '../testworkcheckDetails/workorders_mask.vue'//之前的详情页
 	import sendtasklist from '../testworkcheckDetails/sendtasklist.vue'//下达任务
 	// import reportmask from'../reportDetails/reportMask.vue'//报表
-	import reportmask from'../common/common_mask/report.vue'
+	// import reportmask from'../common/common_mask/report.vue'
 	import workordersDeal from'../testworkcheckDetails/workordersDeal.vue'//任务处理
 	import makeprotocolmask from'../testworkcheckDetails/makeprotocol_mask.vue'//生成分包协议
 	import reportgeneratemask from'../testworkcheckDetails/reportgenerate_mask.vue'//报告生成与编辑
@@ -148,7 +148,7 @@
 			navs_left,
 			workordersmask,
 			sendtasklist,//下达任务
-			reportmask,//报表
+			// reportmask,//报表
 			workordersDeal,//任务处理
 			makeprotocolmask,//生成分包协议
 			reportgeneratemask,//报告生成与编辑
@@ -619,19 +619,26 @@
 				// this.$refs.reportChild.visible();
 				// var file='inspectproxyjiance_table.ureport.xml';
 				if(this.selMenu.length == 0) {
-				this.$message({
-					message: '请您选择数据',
-					type: 'warning'
-				});
-				return;
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
 				} else if(this.selMenu.length > 1) {
 					this.$message({
-						message: '不可同时选择多个数据',
+						message: '不可同时选择数据',
 						type: 'warning'
 					});
 					return;
 				}else{
-					this.$router.push({path: '/report' ,query: {appname: this.workorder,id:this.selMenu[0].ID}});
+					let routeData = this.$router.resolve({
+						path: "/report",
+						query: {
+							appname: this.workorder,
+							id:this.selMenu[0].ID
+						}
+					});
+					window.open(routeData.href, '_blank');
 				}
 			},
 			

@@ -16,7 +16,11 @@
 					<el-collapse v-model="activeNames">
 						 <el-collapse-item title="流程节点" name="1">
 							<el-tabs v-model="activeName" >
-
+                                <el-row>
+									<el-col :span="5">
+										
+									</el-col>	
+								</el-row>
 								<el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
 									<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
 										<el-row>
@@ -171,6 +175,7 @@
                 var url = this.basic_url + '/api-flow/flow/process/'+id;
                     this.$axios.get(url, {}).then((res) => {
 						console.log(res);
+						this.isnotrepeat=res.data.isNotRepeat;
                         for(var i=0;i<res.data.candidateList.length;i++){
                              res.data.candidateList[i].name='tab'+i;   
 						}

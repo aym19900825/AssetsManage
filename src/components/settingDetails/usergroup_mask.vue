@@ -264,7 +264,7 @@
 			},
 			//删除用户
 			delKey(index,row){
-				if(row.id!=''){
+				if(row.id){
 					var url = this.basic_url + '/api-flow/flow/group/delMembership/' + row.id;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',

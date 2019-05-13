@@ -135,7 +135,6 @@
 			return {
 				appName: 'productType',
 				btnShow: false,
-				reportData:{},//报表的数据
 				// up2down:'down',
 				basic_url: Config.dev_url,
 				commentArr: {},

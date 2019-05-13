@@ -11,125 +11,171 @@
 						</span>
 					</div>
 				</div>
-				<div class="mask_content pt10 pl10 pr10 pb10">
-					<div class="content-accordion">
-					<el-collapse v-model="activeNames">
-						 <el-collapse-item title="流程节点" name="1">
-							<el-tabs v-model="activeName" >
-                                <el-row>
-									<el-col :span="5">
-										
-									</el-col>	
-								</el-row>
-								<el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
-									<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
-										<el-row>
-											<el-col :span="5">
-												<el-select v-model="bigtitle[index].type" placeholder="请选择">
-													<el-option
-													v-for="item in options"
-													:key="item.code"
-													:label="item.name"
-													:value="item.code">
-													</el-option>
-												</el-select>
-											</el-col>
-											<el-col :span="5">
-												<el-input v-model="bigtitle[index].executer" v-show="bigtitle[index].type=='0'" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-												</el-input>
-												<!--  -->
-												<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='1'" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-												</el-input>
+				<div class="mask_content">
+					<el-form inline-message :model="dataInfo" ref="user">
+						<div class="content-accordion">
+							<el-collapse v-model="activeNames">
+								<el-collapse-item title="流程节点" name="1"> 
+									<el-row>
+										<el-col :span="5">
+											<el-checkbox :model="dataInfo.isNotRepeat=='0'?false:true">是否执行人可重复</el-checkbox>
+										</el-col>	
+									</el-row>
+									<el-tabs v-model="activeName" >
+										<el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
+											<div class="pb10">
+												<el-form inline-message :model="bigtitle[index]" label-width="110px">
+													<el-row>
+														<el-col :span="8" v-show="bigtitle[index].type=='0'">
+															<el-input placeholder="请输入内容" v-model="bigtitle[index].executer" :disabled="false" class="input-with-select">
+																<el-select v-model="bigtitle[index].type" slot="prepend" :disabled="false" placeholder="请选择" style="width:120px; padding-left:10px;">
+																	<el-option
+																	v-for="item in options"
+																	:key="item.code"
+																	:label="item.name"
+																	:value="item.code">
+																	</el-option>
+																</el-select>
+																<el-button slot="append" icon="el-icon-search" @click="addperson(index)"></el-button>
+															</el-input>
+														</el-col>
+														<el-col :span="8" v-show="bigtitle[index].type=='1'||bigtitle[index].type=='2'">
+															<el-input placeholder="请输入内容" v-model="bigtitle[index].group" :disabled="false" class="input-with-select">
+																<el-select v-model="bigtitle[index].type" slot="prepend" :disabled="false" placeholder="请选择" style="width:120px; padding-left:10px;">
+																	<el-option
+																	v-for="item in options"
+																	:key="item.code"
+																	:label="item.name"
+																	:value="item.code">
+																	</el-option>
+																</el-select>
+																<el-button slot="append" icon="el-icon-search" @click="addusergroup(index)"></el-button>
+															</el-input>
+														</el-col>
+														<el-col :span="8" v-show="bigtitle[index].type!='1'&&bigtitle[index].type!='2'&&bigtitle[index].type!='0'">
+															<el-select v-model="bigtitle[index].type" placeholder="请选择" style="width:120px;">
+																<el-option
+																v-for="item in options"
+																:key="item.code"
+																:label="item.name"
+																:value="item.code">
+																</el-option>
+															</el-select>
+														</el-col>
+													</el-row>
+												</el-form>
+												<div class="table-func table-funcb" style="top:0px;">
+													<el-button type="success" size="mini" round>
+														<i class="icon-add"></i>
+														<font>新建行</font>
+													</el-button>
+												</div>
+											</div>
 
-												<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='2'" :disabled="true">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
-												</el-input>
-											</el-col>
-										</el-row>
-									</el-form>
-									 <el-table
-									:data="bigtitle[index].actionList"
-									style="width: 100%;margin-bottom: 20px;"
-									border
-									row-key="id">
-									<el-table-column
-										prop="flag"
-										label="操作"
-										sortable
-										width="180">
-										<template slot-scope="scope">
-											<el-select v-model="scope.row.flag" placeholder="请选择">
-												<el-option
-												v-for="item in flag_valoptions"
-												:key="item.code"
-												:label="item.name"
-												:value="item.code">
-												</el-option>
-											</el-select>
-                                        </template>
-									</el-table-column>
-									<el-table-column
-										prop="type"
-										label="类型变更"
-										sortable
-										width="180">
-										<template slot-scope="scope">
-												<el-select v-model="scope.row.type" placeholder="请选择">
-												<el-option
-												v-for="item in action_typeoptions"
-												:key="item.code"
-												:label="item.name"
-												:value="item.code">
-												</el-option>
-											</el-select>
-										</template>
-									</el-table-column>
-									<el-table-column
-										prop="event"
-										label="事件"
-										sortable
-										width="180" >
-										<template slot-scope="scope">
-											<el-input v-model="scope.row.event"  :disabled="scope.row.type=='0'?false:true" placeholder="请选择">
-											</el-input>
-										</template>
-									</el-table-column>
-									<el-table-column
-										prop="classpath"
-										label="处理类"
-										sortable
-										width="180">
-										<template slot-scope="scope">
-											<el-input v-model="scope.row.classpath" :disabled="scope.row.type=='1'?false:true" placeholder="请选择">
-											</el-input>
-										</template>
-									</el-table-column>
-									</el-table>
-								</el-tab-pane>  
-							</el-tabs>
-						</el-collapse-item>	
-					</el-collapse>
-					</div>
+											<el-table
+											:data="bigtitle[index].actionList"
+											style="width: 100%;margin-bottom: 20px;"
+											border
+											row-key="id">
+											<el-table-column
+												prop="flag"
+												label="操作"
+												sortable
+												width="180">
+												<template slot-scope="scope">
+													<el-select v-model="scope.row.flag" placeholder="请选择">
+														<el-option
+														v-for="item in flag_valoptions"
+														:key="item.code"
+														:label="item.name"
+														:value="item.code">
+														</el-option>
+													</el-select>
+												</template>
+											</el-table-column>
+											<el-table-column
+												prop="type"
+												label="类型变更"
+												sortable
+												width="180">
+												<template slot-scope="scope">
+														<el-select v-model="scope.row.type" placeholder="请选择">
+														<el-option
+														v-for="item in action_typeoptions"
+														:key="item.code"
+														:label="item.name"
+														:value="item.code">
+														</el-option>
+													</el-select>
+												</template>
+											</el-table-column>
+											<el-table-column
+												prop="event"
+												label="事件"
+												sortable
+												width="180" >
+												<template slot-scope="scope">
+													<el-input v-model="scope.row.event"  :disabled="scope.row.type=='0'?false:true" placeholder="请选择">
+													</el-input>
+												</template>
+											</el-table-column>
+											<el-table-column
+												prop="classpath"
+												label="处理类"
+												sortable>
+												<template slot-scope="scope">
+													<el-input v-model="scope.row.classpath" :disabled="scope.row.type=='1'?false:true" placeholder="请选择">
+													</el-input>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作" width="120" >
+												<template slot-scope="scope">
+													<el-button @click="deleteRow(scope.$index,scope.row,'ipaddressList')" type="text" size="small">
+														<i class="icon-trash red"></i>
+													</el-button>
+												</template>
+											</el-table-column>
+											</el-table>
+										</el-tab-pane>  
+									</el-tabs>
+								</el-collapse-item>	
+							</el-collapse>
+						</div>
+						<div class="content-footer">
+							<el-button type="primary" @click='save("Update")'>保存</el-button>
+							<el-button type="success" @click='save("Submit")'>保存并继续</el-button>
+							<el-button @click="close">取消</el-button>
+						</div>
+					</el-form>
 				</div>
 			</div>
+			<user ref="userchild" @executer="executer"></user>
+            <usergroup ref="groupchild"></usergroup>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
+	import user from '../common/common_mask/usermask.vue'
+    import usergroup from'../common/common_mask/usergroup.vue'
 	export default {
 		name: 'masks',
+		components: {
+			 user,
+			 usergroup,
+		},
 		data() {
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				show:false,
-                selUser: [],
-				bigtitle:[],//保存节点数据
-				dataInfo:{},//
+				selUser: [],
+				bigtitle:[],
+				dataInfo:{
+				    isNotRepeat:'',
+					candidateList:[],//保存节点数据
+				},//
 				options:[],//流程节点类型
 				action_typeoptions:[],//流程事件类型
 				flag_valoptions:[],//流程执行标识
@@ -169,20 +215,35 @@
 				}).catch((wrong) => {
 				})	
 			},
+			//用户的弹出框
+			addperson(index){
+				this.index=index;
+			   this.$refs.userchild.visible(); 
+			},
+			//
+			addusergroup(){
+				this.$refs.groupchild.visible(); 
+			},
 			//添加显示弹窗
 			visible(id) {
                 this.show = true;
                 var url = this.basic_url + '/api-flow/flow/process/'+id;
                     this.$axios.get(url, {}).then((res) => {
 						console.log(res);
-						this.isnotrepeat=res.data.isNotRepeat;
+						
                         for(var i=0;i<res.data.candidateList.length;i++){
                              res.data.candidateList[i].name='tab'+i;   
 						}
+						this.dataInfo.isNotRepeat=res.data.isNotRepeat;//是否执行人可重复
+						// this.dataInfo.candidateList=this.bigtitle
                         this.bigtitle=res.data.candidateList;
                         console.log(this.bigtitle);
                     }).catch((err) => {
                     });
+			},
+			executer:function(executer){
+				console.log(executer);
+				this.bigtitle[this.index].executer=executer;
 			},
 			//点击关闭按钮
 			close() {
@@ -218,22 +279,27 @@
 			},
 			// 保存users/saveOrUpdate
 			save() {
-				this.$refs.modelflow.validate((valid) => {
-					if (valid) {
-					   var url = this.basic_url + '/api-flow/flow/model/create';
-						this.$axios.get(url, {}).then((res) => {
-							this.modelId=res.data.modelId;
-							
-							if(res.status ==200) {
-     						this.$refs.child.visible();
-							}
+				// this.$refs.modelflow.validate((valid) => {
+				// 	if (valid) {
+					   console.log(this.dataInfo);
+					   console.log(this.bigtitle);
+					   var data={
+						 candidateList:this.bigtitle,
+						 isNotRepeat:this.dataInfo.isNotRepeat
+					   }
+					   console.log(data);
+					   var url = this.basic_url + '/api-flow/flow/process/save';
+						this.$axios.post(url, data).then((res) => {
+					    
+		
+						console.log(res);
 						}).catch((err) => {
 						});
-					} else {
-						this.show = false;
-						return false;
-					}
-				});
+					// } else {
+					// 	this.show = false;
+					// 	return false;
+					// }
+				// });
 			},
 			
 			//保存

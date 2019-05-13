@@ -146,7 +146,6 @@
 				this.loading = true;//加载动画打开
 				this.urlOpt = opt;
 				this.arr=arr;//用户组已经选的
-				console.log(this.urlOpt);
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -156,7 +155,6 @@
 				}
 				if(this.urlOpt == 'groups'){
 					var url = this.basic_url + "/api-user/users?id_not_in="+arr;
-					console.log(url);
 				}else{
 					var url = this.basic_url + '/api-user/users?deptid_wheres='+this.urlOpt;
 				}
@@ -188,8 +186,6 @@
 						});
 					}else{
 						this.dialogShow = false;
-						console.log(this.selData);
-						console.log(123);
 						this.$emit('getSelData',this.selData);
 						this.reset();
 					}

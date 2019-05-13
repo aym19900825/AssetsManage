@@ -440,6 +440,7 @@
 				}
 			},
 			review(){
+				console.log(this.selUser[0].SYNTHETICAL);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要复查的数据',
@@ -454,7 +455,7 @@
 					return;
 				}else if(this.selUser[0].SYNTHETICAL == 0) {
 						this.$message({
-							message: '此条数据是合格数据，无须在生成。',
+							message: '此条数据是合格数据，无须在复查。',
 							type: 'warning'
 						});
 				}else if(this.selUser[0].SYNTHETICAL == 1){

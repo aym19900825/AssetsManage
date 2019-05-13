@@ -119,9 +119,9 @@
 												:fetch-suggestions="querySearchAsync" 
 												@select="handleSelect"
 												placeholder="请输入内容"
-                         :disabled="edit" 
+                        :disabled="specialedit" 
 											>
-												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()"></el-button>
+												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()" :disabled="specialedit"></el-button>
 											</el-autocomplete>
                       </el-form-item>
                     </el-col>
@@ -364,7 +364,7 @@
                             <el-form-item
                               :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'"
                             >
-                              <el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入"></el-input>
+                              <el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入"  :disabled="noedit"></el-input>
                             </el-form-item>
                           </template>
                         </el-table-column>
@@ -528,6 +528,7 @@
                                 v-model="scope.row.REALITY_PRICE"
                                 @blur="testPrice(scope.row)"
                                 placeholder="请输入实际单价"
+                                :disabled="noedit"
                               ></el-input>
                             </el-form-item>
                           </template>
@@ -1318,6 +1319,7 @@ export default {
       value: "",
       selval: [],
       edit: true, //禁填
+      specialedit:false,
       noedit: false,
       noedit1: false,
       special: false,
@@ -1922,6 +1924,7 @@ export default {
       this.noedit2 = false;
       this.special = true;
       this.special1 = false;
+      this.specialedit=false;//委托方的名称
     },
     //
     detailgetData() {
@@ -1984,6 +1987,7 @@ export default {
             this.PNAME1 = true;
           } else if (res.data.ISRECEIVE == "2") {
             //2，委托方名称不能动；
+            this.specialedit=true;//委托方的名称
             this.noedit2 = true;
             this.special = true;
             this.special1 = true;
@@ -2137,6 +2141,7 @@ export default {
       this.noedit1 = true;
       this.noedit2 = true;
       this.special = true;
+      this.specialedit=true;//委托方的名称
       this.PNAME = true; //生产单位
       this.PNAME1 = true;
       this.isEditing = false;

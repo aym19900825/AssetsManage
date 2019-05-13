@@ -5,19 +5,19 @@
 				<el-row :gutter="10">
 					<el-col :span="6">
 						<el-form-item label="统一社会信用代码" prop="customercode" label-width="140px">
-							<el-input v-model="searchList.CUSTOMERCODE">
+							<el-input v-model="searchList.customercode">
 							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="6">
 						<el-form-item label="单位名称" prop="customername">
-							<el-input v-model="searchList.CUSTOMERNAME">
+							<el-input v-model="searchList.customername">
 							</el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="5">
 						<el-form-item label="联系地址" prop="customeraddress">
-							<el-input v-model="searchList.CUSTOMERADDRESS">
+							<el-input v-model="searchList.customeraddress">
 							</el-input>
 						</el-form-item>
 					</el-col>
@@ -81,9 +81,9 @@
 			selUser: [],//接勾选的值
 			type:'',
 			searchList: {
-			CUSTOMERCODE: '',
-			CUSTOMERADDRESS: '',
-			CUSTOMERNAME: '',
+			customercode: '',
+			customeraddress: '',
+			customername: '',
 			},
 			page: {
 				currentPage: 1,
@@ -144,23 +144,11 @@
 		//改变页数
 		sizeChange(val) {
 			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
 			this.requestData();
 		},
 		//当前页数
 		currentChange(val) {
 			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
 			this.requestData();
 		},
 	//Table默认加载数据
@@ -169,32 +157,20 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
-			// DEPTID:this.$store.state.currentcjdw[0].id,
-			CUSTOMERCODE:this.searchList.CUSTOMERCODE,
-			CUSTOMERADDRESS:this.searchList.CUSTOMERADDRESS,
-			CUSTOMERNAME:this.searchList.CUSTOMERNAME,
-			// NAME: this.searchList.NAME,
-			// CODE: this.searchList.CODE,
-			// CONTACT_ADDRESS: this.searchList.CONTACT_ADDRESS,
+			customername: this.searchList.customername,
+			customercode: this.searchList.customercode,
+			customeraddress: this.searchList.customeraddress,
 		};
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=' + this.$store.state.currentcjdw[0].id;//如果父组件没有传CJDW承检单位侧显示所有数
 		this.$axios.get(url, {params: data}).then((res) => {
 			this.page.totalCount = res.data.count;	
 			//总的页数
 			let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-			if(this.page.currentPage >= totalPage){
-				 this.loadSign = false
-			}else{
-				this.loadSign=true
-			}
 			this.customerList = res.data.data;
 			// setTimeout(()=>{
 			// 	this.setSelectRow();
 			// }, 200)
 			this.loading = false;//加载动画关闭
-			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-				$('.el-table__body-wrapper table').find('.filing').remove();
-			}//滚动加载数据判断filing
 		}).catch((wrong) => {
 			// 	this.$message({
 			// 	message: '网络错误，请重试',

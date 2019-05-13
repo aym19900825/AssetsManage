@@ -172,23 +172,11 @@
 			//改变页数
 			sizeChange(val) {
 				this.page.pageSize = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
 				this.requestData();
 			},
 			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
 				this.requestData();
 			},
 			//Table默认加载数据
@@ -208,19 +196,11 @@
 					this.page.totalCount = res.data.count;	
 					//总的页数
 					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-					if(this.page.currentPage >= totalPage){
-						this.loadSign = false
-					}else{
-						this.loadSign=true
-					}
 					this.list = res.data.data;
 					// setTimeout(()=>{
 					// 	this.setSelectRow();
 					// }, 200)
 					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}
 				}).catch((wrong) => {
 				})
 			},

@@ -217,7 +217,7 @@
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-				<v-table ref="tablePlugin" :appName="appName" :newHeight="newHeight" :searchList="searchList" @getSelData="setSelData">
+				<v-table ref="tablePlugin" :appName="appName" :selectWay="selectWay" :newHeight="newHeight" :searchList="searchList" @getSelData="setSelData">
 					<el-table-column label="分发号" width="155" sortable prop="NUM">
 					</el-table-column>
 					<el-table-column label="文件名称" sortable prop="DESCRIPTION">
@@ -263,7 +263,7 @@
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-				<v-table ref="tableQualification" :appName="appName2" :newHeight="newHeight" :searchList="searchList2" @getSelData="setSelData">
+				<v-table ref="tableQualification" :appName="appName2" :selectWay="selectWay" :newHeight="newHeight" :searchList="searchList2" @getSelData="setSelData">
 					<el-table-column label="证书名称" sortable width="200px" prop="c_name">
 					</el-table-column>
 					<el-table-column label="资质有效期" sortable prop="c_date">
@@ -292,6 +292,7 @@
 				appName: 'workIns',//作业指导书
 				appName2: 'qualifications',//资质证书
 				newHeight: '300',//传给弹出框表格高度
+				selectWay: 'radio',//table选择方式
 				testing_projectForm:{
 					CHANGEBY: '',
 					CHILD_FIELD:'',

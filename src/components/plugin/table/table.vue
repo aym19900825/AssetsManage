@@ -5,17 +5,25 @@
       @sort-change='tableSortChange'
       border
       :stripe="stripe"
-      :style="{width: fullWidth,height: fullHeight}"
+      :style="{width:fullWidth, height:fullHeight}"
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
+      @row-click = "showRow"
       v-loading="loading"
       element-loading-text="加载中…"
       element-loading-spinner="el-icon-loading"
       element-loading-background="rgba(255, 255, 255, 0.9)" :row-class-name="tableRowClassName">
-      
-      <el-table-column type="selection" fixed width="55" align="center">
+
+      <el-table-column label="单选" fixed width="55" align="center" v-if="!!this.selectWay">
+        <template slot-scope="scope">
+          <el-radio class="radioData" :label="scope.$index" v-model="radioData"> </el-radio>
+        </template>
       </el-table-column>
+
+      <el-table-column type="selection" fixed width="55" align="center" v-else>
+      </el-table-column>
+
       <el-table-column type="index" label="序号" width="50">
         <template slot-scope="scope">
           <span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
@@ -41,7 +49,7 @@
 <script>
 import config from '../../../config.js'
 export default {
-  props: ['appName','newHeight','searchList'],
+  props: ['appName','newHeight','searchList','selectWay'],
   data(){
     return{
       basic_url: config.dev_url,
@@ -51,6 +59,8 @@ export default {
         pageSize: 20,
         totalCount: 0
       },
+      radioData:'radio',
+      selected:{},
       selData: [],
       isshift: false,
       isctrl: false,
@@ -63,6 +73,12 @@ export default {
     }
   },
   methods:{
+    //判断单选点击table-row选中radio
+    showRow(row){
+      //赋值给radio
+      this.radioData = this.list.indexOf(row);
+      this.selected=row;
+    },
     //判断高度
     isHeight(){
       if(!!this.newHeight){
@@ -71,6 +87,7 @@ export default {
         this.fullHeight = document.documentElement.clientHeight - 210 + 'px';
       }
     },
+    //判断加急table-row颜色变化
     tableRowClassName({row, rowIndex}) {
       if(this.appName == 'inspectPro2'||this.appName == 'inspectPro'){
         if (row.COMPMODE =="加急") {
@@ -88,6 +105,7 @@ export default {
         }
       }
     },
+    //排序多选点击table-row选中checkbox
     tableSortChange(column){
       this.page.currentPage = 1;
       var searchObj = this.searchList;
@@ -103,10 +121,12 @@ export default {
       }
       this.requestData();
     },
+    //选中的数据
     selChange(val) {
       this.selData = val;
       this.$emit('getSelData',val)
     },
+    //判断
     singleTable(row){
       if(this.isctrl){
         this.$refs.table.toggleRowSelection(row);
@@ -179,8 +199,8 @@ export default {
       this.requestData();
     },
     requestData(opt){
-      console.log(90);
       this.isHeight();//获取高度
+      console.log(this.selectWay);
       console.log(this.newHeight);
       console.log(this.appName);
       this.loadding = true;

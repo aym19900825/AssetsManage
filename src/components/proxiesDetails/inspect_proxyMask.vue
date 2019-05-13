@@ -250,7 +250,7 @@
 													<el-table-column prop="S_DESC" label="标准内容" sortable>
 														<template slot-scope="scope">
 															<el-form-item :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'" >
-															<el-input  size="small" v-model="scope.row.S_DESC" placeholder="请输入">	
+															<el-input  size="small" v-model="scope.row.S_DESC" placeholder="请输入"  :disabled="noedit">	
 															</el-input>
 															</el-form-item>
 														</template>
@@ -346,7 +346,7 @@
 													<el-table-column prop="REALITY_PRICE" label="实际单价(元)" sortable width="120px" :formatter="priceFormate">
 														<template slot-scope="scope">
 															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REALITY_PRICE'" >
-																<el-input  size="small" v-model="scope.row.REALITY_PRICE" @blur="testPrice(scope.row)" placeholder="请输入实际单价">
+																<el-input  size="small" v-model="scope.row.REALITY_PRICE" @blur="testPrice(scope.row)" placeholder="请输入实际单价"  :disabled="noedit">
 																</el-input>
 															</el-form-item>
 														</template>

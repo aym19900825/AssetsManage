@@ -193,8 +193,13 @@
 		<inspectmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page @realtime="realtime"></inspectmask>
 		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
+<<<<<<< HEAD
 		<!--报表-->
 		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+=======
+					<!--报表-->
+
+>>>>>>> 182647725da88289ec50f8e3cc43efa3fc9b0020
 	</div>
 </template>
 <script>
@@ -204,8 +209,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import inspectmask from '../proxiesDetails/inspect_proxyMask.vue'
 	import assignmissionmask from '../proxiesDetails/assignmissionmask.vue'//下达任务的弹出
-	// import reportmask from'../reportDetails/reportMask.vue'
-	import reportmask from'../common/common_mask/report.vue'
 	import vTable from '../plugin/table/table.vue'
 
 	export default {
@@ -216,7 +219,6 @@
 			navs_tabs,
 			inspectmask,
 			assignmissionmask,
-			reportmask,
 			vTable,
 			
 		},

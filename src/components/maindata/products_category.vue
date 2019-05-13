@@ -109,8 +109,6 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<categorymask :CATEGORY="CATEGORY" ref="categorymask" @request="requestData" @reset="reset"></categorymask>
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -122,8 +120,6 @@
 	import categorymask from '../maindataDetails/product_categoryMask.vue'
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	import tableControle from '../plugin/table-controle/controle.vue'
-	// import reportmask from'../reportDetails/reportMask.vue'
-	import reportmask from'../common/common_mask/report.vue'
 	
 	export default {
 		name: 'customer_management',
@@ -133,7 +129,6 @@
 			'navs_tabs': navs_tabs,
 			'categorymask': categorymask,
 			'tableControle': tableControle,
-			'reportmask': reportmask,
 			'tree_grid':tree_grid,
 		},
 		data() {

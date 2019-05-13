@@ -277,18 +277,17 @@ export default {
     },
     //添加
     openAddMgr() {
+      console.log(this.selUser);
 			if(this.selUser.length == 0) {
 				this.$message({
-					message: '请您选择要修改的流程配置',
+					message: '请您选择数据',
 					type: 'warning'
 				});
-				return;
 			} else if(this.selUser.length > 1) {
 				this.$message({
-					message: '不可同时修改多个流程配置',
+					message: '不可同选择多个数据',
 					type: 'warning'
 				});
-				return;
 		  }else {
 				console.log(this.selUser[0].id);
 				var id=this.selUser[0].id;

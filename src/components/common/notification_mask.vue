@@ -673,7 +673,7 @@
           if (index === 0) {
             sums[index] = '总价';
             return;
-					} else if(index === 4) {//计算第几列的减1
+					} else if(index === 5) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));

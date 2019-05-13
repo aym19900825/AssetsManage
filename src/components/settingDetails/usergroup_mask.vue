@@ -62,10 +62,6 @@
 										</el-table-column>
 										<el-table-column label="用户名" prop="useridDesc" sortable>
 										</el-table-column>
-										<!-- <el-table-column label="用户姓名" prop="nickname" sortable>
-										</el-table-column> -->
-										<!-- <el-table-column label="所属机构" prop="deptName" sortable>
-										</el-table-column> -->
 										<el-table-column label="机构" prop="superviseIdsDesc" sortable>
 											<template slot-scope="scope">
 												<el-input v-model="scope.row.superviseIdsDesc" :disabled="edit" placeholder="请选择">
@@ -73,6 +69,22 @@
 												</el-input>
 										    </template>
 										</el-table-column>
+										<el-table-column label="录入人" prop="createbyName" sortable>
+										</el-table-column>
+										<el-table-column label="录入时间" prop="createtime" sortable>
+										</el-table-column>
+										<el-table-column label="录入人机构" prop="deptName" sortable>
+										</el-table-column>
+										<el-table-column label="修改人" prop="updateby" sortable>
+										</el-table-column>
+										<el-table-column label="修改时间" prop="updatetime" sortable>
+										</el-table-column>
+										
+										<!-- <el-table-column label="用户姓名" prop="nickname" sortable>
+										</el-table-column> -->
+										<!-- <el-table-column label="所属机构" prop="deptName" sortable>
+										</el-table-column> -->
+										
 										<!-- <el-table-column label="手机号" prop="phone" sortable>
 										</el-table-column> -->
 										<el-table-column fixed="right" width="120" label="操作">
@@ -98,12 +110,12 @@
 												<el-input v-model="dataInfo.createdate" placeholder="当前录入时间" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
+										<!-- <el-col :span="8">
 											<el-form-item label="机构" prop="deptName" label-width="100px">
 												<el-input v-model="dataInfo.deptName" placeholder="当前录入人机构" :disabled="edit"></el-input>
 											</el-form-item>
-										</el-col>
-										<el-col :span="8">
+										</el-col> -->
+										<!-- <el-col :span="8">
 											<el-form-item label="修改人" prop="updateby" label-width="100px">
 												<el-input v-model="dataInfo.updateName" placeholder="当前修改人" :disabled="edit"></el-input>
 											</el-form-item>
@@ -112,7 +124,7 @@
 											<el-form-item label="修改时间" prop="updatedate" label-width="100px">
 												<el-input v-model="dataInfo.updatedate" placeholder="当前修改时间" :disabled="edit"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 									</el-row>
 								</el-collapse-item>
 
@@ -197,7 +209,7 @@
 					"deptid":this.$store.state.currentcjdw[0].id,
 					"deptName":this.$store.state.currentcjdw[0].fullname,
 					"createby":'',
-					"createdate":'',
+					"createtime":'',
 					"updateby":'',
 					"updatedate":'',
 					"del_flag":0,
@@ -209,13 +221,22 @@
 		},
 		methods: {
 			//选择多条用户数据插入到行列表中
+			
 			getUserData(val){
 				for(var i=0;i<val.length;i++){
-					var membershipList={
+					var membershipList={}
+					membershipList={
 						userid:val[i].id,
-						useridDesc:val[i].username,
-						// nickname:val[i].nickname,
-						// deptName:val[i].deptName,
+						useridDesc:val[i].nickname,
+						username:val[i].username,
+						deptName:val[i].deptName,
+						deptid:'',
+						createby:'',
+						createbyName:val[i].nickname,
+						createtime:this.getToday(),
+						updatetime:'',
+						updateby:'',
+						updatebyName:'',
 						superviseIds:'',
 						superviseIdsDesc:'',
 						// phone:val[i].phone,
@@ -244,7 +265,7 @@
 			//删除用户
 			delKey(index,row){
 				if(row.id!=''){
-					var url = this.basic_url + '/api-user/groups/delGroupUserById?id=' + row.id;
+					var url = this.basic_url + '/api-flow/flow/group/delMembership/' + row.id;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -280,7 +301,7 @@
 				this.$axios.get(url,{}).then((res) => {
 					if(opt == 'new'){
 						this.dataInfo.createby = res.data.id;
-						this.dataInfo.createdate =this.getToday();
+						this.dataInfo.createtime =this.getToday();
 					}else{
 						this.dataInfo.updateby = res.data.id;
 						this.dataInfo.updatedate = this.getToday();
@@ -459,9 +480,12 @@
 					this.depetData = res.data;
 					if(!!this.dataInfo.id){
 						var membershipList=this.dataInfo.membershipList;
+						if(!!membershipList[this.index].superviseDepts){
 							for(var m=0;m<membershipList[this.index].superviseDepts.length;m++){
 								arr.push(membershipList[this.index].superviseDepts[m].id);
 							}
+						}
+							
 						this.$nextTick(function() {
 							this.$refs.tree.setCheckedKeys(arr)
 						})

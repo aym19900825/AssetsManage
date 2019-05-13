@@ -12,10 +12,102 @@
 					</div>
 				</div>
 				<div class="mask_content pt10 pl10 pr10 pb10">
-					<el-tabs v-model="activeName" >
-                        <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" name="first">
-                        </el-tab-pane>  
-                    </el-tabs>
+					<div class="content-accordion">
+					<el-collapse v-model="activeNames">
+						 <el-collapse-item title="流程节点" name="1">
+							<el-tabs v-model="activeName" >
+
+								<el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].nodeName" :name="bigtitle[index].name" >
+									<el-form inline-message :model="bigtitle[index]" ref="dataInfo" label-width="110px">
+										<el-row>
+											<el-col :span="5">
+												<el-select v-model="bigtitle[index].type" placeholder="请选择">
+													<el-option
+													v-for="item in options"
+													:key="item.code"
+													:label="item.name"
+													:value="item.code">
+													</el-option>
+												</el-select>
+											</el-col>
+											<el-col :span="5">
+												<el-input v-model="bigtitle[index].executer" v-show="bigtitle[index].type=='0'" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												</el-input>
+												<!--  -->
+												<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='1'" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												</el-input>
+
+												<el-input v-model="bigtitle[index].group" v-show="bigtitle[index].type=='2'" :disabled="true">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
+												</el-input>
+											</el-col>
+										</el-row>
+									</el-form>
+									 <el-table
+									:data="bigtitle[index].actionList"
+									style="width: 100%;margin-bottom: 20px;"
+									border
+									row-key="id">
+									<el-table-column
+										prop="flag"
+										label="操作"
+										sortable
+										width="180">
+										<template slot-scope="scope">
+											<el-select v-model="scope.row.flag" placeholder="请选择">
+												<el-option
+												v-for="item in flag_valoptions"
+												:key="item.code"
+												:label="item.name"
+												:value="item.code">
+												</el-option>
+											</el-select>
+                                        </template>
+									</el-table-column>
+									<el-table-column
+										prop="type"
+										label="类型变更"
+										sortable
+										width="180">
+										<template slot-scope="scope">
+												<el-select v-model="scope.row.type" placeholder="请选择">
+												<el-option
+												v-for="item in action_typeoptions"
+												:key="item.code"
+												:label="item.name"
+												:value="item.code">
+												</el-option>
+											</el-select>
+										</template>
+									</el-table-column>
+									<el-table-column
+										prop="event"
+										label="事件"
+										sortable
+										width="180" >
+										<template slot-scope="scope">
+											<el-input v-model="scope.row.event"  :disabled="scope.row.type=='0'?false:true" placeholder="请选择">
+											</el-input>
+										</template>
+									</el-table-column>
+									<el-table-column
+										prop="classpath"
+										label="处理类"
+										sortable
+										width="180">
+										<template slot-scope="scope">
+											<el-input v-model="scope.row.classpath" :disabled="scope.row.type=='1'?false:true" placeholder="请选择">
+											</el-input>
+										</template>
+									</el-table-column>
+									</el-table>
+								</el-tab-pane>  
+							</el-tabs>
+						</el-collapse-item>	
+					</el-collapse>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -24,36 +116,64 @@
 
 <script>
 	import Config from '../../config.js'
-	import iframemask from '../flowDetails/ifram.vue'
 	export default {
 		name: 'masks',
-		components: {
-			iframemask
-		},
 		data() {
 			return {
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
 				show:false,
                 selUser: [],
-                bigtitle:[],//保存节点数据
+				bigtitle:[],//保存节点数据
+				dataInfo:{},//
+				options:[],//流程节点类型
+				action_typeoptions:[],//流程事件类型
+				flag_valoptions:[],//流程执行标识
 				edit: true, //禁填
+				noedit:false,
 				show: false,
 				isok1: true,
 				isok2: false,
                 modelId:'',
-                activeName: 'first'
+				activeName: 'tab0',//节点
+				activeNames: ['1'],//手风琴
 			};
 		},
 		methods: {
+			//流程节点类型
+			cadidate_type(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=cadidate_type';
+				this.$axios.get(url, {}).then((res) => {
+          			this.options = res.data;
+				}).catch((wrong) => {
+				})	
+			},
+			//流程事件类型
+			action_type(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=action_type';
+				this.$axios.get(url, {}).then((res) => {
+          			this.action_typeoptions = res.data;
+				}).catch((wrong) => {
+				})	
+			},
+			//流程执行标识
+			flag_val(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=flag_val';
+				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+          			this.flag_valoptions = res.data;
+				}).catch((wrong) => {
+				})	
+			},
 			//添加显示弹窗
 			visible(id) {
                 this.show = true;
                 var url = this.basic_url + '/api-flow/flow/process/'+id;
                     this.$axios.get(url, {}).then((res) => {
+						console.log(res);
                         for(var i=0;i<res.data.candidateList.length;i++){
-                             res.data.candidateList[i].name=i;   
-                        }
+                             res.data.candidateList[i].name='tab'+i;   
+						}
                         this.bigtitle=res.data.candidateList;
                         console.log(this.bigtitle);
                     }).catch((err) => {
@@ -126,7 +246,9 @@
 			
 		},
 		mounted() {
-			
+			this.cadidate_type();
+			this.action_type();	
+			this.flag_val();
 		},
 		
 	}

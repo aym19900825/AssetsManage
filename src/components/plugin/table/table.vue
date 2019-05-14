@@ -5,7 +5,8 @@
       @sort-change='tableSortChange'
       border
       :stripe="stripe"
-      :style="{width:fullWidth, height:fullHeight}"
+      style="width:100%"
+      :height="fullHeight"
       highlight-current-row
       @current-change="singleTable"
       @selection-change="selChange"
@@ -65,9 +66,8 @@ export default {
       isshift: false,
       isctrl: false,
       stripe: true,//table表格是否需要奇偶区别斑马线，true是false否
-      fullWidth:'100%',
       fullHeight: document.documentElement.clientHeight - 210 + 'px',
-      // fullHeight: '',
+      // fullHeight: '100',
       loading: false,
       loadSign: true
     }
@@ -82,7 +82,9 @@ export default {
     //判断高度
     isHeight(){
       if(!!this.newHeight){
-        this.fullHeight = this.newHeight + 'px';
+        var tableHeight = this.newHeight;
+        $(".el-table").height(tableHeight);
+        // this.fullHeight = this.newHeight + 'px';
       }else{
         this.fullHeight = document.documentElement.clientHeight - 210 + 'px';
       }
@@ -96,7 +98,7 @@ export default {
       }
       if(this.appName == 'asset'){
         var now = (new Date()).getTime();
-        var tranceTime = (new Date(row.TRACE_TIME)).getTime();
+        var tranceTime = (new Date(row.TRACE_TIME)).getTime();//设备溯源时间到期判断
         if (!!row.TRACE_TIME && (tranceTime-now<=0)) {
           return 'warning-row';
         }
@@ -298,7 +300,7 @@ export default {
         if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
           $('.el-table__body-wrapper table').find('.filing').remove();
         }
-        this.isHeight();//获取高度
+        // this.isHeight();//获取高度
       }).catch((wrong) => {})
     },
     

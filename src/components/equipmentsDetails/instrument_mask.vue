@@ -1260,7 +1260,7 @@
 				if(!this.$refs.tablePlugin){
 					setTimeout(()=>{
 						this.$refs.tablePlugin.requestData();//requestData子组件中接收数据的方法名
-					}, 2000);
+					}, 0);
 				}else{
 					this.$refs.tablePlugin.requestData();
 				}

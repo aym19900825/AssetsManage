@@ -809,29 +809,27 @@
 				});
 			},
 			
-			
-			//已确认盖章
+			//确认盖章
 			submited(){
 				var url = this.basic_url + '/api-apps/app/sealUse/operate/createReportData?id='+this.dataid;
-					this.$axios.get(url, {}).then((res) => {
-						// console.log(repotFileId);
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '确认成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.$emit('requests');
-						}else {
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'warning'
-							});
-						}
-					}).catch((err) => {
-					});
-				
+				this.$axios.get(url, {}).then((res) => {
+					// console.log(repotFileId);
+					//resp_code == 0是后台返回的请求成功的信息
+					if(res.data.resp_code == 0) {
+						this.$message({
+							message: '确认成功',
+							type: 'success'
+						});
+						//重新加载数据
+						this.$emit('requests');
+					}else {
+						this.$message({
+							message: res.data.resp_msg,
+							type: 'warning'
+						});
+					}
+				}).catch((err) => {
+				});
 			},
 			//查看
 			readAuth(){

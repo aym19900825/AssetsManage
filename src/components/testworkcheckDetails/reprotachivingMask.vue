@@ -157,7 +157,7 @@
 						<div class="content-footer" v-show="!addtitle">
 							<!-- <el-button type="primary" @click="saveAndUpdate()">保存</el-button> -->
 							<!-- <el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button> -->
-							<el-button type="success" @click="submited">确认报告归档</el-button>
+							<el-button type="success" @click="submitReprot">确认报告归档</el-button>
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -223,7 +223,7 @@
 				approval:false,//流程按钮
 				start:false,//流程按钮
                 report:{
-                    id:'',	//报告ID
+                    ID:'',	//报告ID
                     REPORT_NUM:'',	//报告编号
                     REPORTNAME:'',	//报告名称
                     PROXYNUM:'',	//委托书编号
@@ -240,6 +240,27 @@
             }
 		},
 		methods: {
+			//确认报告归档
+			submitReprot(){
+                var dataid = this.report.ID;
+                var url=this.basic_url + '/api-apps/app/reportOnhole/operate/confirmOnhole?id=' + dataid;
+                this.$axios.get(url, {}).then((res) => {
+                    if(res.data.resp_code == 0) {
+                        this.$message({
+                            message: '确认成功',
+                            type: 'success'
+						});
+						this.detailgetData();
+                    }else{
+                        this.$message({
+							message: res.data.resp_msg,
+							type: 'warning'
+                        });
+                    }
+                }).catch((err) => {
+                });
+			},
+			//文件上传加载动画
 			showLoading(){
 				this.loading = true;
 			},
@@ -250,7 +271,6 @@
 			SelChange(val) {
 				this.selUser = val;
 			},
-
 			//添加显示弹窗
 			visible() {
 				this.reset();

@@ -62,7 +62,7 @@
 										</el-table-column>
 										<el-table-column label="用户名" prop="useridDesc" sortable>
 										</el-table-column>
-										<el-table-column label="机构" prop="superviseIdsDesc" sortable>
+										<el-table-column label="管理机构" prop="superviseIdsDesc" sortable>
 											<template slot-scope="scope">
 												<el-input v-model="scope.row.superviseIdsDesc" :disabled="edit" placeholder="请选择">
 													<el-button slot="append" icon="el-icon-search" @click="adddeptbtn(scope.$index)" :disabled="noedit"></el-button>
@@ -79,14 +79,6 @@
 										</el-table-column>
 										<el-table-column label="修改时间" prop="updatetime" sortable>
 										</el-table-column>
-										
-										<!-- <el-table-column label="用户姓名" prop="nickname" sortable>
-										</el-table-column> -->
-										<!-- <el-table-column label="所属机构" prop="deptName" sortable>
-										</el-table-column> -->
-										
-										<!-- <el-table-column label="手机号" prop="phone" sortable>
-										</el-table-column> -->
 										<el-table-column fixed="right" width="120" label="操作">
 											<template slot-scope="scope">
 												<el-button type="text" size="small" @click="delKey(scope.$index,scope.row)">

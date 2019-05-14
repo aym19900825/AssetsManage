@@ -673,6 +673,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
+						
 						<div class="content-footer" v-show="noviews">
 							<el-button type="primary" @click="save('Update')">保存</el-button>
 							<el-button type="success"  v-show="addtitle" @click="save('Submit')">保存并继续</el-button>

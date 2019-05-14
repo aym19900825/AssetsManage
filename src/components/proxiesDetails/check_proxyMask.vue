@@ -3085,7 +3085,6 @@ export default {
       this.$axios
         .get(url, {})
         .then(res => {
-					console.log(res.data);
           this.logos = res.data;
           this.loading = false; //加载动画关闭
         })

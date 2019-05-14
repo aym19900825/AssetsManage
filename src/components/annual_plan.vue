@@ -186,8 +186,7 @@
 			</div>
 		</div>
 			<annualmask ref="child" @request="requestData" v-bind:page=page></annualmask>
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+			
 	</div>
 </template>
 <script>
@@ -197,7 +196,6 @@
 	import navs_tabs from './common/nav_tabs.vue'
 	import annualmask from './common/annual_mask.vue'
 	import assetsTree from './plugin/vue-tree/tree.vue'
-	import reportmask from'./reportDetails/reportMask.vue'
 	import vTable from './plugin/table/table.vue'
 	export default {
 		name: 'annual_plan',
@@ -207,13 +205,11 @@
 			'navs_left': navs_left,
 			'v-assetsTree': assetsTree,
 			'annualmask': annualmask,
-			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
 				appName: 'workplan',
-				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
@@ -644,8 +640,8 @@
 		},
 		//报表
 		reportdata(){
-			this.reportData.app=this.workplan;
-			this.$refs.reportChild.visible();
+			// this.reportData.app=this.workplan;
+			// this.$refs.reportChild.visible();
 			if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择数据',

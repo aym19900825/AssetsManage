@@ -129,7 +129,7 @@
 					// this.dialogVisible = false;
 					this.resetBasisInfo();//调用resetBasisInfo函数
 					// executer
-					console.log(this.selUser[0].username);
+					
 					this.$emit('executer',this.selUser[0].username);
 				}
             },

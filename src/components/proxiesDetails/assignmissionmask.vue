@@ -145,7 +145,7 @@
 											</el-col>
 											<el-col :span="5">
 												<el-form-item label="数量" prop="ITEM_QUALITY" label-width="110px">
-													<el-input v-model.number="dataInfo.ITEM_QUALITY" :disabled="special1">
+													<el-input v-model="dataInfo.ITEM_QUALITY" :disabled="special1">
 													</el-input>
 												</el-form-item>
 											</el-col>
@@ -494,7 +494,7 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="交委托方份数" prop="REPORT_QUALITY" label-width="110px">
-												<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -858,8 +858,7 @@
 					],//型号
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_QUALITY: [
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ type: 'number', message: '请输入数字'}
+						{ required: true, message: '必填', trigger: 'blur'}
 					],//数量
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理

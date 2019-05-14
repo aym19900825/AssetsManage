@@ -193,13 +193,8 @@
 		<inspectmask ref="child" @request="requestData" @requestTree="getKey" v-bind:page=page @realtime="realtime"></inspectmask>
 		<assignmissionmask  ref="assingn" @request="requestData" @requestTree="getKey" v-bind:page=page></assignmissionmask>
 		<!--右侧内容显示 End-->
-<<<<<<< HEAD
-		<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
-=======
 					<!--报表-->
 
->>>>>>> 182647725da88289ec50f8e3cc43efa3fc9b0020
 	</div>
 </template>
 <script>

@@ -55,7 +55,13 @@
                         </el-row>
 
                       </el-form>
-                      <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto" style="overflow-x:scroll"></iframe>
+
+                      <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"  v-loading="loading"
+                      element-loading-text="加载中…"
+                      element-loading-spinner="el-icon-loading"
+                      element-loading-background="rgba(255, 255, 255, 0.9)" style="overflow-x:scroll">
+
+                      </iframe>
                     </div>
               </el-tab-pane>
             </el-tabs>
@@ -117,6 +123,7 @@ import Config from '../../../config.js';
         tabPosition: 'left',
         noedit:false,//可编辑
         xianshi:false,
+        loading: false,
         appname:'',
         url:'',//单据
         src:'',//统计
@@ -218,7 +225,7 @@ import Config from '../../../config.js';
       },
       handleClick1(tab,event) {
         this.src="";
-        // this.pramList="";//清空form表
+         this.pramList=[];//清空form表
         for(var i=0;i<this.reportsList.length;i++){
           if(this.reportsList[i].code==tab.label){
              var id=this.reportsList[i].id;
@@ -252,7 +259,6 @@ import Config from '../../../config.js';
                 }
               }
             this.pramList = list;
-            console.log(this.pramList);
           }).catch((wrong) => {
 				  })
       },
@@ -314,14 +320,16 @@ import Config from '../../../config.js';
 					str=str.replace("\{","");
 					str=str.replace("\}","");
 					str=str.replace("\",\"","&");
-				}
-				this.str="&"+str;
+        }
+
+        this.str="&"+str.replace(',', '&');
         this.file=this.file+this.str;
 		  		var src=this.basic_url;
 					var pos = src.lastIndexOf(':');
 					src=src.substring(0,pos+1); 
 					this.src=src+"5300";
           this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
+          this.loading = false;//加载动画关闭
       },
       requestData(){
 				var data = {
@@ -382,12 +390,10 @@ import Config from '../../../config.js';
               
             for(var i=0;i<list.length;i++){
               var id=list[0].id;
-              var files=list[0].file;
+              this.file=list[0].file;
             } 
             var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
-              console.log(url);
             this.$axios.get(url, {}).then((res) => {
-              console.log(res);
               var list = res.data.datas;
               if(!!list){
                 this.xianshi = true;
@@ -407,14 +413,13 @@ import Config from '../../../config.js';
                 }
               }
             this.pramList = list;
-              console.log(this.pramList);
               }else{
                 this.xianshi = false;
                 var token = sessionStorage.getItem('access_token');
                 var url=this.basic_url;
 								var pos = url.lastIndexOf(':');
 								url=url.substring(0,pos+1); 
-                this.src = url+"5300/ureport/preview?_u=mysql:" +files+'&access_token='+token;
+                this.src = url+"5300/ureport/preview?_u=mysql:" +this.file+'&access_token='+token;
               }
           }).catch((wrong) => {
 				  })

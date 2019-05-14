@@ -135,10 +135,8 @@
 			return {
 				appName: 'productType',
 				btnShow: false,
-				// up2down:'down',
 				basic_url: Config.dev_url,
 				commentArr: {},
-				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				fileList:[],
 				value: '',

@@ -611,7 +611,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="views">
-							<el-button type="primary" @click="submitForm">确定</el-button>
+							<el-button type="success" @click="submitForm">确定下达</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>

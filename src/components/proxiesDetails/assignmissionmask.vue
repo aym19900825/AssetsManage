@@ -6,7 +6,7 @@
 				<div class="mask_title_div clearfix">
 					<!-- <div class="mask_title" v-show="addtitle">添加检验委托书</div>
 					<div class="mask_title" v-show="modifytitle">修改检验委托书</div> -->
-					<div class="mask_title" v-show="viewtitle">下达任务单</div>
+					<div class="mask_title" v-show="viewtitle">下达任务</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">						 
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -42,7 +42,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="3" class="pull-right">
-											<el-input v-model="dataInfo.TYPEDesc" :disabled="edit">
+											<el-input v-model="dataInfo.DETECTIONTYPEDesc" :disabled="edit">
 												<template slot="prepend">类别</template>
 											</el-input>
 										</el-col>
@@ -51,7 +51,7 @@
 												<template slot="prepend">编号</template>
 											</el-input>
 										</el-col>
-											<el-col :span="6" class="pull-right">
+											<el-col :span="5" class="pull-right">
 											<el-input v-model="dataInfo.R_VENDORDesc" :disabled="edit">
 												<template slot="prepend">承检单位</template>
 											</el-input>
@@ -621,7 +621,7 @@
 						</div>
 						 -->
 						<div class="content-footer">
-							<el-button type="success" @click="build">确定</el-button>
+							<el-button type="success" @click="build">确定下达</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -736,8 +736,8 @@
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
 					VERSION:'1',//版本
-					TYPE:'1',//检验
-					TYPEDesc:'检验',
+					DETECTIONTYPE:'1',//检验
+					DETECTIONTYPEDesc:'检验',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
@@ -1204,8 +1204,8 @@
 					STATE: '1',//流程状态
 					STATEDesc:'编制',
 					VERSION:'1',//版本
-					TYPE:'1',//检验
-					TYPEDesc:'检验',
+					DETECTIONTYPE:'1',//检验
+					DETECTIONTYPEDesc:'检验',
 					STATUS:'0',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
@@ -1346,8 +1346,8 @@
 					this.dataInfo.ENTERBY = res.data.id;
 					var date = new Date();
 					this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.dataInfo.TYPE = '1';
-					this.dataInfo.TYPEDesc = '检验';
+					this.dataInfo.DETECTIONTYPE = '1';
+					this.dataInfo.DETECTIONTYPEDesc = '检验';
 					this.dataInfo.R_VENDORDesc=this.$store.state.currentcjdw[0].fullname;
 					this.dataInfo.R_VENDOR=this.$store.state.currentcjdw[0].id;
 					this.show = true;

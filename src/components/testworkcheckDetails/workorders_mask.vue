@@ -602,12 +602,7 @@
 													</el-table>
 												</el-col>
 											</el-row>
-											<!-- <el-row class="pt20 pb20">
-												<el-col :span="24" class="text-center">
-													<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-													<el-button type="success" @click="sendback">回退</el-button>
-												</el-col>
-											</el-row> -->
+											
 										</el-tab-pane>
 										<!--成果文件 End-->
 
@@ -723,11 +718,11 @@
 								<el-button type="success" @click="checkchildlist">查看子任务单成果文件</el-button>
 							</div>
 							<div class="content-footer" v-show="(this.STATE=='3'||this.STATE=='5'||this.STATE=='6'||this.STATE=='7'||this.STATE=='8')&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id">
-								<el-button type="primary" @click="submitVerify">确认成果文件通过</el-button>
-								<el-button type="warning" @click="sendback">回退成果文件</el-button>
+								<el-button type="primary" @click="submitVerify">确认成果文件通过{{this.workorderForm.WONUM}}</el-button>
+								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 							<div class="content-footer" v-show="this.STATE=='0'&&this.workorderForm.ISCHILDREN=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
-								<el-button type="warning" @click="sendback">回退成果文件</el-button>
+								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 						<!-- </div> -->
 					</el-form>

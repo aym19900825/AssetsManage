@@ -103,8 +103,7 @@
 												:fetch-suggestions="querySearchAsync" 
 												@select="handleSelect"
 												placeholder="请输入内容"
-                        :disabled="specialedit" 
-											>
+                        :disabled="specialedit" >
 												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()" :disabled="specialedit"></el-button>
 											</el-autocomplete>
                       </el-form-item>
@@ -2976,8 +2975,7 @@ export default {
     },
     weituo() {
       var url =
-        this.basic_url +
-        "/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=" +
+        this.basic_url +"/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=" +
         this.$store.state.currentcjdw[0].id; //如果父组件没有传CJDW承检单位侧显示所有数
       this.$axios
         .get(url, {})
@@ -3005,18 +3003,18 @@ export default {
 						key: queryString
 			} 
 			this.weituoname.forEach(function(item,i){
-              if(item.indexOf(queryString) != -1){
-                    list.push({"value":item});   
-              }      
-        })
-        if(!queryString){
-              list = list.splice(0,7);
-        }
-        callback(list);
+          if(item.indexOf(queryString) != -1){
+            list.push({"value":item});   
+          }
+      })
+      if(!queryString){
+          list = list.splice(0,7);
+      }
+      callback(list);
 		},
 		// 模糊查询下拉框 鼠标键盘选中点击触发
     handleSelect(item){
-				 this.accountSearch = item.value;
+				this.accountSearch = item.value;
 				for(let i=0;i<this.weituodata.length;i++){
           if(item.value==this.weituodata[i].customername){
           //委托方赋值

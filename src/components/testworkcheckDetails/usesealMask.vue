@@ -87,7 +87,7 @@
                                     <el-row>
                                          <el-col :span="8">
 											<el-form-item label="用印人" prop="USERDesc">
-												<el-autocomplete v-model="USESEAL.USERDesc" placeholder="请输入内容" :fetch-suggestions="querySearch" @select="handleSelect" style="width: 100%;">
+												<el-autocomplete v-model="USESEAL.USERDesc" placeholder="请输入内容" :fetch-suggestions="querySearchAsync" @select="handleSelect" style="width: 100%;">
                                                     <el-button slot="append" icon="el-icon-search" @click="addperson('use')"></el-button>
                                                 </el-autocomplete>
 											</el-form-item>
@@ -174,7 +174,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="!addtitle">
-							<el-button type="success" @click="submited">确认盖章</el-button>
+							<el-button type="success" v-show="USESEAL.STATE=='9'" @click="submited">确认盖章</el-button>
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -367,23 +367,61 @@
 				sealUse:'sealUse',//appname
 				dataid:'',
 				username:'',
-				
+				userName: [], //用于存用印人
 			};
 		},
 		methods: {
-			querySearch(queryString, cb) {
-				var restaurants = this.restaurants;
-				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-				// 调用 callback 返回建议列表的数据
-				cb(results);
+			//获取用印人
+			getUsers(){
+				var data = {
+					page: this.page.currentPage,
+                    limit: this.page.pageSize,
+					username: this.searchList.username,
+                    nickname: this.searchList.nickname,
+				}
+                var url = this.basic_url + '/api-user/users';
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					let datas=res.data.data;
+					this.page.totalCount = res.data.count;
+					this.gridDataList = res.data.data;
+					for(let i=0;i<datas.length;i++){
+            			this.userName.push(datas[i].nickname);
+					}
+					console.log(this.gridDataList);
+				});
 			},
-			createFilter(queryString) {
-				return (restaurant) => {
-				return (restaurant.nickname.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-				};
+			//用印人-文本框直接搜索数据
+			querySearchAsync(queryString, callback) {
+				var list = [{}];
+				let param = {
+					pageNum: 1,
+					pageSize: 9999,
+					key: queryString
+				} 
+				this.userName.forEach(function(item,i){
+					if(item.indexOf(queryString) != -1){
+						list.push({"value":item});   
+					}
+				})
+				if(!queryString){
+					list = list.splice(0,20);
+				}
+				callback(list);
 			},
-			handleSelect(item) {
-				console.log(item);
+			//用印人-输入数据点击选中触发赋值
+   			handleSelect(item){
+				this.accountSearch = item.value;
+				for(let i=0;i<this.gridDataList.length;i++){
+					if(item.value==this.gridDataList[i].nickname){
+						this.USESEAL.USER = this.gridDataList[i].id;//用户ID
+						this.USESEAL.USERDesc = this.gridDataList[i].nickname;//用户姓名
+						this.USESEAL.SEAL_DEPARTMENT = this.gridDataList[i].deptId;//用户机构ID
+						this.USESEAL.SEAL_DEPARTMENTDesc = this.gridDataList[i].deptName;//用户机构名称
+					}
+				}
+
 			},
 			
 			//编码提示
@@ -452,7 +490,6 @@
 			detailgetData(){
 				var url = this.basic_url +'/api-apps/app/sealUse/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					this.USESEAL = res.data;
 					 for(var j=0;j<this.selectData.length;j++){
                     	if(this.USESEAL.SEAL_DEPARTMENT==this.selectData[j].id){
@@ -460,6 +497,7 @@
                     	}
                		 }
 					this.show = true;
+					this.clearValidate();//清空表单验证
 				}).catch((err) => {
 				});
 			},
@@ -630,7 +668,6 @@
 						this.USESEAL.USERDesc = this.selUser[0].nickname;
 						this.USESEAL.SEAL_DEPARTMENT = this.selUser[0].deptId;
 						this.USESEAL.SEAL_DEPARTMENTDesc = this.selUser[0].deptName;
-						console.log(this.selUser[0]);
                         // this.dialogPerson = false;
                     }else if(this.pertips == 'back'){
                         this.USESEAL.GHUSER = this.selUser[0].id;//归还人
@@ -858,8 +895,13 @@
 			submited(){
 				this.$refs.USESEAL.validate((valid) => {
 					if(valid) {
+						var data = {
+							USER: this.USESEAL.USER,
+							USETIME: this.USESEAL.USETIME,
+							SEAL_DEPARTMENT: this.USESEAL.SEAL_DEPARTMENT,
+						};
 						var url = this.basic_url + '/api-apps/app/sealUse/operate/createReportData?id='+this.dataid;
-						this.$axios.get(url, {}).then((res) => {
+						this.$axios.get(url, {params: data}).then((res) => {
 							// console.log(repotFileId);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
@@ -868,7 +910,7 @@
 									type: 'success'
 								});
 								//重新加载数据
-								this.$emit('requests');
+								this.detailgetData();
 							}else {
 								this.$message({
 									message: res.data.resp_msg,
@@ -894,7 +936,7 @@
 					+ '&username=' + this.username
 					+ '&deptid=' + this.deptid
 					+ '&deptfullname=' + this.deptfullname
-             window.open(url); 
+            	window.open(url); 
         	},
 			//时间格式化
 			dateFormat(row, column) {
@@ -918,19 +960,27 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-				
-	                    this.userid = res.data.id;
-						this.username = res.data.username;
-						this.deptid = res.data.deptId;
-						this.deptfullname = res.data.deptName;
+					this.userid = res.data.id;
+					this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	            });
-        	},
+			},
+			//清空表单验证
+			clearValidate() {
+				// this.$refs[formName].clearValidate();
+				if (this.$refs['USESEAL'] != undefined) {
+					this.$refs['USESEAL'].resetFields();
+					// this.$refs[formName].clearValidate();
+				}
+			},
 		},
 		mounted() {
 			this.getCompany();
-			this.getUser();
-			this.restaurants = this.addperson();
+			this.getUser();//获取当前用户
+			this.getUsers();//获取用印人
+			// this.clearValidate('USESEAL')//清空表单验证
 		},
 		
 	}

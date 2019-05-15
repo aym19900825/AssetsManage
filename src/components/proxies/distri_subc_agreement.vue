@@ -40,10 +40,10 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="分包方名称" prop="VENDOR" label-width="70px">
-									<!-- <el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input> -->
+								<el-form-item label="分包方名称" prop="DEPTID" label-width="70px">
+									<!-- <el-input v-model="searchList.DEPTID" @keyup.enter.native="searchinfo"></el-input> -->
 									<el-select clearable 
-											   v-model="searchList.VENDOR" 
+											   v-model="searchList.DEPTID" 
 											   filterable 
 											   default-first-option 
 											   placeholder="请选择">
@@ -224,7 +224,7 @@
 				searchList: {
 					PROXY_CONTRACT_NUM: '',
 					PROXYNUM: '',
-					VENDOR: '',
+					DEPTID: '',
 					ENTERBY:'',
 					ENTERDATE:''
 				},
@@ -261,7 +261,7 @@
 				this.searchList =  { //点击高级搜索后显示的内容
 					PROXY_CONTRACT_NUM:'',
 					PROXYNUM: '',
-					VENDOR: '',
+					DEPTID: '',
 					ENTERDATE: '',
 				};
 				this.requestData('init');

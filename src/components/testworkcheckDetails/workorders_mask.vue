@@ -20,7 +20,7 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.STATE!=16" class="pr10">
+							<span v-if="this.STATE!='16'" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button>
@@ -28,7 +28,7 @@
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.STATE!=2"><i class="icon-edit-3"></i>审批</el-button>
 							</span>
 							<!--this.$store.state.currentuser.id//全局通用当前用户ID-->
-							<span v-if="this.STATE==1&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" class="pr10">
+							<span v-if="this.STATE=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" class="pr10">
 								<!-- <el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button> -->
 								<el-button class="start" type="success" round size="mini" @click="startup"><i class="icon-check"></i> 接收此任务</el-button>
 								<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
@@ -613,7 +613,7 @@
 
 										<el-tab-pane label="已生成的报告文件" name="sixth">
 											<!--生成的报告列表 Begin-->
-											<el-row v-show="this.STATE!=1||this.STATE!=2||this.STATE!=3||this.STATE!=5&&this.workorderForm.IS_MAIN==1">
+											<el-row v-show="this.STATE!='1'||this.STATE!='2'||this.STATE!='3'||this.STATE!='5'&&this.workorderForm.IS_MAIN==1">
 												<el-col :span="24">
 													<!-- <el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px"> -->
 														<el-table :data="workorderForm.WORKORDER_REPORTList" 
@@ -715,12 +715,12 @@
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div> -->
-						<div class="content-footer" v-show="viewtitle&&this.STATE!=1">
+						<div class="content-footer" v-show="viewtitle&&this.STATE!='1'">
 							<!--this.STATE==5&&workorderForm.IS_MAIN!=1&&-->
 							<!-- <el-button title="查看报告文件" type="primary" @click="lookoverreport">查看报告文件</el-button> -->
-							<el-button type="primary" v-show="(this.STATE==5||this.STATE==3||this.STATE==0||this.STATE==7||this.STATE==8)&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
-							<el-button type="warning" v-show="(this.STATE==5||this.STATE==3||this.STATE==0||this.STATE==7||this.STATE==8)&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
-							<el-button type="success" v-show="this.STATE!=2&&this.STATE!=15&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" @click="checkchildlist">查看子任务单</el-button><!--判断还要修改-->
+							<el-button type="primary" v-show="(this.STATE=='5'||this.STATE=='3'||this.STATE=='0'||this.STATE==7||this.STATE=='8')&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
+							<el-button type="warning" v-show="(this.STATE=='5'||this.STATE=='3'||this.STATE=='0'||this.STATE==7||this.STATE=='8')&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
+							<el-button type="success" v-show="this.STATE!='2'&&this.STATE!='15'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" @click="checkchildlist">查看子任务单</el-button><!--判断还要修改-->
 						</div>
 						<!-- &&this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length!=0 -->
 					</el-form>

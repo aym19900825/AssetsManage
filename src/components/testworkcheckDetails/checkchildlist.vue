@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="子任务单成果数据文件" :visible.sync="dialogProduct" width="70%">
+		<el-dialog :modal-append-to-body="false" title="子任务单成果文件" :visible.sync="dialogProduct" width="70%">
             <div class="scrollbar" style="height:360px;">
                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion v-for="item in selectData" :key="item.WONUM">
                     <el-row :gutter="20">
@@ -14,7 +14,7 @@
 							<el-table-column prop="LIABLE_PERSONDesc" label="检验责任人" sortable>
 							</el-table-column>
 
-							<el-table-column prop="FILENAME" label="成果数据文件名" sortable>
+							<el-table-column prop="FILENAME" label="成果文件名" sortable>
 							</el-table-column>
 
 							<el-table-column prop="FILESIZE" label="文件大小" sortable>

@@ -643,10 +643,10 @@
 			getUser(){//获取当前用户信息
 	            var url = this.basic_url + '/api-user/users/currentMap';
 	            this.$axios.get(url, {}).then((res) => {//获取当前用户信息
-						this.userid = res.data.id;
-						this.username = res.data.username;
-						this.deptid = res.data.deptId;
-						this.deptfullname = res.data.deptName;
+					this.userid = res.data.id;
+					this.username = res.data.username;
+					this.deptid = res.data.deptId;
+					this.deptfullname = res.data.deptName;
 	            }).catch((err) => {
 	            });
         	},

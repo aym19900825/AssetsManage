@@ -169,7 +169,7 @@
 											<el-form-item label="角色" prop="roleId" label-width="100px">
 												<!--inactive判断角色是否停用，1是，2否-->
 												<el-select v-model="user.roleId" filterable multiple default-first-option style="width: 100%;" @change="showUserRole">
-													<el-option v-for="(itemRole,index) in selectData" :key="index" :value="itemRole.id" :label="itemRole.name" :disabled="itemRole.inactive=='2'?false:true"></el-option>
+													<el-option v-for="(itemRole,index) in selectData" :key="index" :value="itemRole.id" :label="itemRole.name" :disabled="itemRole.inactive=='1'?true:false"></el-option>
 												</el-select>
 											</el-form-item>
 										</el-col>

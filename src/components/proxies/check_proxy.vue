@@ -531,9 +531,9 @@
 						type: 'warning'
 					});
 					return;
-				}else if(this.selUser[0].STATE !=3&&this.selUser[0].STATE !=15) {
+				}else if(this.selUser[0].STATE!=3&&this.selUser[0].STATE!=15) {
 					this.$message({
-						message: '此委托书暂不能下达任务，请查看【状态】!',
+						message: '此委托书状态不是待分配或已回退，暂不能下达任务!',
 						type: 'warning'
 					});
 					return;

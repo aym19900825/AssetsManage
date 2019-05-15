@@ -20,18 +20,18 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.STATE!=16" class="pr10">
+							<span v-if="this.STATE!='16'" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button>
-								<el-button class="approval" type="success" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button>
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.STATE!=2"><i class="icon-edit-3"></i>审批</el-button>
+								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button> -->
+								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button> -->
+								<!-- <el-button class="approval" type="success" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button> -->
+								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.STATE!=2"><i class="icon-edit-3"></i>审批</el-button> -->
 							</span>
 							<!--this.$store.state.currentuser.id//全局通用当前用户ID-->
-							<span v-if="this.STATE==1&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" class="pr10">
+							<span v-if="this.STATE=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" class="pr10">
 								<!-- <el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button> -->
 								<el-button class="start" type="success" round size="mini" @click="startup"><i class="icon-check"></i> 接收此任务</el-button>
-								<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退</el-button>
+								<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退此任务</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -557,8 +557,8 @@
 										</el-tab-pane>
 										<!--检验检测设备 End-->
 
-										<!--成果数据 Begin-->
-										<el-tab-pane label="成果数据" name="fifth">
+										<!--成果文件 Begin-->
+										<el-tab-pane label="成果文件" name="fifth">
 											<el-row>
 												<el-col :span="24">
 													<el-table :data="workorderForm.WORKORDER_DATA_TEMPLATEList" 
@@ -602,18 +602,13 @@
 													</el-table>
 												</el-col>
 											</el-row>
-											<!-- <el-row class="pt20 pb20">
-												<el-col :span="24" class="text-center">
-													<el-button type="primary" v-show="workorderForm.IS_MAIN!=1" @click="submitVerify">确认成果文件通过</el-button>
-													<el-button type="success" @click="sendback">回退</el-button>
-												</el-col>
-											</el-row> -->
+											
 										</el-tab-pane>
-										<!--成果数据 End-->
+										<!--成果文件 End-->
 
 										<el-tab-pane label="已生成的报告文件" name="sixth">
 											<!--生成的报告列表 Begin-->
-											<el-row v-show="this.STATE!=1||this.STATE!=2||this.STATE!=3||this.STATE!=5&&this.workorderForm.IS_MAIN==1">
+											<el-row v-show="this.STATE!='1'||this.STATE!='2'||this.STATE!='3'||this.STATE!='5'&&this.workorderForm.IS_MAIN==1">
 												<el-col :span="24">
 													<!-- <el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px"> -->
 														<el-table :data="workorderForm.WORKORDER_REPORTList" 
@@ -715,14 +710,21 @@
 							<el-button type="success" v-show="addtitle">保存并继续</el-button>
 							<el-button @click="close">取消</el-button>
 						</div> -->
-						<div class="content-footer" v-show="viewtitle&&this.STATE!=1">
-							<!--this.STATE==5&&workorderForm.IS_MAIN!=1&&-->
-							<!-- <el-button title="查看报告文件" type="primary" @click="lookoverreport">查看报告文件</el-button> -->
-							<el-button type="primary" v-show="(this.STATE==5||this.STATE==3||this.STATE==0||this.STATE==7||this.STATE==8)&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="submitVerify">确认成果文件通过</el-button>
-							<el-button type="warning" v-show="(this.STATE==5||this.STATE==3||this.STATE==0||this.STATE==7||this.STATE==8)&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.workorderForm.PARENT_NUM==this.workorderForm.WONUM" @click="sendback">回退成果数据</el-button>
-							<el-button type="success" v-show="this.STATE!=2&&this.STATE!=15&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" @click="checkchildlist">查看子任务单</el-button><!--判断还要修改-->
-						</div>
+						<!--this.STATE==5&&workorderForm.IS_MAIN!=1&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id&&this.STATE!='1'
+						&&this.STATE!='2'&&this.STATE!='15'||this.STATE=='5'||this.STATE=='3'||this.STATE=='0'||this.STATE=='7'||this.STATE=='8'-->
 						<!-- &&this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length!=0 -->
+						<!-- <div class="content-footer" v-show="viewtitle"> -->
+							<div class="content-footer" v-show="this.STATE!='2'&&this.STATE!='15'&&this.workorderForm.ISCHILDREN=='1'">
+								<el-button type="success" @click="checkchildlist">查看子任务单成果文件</el-button>
+							</div>
+							<div class="content-footer" v-show="(this.STATE=='3'||this.STATE=='5'||this.STATE=='6'||this.STATE=='7'||this.STATE=='8')&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id">
+								<el-button type="primary" @click="submitVerify">确认成果文件通过{{this.workorderForm.WONUM}}</el-button>
+								<el-button type="warning" @click="approvals">回退成果文件</el-button>
+							</div>
+							<div class="content-footer" v-show="this.STATE=='0'&&this.workorderForm.ISCHILDREN=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
+								<el-button type="warning" @click="approvals">回退成果文件</el-button>
+							</div>
+						<!-- </div> -->
 					</el-form>
 				</div>
 			</div>
@@ -787,7 +789,7 @@
 			<!-- 原始模版  -->
 			<templatemask ref="templatechild" @showModule="showModule"></templatemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -855,7 +857,7 @@
 					WORKORDER_BASISList:[],//检测依据
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
-					WORKORDER_DATA_TEMPLATEList:[],//成果数据文件
+					WORKORDER_DATA_TEMPLATEList:[],//成果文件文件
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORTList:[],//报告
@@ -1015,7 +1017,7 @@
 				this.sampleListVisible = false;
 				this.sampleNumList = [];
 			},
-			//确认检测数据通过
+			//确认成果文件通过
 			submitVerify(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
@@ -1049,6 +1051,8 @@
 								message: '接收工作任务单成功',
 								type: 'success'
 							});
+							//重新加载数据
+							this.$emit('requests');
 						}else{
 							this.$message({
 							message: res.data.resp_msg,
@@ -1058,7 +1062,7 @@
 					}).catch((err) => {
 					});
 			},
-			//回退按钮
+			//回退任务单按钮
 			sendback(){
 				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
 					var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
@@ -1071,9 +1075,11 @@
 								message: '回退工作任务单成功',
 								type: 'success'
 							});
+							//重新加载数据
+							this.$emit('requests');
 						}else{
 							this.$message({
-							message: '已经接收工作任务单，请勿重复接收',
+							message: res.data.resp_msg,
 							type: 'warning'
 						});
 						}
@@ -1642,7 +1648,7 @@
 				};
 				this.workorderForm.WORKORDER_CHECKPERSONList.push(obj);
 			},
-			//成果数据文件
+			//成果文件文件
 			addfield4(){
 				var obj = {
 					DATA_TYPE:'',
@@ -1762,7 +1768,7 @@
 					for(var i = 0;i<res.data.WORKORDER_CHECKPERSONList.length;i++){
 						res.data.WORKORDER_CHECKPERSONList[i].isEditing = false;
 					}
-					//成果数据文件
+					//成果文件文件
 					for(var i = 0;i<res.data.WORKORDER_DATA_TEMPLATEList.length;i++){
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILECHECKED = false;
 						res.data.WORKORDER_DATA_TEMPLATEList[i].FILE_ORGCHECKED = false;

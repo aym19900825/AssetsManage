@@ -57,7 +57,7 @@
 									    </el-table-column>
 									    <el-table-column label="字段名" sortable width="220px" prop="columnname">
 										    <template slot-scope="scope">
-										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" disabled></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
+										      	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.columnname" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing" >{{scope.row.columnname}}</span>
 										    </template>
 									    </el-table-column>
 									    <el-table-column label="字段描述" sortable width="220px" prop="description">

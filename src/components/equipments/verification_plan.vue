@@ -119,8 +119,6 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<detailPage :detailData="selUser[0]" ref="child" @request="requestData"></detailPage>
-		<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -147,7 +145,6 @@
 		data() {
 			return {
 				appName: 'checkPlan',
-				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
@@ -215,7 +212,6 @@
 				},
 				selectData: [],
 				buttons:[],
-				checkPlan:'checkPlan'//appname
 			}
 		},
 		methods: {
@@ -481,8 +477,28 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.checkPlan;
-				this.$refs.reportChild.visible();
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname: this.appName,
+					id:this.selUser[0].id,
+					}
+					});
+					window.open(routeData.href, '_blank');
+				}
 			},
 			//时间格式化  
 			dateFormat(row, column) {

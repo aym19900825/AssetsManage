@@ -1437,11 +1437,11 @@
 				this.selUser = val;
 			},
 			setSel(row) {
-	    this.selUser = [];
-	    this.selUser.push(row);
-	    this.$refs.singleTable.clearSelection();
-		this.$refs.singleTable.toggleRowSelection(row);
-  },
+		    this.selUser = [];
+		    this.selUser.push(row);
+		    this.$refs.singleTable.clearSelection();
+				this.$refs.singleTable.toggleRowSelection(row);
+		  },
 			 //启动流程
 			startup(){
 				var url = this.basic_url + '/api-apps/app/workNot/flow/'+this.dataid;

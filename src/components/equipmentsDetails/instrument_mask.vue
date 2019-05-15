@@ -233,7 +233,7 @@
 		props: ['detailData'],
 		components: {
 			docTable,//文件上传
-			'v-table': vTable,//通用表格
+			vTable,//通用表格
 			tree_grid,//树表格
 		},
 		data() {
@@ -839,6 +839,7 @@
 			},
 			//点击设备分类选值
 			addAsset(){
+				console.log(123);
 				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
 				if(CONFIG_UNIT==""||CONFIG_UNIT=="undenfiend"){
 					this.$message({

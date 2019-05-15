@@ -107,8 +107,7 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<detailPage :detailData="selUser[0]" ref="child" @request="requestData"></detailPage>
-		<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		
 	</div>
 </div>
 </template>
@@ -119,7 +118,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import detailPage from '../equipmentsDetails/usag_records_mask.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'user_management',
@@ -128,14 +126,12 @@
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
 			'tableControle': tableControle,
-			'reportmask': reportmask,
 			'detailPage': detailPage,
 			'v-table': vTable
 		},
 		data() {
 			return {
 				appName: 'asset2',
-				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
@@ -442,8 +438,28 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.asset2;
-				this.$refs.reportChild.visible();
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname:this.appName,
+					id:this.selUser[0].id,
+					}
+					});
+					window.open(routeData.href, '_blank');
+				}
 			},
 			//时间格式化  
 			dateFormat(row, column) {

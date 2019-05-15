@@ -156,8 +156,6 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<instrumentsmask :detailData="selUser[0]" ref="child" @request="requestData"></instrumentsmask>
-		<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -168,7 +166,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'instruments',
@@ -178,7 +175,6 @@
 			'navs_tabs': navs_tabs,
 			'instrumentsmask': instrumentsmask,
 			'tableControle': tableControle,
-			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
@@ -591,7 +587,7 @@
 					let routeData = this.$router.resolve({
 					path: "/report",
 					query: {
-					appname: this.asset,
+					appname:this.appName,
 					id:this.selUser[0].id,
 					}
 					});

@@ -201,6 +201,9 @@
 					even: '',
 					status: '',
 					classpath:'',
+					id:'',
+					nodeId:this.bigtitle[index].nodeId,
+					procDefId:this.dataInfo.procDefId,
 				};
 				this.bigtitle[index].actionList.push(obj);
 			},
@@ -247,11 +250,15 @@
 						}else{
 							res.data.isNotRepeat=false;
 						}
-						this.dataInfo=res.data;//是否执行人可重复
-                        for(var i=0;i<res.data.candidateList.length;i++){
+						for(var i=0;i<res.data.candidateList.length;i++){
                              res.data.candidateList[i].name='tab'+i;   
 						}
-                        this.bigtitle=res.data.candidateList;
+						this.bigtitle=res.data.candidateList;
+						var data=res.data;
+						delete data.candidateList;
+						this.dataInfo=data;//是否执行人可重复
+                        
+                        
                     }).catch((err) => {
                     });
 			},
@@ -323,14 +330,20 @@
 				}
 			},
 			// 保存users/saveOrUpdate
-			save() {
+			save(){
 				if(this.dataInfo.isNotRepeat){
 					this.dataInfo.isNotRepeat=1;
 				}else{
 					this.dataInfo.isNotRepeat=0;
 				}
+				var data={
+				 id:this.dataInfo.id,
+				 isNotRepeat:this.dataInfo.isNotRepeat,
+				 candidateList:this.bigtitle,
+				 procDefId:this.dataInfo.procDefId
+				}
 				var url = this.basic_url + '/api-flow/flow/process/save';
-				this.$axios.post(url,this.dataInfo).then((res) => {
+				this.$axios.post(url,data).then((res) => {
 					if(res.data.resp_code==0){
 					this.show = false;
 					this.$emit('request');

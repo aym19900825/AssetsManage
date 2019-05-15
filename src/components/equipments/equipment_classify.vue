@@ -72,8 +72,6 @@
 					<el-row :gutter="0">
 						<el-col :span="24">
 							 <tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
-							<!-- <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-							</el-pagination> -->
 						</el-col>
 					</el-row>
 				</div>
@@ -114,8 +112,8 @@
 				loading: false,//默认加载数据时显示loading动画
 				checkedName: [
 					'编码',
-					'分类描述',
 					// '父级分类',
+					'分类描述',
 					'录入时间',
 					'修改时间'
 				],
@@ -124,16 +122,16 @@
 					dataIndex: 'CLASSIFY_NUM',
 					isShow:true,
 				},
+				// {
+				// 	text: '父级分类',
+				// 	dataIndex: 'PARENT',
+				// 	isShow:true,
+				// },
 				{
 					text: '分类描述',
 					dataIndex: 'CLASSIFY_DESCRIPTION',
 					isShow:true,
 				},
-				// {
-				// 	text: '父级分类',
-				// 	dataIndex: 'PARENTDesc',
-				// 	isShow:true,
-				// },
 				{
 					text: '录入时间',
 					dataIndex: 'ENTERDATE',

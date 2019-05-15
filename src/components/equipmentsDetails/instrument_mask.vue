@@ -47,7 +47,7 @@
 											<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addAsset"></el-button>
 										</el-input>
 										<el-input v-model="dataInfo[item.prop]" :type="item.type" v-if="item.type=='textarea'" :disabled="noedit"></el-input>
-										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit">
+										<el-date-picker v-model="dataInfo[item.prop]" value-format="yyyy-MM-dd" v-if="item.type=='date'" :disabled="noedit" style="width:100%">
 										</el-date-picker>
 										<el-radio-group v-model="dataInfo[item.prop]" v-if="item.type=='radio'" :disabled="noedit">
 											<el-radio :label="it.label" v-for="it in item.opts" :value="it.val" :key="it.id"></el-radio>
@@ -114,44 +114,80 @@
 
 			<!--设备分类 Begin-->
 			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible2" width="60%">
+					<!-- 高级查询划出 Begin-->
+					<div class="clearfix">
+						<el-form inline-message :model="searchList" label-width="45px">
+							<el-row :gutter="10">
+								<!-- <el-col :span="5">
+									<el-form-item label="编码" prop="CLASSIFY_NUM">
+										<el-input v-model="searchList.CLASSIFY_NUM"></el-input>
+									</el-form-item>
+								</el-col> -->
+								<el-col :span="8">
+									<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
+										<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
+									</el-form-item>
+								</el-col>
+								<!-- <el-col :span="5">
+									<el-form-item label="父级分类" prop="PARENTDesc" label-width="80px">
+										<el-input v-model="searchList.PARENTDesc"></el-input>
+									</el-form-item>
+								</el-col> -->
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+								</el-col>
+							</el-row>
+						</el-form>
+					</div>
+					<!-- 高级查询划出 End-->
+					<div class="scrollbar" style="height:360px;">
+						<tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
+					</div>
+					<div slot="footer" v-if="noviews">
+						<el-button type="primary" @click="addAssetType">确 定</el-button>
+						<el-button @click="resetBasisInfo2">取 消</el-button>
+					</div>
+			</el-dialog>
+			<!--设备分类 End-->
+
+			<!--设备保管人 Begin-->
+			<el-dialog title="用户" :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%">
 				<!-- 高级查询划出 Begin-->
-				<div class="clearfix">
-					<el-form inline-message :model="searchList" label-width="45px">
+				<div class="pb10">
+					<el-form inline-message :model="searchUserList" label-width="100px">
 						<el-row :gutter="10">
-							<!-- <el-col :span="5">
-								<el-form-item label="编码" prop="CLASSIFY_NUM">
-									<el-input v-model="searchList.CLASSIFY_NUM"></el-input>
-								</el-form-item>
-							</el-col> -->
 							<el-col :span="8">
-								<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
-									<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
+								<el-form-item label="用户名" prop="username">
+									<el-input v-model="searchUserList.username" @keyup.enter.native="searchUserInfo">
+									</el-input>
 								</el-form-item>
 							</el-col>
-							<!-- <el-col :span="5">
-								<el-form-item label="父级分类" prop="PARENTDesc" label-width="80px">
-									<el-input v-model="searchList.PARENTDesc"></el-input>
+							<el-col :span="8">
+								<el-form-item label="姓名" prop="nickname">
+									<el-input v-model="searchUserList.nickname" @keyup.enter.native="searchUserInfo">
+									</el-input>
 								</el-form-item>
-							</el-col> -->
+							</el-col>
 							<el-col :span="4">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+								<el-button type="primary" @click="searchUserInfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetUserBtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
 				<!-- 高级查询划出 End-->
-				<tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="categoryList" @classByValue="classByValue" @getDetail="getDetail"></tree_grid>
-				<div slot="footer" v-if="noviews">
-	    			<el-button type="primary" @click="addAssetType">确 定</el-button>
-	    			<el-button @click="resetBasisInfo2">取 消</el-button>
-	  			</div>
-			</el-dialog>
-			<!--设备分类 End-->
-
-			<!--设备保管人 Begin-->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogVisible" width="60%">
-				<el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
+				<v-table ref="tablePlugin" :appName="appName" :selectWay="selectWay" :newHeight="newHeight" :searchList="searchUserList" @getSelData="setSelData">
+					<el-table-column label="用户名" sortable width="140px" prop="username">
+					</el-table-column>
+					<el-table-column label="姓名" sortable prop="nickname">
+					</el-table-column>
+					<el-table-column label="机构" sortable width="150px" prop="deptName">
+					</el-table-column>
+					<el-table-column label="用户有效期" sortable width="140px" prop="user_active_date" :formatter="dateFormat">
+					</el-table-column>
+				</v-table>
+				<!-- <el-table ref="table" :data="userList" border stripe :header-cell-style="rowClass" height="360px" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange"
 						v-loading="loading"
 						element-loading-text="加载中…"
 						element-loading-spinner="el-icon-loading"
@@ -160,23 +196,22 @@
 					</el-table-column>
 					<el-table-column label="用户名" sortable width="140px" prop="username">
 					</el-table-column>
-					<el-table-column label="姓名" sortable width="200px" prop="nickname">
+					<el-table-column label="姓名" sortable prop="nickname">
 					</el-table-column>
 					<el-table-column label="机构" sortable width="150px" prop="deptName">
 					</el-table-column>
-					<el-table-column label="公司" sortable prop="companyName">
+					<el-table-column label="用户有效期" prop="user_active_date" width="140px" sortable :formatter="dateFormat">
 					</el-table-column>
-					<el-table-column label="录入时间" prop="createTime" width="100px" sortable :formatter="dateFormat">
-					</el-table-column>
-				</el-table>
-				<el-pagination background class="text-right pt10" 
-							   @size-change="sizeChange" 
-							   @current-change="currentChange" 
-							   :current-page="page.currentPage" 
-							   :page-sizes="[10, 20, 30, 40]" 
-							   layout="total, sizes, prev, pager, next" 
-							   :total="page.totalCount">
-				</el-pagination>
+				</el-table> -->
+
+				<!-- <el-pagination background class="text-right pt10" 
+					@size-change="sizeChange" 
+					@current-change="currentChange" 
+					:current-page="page.currentPage" 
+					:page-sizes="[10, 20, 30, 40]" 
+					layout="total, sizes, prev, pager, next" 
+					:total="page.totalCount">
+				</el-pagination> -->
 
 				<div slot="footer" v-if="noviews">
 	    			<el-button type="primary" @click="addpeoname">确 定</el-button>
@@ -190,34 +225,29 @@
 
 <script>
 	import Config from '../../config.js'
-	import docTable from '../common/doc.vue'
+	import docTable from '../common/doc.vue'//文件上传
+	import vTable from '../plugin/table/table.vue'//通用表格
 	import tree_grid from '../common/TreeGrid.vue'//树表格
 	export default {
 		name: 'masks',
 		props: ['detailData'],
 		components: {
-			docTable,
-			tree_grid,
+			docTable,//文件上传
+			'v-table': vTable,//通用表格
+			tree_grid,//树表格
 		},
 		data() {
-			var checkNum = (rule, value, callback) => {
-				if (!value) {
-					return callback(new Error('请输入设备价值'));
-				}else{
-					callback();
-				}
-			};
-			var validateKeeper = (rule, value, callback) => {//类别
-                if (this.dataInfo.KEEPERDesc === undefined || this.dataInfo.KEEPERDesc === '' || this.dataInfo.KEEPERDesc === null) {
-                    callback(new Error('必填'));
-                }else {
-                    callback();
-                }
-            };
 			return {
+				appName: 'api-user',//用户列表
+				newHeight: '300',//传给弹出框表格高度
+				selectWay: 'radio',//table选择方式
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},
+				searchUserList: { //点击设备保管人搜索
+					username: '',
+					nickname: '',
+				},
 				docParm: {
 					'model': 'new',
 					'appname': '',
@@ -645,7 +675,6 @@
 						displayType: 'inline-block'
 					}
 				],
-
 				basic_url: Config.dev_url,
 				show: false,
 				isok1: true,
@@ -735,6 +764,18 @@
 			};
 		},
 		methods: {
+			//点击重置[设备保管人]搜索
+			resetUserBtn(){
+				this.searchUserList =  { 
+					username: '',
+					nickname: '',
+				};
+				this.getuserinfo();
+			},
+			//点击搜索[设备保管人]查询
+			searchUserInfo() {
+				this.getuserinfo();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 			    return 'text-align:center'
@@ -775,7 +816,6 @@
 			},
 			classByValue(childValue) {
 				// childValue就是子组件传过来的
-				
 				this.selUser = childValue;
 			},
 			childByValue(childValue) {
@@ -783,7 +823,6 @@
 				this.$refs.navsTabs.showClick(childValue);
 				this.getbutton(childValue);
 			},
-			
 			//设备保管人员情况
 			addPeople(){
 				var CONFIG_UNIT=this.dataInfo.CONFIG_UNIT;
@@ -861,7 +900,7 @@
 				this.page.currentPage = 1;//页码重新传值
 				this.page.pageSize = 10;//页码重新传值
 			},
-			SelChange(val) {
+			setSelData(val) {
 				this.selUser = val;
 			},
 			//表格滚动加载
@@ -1216,31 +1255,42 @@
 					this.loading = false;//加载动画关闭
 				}).catch((wrong) => {})
 			},
-			getuserinfo() {//高级查询字段
-				this.loading = true;//加载动画打开
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-				};
-				this.$axios.get(this.basic_url + '/api-user/users', {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					//总的页数
-					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false
-					} else {
-						this.loadSign = true
-					}
-					this.userList = res.data.data;
-					this.loading = false;//加载动画关闭
-					if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-						$('.el-table__body-wrapper table').find('.filing').remove();
-					}//滚动加载数据判断filing
-				}).catch((wrong) => {})
+			//弹出框-设备保管人
+			getuserinfo(opt) {//高级查询字段
+				if(!this.$refs.tablePlugin){
+					setTimeout(()=>{
+						this.$refs.tablePlugin.requestData();//requestData子组件中接收数据的方法名
+					}, 0);
+				}else{
+					this.$refs.tablePlugin.requestData();
+				}
 				
 			},
+			// getuserinfo() {//高级查询字段
+			// 	this.loading = true;//加载动画打开
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 	};
+			// 	this.$axios.get(this.basic_url + '/api-user/users', {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;
+			// 		//总的页数
+			// 		let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
+			// 		if(this.page.currentPage >= totalPage) {
+			// 			this.loadSign = false
+			// 		} else {
+			// 			this.loadSign = true
+			// 		}
+			// 		this.userList = res.data.data;
+			// 		this.loading = false;//加载动画关闭
+			// 		if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
+			// 			$('.el-table__body-wrapper table').find('.filing').remove();
+			// 		}//滚动加载数据判断filing
+			// 	}).catch((wrong) => {})
+				
+			// },
 		},
 		mounted() {
 			this.getCompany();

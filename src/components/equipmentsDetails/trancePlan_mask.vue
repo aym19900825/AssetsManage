@@ -114,12 +114,9 @@
 				<!--底部-->
 			</div>
 			<!--设备名称 Begin-->
-			<el-dialog title="设备" 
-					  :modal-append-to-body="false" 
-					  :visible.sync="dialogVisname" 
-					  width="80%" 
-					 >
-				<div>
+			<el-dialog title="设备" :modal-append-to-body="false" :visible.sync="dialogVisname" width="80%">
+				<!-- 高级查询划出 Begin-->
+				<div class="pb10">
 					<el-form inline-message :model="searchList" label-width="70px">
 						<el-row :gutter="10">
 							<el-col :span="5">
@@ -144,7 +141,36 @@
 						</el-row>
 					</el-form>
 				</div>
-				<el-table :header-cell-style="rowClass" 
+				<!-- 高级查询划出 End-->
+				<v-table ref="tablePlugin" :appName="appName" :selectWay="selectWay" :newHeight="newHeight" :searchList="searchList" @getSelData="setSelData">
+					<el-table-column label="设备编号" width="130" sortable prop="ASSETNUM">
+						</el-table-column>
+						<el-table-column label="设备名称" width="200" sortable prop="DESCRIPTION">
+						</el-table-column>
+						<el-table-column label="型号" sortable prop="MODEL">
+						</el-table-column>
+						<el-table-column label="技术指标" width="120" sortable prop="ASSET_KPI">
+						</el-table-column>						
+						<el-table-column label="制造商" width="140" sortable prop="VENDOR">
+						</el-table-column>
+						<el-table-column label="出厂编号" width="160" sortable prop="FACTOR_NUM">
+						</el-table-column>
+						<el-table-column label="价格(万元)" width="140" sortable prop="A_PRICE">
+						</el-table-column>
+						<el-table-column label="接受日期" width="140" sortable prop="ACCEPT_DATE" :formatter="dateFormat">
+						</el-table-column>
+						<el-table-column label="启用日期" width="140" sortable prop="S_DATE" :formatter="dateFormat">
+						</el-table-column>						
+						<el-table-column label="配置地址" width="140" sortable prop="C_ADDRESS">
+						</el-table-column>
+						<el-table-column label="接收状态" width="120" sortable prop="A_STATUS">
+						</el-table-column>
+						<el-table-column label="保管人" width="200" sortable prop="KEEPERDesc">
+						</el-table-column>						
+						<el-table-column label="备注" width="200" sortable prop="MEMO">
+						</el-table-column>
+				</v-table>
+				<!-- <el-table :header-cell-style="rowClass" 
 						  :data="assetList" 
 						  border 
 						  ref="table"
@@ -183,8 +209,8 @@
 						</el-table-column>						
 						<el-table-column label="备注" width="200" sortable prop="MEMO">
 						</el-table-column>
-					</el-table>
-					<el-pagination background class="text-right pt10"
+					</el-table> -->
+					<!-- <el-pagination background class="text-right pt10"
 			            @size-change="sizeChange"
 			            @current-change="currentChange"
 			            :current-page="page.currentPage"
@@ -192,7 +218,7 @@
 			            :page-size="page.pageSize"
 			            layout="total, sizes, prev, pager, next"
 			            :total="page.totalCount">
-			        </el-pagination>
+			        </el-pagination> -->
 				<div slot="footer" class="el-dialog__footer" v-if="noviews">
 	    			<el-button type="primary" @click="addinstruname">确 定</el-button>
 	    			<el-button @click="handleClose">取 消</el-button>
@@ -206,31 +232,19 @@
 <script>
 	import Config from '../../config.js'
 	import docTable from '../common/doc.vue'
+	import vTable from '../plugin/table/table.vue'//通用表格
 	export default {
 		name: 'masks',
 		props: ['detailData'],
-		components: {docTable},
+		components: {
+			docTable,
+			'v-table': vTable,//通用表格
+		},
 		data() {
-			var checkNum = (rule, value, callback) => {
-				if (!value) {
-					return callback(new Error('请输入设备价值'));
-				}
-				setTimeout(() => {
-					if (!/^[0-9]*$/.test(value)) {
-						callback(new Error('请输入数字值'));
-					} else {
-						callback();
-					}
-				}, 1000);
-			};
-			var validateAname = (rule, value, callback) => {//类别
-                if (this.dataInfo.A_NAME === undefined || this.dataInfo.A_NAME === '' || this.dataInfo.A_NAME === null) {
-                    callback(new Error('请选择设备名称'));
-                }else {
-                    callback();
-                }
-            };
 			return {
+				appName: 'asset',//用户列表
+				newHeight: '300',//传给弹出框表格高度
+				selectWay: 'radio',//table选择方式
 				loadSign: true, //加载
 				commentArr: {},
 				searchList: {
@@ -552,11 +566,24 @@
 			};
 		},
 		methods: {
+			//点击搜索[设备]查询
+			searchinfo(){
+				this.requestData();
+			},
+			//点击重置[设备]搜索
+			resetbtn(){
+				this.searchList = {
+					ASSETNUM: '',
+					DESCRIPTION: '',
+					VENDOR: ''
+				};
+				this.requestData();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
 			},
-			SelectChange(val){
+			setSelData(val){
 				this.selName = val;
 			},
 			singleTable(row){
@@ -877,19 +904,7 @@
 			// 		this.requestData()
 			// 	}
 			// },
-			searchinfo(){
-				this.page.currentPage = 1;
-				this.requestData();
-			},
-			resetbtn(){
-				this.searchList = {
-					ASSETNUM: '',
-					DESCRIPTION: '',
-					VENDOR: ''
-				};
-				this.page.currentPage = 1;
-				this.requestData();
-			},
+			
 			requestData(index) {
 				var data = {
 					page: this.page.currentPage,

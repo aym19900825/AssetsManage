@@ -107,8 +107,8 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<detailPage :detailData="selUser[0]" ref="child" @request="requestData"></detailPage>
-					<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<!--报表-->
+		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>

@@ -40,7 +40,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="5">
-								<el-form-item label="分包单位" prop="VENDOR" label-width="70px">
+								<el-form-item label="分包方名称" prop="VENDOR" label-width="70px">
 									<!-- <el-input v-model="searchList.VENDOR" @keyup.enter.native="searchinfo"></el-input> -->
 									<el-select clearable 
 											   v-model="searchList.VENDOR" 
@@ -105,7 +105,7 @@
 							</el-table-column>
 							<el-table-column label="流程状态" width="150" sortable prop="STATEDesc" v-if="this.checkedName.indexOf('流程状态')!=-1">
 							</el-table-column>
-							<el-table-column label="分包单位" width="150" sortable prop="VENDORDesc" v-if="this.checkedName.indexOf('分包单位')!=-1">
+							<el-table-column label="分包方名称" width="150" sortable prop="DEPTIDDesc" v-if="this.checkedName.indexOf('分包方名称')!=-1">
 							</el-table-column>
 							<el-table-column label="分包协议类别" width="150" sortable prop="TYPEDesc" v-if="checkedName.indexOf('分包协议类别')!=-1">
 							</el-table-column>
@@ -157,7 +157,7 @@
 					'分包协议编号',
 					'委托书编号',
 					'委托方名称',
-					'分包单位',
+					'分包方名称',
 					'流程状态',
 					'分包协议类别',
 					'检验检测费用',
@@ -184,8 +184,8 @@
 						prop: 'STATEDesc'
 					},
 					{
-						label: '分包单位',
-						prop: 'VENDOR'
+						label: '分包方名称',
+						prop: 'DEPTIDDesc'
 					},
 					{
 						label: '分包协议类别',

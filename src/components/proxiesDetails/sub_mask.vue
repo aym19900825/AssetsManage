@@ -555,17 +555,18 @@
 			//确认接收此分包协议
 			confirmReceipt(){
                 var dataid = this.report.ID;
-                var url=this.basic_url + '  /api-apps/app/subcontrac/operate/confirmReceive?id=' + dataid;
+                var url=this.basic_url + '/api-apps/app/subcontrac/operate/confirmReceive?id=' + dataid;
                 this.$axios.get(url, {}).then((res) => {
                     if(res.data.resp_code == 0) {
                         this.$message({
                             message: '分包协议接收成功',
                             type: 'success'
-                        });
+						});
+						this.detailgetData();
                     }else{
                         this.$message({
-                        message: '已接收此分包协议，请勿重复操作',
-                        type: 'warning'
+							message: res.data.resp_msg,
+							type: 'warning'
                         });
                     }
                 }).catch((err) => {
@@ -583,8 +584,8 @@
                         });
                     }else{
                         this.$message({
-                        message: '已经生成委托书，请勿重复生成',
-                        type: 'warning'
+							message: res.data.resp_msg,
+							type: 'warning'
                         });
                     }
                 }).catch((err) => {

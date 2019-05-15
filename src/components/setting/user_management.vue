@@ -378,7 +378,6 @@
 			getRole() {
 				var url = this.basic_url + '/api-user/roles';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res.data.data);
 					this.selectRoleData = res.data.data;
 				});
 			},

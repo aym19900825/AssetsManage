@@ -32,17 +32,17 @@
 								<el-collapse-item title="用印信息" name="1">
 									<el-row class="pb10">
 										<el-col :span="5" class="pull-right pr10">
-											<el-input v-model="USESEAL.STATEDesc" :disabled="true">
+											<el-input v-model="USESEAL.STATEDesc" :disabled="edit">
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right pr10">
-											<el-input v-model="USESEAL.PROXY_TYPE" :disabled="true">
+											<el-input v-model="USESEAL.PROXY_TYPE" :disabled="edit">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right pr10">
-											<el-input v-model="USESEAL.REPORT_NUM" :disabled="true">
+											<el-input v-model="USESEAL.REPORT_NUM" :disabled="edit">
 												<template slot="prepend">报告编号</template>
 											</el-input>
 										</el-col>
@@ -50,17 +50,17 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="委托单位名称" prop="V_NAME">
-												<el-input v-model="USESEAL.V_NAME" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.V_NAME" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
 											<el-form-item label="委托书编号" prop="PROXYNUM">
-												<el-input v-model="USESEAL.PROXYNUM" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.PROXYNUM" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="委托书版本" prop="PROXY_VERSION">
-												<el-input v-model="USESEAL.PROXY_VERSION" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.PROXY_VERSION" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -69,17 +69,17 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
-												<el-input v-model="USESEAL.COMPDATE" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.COMPDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
 											<el-form-item label="完成方式" prop="COMPMODEDesc">
-												<el-input v-model="USESEAL.COMPMODEDesc" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.COMPMODEDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="报告份数" prop="REPORT_QUALITY">
-												<el-input v-model="USESEAL.REPORT_QUALITY" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.REPORT_QUALITY" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -87,10 +87,18 @@
                                     <el-row>
                                          <el-col :span="8">
 											<el-form-item label="用印人" prop="USERDesc">
-												<el-input v-model="USESEAL.USERDesc" :disabled="true">
+												<el-autocomplete v-model="USESEAL.USERDesc" placeholder="请输入内容" :fetch-suggestions="querySearch" @select="handleSelect" style="width: 100%;">
                                                     <el-button slot="append" icon="el-icon-search" @click="addperson('use')"></el-button>
-                                                </el-input>
+                                                </el-autocomplete>
 											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+                                            <el-form-item label="用印人机构" prop="SEAL_DEPARTMENTDesc">
+												<!-- <el-input v-model="USESEAL.SEAL_DEPARTMENTDesc" :disabled="edit"></el-input> -->
+                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENTDesc" :disabled="edit" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;">
+                                                    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+                                                </el-select>
+                                            </el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="用印时间" prop="USETIME">
@@ -98,29 +106,22 @@
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-                                            <el-form-item label="用印人机构" prop="SEAL_DEPARTMENTDesc">
-                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENTDesc" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;">
-                                                    <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
-                                                </el-select>
-                                            </el-form-item>
-										</el-col>
 									</el-row>
 
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="签发人" prop="ENTERBYDesc">
-												<el-input v-model="USESEAL.ENTERBYDesc" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
 											<el-form-item label="签发日期" prop="ENTERDATE">
-												<el-input v-model="USESEAL.ENTERDATE" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.ENTERDATE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="用印管理员" prop="ENTERBYDesc">
-												<el-input v-model="USESEAL.ENTERBYDesc" :disabled="true"></el-input>
+												<el-input v-model="USESEAL.ENTERBYDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -134,7 +135,7 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="归还接收人" prop="GHUSERDesc">
-												<el-input v-model="USESEAL.GHUSERDesc" :disabled="true">
+												<el-input v-model="USESEAL.GHUSERDesc" :disabled="edit">
                                                     <el-button slot="append" icon="el-icon-search" @click="addperson('back')"></el-button>
                                                 </el-input>
 											</el-form-item>
@@ -181,29 +182,37 @@
 				</div>
 			</div>
             <!-- 人员 -->
-			<el-dialog :modal-append-to-body="false" :visible.sync="dialogPerson" width="60%"  title="用户信息" >
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogPerson" width="60%"  title="用户信息">
+				<!--查询-->
 				<el-form inline-message :model="searchList">
-						<el-row :gutter="10">
-							<el-col :span="5">
-								<el-form-item label="用户名" prop="username" label-width="55px">
-									<el-input v-model="searchList.username">
-									</el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="5">
-								<el-form-item label="姓名" prop="nickname" label-width="45px">
-									<el-input v-model="searchList.nickname">
-									</el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="4">
-								<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
-								<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
-							</el-col>
-						</el-row>
-					</el-form>
-
-					<el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="350px" style="width: 100%;"
+					<el-row :gutter="10">
+						<el-col :span="5">
+							<el-form-item label="用户名" prop="username" label-width="55px">
+								<el-input v-model="searchList.username">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="姓名" prop="nickname" label-width="45px">
+								<el-input v-model="searchList.nickname">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="4">
+							<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+							<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+				<v-table ref="tablePlugin" :appName="appName" :selectWay="selectWay" :newHeight="newHeight" :searchList="searchList" @getSelData="setSelData">
+					<el-table-column label="用户名" sortable width="200px" prop="username">
+					</el-table-column>
+					<el-table-column label="姓名" sortable prop="nickname">
+					</el-table-column>
+					<el-table-column label="机构" sortable width="200px" prop="deptName">
+					</el-table-column>
+				</v-table>
+					<!-- <el-table :header-cell-style="rowClass" :data="gridDataList" line-center border stripe height="350px" style="width: 100%;"
 					:default-sort="{prop:'gridDataList', order: 'descending'}"
 					@selection-change="SelChange"
 						v-loading="loading"
@@ -233,7 +242,7 @@
 						:page-size="page.pageSize"
 						layout="total, sizes, prev, pager, next"
 						:total="page.totalCount">
-					</el-pagination>
+					</el-pagination> -->
 				<span slot="footer" class="dialog-footer">
 	    			<el-button type="primary" @click="confirmPerson">确 定</el-button>
 	    			<el-button @click="DialogClose">取 消</el-button>
@@ -263,6 +272,7 @@
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
 	import vewPoplemask from '../workflow/vewPople.vue'
+	import vTable from '../plugin/table/table.vue'
 	export default {
         name: 'masks',
         components: {
@@ -272,9 +282,13 @@
 			flowhistorymask,
 			flowmapmask,
 			vewPoplemask,
+			'v-table': vTable
 		},
 		data() {
 			return {
+				appName: 'api-user',//用印人
+				newHeight: '300',//传给弹出框表格高度
+				selectWay: 'radio',//table选择方式
 				approvingData:{},//流程数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -293,13 +307,13 @@
 				selectData: [],
 				rules: {
 					USERDesc:[
-						{required: true, message: '请选择', trigger: 'change'}
+						{required: true, message: '请选择'}
 					],
 					USETIME:[
-						{required: true, message: '请选择', trigger: 'change'}
+						{required: true, message: '请选择'}
 					],
 					SEAL_DEPARTMENTDesc:[
-						{required: true, message: '请选择', trigger: 'change'}
+						{required: true, message: '请选择'}
 					],
 				},
 				//tree
@@ -335,8 +349,8 @@
                     ENERBY:'',
                     CHANGEBY:'',
 					CHANGEDATE:'',
-					STATE:'1',//流程状态
-                    STATEDesc:'草稿',
+					STATE:'',//流程状态
+                    STATEDesc:'',
                 },
                 dialogPerson:false,//人员信息弹出框
                 pertips:'',//选择人员参数
@@ -357,6 +371,21 @@
 			};
 		},
 		methods: {
+			querySearch(queryString, cb) {
+				var restaurants = this.restaurants;
+				var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+				// 调用 callback 返回建议列表的数据
+				cb(results);
+			},
+			createFilter(queryString) {
+				return (restaurant) => {
+				return (restaurant.nickname.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+				};
+			},
+			handleSelect(item) {
+				console.log(item);
+			},
+			
 			//编码提示
 			// hint(){
 			// 	this.hintshow = true;
@@ -369,7 +398,7 @@
 			    return 'text-align:center'
 			},
 			//获取导入表格勾选信息
-			SelChange(val) {
+			setSelData(val) {
 				this.selUser = val;
 			},
 			//生成随机数函数
@@ -387,12 +416,14 @@
 				}).then((res) => {
 					this.selectData = res.data;
 				});
-            },
+			},
+			//点击重置-用印人
             resetbtn(){
 				this.searchList =  { //点击高级搜索后显示的内容
 					username:'',
                     nickname:''
-                };
+				};
+				this.addperson();
             },
 			//添加显示弹窗
 			visible() {
@@ -477,7 +508,6 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/sealUse/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					 
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -545,31 +575,43 @@
 			appendver(value){
                 console.log(value);
 				this.USESEAL.PROXY_VERSION = value;
-            },
+			},
+			//点击搜索-用印人
             searchinfo() {
-				this.page.currentPage = 1;
-				this.page.pageSize = 20;
 				this.addperson();
 			},
-            addperson(pertips){
-            	this.loading = true;
-                var data = {
-					page: this.page.currentPage,
-                    limit: this.page.pageSize,
-					username: this.searchList.username,
-                    nickname: this.searchList.nickname,
+			//选择用印人
+			addperson(pertips){
+            	if(!this.$refs.tablePlugin){
+					setTimeout(()=>{
+						this.$refs.tablePlugin.requestData();//requestData子组件中接收数据的方法名
+					}, 0);
+				}else{
+					this.$refs.tablePlugin.requestData();
 				}
-                var url = this.basic_url + '/api-user/users';
-				this.$axios.get(url, {
-					params: data
-				}).then((res) => {
-					this.page.totalCount = res.data.count;
-					this.gridDataList = res.data.data;
-					this.loading = false;
-				});
 				this.dialogPerson = true;	
                 this.pertips = pertips;
-            },
+			},
+            // addperson(pertips){
+            // 	this.loading = true;
+            //     var data = {
+			// 		page: this.page.currentPage,
+            //         limit: this.page.pageSize,
+			// 		username: this.searchList.username,
+            //         nickname: this.searchList.nickname,
+			// 	}
+            //     var url = this.basic_url + '/api-user/users';
+			// 	this.$axios.get(url, {
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.page.totalCount = res.data.count;
+			// 		this.gridDataList = res.data.data;
+			// 		this.loading = false;
+			// 	});
+			// 	this.dialogPerson = true;	
+            //     this.pertips = pertips;
+			// },
+			//选择用印人-确定按钮
             confirmPerson(){
                 if(this.selUser.length == 0){
                     this.$message({
@@ -585,11 +627,14 @@
                     this.resetBasisInfo();//调用resetBasisInfo函数
                     if(this.pertips == 'use'){
                         this.USESEAL.USER = this.selUser[0].id;
-                        this.USESEAL.USERDesc = this.selUser[0].nickname;
+						this.USESEAL.USERDesc = this.selUser[0].nickname;
+						this.USESEAL.SEAL_DEPARTMENT = this.selUser[0].deptId;
+						this.USESEAL.SEAL_DEPARTMENTDesc = this.selUser[0].deptName;
+						console.log(this.selUser[0]);
                         // this.dialogPerson = false;
                     }else if(this.pertips == 'back'){
-                        this.USESEAL.GHUSER = this.selUser[0].id;
-                        this.USESEAL.GHUSERDesc = this.selUser[0].nickname;
+                        this.USESEAL.GHUSER = this.selUser[0].id;//归还人
+                        this.USESEAL.GHUSERDesc = this.selUser[0].nickname;//归还时间
                         // this.dialogPerson = false;
                     }
                 }
@@ -809,31 +854,39 @@
 				});
 			},
 			
-			
-			//已确认盖章
+			//确认盖章
 			submited(){
-				var url = this.basic_url + '/api-apps/app/sealUse/operate/createReportData?id='+this.dataid;
-					this.$axios.get(url, {}).then((res) => {
-						// console.log(repotFileId);
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '确认成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.$emit('requests');
-						}else {
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'warning'
-							});
-						}
-					}).catch((err) => {
-					});
-				
+				this.$refs.USESEAL.validate((valid) => {
+					if(valid) {
+						var url = this.basic_url + '/api-apps/app/sealUse/operate/createReportData?id='+this.dataid;
+						this.$axios.get(url, {}).then((res) => {
+							// console.log(repotFileId);
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '确认成功',
+									type: 'success'
+								});
+								//重新加载数据
+								this.$emit('requests');
+							}else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+						});
+					} else {
+						this.show = true;
+						this.$message({
+							message: '未填写完整，请填写',
+							type: 'warning'
+						});
+					}
+				});
 			},
-			//查看
+			//查看报告文件
 			readAuth(){
 				this.detailgetData();
             	var url = this.po_url+"/show?fileid=" +this.USESEAL.FILEID
@@ -877,6 +930,7 @@
 		mounted() {
 			this.getCompany();
 			this.getUser();
+			this.restaurants = this.addperson();
 		},
 		
 	}

@@ -37,9 +37,9 @@
 	                            </el-collapse-item>
 	                            <!-- 使用记录、维护保养 Begin-->
 								<div class="el-collapse-item pt10 pr20 pb20 ml60" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tabs v-model="activeName">
 									    <el-tab-pane name="first">
-											<span slot="label"><i class="red">*</i> 设备使用记录信息</span>
+											<span slot="label">设备使用记录信息</span>
 									    	<div class="table-func table-funcb">
 												<el-button type="success" size="mini" round @click="addLine('tableList')" v-show="!viewtitle">
 											<i class="icon-add"></i>
@@ -49,7 +49,7 @@
 									<el-table :header-cell-style="rowClass" :data="dataInfo.tableList" row-key="ID" border stripe max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.pmRecord', order: 'descending'}">
 										<el-table-column prop="iconOperation" fixed label="" width="50px">
 											<template slot-scope="scope">
-												<i class="el-icon-check" v-if="scope.row.isEditing"  @click="changeEdit(scope.row)"></i>
+												<i class="el-icon-check" v-if="scope.row.isEditing" @click="changeEdit(scope.row)"></i>
 												<i class="el-icon-edit" v-else @click="changeEdit(scope.row)"></i>
 											</template>
 										</el-table-column>
@@ -64,7 +64,7 @@
 												</el-form-item>
 											</template>
 										</el-table-column>
-										<el-table-column prop="S_NUM" label="样品编号" sortable width="120px">
+										<el-table-column prop="S_NUM" label="样品编号" sortable width="160px">
 											<template slot-scope="scope">
 												<el-form-item :prop="'tableList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 	                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入样品编号">
@@ -130,7 +130,7 @@
 									</el-table>
 									    </el-tab-pane>
 									    <el-tab-pane name="second">
-											<span slot="label"><i class="red">*</i> 设备维护保养记录信息</span>
+											<span slot="label">设备维护保养记录信息</span>
 
 									    	<div class="table-func table-funcb">
 										<el-button type="success" size="mini" round @click="addLine('maintenList')" v-show="!viewtitle">
@@ -216,30 +216,61 @@
 				</div>
 			<!--底部-->
 			</div>
-			<el-dialog :modal-append-to-body="false" title=样品编号 :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
+			<el-dialog :modal-append-to-body="false" title="样品编号" :visible.sync="sampleDialog" width="80%" :before-close="resetSample">
+				<!-- 高级查询划出 Begin-->
 				<div class="pb10">
-					<el-form inline-message :model="searchList" label-width="70px">
-						<el-row :gutter="10" class="pb10">
-							<el-col :span="6">
-								<el-input v-model="searchList.DESCRIPTION">
-									<template slot="prepend">样品名称</template>
-								</el-input>
+					<el-form inline-message :model="searchUserList" label-width="100px">
+						<el-row :gutter="10">
+							<el-col :span="8">
+								<el-form-item label="样品编号" prop="ITEMNUM">
+									<el-input v-model="searchUserList.ITEMNUM" @keyup.enter.native="searchUserInfo">
+									</el-input>
+								</el-form-item>
 							</el-col>
-							<el-col :span="2">
-								<el-button type="primary" @click="searchSam" size="small" style="margin:4px">搜索</el-button>
+							<el-col :span="8">
+								<el-form-item label="样品名称" prop="DESCRIPTION">
+									<el-input v-model="searchUserList.DESCRIPTION" @keyup.enter.native="searchUserInfo">
+									</el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="4">
+								<el-button type="primary" @click="searchUserInfo" size="small" style="margin-top:2px">搜索</el-button>
+								<el-button type="primary" @click="resetUserBtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
 				</div>
-				<el-table :data="sampleList" border stripe style="width: 100%;" @selection-change="selNum" :default-sort="{prop:'sampleList', order: 'descending'}">
-					<el-table-column type="selection" width="55" fixed>
-					</el-table-column>
-					<el-table-column label="样品编号" sortable prop="ITEMNUM">
-					</el-table-column>
-					<el-table-column label="样品名称" sortable prop="DESCRIPTION">
-					</el-table-column>
-				</el-table>
-				<div slot="footer" class="el-dialog__footer">
+				<!-- 高级查询划出 End-->
+
+				<!-- <el-form inline-message :model="searchList" label-width="70px">
+					<el-row :gutter="10" class="pb10">
+						<el-col :span="6">
+							<el-input v-model="searchList.DESCRIPTION">
+								<template slot="prepend">样品名称</template>
+							</el-input>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchSam" size="small" style="margin:4px">搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form> -->
+				<div class="scrollbar" style="height:360px;">
+					<v-table ref="tablePlugin" :appName="appName" :selectWay="selectWay" :newHeight="newHeight" :searchList="searchUserList" @getSelData="setSelData">
+						<el-table-column label="样品编号" width="155" sortable prop="ITEMNUM">
+						</el-table-column>
+						<el-table-column label="样品名称" sortable prop="DESCRIPTION">
+						</el-table-column>
+					</v-table>
+				</div>
+				<!-- <el-table :data="sampleList" border stripe style="width: 100%;" @selection-change="selNum" :default-sort="{prop:'sampleList', order: 'descending'}">
+						<el-table-column type="selection" width="55" fixed>
+						</el-table-column>
+						<el-table-column label="样品编号" width="155" sortable prop="ITEMNUM">
+						</el-table-column>
+						<el-table-column label="样品名称" sortable prop="DESCRIPTION">
+						</el-table-column>
+					</el-table> -->
+				<div slot="footer">
 			       <el-button type="primary" @click="addSample">确 定</el-button>
 			       <el-button @click="resetSample">取 消</el-button>
 			    </div>
@@ -251,11 +282,22 @@
 
 <script>
 	import Config from '../../config.js'
+	import vTable from '../plugin/table/table.vue'//通用表格
 	export default {
 		name: 'masks',
 		props: ['detailData'],
+		components: {
+			'v-table': vTable,//通用表格
+		},
 		data() {
 			return {
+				appName: 'item',//用户列表
+				newHeight: '300',//传给弹出框表格高度
+				selectWay: 'radio',//table选择方式
+				searchUserList: { //点击设备保管人搜索
+					ITEMNUM: '',
+					DESCRIPTION: '',
+				},
 				sampleDialog: false,
 				rules: {
 					ASSETNUM: [
@@ -395,13 +437,22 @@
 			};
 		},
 		methods: {
+			//点击重置[设备保管人]搜索
+			resetUserBtn(){
+				this.searchUserList =  { 
+					ITEMNUM: '',
+					DESCRIPTION: '',
+				};
+				this.getSamples();
+			},
+			//点击搜索[设备保管人]查询
+			searchUserInfo() {
+				this.getSamples();
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
 			},
-			//tabs
-			handleClick(tab, event) {
-		    },
 			searchSam(){
 				this.page.currentPage = 1;
 				this.page.pageSize = 10;
@@ -415,7 +466,7 @@
 				this.page.currentPage = val;
 				this.getSamples();
 			},
-			selNum(val){
+			setSelData(val){
 				this.selSample = val;
 			},
 			addSample(){
@@ -443,26 +494,38 @@
 				};
 				this.searchList.DESCRIPTION = '';
 			},
+			//点击样品编号
 			changeNum(row){
 				this.selRow = row;
+				this.sampleDialog = true;
 				this.getSamples();
 			},
-			getSamples(){
-				var data = {
-					page: this.page.currentPage,
-					limit: this.page.pageSize,
-					DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
+			//弹出框-设备保管人
+			getSamples(opt) {//高级查询字段
+				if(!this.$refs.tablePlugin){
+					setTimeout(()=>{
+						this.$refs.tablePlugin.requestData();//requestData子组件中接收数据的方法名
+					}, 0);
+				}else{
+					this.$refs.tablePlugin.requestData();
 				}
-				var url = this.basic_url + '/api-apps/app/item';
-				this.$axios.get(url,{
-					params: data
-				}).then((res) => {
-					this.sampleList = res.data.data;
-					this.page.totalCount = res.data.count;
-					this.sampleDialog = true;
-				}).catch((err) => {
-				});
 			},
+			// getSamples(){
+			// 	var data = {
+			// 		page: this.page.currentPage,
+			// 		limit: this.page.pageSize,
+			// 		DESCRIPTION: this.searchList.DESCRIPTION,//样品名称
+			// 	}
+			// 	var url = this.basic_url + '/api-apps/app/item';
+			// 	this.$axios.get(url,{
+			// 		params: data
+			// 	}).then((res) => {
+			// 		this.sampleList = res.data.data;
+			// 		this.page.totalCount = res.data.count;
+			// 		this.sampleDialog = true;
+			// 	}).catch((err) => {
+			// 	});
+			// },
 			getUser(){
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url,{}).then((res) => {

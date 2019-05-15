@@ -87,7 +87,7 @@
 											</el-table-column>
 											<el-table-column label="意见说明" sortable prop="description">
 											</el-table-column>
-											<el-table-column label="接收时间" sortable width="160px" prop="createTime">
+											<el-table-column label="完成时间" sortable width="160px" prop="createTime">
 											</el-table-column>
 										</el-table>
 										<el-pagination background class="text-right pt10" @size-change="sizeChanges" @current-change="currentChanges" :current-page="page.currentPages" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSizes" layout="total, sizes, prev, pager, next" :total="page.totalCounts">

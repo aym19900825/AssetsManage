@@ -168,8 +168,6 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<notificationsmask @request="requestData" ref="child" @realtime="realtime"></notificationsmask>
-			<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -196,7 +194,6 @@
 		data() {
 			return {
 				appName: 'workNot',
-				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
@@ -645,8 +642,28 @@
 			},
 		    //报表
 			reportdata(){
-				this.reportData.app=this.workNot;
-				this.$refs.reportChild.visible();
+					if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname: this.workNot,
+					id:this.selUser[0].ID
+					}
+					});
+					window.open(routeData.href, '_blank');
+				}
 			},
 			// 打印
 			Printing() {

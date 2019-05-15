@@ -156,8 +156,6 @@
 		</div>
 		<!--右侧内容显示 End-->
 		<instrumentsmask :detailData="selUser[0]" ref="child" @request="requestData"></instrumentsmask>
-		<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 	</div>
 </div>
 </template>
@@ -168,7 +166,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import instrumentsmask from '../equipmentsDetails/instrument_mask.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'instruments',
@@ -178,13 +175,11 @@
 			'navs_tabs': navs_tabs,
 			'instrumentsmask': instrumentsmask,
 			'tableControle': tableControle,
-			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
 				appName: 'asset',
-				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				commentArr: {},
@@ -576,8 +571,28 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.asset;
-				this.$refs.reportChild.visible();
+				if(this.selUser.length == 0) {
+					this.$message({
+						message: '请您选择数据',
+						type: 'warning'
+					});
+					return;
+				} else if(this.selUser.length > 1) {
+					this.$message({
+						message: '不可同时选择多个数据',
+						type: 'warning'
+					});
+					return;
+				}else{
+					let routeData = this.$router.resolve({
+					path: "/report",
+					query: {
+					appname:this.appName,
+					id:this.selUser[0].id,
+					}
+					});
+					window.open(routeData.href, '_blank');
+				}
 			},
 			
 			//时间格式化  

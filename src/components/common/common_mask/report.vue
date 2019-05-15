@@ -16,7 +16,7 @@
                 <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
                   <el-tab-pane v-for="(itemlist,index) in bigtitle[index].list" :key='index' :label='itemlist.code'>
                     <div class="pull-left" style="width:82%;">
-                      <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px" v-if="xianshi">
+                      <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px" v-if="formshow">
                         <!-- 报表信息 -->
                         <el-row>
                           <el-col :span="5" v-for="(item,index) in pramList" :key="index" v-show="item.label!=''" >
@@ -26,19 +26,35 @@
 
                               <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
 
+                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年"></el-date-picker>
+
                               <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
                               </el-input>
-                            
+                              
                               <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
                               </el-input>
+
+                              
+
+                              <el-select v-model="dataInfo[item.param]" placeholder="请选择">
+                                <el-option
+                                  v-for="item in options"
+                                  :key="item.value"
+                                  :label="item.label"
+                                  :value="item.value">
+                                </el-option>
+                              </el-select>
+
                             </el-form-item>
                             <!--非必填情况-->
                             <el-form-item :label="item.label" :prop="item.param" v-else>
-                              <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input> 
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'&&item.type!='7'&&item.type!='6'&&item.type!='9'&&item.type!='8'&&item.type!='10'&&item.type!='11'"></el-input> 
 
                               <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
+
+                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年"></el-date-picker>
 
                               <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
@@ -47,6 +63,47 @@
                               <el-input v-model="dataInfo[item.param]" v-show="item.type=='4'&&item.add=='1'" :disabled="true">
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept(item)"></el-button>
                               </el-input>
+
+                              <el-input v-model="dataInfo[item.param]" v-show="item.type=='10'" :disabled="true">
+                                <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addAsset(item)"></el-button>
+                              </el-input>
+
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='6'" placeholder="请选择">
+                                <el-option
+                                  v-for="item in options"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item.code">
+                                </el-option>
+                              </el-select>
+
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='9'" placeholder="请选择">
+                                <el-option
+                                  v-for="item in pm_typeoption"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item.code">
+                                </el-option>
+                              </el-select>
+
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='8'" placeholder="请选择">
+                                <el-option
+                                  v-for="item in Execution_status"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item.code">
+                                </el-option>
+                              </el-select>
+                              <!-- 设备状态 -->
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='11'" placeholder="请选择">
+                                <el-option
+                                  v-for="item in stateoptions"
+                                  :key="item.id"
+                                  :label="item.name"
+                                  :value="item.code">
+                                </el-option>
+                              </el-select>
+
                             </el-form-item>
                           </el-col>
                           <el-col :span="3" class="text-center">
@@ -68,7 +125,33 @@
         </el-tab-pane>
       </el-tabs>
         <el-dialog :modal-append-to-body="false" title="用户" :visible.sync="dialogVisibleuser" width="80%" >
-          <el-table :data="userList" border stripe :header-cell-style="rowClass" style="width: 100%;" :default-sort="{prop:'userList', order: 'descending'}" @selection-change="SelChange" >
+        <el-form inline-message :model="searchuserList">
+					<el-row :gutter="10">
+						<el-col :span="5">
+							<el-form-item label="用户名" prop="username" label-width="55px">
+								<el-input v-model="searchuserList.username">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="5">
+							<el-form-item label="姓名" prop="nickname" label-width="45px">
+								<el-input v-model="searchuserList.nickname">
+								</el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="2">
+							<el-button type="primary" @click="searchuser" size="small" style="margin-top:2px" >搜索</el-button>
+						</el-col>
+					</el-row>
+				</el-form>
+          <el-table :data="userList" border stripe :header-cell-style="rowClass" style="width: 100%;" ref="singleTable"
+          :default-sort="{prop:'userList', order: 'descending'}"
+          @selection-change="SelChange"
+					@current-change="setSel"
+          v-loading="loading"  
+          element-loading-text="加载中…"
+          element-loading-spinner="el-icon-loading"
+          element-loading-background="rgba(255, 255, 255, 0.9)">
           <el-table-column type="selection" width="55" fixed align="center">
           </el-table-column>
           <el-table-column label="用户名" sortable width="140px" prop="username">
@@ -99,16 +182,48 @@
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
-          </span>
-      </el-dialog>
+        </span>
+        </el-dialog>
+        <!--设备分类 Begin-->
+			<el-dialog :modal-append-to-body="false" :visible.sync="dialogAssest" width="60%">
+					<!-- 高级查询划出 Begin-->
+					<div class="clearfix">
+						<el-form inline-message :model="searchList" label-width="45px">
+							<el-row :gutter="10">
+								<el-col :span="8">
+									<el-form-item label="分类描述" prop="CLASSIFY_DESCRIPTION" label-width="80px">
+										<el-input v-model="searchList.CLASSIFY_DESCRIPTION"></el-input>
+									</el-form-item>
+								</el-col>
+								<el-col :span="4">
+									<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+									<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px;margin-left: 2px">重置</el-button>
+								</el-col>
+							</el-row>
+						</el-form>
+					</div>
+					<!-- 高级查询划出 End-->
+					<div class="scrollbar" style="height:360px;">
+						<tree_grid :columns="columns" :tree-structure="true" :loading="loading" :data-source="assetList" @classByValue="classByValue" ></tree_grid>
+					</div>
+					<div slot="footer">
+						<el-button type="primary" @click="addAssetType">确 定</el-button>
+						<el-button @click="dialogAssest = false">取 消</el-button>
+					</div>
+			</el-dialog>
+			<!--设备分类 End-->
     </div>
   </div>
 </template>
 
 <script>
 import Config from '../../../config.js';
+import tree_grid from '../../common/TreeGrid.vue'//树表格
   export default {
     props:["reportData"],//第一种方式
+    components: {
+			tree_grid,//树表格
+		},
     data() {
       return {
         basic_url: Config.dev_url,
@@ -117,19 +232,26 @@ import Config from '../../../config.js';
         pramList:[],
         dataInfo:{},
         userList:[],//人名
+        assetList:[],//设备分类
         options:[],//检验检测类型
+        pm_typeoption:[],//年度计划的类型
+        Execution_status:[],//年度计划执行状态
+        stateoptions:[],//设备分类的状态
         bigtitle:[],//统计类&&单据类
         activeName: '',
         tabPosition: 'left',
         noedit:false,//可编辑
-        xianshi:false,
+        formshow:false,
         loading: false,
         appname:'',
         url:'',//单据
         src:'',//统计
         file:'',//统计报表事用的
+        selval:[],//用户勾选
+        selUser:[],//设备分类
         dialogVisible:false,//机构
         dialogVisibleuser:false,//用户
+        dialogAssest:false,//设备分类
         page: {
 					currentPage: 1,
 					pageSize: 20,
@@ -148,6 +270,33 @@ import Config from '../../../config.js';
 				resourceProps: {
 					children: "children",
 					label: "fullname"
+        },
+        columns: [
+					{
+						text: '编码',
+						dataIndex: 'CLASSIFY_NUM',
+						isShow:true,
+					},
+					{
+						text: '分类描述',
+						dataIndex: 'CLASSIFY_DESCRIPTION',
+						isShow:true,
+					},
+					{
+						text: '父级分类',
+						dataIndex: 'PARENTDesc',
+						isShow:true,
+					},
+        ],
+        //用户高级
+        searchuserList: {
+					nickname: '',
+					username: '',
+				},
+        searchList: { //点击高级搜索后显示的内容
+					CLASSIFY_NUM:'',
+					CLASSIFY_DESCRIPTION: '',
+					PARENT:'',
 				},
       };
     },
@@ -158,7 +307,13 @@ import Config from '../../../config.js';
 			},
 			SelChange(val) {
 				this.selval = val;
-			},
+      },
+      setSel(row) {
+		    this.selval = [];
+		    this.selval.push(row);
+		    this.$refs.singleTable.clearSelection();
+				this.$refs.singleTable.toggleRowSelection(row);
+		  },
 			sizeChange(val) {
 				this.page.pageSize = val;
 				this.requestData();
@@ -175,6 +330,10 @@ import Config from '../../../config.js';
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
       },
+      classByValue(childValue) {
+				// childValue就是子组件传过来的
+				this.selUser = childValue;
+			},
       handleNodeClick(data) { //获取勾选树菜单节点
 			},
 			handleClicks(data,checked, indeterminate) {
@@ -212,13 +371,6 @@ import Config from '../../../config.js';
 				}).catch((wrong) => {
 				});
       },
-      addPeople(item){
-				if(item.type==4){
-					this.getDept(item.param);
-				}else{
-					this.requestData(item.param);
-				}
-      },
       //单据和统计的切换
       handleClick(){
        
@@ -232,19 +384,23 @@ import Config from '../../../config.js';
              this.file=this.reportsList[i].file
           }
         }
-
         this.appname=this.$route.query.appname; 
          var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
             this.$axios.get(url, {}).then((res) => {
               var list = res.data.datas;
               if(!!list){
-                  this.xianshi = true;
+                  this.formshow = true;
               }else{
-                  this.xianshi = fale;
+                  this.formshow = false;
+                  var token = sessionStorage.getItem('access_token');
+                  var url=this.basic_url;
+                  var pos = url.lastIndexOf(':');
+                  url=url.substring(0,pos+1); 
+                  this.src = url+"5300/ureport/preview?_u=mysql:" +this.file+'&access_token='+token;
               }
               var plistsize = res.data.datas.length;
               for(var i=0;i<plistsize;i++){
-                if(list[i].type=='4'){
+                if(list[i].type=='4'||list[i].type=='3'||list[i].type=='10'){
                  
                   var param =list[i];
                   var newparam = {};
@@ -272,23 +428,22 @@ import Config from '../../../config.js';
               this.reportsList = res.data.datas;  
                 	}).catch((wrong) => {
 				       });
-            var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
-            this.$axios.get(url, {}).then((res) => {
-            this.pramList = res.data.datas;
-          }).catch((wrong) => {
-				  })
+            // var url = this.basic_url + '/api-apps/app/'+this.appname+'/reportParams/'+id;
+            // console.log(url);
+            // this.$axios.get(url, {}).then((res) => {
+            // this.pramList = res.data.datas;
+            // console.log(this.pramList);
+          // }).catch((wrong) => {
+				  // })
         },
         //单据
         single(){
-          // work-task.ureport.xml
           this.appname=this.$route.query.appname;
            var url = this.basic_url + '/api-apps/app/'+this.appname+'/report?type=单据类';
             this.$axios.get(url, {}).then((res) => {
               this.reportList = res.data.datas; 
               var file=this.reportList[0].file;
               var token = sessionStorage.getItem('access_token');
-              // this.appname=this.$route.query.appname;
-              // var file=this.$route.query.file;
               var id=this.$route.query.id;
               var url=this.basic_url;
               var pos = url.lastIndexOf(':');
@@ -331,18 +486,24 @@ import Config from '../../../config.js';
           this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
           this.loading = false;//加载动画关闭
       },
-      requestData(){
+      //人员
+      requestData(item){
 				var data = {
 						page: 1,
-						limit: 10,
+            limit: 10,
+            nickname: this.searchList.nickname,
+						username: this.searchList.username,
 					}
 				var url = this.basic_url + '/api-user/users';
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
-					this.userList = res.data.data;
-					this.dialogVisibleuser = true;
+          this.userList = res.data.data;
+          this.dialogVisibleuser = true;
+          sessionStorage.setItem("prop", item.param);//名称
+          var userid=item.param.slice(0,-4);
+          sessionStorage.setItem("userid", userid);
 				}).catch((wrong) => {
 				});
 			},
@@ -359,10 +520,70 @@ import Config from '../../../config.js';
 						type: 'warning'
 					});
 				}else{
-					var value = sessionStorage.getItem("user");
-				  this.dataInfo[value]=this.selval[0].username;
+          var value = sessionStorage.getItem("prop");
+          var value2 = sessionStorage.getItem("userid");
+          this.dataInfo[value]=this.selval[0].username;
+          this.dataInfo[value2]=this.selval[0].id+"";
 					this.dialogVisibleuser = false;
 				}
+      },
+
+      //点击设备分类选值
+			addAsset(item){
+				this.loading = true;//加载动画打开
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+					CLASSIFY_DESCRIPTION: this.searchList.CLASSIFY_DESCRIPTION,
+				};
+				this.$axios.get(this.basic_url + '/api-apps/app/assetClass/tree?tree_id=CLASSIFY_NUM&tree_pid=PARENT', {//要修改接口路径
+					params: data
+				}).then((res) => {
+					//总的页数
+					sessionStorage.setItem("assetid", item.param);//名称
+          var asset=item.param.slice(0,-4);
+          sessionStorage.setItem("asset", asset);
+          this.assetList = res.data.datas;
+          this.dialogAssest = true;
+          this.loading = false;//加载动画关闭
+				}).catch((wrong) => {})
+			},
+			//设备分类赋值
+			addAssetType(){
+				if(this.selUser.length == 0){
+					this.$message({
+						message: '请选择数据',
+						type: 'warning'
+					});
+				}else if(this.selUser.length > 1){
+					this.$message({
+						message: '不可同时选择多条数据',
+						type: 'warning'
+					});
+				}else{
+          var value = sessionStorage.getItem("assetid");
+          var value2 = sessionStorage.getItem("asset");
+          this.dataInfo[value]=this.selUser[0].CLASSIFY_DESCRIPTION;
+          this.dataInfo[value2]=this.selUser[0].PARENT;
+					this.dialogAssest = false;
+				}
+      },
+      searchuser() {
+				this.page.currentPage = 1;
+				this.page.pageSize = 10;
+				this.requestData();
+			},
+      searchinfo() {//设备分类的高级查询高级搜索-搜索按钮后显示的内
+				this.addAsset();
+			},
+      //设备分类的高级查询
+      resetbtn(){
+				this.searchList = { //点击高级搜索-重置按钮后显示的内容
+					CLASSIFY_NUM:'',
+					CLASSIFY_DESCRIPTION: '',
+					PARENT:'',
+				};
+				this.requestData();
       },
       //检验检测类型
       inspectproType(){
@@ -371,6 +592,30 @@ import Config from '../../../config.js';
           this.options = res.data;
 				}).catch((wrong) => {
 				})	
+      },
+      //年度计划类型
+      pm_type(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=pm_type';
+				this.$axios.get(url, {}).then((res) => {
+          this.pm_typeoption = res.data;
+				}).catch((wrong) => {
+				})	
+      },
+       //年度计划执行状态
+      Execution(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=LEADER_STATUS';
+				this.$axios.get(url, {}).then((res) => {
+          this.Execution_status = res.data;
+				}).catch((wrong) => {
+				})	
+      },
+      //设备状态
+      STATE(){
+        var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=STATE';
+				this.$axios.get(url, {}).then((res) => {
+          this.stateoptions = res.data;
+				}).catch((wrong) => {
+				})
       },
       //默认加载/api-apps/app/inspectPro/reportList
        singleAndStatistics(){
@@ -396,10 +641,10 @@ import Config from '../../../config.js';
             this.$axios.get(url, {}).then((res) => {
               var list = res.data.datas;
               if(!!list){
-                this.xianshi = true;
+                this.formshow = true;
                   var plistsize = res.data.datas.length;
               for(var i=0;i<plistsize;i++){
-                if(list[i].type=='4'){
+                if(list[i].type=='4'||list[i].type=='10'||list[i].type=='3'){
                   var param =list[i];
                   var newparam = {};
                      newparam.label=param.label;
@@ -414,7 +659,7 @@ import Config from '../../../config.js';
               }
             this.pramList = list;
               }else{
-                this.xianshi = false;
+                this.formshow = false;
                 var token = sessionStorage.getItem('access_token');
                 var url=this.basic_url;
 								var pos = url.lastIndexOf(':');
@@ -432,9 +677,12 @@ import Config from '../../../config.js';
     mounted(){
         this.single();
         this.Statistics();
-        this.inspectproType();
         this.singleAndStatistics();
-        // this.singleRun();
+        this.inspectproType();//检验检测类型
+        this.pm_type();//年度计划类型
+        this.Execution();//年度计划执行状态
+        this.STATE();//设备状态
+        
     }
     
   };

@@ -142,8 +142,6 @@
 			</div>
 			<!--右侧内容显示 End-->
 			<testingmask :testingForm="testingForm" ref="child" @request="requestData" @reset="reset" v-bind:page=page></testingmask>
-		<!--报表-->
-			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
 	</div>
 </template>
@@ -154,7 +152,6 @@
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import testingmask from '../maindataDetails/testing_methodsMask.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'testing_methods',
@@ -164,7 +161,6 @@
 			'navs_tabs': navs_tabs,
 			'testingmask': testingmask,
 			'tableControle': tableControle,
-			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
@@ -565,8 +561,6 @@
 			},
 			// 报表
 			reportdata(){
-				// this.reportData.app=this.inspectionMet;
-				// this.$refs.reportChild.visible();
 				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择数据',
@@ -583,7 +577,7 @@
 					let routeData = this.$router.resolve({
 						path: "/report",
 						query: {
-						appname: this.inspectionPro,
+						appname: this.inspectionMet,
 						id:this.selMenu[0].ID
 						}
 					});

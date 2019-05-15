@@ -21,13 +21,13 @@
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基本信息" name="1">
-									<el-row :gutter="5" class="pb10">
+									<!-- <el-row :gutter="5" class="pb10">
 										<el-col :span="5" class="pull-right">
 											<el-input v-model="dataInfo.status" :disabled="edit">
 												<template slot="prepend">状态</template>
 											</el-input>
 										</el-col>
-									</el-row>
+									</el-row> -->
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="代码" prop="code" label-width="110px">
@@ -48,9 +48,15 @@
 									</el-row>
 									<el-row >
 										<el-col :span="8">
-											<el-form-item label="类型" prop="type" label-width="110px">
-												<el-input v-model="dataInfo.type" :disabled="noedit">
-												</el-input>
+											<el-form-item label="报表类型" prop="type" label-width="110px">
+												<el-select v-model="dataInfo.type" placeholder="请选择" :disabled="noedit" style="width:100%;">
+													<el-option
+														v-for="item in report_typeoption"
+														:key="item.id"
+														:label="item.name"
+														:value="item.name">
+													</el-option>
+												</el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -234,8 +240,13 @@
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3'], //手风琴数量
 				labelPositions: 'right',
+				report_typeoption:[],//报表类型
 				rules: {
-					
+					type: [{
+            required: true,
+            message: "必填",
+            trigger: "change",
+          }]
 				},
 				dataid:'',//修改和查看带过的id
 				selectData:[],
@@ -312,21 +323,7 @@
 			},
 			//添加显示弹窗
 			visible() {
-				// this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
-				// 	
-				// 	// this.dataInfo.DEPTID = res.data.deptId;
-				// 	this.dataInfo.createby = res.data.id;
-				// 	this.username=res.data.username;
-				// 	var date = new Date();
-				// 	this.dataInfo.createdate = this.$moment(date).format("YYYY-MM-DD");
-				// 	this.show = true;
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	})
-				// })
-               	this.addtitle = true;
+        this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
 				this.views = false; //
@@ -351,18 +348,6 @@
 			// 这里是修改
 			detail(dataid) {
 				this.dataid=dataid;
-				// var usersUrl = this.basic_url + '/api-user/users/currentMap'
-				// this.$axios.get(usersUrl, {}).then((res) => {
-				// 	// this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-				// 	this.dataInfo.updateby = res.data.id;
-				// 	var date = new Date();
-				// 	this.dataInfo.updatedate = this.$moment(date).format("YYYY-MM-DD");
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	});
-				// });
 				this.detailgetData();
 				this.modifytitle = true;
 				this.addtitle = false;
@@ -487,9 +472,19 @@
 					console.log('请求失败');
 				})
 			},
+			//报表类型
+      report_type(){
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_type';
+				this.$axios.get(url, {}).then((res) => {
+          this.report_typeoption = res.data;
+          console.log(res.data);
+				}).catch((wrong) => {
+				})	
+      },
 		},
 		mounted() {
 			this.getType();
+			this.report_type();
 		},
 	}
 </script>

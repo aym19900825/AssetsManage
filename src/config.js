@@ -22,6 +22,6 @@ const config = {
 		// code_url: 'http://203.93.173.179:7900',//后端数据
 		// file_url: 'http://203.93.173.179:8099', //文件服务
 		// po_url:'http://203.93.173.179:4700'//Pageoffice
-}
+ }
 
 	export default config

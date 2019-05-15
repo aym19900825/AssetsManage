@@ -220,7 +220,6 @@
 		data() {
 			return {
 				appName: 'inspectPro',
-				reportData:{},//报表的数据
 				loadSign: true, //鼠标滚动加载数据
 				loading: false, //默认加载数据时显示loading动画
 				basic_url: Config.dev_url,
@@ -683,10 +682,7 @@
 			},
 			//报表
 			reportdata(){
-				// this.reportData.app=this.inspectPro;
-				// this.$refs.reportChild.visible();
-				// var file='inspectproxyjiance_table.ureport.xml';
-					if(this.selUser.length == 0) {
+				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择数据',
 						type: 'warning'
@@ -699,21 +695,15 @@
 					});
 					return;
 				}else{
-					// this.$router.push({path: '/report' ,query: {appname: this.inspectPro,id:this.selUser[0].ID,}});
 					let routeData = this.$router.resolve({
 					path: "/report",
 					query: {
 					appname: this.inspectPro,
-					id:this.selUser[0].ID
+					id:this.selUser[0].id,
 					}
 					});
 					window.open(routeData.href, '_blank');
-					// 	var token = sessionStorage.getItem('access_token');
-					//  var url=this.basic_url + '/report?access_token='+token;
-					// // var url='http://baidu.com'
-					// window.open(url);
 				}
-			
 			},
 			// 删除
 			delinfo() {

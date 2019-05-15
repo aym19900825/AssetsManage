@@ -18,7 +18,11 @@
 								<el-collapse-item title="流程节点" name="1"> 
 									<el-row>
 										<el-col :span="5">
-											<el-checkbox :model="dataInfo.isNotRepeat=='0'?false:true">是否执行人可重复</el-checkbox>
+											<el-form-item label="" prop="isNotRepeat">
+												<el-checkbox-group v-model="dataInfo.isNotRepeat">
+    											<el-checkbox label="是否执行人可重复"></el-checkbox>
+												</el-checkbox-group>
+											</el-form-item>
 										</el-col>	
 									</el-row>
 									<el-tabs v-model="activeName" >
@@ -65,7 +69,7 @@
 													</el-row>
 												</el-form>
 												<div class="table-func table-funcb" style="top:0px;">
-													<el-button type="success" size="mini" round>
+													<el-button type="success" size="mini" round @click="addfield(index)">
 														<i class="icon-add"></i>
 														<font>新建行</font>
 													</el-button>
@@ -130,7 +134,7 @@
 											</el-table-column>
 											<el-table-column fixed="right" label="操作" width="120" >
 												<template slot-scope="scope">
-													<el-button @click="deleteRow(scope.$index,scope.row,'ipaddressList')" type="text" size="small">
+													<el-button @click="deleteRow(scope.$index,scope.row,'bigtitle[index].actionList')" type="text" size="small">
 														<i class="icon-trash red"></i>
 													</el-button>
 												</template>
@@ -142,8 +146,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer">
-							<el-button type="primary" @click='save("Update")'>保存</el-button>
-							<el-button type="success" @click='save("Submit")'>保存并继续</el-button>
+							<el-button type="primary" @click='save'>保存</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -190,6 +193,17 @@
 			};
 		},
 		methods: {
+			//新建行
+			addfield(index){
+				var obj = {
+					flag: '',
+					type: '',
+					even: '',
+					status: '',
+					classpath:'',
+				};
+				this.bigtitle[index].actionList.push(obj);
+			},
 			//流程节点类型
 			cadidate_type(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=cadidate_type';
@@ -210,7 +224,6 @@
 			flag_val(){
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=flag_val';
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
           			this.flag_valoptions = res.data;
 				}).catch((wrong) => {
 				})	
@@ -229,20 +242,20 @@
                 this.show = true;
                 var url = this.basic_url + '/api-flow/flow/process/'+id;
                     this.$axios.get(url, {}).then((res) => {
-						console.log(res);
-						
+						if(res.data.isNotRepeat=='1'){
+                           res.data.isNotRepeat=true;
+						}else{
+							res.data.isNotRepeat=false;
+						}
+						this.dataInfo=res.data;//是否执行人可重复
                         for(var i=0;i<res.data.candidateList.length;i++){
                              res.data.candidateList[i].name='tab'+i;   
 						}
-						this.dataInfo.isNotRepeat=res.data.isNotRepeat;//是否执行人可重复
-						// this.dataInfo.candidateList=this.bigtitle
                         this.bigtitle=res.data.candidateList;
-                        console.log(this.bigtitle);
                     }).catch((err) => {
                     });
 			},
 			executer:function(executer){
-				console.log(executer);
 				this.bigtitle[this.index].executer=executer;
 			},
 			//点击关闭按钮
@@ -277,42 +290,62 @@
 				$(".mask_div").css("top", "0px");
 				$(".mask_divbg").css("top", "100px");
 			},
-			// 保存users/saveOrUpdate
-			save() {
-				// this.$refs.modelflow.validate((valid) => {
-				// 	if (valid) {
-					   console.log(this.dataInfo);
-					   console.log(this.bigtitle);
-					   var data={
-						 candidateList:this.bigtitle,
-						 isNotRepeat:this.dataInfo.isNotRepeat
-					   }
-					   console.log(data);
-					   var url = this.basic_url + '/api-flow/flow/process/save';
-						this.$axios.post(url, data).then((res) => {
-					    
-		
-						console.log(res);
+			//刪除新建行
+			deleteRow(index, row, listName){
+				if(row.id){
+					var url = this.basic_url + '/api-flow/flow/process/action/' + row.id;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.bigtitle[index].actionList.splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
 						}).catch((err) => {
 						});
-					// } else {
-					// 	this.show = false;
-					// 	return false;
-					// }
-				// });
+					}).catch(() => {
+
+					});
+				}else{
+					this.user[TableName].splice(index,1);
+				}
 			},
-			
-			//保存
-			saveAndUpdate() {
-				this.save();
-//				if(this.falg){
-//					this.show = false;
-//				}
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save();
-				this.show = true;
+			// 保存users/saveOrUpdate
+			save() {
+				if(this.dataInfo.isNotRepeat){
+					this.dataInfo.isNotRepeat=1;
+				}else{
+					this.dataInfo.isNotRepeat=0;
+				}
+				var url = this.basic_url + '/api-flow/flow/process/save';
+				this.$axios.post(url,this.dataInfo).then((res) => {
+					if(res.data.resp_code==0){
+					this.show = false;
+					this.$emit('request');
+					this.$message({
+						message: res.data.resp_msg,
+						type: 'success'	
+					});	
+					}else{
+					this.$message({
+						message: res.data.resp_msg,
+						type: 'warning'
+					});	
+					}
+				}).catch((err) => {
+				});
 			},
 			
 		},

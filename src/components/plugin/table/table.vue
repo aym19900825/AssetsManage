@@ -202,9 +202,6 @@ export default {
     },
     requestData(opt){
       this.isHeight();//获取高度
-      console.log(this.selectWay);
-      console.log(this.newHeight);
-      console.log(this.appName);
       this.loadding = true;
       var data = this.searchList;
       if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){

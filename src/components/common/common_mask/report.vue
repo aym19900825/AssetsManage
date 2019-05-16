@@ -6,7 +6,7 @@
                 <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
                     <el-tab-pane v-for="item in bigtitle[index].list" :key='item.id' :label='item.code'>
                       <div class="pull-left" style="width:86%;">
-                        <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"></iframe>
+                        <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto" overflow-x="auto"></iframe>
                       </div>
                     </el-tab-pane>
                 </el-tabs>
@@ -113,7 +113,7 @@
 
                       </el-form>
 
-                      <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto"  v-loading="loading"
+                      <iframe :src="src" width="100%" :height="fullHeight" frameborder="0" scrolling="auto" overflow-x="auto" v-loading="loading"
                       element-loading-text="加载中…"
                       element-loading-spinner="el-icon-loading"
                       element-loading-background="rgba(255, 255, 255, 0.9)" style="overflow-x:scroll">
@@ -450,6 +450,7 @@ import tree_grid from '../../common/TreeGrid.vue'//树表格
               url=url.substring(0,pos+1); 
               this.url=url+"5300";
               this.url = this.url+"/ureport/preview?_u=mysql:" +file+'&id='+ id+'&access_token='+token;
+              console.log(this.url);
                 	}).catch((wrong) => {
                });
         },

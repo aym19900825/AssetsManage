@@ -681,10 +681,6 @@
 			},
 			//报表
 			reportdata(){
-				// this.reportData.app=this.inspectPro2;
-				// this.$refs.reportChild.visible();
-				// this.reportData.app=this.inspectPro;
-				// this.$refs.reportChild.visible();
 					if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择数据',
@@ -706,7 +702,6 @@
 					}
 					});
 					window.open(routeData.href, '_blank');
-					// this.$router.push({path: '/report' ,query: {appname: this.inspectPro2,id:this.selUser[0].ID}});
 				}
 			},
 			// 删除

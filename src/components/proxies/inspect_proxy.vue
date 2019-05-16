@@ -699,7 +699,7 @@
 					path: "/report",
 					query: {
 					appname: this.inspectPro,
-					id:this.selUser[0].id,
+					id:this.selUser[0].ID,
 					}
 					});
 					window.open(routeData.href, '_blank');

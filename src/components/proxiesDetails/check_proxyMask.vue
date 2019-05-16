@@ -1351,7 +1351,6 @@ export default {
           {
             required: false,
             trigger: "change",
-            validator: this.Validators.isZipcode
           }
         ], //邮编
         V_PERSON: [{ required: true, validator: this.Validators.isNickname }], //联系人姓名

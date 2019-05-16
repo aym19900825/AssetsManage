@@ -4,8 +4,6 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<!-- <div class="mask_title" v-show="addtitle">添加检验委托书</div>
-					<div class="mask_title" v-show="modifytitle">修改检验委托书</div> -->
 					<div class="mask_title" v-show="viewtitle">下达任务</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">						 
@@ -18,15 +16,6 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" class="demo-ruleForm">
-						<!-- <div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATE!=3">
-								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
-							</span>
-							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="委托方名称" name="1">
@@ -475,17 +464,17 @@
 										<el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
-													<el-radio label="认证中心"></el-radio>
 													<el-radio label="国家中心"></el-radio>
+													<el-radio label="认证中心"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>
 										<el-col :span="6">
 											<el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
-												<el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-    											<el-checkbox label="CNAS"></el-checkbox>
-												</el-checkbox-group>
-											</el-form-item>
+                        <el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
+													 <el-checkbox v-for="item in logos" :key="item.id" :label="item.code" :value="item.name" >{{item.name}}</el-checkbox>
+                        </el-checkbox-group>
+                      </el-form-item>
 										</el-col>
 									</el-row>
 
@@ -611,13 +600,7 @@
 								</el-collapse-item>
 							</el-collapse>
 						</div>
-						<!-- <div class="content-footer" v-show="noviews">
-							<el-button type="primary" @click="save('Update')">保存</el-button>
-							<el-button type="success"  v-show="addtitle" @click="save('Submit')">保存并继续</el-button>
-							<el-button v-show="modifytitle" type="btn btn-primarys" @click="modifyversion">修订</el-button>
-							<el-button @click="close">取消</el-button>
-						</div>
-						 -->
+					
 						<div class="content-footer">
 							<el-button type="success" @click="build">确定下达</el-button>
 							<el-button @click="close">取消</el-button>
@@ -768,6 +751,7 @@
 					ACTUAL_PERCENT:0,
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
+					logos: "",//标识
 					CHECK_PROXY_CONTRACTList: [//分包要求
 						{
 							INSPECT_GROUP:'',	//专业组
@@ -1386,9 +1370,8 @@
 				
 					res.data.LEADER = Number(res.data.LEADER);
 					this.getmaingroup(res.data.MAINGROUP);
-					if(res.data.CNAS_OR_CMA_ID=='1'){
-						 res.data.CNAS_OR_CMA_ID=true;
-					}
+					// 标识的渲染
+					res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(',');
 					if(res.data.MAINGROUP==''){
 						 res.data.MAINGROUP='';
 					}else{
@@ -1961,7 +1944,22 @@
 			SelChange(val) {
 				this.selval = val;
 			},
-			
+			//获取标识
+			logo() {
+				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=identification ';
+				this.$axios
+					.get(url, {})
+					.then(res => {
+						this.logos = res.data;
+						this.loading = false; //加载动画关闭
+					})
+					.catch(wrong => {
+						// 	this.$message({
+						// 	message: '网络错误，请重试',
+						// 	type: 'erro'
+						// });
+					});
+			}
 			
         },
        

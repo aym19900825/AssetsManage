@@ -519,7 +519,7 @@ export default {
 			this.getcjdw();
 			this.getUser();
 			//加载待办任务
-			// this.requestData();
+		  this.requestData();
       // this.timer = setInterval(this.requestData(), 1000);//定时调用代办和已办的列表
 			//一级菜单
 			// this.initEchart();//调用饼状图图表函数名称

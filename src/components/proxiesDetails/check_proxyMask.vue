@@ -894,7 +894,6 @@
                     <el-col :span="8">
                       <el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
                         <el-input
-                          type="number"
                           v-model="dataInfo.CHECK_COST"
                           id="cost"
                           @blur="toPrice"
@@ -905,7 +904,6 @@
                     <el-col :span="8">
                       <el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
                         <el-input
-                          type="number"
                           v-model="dataInfo.ACTUALCOST"
                           id="actualcost"
                           @blur="actualPrice"

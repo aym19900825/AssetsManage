@@ -19,7 +19,7 @@
                       <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px" v-if="formshow">
                         <!-- 报表信息 -->
                         <el-row>
-                          <el-col :span="5" v-for="(item,index) in pramList" :key="index" v-show="item.label!=''" >
+                          <el-col :span="9" v-for="(item,index) in pramList" :key="index" v-show="item.label!=''" >
                             <!--必填情况-->
                             <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
                               <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input>
@@ -54,7 +54,7 @@
 
                               <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
 
-                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年"></el-date-picker>
+                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年" style="width:100%;"></el-date-picker>
 
                               <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
@@ -68,7 +68,7 @@
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addAsset(item)"></el-button>
                               </el-input>
 
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='6'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='6'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in options"
                                   :key="item.id"
@@ -77,7 +77,7 @@
                                 </el-option>
                               </el-select>
 
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='9'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='9'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in pm_typeoption"
                                   :key="item.id"
@@ -86,7 +86,7 @@
                                 </el-option>
                               </el-select>
 
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='8'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='8'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in Execution_status"
                                   :key="item.id"
@@ -95,7 +95,7 @@
                                 </el-option>
                               </el-select>
                               <!-- 设备状态 -->
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='11'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='11'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in stateoptions"
                                   :key="item.id"

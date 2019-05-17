@@ -942,12 +942,39 @@
 					});
 					return;
 				}
-				this.requestDeptname();
-				
-				// this.$emit('request');
+				// this.requestDeptname();
 				this.proindex = item;
 				this.requestnum = '3';
 				this.deptnum = '1';
+				var data = {
+					page: this.page.currentPage,
+					limit: this.page.pageSize,
+				};
+				var url = this.basic_url + '/api-apps/app/customer?TYPE_where_in=1,3&page=1&limit=20&NAME&CODE&CONTACT_ADDRESS&DEPTID='+this.proindex.CJDW;
+				console.log(url);
+				this.$axios.get(url, {
+					params: data
+				}).then((res) => {
+					this.dialogVisible5 = true;
+					this.page.totalCount = res.data.count;	
+					//总的页数
+					let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
+					if(this.page.currentPage >= totalPage){
+						this.loadSign = false
+					}else{
+						this.loadSign=true
+					}
+					this.commentArr[this.page.currentPage]=res.data.data
+					let newarr=[]
+					for(var i = 1; i <= totalPage; i++){
+						if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
+							for(var j = 0; j < this.commentArr[i].length; j++){
+								newarr.push(this.commentArr[i][j])
+							}
+						}
+					}					
+					this.customerList = newarr;
+				}).catch((wrong) => {})
 			},
 			//受检企业名称
 			getdeptbtn(item){
@@ -1569,6 +1596,7 @@
 					limit: this.page.pageSize,
 				};
 				var url = this.basic_url + '/api-apps/app/customer?TYPE_where_in=1,3&page=1&limit=20&NAME&CODE&CONTACT_ADDRESS&DEPTID='+this.proindex.CJDW;
+				console.log(url);
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1591,7 +1619,6 @@
 						}
 					}					
 					this.customerList = newarr;
-					console.log(this.dialogVisible5);
 				}).catch((wrong) => {})
 			},
 			//产品类别数据

@@ -4,8 +4,6 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<!-- <div class="mask_title" v-show="addtitle">添加检验委托书</div>
-					<div class="mask_title" v-show="modifytitle">修改检验委托书</div> -->
 					<div class="mask_title" v-show="viewtitle">下达任务</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">						 
@@ -18,15 +16,6 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="dataInfo" :label-position="labelPositions" :rules="rules" ref="dataInfo" class="demo-ruleForm">
-						<!-- <div class="text-center" v-show="viewtitle">
-							<span v-if="this.dataInfo.STATE!=3">
-								<el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start"><i class="icon-start"></i> 启动流程</el-button>
-								<el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 审批</el-button>
-							</span>
-							<el-button type="primary" round plain size="mini" @click="flowmap"><i class="icon-git-pull-request"></i> 流程地图</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="委托方名称" name="1">
@@ -474,11 +463,11 @@
 												<el-input v-model="dataInfo.REPORT_NUM" disabled></el-input>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
+                    <el-col :span="8">
 											<el-form-item label="格式" prop="REPORT_FOMAT" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_FOMAT" :disabled="noedit">
-													<el-radio label="认证中心"></el-radio>
 													<el-radio label="国家中心"></el-radio>
+													<el-radio label="认证中心"></el-radio>
 												</el-radio-group>
 											</el-form-item>
 										</el-col>

@@ -581,17 +581,6 @@
 				for(var a = 0; a < mData.length; a++){
 						if(mData[a].checked){
 							arr.push(mData[a].id);
-							// if(mData[a].children!=undefined){
-							// 	for(var b=0;b<mData[a].children.length;b++){
-							// 		if(!mData[a].children[b].checked){
-							// 		flag=false;
-							// 		break;
-							// 		}
-							// 	}
-							// 	if(!flag){
-							// 		arr.pop(mData[a].id)
-							// 	}
-							// }
 						}
 						if(mData[a].children!=undefined){
 							this.recursive(mData[a].children,arr);
@@ -633,46 +622,46 @@
 			var products=this.$refs.product.getCheckedNodes();
 			var testingproduct=this.$refs.testproduct.getCheckedNodes();
 			for(var a=0;a<work.length;a++){
-				if(work[a].name!="年度计划"){
+				if(work[a].name!="年度计划"&&!!work[a].id){
 					  pmType.push(work[a].id); 
 				}
 			}
 			for(var b=0;b<annual.length;b++){
-				if(annual[b].name!="工作任务通知书"){
+				if(annual[b].name!="工作任务通知书"&&!!annual[b].id){
 					  taskType.push(annual[b].id); 
 				}
 			}
        for(var c=0;c<products.length;c++){
-						if(products[c].type=="dept"){
+						if(products[c].type=="dept"&&!!products[c].id){
 								deptIds.push(products[c].id);
 						}
-						if(products[c].type=="product"){
+						if(products[c].type=="product"&&!!products[c].id){
 								product.push(products[c].id);
 						}
 
-					if(products[c].type=="producttype"){
+					if(products[c].type=="producttype"&&!!products[c].id){
 								productType.push(products[c].id);
 						}
 
-					if(products[c].type=="menu"){
+					if(products[c].type=="menu"&&!!products[c].id){
 								mtype.push(products[c].id);
 						}
 			}
 
 
    for(var c=0;c<testingproduct.length;c++){
-						if(testingproduct[c].type=="dept"){
+						if(testingproduct[c].type=="dept"&&!!testingproduct[c].id){
 								checkDeptIds.push(testingproduct[c].id);
 						}
-						if(testingproduct[c].type=="product"){
+						if(testingproduct[c].type=="product"&&!!testingproduct[c].id){
 								checkProduct.push(testingproduct[c].id);
 						}
 
-					if(testingproduct[c].type=="producttype"){
+					if(testingproduct[c].type=="producttype"&&!!testingproduct[c].id){
 								checkProductType.push(testingproduct[c].id);
 						}
 
-					if(testingproduct[c].type=="menu"){
+					if(testingproduct[c].type=="menu"&&!!testingproduct[c].id){
 								mchecktype.push(testingproduct[c].id);
 						}
 			}
@@ -1014,25 +1003,6 @@
 				}
 				this.requestData('init');
 			},
-
-			// min3max() { //左侧菜单正常和变小切换
-			// 	if($(".lefttree").hasClass("el-col-5")) {
-			// 		$(".lefttree").removeClass("el-col-5");
-			// 		$(".lefttree").addClass("el-col-1");
-			// 		$(".leftcont").removeClass("el-col-19");
-			// 		$(".leftcont").addClass("el-col-23");
-			// 		$(".icon-doubleok").removeClass("icon-double-angle-left");
-			// 		$(".icon-doubleok").addClass("icon-double-angle-right");
-			// 	} else {
-			// 		$(".lefttree").removeClass("el-col-1");
-			// 		$(".lefttree").addClass("el-col-5");
-			// 		$(".leftcont").removeClass("el-col-23");
-			// 		$(".leftcont").addClass("el-col-19");
-			// 		$(".icon-doubleok").removeClass("icon-double-angle-right");
-			// 		$(".icon-doubleok").addClass("icon-double-angle-left");
-			// 	}
-			// 	this.ismin = !this.ismin;
-			// },
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值
         		this.$refs.navsTabs.showClick(childValue);

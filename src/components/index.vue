@@ -220,6 +220,7 @@ export default {
 					pageSize: 20,
 					totalCount: 0
 				},
+				url: window.location.href,//地址
 
 				}
     },
@@ -265,6 +266,7 @@ export default {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
+				console.log(123);
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.page.totalCount = res.data.count;
@@ -385,34 +387,16 @@ export default {
 			//已办改变页数
 			sizeChanges(val) {
 				this.page.pageSizes = val;
-				if(this.page.currentPages == Math.ceil(this.page.totalCounts / this.page.pageSizes)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
 				this.requestData();
 			},
 			//当前页数
 			currentChange(val) {
 				this.page.currentPage = val;
-				if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
 				this.requestData();
 			},
 			//已办当前页数
 			currentChanges(val) {
 				this.page.currentPages = val;
-				if(this.page.currentPages == Math.ceil(this.page.totalCounts / this.page.pageSizes)){
-					$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-					sessionStorage.setItem('toBtm','true');
-				}else{
-					sessionStorage.setItem('toBtm','false');
-				}
 				this.requestData();
 			},
 			goto(item){
@@ -535,8 +519,8 @@ export default {
 			this.getcjdw();
 			this.getUser();
 			//加载待办任务
-			// this.requestData();
-      this.timer = setInterval(this.requestData(), 1000);//定时调用代办和已办的列表
+		  this.requestData();
+      // this.timer = setInterval(this.requestData(), 1000);//定时调用代办和已办的列表
 			//一级菜单
 			// this.initEchart();//调用饼状图图表函数名称
 			this.getTodoNumber();//打开页面就执行getTodoNum待办任务数函数
@@ -566,6 +550,15 @@ export default {
 						})
 			};
 		},
+		watch: {
+			url(){
+				var url = window.location.href;
+				console.log(url);
+				if(url.indexOf('index') != -1){
+						this.timer = setInterval(this.requestData(), 1000);//定时调用代办和已办的列表
+				}
+			}	 
+    },
 		beforeDestroy() {
       clearInterval(this.timer);
     }

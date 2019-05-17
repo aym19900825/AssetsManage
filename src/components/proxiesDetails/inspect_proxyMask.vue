@@ -927,8 +927,8 @@
 				labelPositions: 'right',
 				rules: {
 					V_NAME: [
-						{required: true, message: '必填', trigger: 'change',validator:this.Validators.isSpecificKey }],//委托方名称名称
-					V_ADDRESS: [{required: true, trigger: 'change', validator: this.Validators.isAddress}],//地址
+						{required: true, message: '必填',}],//委托方名称名称
+					V_ADDRESS: [{required: true, trigger: 'change'}],//地址
 					V_ZIPCODE: [{required: false, trigger: 'change', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{required: true, validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话

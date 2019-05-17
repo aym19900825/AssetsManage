@@ -176,7 +176,7 @@
           </el-row>
         </div>
       </div>
-      <flowconfiguration ref="child"></flowconfiguration>
+      <flowconfiguration ref="child" @request="requestData"></flowconfiguration>
     </div>
   </div>
 </template>
@@ -275,9 +275,8 @@ export default {
         this.openAddMgr();
       }
     },
-    //添加
+    //流程配置
     openAddMgr() {
-      console.log(this.selUser);
 			if(this.selUser.length == 0) {
 				this.$message({
 					message: '请您选择数据',
@@ -289,7 +288,6 @@ export default {
 					type: 'warning'
 				});
 		  }else {
-				console.log(this.selUser[0].id);
 				var id=this.selUser[0].id;
 				this.$refs.child.visible(id);
 			}

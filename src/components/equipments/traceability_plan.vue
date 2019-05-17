@@ -565,7 +565,7 @@
 					path: "/report",
 					query: {
 					appname:this.appName,
-					id:this.selUser[0].id,
+					id:this.selUser[0].ID,
 					}
 					});
 					window.open(routeData.href, '_blank');

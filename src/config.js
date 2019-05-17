@@ -15,7 +15,7 @@ const config = {
 		dev_url: 'http://192.168.1.126:9200',//前端数据
 		code_url: 'http://192.168.1.126:7900',//后端数据
 		file_url: 'http://192.168.1.126:8099',//文件服务
-		po_url:'http://192.168.1.126:4700',//Pageoffice
+		po_url:'http://192.168.1.126:4700',//Pageofficereport
 
 		//远端服务器部署
 		// dev_url: 'http://203.93.173.179:9500', //前端数据

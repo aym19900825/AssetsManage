@@ -16,7 +16,7 @@
     <el-table-column label="序号" type="index" width="55">
     </el-table-column>
     <el-table-column v-for="(column, index) in columns" :width="column.width" :dataType="column.dataType" :key="column.dataIndex"
-      :label="column.text" :formatter="dateFormat" v-if="column.isShow && column.dataIndex != 'version'">
+      :label="column.text" v-if="column.isShow && column.dataIndex != 'version'&& column.dataIndex != 'ENTERDATE'">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span v-if="toggleIconShow(index,scope.row)" class="button is-outlined is-primary is-small" @click="toggle(scope.$index)">
@@ -30,7 +30,21 @@
     </el-table-column>
 
     <el-table-column v-for="(column, index) in columns" :width="column.width" :dataType="column.dataType" :key="column.dataIndex"
-      :label="column.text" :formatter="dateFormat" v-if="column.isShow && column.dataIndex == 'version'" align="right">
+      :label="column.text"  v-if="column.isShow && column.dataIndex == 'version'&& column.dataIndex != 'ENTERDATE'" align="right">
+      <template slot-scope="scope">
+        <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
+        <span v-if="toggleIconShow(index,scope.row)" class="button is-outlined is-primary is-small" @click="toggle(scope.$index)">
+          <i v-if="!scope.row._expanded" class="el-icon-caret-right" aria-hidden="true"></i>
+          <i v-if="scope.row._expanded" class="el-icon-caret-bottom" aria-hidden="true"></i>
+        </span>
+        <span v-else-if="index===0" class="ms-tree-space"></span>
+        <span v-if="index===0" @click="view(scope.row)">{{scope.row[column.dataIndex]}}</span>
+        <span v-else>{{scope.row[column.dataIndex]}}</span>          
+      </template>
+    </el-table-column>
+    <!-- 格式化时间 -->
+    <el-table-column v-for="(column, index) in columns" :width="column.width" :dataType="column.dataType" :key="column.dataIndex"
+      :label="column.text" :formatter="dateFormat" v-if="column.isShow && column.dataIndex == 'ENTERDATE'" align="right">
       <template slot-scope="scope">
         <span v-if="spaceIconShow(index)" v-for="(space, levelIndex) in scope.row._level" class="ms-tree-space"></span>
         <span v-if="toggleIconShow(index,scope.row)" class="button is-outlined is-primary is-small" @click="toggle(scope.$index)">
@@ -114,11 +128,23 @@
         if (me.treeStructure) {
           let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll);
           return data;
+          console.log(1234);
+          console.log(data);
         }
         return me.dataSource;
       }
     },
     methods: {
+      //时间格式化  
+			dateFormat(row, column) {
+        console.log(row);
+        console.log(column);
+				var date = row[column.property];
+				if(date == undefined) {
+					return "";
+				}
+				return this.$moment(date).format("YYYY-MM-DD");
+			},
       singleTable(row){
         if(this.isctrl){
           this.$refs.table.toggleRowSelection(row);

@@ -178,8 +178,10 @@
             </span>
         </el-dialog>
         <el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" >
-        <el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-        </el-tree>
+          <div class="scrollbar" style="max-height: 400px;">
+            <el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+            </el-tree>
+          </div>  
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>

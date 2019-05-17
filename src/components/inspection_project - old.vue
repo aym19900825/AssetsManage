@@ -33,18 +33,6 @@
 								</el-select> -->
 							</el-form-item>
 						</el-form>
-						<el-upload
-							ref="upload"
-							class="upload"
-							:action="uploadUrl()"
-							:on-success="fileSuccess"
-							:limit="1"
-							multiple
-							method:="post"
-							:beforeUpload="beforeAvatarUpload"
-							:file-list="fileList">
-								<el-button type="primary" size="small" round><i class="icon-upload-cloud"></i> 导入数据</el-button>
-							</el-upload>
 					</el-col>
 					<el-col :span="9" class="text-left">
 						<el-dropdown size="small">
@@ -56,12 +44,13 @@
 											<el-upload
 											ref="upload"
 											class="upload"
-											:action="uploadUrl()"
+											:before-upload="beforeUpload"
+											:on-exceed="handleExceed"
+											:action="uploadUrl"
 											:on-success="fileSuccess"
 											:limit="1"
 											multiple
 											method:="post"
-											:beforeUpload="beforeAvatarUpload"
 											:file-list="fileList">
 												<i class="icon-upload-cloud"></i> 点击上传文件
 											</el-upload>
@@ -296,75 +285,43 @@
 			}
 		},
 		methods: {
+			// 上传文件之前的钩子
+			beforeUpload (file) {
+				console.log('beforeUpload')
+				console.log(file.type)
+				const isText = file.type === 'application/vnd.ms-excel'
+				const isTextComputer = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				return (isText | isTextComputer)
+			},
+			// 上传文件个数超过定义的数量
+			handleExceed (files, fileList) {
+				this.$message.warning(`当前限制选择 1 个文件，请删除后继续上传`)
+			},
+			//导入上传检验检测数据
+			uploadUrl(){
+				var url = this.basic_url +'/api-apps/appCustom/importAbilityExc?access_token='+sessionStorage.getItem('access_token');
+				return url;
+				this.$axios.get(url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+							this.$message({
+								message: '导入成功',
+								type: 'success'
+							});
+						} else {
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+				});
+			},
 			//上传成功后返回数据
 			fileSuccess(){
 				this.page.currentPage = 1;
 				this.requestData();
 			},
 			//上传文件列表
-			handleSuccess(response, file, fileList){
-				this.$message({
-					message: '导入成功',
-					type: 'success'
-				});
-			},
-			//上传之前判断文件格式
-			beforeAvatarUpload(file) { 				
-				var testmsg=file.name.substring(file.name.lastIndexOf('.')+1)				
-				const isExcel = testmsg === 'xls' || 'xlsx'
-				const isLt2M = file.size / 1024 / 1024 < 10
-				if(!isExcel) {
-					this.$message({
-						message: '上传文件只能是 xls、xlsx格式！',
-						type: 'warning'
-					});
-				}
-				if(!isLt2M) {
-					this.$message({
-						message: '上传文件大小不能超过 10MB！',
-						type: 'warning'
-					});
-				}
-				return isExcel && isLt2M
-			},
-			//自定义上传方式
-			// UploadImage(param){
-			// 	const formData = new FormData()
-			// 	formData.append('file', param.file)
-
-			// 	UploadImageApi(formData).then(response => {
-			// 		console.log('上传图片成功')
-			// 		param.onSuccess()  // 上传成功的图片会显示绿色的对勾
-			// 		// 但是我们上传成功了图片， fileList 里面的值却没有改变，还好有on-change指令可以使用
-			// 	}).catch(response => {
-			// 		console.log('图片上传失败')
-			// 		param.onError()
-			// 	})
-			// },
-    // fileChange(file){
-    //   this.$refs.upload.clearFiles() //清除文件对象
-    //   // this.logo = file.raw // 取出上传文件的对象，在其它地方也可以使用
-    //   this.fileList = [{name: file.name, url: file.url}] // 重新手动赋值filstList， 免得自定义上传成功了, 而fileList并没有动态改变， 这样每次都是上传一个对象
-    // },
-			//导入检验检测数据
-			uploadUrl(){
-				var url = this.basic_url +'/api-apps/appCustom/importAbilityExc?access_token='+sessionStorage.getItem('access_token');
-				return url;
-				// this.$axios.post(url, {}).then((res) => {
-				// 	if(res.data.resp_code == 0) {
-				// 		this.$message({
-				// 			message: '导入成功',
-				// 			type: 'success'
-				// 		});
-				// 	} else {
-				// 		this.$message({
-				// 			message: res.data.resp_msg,
-				// 			type: 'warning'
-				// 		});
-				// 	}
-				// });
-			},
-			
+			handleSuccess(response, file, fileList){},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'

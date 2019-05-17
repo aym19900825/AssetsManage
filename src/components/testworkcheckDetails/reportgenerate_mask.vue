@@ -551,7 +551,6 @@
 					}else {
 						this.reportTemplate.RE_TYPE=this.datanum;
 					};
-					console.log(this.datanum);
 					// console.log(res.data.data[0].ID);
 					// this.reptemDetailNum=res.data.data[0].RE_NUM
 					

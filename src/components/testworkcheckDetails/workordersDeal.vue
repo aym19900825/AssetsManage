@@ -232,12 +232,12 @@
 														<el-table-column label="操作" v-show="!pageDisable">
 															<template slot-scope="scope">
 															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																	<i class="icon-excel"></i>
+																	<i class="icon-eye"></i>
 																</el-button>
-																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)">
+																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||workorderForm.STATE == '0'">
 																	<i class="icon-pencil"></i>
 																</el-button>
-																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small"  v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)">
+																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||workorderForm.STATE == '0'">
 																	<i class="icon-trash red"></i>
 																</el-button>
 															</template>

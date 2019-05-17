@@ -30,6 +30,7 @@
           <span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
         </template>
       </el-table-column>
+      
       <slot :list='list'></slot>
     </el-table>
     <div class="pt10 text-right">

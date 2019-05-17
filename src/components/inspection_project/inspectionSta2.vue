@@ -381,7 +381,6 @@
 				this.selParentId =id;
 				this.pTypeId = num;
 				this.parentId = pro_num;
-				console.log(this.selParentId);
 				var url = this.basic_url + '/api-apps/app/inspectionSta2/PRODUCT2'
 				url = !!id? (url + '/' + id) : url;
 				this.$axios.get(url, {}).then((res) => {

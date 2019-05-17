@@ -119,12 +119,21 @@ export default {
 		    	this.appname=this.approvingData.app;
 		    	this.$refs.approveForm.validate((valid) => {	
 						if (valid) {
-						var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this.id;	
-						this.approveForm = {
-								"end":false,
-								"flag": true,
-								"opinion":this.approveForm.opinion,
-						}
+							var url = this.basic_url + '/api-apps/app/'+this. appname+'/flow/'+this.id;	
+							if(!!this.approveForm.opinion){//判断意见说明是否为空
+								this.approveForm = {
+										"end":false,
+										"flag": true,
+										"opinion":this.approveForm.opinion,
+								}
+							}else{
+								this.approveForm = {
+									"end":false,
+									"flag": true,
+									"opinion":'同意',
+								}
+							}
+
 					this.$axios.post(url, this.approveForm).then((res) => {
 						if(res.data.resp_code == 1) {
 								this.$message({

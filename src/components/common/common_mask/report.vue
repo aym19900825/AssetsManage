@@ -108,6 +108,7 @@
                           </el-col>
                           <el-col :span="3" class="text-center">
                             <el-button type="primary" size="small" @click="determine">搜索</el-button>
+                            <el-button type="primary" @click="reportreset" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
                           </el-col>
                         </el-row>
 
@@ -487,6 +488,12 @@ import tree_grid from '../../common/TreeGrid.vue'//树表格
           this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
           this.loading = false;//加载动画关闭
       },
+      //报表的重置
+      reportreset(){
+          this.dataInfo={};
+          this.src='';
+      },
+    
       //人员
       requestData(item){
 				var data = {

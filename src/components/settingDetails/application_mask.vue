@@ -85,7 +85,7 @@
 												</el-select>
 											</el-form-item>-->
 											<el-form-item label="报表类型" prop="reportId">
-												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit">
+												<el-select v-model="dataInfo.reportId" multiple :disabled="noedit" style="width:100%;">
 													<el-option v-for="item in selectData" :key="item.id" :value="item.id" :label="item.name"></el-option>
 												</el-select>
 											</el-form-item>

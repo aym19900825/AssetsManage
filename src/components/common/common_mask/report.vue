@@ -19,7 +19,7 @@
                       <el-form inline-message :model="dataInfo" ref="dataInfo" label-width="110px" v-if="formshow">
                         <!-- 报表信息 -->
                         <el-row>
-                          <el-col :span="5" v-for="(item,index) in pramList" :key="index" v-show="item.label!=''" >
+                          <el-col :span="9" v-for="(item,index) in pramList" :key="index" v-show="item.label!=''" >
                             <!--必填情况-->
                             <el-form-item :label="item.label" :prop="item.param" v-if="item.required==1" :rules="{required: true, message: '请填写', trigger: 'blur'}">
                               <el-input v-model="dataInfo[item.param]" v-show="item.type!='1'&&item.type!='4'&&item.type!='3'"></el-input>
@@ -54,7 +54,7 @@
 
                               <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
 
-                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年"></el-date-picker>
+                              <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年" style="width:100%;"></el-date-picker>
 
                               <el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
@@ -68,7 +68,7 @@
                                 <el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="addAsset(item)"></el-button>
                               </el-input>
 
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='6'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='6'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in options"
                                   :key="item.id"
@@ -77,7 +77,7 @@
                                 </el-option>
                               </el-select>
 
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='9'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='9'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in pm_typeoption"
                                   :key="item.id"
@@ -86,7 +86,7 @@
                                 </el-option>
                               </el-select>
 
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='8'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='8'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in Execution_status"
                                   :key="item.id"
@@ -95,7 +95,7 @@
                                 </el-option>
                               </el-select>
                               <!-- 设备状态 -->
-                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='11'" placeholder="请选择">
+                              <el-select v-model="dataInfo[item.param]" v-show="item.type=='11'" placeholder="请选择" style="width:100%;">
                                 <el-option
                                   v-for="item in stateoptions"
                                   :key="item.id"
@@ -108,6 +108,7 @@
                           </el-col>
                           <el-col :span="3" class="text-center">
                             <el-button type="primary" size="small" @click="determine">搜索</el-button>
+                            <el-button type="primary" @click="reportreset" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
                           </el-col>
                         </el-row>
 
@@ -177,8 +178,10 @@
             </span>
         </el-dialog>
         <el-dialog :modal-append-to-body="false" title="机构" :visible.sync="dialogVisible" width="30%" >
-        <el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
-        </el-tree>
+          <div class="scrollbar" style="max-height: 400px;">
+            <el-tree ref="tree" :data="resourceData" show-checkbox  node-key="id" default-expand-all :default-checked-keys="resourceCheckedKey" :props="resourceProps" @node-click="handleNodeClick" @check-change="handleClicks" check-strictly>
+            </el-tree>
+          </div>  
         <span slot="footer" class="dialog-footer">
             <el-button type="primary" @click="dailogconfirm" >确 定</el-button>
             <el-button @click="dialogVisible = false">取 消</el-button>
@@ -487,6 +490,12 @@ import tree_grid from '../../common/TreeGrid.vue'//树表格
           this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
           this.loading = false;//加载动画关闭
       },
+      //报表的重置
+      reportreset(){
+          this.dataInfo={};
+          this.src='';
+      },
+    
       //人员
       requestData(item){
 				var data = {

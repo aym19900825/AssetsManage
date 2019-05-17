@@ -1263,11 +1263,12 @@
 				this.dataInfo.WORK_NOTICE_CHECKPROJECTList = [];
 			},
 		appendnames(value){
-				if(value.PROXY_TYPE==1||value.PROXY_TYPE==3){
+			 //客户类型(TYPE)
+				if(value.TYPE==1||value.TYPE==3){
 					this.dataInfo.V_NAME=value.ID;
 					this.dataInfo.V_NAMEDesc=value.NAME;
 					this.dataInfo.DEPUTE_TYPE=1;
-				}else if(value.PROXY_TYPE==2){
+				}else if(value.TYPE==2){
 					this.dataInfo.V_NAMEDesc=value.fullname;
 					this.dataInfo.V_NAME=value.id;
 					this.dataInfo.DEPUTE_TYPE=2;

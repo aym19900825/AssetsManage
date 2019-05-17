@@ -545,7 +545,7 @@
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="报告份数" prop="REPORT_QUALITY" label-width="110px">
+											<el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
 												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -577,12 +577,12 @@
 										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-												<el-input type="number" v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
-												<el-input  type="number" v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -1878,6 +1878,7 @@
 								REMARKS:'',
 								TECHNICAL_REQUIRE:value[i].TECHNICAL_REQUIRE,
 								UNITCOST:value[i].UNITCOST,
+								REALITY_PRICE:value[i].UNITCOST,
 								VERSION:value[i].VERSION,
 								QUATITY:0,
 						}	

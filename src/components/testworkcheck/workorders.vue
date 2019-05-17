@@ -644,6 +644,7 @@
 			
 			getDetail(data){
 				this.view(data);
+				console.log(data);
 			},
 			//查看
 			view(data) {

@@ -33,7 +33,7 @@
 											class="upload"
 											:action="uploadUrl()"
 											:on-success="fileSuccess"
-											:limit=1
+											:limit="1"
 											multiple
 											method:="post"
 											:file-list="fileList">

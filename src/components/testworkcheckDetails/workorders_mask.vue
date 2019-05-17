@@ -22,7 +22,7 @@
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.STATE!='16'" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
-								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button> -->
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button> -->
 								<!-- <el-button class="approval" type="success" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button> -->
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.STATE!=2"><i class="icon-edit-3"></i>审批</el-button> -->
@@ -31,7 +31,7 @@
 							<span v-if="this.STATE=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id" class="pr10">
 								<!-- <el-button class="start" type="primary" round size="mini" @click="Accept" ><i class="icon-check"></i> 接收此任务</el-button> -->
 								<el-button class="start" type="success" round size="mini" @click="startup"><i class="icon-check"></i> 接收此任务</el-button>
-								<el-button class="start" type="warning" round size="mini" @click="sendback" ><i class="icon-back"></i> 回退此任务</el-button>
+								<el-button class="start" type="warning" round size="mini" @click="sendback"><i class="icon-back"></i> 回退此任务</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -585,7 +585,7 @@
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
 														
-														<el-table-column label="审核人" prop="CHECKER">
+														<el-table-column label="审核人" prop="CHECKERDesc">
 														</el-table-column>
 
 														<el-table-column label="审核时间" prop="CHECK_DATE">
@@ -714,11 +714,11 @@
 						&&this.STATE!='2'&&this.STATE!='15'||this.STATE=='5'||this.STATE=='3'||this.STATE=='0'||this.STATE=='7'||this.STATE=='8'-->
 						<!-- &&this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length!=0 -->
 						<!-- <div class="content-footer" v-show="viewtitle"> -->
-							<div class="content-footer" v-show="this.STATE!='2'&&this.STATE!='15'&&this.workorderForm.ISCHILDREN=='1'">
+							<div class="content-footer" v-show="this.STATE!='2'&&this.STATE!='3'&&this.STATE!='15'&&this.workorderForm.ISCHILDREN=='1'">
 								<el-button type="success" @click="checkchildlist">查看子任务单成果文件</el-button>
 							</div>
-							<div class="content-footer" v-show="(this.STATE=='3'||this.STATE=='5'||this.STATE=='6'||this.STATE=='7'||this.STATE=='8')&&this.MASTER_INSPECTOR!=this.$store.state.currentuser.id">
-								<el-button type="primary" @click="submitVerify">确认成果文件通过{{this.workorderForm.WONUM}}</el-button>
+							<div class="content-footer" v-show="isshow&&(this.STATE=='5'||this.STATE=='6'||this.STATE=='7'||this.STATE=='8')&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
+								<el-button type="primary" @click="submitPassed">确认成果文件通过</el-button>
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 							<div class="content-footer" v-show="this.STATE=='0'&&this.workorderForm.ISCHILDREN=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
@@ -847,6 +847,7 @@
 		},
 		data() {
 			return {
+				isshow:true,//判断按钮是否显示
 				sampleNumList: [],//样品检验查看结果数据
 				approvingData:{},//流程传的数据
 				file_url: Config.file_url,
@@ -1018,10 +1019,29 @@
 				this.sampleNumList = [];
 			},
 			//确认成果文件通过
+			submitPassed(){
+				var WONUM = this.workorderForm.WONUM;//获取当前任务单编号
+				var url=this.basic_url + '/api-apps/app/workorder/operate/confirmResultFile?WONUM=' + WONUM;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 0) {
+						this.$message({
+								message: '确认成功',
+								type: 'success'
+							});
+						this.detailgetData();
+						}else{
+							this.$message({
+								message: res.data.resp_msg,
+								type: 'warning'
+							});
+						}
+					}).catch((err) => {
+					});
+			},
+			//确认是否提交成果文件
 			submitVerify(){
 				var url = this.basic_url + '/api-apps/app/workorder/operate/confirmData?ID='+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {
 							this.$message({
@@ -1547,39 +1567,39 @@
 			},
 			//审批流程
 			approvals(){
-				this.approvingData.id =this.dataid;
+				this.approvingData.id=this.dataid;
 				this.approvingData.app=this.workorder;
-				 var url = this.basic_url + '/api-apps/app/workorder/flow/isEnd/'+this.dataid;
-		    		this.$axios.get(url, {}).then((res) => {
-		    			if(res.data.resp_code == 0) {
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
-							});
-		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/'+this.dataid;
-		    				this.$axios.get(url, {}).then((res) => {
-				    			if(res.data.resp_code == 1) {
-										this.$message({
-											message:res.data.resp_msg,
-											type: 'warning'
-										});
+				var url = this.basic_url + '/api-apps/app/workorder/flow/isEnd/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+						if(res.data.resp_code == 0) {
+						this.$message({
+							message:res.data.resp_msg,
+							type: 'warning'
+						});
+						}else{
+							var url = this.basic_url + '/api-apps/app/workorder/flow/isExecute/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+								if(res.data.resp_code == 1) {
+									this.$message({
+										message:res.data.resp_msg,
+										type: 'warning'
+									});
+							}else{
+								var url = this.basic_url + '/api-apps/app/workorder/flow/customFlowValidate/'+this.dataid;
+							this.$axios.get(url, {}).then((res) => {
+									if(res.data.resp_code == 1) {
+									this.$message({
+										message:res.data.resp_msg,
+										type: 'warning'
+									});
 								}else{
-									var url = this.basic_url + '/api-apps/app/workorder/flow/customFlowValidate/'+this.dataid;
-								this.$axios.get(url, {}).then((res) => {
-				    				if(res.data.resp_code == 1) {
-										this.$message({
-											message:res.data.resp_msg,
-											type: 'warning'
-										});
-									}else{
-									 	this.$refs.approvalChild.visible(this.nodeState);
-									}
-								})
+									this.$refs.approvalChild.visible(this.nodeState);
 								}
-		    				});
-		    			}
-					});
+							})
+							}
+							});
+						}
+				});
 			},
 			//流程历史
 			flowhistory(){
@@ -1604,7 +1624,6 @@
 			SelChange(val) {
 				this.selMenu = val;
 			},
-			
 			addfield1(){//检测依据列表新建行
 				var date=new Date();
 				this.currentDate = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
@@ -1745,16 +1764,20 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					this.MASTER_INSPECTOR=parseInt(res.data.MASTER_INSPECTOR);//当前责任人ID
-					this.STATE=parseInt(res.data.STATE)//当前流程状态
-					res.data.CJDW = parseInt(res.data.CJDW);
-					console.log(this.MASTER_INSPECTOR);//当前责任人ID
-					console.log(this.$store.state.currentuser.id);//登录用户的ID
-					console.log(this.STATE);//登录用户的ID
-					//依据
-					for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
-						res.data.WORKORDER_BASISList[i].isEditing = false;
-					}
+					this.STATE=parseInt(res.data.STATE);//当前流程状态
+						if(!!res.data.WORKORDER_DATA_TEMPLATEList[0]){
+								this.isTogether=parseInt(res.data.WORKORDER_DATA_TEMPLATEList[0].ISTOGETHER);
+								this.isshow=true;//判断成果文件【确认成果文件通过、回退成果文件】是否显示
+						}else{
+							this.isshow=false;//按钮不显示
+						}
+					res.data.CJDW = parseInt(res.data.CJDW);//parseInt解析一个字符串,并返回一个整数
+						//依据
+						for(var i = 0;i<res.data.WORKORDER_BASISList.length;i++){
+							res.data.WORKORDER_BASISList[i].isEditing = false;
+						}
 					//项目
 					for(var i = 0;i<res.data.WORKORDER_PROJECTList.length;i++){
 						// res.data.WORKORDER_PROJECTList[i].isEditing = false;
@@ -1791,11 +1814,11 @@
 					// res.data.ITEM_PROFESSIONAL_GROUP = Number(res.data.ITEM_PROFESSIONAL_GROUP);
 					this.RVENDORSelect(res.data.CJDW);
 					this.workorderForm = res.data;
-					if(res.data.IS_MAIN == '1'){//是主任务单
-						this.showcreatereoprt = true;//显示生成报告按钮
-					}else{//不是主任务单
-						this.showcreatereoprt = false;
-					}
+						if(res.data.IS_MAIN == '1'){//是主任务单
+							this.showcreatereoprt = true;//显示生成报告按钮
+						}else{//不是主任务单
+							this.showcreatereoprt = false;
+						}
 					this.show = true;
 				}).catch((err) => {
 				});
@@ -1804,7 +1827,7 @@
 			detail(dataid) {
 				this.dataid=dataid;
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-	    			this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
+					this.workorderForm.DEPTID = res.data.deptId;//传给后台机构id
 					this.workorderForm.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.workorderForm.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
@@ -1832,6 +1855,7 @@
 			},
 			//这是查看
 			view(dataid) {
+				
 				this.btnshow = true;//显示报告提交按钮
 				this.dataid=dataid;	
 				this.modifytitle = false;
@@ -1841,8 +1865,9 @@
 				this.noviews = false;
 				this.edit = true;
 				this.noedit = true;
-				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
+				//判断启动流程和审批的按钮是否显示
+				console.log(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid);
 				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
 					if(res.data.resp_code == 0){
 						switch(res.data.datas){
@@ -1860,7 +1885,6 @@
 				}).catch((err) => {});
 				var url = this.basic_url + '/api-apps/app/workorder/flow/isStart/'+dataid;
 				this.$axios.get(url, {}).then((res) => {
-					
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
@@ -1887,26 +1911,26 @@
 			// 保存users/saveOrUpdate
 			submitForm() {
 				this.$refs.workorderForm.validate((valid) => {
-		          if (valid) {
-					var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
-					this.$axios.post(url,this.workorderForm).then((res) => {
-						// 
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '保存成功',
-								type: 'success'
-							});
-							this.show = false;
-							//重新加载数据
-							this.$emit('request');
-						}
-					}).catch((err) => {
-					});
-						} else {
-							return false;
-						}
-					});
+					if (valid) {
+						var url = this.basic_url + '/api-apps/app/workorder/saveOrUpdate';
+						this.$axios.post(url,this.workorderForm).then((res) => {
+							// 
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								this.show = false;
+								//重新加载数据
+								this.$emit('request');
+							}
+						}).catch((err) => {
+						});
+					} else {
+						return false;
+					}
+				});
 			},
 			//查看子任务单
 			checkchildlist(){
@@ -2008,10 +2032,9 @@
 	        this.username = res.data.username;
 					this.deptid = res.data.deptId;
 					this.deptfullname = res.data.deptName;
-	            }).catch((err) => {
-	            });
-        	},
-			
+						}).catch((err) => {
+						});
+					},
 		},
 		
 		mounted() {
@@ -2031,5 +2054,4 @@
 
 <style scoped>
 	@import '../../assets/css/mask-modules.css';
-
 </style>

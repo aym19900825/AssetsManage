@@ -111,6 +111,23 @@
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="130px">
+												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="型号" prop="MODEL" label-width="130px">
+												<el-input v-model="samplesForm.MODEL" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="样品数量" prop="QUATITY" label-width="130px">
+												<el-input v-model="samplesForm.QUATITY" label="描述文字" @change="changeNum" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<!-- <el-row>
+										<el-col :span="8">
+											<el-form-item label="样品名称" prop="DESCRIPTION" label-width="130px">
 												<el-input v-model="samplesForm.DESCRIPTION" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
@@ -124,7 +141,7 @@
 												<el-input v-model="samplesForm.QUATITY" label="描述文字" @change="changeNum" :disabled="noedit||(!!samplesForm.PROXYNUM)"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
+									</el-row> -->
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="生产日期/批" prop="MANUFACTURE_DATE" label-width="130px">

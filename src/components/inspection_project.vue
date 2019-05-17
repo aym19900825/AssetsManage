@@ -13,14 +13,16 @@
 			<div class="ibox-content">
 				<!--所属机构 Begin-->
 				<el-row :gutter="0">
-					<el-col :span="24" class="text-center">
-						<div class="clearfix">
-							<div class="table-func pull-left">
-								<el-button type="success" size="mini" round @click="addfield_productType2" class="pull-right mt5">
-									<i class="icon-add"></i>
-									<font>新建</font>
-								</el-button>
-							</div>
+					<el-col :span="8" class="text-left">
+						<div class="table-func">
+							<el-button type="success" size="mini" round @click="addfield_productType2" class="mt5">
+								<i class="icon-add"></i>
+								<font>新建</font>
+							</el-button>
+						</div>
+						
+					</el-col>
+					<el-col :span="7" class="text-center">
 						<el-form :inline="true" :model="formInline">
 							<el-form-item label="所属机构" prop="DEPTID">
 								<el-select v-model="formInline.DEPTID" placeholder="请选择" @change="requestData" :disabled="nameFlag">
@@ -31,7 +33,41 @@
 								</el-select> -->
 							</el-form-item>
 						</el-form>
-						</div>
+						<el-upload
+							ref="upload"
+							class="upload"
+							:action="uploadUrl()"
+							:on-success="fileSuccess"
+							:limit="1"
+							multiple
+							method:="post"
+							:beforeUpload="beforeAvatarUpload"
+							:file-list="fileList">
+								<el-button type="primary" size="small" round><i class="icon-upload-cloud"></i> 导入数据</el-button>
+							</el-upload>
+					</el-col>
+					<el-col :span="9" class="text-left">
+						<el-dropdown size="small">
+									<el-button type="primary" size="small" round>
+										<i class="icon-inventory-line-callin"></i> 导入数据 <i class="el-icon-arrow-down el-icon--right"></i>
+									</el-button>
+									<el-dropdown-menu slot="dropdown">
+										<el-dropdown-item>
+											<el-upload
+											ref="upload"
+											class="upload"
+											:action="uploadUrl()"
+											:on-success="fileSuccess"
+											:limit="1"
+											multiple
+											method:="post"
+											:beforeUpload="beforeAvatarUpload"
+											:file-list="fileList">
+												<i class="icon-upload-cloud"></i> 点击上传文件
+											</el-upload>
+										</el-dropdown-item>
+									</el-dropdown-menu>
+								</el-dropdown>
 					</el-col>
 				</el-row>
 				<!--所属机构 End-->
@@ -228,6 +264,7 @@
 				productType2Form:{//产品类别数据组
 					inspectionList: []
 				},
+				fileList:[],//上传的数据列表
 				departmentId: '',//当前用户机构号
 				categoryList:[],//获取产品类型数据
 				catedata:'',//获取产品类别一条数据放到table行中
@@ -259,9 +296,78 @@
 			}
 		},
 		methods: {
+			//上传成功后返回数据
+			fileSuccess(){
+				this.page.currentPage = 1;
+				this.requestData();
+			},
+			//上传文件列表
+			handleSuccess(response, file, fileList){
+				this.$message({
+					message: '导入成功',
+					type: 'success'
+				});
+			},
+			//上传之前判断文件格式
+			beforeAvatarUpload(file) { 				
+				var testmsg=file.name.substring(file.name.lastIndexOf('.')+1)				
+				const isExcel = testmsg === 'xls' || 'xlsx'
+				const isLt2M = file.size / 1024 / 1024 < 10
+				if(!isExcel) {
+					this.$message({
+						message: '上传文件只能是 xls、xlsx格式！',
+						type: 'warning'
+					});
+				}
+				if(!isLt2M) {
+					this.$message({
+						message: '上传文件大小不能超过 10MB！',
+						type: 'warning'
+					});
+				}
+				return isExcel && isLt2M
+			},
+			//自定义上传方式
+			// UploadImage(param){
+			// 	const formData = new FormData()
+			// 	formData.append('file', param.file)
+
+			// 	UploadImageApi(formData).then(response => {
+			// 		console.log('上传图片成功')
+			// 		param.onSuccess()  // 上传成功的图片会显示绿色的对勾
+			// 		// 但是我们上传成功了图片， fileList 里面的值却没有改变，还好有on-change指令可以使用
+			// 	}).catch(response => {
+			// 		console.log('图片上传失败')
+			// 		param.onError()
+			// 	})
+			// },
+    // fileChange(file){
+    //   this.$refs.upload.clearFiles() //清除文件对象
+    //   // this.logo = file.raw // 取出上传文件的对象，在其它地方也可以使用
+    //   this.fileList = [{name: file.name, url: file.url}] // 重新手动赋值filstList， 免得自定义上传成功了, 而fileList并没有动态改变， 这样每次都是上传一个对象
+    // },
+			//导入检验检测数据
+			uploadUrl(){
+				var url = this.basic_url +'/api-apps/appCustom/importAbilityExc?access_token='+sessionStorage.getItem('access_token');
+				return url;
+				// this.$axios.post(url, {}).then((res) => {
+				// 	if(res.data.resp_code == 0) {
+				// 		this.$message({
+				// 			message: '导入成功',
+				// 			type: 'success'
+				// 		});
+				// 	} else {
+				// 		this.$message({
+				// 			message: res.data.resp_msg,
+				// 			type: 'warning'
+				// 		});
+				// 	}
+				// });
+			},
+			
 			//表头居中
 			rowClass({ row, rowIndex}) {
-			    return 'text-align:center'
+				return 'text-align:center'
 			},
 			childMsd_product2(data){//赋值给子组件检验/检测标准
 				this.product2Id = data;
@@ -295,8 +401,9 @@
 				this.$refs.rawDataAssetchild.viewfield_rawDataAsset(null,null,null,null,null);
 				}
 			},
-			
-			iconOperation(row, column, cell, event){//切换Table-操作列中的修改、保存
+
+			//切换Table-操作列中的修改、保存
+			iconOperation(row, column, cell, event){
 				if(column.property ==="iconOperation"){
 					row.isEditing = !row.isEditing
 				}

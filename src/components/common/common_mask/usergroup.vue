@@ -91,6 +91,7 @@
                 }
                 var url = this.basic_url + '/api-flow/flow/group';
                     this.$axios.get(url, {params: params}).then((res) => {
+					this.page.totalCount = res.data.count;//页码赋值	
                     this.userList = res.data.data;
                     this.dialogVisible=true;
                     }).catch((err) => {
@@ -129,7 +130,6 @@
 				}else{
 					// this.dialogVisible = false;
 					this.resetBasisInfo();//调用resetBasisInfo函数
-					console.log(this.selUser[0]);
 					this.$emit('group',this.selUser[0].num);
 				}
             },

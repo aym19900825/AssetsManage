@@ -90,6 +90,7 @@
                 }
                 var url = this.basic_url +'/api-user/users';
                     this.$axios.get(url, {params: params}).then((res) => {
+					this.page.totalCount = res.data.count;//页码赋值	
                 	this.userList = res.data.data;
                     this.dialogVisible=true;
                     }).catch((err) => {

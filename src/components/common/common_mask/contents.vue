@@ -235,7 +235,7 @@
 				var str='';
 				str=val.arr;
 			str=str.toString(',')
-			var url = this.basic_url + '/api-apps/app/workNotCheo?N_CODE_wheres='+val.N_CODE+'&DEPTTYPE=1&P_DESC_where_not_in='+str;
+			var url = this.basic_url + '/api-apps/appSelection/workNotCheo/page?N_CODE_wheres='+val.N_CODE+'&DEPTTYPE=1&P_DESC_where_not_in='+str;
 			console.log(url);
 		// var url=this.basic_url +'/api-apps/app/inspectionPro2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_in='+this.S_NUM+'&P_NUM_where_not_in='+this.projectnum;
 		this.$axios.get(url,{}).then((res) => {

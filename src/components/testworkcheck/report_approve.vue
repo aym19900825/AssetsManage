@@ -247,7 +247,7 @@
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
 						});
-						this.$refs.reportapprove.view(this.selUser[0]);
+						this.$refs.reportapprove.view(this.selUser[0].ID);
 					}
 					//驳回
 					else if(this.selUser[0].STATE == 0) {
@@ -427,7 +427,18 @@
 					
 				}).catch((wrong) => {
 				})
-		    },
-		}
+			},
+			getRouterData() {
+      		// 只是改了query，其他都不变
+				  this.id = this.$route.query.bizId;
+				  this.$refs.reportapprove.view(this.id);
+			},
+		
+		},
+		mounted() {
+			if(this.$route.query.bizId!=undefined){
+				this.getRouterData();
+			}
+		},
 	}
 </script>

@@ -863,7 +863,7 @@
 					ACTUALCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//实收费用
 					CONTRACTCOST:[{required: false, trigger: 'blur', validator:this.Validators.isPrices}],//标准费用
 					ITEM_STATUS: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品状态
-					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//标识
+					CNAS_OR_CMA_ID: [{ required: false, trigger: 'blur'}],//标识
 					ITEM_SECRECY: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//保密要求
 					CONTRACTNUM: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//合同编号
 				},

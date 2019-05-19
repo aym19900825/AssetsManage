@@ -281,10 +281,9 @@
 		var arr=val.arr.toString(',');
 		// var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		// var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_not_in='+this.S_NUM;
-		var url = this.basic_url + '/api-apps/app/workNotCheb?N_CODE_wheres='+val.N_CODE+'&DEPTTYPE=1&S_NAME_where_not_in='+arr;
+		var url = this.basic_url + '/api-apps/appSelection/workNotCheb/page?N_CODE_wheres='+val.N_CODE+'&DEPTTYPE=1&S_NAME_where_not_in='+arr;
 		console.log(url);
 		 this.$axios.get(url, {}).then((res) => {
-			 console.log(res);
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)

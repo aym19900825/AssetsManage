@@ -206,7 +206,7 @@
 										</el-form-item>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-									<el-tabs v-model="activeName" @tab-click="handleClick">
+									<el-tabs v-model="activeName">
 									    <el-tab-pane label="检验依据" name="first">
 											<div class="table-func table-funcb">
 												<el-button type="primary" size="mini" round @click="basisleadbtn('maintable')"  v-show="!viewtitle">
@@ -605,7 +605,7 @@
 						</div>
 					
 						<div class="content-footer">
-							<el-button type="success" @click="build">确定下达</el-button>
+							<el-button type="success" @click="submitBuild">确定下达</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
@@ -1071,17 +1071,17 @@
 			},
 			handleClicks(data,checked, indeterminate) {
 				this.getCheckboxData = data;
-           		 this.i++;
-            		if(this.i%2==0){
-                	if(checked){
-                    	this.$refs.tree.setCheckedNodes([]);
-                    	this.$refs.tree.setCheckedNodes([data]);
-                    	//交叉点击节点
-               		 }else{
-                     this.$refs.tree.setCheckedNodes([]);
-                    	//点击已经选中的节点，置空
-                	 }
-            		}
+				this.i++;
+				if(this.i%2==0){
+					if(checked){
+							this.$refs.tree.setCheckedNodes([]);
+							this.$refs.tree.setCheckedNodes([data]);
+							//交叉点击节点
+						}else{
+							this.$refs.tree.setCheckedNodes([]);
+							//点击已经选中的节点，置空
+						}
+				}
       },
 			//表头居中
 			rowClass({ row, rowIndex}) {
@@ -1231,18 +1231,16 @@
 					CHECK_PROXY_CONTRACTList: [],
 				};	  
 			},
-			handleClick(tab, event) {
-		    },
 			iconOperation(row, column, cell, event) {
 				if(column.property === "iconOperation") {
 					row.isEditing = !row.isEditing;
 				}
 			},
 			//生成工作任务单
-			build(){
+			submitBuild(){
 				this.$refs.dataInfo.validate((valid) => {
 			    if (valid) {
-					this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
+					// this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
 					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder';
 					this.$axios.post(Url, {inspectpro:this.dataInfo}).then((res) => {
 						if(res.data.resp_code == 0) {

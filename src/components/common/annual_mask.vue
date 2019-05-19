@@ -336,7 +336,7 @@
                                                             </el-form-item>
 														</template>
 													</el-table-column>
-													<el-table-column prop="REMARKS" label="技术要求" width="300">
+													<el-table-column prop="REMARKS" label="要求" width="300">
 														<template slot-scope="scope">
                                                             <el-form-item :prop="'proTestList.'+scope.$index + '.REMARKS'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
                                                                 <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.REMARKS" :disabled="noedit"></el-input>

@@ -245,45 +245,71 @@
 	import Config from '../../config.js'
 	export default {
 		name: 'masks',
-		props: {
-			adddeptForm: {
-				type: Object,
-				default: function(){
-					return {
-						version:'',
-						status:'',
-						step:'',
-						code:'',
-						sort: 0,//排序
-						fullname:'',
-						pName:'',
-						pid:'',
-						depttype:'',
-						type:'',
-						inactive:'',
-						address:'',
-						zipcode:'',
-						leader:'',
-						leaderName:'',
-						telephone:'',
-						fax:'',
-						email:'',
-						simplename:'',
-						tips:'',
-						createUser:'',
-						createTime:'',
-						updateUser:'',
-						updateTime:''
-					}
-				}
-			}
-		},
+		// props: {
+		// 	adddeptForm: {
+		// 		type: Object,
+		// 		default: function(){
+		// 			return {
+		// 				version:'',
+		// 				status:'',
+		// 				step:'',
+		// 				code:'',
+		// 				sort: 0,//排序
+		// 				fullname:'',
+		// 				pName:'',
+		// 				pid:'',
+		// 				depttype:'',
+		// 				type:'',
+		// 				inactive:'',
+		// 				address:'',
+		// 				zipcode:'',
+		// 				leader:'',
+		// 				leaderName:'',
+		// 				telephone:'',
+		// 				fax:'',
+		// 				email:'',
+		// 				simplename:'',
+		// 				tips:'',
+		// 				createUser:'',
+		// 				createTime:'',
+		// 				updateUser:'',
+		// 				updateTime:''
+		// 			}
+		// 		}
+		// 	}
+		// },
 		data() {
 			return {
 				basic_url: Config.dev_url,
 				value: '',
 				loadSign: true, //加载
 				commentArr: {},
+				adddeptForm: {
+					version:'',
+					status:'',
+					step:'',
+					code:'',
+					sort: 0,//排序
+					fullname:'',
+					pName:'',
+					pid:'',
+					depttype:'',
+					type:'',
+					inactive:'',
+					address:'',
+					zipcode:'',
+					leader:'',
+					leaderName:'',
+					telephone:'',
+					fax:'',
+					email:'',
+					simplename:'',
+					tips:'',
+					createUser:'',
+					createTime:'',
+					updateUser:'',
+					updateTime:''	
+			},
 				options: [{
 					value: '1',
 					label: '活动'
@@ -408,8 +434,18 @@
 				this.stopselect = false;
 				this.showcode = false;
 			},
+			//请求查看或修改的数据
+			detailgetData(id){
+				var url = this.basic_url + '/api-user/depts/' + id;
+				this.$axios.get(url, {}).then((res) => {
+					res.data.type = res.data.type.toString();
+				    this.adddeptForm=res.data;
+					this.show = true;
+				}).catch((err) => {
+				});
+			},
 			//修改
-			detail() {
+			detail(id) {
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -419,6 +455,7 @@
 				this.noedit = false; //表单内容
 				this.stopcontent = false;
 				this.stopselect = true;
+				this.detailgetData(id);
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 	    			this.adddeptForm.updateUser = res.data.id;
 	    			this.adddeptForm.updatebyName = res.data.nickname;
@@ -440,11 +477,12 @@
         			// this.ADDDEPTFORM = JSON.parse(obj);
 				}).catch((err) => {
 				});
-				console.log(this.adddeptForm);
-                 this.show = true;
+				
+
 			},
+
 			//这是查看
-			view(){
+			view(id){
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -455,7 +493,8 @@
 				this.stopcontent = false;
 				this.stopselect = true;
 				this.personinfo = true;
-				this.show = true;
+			    this.detailgetData(id);
+				
 			},
 			//获取负责人数据
 			getPerson(){
@@ -472,7 +511,7 @@
 			},
 			//当前页
 			currentChange(val) {
-				this.page.currentPage = val;
+				this.page.currentPage = val; 
 				this.requestData();
 			},
 			judge(data) {
@@ -605,7 +644,7 @@
 			getDEPT_TYPE() {//获取机构属性
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=DEPT_TYPE&code_where_not_in=1';
 				this.$axios.get(url, {}).then((res) => {
-					// console.log(res);
+					console.log(res);
 					this.SelectDEPT_TYPE = res.data;
 				}).catch(error => {
 				})
@@ -613,6 +652,7 @@
 			getsys_depttype() {//获取机构类型
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=depttype';
 				this.$axios.get(url, {}).then((res) => {
+					
 					this.Selectsys_depttype = res.data;
 				}).catch(error => {
 				})

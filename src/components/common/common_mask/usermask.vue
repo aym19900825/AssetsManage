@@ -107,9 +107,11 @@
             },
             sizeChange(val) {
 				this.page.pageSize = val;
+				this.visible();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
+				this.visible();
             },
             //表头居中
 			rowClass({ row, rowIndex}) {

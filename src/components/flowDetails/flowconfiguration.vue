@@ -23,6 +23,13 @@
     											<el-checkbox label="是否执行人可重复"></el-checkbox>
 												</el-checkbox-group>
 											</el-form-item>
+										</el-col>
+									    <el-col :span="5">
+										    <el-form-item label="" prop="isPromoterNotExecut">
+												<el-checkbox-group v-model="dataInfo.isPromoterNotExecut">
+    											<el-checkbox label="发起人是否可以审批流程"></el-checkbox>
+												</el-checkbox-group>
+											</el-form-item> 
 										</el-col>	
 									</el-row>
 									<el-tabs v-model="activeName" >
@@ -176,7 +183,8 @@
 				selUser: [],
 				bigtitle:[],
 				dataInfo:{
-				    isNotRepeat:'',
+					isNotRepeat:'',
+					isPromoterNotExecute:'',//发起人是否可以审批流程
 					candidateList:[],//保存节点数据
 				},//
 				options:[],//流程节点类型
@@ -250,7 +258,12 @@
                            res.data.isNotRepeat=true;
 						}else{
 							res.data.isNotRepeat=false;
-						}
+						} 
+						if(res.data.isPromoterNotExecute=='1'){
+                           res.data.isPromoterNotExecute=true;
+						}else{
+							res.data.isPromoterNotExecute=false;
+						} 
 						for(var i=0;i<res.data.candidateList.length;i++){
                              res.data.candidateList[i].name='tab'+i;   
 						}
@@ -340,9 +353,15 @@
 				}else{
 					this.dataInfo.isNotRepeat=0;
 				}
+				if(this.dataInfo.isPromoterNotExecute){
+					this.dataInfo.isPromoterNotExecute=1;
+				}else{
+					this.dataInfo.isPromoterNotExecute=0;
+				}
 				var data={
 				 id:this.dataInfo.id,
 				 isNotRepeat:this.dataInfo.isNotRepeat,
+				 isPromoterNotExecute:this.dataInfo.isPromoterNotExecute,
 				 candidateList:this.bigtitle,
 				 procDefId:this.dataInfo.procDefId
 				}

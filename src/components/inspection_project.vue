@@ -23,16 +23,16 @@
 						
 					</el-col>
 					<el-col :span="7" class="text-center">
-						<el-form :inline="true" :model="formInline">
+						<!-- <el-form :inline="true" :model="formInline">
 							<el-form-item label="所属机构" prop="DEPTID">
 								<el-select v-model="formInline.DEPTID" placeholder="请选择" @change="requestData" :disabled="nameFlag">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
-								</el-select>
+								</el-select> -->
 								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择" v-else disabled @change="requestData">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select> -->
-							</el-form-item>
-						</el-form>
+							<!-- </el-form-item>
+						</el-form> -->
 						<el-upload
 							ref="upload"
 							class="upload"
@@ -72,7 +72,11 @@
 				</el-row>
 				<!--所属机构 End-->
 
-				<el-row class="relative" id="pageDiv">
+				<el-row class="relative" id="pageDiv"
+						v-loading="loading"
+						element-loading-text="数据导入中，数据量较大，请勿关闭此窗口…"
+						element-loading-spinner="el-icon-loading"
+						element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-col :span="6">
 						<el-card class="box-card" :body-style="{ padding: '10px' }">
 							<div slot="header" class="title clearfix">
@@ -178,11 +182,6 @@
 				height="400px"
 				highlight-current-row
 				@current-change="addproclass"
-				v-loadmore="loadMore"
-				v-loading="loading"
-				element-loading-text="加载中…"
-				element-loading-spinner="el-icon-loading"
-				element-loading-background="rgba(255, 255, 255, 0.9)"
 				style="width: 100%;" :default-sort="{prop:'categoryList', order:'descending'}">
 				<!-- <el-table-column type="selection" fixed width="55" align="center">
 				</el-table-column> -->
@@ -296,18 +295,6 @@
 			}
 		},
 		methods: {
-			//上传成功后返回数据
-			fileSuccess(){
-				this.page.currentPage = 1;
-				this.requestData();
-			},
-			//上传文件列表
-			handleSuccess(response, file, fileList){
-				this.$message({
-					message: '导入成功',
-					type: 'success'
-				});
-			},
 			//上传之前判断文件格式
 			beforeAvatarUpload(file) { 				
 				var testmsg=file.name.substring(file.name.lastIndexOf('.')+1)				
@@ -349,6 +336,7 @@
 			//导入检验检测数据
 			uploadUrl(){
 				var url = this.basic_url +'/api-apps/appCustom/importAbilityExc?access_token='+sessionStorage.getItem('access_token');
+				
 				return url;
 				// this.$axios.post(url, {}).then((res) => {
 				// 	if(res.data.resp_code == 0) {
@@ -364,7 +352,19 @@
 				// 	}
 				// });
 			},
-			
+				//上传成功后返回数据
+			fileSuccess(){
+				// this.loading = true;
+				this.page.currentPage = 1;
+				// this.$message({
+				// 	message: '导入成功',
+				// 	type: 'success'
+				// });
+				this.requestData();
+			},
+			//上传文件列表
+			handleSuccess(response, file, fileList){
+			},
 			//表头居中
 			rowClass({ row, rowIndex}) {
 				return 'text-align:center'
@@ -526,7 +526,7 @@
 			},
 			
 			requestData() {//加载数据
-				this.loading = true;//加载动画打开
+				// this.loading = true;//加载动画打开
 				var _this = this;
 				var data = {
 					page: this.page.currentPage,
@@ -560,7 +560,6 @@
 							}
 						}
 						this.productType2Form.inspectionList = newarr;//滚动加载更多
-						
 						this.loading = false;//加载动画关闭
 						if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
 							$('.el-table__body-wrapper table').find('.filing').remove();

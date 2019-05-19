@@ -198,9 +198,12 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="200px">
-											<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
-										</el-form-item>
+									<el-form-item label="抽样方案" prop="REMARKS" label-width="200px">
+                    <el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
+                  </el-form-item>
+                  <el-form-item label="判定依据" prop="JUDGE" label-width="200px">
+                    <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input>
+                  </el-form-item>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -749,6 +752,7 @@
 					COMPDATE:'',
 					COMPMODE:'',//完成方式
 					REMARKS:'',
+					JUDGE:'',//
 					V_NAME:'',//委托方名称名称
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
@@ -852,9 +856,9 @@
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
-						{ required: true, message: '必填', trigger: 'blur'},
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
+						{ required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey},
 					],//抽样方案/判定依据
+					JUDGE:[{ required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}],///判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					REPORT_QUALITY: [
 						{ required: true, message: '必填', trigger: 'blur'},
@@ -1224,6 +1228,7 @@
 					COMPDATE:'',
 					COMPMODE:'正常',//完成方式
 					REMARKS:'',
+					JUDGE:'',
 					V_NAME:'',//委托方名称名称
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',

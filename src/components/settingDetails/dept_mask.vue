@@ -440,6 +440,7 @@
         			// this.ADDDEPTFORM = JSON.parse(obj);
 				}).catch((err) => {
 				});
+				console.log(this.adddeptForm);
                  this.show = true;
 			},
 			//这是查看

@@ -359,11 +359,7 @@
 			},
 			//这是查看
 			view(data) {
-				this.dataid = data.ID;
-				console.log(data.ID);
-				// this.report.DESCRIPTION = data.DESCRIPTION;
-				// this.report.STATEDesc = data.STATEDesc;
-				// this.report.REPORTNUM = data.REPORTNUM;
+				this.dataid = data;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

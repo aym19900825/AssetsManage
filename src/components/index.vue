@@ -514,6 +514,7 @@ export default {
 						});
 			},
 		},
+
 		mounted(){
 			//获取全局的承检单位
 			this.getcjdw();

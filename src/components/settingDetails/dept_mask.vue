@@ -686,73 +686,75 @@
 				var _this = this;
 				this.$refs.adddeptForm.validate((valid) => {
 		          if (valid) {
-		          	_this.adddeptForm.status=((_this.adddeptForm.status=="1"||_this.adddeptForm.status=='活动') ? '1' : '0');
-					var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
-					console.log(url);
-					this.$axios.post(url, {
-						address: this.adddeptForm.address,
-						children: this.adddeptForm.children,
-						code: this.adddeptForm.code,
-						sort: this.adddeptForm.sort,//排序
-						createTime: this.adddeptForm.createTime,
-						createUser: this.adddeptForm.createUser,
-						createbyName: this.adddeptForm.createbyName,
-						del_flag: this.adddeptForm.del_flag,
-						depttype: this.adddeptForm.depttype,
-						depttypeName: this.adddeptForm.depttypeName,
-						email: this.adddeptForm.email,
-						simplename: this.adddeptForm.simplename,
-						fullname: this.adddeptForm.fullname,//机构名称
-						id: this.adddeptForm.id,
-						leaderName: this.adddeptForm.leaderName,
-						pid:this.adddeptForm.pid,
-						parent:this.adddeptForm.parent,
-						pName: this.adddeptForm.pName,
-						status: this.adddeptForm.status,
-						telephone: this.adddeptForm.telephone,
-						type: this.adddeptForm.type,//机构属性
-						typeName: this.adddeptForm.typeName,
-						// updateTime: this.adddeptForm.updateTime,
-						// updateUser: this.adddeptForm.updateUser,
-						// updatebyName:this.adddeptForm.updatebyName,
-					}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						// console.log(res)
-						console.log(this.adddeptForm.fullname);
-						console.log(this.adddeptForm.pName);
-						if (this.adddeptForm.fullname==this.adddeptForm.pName){
+					  if (this.adddeptForm.fullname==this.adddeptForm.pName){
 							this.$message({
 								message: '上级机构不能选自己',
 								type: 'warning'
 							});
 						} else{
-							if(res.data.resp_code == 0) {
+							var url = _this.basic_url + '/api-user/depts/saveOrUpdate';
+							console.log(url);
+							this.$axios.post(url, {
+								address: this.adddeptForm.address,
+								children: this.adddeptForm.children,
+								code: this.adddeptForm.code,
+								sort: this.adddeptForm.sort,//排序
+								createTime: this.adddeptForm.createTime,
+								createUser: this.adddeptForm.createUser,
+								createbyName: this.adddeptForm.createbyName,
+								del_flag: this.adddeptForm.del_flag,
+								depttype: this.adddeptForm.depttype,
+								depttypeName: this.adddeptForm.depttypeName,
+								email: this.adddeptForm.email,
+								simplename: this.adddeptForm.simplename,
+								fullname: this.adddeptForm.fullname,//机构名称
+								id: this.adddeptForm.id,
+								leaderName: this.adddeptForm.leaderName,
+								pid:this.adddeptForm.pid,
+								parent:this.adddeptForm.parent,
+								pName: this.adddeptForm.pName,
+								status: this.adddeptForm.status,
+								telephone: this.adddeptForm.telephone,
+								type: this.adddeptForm.type,//机构属性
+								typeName: this.adddeptForm.typeName,
+								// updateTime: this.adddeptForm.updateTime,
+								// updateUser: this.adddeptForm.updateUser,
+								// updatebyName:this.adddeptForm.updatebyName,
+							}).then((res) => {
+								//resp_code == 0是后台返回的请求成功的信息
+								 console.log(res)
+								// console.log(this.adddeptForm.fullname);
+								// console.log(this.adddeptForm.pName);
+								
+									if(res.data.resp_code == 0) {
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										if(parameter=="Update"){
+											this.$emit('request');
+											this.show = false;
+										}else{
+											this.$emit('reset');
+											this.show = true;
+										}
+										this.$refs["adddeptForm"].resetFields();//清空验证							 
+									}
+								// }
+							}).catch((err) => {
+								console.log(err);
 								this.$message({
-									message: '保存成功',
-									type: 'success'
+									 message: 保存,
+									type: 'warning'
 								});
-								if(parameter=="Update"){
-									this.$emit('request');
-									this.show = false;
-								}else{
-									this.$emit('reset');
-									this.show = true;
-								}
-								this.$refs["adddeptForm"].resetFields();//清空验证							 
-							}
-						}
-					}).catch((err) => {
-						this.$message({
-							 message: err.resp_msg,
-							type: 'warning'
-						});
-					});
-		          } else {
-						this.show = true;
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
+							});
+						    }
+						} else {
+								this.show = true;
+								this.$message({
+									message: '未填写完整，请填写',
+									type: 'warning'
+								});
 					}
 		        });
 				

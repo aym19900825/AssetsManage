@@ -153,7 +153,7 @@
 				</div>
 			</div>
 			<user ref="userchild" @executer="executer"></user>
-            <usergroup ref="groupchild"></usergroup>
+            <usergroup ref="groupchild" @group="group"></usergroup>
 		</div>
 	</div>
 </template>
@@ -237,7 +237,8 @@
 			   this.$refs.userchild.visible(); 
 			},
 			//
-			addusergroup(){
+			addusergroup(index){
+				this.index=index;
 				this.$refs.groupchild.visible(); 
 			},
 			//添加显示弹窗
@@ -264,6 +265,9 @@
 			},
 			executer:function(executer){
 				this.bigtitle[this.index].executer=executer;
+			},
+			group:function(group){
+				this.bigtitle[this.index].group=group;
 			},
 			//点击关闭按钮
 			close() {

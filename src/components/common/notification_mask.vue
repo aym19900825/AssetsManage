@@ -464,7 +464,7 @@
 					</el-table-column>
 					<el-table-column label="姓名" sortable width="200px" prop="nickname">
 					</el-table-column>
-					<el-table-column label="机构" sortable width="200px" prop="deptName">
+					<el-table-column label="机构" sortable width="200px" prop="deptIdDesc">
 					</el-table-column>
 					<el-table-column label="公司" sortable prop="companyName">
 					</el-table-column>
@@ -1348,17 +1348,17 @@
 					var params = {
 						page: this.page.currentPage,
 						limit: this.page.pageSize,
-
 						deptId: this.searchList.deptId,
 						nickname: this.searchList.nickname,
 						username: this.searchList.username,
 					}
-					var url = this.basic_url + '/api-user/users/usersByDept?deptId='+this.dataInfo.CJDW;
+					var url = this.basic_url + '/api-user/users/findUsersByDept/'+this.dataInfo.CJDW;
 					this.$axios.get(url, {
 						params: params
 					}).then((res) => {
 						this.page.totalCount = res.data.count;
-						this.gridDataList = res.data.data;
+					  console.log(res.data);
+						this.gridDataList = res.data;
 						this.loading = false;
 					});
 					this.dialogVisible = true;	
@@ -1421,10 +1421,12 @@
 				    var url=this.basic_url + '/api-apps/app/workNot/operate/createInspectProxy?ID=' + dataid+'&DETECTIONTYPE=2';
 					this.$axios.get(url, {}).then((res) => {
 						if(res.data.resp_code == 0) {
+							this.show=false;
 							this.$message({
 								message: '生成检测委托书成功',
 								type: 'success'
 							});
+							
 						}else{
 							this.$message({
 							message: '已经生成检测委托书，请勿重复生成',

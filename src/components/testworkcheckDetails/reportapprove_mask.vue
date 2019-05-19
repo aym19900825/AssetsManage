@@ -237,6 +237,7 @@
 					STATEDesc:'',
 					V_NAME:'',//委托单位
 					DETECTIONTYPE:'',//检测类型
+					DETECTIONTYPEDesc:'',//检测类型描述
 					ENTERBY:'',//提交人
 					ENTERBYDesc:'',//提交人描述
 					ENTERDATE:'',//提交时间
@@ -297,8 +298,8 @@
 			},
 			//生成的报告文件列表
 			detailgetData(){
-				// console.log('detailgetData');
-				var url = this.basic_url +'/api-apps/app/reportApprove/' +this.dataid;
+				console.log(this.dataid);
+				var url = this.basic_url +'/api-apps/app/reportApprove/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.report = res.data;
 					console.log(res);
@@ -359,7 +360,7 @@
 			},
 			//这是查看
 			view(data) {
-				this.dataid = data;
+				this.dataid = data.ID;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

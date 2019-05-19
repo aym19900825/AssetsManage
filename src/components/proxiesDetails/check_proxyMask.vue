@@ -103,7 +103,7 @@
 												:fetch-suggestions="querySearchAsync" 
 												@select="handleSelect"
 												placeholder="请输入内容"
-                        :disabled="specialedit" >
+                        :disabled="specialedit" style="width:100%">
 												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()" :disabled="specialedit"></el-button>
 											</el-autocomplete>
                       </el-form-item>

@@ -64,7 +64,7 @@
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="检测类型" width="140" sortable prop="DETECTIONTYPE" v-if="checkedName.indexOf('检测类型')!=-1">
+								<el-table-column label="检测类型" width="140" sortable prop="DETECTIONTYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
@@ -144,7 +144,7 @@
 						prop: 'V_NAME'
 					},{
 						label: '检测类型',
-						prop: 'DETECTIONTYPE'
+						prop: 'DETECTIONTYPEDesc'
 					},{
 						label: '流程状态',
 						prop: 'STATE'
@@ -279,7 +279,7 @@
 			},
 			//查看
 			view(data) {
-				console.log(data);
+				// console.log(data);
 				this.$refs.reportapprove.view(data);
 			},
 			//高级查询

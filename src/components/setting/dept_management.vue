@@ -271,8 +271,8 @@
 			},
 			//查看
 			view(data) {
-			 	this.adddeptForm = data;
-				this.$refs.child.view();
+			 	// this.adddeptForm = data;
+				this.$refs.child.view(data.id);
 			},
 			tableControle(data){//控制表格列显示隐藏
 			  this.checkedName = data;
@@ -358,8 +358,8 @@
 					});
 					return;
 				} else {
-					this.adddeptForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					// this.adddeptForm = this.selMenu[0]; 
+					this.$refs.child.detail(this.selMenu[0].id);
 				}
 			},
 			//高级查询

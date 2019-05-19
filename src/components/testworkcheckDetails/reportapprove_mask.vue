@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="report.DETECTIONTYPE" :disabled="true">
+											<el-input v-model="report.DETECTIONTYPEDesc" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>

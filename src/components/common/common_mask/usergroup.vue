@@ -65,7 +65,7 @@
                 loading: false,
                 page: {
 					currentPage: 1,
-					pageSize: 20,
+					pageSize: 10,
 					totalCount: 0
 				},
 				searchList: {
@@ -108,9 +108,11 @@
             },
             sizeChange(val) {
 				this.page.pageSize = val;
+				this.visible();
 			},
 			currentChange(val) {
 				this.page.currentPage = val;
+				this.visible();
             },
             //表头居中
 			rowClass({ row, rowIndex}) {

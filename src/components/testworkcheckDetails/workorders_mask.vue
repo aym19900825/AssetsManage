@@ -22,7 +22,7 @@
 						<div class="text-center" v-show="viewtitle">
 							<span v-if="this.STATE!='16'" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id"><i class="icon-edit-3"></i>审核</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'&&this.username==this.$store.state.currentuser.username||this.$store.state.currentuser.id==this.MASTER_INSPECTOR"><i class="icon-edit-3"></i>审核</el-button>
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button> -->
 								<!-- <el-button class="approval" type="success" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button> -->
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.STATE!=2"><i class="icon-edit-3"></i>审批</el-button> -->
@@ -1766,7 +1766,16 @@
 				this.$axios.get(url, {}).then((res) => {
 					console.log(res);
 					this.MASTER_INSPECTOR=parseInt(res.data.MASTER_INSPECTOR);//当前责任人ID
+					console.log(res.data);
+					console.log(res.data.MASTER_INSPECTOR);
 					this.STATE=parseInt(res.data.STATE);//当前流程状态
+					var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
+						this.$axios.get(url, {}).then((res) => {
+							var resullt=res.data.datas;
+							this.Executorsid==res.data.datas;
+							console.log(res.data.datas);
+							console.log(res.data.datas.id);
+						});
 						if(!!res.data.WORKORDER_DATA_TEMPLATEList[0]){
 								this.isTogether=parseInt(res.data.WORKORDER_DATA_TEMPLATEList[0].ISTOGETHER);
 								this.isshow=true;//判断成果文件【确认成果文件通过、回退成果文件】是否显示
@@ -1855,7 +1864,6 @@
 			},
 			//这是查看
 			view(dataid) {
-				
 				this.btnshow = true;//显示报告提交按钮
 				this.dataid=dataid;	
 				this.modifytitle = false;
@@ -1866,6 +1874,7 @@
 				this.edit = true;
 				this.noedit = true;
 				this.detailgetData();
+				
 				//判断启动流程和审批的按钮是否显示
 				console.log(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid);
 				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
@@ -1895,7 +1904,9 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
+								this.username==users;
 								// console.log("users----"+users);
+								console.log(this.username);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;

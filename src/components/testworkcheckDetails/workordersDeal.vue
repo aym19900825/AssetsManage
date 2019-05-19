@@ -453,7 +453,6 @@
 						return item.MEMO!=''
 					});
 				}
-
 				//当检测项目或者分包项目不为空时，必须上传成果文件
 				if(fileList.length == 0){
 					fileFlag = false;

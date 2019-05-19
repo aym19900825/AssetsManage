@@ -212,7 +212,15 @@
                   <el-row>
                     <el-col :span="8">
                       <el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
-                        <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit"></el-input>
+                        <!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit"></el-input> -->
+                        <el-select v-model="dataInfo.ITEM_STATUS" filterable placeholder="请选择" style="width:100%;">
+													<el-option
+														v-for="item in itemstateoptions"
+														:key="item.id"
+														:label="item.name"
+														:value="item.code">
+													</el-option>
+												</el-select>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -274,8 +282,11 @@
                       </el-form-item>
                     </el-col>
                   </el-row>
-                  <el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="200px">
+                  <el-form-item label="抽样方案" prop="REMARKS" label-width="200px">
                     <el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
+                  </el-form-item>
+                  <el-form-item label="判定依据" prop="JUDGE" label-width="200px">
+                    <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input>
                   </el-form-item>
                 </el-collapse-item>
                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
@@ -1193,6 +1204,7 @@ export default {
         }
       },
       approvingData: {},
+      itemstateoptions:[],//样品状态
       loading: false,
       loadSign: true, //加载
       commentArr: {},
@@ -1234,7 +1246,8 @@ export default {
         PAYMENT_METHOD: "", //付款方式
         COMPDATE: "",
         COMPMODE: "", //完成方式
-        REMARKS: "",
+        REMARKS: "",//抽样方案
+        JUDGE:"",//判定依据
         V_NAME: "", //委托方名称名称
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
@@ -1371,7 +1384,7 @@ export default {
           }
         ], //产品名称
         ITEM_NAME: [
-          { required: false, validator: this.Validators.isSpecificKey }
+          { required: true, validator: this.Validators.isSpecificKey }
         ], //样品名称
         ITEM_QUALITY: [{ required: true, message: "必填", trigger: "blur" }], //数量
         PAYMENT_METHOD: [
@@ -1382,9 +1395,11 @@ export default {
           { required: true, message: "必填", trigger: "change" }
         ], //检后处理
         REMARKS: [
-          { required: true, message: "必填", trigger: "blur" },
-          { trigger: "blur", validator: this.Validators.isSpecificKey }
-        ], //抽样方案/判定依据
+          { required: true, message: "必填", trigger: "blur",validator: this.Validators.isSpecificKey}
+        ], //抽样方案
+        JUDGE : [
+          { required: true, message: "必填", trigger: "blur",validator: this.Validators.isSpecificKey}
+        ],// 判定依据
         COMPDATE: [{ required: true, message: "必填", trigger: "blur" }], //完成日期
         REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur" }], //交委托方分数
         REPORT_MODE: [{ required: true, message: "必选", trigger: "change" }], //发送方式
@@ -1757,7 +1772,8 @@ export default {
         PAYMENT_METHOD: "", //付款方式
         COMPDATE: "",
         COMPMODE: "正常", //完成方式
-        REMARKS: "",
+        REMARKS: "",//抽样方案
+        JUDGE:"",//判定依据
         V_NAME: "", //委托方名称名称
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
@@ -3090,14 +3106,23 @@ export default {
           // 	type: 'erro'
           // });
         });
-    }
+    },
+    //样品状态
+      ITEM_STATUS(){
+        var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=item_accept_status';
+				this.$axios.get(url, {}).then((res) => {
+          this.itemstateoptions = res.data;
+				}).catch((wrong) => {
+				})
+      },
   },
   mounted() {
     this.getCompany();
     this.getuser();
     this.RVENDORSelect();
 		this.weituo();
-		this.logo();
+    this.logo();
+    this.ITEM_STATUS();//样品状态
   }
 };
 </script>

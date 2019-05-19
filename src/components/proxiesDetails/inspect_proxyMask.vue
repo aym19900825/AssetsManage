@@ -154,7 +154,15 @@
 										<el-row>
 											<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit" ></el-input>
+													<!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit" ></el-input> -->
+													<el-select v-model="dataInfo.ITEM_STATUS" filterable placeholder="请选择" style="width:100%;">
+													<el-option
+														v-for="item in itemstateoptions"
+														:key="item.id"
+														:label="item.name"
+														:value="item.code">
+													</el-option>
+												</el-select>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -210,9 +218,12 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案/判定依据" prop="REMARKS" label-width="200px">
-											<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
-										</el-form-item>
+										<el-form-item label="抽样方案" prop="REMARKS" label-width="200px">
+                    <el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
+                  </el-form-item>
+                  <el-form-item label="判定依据" prop="JUDGE" label-width="200px">
+                    <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input>
+                  </el-form-item>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -838,7 +849,8 @@
 					PAYMENT_METHOD:'',//付款方式
 					COMPDATE:'',
 					COMPMODE:'',//完成方式
-					REMARKS:'',
+					REMARKS:'',//抽样方案
+					JUDGE:'',//判定依据
 					V_NAME:'',//委托方名称名称
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
@@ -873,6 +885,7 @@
 					],
 				},
 				gridDataList: [], //彈出框的數據
+				itemstateoptions:[],//样品状态
 				page: {
 					currentPage: 1,
 					pageSize: 20,
@@ -935,15 +948,17 @@
 					R_VENDORDesc: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//承检单位
 					P_NAMEDesc: [{required: false, validator: this.Validators.isSpecificKey}],//生产单位名称
 					PRODUCT: [{required: false, trigger: 'change', validator: this.Validators.isSpecificKey}],//产品名称
-					ITEM_NAME: [{required: false,  validator: this.Validators.isSpecificKey}],//样品名称
+					ITEM_NAME: [{required: true,  validator: this.Validators.isSpecificKey}],//样品名称
 					ITEM_QUALITY: [{ required: true, message: '必填', trigger: 'blur'}],//数量
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
-						{required: true, message: '必填', trigger: 'blur'},
-						{trigger: 'blur', validator:this.Validators.isSpecificKey}
-					],//抽样方案/判定依据
+						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
+					],//抽样方案
+					JUDGE:[
+						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
+					],//判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
@@ -1261,7 +1276,8 @@
 					PAYMENT_METHOD:'',//付款方式
 					COMPDATE:'',
 					COMPMODE:'正常',//完成方式
-					REMARKS:'',
+					REMARKS:'',//抽样方案
+					JUDGE:'',//判定依据
 					V_NAME:'',//委托方名称名称
 					V_ADDRESS:'',//委托方名称地址
 					V_ZIPCODE:'',
@@ -2373,13 +2389,21 @@
 					 }
 				}
 			},
+			//样品状态
+      ITEM_STATUS(){
+        var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=item_accept_status';
+				this.$axios.get(url, {}).then((res) => {
+          this.itemstateoptions = res.data;
+				}).catch((wrong) => {
+				})
+      },
 			
 		},
 		mounted() {
 			this.getCompany();
 			this.getuser();
 			this.RVENDORSelect();
- 
+			this.ITEM_STATUS();
 		},
 
 	}

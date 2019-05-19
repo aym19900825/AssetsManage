@@ -247,12 +247,13 @@
 					TYPE: '',
 					STATUS: '活动',
 					VERSION: '1',
-					DEPARTMENT: '',
+					DECRIPTION: '',
 					ENTERBY: '',
 					ENTERDATE: '',
 					CHANGEBY: '',
 					CHANGEDATE: ''
 				};
+				console.log(123);
 				if(this.$refs['CATEGORY'] !== undefined) {
 					this.$refs['CATEGORY'].resetFields();
 				}

@@ -551,12 +551,8 @@ export default {
 			};
 		},
 		watch: {
-			url(){
-				var url = window.location.href;
-				console.log(url);
-				if(url.indexOf('index') != -1){
-						this.timer = setInterval(this.requestData(), 1000);//定时调用代办和已办的列表
-				}
+			completeList(){
+						this.timer = setInterval(this.requestData(), 30000);//定时调用代办和已办的列表
 			}	 
     },
 		beforeDestroy() {

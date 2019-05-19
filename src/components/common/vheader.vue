@@ -205,6 +205,14 @@ export default {
         this.getITEM_Roles();
         this.getTodoNumber();//待办工作
         this.getTodoFinish();//已完成
+    },
+    watch: {
+        toDoNumber(){
+            this.timer = setInterval(this.getTodoNumber(), 30000);//定时调用代办和已办的列表
+        }	 
+    },
+	beforeDestroy() {
+      clearInterval(this.timer);
     }
 }
 </script>

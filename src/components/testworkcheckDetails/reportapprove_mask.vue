@@ -326,7 +326,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
-				this.detailgetData();
+				// this.detailgetData();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.report.DEPTID = res.data.deptId;//传给后台机构id
 					this.report.CHANGEBY = res.data.id;
@@ -360,7 +360,9 @@
 			},
 			//这是查看
 			view(data) {
-				this.dataid = data.ID;
+				console.log(data);
+				this.dataid = data;
+				// console.log(this.dataid);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -598,7 +600,7 @@
 			},
 			//预览报告文件
 			readAuth(){
-				// this.detailgetData();
+				this.detailgetData();
             	var url = this.po_url+"/show?fileid=" + this.report.FILEID
 				+ '&userid=' +  this.userid
 				+ '&username=' + this.username

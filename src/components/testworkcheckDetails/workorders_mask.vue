@@ -20,9 +20,9 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.STATE!='16'" class="pr10">
+							<span v-if="this.STATE=='3'&&this.username==this.$store.state.currentuser.username" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'&&this.username==this.$store.state.currentuser.username||this.$store.state.currentuser.id==this.MASTER_INSPECTOR"><i class="icon-edit-3"></i>审核</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button> -->
 								<!-- <el-button class="approval" type="success" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='4'"><i class="icon-edit-3"></i> 确认接收</el-button> -->
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState!=='1'&&this.STATE!=2"><i class="icon-edit-3"></i>审批</el-button> -->
@@ -699,6 +699,8 @@
 											<el-form-item label="修改时间" prop="CHANGEDATE">
 												<el-input v-model="workorderForm.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
+											
+										<div>{{this.MASTER_INSPECTOR}}---{{this.$store.state.currentuser.id}}</div>
 										</el-col>
 									</el-row>
 								</el-collapse-item>
@@ -717,11 +719,11 @@
 							<div class="content-footer" v-show="this.STATE!='2'&&this.STATE!='3'&&this.STATE!='15'&&this.workorderForm.ISCHILDREN=='1'">
 								<el-button type="success" @click="checkchildlist">查看子任务单成果文件</el-button>
 							</div>
-							<div class="content-footer" v-show="isshow&&(this.STATE=='5'||this.STATE=='6'||this.STATE=='7'||this.STATE=='8')&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
+							<div class="content-footer" v-show="isshow&&this.STATE=='5'&&this.isTogether!='1'&&this.username==this.$store.state.currentuser.username">
 								<el-button type="primary" @click="submitPassed">确认成果文件通过</el-button>
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
-							<div class="content-footer" v-show="this.STATE=='0'&&this.workorderForm.ISCHILDREN=='1'&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
+							<div class="content-footer" v-show="isshow&&this.STATE=='0'&&this.workorderForm.ISCHILDREN==1&&this.username==this.$store.state.currentuser.username||this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 						<!-- </div> -->

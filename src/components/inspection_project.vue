@@ -23,16 +23,19 @@
 						
 					</el-col>
 					<el-col :span="7" class="text-center">
-						<!-- <el-form :inline="true" :model="formInline">
+						<el-form :inline="true" :model="formInline">
 							<el-form-item label="所属机构" prop="DEPTID">
 								<el-select v-model="formInline.DEPTID" placeholder="请选择" @change="requestData" :disabled="nameFlag">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
-								</el-select> -->
+								</el-select>
 								<!-- <el-select v-model="formInline.DEPTID" placeholder="请选择" v-else disabled @change="requestData">
 									<el-option v-for="(data,index) in Select_DEPTID" :key="index" :value="data.id" :label="data.fullname"></el-option>
 								</el-select> -->
-							<!-- </el-form-item>
-						</el-form> -->
+							</el-form-item>
+						</el-form>
+						
+					</el-col>
+					<el-col :span="9" class="text-left">
 						<el-upload
 							ref="upload"
 							class="upload"
@@ -45,9 +48,7 @@
 							:file-list="fileList">
 								<el-button type="primary" size="small" round><i class="icon-upload-cloud"></i> 导入数据</el-button>
 							</el-upload>
-					</el-col>
-					<el-col :span="9" class="text-left">
-						<el-dropdown size="small">
+						<!-- <el-dropdown size="small">
 									<el-button type="primary" size="small" round>
 										<i class="icon-inventory-line-callin"></i> 导入数据 <i class="el-icon-arrow-down el-icon--right"></i>
 									</el-button>
@@ -67,7 +68,7 @@
 											</el-upload>
 										</el-dropdown-item>
 									</el-dropdown-menu>
-								</el-dropdown>
+								</el-dropdown> -->
 					</el-col>
 				</el-row>
 				<!--所属机构 End-->

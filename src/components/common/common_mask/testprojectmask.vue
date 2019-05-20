@@ -270,25 +270,7 @@
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-            if(this.page.currentPage >= totalPage){
-                    this.loadSign = false
-            }else{
-                this.loadSign=true
-            }
-            this.commentArr[this.page.currentPage]=res.data.data
-            let newarr=[]
-            for(var i = 1; i <= totalPage; i++){
-            
-                if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-                    
-                    for(var j = 0; j < this.commentArr[i].length; j++){
-                        newarr.push(this.commentArr[i][j])
-                    }
-                }
-            }
-            
-						this.projectList = newarr;
-						console.log(this.projectList);
+			this.projectList = res.data.data;
         }).catch((wrong) => {})
 	},
 	determine(){

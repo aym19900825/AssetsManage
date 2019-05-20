@@ -149,6 +149,7 @@
 		loadSign:true,//加载
 		commentArr:{},
 		selUser: [],//接勾选的值
+		val2:'',//用于区分判定方案和检测依据
 		page: {
 			currentPage: 1,
 			pageSize: 20,
@@ -235,24 +236,31 @@
 		this.resetBasisInfo();
 	},
 	//页面显示
-    basislead(value){
-		this.PRO_NUM = value.PRO_NUM;//产品编号
-		this.P_NUM = value.P_NUM;//产品类别编号
-		this.S_NUM=value.S_NUM;
-		this.SS_NUM=value.SS_NUM;
-		// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
-		// 	this.basistable = value[1];//检测依据表格中已有的数据
-		// 	var basissnum = [];
-		// 	for(var i = 0;i<this.basistable.length;i++){
-		// 		basissnum.push(this.basistable[i].S_NUM);
-		// 	}
-		// 	this.basissnums = basissnum.toString(',');
-		// }else{
-		// 	this.basissnums = '';
-		// }
-		this.requestData();//渲染数据
-		this.searchList.DEPTID=this.$store.state.currentcjdw[0].fullname;
-		this.dialogVisible = true;
+    basislead(val1,val2){
+		this.val2=val2;
+		if(!!val2){
+			this.requestData(val2);//渲染数据
+			this.dialogVisible = true;
+		}else{
+			this.PRO_NUM = val1.PRO_NUM;//产品编号
+			this.P_NUM = val1.P_NUM;//产品类别编号
+			this.S_NUM=val1.S_NUM;
+			this.SS_NUM=val1.SS_NUM;
+			// if(value[1]!=''&&value[1]!=null&&value[1]!=undefined){
+			// 	this.basistable = value[1];//检测依据表格中已有的数据
+			// 	var basissnum = [];
+			// 	for(var i = 0;i<this.basistable.length;i++){
+			// 		basissnum.push(this.basistable[i].S_NUM);
+			// 	}
+			// 	this.basissnums = basissnum.toString(',');
+			// }else{
+			// 	this.basissnums = '';
+			// }
+			this.requestData();//渲染数据
+			this.searchList.DEPTID=this.$store.state.currentcjdw[0].fullname;
+			this.dialogVisible = true;
+		}
+		
     },
     addbasis(){
         var selData = this.selUser;
@@ -284,10 +292,16 @@
 				this.selUser[i].ID = '';
                 list.push(this.selUser[i]);
 			}
-            this.$emit('testbasis',list);
-			// this.$emit('testbasisnum',basisnums);
-			// this.$emit('testbasisname',basisnames);
-			// this.$emit('testbasisprover',provers);
+			if(!!this.val2){
+				var S_NAME=this.selUser[0].S_NAME;
+                this.$emit('testbasisname',S_NAME);
+			}else{
+				this.$emit('testbasis',list);
+				// this.$emit('testbasisnum',basisnums);
+				// this.$emit('testbasisname',basisnames);
+				// this.$emit('testbasisprover',provers);
+			}
+            
             this.resetBasisInfo();
 		}
 	},
@@ -298,7 +312,7 @@
 		this.page.currentPage = 1;//页码信息重置
 		this.page.pageSize = 10;//页码信息重置
 	},
-    searchinfo(index) {
+    searchinfo() {
         this.page.currentPage = 1;
         this.page.pageSize = 10;
         this.requestData();
@@ -312,10 +326,8 @@
             S_NAME: this.searchList.S_NAME,
             S_ENGNAME:this.searchList.S_ENGNAME,
             VERSION: this.searchList.VERSION,
-            // DEPTID: this.searchList.DEPTID,
             RELEASETIME: this.searchList.RELEASETIME,
             STARTETIME: this.searchList.STARTETIME,
-            // STATUS: this.searchList.STATUS,
 		};
 		// var url = this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.productnum+'&S_NUM_where_not_in='+this.basissnums;
 		var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_not_in='+this.S_NUM;
@@ -325,23 +337,7 @@
             this.page.totalCount = res.data.count;	
             //总的页数
             let totalPage=Math.ceil(this.page.totalCount/this.page.pageSize)
-            if(this.page.currentPage >= totalPage){
-                    this.loadSign = false
-            }else{
-                this.loadSign=true
-            }
-            this.commentArr[this.page.currentPage]=res.data.data
-            let newarr=[]
-            for(var i = 1; i <= totalPage; i++){
-            
-                if(typeof(this.commentArr[i])!='undefined' && this.commentArr[i].length>0){
-                    
-                    for(var j = 0; j < this.commentArr[i].length; j++){
-                        newarr.push(this.commentArr[i][j])
-                    }
-                }
-            }
-            this.standardList = newarr;
+            this.standardList = res.data.data;
         }).catch((wrong) => {})
 	},
 	determine(){

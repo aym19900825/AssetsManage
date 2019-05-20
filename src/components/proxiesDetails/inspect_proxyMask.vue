@@ -204,7 +204,7 @@
 								<el-collapse-item title="检验" name="3">
 									<el-row>
 									<el-col :span="8">
-										<el-form-item label="完成日期" prop="COMPDATE" label-width="140px">
+										<el-form-item label="完成日期" prop="COMPDATE" label-width="110px">
 											<el-date-picker v-model="dataInfo.COMPDATE" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit" :picker-options="pickerOptions1">
 											</el-date-picker>
 										</el-form-item>
@@ -218,12 +218,24 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案" prop="REMARKS" label-width="200px">
-                    <el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
-                  </el-form-item>
-                  <el-form-item label="判定依据" prop="JUDGE" label-width="200px">
-                    <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input>
-                  </el-form-item>
+									<el-row>
+										<el-form-item label="抽样方案" prop="REMARKS" label-width="110px">
+                    	<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
+                  	</el-form-item>
+									</el-row>
+									<el-row>
+										<el-form-item label="判定依据" prop="JUDGE" label-width="110px">
+											<!-- <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input> -->
+                      <el-autocomplete 
+												v-model="dataInfo.JUDGE" 
+												:fetch-suggestions="querySearchAsync2" 
+												@select="handleSelect2"
+												placeholder="请输入内容"
+                        :disabled="noedit" style="width:100%">
+												<el-button slot="append" icon="el-icon-search" @click="basisleadbtn('main')" :disabled="noedit"></el-button>
+											</el-autocomplete>
+										</el-form-item>
+									</el-row>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName" @tab-click="handleClick">
@@ -813,6 +825,7 @@
 				approvingData:{},
 				loading: false,
 				loadSign:true,//加载
+				determinebasicList:[],
 				commentArr:{},
 				basic_url: Config.dev_url,
 				po_url: Config.po_url,
@@ -1739,7 +1752,7 @@
 				//样品没有值的时候
 				if(val[0]=='falg'){
 				// this.dataInfo.P_NAME='';
-				this.dataInfo.ITEM_NAME='';
+				// this.dataInfo.ITEM_NAME='';
 				this.dataInfo.ITEM_MODEL='';
 				this.dataInfo.ITEM_QUALITY='';
 				this.dataInfo.ITEM_STATUS='';
@@ -1799,7 +1812,7 @@
 			},
 			//分包要求检验依据名称
 			testbasisname(value){
-				this.deptindex.BASIS = value;
+				this.dataInfo.JUDGE = value;
 			},
 			//检测依据编号+版本
 			testbasisprover(value){
@@ -1836,43 +1849,44 @@
 				}
 			},
 			//检验依据放大镜
-			basisleadbtn(val){
-				var snum=this.dataInfo.INSPECT_PROXY_BASISList;
-				var basislist=[];
-				for(var i=0;i<snum.length;i++){
-          	basislist.push(snum[i].S_NUM);
-				}
-				var basisnums=basislist.join(',');
-				this.inistinspectproxy=(this.dataInfo.INSPECT_PROXY_BASISList).join(',');
-				this.deptindex = val;
-				//子表
-				if(val == 'maintable'){
-					if(this.dataInfo.PRO_NUM == null || this.dataInfo.PRO_NUM == '' || this.dataInfo.PRO_NUM == undefined){
-						this.$message({
-							message: '请先选择产品名称',
-							type: 'warning'
-						});
-					}else{
-						var data={
-							P_NUM:this.dataInfo.P_NUM,
-							PRO_NUM:this.dataInfo.PRO_NUM,
-							S_NUM:basisnums
-						}
-						this.$refs.standardchild.basislead(data);
-						this.main = 'main';
-					}
-				}else{
-					if(this.deptindex.PRO_NUM == null || this.deptindex.PRO_NUM == '' || this.deptindex.PRO_NUM == undefined){
-						this.$message({
-							message: '请先选择产品名称',
-							type: 'warning'
-						});
-					}else{
-						this.$refs.standardchild.basislead(this.deptindex.PRO_NUM);
-						this.main = 'table';
-					}
-				}
-			},
+			basisleadbtn(val) {
+      console.log(this.dataInfo.PRO_NUM);
+      var snum = this.dataInfo.INSPECT_PROXY_BASISList;
+      var basislist = [];
+      for (var i = 0; i < snum.length; i++) {
+        basislist.push(snum[i].S_NUM);
+      }
+      var basisnums = basislist.join(",");
+      this.inistinspectproxy = this.dataInfo.INSPECT_PROXY_BASISList.join(",");
+      this.deptindex = val;
+      //子表
+      if (val == "maintable") {
+        if (!!this.dataInfo.PRO_NUM ) {
+          var data = {
+            P_NUM: this.dataInfo.P_NUM,
+            PRO_NUM: this.dataInfo.PRO_NUM,
+            S_NUM: basisnums
+          };
+          this.$refs.standardchild.basislead(data);
+          // this.main = "main";
+        } else {
+          this.$message({
+            message: "请先选择产品名称",
+            type: "warning"
+          });
+        }
+      } else {
+        if (!!this.dataInfo.PRO_NUM) {
+          this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM,'main');
+          // this.main = "table";
+        } else {
+          this.$message({
+            message: "请先选择产品名称",
+            type: "warning"
+          });
+        }
+      }
+    },
 			//检验依据列表赋值
 			addbasis(val){
 				for(var i = 0;i<val.length;i++){
@@ -2396,7 +2410,42 @@
           this.itemstateoptions = res.data;
 				}).catch((wrong) => {
 				})
-      },
+			},
+			//判定依据
+    determinebasic(){
+      var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.dataInfo.PRO_NUM+'&NUM_wheres='+this.dataInfo.P_NUM+'&S_NUM_where_not_in='+this.dataInfo.S_NUM;
+	    this.$axios.get(url, {}).then((res) => {
+        console.log(res.data.data);
+            this.determinebasicList = res.data.data;
+            let datas=res.data.data;
+            for(let i=0;i<datas.length;i++){
+              this.determinebasiname.push(datas[i].S_NAME);
+					  }
+      }).catch((wrong) => {})
+    },
+    querySearchAsync2(queryString, callback) {
+			var list = [{}];
+			let param = {
+						pageNum: 1,
+						pageSize: 9999,
+						key: queryString
+			} 
+			this.determinebasiname.forEach(function(item,i){
+          if(item.indexOf(queryString) != -1){
+            list.push({"value":item});   
+          }
+      })
+      if(!queryString){
+          list = list.splice(0,7);
+      }
+      callback(list);
+    },
+    accountSearch2(){
+
+    },
+    handleSelect2(){
+      
+    },
 			
 		},
 		mounted() {

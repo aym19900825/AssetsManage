@@ -913,7 +913,7 @@
 						{ trigger: 'blur', validator: this.Validators.isWorknumber}
 					],//工作任务单编号
 					ITEM_NAME: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
-					ITEM_MODEL: [{ required: true, trigger: 'blur', validator: this.Validators.isSpecificKey}],//规格型号
+					ITEM_MODEL: [{ required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//规格型号
 					ITEMNUM: [{ required: true, trigger: 'blur', validator: this.Validators.isWorknumber}],//样品编号
 					// ITEM_STATU: [{ required: true, message: '不能为空', trigger: 'blur' }],
 					ITEM_STATUS: [

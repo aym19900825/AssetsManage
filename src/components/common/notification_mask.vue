@@ -421,7 +421,7 @@
 						<el-button type="success" @click="save('Submit')">保存并继续</el-button>
 						<el-button @click="close">取消</el-button>
 					</div>
-					<div class="content-footer" v-show="views&&this.dataInfo.STATE == 3">
+					<div class="content-footer" v-show="views&&this.dataInfo.STATE == 6">
 						<el-button type="success" @click="buildcheck">生成检验委托书</el-button>
 						<el-button type="success" @click="buildtest">生成检测委托书</el-button>
 					</div>	

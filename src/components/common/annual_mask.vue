@@ -24,7 +24,7 @@
 								<el-collapse-item title="基本信息" name="1">
 									<el-row :gutter="5">
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="WORKPLAN.STATUSDesc" :disabled="true">
+											<el-input v-model="WORKPLAN.STATUSDesc" :disabled="edit">
 												<template slot="prepend">编辑状态</template>
 											</el-input>
 										</el-col>
@@ -141,7 +141,7 @@
 											<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="200px">
 												<template slot-scope="scope">
 													<!-- <el-form-item :prop="'worlplanlist.'+scope.$index + '.PRODUCT_TYPE'" :rules="{required: true, message: '请选择', trigger: 'change'}"> -->
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" :disabled="true" placeholder="请选择">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" :disabled="edit" placeholder="请选择">
 															<el-button slot="append" icon="el-icon-search" @click="addprobtn(scope.row)" :disabled="noedit"></el-button>
 														</el-input>
 														<span v-if="!scope.row.isEditing">{{scope.row.PRODUCT_TYPE}}</span>
@@ -151,7 +151,7 @@
 											<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="200px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'worlplanlist.'+scope.$index + '.ITEM_NAME'" :rules="{required: true, message: '请选择', trigger: 'change'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请选择" :disabled="true">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.ITEM_NAME" placeholder="请选择" :disabled="edit">
 															<el-button slot="append" icon="el-icon-search" @click="addproduct(scope.row)" :disabled="noedit"></el-button>
 														</el-input>
 														<span v-if="!scope.row.isEditing">{{scope.row.ITEM_NAME}}</span>
@@ -169,7 +169,7 @@
 											<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'worlplanlist.'+scope.$index + '.V_NAME'" :rules="{required: true, message: '请选择', trigger: 'change'}">
-														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请选择" :disabled="true">
+														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请选择" :disabled="edit">
 															<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
 														</el-input>
 														<span v-else>{{scope.row.V_NAME}}</span>
@@ -323,7 +323,7 @@
 													<el-table-column prop="P_NUM" label="项目编号" width="100">
 														<template slot-scope="scope">
 															<el-form-item :prop="'proTestList.'+scope.$index + '.P_NUM'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
-																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" :disabled="noedit|| scope.row.S_NUM"></el-input>
+																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_NUM" :disabled="noedit|| !!scope.row.S_NUM"></el-input>
 																<span v-else>{{scope.row.P_NUM}}</span>
 															</el-form-item>
 														</template>
@@ -331,7 +331,7 @@
 													<el-table-column prop="P_DESC" label="检验检测项目名称">
 														<template slot-scope="scope">
                                                             <el-form-item :prop="'proTestList.'+scope.$index + '.P_DESC'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
-                                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" :disabled="noedit || scope.row.S_NUM"></el-input>
+                                                                <el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.P_DESC" :disabled="noedit || !!scope.row.S_NUM"></el-input>
                                                                 <span v-else>{{scope.row.P_DESC}}</span>
                                                             </el-form-item>
 														</template>
@@ -992,12 +992,13 @@
 			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
+				//删除依据对应的项目与要求
 				if(TableName == 'WORLPLANLINE_BASIS'){
 					if(row.DEPTTYPE == '2'){
 						var projectList = this.proTestListForm.proTestList;
 						for (let i = projectList.length - 1; i >= 0; i--) {
 							if(projectList[i].S_NUM == row.S_NUM){
-								this.delPlan(i,projectList[i],'WORLPLANLINE_PROJECT','proTestList');
+								this.delPlan(i,projectList[i],'WORLPLANLINE_BASIS','proTestList');
 							}
 						}
 					}

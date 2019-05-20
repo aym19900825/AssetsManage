@@ -1139,10 +1139,10 @@
 				this.special=true;
 				this.detailgetData();
 				this.isEditing=false;
-
-				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
-					if(res.code.resp_code == 0){
-						switch(res.code.datas){
+        var url=this.basic_url+'/api-apps/app/workNot/flow/NodeId/'+this.dataid;
+				this.$axios.get(url, {}).then((res) => {
+					if(res.data.resp_code == 0){
+						switch(res.data.datas){
 							case 'cxlr':
 								this.nodeState = '1';
 								break;

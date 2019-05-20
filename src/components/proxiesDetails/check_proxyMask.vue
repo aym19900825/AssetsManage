@@ -213,7 +213,7 @@
                     <el-col :span="8">
                       <el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
                         <!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit"></el-input> -->
-                        <el-select v-model="dataInfo.ITEM_STATUS" filterable placeholder="请选择" style="width:100%;">
+                        <el-select v-model="dataInfo.ITEM_STATUS" filterable allow-create placeholder="请选择" style="width:100%;">
 													<el-option
 														v-for="item in itemstateoptions"
 														:key="item.id"

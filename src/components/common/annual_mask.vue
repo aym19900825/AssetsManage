@@ -1511,7 +1511,7 @@
 				var projects = !!this.proTestListForm.proTestList ? this.proTestListForm.proTestList : [];
 				var projectnums = [];
 				for (var j = 0; j < projects.length; j++) {
-					projects.push(projects[j].P_NUM);
+					projectnums.push(projects[j].P_NUM);
 				}
 				var data = {
 					page: this.page.currentPage,

@@ -229,7 +229,7 @@
 
 												    <el-table-column prop="FAX" label="传真" sortable width="150px">
 												       <template slot-scope="scope">
-																 <el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.FAX'" :rules="[{required: true, message: '不能为空', trigger: 'blur'},{trigger: 'blur', validator: Validators.isTelephone}]">
+																 <el-form-item :prop="'CUSTOMER_PERSONList.'+scope.$index + '.FAX'">
 												         	<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.FAX" placeholder="请输入内容"></el-input><span v-show="!scope.row.isEditing">{{scope.row.FAX}}</span>
 																 </el-form-item>
 															</template>

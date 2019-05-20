@@ -168,7 +168,7 @@
 											</el-table-column>
 											<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'worlplanlist.'+scope.$index + '.V_NAME'" :rules="{required: true, message: '请选择', trigger: 'change'}">
+													<el-form-item :prop="'worlplanlist.'+scope.$index + '.V_NAME'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请选择" :disabled="true">
 															<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
 														</el-input>
@@ -179,7 +179,7 @@
 
 											<el-table-column prop="CHECKCOST" label="检测费用" sortable width="120px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'worlplanlist.'+scope.$index + '.CHECKCOST'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
+													<el-form-item :prop="'worlplanlist.'+scope.$index + '.CHECKCOST'" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.CHECKCOST" placeholder="请输入" id="cost" @blur="toPrice(scope.row)"></el-input>
 														<span v-else id="costshow">{{scope.row.CHECKCOST}}</span>
 													</el-form-item>

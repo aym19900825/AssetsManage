@@ -3,7 +3,7 @@
     <div class="el-collapse-item pt10 pl10 pr10 pb10">
         <el-tabs v-model="activeName" @tab-click="handleClick" >
             <el-tab-pane v-for="(title,index) in bigtitle" :key="index" :label="bigtitle[index].title" name="first" v-if="bigtitle[index].title=='单据类'">
-                <el-tabs :tab-position="tabPosition" @tab-click="handleClick1" :style="styleHeight">
+                <el-tabs :tab-position="tabPosition" @tab-click="singleClick" :style="styleHeight">
                     <el-tab-pane v-for="item in bigtitle[index].list" :key='item.id' :label='item.code'>
                       <div class="pull-left" style="width:86%;">
                         <iframe :src="url" width="100%" :height="fullHeight" frameborder="0" scrolling="auto" overflow-x="auto"></iframe>
@@ -374,13 +374,29 @@ import tree_grid from '../../common/TreeGrid.vue'//树表格
 				}).catch((wrong) => {
 				});
       },
+      //单据的切换
+      singleClick(tab,event){
+        this.url="";
+        for(var i=0;i<this.reportList.length;i++){
+          if(this.reportList[i].code==tab.label){
+             var id=this.reportList[i].id;
+             var file=this.reportList[i].file
+          }
+        }
+        var token = sessionStorage.getItem('access_token');
+        var url=this.basic_url;
+        var pos = url.lastIndexOf(':');
+        url=url.substring(0,pos+1); 
+        this.url=url+"5300";
+        this.url = this.url+"/ureport/preview?_u=mysql:" +file+'&id='+ id+'&access_token='+token;
+      },
       //单据和统计的切换
       handleClick(){
        
       },
       handleClick1(tab,event) {
         this.src="";
-         this.pramList=[];//清空form表
+        this.pramList=[];//清空form表
         for(var i=0;i<this.reportsList.length;i++){
           if(this.reportsList[i].code==tab.label){
              var id=this.reportsList[i].id;

@@ -402,8 +402,19 @@
 					
 				}).catch((wrong) => {
 				})
-		    },
-		}
+			},
+			getRouterData() {
+				// 只是改了query，其他都不变
+					this.id = this.$route.query.bizId;
+					this.$refs.qualitysup.view(this.id);
+				},
+			
+			},
+			mounted() {
+				if(this.$route.query.bizId!=undefined){
+					this.getRouterData();
+				}
+			},
 	}
 </script>
 

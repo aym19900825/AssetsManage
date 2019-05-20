@@ -266,7 +266,6 @@ export default {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
 				}
-				console.log(123);
 				var url = this.basic_url + '/api-apps/app/flow/flow/todo';
 				this.$axios.get(url, {params: data}).then((res) => {
 					this.page.totalCount = res.data.count;

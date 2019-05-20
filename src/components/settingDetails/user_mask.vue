@@ -959,6 +959,11 @@
 					var roleId = this.user.roleId;
 					for(var i=0; i< roleId.length; i++){
 						roleId[i] =  parseInt(roleId[i]);
+					var url =this.basic_url +"/api-user/roles/" +roleId[i];
+						this.$axios.get(url, {}).then(res => {
+						var resullt = res.data;
+						this.selectData.push(resullt);
+          			});
 					}
 					this.show = true;
 				}).catch((err) => {

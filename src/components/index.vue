@@ -551,7 +551,9 @@ export default {
 		},
 		watch: {
 			completeList(){
-				this.timer = setInterval(this.requestData(), 300000);//定时调用代办和已办的列表
+				this.timer = setTimeout(function(){
+						this.requestData()
+					},30000);//定时调用代办和已办的列表
 			}	 
     },
 		beforeDestroy() {

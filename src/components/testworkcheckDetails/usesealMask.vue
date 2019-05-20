@@ -59,12 +59,11 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="委托书版本" prop="PROXY_VERSION">
-												<el-input v-model="USESEAL.PROXY_VERSION" :disabled="edit"></el-input>
+											<el-form-item label="委托书版本" prop="VERSION">
+												<el-input v-model="USESEAL.VERSION" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
-
 									
 									<el-row>
 										<el-col :span="8">
@@ -73,8 +72,8 @@
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="完成方式" prop="COMPMODEDesc">
-												<el-input v-model="USESEAL.COMPMODEDesc" :disabled="edit"></el-input>
+											<el-form-item label="完成方式" prop="COMPMODE">
+												<el-input v-model="USESEAL.COMPMODE" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -142,7 +141,7 @@
 										</el-col>
 									</el-row> -->
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="2" v-show="views">
+								<!-- <el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -170,7 +169,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</el-collapse-item>
+								</el-collapse-item> -->
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show="!addtitle">
@@ -335,7 +334,7 @@
                     ID:'',
                     WONUM:'',
                     PROXYNUM:'',
-                    PROXY_VERSION:'',
+                    VERSION:'',
                     USER:'',
                     USETIME:'',
                     DEPARTMENT:'',
@@ -612,7 +611,7 @@
 			},
 			appendver(value){
                 console.log(value);
-				this.USESEAL.PROXY_VERSION = value;
+				this.USESEAL.VERSION = value;
 			},
 			//点击搜索-用印人
             searchinfo() {
@@ -691,7 +690,7 @@
 					ID:'',
                     WONUM:'',
                     PROXYNUM:'',
-                    PROXY_VERSION:'',
+                    VERSION:'',
                     USER:'',
                     USETIME:'',
                     DEPARTMENT:'',

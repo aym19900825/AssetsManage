@@ -59,8 +59,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="委托书版本" prop="PROXY_VERSION">
-												<el-input v-model="report.PROXY_VERSION" :disabled="noedit"></el-input>
+											<el-form-item label="委托书版本" prop="VERSION">
+												<el-input v-model="report.VERSION" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -71,8 +71,8 @@
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="完成方式" prop="COMPMODEDesc">
-												<el-input v-model="report.COMPMODEDesc" :disabled="true"></el-input>
+											<el-form-item label="完成方式" prop="COMPMODE">
+												<el-input v-model="report.COMPMODE" :disabled="true"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -100,24 +100,24 @@
 									</el-row>
                                     <el-row>
 										<el-col :span="8">
-											<el-form-item label="归档人" prop="ONHOLEPERSON">
-												<el-input v-model="report.ONHOLEPERSON" :disabled="noedit"></el-input>
+											<el-form-item label="归档人" prop="ONHOLEPERSONDesc">
+												<el-input v-model="report.ONHOLEPERSONDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="归档时间" prop="ONHOLTIME">
-												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;" :disabled="noedit">
+												<el-date-picker v-model="report.ONHOLTIME" type="date" placeholder="请选择日期" value-format="yyyy-MM-dd" style="width: 100%;">
 												</el-date-picker>
 											</el-form-item>
 										</el-col>
 									</el-row>
-									<el-row>
+									<!-- <el-row>
 										<el-col :span="8" v-if="dept">
 											<el-form-item label="机构" prop="DEPTIDDesc">
 												<el-input v-model="report.DEPTIDDesc" :disabled="edit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
+									</el-row> -->
 								</el-collapse-item>
 								<el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
@@ -203,7 +203,7 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					ONHOLEPERSON: [{required: true, trigger: 'change', message: '请选择'}],//归档人
+					ONHOLEPERSONDesc: [{required: true, trigger: 'change', message: '请选择'}],//归档人
 					ONHOLTIME: [{required: true, trigger: 'change', message: '请选择'}],//归档时间
 				},
 				//tree
@@ -227,7 +227,8 @@
                     REPORT_NUM:'',	//报告编号
                     REPORTNAME:'',	//报告名称
                     PROXYNUM:'',	//委托书编号
-                    ONHOLEPERSON:'',	//归档人
+					ONHOLEPERSON:'',	//归档人ID
+					ONHOLEPERSONDesc:'',	//归档人描述
                     ONHOLTIME:'',	//归档时间
                     CHANGEBY:'',	//修改人
                     CHANGEDATE:'',	//修改时间
@@ -358,6 +359,15 @@
 			//这是查看
 			view(id) {
 				this.dataid=id;
+				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
+					this.report.ONHOLEPERSON = res.data.id;//归档人
+					this.report.ONHOLEPERSONDesc = res.data.nickname;
+					console.log(res.data.id);
+					console.log(res.data.nickname);
+					var date = new Date();
+					this.report.ONHOLTIME = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");//归档时间
+					}).catch((err) => {
+				})
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

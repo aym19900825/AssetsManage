@@ -105,16 +105,16 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="完成方式" prop="COMPMODEDesc">
-												<el-input v-model="report.COMPMODEDesc" :disabled="noedit"></el-input>
+											<el-form-item label="完成方式" prop="COMPMODE">
+												<el-input v-model="report.COMPMODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="实收费用" prop="COMPMODEDesc">
-												<el-input v-model="report.COMPMODEDesc"></el-input>
+											<el-form-item label="实收费用" prop="ACTUALCOST">
+												<el-input v-model="report.ACTUALCOST" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -157,7 +157,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
-							<el-button type="success" @click="readAuth">确认报告寄出</el-button>
+							<!-- <el-button type="success" @click="readAuth">确认报告寄出</el-button> 在外面显示，批量寄出-->
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -247,7 +247,7 @@
 					CJDW:'',//承检单位
 					LEADER:'',//主检负责人
 					ENTERBY:'',//提交人
-					ISSEND:'',//是否寄出
+					ISSEND:'1',//是否寄出
 					SENDPERSON:'',//寄出人
 					SENDDATE:'',//寄出时间
 					COMPDATE:'',//完成日期
@@ -374,6 +374,7 @@
 			view(data) {
 				this.dataid = data.ID;
 				console.log(data.ID);
+				this.report.ISSEND=='1'//是否寄出
 				// this.report.DESCRIPTION = data.DESCRIPTION;
 				// this.report.STATEDesc = data.STATEDesc;
 				// this.report.REPORT_NUM = data.REPORT_NUM;

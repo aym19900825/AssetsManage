@@ -78,7 +78,7 @@
 								</el-table-column>
 								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="完成方式" width="120" sortable prop="COMPMODEDesc" v-if="checkedName.indexOf('完成方式')!=-1">
+								<el-table-column label="完成方式" width="120" sortable prop="COMPMODE" v-if="checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -170,7 +170,7 @@
 						prop: 'COMPDATE'
 					},{
 						label: '完成方式',
-						prop: 'COMPMODEDesc'
+						prop: 'COMPMODE'
 					},
 				],
 				selUser: [],

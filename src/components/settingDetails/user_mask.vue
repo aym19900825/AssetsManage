@@ -729,7 +729,7 @@
 					this.user.enterbyName = res.data.nickname;
 					var date = new Date();
 					this.user.createTime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err) => {
+					}).catch((err) => {
 				})
 				this.addtitle = true;
 				this.modifytitle = false;

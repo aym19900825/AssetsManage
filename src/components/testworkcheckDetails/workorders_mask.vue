@@ -699,8 +699,7 @@
 											<el-form-item label="修改时间" prop="CHANGEDATE">
 												<el-input v-model="workorderForm.CHANGEDATE" :disabled="true"></el-input>
 											</el-form-item>
-											
-										<div>{{this.MASTER_INSPECTOR}}---{{this.$store.state.currentuser.id}}</div>
+										<!-- <div>{{this.MASTER_INSPECTOR}}---{{this.$store.state.currentuser.id}}----{{this.username}}---{{this.$store.state.currentuser.username}}</div> -->
 										</el-col>
 									</el-row>
 								</el-collapse-item>
@@ -723,7 +722,8 @@
 								<el-button type="primary" @click="submitPassed">确认成果文件通过</el-button>
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
-							<div class="content-footer" v-show="isshow&&this.STATE=='0'&&this.workorderForm.ISCHILDREN==1&&this.username==this.$store.state.currentuser.username||this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
+							<!-- this.MASTER_INSPECTOR==this.$store.state.currentuser.id 登录人和当前责任人-->
+							<div class="content-footer" v-show="isshow&&(this.STATE==5||this.STATE==6||this.STATE==0)&&this.workorderForm.ISCHILDREN=='1'&&this.username==this.$store.state.currentuser.username">
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 						<!-- </div> -->
@@ -1747,7 +1747,7 @@
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.workorderForm.DEPTID = res.data.deptId;
 					this.workorderForm.ENTERBY = res.data.id;
-					this.username=res.data.username;
+					this.username3=res.data.username;
 					var date = new Date();
 					this.workorderForm.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err) => {
@@ -1766,17 +1766,20 @@
 			detailgetData() {
 				var url = this.basic_url +'/api-apps/app/workorder/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
-					console.log(res);
 					this.MASTER_INSPECTOR=parseInt(res.data.MASTER_INSPECTOR);//当前责任人ID
-					console.log(res.data);
-					console.log(res.data.MASTER_INSPECTOR);
 					this.STATE=parseInt(res.data.STATE);//当前流程状态
 					var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
-							this.Executorsid==res.data.datas;
+							var users='';
+							for(var i=0;i<resullt.length;i++){
+								// this.username = users + resullt[i].username+",";
+								this.username = users + resullt[i].username;//把逗号去了不知道是否会影响其它
+								console.log("users----"+this.username);
+							}
+							console.log(this.username);
 							console.log(res.data.datas);
-							console.log(res.data.datas.id);
+							console.log(res.data.datas[0].id);
 						});
 						if(!!res.data.WORKORDER_DATA_TEMPLATEList[0]){
 								this.isTogether=parseInt(res.data.WORKORDER_DATA_TEMPLATEList[0].ISTOGETHER);
@@ -1878,7 +1881,7 @@
 				this.detailgetData();
 				
 				//判断启动流程和审批的按钮是否显示
-				console.log(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid);
+				// console.log(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid);
 				this.$axios.get(this.basic_url+'/api-apps/app/workorder/flow/NodeId/'+this.dataid, {}).then((res) => {
 					if(res.data.resp_code == 0){
 						switch(res.data.datas){
@@ -1906,9 +1909,7 @@
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								users = users + resullt[i].username+",";
-								this.username==users;
 								// console.log("users----"+users);
-								console.log(this.username);
 							}
 							if(users.indexOf(this.username) != -1){
 								this.approval=true;
@@ -2042,7 +2043,7 @@
 					this.$axios.get(url, {}).then((res) => {//获取当前用户信息
 					this.currentuserinfo = res.data;
 				 	this.userid = res.data.id;
-	        this.username = res.data.username;
+	        this.username2 = res.data.username;
 					this.deptid = res.data.deptId;
 					this.deptfullname = res.data.deptName;
 						}).catch((err) => {

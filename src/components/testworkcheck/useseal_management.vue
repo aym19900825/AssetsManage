@@ -42,10 +42,10 @@
 									<el-form-item label="委托单位名称" prop="V_NAME" label-width="100px">
 										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
-											   v-model="searchList.V_NAME" 
-											   filterable 
-											   default-first-option 
-											   placeholder="请选择">
+											v-model="searchList.V_NAME" 
+											filterable 
+											default-first-option 
+											placeholder="请选择" style="width:100%;">
 											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -57,7 +57,7 @@
 											   v-model="searchList.USER" 
 											   filterable 
 											   default-first-option 
-											   placeholder="请选择">
+											   placeholder="请选择" style="width:100%;">
 											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
 										</el-select>
 									</el-form-item>
@@ -69,12 +69,12 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="用印人机构" prop="SEAL_DEPARTMENT" label-width="110px">
+									<el-form-item label="用印人机构" prop="SEAL_DEPARTMENT" label-width="100px">
 										<el-select clearable 
 											   v-model="searchList.SEAL_DEPARTMENT" 
 											   filterable 
 											   default-first-option 
-											   placeholder="请选择">
+											   placeholder="请选择" style="width:100%;">
 											<el-option v-for="(datadept,index) in maingroup" :key="index" :value="datadept.id" :label="datadept.fullname"></el-option>
 										</el-select>
 									</el-form-item>

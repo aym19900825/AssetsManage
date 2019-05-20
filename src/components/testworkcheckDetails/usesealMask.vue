@@ -94,7 +94,7 @@
 										<el-col :span="8">
                                             <el-form-item label="用印人机构" prop="SEAL_DEPARTMENTDesc">
 												<!-- <el-input v-model="USESEAL.SEAL_DEPARTMENTDesc" :disabled="edit"></el-input> -->
-                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENTDesc" :disabled="edit" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;">
+                                                <el-select clearable v-model="USESEAL.SEAL_DEPARTMENTDesc" filterable allow-create default-first-option placeholder="请选择" style="width: 100%;">
                                                     <el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
                                                 </el-select>
                                             </el-form-item>

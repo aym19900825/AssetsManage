@@ -64,7 +64,7 @@
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">
 								</el-table-column>
-								<el-table-column label="检测类型" width="140" sortable prop="DETECTIONTYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
+								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
 								<el-table-column label="流程状态" sortable prop="STATEDesc" width="140px" v-if="checkedName.indexOf('流程状态')!=-1">
 								</el-table-column>
@@ -144,7 +144,7 @@
 						prop: 'V_NAME'
 					},{
 						label: '检测类型',
-						prop: 'DETECTIONTYPEDesc'
+						prop: 'PROXY_TYPEDesc'
 					},{
 						label: '流程状态',
 						prop: 'STATE'
@@ -168,7 +168,7 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
 					REPORT_NUM:'',
-					DESCRIPTION:'',
+					PROXY_TYPE:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -195,7 +195,7 @@
 			resetbtn(){
 				this.searchList = {
 					REPORT_NUM:'',
-					DESCRIPTION:'',
+					PROXY_TYPE:'',
 				};
 				this.requestData('init');
 			},

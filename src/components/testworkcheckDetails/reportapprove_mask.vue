@@ -37,7 +37,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="report.DETECTIONTYPEDesc" :disabled="true">
+											<el-input v-model="report.PROXY_TYPEDesc" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
@@ -236,8 +236,8 @@
                     STATE:'',//流程状态
 					STATEDesc:'',
 					V_NAME:'',//委托单位
-					DETECTIONTYPE:'',//检测类型
-					DETECTIONTYPEDesc:'',//检测类型描述
+					PROXY_TYPE:'',//检测类型
+					PROXY_TYPEDesc:'',//检测类型描述
 					ENTERBY:'',//提交人
 					ENTERBYDesc:'',//提交人描述
 					ENTERDATE:'',//提交时间

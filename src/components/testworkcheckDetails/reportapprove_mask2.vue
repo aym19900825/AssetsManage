@@ -360,7 +360,7 @@
 			},
 			//这是查看
 			view(data) {
-				this.dataid = data.ID;
+				this.dataid = data;
 				// this.report.REPORTNAME = data.REPORTNAME;
 				// this.report.STATEDesc = data.STATEDesc;
 				// this.report.REPORT_NUM = data.REPORT_NUM;

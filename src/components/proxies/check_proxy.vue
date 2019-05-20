@@ -953,9 +953,8 @@
 					console.log(err);
 				})
 			},
-			//触发header中的方法
+			//触发header新任务叮当数据
 			realtime(){
-				console.log(1);
 				 this.$refs.vheader.getTodoNumber();
 			},
 		},
@@ -963,7 +962,6 @@
 			this.getKey();
 		},
 		mounted() {
-			console.log(123);
 			if(this.$route.query.bizId!=undefined){
 				this.getRouterData();
 			}

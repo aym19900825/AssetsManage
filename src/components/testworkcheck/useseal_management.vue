@@ -56,16 +56,15 @@
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="完成日期" prop="GHTIME" label-width="110px">
-										<el-date-picker v-model="searchList.GHTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" @keyup.enter.native="searchinfo">
+									<el-form-item label="用印时间" prop="USETIME" label-width="110px">
+										<el-date-picker v-model="searchList.USETIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" @keyup.enter.native="searchinfo">
 										</el-date-picker>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="完成方式" prop="GHUSER" label-width="100px">
-										<!-- <el-input v-model="searchList.GHUSER" @keyup.enter.native="searchinfo"></el-input> -->
+									<el-form-item label="用印人机构" prop="SEAL_DEPARTMENT" label-width="110px">
 										<el-select clearable 
-											   v-model="searchList.GHUSER" 
+											   v-model="searchList.USER" 
 											   filterable 
 											   default-first-option 
 											   placeholder="请选择">
@@ -234,11 +233,11 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
-                    WONUM:'',
-					PROXYNUM:'',
+                    REPORT_NUM:'',
+					V_NAME:'',
 					USER: '',
-					GHTIME:'',
-                    GHUSER: '',
+					USETIME:'',
+					SEAL_DEPARTMENT:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，

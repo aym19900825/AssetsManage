@@ -162,6 +162,7 @@
 				    '工作任务单编号',
 					'样品名称',
 					'状态',
+					'执行状态',
 					'委托书编号',
 					'产品类别',
 					'产品名称',
@@ -191,6 +192,12 @@
 					{
 						text: '状态',
 						dataIndex: 'STATEDesc',
+					 	width: '100',
+						isShow:true,
+					},
+					{
+						text: '执行状态',
+						dataIndex: 'LEADER_STATUSDesc',
 					 	width: '100',
 						isShow:true,
 					},

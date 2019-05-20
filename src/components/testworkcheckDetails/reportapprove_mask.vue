@@ -362,7 +362,7 @@
 			view(data) {
 				console.log(data);
 				this.dataid = data;
-				// console.log(this.dataid);
+				console.log(this.dataid);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

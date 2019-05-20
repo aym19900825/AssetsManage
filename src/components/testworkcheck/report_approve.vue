@@ -59,7 +59,7 @@
 								</el-table-column> -->
 								<el-table-column label="报告编号" width="220" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
+									<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.REPORT_NUM}}</p>
 									</template>
 								</el-table-column>
 								<el-table-column label="委托单位名称" sortable prop="V_NAME" v-if="checkedName.indexOf('委托单位名称')!=-1">

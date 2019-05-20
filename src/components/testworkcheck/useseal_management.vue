@@ -34,13 +34,20 @@
 						<el-form inline-message :model="searchList" label-width="45px">
 							<el-row :gutter="10">
                                 <el-col :span="7">
-									<el-form-item label="报告编号" prop="WONUM" label-width="110px">
-										<el-input v-model="searchList.WONUM" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="报告编号" prop="REPORT_NUM" label-width="110px">
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="委托单位名称" prop="PROXYNUM" label-width="100px">
-										<el-input v-model="searchList.PROXYNUM" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="委托单位名称" prop="V_NAME" label-width="100px">
+										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
+										<el-select clearable 
+											   v-model="searchList.V_NAME" 
+											   filterable 
+											   default-first-option 
+											   placeholder="请选择">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -64,11 +71,11 @@
 								<el-col :span="7">
 									<el-form-item label="用印人机构" prop="SEAL_DEPARTMENT" label-width="110px">
 										<el-select clearable 
-											   v-model="searchList.USER" 
+											   v-model="searchList.SEAL_DEPARTMENT" 
 											   filterable 
 											   default-first-option 
 											   placeholder="请选择">
-											<el-option v-for="(data,index) in selPerson" :key="index" :value="data.id" :label="data.fullname"></el-option>
+											<el-option v-for="(datadept,index) in maingroup" :key="index" :value="datadept.id" :label="datadept.fullname"></el-option>
 										</el-select>
 									</el-form-item>
 								</el-col>
@@ -84,9 +91,9 @@
 						<el-col :span="24">
 							<!-- 表格 Begin-->
 							<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-								<el-table-column label="报告编号" width="155" sortable prop="WONUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
+								<el-table-column label="报告编号" width="155" sortable prop="REPORT_NUM" v-if="this.checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.WONUM}}</p>
+										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}</p>
 									</template>
 								</el-table-column>
                                 <el-table-column label="委托单位名称" width="285" sortable prop="V_NAME" v-if="this.checkedName.indexOf('委托单位名称')!=-1">
@@ -249,7 +256,9 @@
 					totalCount: 0
 				},
 				buttons:[],
-				selPerson: [],
+				selPerson: [],//用印人
+				maingroup: [],//用印人机构
+				selectData: [],//委托单位名称
 			}
 		},
 		methods: {
@@ -262,11 +271,11 @@
 			//重置
 			resetbtn(){
 				this.searchList = {
-					WONUM:'',
-					PROXYNUM:'',
+					REPORT_NUM:'',
+					V_NAME:'',
 					USER: '',
-					GHTIME:'',
-                    GHUSER: '',
+					USETIME:'',
+					SEAL_DEPARTMENT:'',
 				};
 				this.requestData('init');
 			},
@@ -517,13 +526,54 @@
 						})
 					}
 				}).catch((wrong) => {})
-			}
+			},
+		//用印人机构
+		getSelDept() {
+			var type = "2";
+				var url = this.basic_url + '/api-user/depts/treeByType';
+				this.$axios.get(url, {
+					params: {
+						type: type
+					},
+				}).then((res) => {
+					this.maingroup = res.data;
+				});
+			},
+			//委托单位名称
+			getSelPromise(){
+				var arr1 = [];
+				var resFun = new Promise((resolve,reject)=>{
+					this.$axios.get(this.basic_url + '/api-user/depts/findFirstSecond', {}).then((res) => {
+						this.selectData = res.data;
+						resolve(arr1);
+					}).catch((wrong) => {})
+				})
+				return resFun;
+			},
+			getSelectData(){
+				this.getSelPromise().then(()=>{
+					this.$axios.get(this.basic_url + '/api-apps/app/customer', {}).then((res) => {
+						var resData = res.data.data;
+						for (let i = 0; i < resData.length; i++) {
+							this.selectData.push({
+								id: resData[i].ID,
+								fullname:  resData[i].NAME
+							})
+						}
+					}).catch((wrong) => {})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+			},
 		},
 		mounted() {
 			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}
-			this.getSelPerson();
+			this.getSelPerson();//用印人
+			this.getSelDept();//用印人机构
+			this.getSelectData();//委托单位名称
 		},
 	}
 </script>

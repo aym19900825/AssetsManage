@@ -37,11 +37,11 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right pr10">
-											<el-input v-model="USESEAL.PROXY_TYPE" :disabled="edit">
+											<el-input v-model="USESEAL.PROXY_TYPEDesc" :disabled="edit">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
-										<el-col :span="5" class="pull-right pr10">
+										<el-col :span="7" class="pull-right pr10">
 											<el-input v-model="USESEAL.REPORT_NUM" :disabled="edit">
 												<template slot="prepend">报告编号</template>
 											</el-input>

@@ -273,6 +273,8 @@ export default {
     getbtn(item) {
       if (item.name == "流程配置") {
         this.openAddMgr();
+      }else if(item.name=="删除"){
+        this.delinfo();
       }
     },
     //流程配置
@@ -295,6 +297,39 @@ export default {
     //Table默认加载数据
     requestData(opt) {
       this.$refs.table.requestData(opt);
+    },
+    // 删除
+    delinfo() {
+      var selData = this.selUser;
+      var id=this.selUser[0].deploymentId;
+      if(selData.length == 0) {
+        this.$message({
+          message: '请您选择要删除的数据',
+          type: 'warning'
+        });
+        return;
+      } else {
+        var url = this.basic_url + '/api-flow/flow/process/'+id;
+        this.$confirm('确定删除吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({
+          value
+        }) => {
+          this.$axios.delete(url, {}).then((res) => { //.delete 传数据方法
+            if(res.data.resp_code == 0) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              });
+              this.requestData(opt);
+            }
+          }).catch((err) => {
+          });
+        }).catch(() => {
+
+        });
+      }
     },
     childByValue: function(childValue) {
       this.$refs.navsTabs.showClick(childValue);

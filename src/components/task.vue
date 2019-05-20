@@ -76,15 +76,17 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="App" sortable width="140px" prop="app" v-if="this.checkedName.indexOf('App')!=-1">
-								</el-table-column>
+								<!-- <el-table-column label="App" sortable width="140px" prop="app" v-if="this.checkedName.indexOf('App')!=-1">
+								</el-table-column> -->
 								<el-table-column label="当前环节" sortable prop="name" v-if="this.checkedName.indexOf('当前环节')!=-1">
 								</el-table-column>
-								<el-table-column label="应用" sortable prop="appDesc" v-if="this.checkedName.indexOf('应用')!=-1">
+								<el-table-column label="任务类型" sortable prop="appDesc" v-if="this.checkedName.indexOf('任务类型')!=-1">
 								</el-table-column>
-								<el-table-column label="任务状态" sortable width="100px" align="center" prop="state" v-if="this.checkedName.indexOf('任务状态')!=-1">
+								<el-table-column label="状态" sortable width="100px" align="center" prop="bizDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>
-								<el-table-column label="录入时间" sortable width="160px" prop="createTime" v-if="this.checkedName.indexOf('录入时间')!=-1">
+								<el-table-column label="意见说明" sortable prop="description">
+								</el-table-column>
+								<el-table-column label="操作时间" sortable width="160px" prop="createTime" v-if="this.checkedName.indexOf('操作时间')!=-1">
 								</el-table-column>
 							</el-table>
 							<el-pagination background class="text-right pt10" v-if="this.checkedName.length>0" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
@@ -120,12 +122,13 @@ export default {
       	commentArr: {},
       	checkedName: [
 //					'数据id',
-					'App',
-					'当前环节',
-					'应用',
 					'单据号',
-					'任务状态',
-					'录入时间',
+					// 'App',
+					'任务类型',
+					'当前环节',
+					'状态',
+					'意见说明',
+					'操作时间',
 					],
 		tableHeader: [
 //		{
@@ -133,27 +136,31 @@ export default {
 //			prop: 'bizid'
 //		},
 		{
-			label: 'App',
-			prop: 'app'
+			label: '单据号',
+			prop: 'bizNum'
+		},
+		// {
+		// 	label: 'App',
+		// 	prop: 'app'
+		// },
+		{
+			label: '任务类型',
+			prop: 'appDesc'
 		},
 		{
 			label: '当前环节',
 			prop: 'name'
 		},
 		{
-			label: '应用',
-			prop: 'appDesc'
+			label: '状态',
+			prop: 'bizDesc'
 		},
 		{
-			label: '单据号',
-			prop: 'bizNum'
+			label: '说明',
+			prop: 'description'
 		},
 		{
-			label: '任务状态',
-			prop: 'state'
-		},
-		{
-			label: '录入时间',
+			label: '操作时间',
 			prop: 'createTime'
 		}],
 		searchList: {

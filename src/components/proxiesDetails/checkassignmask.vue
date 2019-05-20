@@ -644,7 +644,7 @@
 			<!--受检企业-->
 			<enterprisemask ref="enterprisechild"  @appendnames="appendnames"></enterprisemask>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild"  @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -717,12 +717,12 @@
 				dataInfo: {
 					MAINGROUP:'',//主检组
 					LEADER:'',//主检负责人
-					STATE: '1',//流程状态
+					STATE: '',//流程状态
 					STATEDesc:'编制',
-					VERSION:'1',//版本
-					DETECTIONTYPE:'1',//检验
+					VERSION:'',//版本
+					DETECTIONTYPE:'',//检验
 					DETECTIONTYPEDesc:'检验',
-					STATUS:'0',
+					STATUS:'',
 					VENDOR:'',//委托方名称编号
 					R_VENDOR:'',//承建单位
 					R_VENDORDesc:'',
@@ -731,7 +731,7 @@
 					ITEM_MODEL:'',//样品型号
 					ITEM_QUALITY:'',//样品数量
 					ITEM_SECRECY:'',//样品保密要求
-					ITEM_METHOD:'委托方送样',//样品取样方式
+					ITEM_METHOD:'',//样品取样方式
 					ITEM_DISPOSITION:'',//样品检后处理
 					REPORT_NUM:'',//检验报告编号
 					P_NUM:'',
@@ -814,7 +814,7 @@
 				down: true,
 				up: false,
 				type: '',
-				datainfo:{},
+				// datainfo:{},
 				addtitle: true, //添加弹出框titile
 				modifytitle: false, //修改弹出框titile
 				viewtitle: false, //查看弹出框title
@@ -823,7 +823,6 @@
 				modify: false,
 				start:false,
 				approval:false,
-				DataInfo:'',
 				activeName: 'first',//tabs
 				activeNames: ['1', '2', '3', '4', '5', '6', '7', '8', ], //手风琴数量
 				labelPositions: 'right',
@@ -1240,23 +1239,26 @@
 			submitBuild(){
 				this.$refs.dataInfo.validate((valid) => {
 			    if (valid) {
-					// this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
-					var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder';
-					this.$axios.post(Url, {inspectpro:this.dataInfo}).then((res) => {
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '生成工作任务单成功',
-								type: 'success'
-							});
-							this.close();
-						}else{
-							this.$message({
-							message: '已经生成工作任务单，请勿重复生成',
-							type: 'warning'
-						});
+						if(!!this.dataInfo.CNAS_OR_CMA_ID){//判断标识CNAS、CMA是否为空
+							this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
 						}
-					}).catch((err) => {
-					});
+						var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder';
+						this.$axios.post(Url, {inspectpro:this.dataInfo}).then((res) => {
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '任务下达成功',
+									type: 'success'
+								});
+								this.close();
+								this.detailgetData();
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+							}
+						}).catch((err) => {
+						});
 					}else{
 			        this.show = true;
 			        this.$message({
@@ -1346,7 +1348,7 @@
 				this.special=true;
 				this.special1=false;
 			},
-			//
+			//查看
 			detailgetData() {
 			var url = this.basic_url +'/api-apps/app/inspectPro/' + this.dataid;
 				this.$axios.get(url, {}).then((res) => {
@@ -1387,9 +1389,6 @@
 					this.dataInfo = res.data;
 					this.RVENDORSelect();
 					this.show = true;
-					//深拷贝数据
-					let _obj = JSON.stringify(this.dataInfo);
-        			this.DataInfo = JSON.parse(_obj);
 				}).catch((err) => {
 				});
 			},	

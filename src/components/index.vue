@@ -68,7 +68,6 @@
 									<div id="todoLists" style="width:100%; height:220px;">
 											<!-- 表格 -->
 										<el-table ref="table" :data="completeList" :header-cell-style="rowClass" border stripe height="180" style="width: 100%;" :default-sort="{prop:'completeList', order: 'descending'}"
-
 											v-loading="loading"
 											element-loading-text="加载中…"
 											element-loading-spinner="el-icon-loading"
@@ -552,7 +551,7 @@ export default {
 		},
 		watch: {
 			completeList(){
-						this.timer = setInterval(this.requestData(), 30000);//定时调用代办和已办的列表
+				this.timer = setInterval(this.requestData(), 300000);//定时调用代办和已办的列表
 			}	 
     },
 		beforeDestroy() {

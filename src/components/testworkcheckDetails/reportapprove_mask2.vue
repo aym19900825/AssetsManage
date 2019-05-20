@@ -36,7 +36,7 @@
 											</el-input>
 										</el-col>
 										<el-col :span="5" class="pull-right">
-											<el-input v-model="report.DETECTIONTYPE" :disabled="true">
+											<el-input v-model="report.DETECTIONTYPEDesc" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
@@ -45,18 +45,18 @@
 									<el-row class="reportbg">
 										<el-row>
 											<el-col :span="24" class="text-right">
-												报告编号：{{report.REPORTNUM}}
+												报告编号：{{report.REPORT_NUM}}
 											</el-col>
 
 											<el-col :span="24" class="text-center pt40">
 												<div class="h2">中国检验认证中心</div>
 												<div class="h1">检验报告</div>
-												<div class="h3">{{report.DESCRIPTION}}</div>
+												<div class="h3">{{report.REPORTNAME}}</div>
 											</el-col>
 										</el-row>
 										<el-row class="reportbotmbg">
 											<el-col :span="24">
-												报告名称：{{report.DESCRIPTION}}
+												报告名称：{{report.REPORTNAME}}
 											</el-col>
 											<el-col :span="24">
 												委托单位：{{report.V_NAME}}
@@ -90,10 +90,10 @@
 														<span> {{scope.$index+1}} </span>
 													</template>
 												</el-table-column>
-												<el-table-column label="报告编号" prop="REPORTNUM">
+												<el-table-column label="报告编号" prop="REPORT_NUM">
 												</el-table-column>
 
-												<el-table-column label="报告名称" prop="DESCRIPTION">
+												<el-table-column label="报告名称" prop="REPORTNAME">
 												</el-table-column>
 
 												<el-table-column label="报告文件大小" prop="FILESIZE">
@@ -227,9 +227,9 @@
 				approval:false,
                 report:{
                     ID:'',	//报告ID
-					REPORTNUM:'',	//报告编码
+					REPORT_NUM:'',	//报告编码
 					// REPORTNAME:'',	//报告文件
-                    DESCRIPTION:'',	//报告描述
+                    REPORTNAME:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
                     STATUS:'',	//活动/不活动
                     STATE:'',//流程状态
@@ -311,9 +311,9 @@
 			// 这里是修改
 			detail(maindata) {
 				this.dataid = maindata.ID;
-				this.report.DESCRIPTION = maindata.DESCRIPTION;
+				this.report.REPORTNAME = maindata.REPORTNAME;
 				this.report.STATEDesc = maindata.STATEDesc;
-				this.report.REPORTNUM = maindata.REPORTNUM;
+				this.report.REPORT_NUM = maindata.REPORT_NUM;
 				this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -360,10 +360,10 @@
 			},
 			//这是查看
 			view(data) {
-				this.dataid = data.ID;
-				// this.report.DESCRIPTION = data.DESCRIPTION;
+				this.dataid = data;
+				// this.report.REPORTNAME = data.REPORTNAME;
 				// this.report.STATEDesc = data.STATEDesc;
-				// this.report.REPORTNUM = data.REPORTNUM;
+				// this.report.REPORT_NUM = data.REPORT_NUM;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -592,8 +592,8 @@
 			reset(){
 				this.report = {
                     ID:'',	//报告ID
-                    REPORTNUM:'',	//编码
-                    DESCRIPTION:'',	//报告描述
+                    REPORT_NUM:'',	//编码
+                    REPORTNAME:'',	//报告描述
                     WONUMID:'',	//工作任务单ID
                     STATUS:'',	//活动/不活动
                     STATE:'',//流程状态

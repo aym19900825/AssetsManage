@@ -59,7 +59,7 @@
 								</el-table-column> -->
 								<el-table-column label="报告编号" width="220" sortable prop="REPORT_NUM" v-if="checkedName.indexOf('报告编号')!=-1">
 									<template slot-scope="scope">
-										<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.REPORT_NUM}}
+										<p class="blue" title="点击查看详情" @click=view(scope.row.ID)>{{scope.row.REPORT_NUM}}
 										</p>
 									</template>
 								</el-table-column>
@@ -428,6 +428,17 @@
 				}).catch((wrong) => {
 				})
 		    },
-		}
+			getRouterData() {
+				// 只是改了query，其他都不变
+					this.id = this.$route.query.bizId;
+					this.$refs.reportapprove.view(this.id);
+				},
+			
+			},
+			mounted() {
+				if(this.$route.query.bizId!=undefined){
+					this.getRouterData();
+				}
+			},
 	}
 </script>

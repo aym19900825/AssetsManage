@@ -285,31 +285,30 @@
 				loadSign: true, //加载
 				commentArr: {},
 				adddeptForm: {
-					version:'',
-					status:'',
-					step:'',
-					code:'',
-					sort: 0,//排序
-					fullname:'',
-					pName:'',
-					pid:'',
-					depttype:'',
-					type:'',
-					inactive:'',
-					address:'',
-					zipcode:'',
-					leader:'',
-					leaderName:'',
-					telephone:'',
-					fax:'',
-					email:'',
-					simplename:'',
-					tips:'',
-					createUser:'',
-					createTime:'',
-					updateUser:'',
-					updateTime:''	
-			},
+					"id":'',
+					"version":'1',
+					"status":'活动',
+					"step":'',
+					"sort":0,
+					"pid":this.$store.state.currentcjdw[0].id,//上级机构ID
+					"pName":this.$store.state.currentcjdw[0].fullname,//上级机构名称
+					"fullname":'',
+					"org_range":'2',
+					"type":""+this.$store.state.currentcjdw[0].type+"",//机构属性
+					"inactive":'否',
+					"address":'',
+					"zipcode":'',
+					"leader":'',
+					"telephone":'',
+					"fax":'',
+					"email":'',
+					"tips":'',
+					"enterby":'',
+					"enterdate":'',
+					"changeby":'',
+					"changedate":'',
+					"depttype":'2',//机构类型	
+			   },
 				options: [{
 					value: '1',
 					label: '活动'
@@ -411,7 +410,8 @@
                     	//点击已经选中的节点，置空
                 	 }
             		}
-        	},
+			},
+			
         	//添加显示弹窗
 			visible() {//点击父组件按钮显示弹窗
 				// this.$axios.get(this.basic_url +'/api-user/users/currentMap', {}).then((res) => {

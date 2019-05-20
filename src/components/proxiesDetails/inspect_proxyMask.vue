@@ -1451,11 +1451,23 @@
 						}
 						res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP = Number(res.data.CHECK_PROXY_CONTRACTList[n].INSPECT_GROUP);
 					}	
-					
+					//用于获取主键负责人的数据
+					var url =this.basic_url +"/api-user/users/" +res.data.LEADER;
+						this.$axios.get(url, {}).then(res => {
+						var resullt = res.data;
+						this.leaderdata.push(resullt);
+          });
 					res.data.LEADER = Number(res.data.LEADER);
+					//用于标识渲染
 					if(res.data.CNAS_OR_CMA_ID=='1'){
 						 res.data.CNAS_OR_CMA_ID=true;
 					}
+					//用于获取主检组菜的数据
+          var url =this.basic_url +"/api-user/depts/" +res.data.MAINGROUP;
+            this.$axios.get(url, {}).then(res => {
+            var resullt = res.data;
+            this.maingroup.push(resullt);
+          });
 					if(res.data.MAINGROUP==''){
 						 res.data.MAINGROUP='';
 					}else{
@@ -1850,7 +1862,6 @@
 			},
 			//检验依据放大镜
 			basisleadbtn(val) {
-      console.log(this.dataInfo.PRO_NUM);
       var snum = this.dataInfo.INSPECT_PROXY_BASISList;
       var basislist = [];
       for (var i = 0; i < snum.length; i++) {
@@ -2415,7 +2426,6 @@
     determinebasic(){
       var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.dataInfo.PRO_NUM+'&NUM_wheres='+this.dataInfo.P_NUM+'&S_NUM_where_not_in='+this.dataInfo.S_NUM;
 	    this.$axios.get(url, {}).then((res) => {
-        console.log(res.data.data);
             this.determinebasicList = res.data.data;
             let datas=res.data.data;
             for(let i=0;i<datas.length;i++){

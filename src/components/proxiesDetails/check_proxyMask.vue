@@ -292,7 +292,6 @@
 											<!-- <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input> -->
                       <el-autocomplete 
 												v-model="dataInfo.JUDGE" 
-												:fetch-suggestions="querySearchAsync2" 
 												@select="handleSelect2"
 												placeholder="请输入内容"
                         :disabled="noedit" style="width:100%">
@@ -2621,7 +2620,7 @@ export default {
     },
     //生产单位名称
     appendnames(value) {
-      if (value.PROXY_TYPE == 1) {
+      if (value.TYPE == 1) {
         this.dataInfo.V_NAME = value.ID;
         this.dataInfo.PRODUCT_UNIT = value.CODE;
         this.dataInfo.P_NAMEDesc = value.NAME;
@@ -2770,16 +2769,16 @@ export default {
     //姓名
     addname() {
       var customid = this.dataInfo.V_NAME; //委托方名称id
-      if (customid == "" || customid == "undenfiend") {
-        this.$message({
+      if (!!customid) {
+        this.requestData();
+      } else {
+         this.$message({
           message: "请先选委托方名称名称",
           type: "warning"
         });
-      } else {
-        this.requestData();
       }
     },
-
+ //姓名
     requestData(val) {
       this.loading = true;
       var data = {
@@ -2795,7 +2794,7 @@ export default {
           params: data
         })
         .then(res => {
-					if(!!res.data){
+					if(!!res.data.CUSTOMER_PERSONList[0]){
 						if (val == "default") {
 							this.dataInfo.V_PERSON = res.data.CUSTOMER_PERSONList[0].PERSON;
 							this.dataInfo.V_PHONE = res.data.CUSTOMER_PERSONList[0].PHONE;

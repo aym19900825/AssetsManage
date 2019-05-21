@@ -951,7 +951,6 @@
 					limit: this.page.pageSize,
 				};
 				var url = this.basic_url + '/api-apps/app/customer?TYPE_where_in=1,3&page=1&limit=20&NAME&CODE&CONTACT_ADDRESS&DEPTID='+this.proindex.CJDW;
-				console.log(url);
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1058,6 +1057,8 @@
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workplan/operate/createWorkNotice?ID=' + dataid, {}).then((res) => {
 					if(res.data.resp_code == 0) {
+						this,show=false;
+						this.$emit('request');
 						this.$message({
 							message: '下达工作任务通知书成功',
 							type: 'success'
@@ -1423,7 +1424,6 @@
 					this.page.currentPage = 1;
 					this.requestBasis();//检测依据数据接口
 					this.requestnum = '4';
-					console.log(this.editPlan.CJDW);
 					// this.dialogVisible = true;
 					this.basissnums = '';
 				}
@@ -1595,7 +1595,6 @@
 					limit: this.page.pageSize,
 				};
 				var url = this.basic_url + '/api-apps/app/customer?TYPE_where_in=1,3&page=1&limit=20&NAME&CODE&CONTACT_ADDRESS&DEPTID='+this.proindex.CJDW;
-				console.log(url);
 				this.$axios.get(url, {
 					params: data
 				}).then((res) => {
@@ -1770,7 +1769,7 @@
 					'YEAR': year,	
 					'PROXY_TYPE': '1',
 					'STATUS': '1',
-					'STATUSDesc': '草稿',
+					'STATUSDesc': '编制',
 					'LEADER_STATUS': '1',
 					'STATUSDATE': date,
 					// 'CJDW': this.deptid,//缺省值当前用户所属机构

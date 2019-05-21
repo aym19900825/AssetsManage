@@ -98,7 +98,7 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
-											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit || dataInfo.WP_NUM!=''"></el-input>
+											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit || dataInfo.WP_NUM ==''"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8" v-show="reviewtitle">
@@ -156,13 +156,13 @@
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAMEDesc" label-width="140px">
 											<el-input v-model="dataInfo.V_NAMEDesc" disabled>
-												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
+												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
 										<el-form-item label="样品数量" prop="QUALITY" label-width="110px">
-											<el-input v-model.number="dataInfo.QUALITY" :disabled="noedit"></el-input>
+											<el-input v-model="dataInfo.QUALITY" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="6">
@@ -216,6 +216,7 @@
 													</el-form-item>
 												</template>
 											</el-table-column>
+
 											<el-table-column prop="S_NAME" label="检验标准名称" sortable>
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NAME'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
@@ -1087,7 +1088,6 @@
 				var url = this.basic_url + '/api-apps/app/workNot/flow/Executors/'+this.dataid;
 					this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
-							// var users='';
 							for(var i=0;i<resullt.length;i++){
 								this.users =this.users + resullt[i].username+",";
 							}
@@ -1104,18 +1104,21 @@
 			},	
 			// 这里是修改
 			detail(dataid) {
+				this.reset();
 				this.dataid=dataid;
 				var usersUrl = this.basic_url + '/api-user/users/currentMap'
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
-					if(this.dataInfo.WP_NUM!=undefined||this.dataInfo.WP_NUM!=null){
+					console.log(this.dataInfo.CHANGEBY);
+					if(!!this.dataInfo.WP_NUM){
 							this.special=true;
 					}else{
 							this.special=false;
 					}
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
+					console.log(this.dataInfo.CHANGEDATE);
 				}).catch((err) => {
 				});
 				this.detailgetData();
@@ -1534,8 +1537,6 @@
 				this.approvingData.app=this.workNot;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
-		
-			
 			getuser(){//获取当前用户信息
 				var url = this.basic_url + '/api-user/users/currentMap';
 				this.$axios.get(url, {}).then((res) => {//获取当前用户信息

@@ -174,7 +174,7 @@
 		</el-dialog>	
 		<!--右侧内容显示 End-->
 		<!--报表-->
-		<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
+		<!-- <reportmask :reportData="reportData" ref="reportChild" ></reportmask> -->
 	  <!--数据限制-->
 		<datarestrictmask  @request="requestData" ref="datarestrictmask" ></datarestrictmask>
 	</div>
@@ -185,7 +185,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import usermask from '../settingDetails/user_mask.vue'
-	import reportmask from'../reportDetails/reportMask.vue'
+	// import reportmask from'../reportDetails/reportMask.vue'
 	import datarestrictmask from'../common/common_mask/datarestrictmask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
@@ -195,22 +195,20 @@
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
 			'usermask': usermask,
-			'reportmask': reportmask,
+			// 'reportmask': reportmask,
 			'datarestrictmask': datarestrictmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
-				appName: 'api-user',
-				reportData:{},//报表的数据
+				appName:'api-user',
+				appname:'user',//报表
 				rules:{
 					newpassword: [
-					{required: true,trigger: 'blur',message: '必填'},
-					{validator: this.Validators.isValidatePass, trigger: 'blur'},
+					{required: true,trigger: 'blur',message: '必填',validator: this.Validators.isValidatePass},
 				],
 					Password: [
-					{required: true,trigger: 'blur',message: '必填'},
-					{validator: this.Validators.isValidatePass, trigger: 'blur'},
+					{required: true,trigger: 'blur',message: '必填',validator: this.Validators.isValidatePass},
 				]
 				},
 				permissions:false,//查看权限
@@ -552,7 +550,6 @@
 				var url = this.basic_url + '/api-apps/appCustom/pdTree/'+id+'/1';
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.datas!=null){
-						console.log(res.data.datas);
 						this.productData = res.data.datas;
 						this.recursive(res.data.datas,arr);
 						this.$nextTick(() => {
@@ -598,7 +595,6 @@
 				this.$refs.annual.setCheckedKeys(arr);
 			},
 			productsetChecked(arr){
-				console.log(arr);
 				this.$refs.product.setCheckedKeys(arr);
 			},
 			testproductsetChecked(arr){
@@ -941,9 +937,29 @@
 			},
 			//报表
 			reportdata(){
-				this.reportData.app=this.workorder;
-				this.$refs.reportChild.visible();
-			},
+        if(this.selUser.length == 0) {
+          this.$message({
+            message: '请您选择数据',
+            type: 'warning'
+          });
+          return;
+        } else if(this.selUser.length > 1) {
+          this.$message({
+            message: '不可同时选择多个数据',
+            type: 'warning'
+          });
+          return;
+        }else{
+          let routeData = this.$router.resolve({
+	          path: "/report",
+	          query: {
+	          appname: this.appname,
+	          id:this.selUser[0].id,
+	          }
+	          });
+          window.open(routeData.href, '_blank');
+        }
+      },
 			handleClose(done) {
 				this.$confirm('确认关闭？')
 					.then(_ => {

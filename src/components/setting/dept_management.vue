@@ -99,6 +99,7 @@
 		},
 		data() {
 			return {
+				appName:'dept',
 				loading: false,
 				basic_url: Config.dev_url,
 				checkedName: [
@@ -332,10 +333,12 @@
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="删除"){
-				 this.deluserinfo();
-				}else if(item.name=="彻底删除"){
-				 this.physicsDel();
-				}
+						this.deluserinfo();
+					}else if(item.name=="彻底删除"){
+						this.physicsDel();
+					}else if(item.name=='报表'){
+						this.reportdata();
+					}
 		    },
 			//添加
 			openAddMgr() {
@@ -549,6 +552,30 @@
 					this.companyId = '';
 				}
 				this.requestData();
+			},
+			reportdata(){
+				if(this.selMenu.length == 0) {
+          this.$message({
+            message: '请您选择数据',
+            type: 'warning'
+          });
+          return;
+        } else if(this.selMenu.length > 1) {
+          this.$message({
+            message: '不可同时选择多个数据',
+            type: 'warning'
+          });
+          return;
+        }else{
+          let routeData = this.$router.resolve({
+	          path: "/report",
+	          query: {
+	          appname: this.appName,
+	          id:this.selMenu[0].id,
+	          }
+	          });
+          window.open(routeData.href, '_blank');
+        }
 			},
 			handleNodeClick(data) {
 			},

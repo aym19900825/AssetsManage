@@ -868,9 +868,14 @@
                   </el-row>
 
                   <el-row>
-                    <el-col :span="8">
+                    <el-col :span="4">
                       <el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
                         <el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
+                        <el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -1265,6 +1270,8 @@ export default {
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
         P_NAME: "",
+        REPORT_QUALITY:'',
+        REPORT_COUNT:'',
         CNAS_OR_CMA_ID: [],
         CHECK_COST: 0, //合同费用
         ACTUALCOST: 0, //实收费用
@@ -1413,8 +1420,9 @@ export default {
         JUDGE : [
           { required: true, message: "必填", trigger: "blur",validator: this.Validators.isSpecificKey}
         ],// 判定依据
-        COMPDATE: [{ required: true, message: "必填", trigger: "blur" }], //完成日期
-        REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur" }], //交委托方分数
+        COMPDATE: [{ required: true, message: "必填", trigger: "blur"}], //完成日期
+        REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur"}], //交委托方分数
+        REPORT_COUNT:[{required: true, message: "必填", trigger: "blur"}],
         REPORT_MODE: [{ required: true, message: "必选", trigger: "change" }], //发送方式
         REPORT_FOMAT: [{ required: true, message: "必填", trigger: "change" }], //格式
         CHECK_COST: [
@@ -1506,7 +1514,7 @@ export default {
         if (index === 0) {
           sums[index] = "总价";
           return;
-        } else if (index === 4) {
+        } else if (index === 5) {
           //计算第几列的减1
           const values = data.map(item => {
             if (!!item[column.property]) {
@@ -1790,6 +1798,7 @@ export default {
         V_NAME: "", //委托方名称名称
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
+        REPORT_COUNT:'',//报告分数
         CNAS_OR_CMA_ID: [],
         ACTUAL_PERCENT: 0,
         CHECK_COST: 0, //合同费用

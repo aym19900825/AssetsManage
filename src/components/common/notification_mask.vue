@@ -156,7 +156,7 @@
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAMEDesc" label-width="140px">
 											<el-input v-model="dataInfo.V_NAMEDesc" disabled>
-												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
+												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2'|| dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -602,6 +602,8 @@
 					V_NAME: '',
 					V_NAMEDesc:'',
 					VENDOR:'',
+					V_ZIPCODE:'',
+					V_ADDRESS:'',
 					CJDW: '',
 					P_LEADER: '',
 					TASKNUM: '',
@@ -753,6 +755,8 @@
 					V_NAME: '',
 					V_NAMEDesc:'',
 					VENDOR:'',
+					V_ADDRESS:'',
+					V_ZIPCODE:'',
 					CJDW: '',
 					P_LEADER: '',
 					TASKNUM: '',
@@ -1270,6 +1274,9 @@
 				if(value.TYPE==1||value.TYPE==3){
 					this.dataInfo.V_NAME=value.ID;
 					this.dataInfo.V_NAMEDesc=value.NAME;
+					this.dataInfo.V_ADDRESS=val.CONTACT_ADDRESS;
+					this.dataInfo.V_ZIPCODE=val.ZIPCODE;
+					this.dataInfo.VENDOR=val.CODE;
 					this.dataInfo.DEPUTE_TYPE=1;
 				}else if(value.TYPE==2){
 					this.dataInfo.V_NAMEDesc=value.fullname;

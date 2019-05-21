@@ -1259,7 +1259,7 @@
 								message: '生成工作任务单成功',
 								type: 'success'
 							});
-							this.close();
+							this.show = false;
 						  this.$emit('request');
 						}else{
 							this.$message({

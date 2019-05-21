@@ -496,18 +496,24 @@ h6 {
   }
   .el-table .warning-row {
     background:#ffecee;
-    font-weight: bold;
+    /* font-weight: bold; */
   }
   .el-table .warning-row .cell {
     color: #cb4040;
+  }
+  .el-table .yellow-row {
+	background:#feffef;
   }
   .el-table .yellow-row .cell {
     color: #FF8000;
   }
   .el-table .success-row {
-    background: #bdfdd0;
+	background: #ebfbf0;
+	/* font-weight: bold; */
   }
-
+  .el-table .success-row .cell {
+    color: #0c962b;
+  }
 /*表单提交按钮居中显示*/
 .el-dialog {
 	background: #F3F6FA;

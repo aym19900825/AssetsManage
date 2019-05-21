@@ -715,7 +715,7 @@
 						&&this.STATE!='2'&&this.STATE!='15'||this.STATE=='5'||this.STATE=='3'||this.STATE=='0'||this.STATE=='7'||this.STATE=='8'-->
 						<!-- &&this.workorderForm.WORKORDER_REPORT_TEMPLATEList.length!=0 -->
 						<!-- <div class="content-footer" v-show="viewtitle"> -->
-							<div class="content-footer" v-show="this.STATE!='2'&&this.STATE!='3'&&this.STATE!='15'&&this.workorderForm.ISCHILDREN=='1'">
+							<div class="content-footer" v-show="(this.STATE!=1||this.STATE!=3||this.STATE!=15)&&this.workorderForm.ISCHILDREN=='1'">
 								<el-button type="success" @click="checkchildlist">查看子任务单成果文件</el-button>
 							</div>
 							<div class="content-footer" v-show="isshow&&this.STATE=='5'&&this.isTogether!='1'&&this.username==this.$store.state.currentuser.username">

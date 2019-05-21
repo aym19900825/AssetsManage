@@ -5,12 +5,12 @@
     ref="table"
     :row-style="showTr" 
     border 
-    stripe 
+    :stripe="stripe" 
     highlight-current-row
     @current-change="singleTable"
     :header-cell-style="rowClass" 
     :height="fullHeight" 
-    @selection-change="SelChange">
+    @selection-change="SelChange" :row-class-name="tableRowClassName">
     <el-table-column type="selection" width="55" fixed align="center">
 		</el-table-column>
     <el-table-column label="序号" type="index" width="55">
@@ -64,14 +64,21 @@
   export default {
     name: 'tree-grid',
     props: {
-// 该属性是确认父组件传过来的数据是否已经是树形结构了，如果是，则不需要进行树形格式化
+      //应用模块名称
+      appName: {
+        type: String,
+        default: function () {
+          return 'normal'
+        }
+      },
+      // 该属性是确认父组件传过来的数据是否已经是树形结构了，如果是，则不需要进行树形格式化
       treeStructure: {
         type: Boolean,
         default: function () {
           return false
         }
       },
-// 这是相应的字段展示
+      // 这是相应的字段展示
       columns: {
         type: Array,
         default: function () {
@@ -84,28 +91,28 @@
           return []
         }
       }, 
-// 这是数据源
+      // 这是数据源
       dataSource: {
         type: Array,
         default: function () {
           return []
         }
       },
-// 这个作用是根据自己需求来的，比如在操作中涉及相关按钮编辑，删除等，需要向服务端发送请求，则可以把url传过来
+      // 这个作用是根据自己需求来的，比如在操作中涉及相关按钮编辑，删除等，需要向服务端发送请求，则可以把url传过来
       requestUrl: {
         type: String,
         default: function () {
           return ''
         }
       },
-// 这个是是否展示操作列
+      // 这个是是否展示操作列
       treeType: {
         type: String,
         default: function () {
           return 'normal'
         }
       },
-// 是否默认展开所有树
+      // 是否默认展开所有树
       defaultExpandAll: {
         type: Boolean,
         default: function () {
@@ -119,22 +126,35 @@
         selData: [],
         isshift: false,
         isctrl: false,
+        stripe: true,//table表格是否需要奇偶区别斑马线，true是false否
       }
     },
     computed: {
     // 格式化数据源
       data: function () {
         let me = this
+        console.log(1234);
+        console.log(this.appName);
+        if(this.appName == 'workorder'){
+          this.stripe = false;
+        }
         if (me.treeStructure) {
           let data = Utils.MSDataTransfer.treeToArray(me.dataSource, null, null, me.defaultExpandAll);
           return data;
-          console.log(1234);
-          console.log(data);
+         
         }
         return me.dataSource;
       }
     },
     methods: {
+      //判断加急table-row颜色变化
+      tableRowClassName({row, rowIndex}) {
+        if(this.appName == 'workorder'){
+          if(row.STATEDesc =="待接收") {
+            return 'success-row';
+          }
+        }
+      },
       //时间格式化  
 			dateFormat(row, column) {
         console.log(row);
@@ -144,11 +164,12 @@
 					return "";
 				}
 				return this.$moment(date).format("YYYY-MM-DD");
-			},
+      },
+      //判断表格是否点击单行选中
       singleTable(row){
         if(this.isctrl){
           this.$refs.table.toggleRowSelection(row);
-          console.log(this.$refs.table.toggleRowSelection(row));
+          // console.log(this.$refs.table.toggleRowSelection(row));
         }else if(this.isshift){
           var selData = this.selData;
           var list = this.list;
@@ -264,14 +285,6 @@
         }
         return false
       },
-      //时间格式化  
-			dateFormat(row, column) {
-				var date = row[column.property];
-				if(date == undefined) {
-					return "";
-				}
-				return this.$moment(date).format("YYYY-MM-DD");
-			},
     },
     mounted(){
       this.eventBind();

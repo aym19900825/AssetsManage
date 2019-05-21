@@ -168,80 +168,174 @@
 											default-expand-all
 											@selection-change="selChange"
 											style="width: 100%;"
-												v-loading="loading"
-												element-loading-text="报告生成中，请勿关闭此窗口…"
-												element-loading-spinner="el-icon-loading"
-												element-loading-background="rgba(255, 255, 255, 0.9)">
-												<el-table-column type="expand">
-													<template slot-scope="props">
-														<el-table ref="table2" :data="props.row.workorder_data_templateList" 
-															border 
-															stripe 
-															row-key="ID"
-															:fit="true" 
-															max-height="260" 
-															style="width: 100%;" 
-															highlight-current-row
-															@current-change="singleTable"
-															@selection-change="selChange">
-															<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+											v-loading="loading"
+											element-loading-text="报告生成中，请勿关闭此窗口…"
+											element-loading-spinner="el-icon-loading"
+											element-loading-background="rgba(255, 255, 255, 0.9)">
+											<el-table-column type="expand">
+												<template slot-scope="props">
+													<el-table ref="table2" :data="props.row.workorder_data_templateList" 
+														border 
+														stripe 
+														row-key="ID"
+														:fit="true" 
+														max-height="260" 
+														style="width: 100%;" 
+														highlight-current-row
+														@current-change="singleTable"
+														@selection-change="selChange">
+														<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
 
-															<el-table-column type="index" label="序号" width="50">
-																<template slot-scope="scope">
-																	<span> {{(page.currentPage-1)*page.pageSize+scope.$index+1}} </span>
+														<el-table-column type="index" label="序号" width="50">
+															<template slot-scope="scope2">
+																<span> {{(page.currentPage-1)*page.pageSize+scope2.$index+1}} </span>
+															</template>
+														</el-table-column>
+
+														<el-table-column label="检验责任人" width="120px" sortable prop="LIABLE_PERSONDesc">
+														</el-table-column>
+
+														<el-table-column label="成果文件ID" width="130px" prop="FILEID">
+														</el-table-column>
+
+														<el-table-column label="成果文件名称" prop="FILENAME">
+														</el-table-column>
+
+														<el-table-column label="审核人" width="100px" prop="CHECKER">
+														</el-table-column>
+
+														<el-table-column label="审核时间" width="120px" prop="CHECK_DATE">
+														</el-table-column>
+
+														<el-table-column label="文件大小" width="120px" prop="FILESIZE">
+														</el-table-column>
+
+														<el-table-column label="排序" width="130px" prop="SORT">
+															<template slot-scope="scope2">
+																<el-button size="mini" :disabled="scope2.$index===0" @click="moveUp(scope2.$index,scope2.row, props.row.workorder_data_templateList)" title="上移"><i class="el-icon-arrow-up"></i></el-button>
+																<el-button size="mini" :disabled="scope2.$index===(reportData.List.length-1)" @click="moveDown(scope2.$index,scope2.row,props.row.workorder_data_templateList)" title="下移"><i class="el-icon-arrow-down"></i></el-button>
+															</template>
+														</el-table-column>
+
+														<el-table-column label="操作" width="80px">
+															<template slot-scope="scope2">
+																<el-button title="预览" @click="readFile(scope2.row)" type="text" size="small"> 
+																	<i class="icon-eye"></i>
+																	预览
+																</el-button>
+																<!-- <el-button title="编辑" @click="editFile(scope2.row)" type="text" size="small"> 
+																	<i class="icon-edit"></i>
+																	编辑
+																</el-button> -->
+																<!-- <el-button class="orange" title="回退" type="text" size="small" @click="sendback(scope2.row)">
+																	<i class="icon-back orange"></i>
+																	回退
+																</el-button> -->
+															</template>
+														</el-table-column>
+													</el-table>
+													
+													<el-table class="mt30" ref="table11" :data="props.row.SonWorkorderList" 
+														border 
+														stripe
+														highlight-current-row
+														default-expand-all
+														@selection-change="selChange"
+														style="width: 100%;">
+
+															<el-table-column type="expand">
+																<template slot-scope="props2">
+																	<el-table ref="table12" :data="props2.row.SonWorkorder_data_templateList" 
+																		border 
+																		stripe 
+																		row-key="ID"
+																		:fit="true" 
+																		max-height="260" 
+																		style="width: 100%;" 
+																		highlight-current-row
+																		@current-change="singleTable"
+																		@selection-change="selChange">
+																		<el-table-column type="selection" fixed width="55" align="center"></el-table-column>
+
+																		<el-table-column type="index" label="序号" width="50">
+																			<template slot-scope="scope3">
+																				<span> {{(page.currentPage-1)*page.pageSize+scope3.$index+1}} </span>
+																			</template>
+																		</el-table-column>
+
+																		<el-table-column label="检验责任人" width="120px" sortable prop="LIABLE_PERSONDesc">
+																		</el-table-column>
+
+																		<el-table-column label="成果文件ID" width="130px" prop="FILEID">
+																		</el-table-column>
+
+																		<el-table-column label="成果文件名称" prop="FILENAME">
+																		</el-table-column>
+
+																		<el-table-column label="审核人" width="100px" prop="CHECKER">
+																		</el-table-column>
+
+																		<el-table-column label="审核时间" width="120px" prop="CHECK_DATE">
+																		</el-table-column>
+
+																		<el-table-column label="文件大小" width="120px" prop="FILESIZE">
+																		</el-table-column>
+
+																		<el-table-column label="排序" width="130px" prop="SORT">
+																			<template slot-scope="scope4">
+																				<el-button size="mini" :disabled="scope4.$index===0" @click="moveUp(scope4.$index,scope4.row, props2.row.SonWorkorder_data_templateList)" title="上移"><i class="el-icon-arrow-up"></i></el-button>
+																				<el-button size="mini" :disabled="scope4.$index===(reportData.List.length-1)" @click="moveDown(scope4.$index,scope4.row,props2.row.SonWorkorder_data_templateList)" title="下移"><i class="el-icon-arrow-down"></i></el-button>
+																			</template>
+																		</el-table-column>
+
+																		<el-table-column label="操作" align="center" width="80px">
+																			<template slot-scope="scope4">
+																				<el-button title="预览" @click="readFile(scope4.row)" type="text" size="small"> 
+																					<i class="icon-eye"></i>
+																					预览
+																				</el-button>
+																			</template>
+																		</el-table-column>
+																	</el-table>
 																</template>
 															</el-table-column>
 
-															<el-table-column label="检验责任人" width="120px" sortable prop="LIABLE_PERSONDesc">
+															<el-table-column type="index" label="序号" width="55">
 															</el-table-column>
 
-															<el-table-column label="成果文件ID" prop="FILEID">
+															<el-table-column label="工作任务单编号" prop="WONUM" sortable>
 															</el-table-column>
 
-															<el-table-column label="成果文件名称" prop="FILENAME">
+															<el-table-column label="样品名称" prop="PRODUCT" sortable>
 															</el-table-column>
 
-															<el-table-column label="审核人" width="100px" prop="CHECKER">
+															<el-table-column label="是否为主任务单" prop="IS_MAIN">
 															</el-table-column>
 
-															<el-table-column label="审核时间" width="120px" prop="CHECK_DATE">
+															<el-table-column label="完成方式" prop="COMPLETE_MODE">
 															</el-table-column>
 
-															<el-table-column label="文件大小" width="120px" prop="FILESIZE">
+															<el-table-column label="完成日期" prop="COMPLETE_DATE" sortable>
 															</el-table-column>
 
-															<el-table-column label="排序" width="130px" prop="SORT">
-																<template slot-scope="scope">
-																	<el-button size="mini" :disabled="scope.$index===0" @click="moveUp(scope.$index,scope.row, props.row.workorder_data_templateList)" title="上移"><i class="el-icon-arrow-up"></i></el-button>
-																	<el-button size="mini" :disabled="scope.$index===(reportData.List.length-1)" @click="moveDown(scope.$index,scope.row,props.row.workorder_data_templateList)" title="下移"><i class="el-icon-arrow-down"></i></el-button>
+															<el-table-column label="责任人" prop="MASTER_INSPECTOR" sortable>
+															</el-table-column>
+
+															<el-table-column label="操作" align="center" width="100px">
+																<template slot-scope="scope3">
+																	<el-button type="warning" size="small" @click="sendback(scope3.row)">回退</el-button>
 																</template>
 															</el-table-column>
+													</el-table>
 
-															<el-table-column label="操作" width="80px">
-																<template slot-scope="scope">
-																	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																		<i class="icon-eye"></i>
-																		预览
-																	</el-button>
-																	<!-- <el-button title="编辑" @click="editFile(scope.row)" type="text" size="small"> 
-																		<i class="icon-edit"></i>
-																		编辑
-																	</el-button> -->
-																	<!-- <el-button class="orange" title="回退" type="text" size="small" @click="sendback(scope.row)">
-																		<i class="icon-back orange"></i>
-																		回退
-																	</el-button> -->
-																</template>
-															</el-table-column>
-														</el-table>
-													</template>
-												</el-table-column>
+												</template>
+											</el-table-column>
 
-												<el-table-column type="selection" width="55">
-												</el-table-column>
+											<!-- <el-table-column type="selection" width="55">
+											</el-table-column> -->
 
-												<el-table-column type="index" label="序号" width="55">
-												</el-table-column>
+											<el-table-column type="index" label="序号" width="55">
+											</el-table-column>
 
 											<el-table-column label="工作任务单编号" prop="WONUM" sortable>
 											</el-table-column>
@@ -252,7 +346,7 @@
 											<el-table-column label="是否为主任务单" prop="IS_MAIN">
 											</el-table-column>
 
-											<el-table-column label="完成方式" prop="COMPLETE_MOD">
+											<el-table-column label="完成方式" prop="COMPLETE_MODE">
 											</el-table-column>
 
 											<el-table-column label="完成日期" prop="COMPLETE_DATE" sortable>
@@ -260,7 +354,11 @@
 
 											<el-table-column label="责任人" prop="MASTER_INSPECTOR" sortable>
 											</el-table-column>
-
+											<!-- <el-table-column label="操作" align="center" width="100px">
+												<template slot-scope="scope">
+													<el-button type="warning" size="small" @click="sendback(scope.row)">回退</el-button>
+												</template>
+											</el-table-column> -->
 										</el-table>
 									</el-col>
 								</el-row>
@@ -339,7 +437,7 @@
 						<!--检验检测项目清单按钮事件-->
 						<el-button type="primary" v-show="secondBtn" @click="submitForm">保存</el-button>
 						<!--内容页按钮事件-->
-						<el-button type="warning" v-show="thirdBtn" @click="sendback">回退</el-button>
+						<!-- <el-button type="warning" v-show="thirdBtn" @click="sendback">回退</el-button> -->
 						<el-button type="primary" v-show="thirdBtn" @click="getreport">生成检验/检测报告</el-button>
 						<!--已生成报告按钮事件-->
 						<el-button type="success" v-show="fifthBtn" @click="submitVerify">提交审核</el-button>
@@ -769,6 +867,7 @@
 			},
 			//回退成果文件
 			sendback(row){
+				console.log();
 				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
 				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
 				this.$axios.get(Url, {}).then((res) => {
@@ -831,7 +930,8 @@
 									type: 'success'
 								});
 								//重新加载数据
-								this.$emit('requests');
+								this.close();
+								this.requestData();
 							}else {
 								this.$message({
 									message: res.data.resp_msg,

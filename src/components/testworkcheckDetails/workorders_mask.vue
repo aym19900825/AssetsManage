@@ -723,7 +723,10 @@
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 							<!-- this.MASTER_INSPECTOR==this.$store.state.currentuser.id 登录人和当前责任人-->
-							<div class="content-footer" v-show="isshow&&(this.STATE==5||this.STATE==6||this.STATE==0)&&this.workorderForm.ISCHILDREN=='1'&&this.username==this.$store.state.currentuser.username">
+							<!-- <div class="content-footer" v-show="isshow&&(this.STATE==5||this.STATE==6||this.STATE==0)&&this.workorderForm.ISCHILDREN=='1'&&this.username==this.$store.state.currentuser.username">
+								<el-button type="warning" @click="approvals">回退成果文件</el-button>
+							</div> -->
+							<div class="content-footer">
 								<el-button type="warning" @click="approvals">回退成果文件</el-button>
 							</div>
 						<!-- </div> -->

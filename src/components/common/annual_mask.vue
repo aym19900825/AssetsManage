@@ -1057,7 +1057,7 @@
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workplan/operate/createWorkNotice?ID=' + dataid, {}).then((res) => {
 					if(res.data.resp_code == 0) {
-						this,show=false;
+						this.show=false;
 						this.$emit('request');
 						this.$message({
 							message: '下达工作任务通知书成功',

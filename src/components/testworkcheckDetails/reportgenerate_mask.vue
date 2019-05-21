@@ -166,7 +166,6 @@
 											stripe
 											highlight-current-row
 											default-expand-all
-											@selection-change="selChange"
 											style="width: 100%;"
 											v-loading="loading"
 											element-loading-text="报告生成中，请勿关闭此窗口…"
@@ -201,7 +200,7 @@
 														<el-table-column label="成果文件名称" prop="FILENAME">
 														</el-table-column>
 
-														<el-table-column label="审核人" width="100px" prop="CHECKER">
+														<el-table-column label="审核人" width="100px" prop="CHECKERDesc">
 														</el-table-column>
 
 														<el-table-column label="审核时间" width="120px" prop="CHECK_DATE">
@@ -240,7 +239,6 @@
 														stripe
 														highlight-current-row
 														default-expand-all
-														@selection-change="selChange"
 														style="width: 100%;">
 
 															<el-table-column type="expand">
@@ -272,7 +270,7 @@
 																		<el-table-column label="成果文件名称" prop="FILENAME">
 																		</el-table-column>
 
-																		<el-table-column label="审核人" width="100px" prop="CHECKER">
+																		<el-table-column label="审核人" width="100px" prop="CHECKERDesc">
 																		</el-table-column>
 
 																		<el-table-column label="审核时间" width="120px" prop="CHECK_DATE">
@@ -309,7 +307,7 @@
 															<el-table-column label="样品名称" prop="PRODUCT" sortable>
 															</el-table-column>
 
-															<el-table-column label="是否为主任务单" prop="IS_MAIN">
+															<el-table-column label="是否为主任务单" prop="IS_MAINDesc">
 															</el-table-column>
 
 															<el-table-column label="完成方式" prop="COMPLETE_MODE">
@@ -318,7 +316,7 @@
 															<el-table-column label="完成日期" prop="COMPLETE_DATE" sortable>
 															</el-table-column>
 
-															<el-table-column label="责任人" prop="MASTER_INSPECTOR" sortable>
+															<el-table-column label="责任人" prop="MASTER_INSPECTORDesc" sortable>
 															</el-table-column>
 
 															<el-table-column label="操作" align="center" width="100px">
@@ -343,7 +341,7 @@
 											<el-table-column label="样品名称" prop="PRODUCT" sortable>
 											</el-table-column>
 
-											<el-table-column label="是否为主任务单" prop="IS_MAIN">
+											<el-table-column label="是否为主任务单" prop="IS_MAINDesc">
 											</el-table-column>
 
 											<el-table-column label="完成方式" prop="COMPLETE_MODE">
@@ -352,7 +350,7 @@
 											<el-table-column label="完成日期" prop="COMPLETE_DATE" sortable>
 											</el-table-column>
 
-											<el-table-column label="责任人" prop="MASTER_INSPECTOR" sortable>
+											<el-table-column label="责任人" prop="MASTER_INSPECTORDesc" sortable>
 											</el-table-column>
 											<!-- <el-table-column label="操作" align="center" width="100px">
 												<template slot-scope="scope">
@@ -544,7 +542,9 @@
 			},
 			//选择数据带值
 			selChange(val) {
-				this.selData = val;
+				var arr=[];
+				arr.push(val);
+				console.log(arr);
 			},
 			//TAbs页切换事件判断按钮显示
 			handleClick(tab, event) {
@@ -959,6 +959,7 @@
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								//默认保存成功后执行生成报告
+								console.log(this.selData)
 								if(this.selData.length == 0){
 									this.$message({
 										message: '请选择要生成报告的成果文件',
@@ -972,11 +973,13 @@
 										'recordid': this.reptemDetailId,
 									}).then((res) => {
 										this.moduleFileList = res.data.fileList;
+										debugger;
 										var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
 										var path = [];
 										for(let j=0; j<this.selData.length;j++){
 											path.push(this.selData[j].FILEPATH);
 										}
+										debugger;
 										var postData = {
 											proxynum: '',
 											templatecode: this.reportTemplate.RE_TYPE,

@@ -1089,8 +1089,8 @@
 							var resullt=res.data.datas;
 							// var users='';
 							for(var i=0;i<resullt.length;i++){
-							this.users =this.users + resullt[i].username+",";
-						}
+								this.users =this.users + resullt[i].username+",";
+							}
 						if(this.users.indexOf(this.username) != -1){
 							this.approval=true;
 							this.start=false;

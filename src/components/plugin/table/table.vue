@@ -260,7 +260,7 @@ export default {
         var url = this.basic_url + '/api-log/logs/operLog';
       }else if(this.appName == 'productType'||this.appName == 'product'||this.appName == 'inspectionSta'||this.appName == 'inspectionPro'||this.appName == 'inspectionMet'||this.appName == 'rawDataTem'||this.appName == 'workIns'){//单独定义基础数据中的APPNAME数据显示本站室所有数据。
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
-      }else if(this.appName == 'inspectionRepTem') {//检验/检测报告模板
+      }else if(this.appName == 'inspectionRepTem'||this.appName == 'sealUse') {//检验/检测报告模板||//用印管理
         var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/page';
       }else if(this.appName == 'group'){
         // var url = this.basic_url + '/api-user/groups';
@@ -272,7 +272,7 @@ export default {
       }else if(this.appName == 'qualitySupApp'){
         var url = this.basic_url + '/api-apps/app/qualitySupApp';
       }else if(this.appName == 'qualitySupApp2'){
-        var url = this.basic_url + '/api-apps/app/qualitySupApp?STATEAPPROVAL_where_in=8,0,17';
+        var url = this.basic_url + '/api-apps/app/qualitySupApp?STATEAPPROVAL_where_in=11,0,13';
       }else if(this.appName == 'reportOnhole'){
         var url = this.basic_url + '/api-apps/app/reportOnhole?REPORT_TYPE_where_in=1';
       }else if(this.appName == 'reportOnhole2'){

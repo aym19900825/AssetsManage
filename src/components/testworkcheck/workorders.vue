@@ -105,7 +105,7 @@
 						<div id="middle"></div>
 						<el-col :span="19" class="leftcont" id="right">
 							<!-- 表格 -->
-							<tree_grid :data-source="userList" :columns="columns" :loading="loading" :tree-structure="true" v-on:classByValue="childvalue" @getDetail="getDetail"></tree_grid>
+							<tree_grid :appName="appName" :data-source="userList" :columns="columns" :loading="loading" :tree-structure="true" v-on:classByValue="childvalue" @getDetail="getDetail"></tree_grid>
 							<!-- 表格 -->
 						</el-col>
 					</el-row>
@@ -155,6 +155,7 @@
 		},
 		data() {
 			return {
+				appName: 'workorder',
 				reportData:{},//报表的数据
 				loading: false,
 				basic_url: Config.dev_url,
@@ -802,7 +803,7 @@
 				}).then((res) => {
 					this.loading = false;
 					let result=res.data.datas;
-					console.log(res.data.datas);
+					// console.log(res.data.datas);
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
 							let subDepts=result[i].subDepts;

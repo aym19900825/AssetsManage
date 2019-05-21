@@ -56,7 +56,7 @@
 										</el-tab-pane>
 										<el-tab-pane label="检验检测项目与要求" name="second">
 											<div class="table-func table-funcb table-funcW100">
-												<el-button style="float:left;" type="success" size="mini" round @click="viewModule" v-show="!pageDisable">
+												<el-button style="float:left;" type="success" size="mini" round @click="viewModule" v-show="!pageDisable&&this.MASTER_INSPECTOR==$store.state.currentuser.id">
 													<i class="icon-eye"></i> <font>所有模板</font>
 												</el-button>
 											</div>
@@ -71,7 +71,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM||workorderForm.MASTER_INSPECTOR!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
@@ -88,7 +88,7 @@
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="模板" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">查看模板</el-button>
+														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||workorderForm.MASTER_INSPECTOR!=$store.state.currentuser.id">查看模板</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable width="200px">

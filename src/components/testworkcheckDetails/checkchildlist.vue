@@ -20,7 +20,7 @@
 							<el-table-column prop="FILESIZE" label="文件大小" sortable>
 							</el-table-column>
 							
-							<el-table-column prop="CHECKER" label="审核人">
+							<el-table-column prop="CHECKERDesc" label="审核人">
 							</el-table-column>
 
 							<el-table-column prop="CHECK_DATE" label="审核时间">

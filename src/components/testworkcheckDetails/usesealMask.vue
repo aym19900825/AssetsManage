@@ -405,7 +405,7 @@
 					}
 				})
 				if(!queryString){
-					list = list.splice(0,20);
+					list = list.splice(0,200);
 				}
 				callback(list);
 			},

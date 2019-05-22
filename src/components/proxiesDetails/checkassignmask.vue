@@ -1235,7 +1235,7 @@
 					row.isEditing = !row.isEditing;
 				}
 			},
-			//生成工作任务单
+			//确定下达任务
 			submitBuild(){
 				this.$refs.dataInfo.validate((valid) => {
 			    if (valid) {
@@ -1249,8 +1249,8 @@
 									message: '任务下达成功',
 									type: 'success'
 								});
-								this.close();
 								this.detailgetData();
+								this.close();
 							}else{
 								this.$message({
 									message: res.data.resp_msg,

@@ -626,7 +626,7 @@
 					PROXY_TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
 					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
 					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
-					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
+					P_LEADERDesc: [{required: true,  message: '请选择'}], //项目负责人
 					PRODUCT_TYPE: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品类别
 					ITEM_NAME: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品名称
 					ITEM_MODEL: [

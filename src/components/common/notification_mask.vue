@@ -152,11 +152,12 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
-									<el-row>
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAMEDesc" label-width="140px">
 											<el-input v-model="dataInfo.V_NAMEDesc" disabled>
-												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2'|| dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
+												<!-- <el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2'|| dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button> -->
+												<el-button slot="append" :disabled="noedit || dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>

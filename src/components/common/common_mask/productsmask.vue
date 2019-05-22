@@ -1,6 +1,24 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogProduct" width="80%">
+			<el-form inline-message :model="searchList" label-width="45px">
+				<el-row :gutter="10">
+					<el-col :span="5">
+						<el-form-item label="编码" prop="PRO_NUM">
+							<el-input v-model="searchList.PRO_NUM"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="名称" prop="PRO_NAME">
+							<el-input v-model="searchList.PRO_NAME"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="4">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+					</el-col>
+				</el-row>
+			</el-form>
 			<el-table ref="singleTable" 
 				:header-cell-style="rowClass"
 				:data="productList" 
@@ -65,6 +83,10 @@
 			pageSize: 20,
 			totalCount: 0
 		},
+		searchList: {
+			PRO_NUM:'',
+			PRO_NAME:'',
+		},
 		allDepts: '',
 		DEPTID:'',//当前选择的机构值
 		CJDW:'',//机构编号
@@ -77,8 +99,19 @@
   methods: {
 	setSel(val) {
       	this.selUser = val;
-    },
-  	dateFormat(row, column) {
+	},
+		searchinfo(){
+		this.page.currentPage = 1;
+		this.page.pageSize = 20;
+		this.getData();
+	},
+	resetbtn(){
+		this.searchList = {
+			PRO_NUM:'',
+			PRO_NAME:'',
+		}
+	},	
+  dateFormat(row, column) {
 		var date = row[column.property];
 		if(date == undefined) {
 			return "";
@@ -97,11 +130,11 @@
 	},
   	sizeChange(val) {
 		this.page.pageSize = val;
-		this.requestData();
+		this.getproduct(this.appname);
 	},
 	currentChange(val) {
 		this.page.currentPage = val;
-		this.requestData();
+		this.getproduct(this.appname);
 	},
   	//点击关闭按钮
 	close() {
@@ -109,16 +142,16 @@
 	},
 	getproduct(val){
 			var data = {
-			page: this.page.currentPage,
-			limit: this.page.pageSize,
-		};
-			if(val.appname=='inspectPro'){
+				page: this.page.currentPage,
+				limit: this.page.pageSize,
+			};
+			this.appname=val.appname;
+			if(this.appname=='inspectPro'){
 					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+null;
 			}else{
 					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+2+'/'+null;
 			}
 		this.$axios.get(url, {}).then((res) => {
-			console.log(res);
 			this.page.totalCount = res.data.count;
 			this.productList = res.data.data;
 			this.dialogProduct = true;

@@ -1400,7 +1400,6 @@ export default {
           {
             required: false,
             trigger: "change",
-            validator: this.Validators.isSpecificKey
           }
         ], //产品名称
         ITEM_NAME: [

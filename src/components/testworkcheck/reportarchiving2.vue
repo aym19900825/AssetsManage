@@ -51,8 +51,8 @@
 							</el-row>
 							<el-row :gutter="10">
 								<el-col :span="7">
-									<el-form-item label="归档人" prop="ONHOLEPERSON" label-width="70px">
-										<el-input v-model="searchList.ONHOLEPERSON" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="归档人" prop="ONHOLEPERSONDesc" label-width="70px">
+										<el-input v-model="searchList.ONHOLEPERSONDesc" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
@@ -93,7 +93,7 @@
 								</el-table-column>
 								<el-table-column label="主检负责人" width="120" sortable prop="LEADERDesc" v-if="checkedName.indexOf('主检负责人')!=-1">
 								</el-table-column>
-								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSON" v-if="this.checkedName.indexOf('归档人')!=-1">
+								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSONDesc" v-if="this.checkedName.indexOf('归档人')!=-1">
 								</el-table-column>
 								<el-table-column label="归档时间" width="185" sortable prop="ONHOLTIME" v-if="this.checkedName.indexOf('归档时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
@@ -191,7 +191,7 @@
 						prop: 'LEADERDesc'
 					},{
 						label: '归档人',
-						prop: 'ONHOLEPERSON'
+						prop: 'ONHOLEPERSONDesc'
 					},{
 						label: '归档时间',
 						prop: 'ONHOLTIME'
@@ -214,7 +214,7 @@
 					REPORT_NUM:'',
 					REPORTNAME:'',
 					V_NAME:'',
-					ONHOLEPERSON: '',
+					ONHOLEPERSONDesc: '',
 					ONHOLTIME:'',
 				},
 				//tree
@@ -242,7 +242,7 @@
 					REPORT_NUM:'',
 					REPORTNAME:'',
 					V_NAME:'',
-					ONHOLEPERSON: '',
+					ONHOLEPERSONDesc: '',
 					ONHOLTIME:'',
 				};
 				this.requestData('init');

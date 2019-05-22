@@ -1,6 +1,24 @@
 <template>
 	<div>
 		<el-dialog :modal-append-to-body="false" title="产品名称" :visible.sync="dialogProduct" width="80%">
+			<el-form inline-message :model="searchList" label-width="45px">
+				<el-row :gutter="10">
+					<el-col :span="5">
+						<el-form-item label="编码" prop="PRO_NUM">
+							<el-input v-model="searchList.PRO_NUM"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="5">
+						<el-form-item label="名称" prop="PRO_NAME">
+							<el-input v-model="searchList.PRO_NAME"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="4">
+						<el-button type="primary" @click="searchinfo" size="small" style="margin-top:2px">搜索</el-button>
+						<el-button type="primary" @click="resetbtn" size="small" style="margin-top:2px; margin-left: 2px">重置</el-button>
+					</el-col>
+				</el-row>
+			</el-form>
 			<el-table ref="singleTable" 
 				:header-cell-style="rowClass"
 				:data="productList" 
@@ -65,6 +83,10 @@
 			pageSize: 20,
 			totalCount: 0
 		},
+		searchList: {
+			PRO_NUM:'',
+			PRO_NAME:'',
+		},
 		allDepts: '',
 		DEPTID:'',//当前选择的机构值
 		CJDW:'',//机构编号
@@ -77,8 +99,19 @@
   methods: {
 	setSel(val) {
       	this.selUser = val;
-    },
-  	dateFormat(row, column) {
+	},
+	searchinfo(){
+		this.page.currentPage = 1;
+		this.page.pageSize = 20;
+		this.getData();
+	},
+	resetbtn(){
+		this.searchList = {
+			PRO_NUM:'',
+			PRO_NAME:'',
+		}
+	},	
+  dateFormat(row, column) {
 		var date = row[column.property];
 		if(date == undefined) {
 			return "";
@@ -95,22 +128,17 @@
 		this.$refs.singleTable.clearSelection();
         this.$refs.singleTable.toggleRowSelection(row);
 	},
-  	sizeChange(val) {
+  sizeChange(val) {
 		this.page.pageSize = val;
-		this.requestData();
+		this.getData();
 	},
 	currentChange(val) {
 		this.page.currentPage = val;
-		this.requestData();
+		this.getData();
 	},
   	//点击关闭按钮
 	close() {
 		this.dialogProduct = false;
-	},
-	addprobtn(){
-		this.dialogVisible3 = true;
-		this.requestnum = '1';
-		this.requesCategory();
 	},
 	//产品类别数据
 	requesCategory(){
@@ -168,6 +196,8 @@
 		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			PRO_NUM:this.searchList.PRO_NUM,
+			PRO_NAME: this.searchList.PRO_NAME,
 		};
 		if(!!this.CJDW){
 				var url = this.basic_url + '/api-apps/app/product2?NUM_wheres='+this.NUM+'&DEPTID_where_in='+this.allDepts;
@@ -188,10 +218,11 @@
 		}).catch((wrong) => {})
 	},
 	getproduct(val){
-		console.log(val);
-			var data = {
+		var data = {
 			page: this.page.currentPage,
 			limit: this.page.pageSize,
+			NUM:this.searchList.PRO_NUM,
+			TYPE: this.searchList.PRO_NAME,
 		};
 			if(val.appname=='inspectPro'){
 					var url = this.basic_url +'/api-apps/appCustom/findProductbyAuthandDept/'+this.$store.state.currentcjdw[0].id+'/'+1+'/'+null;
@@ -228,12 +259,12 @@
 		}
 	},
 	
-    resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
-        this.dialogProduct = false;//关闭弹出框
-        this.productList = [];//列表数据置空
-        this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 20;//页码重新传值
-    },
+	resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
+			this.dialogProduct = false;//关闭弹出框
+			this.productList = [];//列表数据置空
+			this.page.currentPage = 1;//页码重新传值
+			this.page.pageSize = 20;//页码重新传值
+	},
   },
 }
 </script>

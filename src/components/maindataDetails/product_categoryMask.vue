@@ -175,7 +175,7 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				rules: {
-					NUM: [{required: false, trigger: 'blur', validator: this.Validators.isWorknumber,}],
+					// NUM: [{required: false, trigger: 'blur', validator: this.Validators.isWorknumber,}],
 					TYPE: [{required: true, trigger: 'blur', validator: this.Validators.isSpecificKey,}],
 				},
 				resourceProps: {

@@ -71,7 +71,8 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM||workorderForm.MASTER_INSPECTOR!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														<div>{{scope.row}}---{{workorderForm.WONUM}}——{{masterId}}--{{$store.state.currentuser.id}}</div>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
@@ -88,7 +89,7 @@
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="模板" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||workorderForm.MASTER_INSPECTOR!=$store.state.currentuser.id">查看模板</el-button>
+														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id">查看模板</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_DATE" label="检测日期" sortable width="200px">
@@ -113,7 +114,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
@@ -130,7 +131,7 @@
 												</el-table-column>
 							            		<el-table-column prop="VERSION" label="模板" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM">查看模板</el-button>
+														<el-button type="primary" size="mini" round @click="showMoudel(scope.$index,scope.row)" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id">查看模板</el-button>
 													</template>
 												</el-table-column>
 												<el-table-column prop="INSPECT_DATE" label="检测日期" width="160px" sortable>
@@ -206,7 +207,7 @@
 											</el-table>
 										</el-tab-pane>
 
-										<el-tab-pane label="成果数据" name="fifth">
+										<el-tab-pane label="成果文件" name="fifth">
 											<div class="table-func table-funcb" v-show="!pageDisable&&this.MASTER_INSPECTOR==this.$store.state.currentuser.id">
 												<form method="post" id="file" action="" enctype="multipart/form-data" style="float: left; margin-left: 10px; position: relative;">
 													<el-button type="success" size="mini" round class="a-upload">
@@ -233,11 +234,12 @@
 															<template slot-scope="scope">
 															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
 																	<i class="icon-eye"></i>
+																	<!-- {{scope.row.LIABLE_PERSON}}--{{$store.state.currentuser.id}} -->
 																</el-button>
-																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||workorderForm.STATE == '0'">
+																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||(workorderForm.STATE == '0'||workorderForm.STATE == '2')&&scope.row.LIABLE_PERSON==$store.state.currentuser.id">
 																	<i class="icon-pencil"></i>
 																</el-button>
-																<el-button title="删除" @click="delFile(scope.$index,scope.row)" type="text" size="small" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||workorderForm.STATE == '0'">
+																<el-button title="删除" type="text" size="small" @click="delFile(scope.$index,scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||(workorderForm.STATE == '0'||workorderForm.STATE == '2')&&scope.row.LIABLE_PERSON==$store.state.currentuser.id">
 																	<i class="icon-trash red"></i>
 																</el-button>
 															</template>
@@ -639,8 +641,9 @@
 				this.editEquptIndex = index;
 				this.$refs.equiptDialog.showData();
 			},
-			showDialog(id){
+			showDialog(id,masterid){
 				this.detailId = id;
+				this.masterId = parseInt(masterid);//当前责任人ID
 				this.requestData('showDialog');
 				
 			},

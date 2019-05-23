@@ -20,7 +20,8 @@
 					<!-- status-icon 验证后文本框上显示对勾图标 -->
 					<el-form inline-message :model="workorderForm" :label-position="labelPosition" :rules="rules" ref="workorderForm" label-width="110px">
 						<div class="text-center" v-show="viewtitle">
-							<span v-if="this.STATE=='3'&&this.username==this.$store.state.currentuser.username" class="pr10">
+							<!-- {{this.username}}---{{this.$store.state.currentuser.username}} -->
+							<span v-if="(this.STATE==3||this.STATE==0)&&this.username==this.$store.state.currentuser.username" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button> -->
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-if="approval&&nodeState=='3'"><i class="icon-edit-3"></i>审核</el-button>
 								<!-- <el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-else-if="approval&&nodeState=='5'"><i class="icon-edit-3"></i> 提交报告</el-button> -->
@@ -1771,18 +1772,18 @@
 				this.$axios.get(url, {}).then((res) => {
 					this.MASTER_INSPECTOR=parseInt(res.data.MASTER_INSPECTOR);//当前责任人ID
 					this.STATE=parseInt(res.data.STATE);//当前流程状态
-					var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/workorder/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
 							var users='';
 							for(var i=0;i<resullt.length;i++){
 								// this.username = users + resullt[i].username+",";
 								this.username = users + resullt[i].username;//把逗号去了不知道是否会影响其它
-								console.log("users----"+this.username);
+								// console.log("users----"+this.username);
 							}
-							console.log(this.username);
-							console.log(res.data.datas);
-							console.log(res.data.datas[0].id);
+							// console.log(this.username);
+							// console.log(res.data.datas);
+							// console.log(res.data.datas[0].id);
 						});
 						if(!!res.data.WORKORDER_DATA_TEMPLATEList[0]){
 								this.isTogether=parseInt(res.data.WORKORDER_DATA_TEMPLATEList[0].ISTOGETHER);

@@ -150,11 +150,23 @@
       //判断加急table-row颜色变化
       tableRowClassName({row, rowIndex}) {
         if(this.appName == 'workorder'){
-          if(row.STATEDesc =="待接收") {
-            return 'normal-received-row';
-          }else if(row.STATEDesc =="驳回"){
-            return 'yellow-row';
-          }
+          if (row.COMPLETE_MODE =="加急"&&row.STATEDesc=="待接收") {
+              return 'urgent-received-row';
+            } else if(row.COMPLETE_MODE =="加急"&&row.STATEDesc=="执行中"){
+              return 'urgent-doing-row';
+            } else if(row.COMPLETE_MODE =="加急"&&row.LEADER_STATUSDesc=="已完成"){
+              return 'urgent-complete-row';
+            } else if(row.COMPLETE_MODE =="正常"&&row.STATEDesc=="待接收"){
+              return 'normal-received-row';
+            } else if(row.COMPLETE_MODE =="正常"&&row.STATEDesc=="执行中"){
+              return 'normal-doing-row';
+            } else if(row.COMPLETE_MODE =="正常"&&row.LEADER_STATUSDesc=="已完成"){
+              return 'normal-complete-row';
+            } else if(row.STATEDesc=="驳回"){
+              return 'yellow-row';
+            }
+
+          
         }
       },
       //时间格式化  

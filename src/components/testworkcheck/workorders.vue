@@ -441,7 +441,7 @@
 						});
 						return;
 					}
-					this.$refs.workDeal.showDialog(this.selMenu[0].ID);
+					this.$refs.workDeal.showDialog(this.selMenu[0].ID,this.selMenu[0].MASTER_INSPECTOR);
 				}
 			},
 			//生成分包协议

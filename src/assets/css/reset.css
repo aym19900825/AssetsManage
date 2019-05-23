@@ -521,7 +521,7 @@ h6 {
 /*************************执行状态（处理中）*/
 /*完成方式（正常）*/
 .el-table .normal-doing-row {background: #ecfdfd;}
-.el-table .normal-doing-row .cell {color: #1b1e1f;}
+.el-table .normal-doing-row .cell {color: #0079bf;}
 /*完成方式（加急）*/
 .el-table .urgent-doing-row {background: #ecfdfd;}
 .el-table .urgent-doing-row .cell {color: #eb6161;}
@@ -534,6 +534,14 @@ h6 {
 .el-table .urgent-complete-row {background: #f6f7fb;}
 .el-table .urgent-complete-row .cell {color: #c19f9f;}
 
+/*流程历史-驳回样式*/
+.el-step__title.is-error,.el-step__description.is-error{
+	color: #ffab2c;
+}
+.el-step__head.is-error{
+	color: #ffab2c;
+	border-color: #ffab2c;
+}
 /*表单提交按钮居中显示*/
 .el-dialog {
 	background: #F3F6FA;

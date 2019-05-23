@@ -344,7 +344,7 @@
 					ACCEPTDATE: '',//入库时间
 					ACCEPT_PERSON: '',//收样人
 					ACCEPT_DATE: '',//收样日期
-					GRANT_PERSON: '',//领样人
+					GRANT_PERSON: '',//领样人sss
 					GRANT_DATE: '',//领样日期
 					STATE: '2',//状态
 					STATEDesc:'在检',

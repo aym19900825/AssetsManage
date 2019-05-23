@@ -212,7 +212,6 @@
         this.requestData();
     },
 	requestData(val){
-        console.log(val);
 		var data = {
             page: this.page.currentPage,
             limit: this.page.pageSize,
@@ -231,12 +230,10 @@
 		// this.PRO_NUM = value.PRO_NUM;//产品编号
 		// this.P_NUM = value.P_NUM;//产品类别编号
 				// this.S_NUM=value.S_NUM.toString(',');
-				console.log(val.arr);
-				var str='';
-				str=val.arr;
+			var str='';
+			str=val.arr;
 			str=str.toString(',')
 			var url = this.basic_url + '/api-apps/appSelection/workNotCheo/page?N_CODE_wheres='+val.N_CODE+'&DEPTTYPE=1&P_DESC_where_not_in='+str;
-			console.log(url);
 		// var url=this.basic_url +'/api-apps/app/inspectionPro2?PRO_NUM_wheres='+this.PRO_NUM+'&NUM_wheres='+this.P_NUM+'&S_NUM_where_in='+this.S_NUM+'&P_NUM_where_not_in='+this.projectnum;
 		this.$axios.get(url,{}).then((res) => {
 			console.log(res);

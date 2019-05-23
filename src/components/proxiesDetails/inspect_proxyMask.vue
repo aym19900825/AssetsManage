@@ -569,12 +569,12 @@
 									<el-row>
 										<el-col :span="4">
 											<el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
-												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit" @blur="compare"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="4">
 											<el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
-												<el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit"></el-input>
+												<el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit" @blur="compare"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -1028,6 +1028,16 @@
 			};
 		},
 		methods: {
+			// 报告份数
+			compare(){
+				if(this.dataInfo.REPORT_QUALITY<this.dataInfo.REPORT_COUNT){
+					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY-1;
+					this.$message({
+						message: '报告份数不能大于交付委托方份数',
+						type: 'warning'
+					});
+				}
+			},
 			priceFormate(row, column) {
 				var money = row.UNITCOST;
 				return row.UNITCOST =  this.toFixedPrice(money);
@@ -1331,7 +1341,7 @@
 							this.show=false;
 							this.$emit('request');
 						}else{
-							this.$message({
+						this.$message({
 							message: '已经生成工作任务单，请勿重复生成',
 							type: 'warning'
 						});

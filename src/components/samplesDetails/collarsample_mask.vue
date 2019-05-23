@@ -319,29 +319,30 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				noedit: false,
 				samplesForm: {
 					ITEMNUM: '',//样品子表ID
-						ITEM_TYPE: '',
-						ITEM_STEPs: [],//样品序号
-						TYPE: '',//样品类别
-						VENDOR: '',//样品编号编号
-						DESCRIPTION: '',//样品名称
-						MODEL: '',//型号
-						QUATITY: '',//数量
-						PRODUCT_CODE: '',//产品标识代码
-						OTHER: '',//其他资料
-						MEMO: '',//备注
-						ACCEPTDATE: '',//入库时间
-						ACCEPT_PERSON: '',//收样人
-						ACCEPT_DATE: '',//收样日期
-						GRANT_PERSONDesc: '',//领样人
-						GRANT_PERSON: '',//领样人
-						GRANT_DATE: '',//领样日期
-						STATE: 1,//状态
-						STATUSDATE: '',//状态日期
-						ENTERBY: '',//录入人
-						ENTERDATE: '',//录入时间
-						CHANGEBY: '',//修改人
-						CHANGEDATE: '',//修改时间
-						STATUS: '1',//信息状态
+					ITEM_TYPE: '',
+					ITEM_STEPs: [],//样品序号
+					TYPE: '',//样品类别
+					VENDOR: '',//样品编号编号
+					DESCRIPTION: '',//样品名称
+					MODEL: '',//型号
+					QUATITY: '',//数量
+					PRODUCT_CODE: '',//产品标识代码
+					OTHER: '',//其他资料
+					MEMO: '',//备注
+					ACCEPTDATE: '',//入库时间
+					ACCEPT_PERSON: '',//收样人
+					ACCEPT_DATE: '',//收样日期
+					GRANT_PERSONDesc: '',//领样人
+					GRANT_PERSON: '',//领样人
+					GRANT_DATE: '',//领样日期
+					STATE: '2',//状态
+					STATEDesc: '在检',//状态描述
+					STATUSDATE: '',//状态日期
+					ENTERBY: '',//录入人
+					ENTERDATE: '',//录入时间
+					CHANGEBY: '',//修改人
+					CHANGEDATE: '',//修改时间
+					STATUS: '1',//信息状态
 				},
 				sampleAutoInput: false //扫描枪输入
 			};
@@ -565,7 +566,9 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 				this.samplesForm.MODEL = '';
 				this.samplesForm.ITEM_TYPE = '1';
 				this.samplesForm.QUALITY = 0;
-				
+				this.samplesForm.STATE = '2';
+				this.samplesForm.STATEDesc = '在检';
+
 				this.maxNum = 1000;
 				this.lastTime = 0;
 			},
@@ -724,6 +727,7 @@ import usermask from'../common/common_mask/currentUserMask.vue'
 									this.$emit('request');
 								}
 								this.$emit('reset');
+								this.resetSamples();
 								this.$refs["samplesForm"].resetFields();
 							}else{
 								this.$message({

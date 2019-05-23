@@ -252,14 +252,14 @@
 													<el-table-column label="序号" width="50" type="index">
 													</el-table-column>
 
-													<el-table-column prop="S_NUM" label="编码" sortable width="160">
+													<!-- <el-table-column prop="S_NUM" label="编码" sortable width="160">
 														<template slot-scope="scope">
 															<el-form-item :prop="'basisList.'+scope.$index + '.S_NUM'" :rules="{required: true, message: '请输入', trigger: 'blur'}">
 																<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.S_NUM"></el-input>
 																<span v-else>{{scope.row.S_NUM}}</span>
 															</el-form-item>
 														</template>
-													</el-table-column>
+													</el-table-column> -->
 
 													<el-table-column prop="SS_NUM" label="标准编号" sortable width="160">
 														<template slot-scope="scope">

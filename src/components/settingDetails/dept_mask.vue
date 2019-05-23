@@ -125,17 +125,17 @@
 											</el-form-item>
 										</el-col>
 										
-										<el-col :span="8" v-if="adddeptForm.type==1||adddeptForm.type==4||adddeptForm.type==5&&adddeptForm.del_flag==0" v-show="true">
+										<el-col :span="8" v-if="adddeptForm.type==1||adddeptForm.type==4||adddeptForm.type==5&&adddeptForm.del_flag==0" v-show="deptview">
 											<el-form-item label="机构简称" prop="simplename" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
 												<el-input v-model="adddeptForm.simplename" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 
-										<el-col :span="8" v-else v-show="false">
+										<!-- <el-col :span="8" v-else v-show="false">
 											<el-form-item label="机构简称" prop="simplename">
 												<el-input v-model="adddeptForm.simplename" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col> -->
 										
 										<el-col :span="8">
 											<el-form-item label="排序" prop="sort">
@@ -327,7 +327,7 @@
 				showcode:true,
 				views: false, //录入修改人信息
 				noviews:true,//按钮
-				deptview:false,//机构简称
+				deptview:true,//机构简称
 				selMenu:[],
 				selUser: [],
 				selData: [],//获取当前负责人
@@ -626,11 +626,11 @@
 					this.adddeptForm.pid = this.checkedNodes[0].id;
 					this.adddeptForm.parent = this.checkedNodes[0].fullname;
 					this.adddeptForm.pName = this.checkedNodes[0].fullname;
-					// if(this.adddeptForm.pid==128){
-					// 	this.deptview= true;
-					// }else{
-					// 	this.deptview= false;
-					// }
+					if(this.checkedNodes[0].id==128){
+						this.deptview= true;
+					}else{
+						this.deptview= false;
+					}
 				}				
 			},
 			getCheckedNodes() {

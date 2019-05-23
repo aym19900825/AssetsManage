@@ -870,12 +870,12 @@
                   <el-row>
                     <el-col :span="4">
                       <el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
-                        <el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+                        <el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit" @blur="compare"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="4">
                       <el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
-                        <el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit"></el-input>
+                        <el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit" @blur="compare"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -1232,7 +1232,9 @@ export default {
       weituoname: [], //用于存委托书名称
       determinebasiname:[],//用于存判定依据的S_NAME
 			weituodata:[],//委托方的数据
-			logos: "",//标识
+      logos: "",//标识
+      standardList:[],//如果是年度计划生成委托书用于保存时中心外的依据
+      contentList:[],//如果是年度计划生成委托书用于保存时中心内的依据
       dataInfo: {
         MAINGROUP: "", //主检组
         LEADER: "", //主检负责人
@@ -1500,6 +1502,16 @@ export default {
     };
   },
   methods: {
+    // 报告份数
+			compare(){
+				if(this.dataInfo.REPORT_QUALITY<this.dataInfo.REPORT_COUNT){
+					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY-1;
+					this.$message({
+						message: '报告份数不能大于交付委托方份数',
+						type: 'warning'
+					});
+				}
+			},
     priceFormate(row, column) {
       var money = row.UNITCOST;
       return (row.UNITCOST = this.toFixedPrice(money));
@@ -2027,6 +2039,8 @@ export default {
 					}
 					this.dataInfo = res.data;
           this.show = true;
+          this.outcontents();
+          this.outbasis();
           //深拷贝数据
           let _obj = JSON.stringify(this.dataInfo);
           this.DataInfo = JSON.parse(_obj);
@@ -2649,14 +2663,21 @@ export default {
             type: "warning"
           });
         }
+        
         if (valid) {
+            if(this.contentList.length>0){
+              this.$message({
+                message: "请将分包要求补充完整",
+                type: "warning"
+              });
+                return
+            } 
           if (
-            this.dataInfo.INSPECT_PROXY_BASISList.length <= 0 &&
-            this.dataInfo.INSPECT_PROXY_PROJECList.length <= 0 &&
-            this.dataInfo.CHECK_PROXY_CONTRACTList.length <= 0
+            this.dataInfo.INSPECT_PROXY_BASISList.length ==0 &&
+            this.dataInfo.INSPECT_PROXY_PROJECList.length == 0 
           ) {
             this.$message({
-              message: "检测依据和检验项目与要求和分包要求是必填项，请填写！",
+              message: "检测依据和检验项目与要求是必填项，请填写！",
               type: "warning"
             });
             return false;
@@ -2984,6 +3005,14 @@ export default {
       };
       this.$refs.basis.requestData(data);
     },
+    //保存时用于判断是否有中心外的数据中有检测技术依据
+    outbasis(){
+     var url = this.basic_url + '/api-apps/appSelection/workNotCheb/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1';
+		 this.$axios.get(url, {}).then((res) => {
+            this.standardList =res.data.data;
+            console.log(this.standardList);
+        }).catch((wrong) => {}) 
+    },
     addBasis(val) {
       var str = val.toString(",");
       for (let i = 0; i < this.dataInfo.CHECK_PROXY_CONTRACTList.length; i++) {
@@ -3003,6 +3032,14 @@ export default {
         arr: arr
       };
       this.$refs.contents.requestData(data);
+    },
+    // 如果是年度计划生成委托书用于保存时中心内的依据
+    outcontents(){
+      var url = this.basic_url + '/api-apps/appSelection/workNotCheo/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1';
+      this.$axios.get(url,{}).then((res) => {
+            this.contentList = res.data.data;
+            console.log(this.contentList);
+        }).catch((wrong) => {})
     },
     add(val) {
       var str = val.toString(",");
@@ -3184,6 +3221,7 @@ export default {
     this.logo();
     this.ITEM_STATUS();//样品状态
     this.determinebasic();//判定依据
+    
   }
 };
 </script>

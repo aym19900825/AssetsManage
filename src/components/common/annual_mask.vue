@@ -168,7 +168,7 @@
 											</el-table-column>
 											<el-table-column prop="V_NAME" label="生产企业名称" sortable width="220px">
 												<template slot-scope="scope">
-													<el-form-item :prop="'worlplanlist.'+scope.$index + '.V_NAME'" :rules="{required: true, message: '请选择', trigger: 'change'}">
+													<el-form-item :prop="'worlplanlist.'+scope.$index + '.V_NAME'">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.V_NAME" placeholder="请选择" :disabled="edit">
 															<el-button slot="append" icon="el-icon-search" @click="prodeptbtn(scope.row)"></el-button>
 														</el-input>
@@ -1057,7 +1057,7 @@
 				}else{
 					this.$axios.get(this.basic_url + '/api-apps/app/workplan/operate/createWorkNotice?ID=' + dataid, {}).then((res) => {
 					if(res.data.resp_code == 0) {
-						this,show=false;
+						this.show=false;
 						this.$emit('request');
 						this.$message({
 							message: '下达工作任务通知书成功',
@@ -1660,7 +1660,7 @@
 					'STATUS': '1',
 					'VENDOR':  '',
 					// 'CJDW': this.proposeUnit
-					'CJDW':this.deptid
+					'CJDW':''
 				};
 				// this.worlPlanListForm.worlplanlist.unshift(obj);
 				this.worlPlanListForm.worlplanlist.push(obj);

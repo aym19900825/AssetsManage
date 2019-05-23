@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="report" :rules="rules" ref="report" label-width="100px" class="demo-adduserForm">
+					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
 							<!-- <div class="text-center" v-show="viewtitle">
 							<span v-if="this.report.STATE!=3">
 							<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 启动流程</el-button>
@@ -202,10 +202,10 @@
 				activeNames: ['1','2'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
-				rules: {
-					ONHOLEPERSONDesc: [{required: true, trigger: 'change', message: '请选择'}],//归档人
-					ONHOLTIME: [{required: true, trigger: 'change', message: '请选择'}],//归档时间
-				},
+				// rules: {
+				// 	ONHOLEPERSONDesc: [{required: true, trigger: 'change', message: '请选择'}],//归档人
+				// 	ONHOLTIME: [{required: true, trigger: 'change', message: '请选择'}],//归档时间
+				// },
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				category:{},//从父组件接过来的值

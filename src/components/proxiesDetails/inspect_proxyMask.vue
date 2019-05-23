@@ -567,9 +567,14 @@
 									</el-row>
 
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="4">
 											<el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
 												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="4">
+											<el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
+												<el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -973,6 +978,7 @@
 						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
 					],//判定依据
 					COMPDATE: [{ required: true, message: '必填', trigger: 'blur' }],//完成日期
+				  REPORT_COUNT: [{ required: true, message: '必填', trigger: 'blur'}],//交委托方分数
 					REPORT_QUALITY: [{ required: true, message: '必填', trigger: 'blur'}],//交委托方分数
 					REPORT_MODE: [{ required: true, message: '必选', trigger: 'change' }],//发送方式
 					REPORT_FOMAT: [{ required: true, message: '必填', trigger: 'change' }],//格式

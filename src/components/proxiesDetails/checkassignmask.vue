@@ -300,10 +300,10 @@
 
 												<el-table-column prop="UNITCOST" label="单价(元)" sortable width="120px" :formatter="priceFormate">
 												</el-table-column>
-												<el-table-column prop="QUATITY" label="样品数量" sortable width="120px">
+												<el-table-column prop="REALITY_PRICE" label="实际单价(元)" sortable width="120px">
 													<template slot-scope="scope">
-															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.QUATITY'" >
-															<el-input size="small" v-model="scope.row.QUATITY" placeholder="请输入"></el-input> 
+															<el-form-item :prop="'INSPECT_PROXY_PROJECList.'+scope.$index + '.REALITY_PRICE'" >
+															<el-input size="small" v-model="scope.row.REALITY_PRICE" placeholder="请输入"></el-input> 
 														</el-form-item>	
 													</template>
 												</el-table-column>
@@ -907,7 +907,7 @@
             sums[index] = '统计';
             return;
 					} 
-					else if(index === 3) {//计算第几列的减1
+					else if(index === 4) {//计算第几列的减1
 						const values = data.map(item => {
 							if(!!item[column.property]){
 								return Number(item[column.property].replace(/,/g,''));
@@ -1239,8 +1239,10 @@
 			submitBuild(){
 				this.$refs.dataInfo.validate((valid) => {
 			    if (valid) {
-						if(!!this.dataInfo.CNAS_OR_CMA_ID){//判断标识CNAS、CMA是否为空
+						if(!!this.dataInfo.CNAS_OR_CMA_ID[0]){//判断标识CNAS、CMA是否为空
 							this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
+						}else{
+							this.dataInfo.CNAS_OR_CMA_ID=this.dataInfo.CNAS_OR_CMA_ID[1];
 						}
 						var Url = this.basic_url + '/api-apps/app/inspectPro/operate/createWorkorder';
 						this.$axios.post(Url, {inspectpro:this.dataInfo}).then((res) => {
@@ -1249,8 +1251,8 @@
 									message: '任务下达成功',
 									type: 'success'
 								});
-								this.detailgetData();
-								this.close();
+								this.show = false;
+								this.$emit('request');
 							}else{
 								this.$message({
 									message: res.data.resp_msg,
@@ -1393,26 +1395,6 @@
 				});
 			},	
 			
-			// 这里是修改
-			detail(dataid) {
-				this.dataid=dataid;
-				var usersUrl = this.basic_url + '/api-user/users/currentMap'
-				this.$axios.get(usersUrl, {}).then((res) => {
-					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
-					this.dataInfo.CHANGEBY = res.data.id;
-					var date = new Date();
-					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err) => {
-				});
-				this.detailgetData();
-				this.modifytitle = true;
-				this.addtitle = false;
-				this.viewtitle = false;
-				this.noviews = true;
-				this.views = false; //
-				this.edit = true;
-				this.noedit = false;
-			},
 			//这是查看
 			view(dataid) {
 				this.dataid=dataid;				

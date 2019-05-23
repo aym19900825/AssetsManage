@@ -152,11 +152,12 @@
 								</el-row>
 							</el-collapse-item>
 							<el-collapse-item title="检验检测要求" name="4" label-width="100px">
-									<el-row>
+								<el-row>
 									<el-col :span="8">
 										<el-form-item label="受检企业" prop="V_NAMEDesc" label-width="140px">
 											<el-input v-model="dataInfo.V_NAMEDesc" disabled>
-												<el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2' || dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
+												<!-- <el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2'|| dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button> -->
+												<el-button slot="append" :disabled="noedit || dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -602,6 +603,8 @@
 					V_NAME: '',
 					V_NAMEDesc:'',
 					VENDOR:'',
+					V_ZIPCODE:'',
+					V_ADDRESS:'',
 					CJDW: '',
 					P_LEADER: '',
 					TASKNUM: '',
@@ -624,7 +627,7 @@
 					PROXY_TYPE:[{required: true, message: '请至少选择一个', trigger: 'change'}],
 					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
 					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
-					P_LEADERDesc: [{required: true, trigger: 'blur', message: '请选择'}], //项目负责人
+					P_LEADERDesc: [{required: true,  message: '请选择'}], //项目负责人
 					PRODUCT_TYPE: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品类别
 					ITEM_NAME: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品名称
 					ITEM_MODEL: [
@@ -753,6 +756,8 @@
 					V_NAME: '',
 					V_NAMEDesc:'',
 					VENDOR:'',
+					V_ADDRESS:'',
+					V_ZIPCODE:'',
 					CJDW: '',
 					P_LEADER: '',
 					TASKNUM: '',
@@ -1270,6 +1275,9 @@
 				if(value.TYPE==1||value.TYPE==3){
 					this.dataInfo.V_NAME=value.ID;
 					this.dataInfo.V_NAMEDesc=value.NAME;
+					this.dataInfo.V_ADDRESS=val.CONTACT_ADDRESS;
+					this.dataInfo.V_ZIPCODE=val.ZIPCODE;
+					this.dataInfo.VENDOR=val.CODE;
 					this.dataInfo.DEPUTE_TYPE=1;
 				}else if(value.TYPE==2){
 					this.dataInfo.V_NAMEDesc=value.fullname;

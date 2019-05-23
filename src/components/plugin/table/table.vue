@@ -92,11 +92,25 @@ export default {
     },
     //判断加急table-row颜色变化
     tableRowClassName({row, rowIndex}) {
+      //委托书
       if(this.appName == 'inspectPro2'||this.appName == 'inspectPro'){
-        if (row.COMPMODE =="加急") {
-          return 'warning-row';
+        if (row.COMPMODE =="加急"&&row.LEADER_STATUSDesc=="未开始") {
+          return 'urgent-received-row';
+        } else if(row.COMPMODE =="加急"&&row.LEADER_STATUSDesc=="进行中"){
+          return 'urgent-doing-row';
+        } else if(row.COMPMODE =="加急"&&row.LEADER_STATUSDesc=="已完成"){
+          return 'urgent-complete-row';
+        } else if(row.COMPMODE =="正常"&&row.LEADER_STATUSDesc=="未开始"){
+          return 'normal-received-row';
+        } else if(row.COMPMODE =="正常"&&row.LEADER_STATUSDesc=="进行中"){
+          return 'normal-doing-row';
+        } else if(row.COMPMODE =="正常"&&row.LEADER_STATUSDesc=="已完成"){
+          return 'normal-complete-row';
+        } else if(row.STATEDesc=="驳回"){
+          return 'yellow-row';
         }
       }
+      //设备管理
       if(this.appName == 'asset'){
         var now = (new Date()).getTime();
         var tranceTime = (new Date(row.TRACE_TIME)).getTime();//设备溯源时间到期判断
@@ -107,6 +121,7 @@ export default {
           return 'yellow-row';
         }
       }
+
     },
     //排序多选点击table-row选中checkbox
     tableSortChange(column){

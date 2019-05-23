@@ -151,7 +151,9 @@
       tableRowClassName({row, rowIndex}) {
         if(this.appName == 'workorder'){
           if(row.STATEDesc =="待接收") {
-            return 'success-row';
+            return 'normal-received-row';
+          }else if(row.STATEDesc =="驳回"){
+            return 'yellow-row';
           }
         }
       },

@@ -1235,7 +1235,7 @@
 					row.isEditing = !row.isEditing;
 				}
 			},
-			//生成工作任务单
+			//确定下达任务
 			submitBuild(){
 				this.$refs.dataInfo.validate((valid) => {
 			    if (valid) {

@@ -492,28 +492,48 @@ h6 {
 
 /*table行颜色标记*/
 .fixed-table-toolbar .columns{
-    width: 120px;
-  }
-  .el-table .warning-row {
-    background:#ffecee;
-    /* font-weight: bold; */
-  }
-  .el-table .warning-row .cell {
-    color: #cb4040;
-  }
-  .el-table .yellow-row {
+	width: 120px;
+}
+/*加急、已过期*/
+.el-table .warning-row {
+	background:#ffecee;
+}
+.el-table .warning-row .cell {
+	color: #cb4040;
+}
+	
+/*驳回、快过期*/
+.el-table .yellow-row {
 	background:#feffef;
-  }
-  .el-table .yellow-row .cell {
-    color: #FF8000;
-  }
-  .el-table .success-row {
-	background: #ebfbf0;
-	/* font-weight: bold; */
-  }
-  .el-table .success-row .cell {
-    color: #0c962b;
-  }
+}
+.el-table .yellow-row .cell {
+	color: #FF8000;
+}
+
+/*************************执行状态（待接收）*/
+/*完成方式（正常）*/
+.el-table .normal-received-row {background: #ebfbf0;}
+.el-table .normal-received-row .cell {color: #0c962b;}
+/*完成方式（加急）*/
+.el-table .urgent-received-row {background: #ffecee;}
+.el-table .urgent-received-row .cell {color: #cb4040;}
+
+/*************************执行状态（处理中）*/
+/*完成方式（正常）*/
+.el-table .normal-doing-row {background: #ecfdfd;}
+.el-table .normal-doing-row .cell {color: #1b1e1f;}
+/*完成方式（加急）*/
+.el-table .urgent-doing-row {background: #ecfdfd;}
+.el-table .urgent-doing-row .cell {color: #eb6161;}
+
+/*************************执行状态（已完成）*/
+/*完成方式（正常）*/
+.el-table .normal-complete-row {background: #f6f7fb;}
+.el-table .normal-complete-row .cell {color: #929eb9;}
+/*完成方式（加急）*/
+.el-table .urgent-complete-row {background: #f6f7fb;}
+.el-table .urgent-complete-row .cell {color: #c19f9f;}
+
 /*表单提交按钮居中显示*/
 .el-dialog {
 	background: #F3F6FA;

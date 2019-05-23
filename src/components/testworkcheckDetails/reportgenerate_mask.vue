@@ -542,9 +542,7 @@
 			},
 			//选择数据带值
 			selChange(val) {
-				var arr=[];
-				arr.push(val);
-				console.log(arr);
+				this.selData = val;
 			},
 			//TAbs页切换事件判断按钮显示
 			handleClick(tab, event) {

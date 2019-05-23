@@ -105,6 +105,13 @@
 								<el-table-column label="修改时间" width="120" prop="CHANGEDATE" sortable="custom" :formatter="dateFormat" v-if="checkedName.indexOf('修改时间')!=-1">
 								</el-table-column>
 							</v-table>
+							<!-- <Htable :list="list"
+									@handleSelectionChange="handleSelectionChange"
+									:options="options"
+									:columns="tableHeader"
+								>
+								</Htable> -->
+
 							<!-- 表格 End-->
 						</el-col>
 					</el-row>
@@ -124,15 +131,18 @@
 	import productmask from '../maindataDetails/product_mask.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
 	import vTable from '../plugin/table/table.vue'
+	// import Htable from '../plugin/table/table-normal.vue'
 	export default {
 		name: 'customer_management',
 		components: {
-			'vheader': vheader,
-			'navs_left': navs_left,
-			'navs_tabs': navs_tabs,
-			'productmask': productmask,
-			'tableControle': tableControle,
-			'v-table': vTable
+			vheader,
+			navs_left,
+			navs_tabs,
+			productmask,
+			tableControle,
+			vTable
+		    // Htable
+			
 		},
 		data() {
 			return {
@@ -219,7 +229,8 @@
 				},
 				selectData: [],
 				buttons:[],
-			    product:'product'//appname
+				product:'product',//appname
+				list:[],//数组
 			}
 		},
 		methods: {
@@ -568,6 +579,11 @@
 			},
 			requestData() {
 				this.$refs.table.requestData();
+				// var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
+				// this.$axios.get(url, {}).then((res) => {
+				// 	this.list = res.data.data;
+				// }).catch((wrong) => {
+				// })
 			},
 			handleNodeClick(data) {},
 			childByValue:function(childValue) {
@@ -612,7 +628,7 @@
 			}
 		},
 		mounted() {
-			// this.requestData();
+		    this.requestData();
 			this.getCompany();
 			this.getdept();
 		},

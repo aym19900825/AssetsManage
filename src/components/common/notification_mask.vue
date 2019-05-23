@@ -266,7 +266,7 @@
 											</div>
 	                                        
 											<el-table ref="" :data="dataInfo.WORK_NOTICE_CHECKPROJECTList" row-key="ID" border stripe :fit="true"
-												:summary-method="getSummaries" :show-summary="true"
+												
 												highlight-current-row
 												style="width: 100%;" 
 												:default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKPROJECTList', order: 'descending'}">
@@ -670,42 +670,42 @@
 				return row.UNITCOST =  this.toFixedPrice(money);
 			},
 			//分包要求检测费用列的总和
-			getSummaries(param) {
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = '总价';
-            return;
-					} else if(index === 5) {//计算第几列的减1
-						const values = data.map(item => {
-							if(!!item[column.property]){
-								return Number(item[column.property].replace(/,/g,''));
-							}else{
-								return 0.00;
-							}
-						});
-						//验证每个value值是否是数字，如果是执行if
-						if (!values.every(value => isNaN(value))) {
-							sums[index] = values.reduce((prev, curr) => {
-								return prev + curr;
-							}, 0);
-							sums[index] = this.toFixedPrice(sums[index]);
-							if(!!sums[index]){
-								this.INSPECTCOST = sums[index];
-							}else{
-								this.INSPECTCOST = '0.00';
-							}
-							var paramData1 = this.INSPECTCOST;
-							this.$forceUpdate();
-							 this.dataInfo.CHECTCOST = this.INSPECTCOST ;
-						} else {
-							sums[index] = ' ';
-						}
-					}
-				});
-					return sums;
-			},
+			// getSummaries(param) {
+      //   const { columns, data } = param;
+      //   const sums = [];
+      //   columns.forEach((column, index) => {
+      //     if (index === 0) {
+      //       sums[index] = '总价';
+      //       return;
+			// 		} else if(index === 5) {//计算第几列的减1
+			// 			const values = data.map(item => {
+			// 				if(!!item[column.property]){
+			// 					return Number(item[column.property].replace(/,/g,''));
+			// 				}else{
+			// 					return 0.00;
+			// 				}
+			// 			});
+			// 			//验证每个value值是否是数字，如果是执行if
+			// 			if (!values.every(value => isNaN(value))) {
+			// 				sums[index] = values.reduce((prev, curr) => {
+			// 					return prev + curr;
+			// 				}, 0);
+			// 				sums[index] = this.toFixedPrice(sums[index]);
+			// 				if(!!sums[index]){
+			// 					this.INSPECTCOST = sums[index];
+			// 				}else{
+			// 					this.INSPECTCOST = '0.00';
+			// 				}
+			// 				var paramData1 = this.INSPECTCOST;
+			// 				this.$forceUpdate();
+			// 				 this.dataInfo.CHECTCOST = this.INSPECTCOST ;
+			// 			} else {
+			// 				sums[index] = ' ';
+			// 			}
+			// 		}
+			// 	});
+			// 		return sums;
+			// },
 			toFixedPrice(price){
 				var res = 0;
 				var money = price;
@@ -1197,8 +1197,9 @@
 			},
 			//
 			review(dataid){
-					var url = this.basic_url + '/api-apps/app/workNot/operate/createWorkNotice/?ID=' + dataid;
+					var url = this.basic_url + '/api-apps/app/workNot/operate/createWorkNotice?ID=' + dataid+"&ischeck=1";
 					this.$axios.get(url, {}).then((res) => {
+							console.log(res);
 							if(res.data.resp_code == "0") {
 									this.dataInfo=res.data;
 									this.show=true;

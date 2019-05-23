@@ -26,7 +26,9 @@ const role_management = r => require.ensure([], () => r(require('@/components/se
 const menu_management = r => require.ensure([], () => r(require('@/components/setting/menu_management')), 'menu_management')
 const data_management = r => require.ensure([], () => r(require('@/components/setting/data_management')), 'data_management')
 const safe_management = r => require.ensure([], () => r(require('@/components/setting/safe_management')), 'safe_management')
-const number_settings = r => require.ensure([], () => r(require('@/components/setting/number_settings')), 'number_settings')
+const number_settings = r => require.ensure([], () => r(require('@/components/setting/number_settings')), 'number_settings')//自动编号
+const numbers = r => require.ensure([], () => r(require('@/components/setting/numbers')), 'numbers')//编号设置（实施用）
+const customernumber = r => require.ensure([], () => r(require('@/components/setting/customernumber')), 'customernumber')//编号设置（客户备用）
 const dictionaries_management = r => require.ensure([], () => r(require('@/components/setting/dictionaries_management')), 'dictionaries_management')
 const personinfo = r => require.ensure([], () => r(require('@/components/setting/personinfo')), 'personinfo')
 const passwordedit = r => require.ensure([], () => r(require('@/components/setting/passwordedit')), 'passwordedit')
@@ -95,6 +97,9 @@ const printCode  = r => require.ensure([], () => r(require('@/components/samples
 const loginlog  = r => require.ensure([], () => r(require('@/components/loginlog/loginlog')), 'loginlog')//打印条码
 const operlog  = r => require.ensure([], () => r(require('@/components/loginlog/operlog')), 'operlog')//打印条码
 const report = r => require.ensure([], () => r(require('@/components/common/common_mask/report')), 'report')
+//报表统计
+const report_list = r => require.ensure([], () => r(require('@/components/statisticalReport/report_list')), 'report_list')
+
 Vue.use(Router)
   const routes = [
     {//登录页
@@ -116,6 +121,11 @@ Vue.use(Router)
       path: '/report',
       name: 'report',
       component: report
+    },
+     {//统计报表
+      path: '/report_list',
+      name: 'report_list',
+      component: report_list
     },
     {//年度计划
       path: '/annual_plan',
@@ -181,6 +191,18 @@ Vue.use(Router)
       path: '/number_settings',
       name: 'number_settings',
       component: number_settings
+    },
+    //编号客户用
+    {
+      path: '/customernumber',
+      name: 'customernumber',
+      component: customernumber
+    },
+     //编号实施用
+     {
+      path: '/numbers',
+      name: 'numbers',
+      component: numbers
     },
     {//机构管理
       path: '/dept_management',

@@ -68,7 +68,7 @@
 										<el-input v-model="searchList.ITEM_NAME" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="5">
+								<el-col :span="4">
 									<el-form-item label="承检单位" prop="CJDW" label-width="75px">
 										<el-select clearable v-model="searchList.CJDW" filterable allow-create default-first-option placeholder="请选择">
 											<el-option v-for="(data,index) in selectDept" :key="index" :value="data.id" :label="data.fullname"></el-option>
@@ -82,6 +82,11 @@
 										</el-select>
 									</el-form-item>
 								</el-col>
+							  <el-col :span="5">
+									<el-form-item label="年度计划编号" prop="WP_NUM" label-width="110px">
+										<el-input v-model="searchList.WP_NUM" @keyup.enter.native="searchinfo"></el-input>
+									</el-form-item>
+								</el-col>	
 							</el-row>
 							<el-row :gutter="5">
 								<el-col :span="5">
@@ -147,6 +152,8 @@
 								<el-table-column label="下达日期" width="130" sortable prop="XD_DATE" :formatter="dateFormat" v-if="checkedName.indexOf('下达日期')!=-1">
 								</el-table-column>
 								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="checkedName.indexOf('任务号')!=-1">
+								</el-table-column>
+								<el-table-column label="年度计划编号" width="150" prop="WP_NUM" sortable v-if="checkedName.indexOf('年度计划编号')!=-1">
 								</el-table-column>
 								<el-table-column label="受检产品名称" width="150" sortable prop="ITEM_NAME" v-if="checkedName.indexOf('受检产品名称')!=-1">
 								</el-table-column>
@@ -258,6 +265,10 @@
 						label: '任务号',
 						prop: 'TASKNUM'
 					},
+						{
+						label: '年度计划编号',
+						prop: 'WP_NUM'
+					},
 					{
 						label: '抽样方案',
 						prop: 'SOLUTION'
@@ -283,7 +294,8 @@
 					PROXY_TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
-					STATUS: ''
+					STATUS: '',
+					WP_NUM:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -348,7 +360,8 @@
 					PROXY_TYPE: '',
 					XD_DATE: '',
 					COMPDATE: '',
-					STATUS: ''
+					STATUS: '',
+					WP_NUM:'',
 				};
 				this.requestData('init');
 			},
@@ -437,7 +450,6 @@
 				}
 			},
 			review(){
-				console.log(this.selUser[0].SYNTHETICAL);
 				if(this.selUser.length == 0) {
 					this.$message({
 						message: '请您选择要复查的数据',
@@ -455,7 +467,8 @@
 							message: '此条数据是合格数据，无须在复查。',
 							type: 'warning'
 						});
-				}else if(this.selUser[0].SYNTHETICAL == 1){
+				}else {
+					console.log(1);
 					this.$refs.child.review(this.selUser[0].ID);
 				}
 		  },

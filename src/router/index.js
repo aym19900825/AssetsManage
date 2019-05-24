@@ -48,6 +48,7 @@ const workorders  = r => require.ensure([], () => r(require('@/components/testwo
 const report_approve  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve')), 'report_approve')//报告审核
 const report_approve2  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_approve2')), 'report_approve2')//报告审批
 const report_send  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_send')), 'report_send')//报告寄出
+const report_print  = r => require.ensure([], () => r(require('@/components/testworkcheck/report_print')), 'report_print')//报告打印
 const useseal_management  = r => require.ensure([], () => r(require('@/components/testworkcheck/useseal_management')), 'useseal_management')//用印管理
 const quality_supervision2  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision2')), 'quality_supervision2')//质量监督抽查审核
 const quality_supervision  = r => require.ensure([], () => r(require('@/components/testworkcheck/quality_supervision')), 'quality_supervision')//质量监督抽查审批
@@ -386,6 +387,11 @@ Vue.use(Router)
       path: '/report_send',
       name: 'report_send',
       component: report_send
+    },
+    {//报告打印
+      path: '/report_print',
+      name: 'report_print',
+      component: report_print
     },
     {//用印管理
       path: '/useseal_management',

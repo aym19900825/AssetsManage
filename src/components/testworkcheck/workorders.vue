@@ -489,23 +489,21 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == '0') {
+				} else if(this.selMenu[0].STATE == '0'&&this.selMenu[0].IS_MAIN!='1') {
 					this.$message({
 						message: '此任务单状态为驳回，报告暂不能生成与编辑',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE!='6'&&this.selMenu[0].STATE!='16') {
+				} else if(this.selMenu[0].STATE!='6') {
 					console.log(this.selMenu[0].STATE);
 					this.$message({
 						message: '此任务单状态不是待生成，暂不能使用报告生成与编辑',
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE == '6'||this.selMenu[0].STATE == '16') {//待生成
+				} else if((this.selMenu[0].STATE == '6'||this.selMenu[0].STATE == '0')&&this.selMenu[0].IS_MAIN=='1') {//待生成
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID,this.selMenu[0].REPORTTEMPLATENUM);
-					console.log(this.selMenu[0].ID);
-					console.log(this.selMenu[0].REPORTTEMPLATENUM);
 				}
 			},
 			getCurrentRole(){//获取当前用户信息

@@ -71,7 +71,7 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<div>{{scope.row}}---{{workorderForm.WONUM}}——{{masterId}}--{{$store.state.currentuser.id}}</div>
+														<!-- <div>{{scope.row}}---{{workorderForm.WONUM}}——{{masterId}}--{{$store.state.currentuser.id}}</div> -->
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
@@ -230,17 +230,23 @@
 														</el-table-column>
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
+														<el-table-column label="是否审核" width="100" align="center" prop="ISTOGETHERDesc">
+														</el-table-column>
+														<el-table-column label="审核人" align="center" prop="CHECKERDesc">
+														</el-table-column>
+														<el-table-column label="审核时间" prop="CHECK_DATE">
+														</el-table-column>
 														<el-table-column label="操作" v-show="!pageDisable">
 															<template slot-scope="scope">
 															 	<el-button title="预览" @click="readFile(scope.row)" type="text" size="small"> 
-																	<i class="icon-eye"></i>
+																	<i class="icon-eye"></i> 预览
 																	<!-- {{scope.row.LIABLE_PERSON}}--{{$store.state.currentuser.id}} -->
 																</el-button>
 																<el-button title="编辑" type="text" size="small" @click="editFile(scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||(workorderForm.STATE == '0'||workorderForm.STATE == '2')&&scope.row.LIABLE_PERSON==$store.state.currentuser.id">
-																	<i class="icon-pencil"></i>
+																	<i class="icon-pencil"></i> 编辑
 																</el-button>
-																<el-button title="删除" type="text" size="small" @click="delFile(scope.$index,scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||(workorderForm.STATE == '0'||workorderForm.STATE == '2')&&scope.row.LIABLE_PERSON==$store.state.currentuser.id">
-																	<i class="icon-trash red"></i>
+																<el-button class="red" title="删除" type="text" size="small" @click="delFile(scope.$index,scope.row)" v-show="!(!!scope.row.CONTRACTID&&scope.row.CONTRACTID==-1)||(workorderForm.STATE == '0'||workorderForm.STATE == '2')&&scope.row.LIABLE_PERSON==$store.state.currentuser.id">
+																	<i class="icon-trash"></i> 删除
 																</el-button>
 															</template>
 														</el-table-column>
@@ -351,7 +357,7 @@
 					WORKORDER_BASISList:[],//检测依据
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
-					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+					WORKORDER_DATA_TEMPLATEList:[],//成果文件
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORTList:[],//报告
@@ -504,7 +510,7 @@
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
 					+ '&recordid=' + this.detailId
-					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
+					+ '&appname=工作任务单_关联成果文件&appid=39&fileedit=0&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
 			//编辑文件
@@ -516,7 +522,7 @@
 					+ '&deptid=' + this.docParm.deptid
 					+ '&deptfullname=' + this.docParm.deptfullname
 					+ '&recordid=' + this.detailId
-					+ '&appname=工作任务单_关联原始数据模板&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
+					+ '&appname=工作任务单_关联成果文件&appid=39&fileedit=1&fileprint=0&fileread=1&fileduplicate=0';
 				 window.open(url); 
 			},
 			//删除文件
@@ -794,7 +800,8 @@
 							FILEPATH: res.data.webUrl,
 							LIABLE_PERSONDesc: this.username,
 							LIABLE_PERSON: this.userid,
-							CONTRACTID: ''
+							CONTRACTID: '',
+							ISTOGETHER: '0',//是否汇总/通过
 						};
 						this.workorderForm.WORKORDER_DATA_TEMPLATEList.push(obj);
 					}
@@ -854,7 +861,7 @@
 					WORKORDER_BASISList:[],//检测依据
 					WORKORDER_PROJECTList:[],//检测项目
 					WORKORDER_CHECKPERSONList:[],//检验员信息
-					WORKORDER_DATA_TEMPLATEList:[],//原始数据模板
+					WORKORDER_DATA_TEMPLATEList:[],//成果文件
 					WORKORDER_ASSETList:[],//检验检测设备
 					WORKORDER_REPORT_TEMPLATEList:[],//报告模板
 					WORKORDER_REPORTList:[],//报告
@@ -1213,7 +1220,7 @@
 					username: res.data.nickname,
 					deptid: res.data.deptId,
 					deptfullname: res.data.deptName,
-					appname: '工作任务单_关联原始数据模板',
+					appname: '工作任务单_关联成果文件',
 					appid: '39'
 				};
 	            }).catch((err) => { });

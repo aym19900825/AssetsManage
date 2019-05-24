@@ -40,9 +40,9 @@
 																  stripe 
 																  highlight-current-row 
 																  style="width: 100%;">
-															<el-table-column prop="BASIS" label="检验检测技术依据" sortable width="150px">
+															<el-table-column prop="BASIS" label="检验检测依据" sortable width="260px">
 															</el-table-column>
-															<el-table-column prop="P_REMARKS" label="检验项目内容" sortable width="200px">
+															<el-table-column prop="P_REMARKS" label="检验检测项目与要求" sortable width="200px">
 															</el-table-column>
 															<!-- <el-table-column prop="REQUIRES" label="对环境和操作人员要求" sortable>
 															</el-table-column> -->
@@ -119,7 +119,7 @@
 		},
 		methods: {
 			reset(){
-            	this.workorderForm = {
+				this.workorderForm = {
 					list: []					
 				};
 				this.pageDisable = false;

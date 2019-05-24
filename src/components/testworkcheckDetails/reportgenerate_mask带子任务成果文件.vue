@@ -235,6 +235,100 @@
 															</template>
 														</el-table-column>
 													</el-table>
+
+													<h1 class="pt30">子任务单-成果数据文件情况</h1>
+													<el-table class="mt10" ref="table11" :data="props.row.SonWorkorderList" 
+														border 
+														stripe
+														highlight-current-row
+														default-expand-all
+														style="width: 100%;">
+
+															<el-table-column type="expand">
+																<template slot-scope="props2">
+																	<el-table ref="table12" :data="props2.row.SonWorkorder_data_templateList" 
+																		border 
+																		stripe 
+																		row-key="ID"
+																		:fit="true" 
+																		max-height="260" 
+																		style="width: 100%;" 
+																		highlight-current-row
+																		@current-change="singleTable"
+																		@selection-change="selChange">
+																		<!-- <el-table-column type="selection" fixed width="55" align="center"></el-table-column> -->
+
+																		<el-table-column type="index" label="序号" width="50">
+																			<template slot-scope="scope3">
+																				<span> {{(page.currentPage-1)*page.pageSize+scope3.$index+1}} </span>
+																			</template>
+																		</el-table-column>
+
+																		<el-table-column label="检验责任人" width="120px" sortable prop="LIABLE_PERSONDesc">
+																		</el-table-column>
+
+																		<el-table-column label="成果文件名称" prop="FILENAME">
+																		</el-table-column>
+																		
+																		<el-table-column label="是否审核" width="100" align="center" prop="ISTOGETHERDesc">
+																		</el-table-column>
+
+																		<el-table-column label="审核人" width="100" align="center" prop="CHECKERDesc">
+																		</el-table-column>
+
+																		<el-table-column label="审核时间" width="160" prop="CHECK_DATE">
+																		</el-table-column>
+
+																		<el-table-column label="文件大小" width="120px" prop="FILESIZE">
+																		</el-table-column>
+
+																		<!-- <el-table-column label="排序" width="130px" prop="SORT">
+																			<template slot-scope="scope4">
+																				<el-button size="mini" :disabled="scope4.$index===0" @click="moveUp(scope4.$index,scope4.row, props2.row.SonWorkorder_data_templateList)" title="上移"><i class="el-icon-arrow-up"></i></el-button>
+																				<el-button size="mini" :disabled="scope4.$index===(reportData.List.length-1)" @click="moveDown(scope4.$index,scope4.row,props2.row.SonWorkorder_data_templateList)" title="下移"><i class="el-icon-arrow-down"></i></el-button>
+																			</template>
+																		</el-table-column> -->
+
+																		<el-table-column label="操作" align="center" width="80px">
+																			<template slot-scope="scope4">
+																				<el-button title="预览" @click="readFile(scope4.row)" type="text" size="small"> 
+																					<i class="icon-eye"></i>
+																					预览
+																				</el-button>
+																			</template>
+																		</el-table-column>
+																	</el-table>
+																</template>
+															</el-table-column>
+
+															<el-table-column type="index" label="序号" width="55">
+															</el-table-column>
+
+															<el-table-column label="工作任务单编号" prop="WONUM" sortable>
+															</el-table-column>
+
+															<el-table-column label="样品名称" prop="PRODUCT" sortable>
+															</el-table-column>
+
+															<el-table-column label="主任务单？" width="100" align="center" prop="IS_MAINDesc">
+															</el-table-column>
+
+															<el-table-column label="完成方式" width="100" align="center" prop="COMPLETE_MODE">
+															</el-table-column>
+
+															<el-table-column label="完成日期" width="140" align="center" prop="COMPLETE_DATE" sortable>
+															</el-table-column>
+
+															<el-table-column label="责任人" width="120" align="center" prop="MASTER_INSPECTORDesc" sortable>
+															</el-table-column>
+
+															<el-table-column label="操作" align="center" width="100px">
+																<template slot-scope="scope3">
+																	<el-button type="warning" size="small" @click="sendback(scope3.row)">回退</el-button>
+																</template>
+															</el-table-column>
+													</el-table>
+
 												</template>
 											</el-table-column>
 

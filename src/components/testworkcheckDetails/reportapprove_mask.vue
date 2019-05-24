@@ -302,7 +302,7 @@
 				var url = this.basic_url +'/api-apps/app/reportApprove/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.report = res.data;
-					console.log(res);
+					// console.log(res);
 					// this.report.WORKORDER_REPORTList = !!this.report.WORKORDER_REPORTList?this.report.WORKORDER_REPORTList:[];
 					this.report.WORKORDER_REPORTList.push(res.data);
 					this.show = true;
@@ -360,9 +360,9 @@
 			},
 			//这是查看
 			view(data) {
-				console.log(data);
+				// console.log(data);
 				this.dataid = data;
-				console.log(this.dataid);
+				// console.log(this.dataid);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;

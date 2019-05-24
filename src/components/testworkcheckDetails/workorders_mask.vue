@@ -586,7 +586,10 @@
 														<el-table-column label="文件大小" prop="FILESIZE">
 														</el-table-column>
 														
-														<el-table-column label="审核人" prop="CHECKERDesc">
+														<el-table-column label="是否审核" width="100" align="center" prop="ISTOGETHERDesc">
+														</el-table-column>
+
+														<el-table-column label="审核人" align="center" prop="CHECKERDesc">
 														</el-table-column>
 
 														<el-table-column label="审核时间" prop="CHECK_DATE">

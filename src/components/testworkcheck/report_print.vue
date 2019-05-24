@@ -86,20 +86,6 @@
 					</el-row>
 				</div>
 			</div>
-			<el-dialog title="报告寄出" width="60%" :visible.sync="passdialog" :before-close="resetNewpwd">
-				<el-form inline-message :model="userpassword" :rules="rules" ref="newPwdForm">
-					<el-form-item label="新密码" prop="Password" label-width="100px">
-						<el-input  type="password" v-model="userpassword.Password"></el-input>
-					</el-form-item>
-					<el-form-item label="确认新密码" prop="newPassword" label-width="100px">
-						<el-input type="password" v-model="userpassword.newPassword"></el-input>
-					</el-form-item>
-				</el-form>
-				<span slot="footer" class="dialog-footer">
-					<el-button type="primary" @click="sendReport">确 定</el-button>
-					<el-button @click="resetNewpwd">取 消</el-button>
-				</span>
-			</el-dialog>
 			<!--右侧内容显示 End-->
 			<reportsendmask ref="reportsend" @request="requestData" v-bind:page=page></reportsendmask>
 			<!--报表-->
@@ -129,20 +115,6 @@
 		},
 		data() {
 			return {
-				//报告寄出数据
-				userpassword:{
-					newPassword: '',
-					Password:''
-				},
-				passdialog:false,//报告寄出弹出框
-				rules:{
-					newpassword: [
-						{required: true, trigger: 'blur', message: '必填', validator: this.Validators.isValidatePass},
-					],
-					Password: [
-						{required: true, trigger: 'blur', message: '必填', validator: this.Validators.isValidatePass},
-					]
-				},
 				appName: 'reportSend',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
@@ -226,12 +198,6 @@
 		},
 		
 		methods: {
-			//关闭报告寄出弹出框
-			resetNewpwd(){
-				this.passdialog = false;
-				this.requestData('init');
-				this.$refs['newPwdForm'].resetFields();
-			},
 			//选择数据
 			setSelData(val){
 				this.selUser = val;

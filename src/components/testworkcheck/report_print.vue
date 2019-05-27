@@ -87,7 +87,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<reportsendmask ref="reportsend" @request="requestData" v-bind:page=page></reportsendmask>
+			<reportprintmask ref="reportsend" @request="requestData" v-bind:page=page></reportprintmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -98,7 +98,7 @@
 	import vheader from '../common/vheader.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import navs_left from '../common/left_navs/nav_left5.vue'
-	import reportsendmask from '../testworkcheckDetails/reportsend_mask.vue'
+	import reportprintmask from '../testworkcheckDetails/reportprint_mask.vue'
     import tableControle from '../plugin/table-controle/controle.vue'
 	import reportmask from'../reportDetails/reportMask.vue'
 	import vTable from '../plugin/table/table.vue'
@@ -108,14 +108,14 @@
 			'vheader': vheader,
 			'navs_left': navs_left,
 			'navs_tabs': navs_tabs,
-			'reportsendmask': reportsendmask,
+			'reportprintmask': reportprintmask,
 			'tableControle': tableControle,
 			'reportmask': reportmask,
 			'v-table': vTable
 		},
 		data() {
 			return {
-				appName: 'reportSend',
+				appName: 'reportBase',
 				reportData:{},//报表的数据
 				basic_url: Config.dev_url,
 				commentArr: {},
@@ -225,16 +225,12 @@
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
 		    	 this.physicsDel();
-		    	}else if(item.name=="确认报告寄出"){
-		    	 this.sendReport();
 		    	}else if(item.name=="高级查询"){
 		    	 this.modestsearch();
 		    	}else if(item.name=="导入"){
 		    	 this.download();
 		    	}else if(item.name=="删除"){
 		    	 this.deluserinfo();
-		    	}else if(item.name=="生成子任务单"){
-		    	 this.tasklist();
 		    	}else if(item.name=="报表"){
 			     this.reportdata();
 				}
@@ -295,48 +291,7 @@
 			},
 			//查看
 			view(data) {
-				console.log(data);
 				this.$refs.reportsend.view(data);
-			},
-			//确认报告寄出
-			sendReport(){
-				var selData = this.selUser;
-				if(selData.length == 0) {
-					this.$message({
-						message: '请选择您要寄出的报告',
-						type: 'warning'
-					});
-					return;
-				} else {
-					//changeUser为勾选的数据
-					var changeUser = selData;
-					//cancelid为id的数组
-					var cancelid = [];
-					var ids;
-					for(var i = 0; i < changeUser.length; i++) {
-						cancelid.push(changeUser[i].ID);
-					}
-					//ids为cancelid数组用逗号拼接的字符串
-					ids = cancelid.toString(',');
-					var url = this.basic_url + '/api-apps/app/reportSend/operate/confirmReportSend?ids='+ids;
-					this.$axios.get(url, {}).then((res) => {
-						//resp_code == 0是后台返回的请求成功的信息
-						if(res.data.resp_code == 0) {
-							this.$message({
-								message: '确认成功',
-								type: 'success'
-							});
-							//重新加载数据
-							this.$emit('requests');
-						}else {
-							this.$message({
-								message: res.data.resp_msg,
-								type: 'warning'
-							});
-						}
-					}).catch((err) => {
-					});
-				}
 			},
 			//高级查询
 			modestsearch() {
@@ -440,18 +395,6 @@
 					}).catch(() => {
 					});
 				}
-			},
-			// 导入
-			importData() {
-
-			},
-			// 导出
-			exportData() {
-
-			},
-			// 打印
-			Printing() {
-
 			},
 			//时间格式化  
 			dateFormat(row, column) {

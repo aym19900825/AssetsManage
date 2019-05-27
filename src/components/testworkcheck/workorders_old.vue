@@ -517,7 +517,7 @@
 				var id=data.ID;
 				this.$refs.child.view(id);
 			},
-			//代办跳转
+			//首页待办任务跳转
 			getRouterData() {
 				// 只是改了query，其他都不变
 				this.id = this.$route.query.bizId;

@@ -36,7 +36,7 @@
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="5" class="pull-right pr10">
+										<el-col :span="6" class="pull-right pr10">
 											<el-input v-model="report.PROXY_TYPEDesc" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>

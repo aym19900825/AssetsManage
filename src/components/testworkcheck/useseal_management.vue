@@ -40,7 +40,6 @@
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="委托单位名称" prop="V_NAME" label-width="100px">
-										<!-- <el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											v-model="searchList.V_NAME" 
 											filterable 
@@ -52,7 +51,6 @@
 								</el-col>
 								<el-col :span="7">
 									<el-form-item label="用印人" prop="USER" label-width="80px">
-										<!-- <el-input v-model="searchList.USER" @keyup.enter.native="searchinfo"></el-input> -->
 										<el-select clearable 
 											   v-model="searchList.USER" 
 											   filterable 
@@ -509,7 +507,7 @@
 				})
 
 		    },
-		    //代办跳转
+		    //首页待办任务跳转
 			getRouterData() {
 				// 只是改了query，其他都不变
 				this.id = this.$route.query.bizId;

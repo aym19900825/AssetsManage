@@ -1376,8 +1376,6 @@ export default {
         V_ADDRESS: [
           {
             required: true,
-            trigger: "change",
-            validator: this.Validators.isAddress
           }
         ], //地址
         V_ZIPCODE: [
@@ -1505,9 +1503,9 @@ export default {
     // 报告份数
 			compare(){
 				if(this.dataInfo.REPORT_QUALITY<this.dataInfo.REPORT_COUNT){
-					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY-1;
+					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY;
 					this.$message({
-						message: '报告份数不能大于交付委托方份数',
+						message: '交付委托方份数不能大于报告份数',
 						type: 'warning'
 					});
 				}

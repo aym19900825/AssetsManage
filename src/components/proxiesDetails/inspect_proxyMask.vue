@@ -959,7 +959,7 @@
 				rules: {
 					V_NAME: [
 						{required: true, message: '必填',}],//委托方名称名称
-					V_ADDRESS: [{required: true, trigger: 'change'}],//地址
+					V_ADDRESS: [{required: true}],//地址
 					V_ZIPCODE: [{required: false, trigger: 'change', validator: this.Validators.isZipcode}],//邮编
 					V_PERSON: [{required: true, validator: this.Validators.isNickname}],//联系人姓名
 					V_PHONE: [{required: true, validator: this.Validators.isPhones}],//联系人电话
@@ -1031,9 +1031,9 @@
 			// 报告份数
 			compare(){
 				if(this.dataInfo.REPORT_QUALITY<this.dataInfo.REPORT_COUNT){
-					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY-1;
+					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY;
 					this.$message({
-						message: '报告份数不能大于交付委托方份数',
+						message: '交付委托方份数不能大于报告份数',
 						type: 'warning'
 					});
 				}

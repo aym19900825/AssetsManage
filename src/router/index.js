@@ -99,7 +99,7 @@ const loginlog  = r => require.ensure([], () => r(require('@/components/loginlog
 const operlog  = r => require.ensure([], () => r(require('@/components/loginlog/operlog')), 'operlog')//打印条码
 const report = r => require.ensure([], () => r(require('@/components/common/common_mask/report')), 'report')
 //报表统计
-const report_list = r => require.ensure([], () => r(require('@/components/statisticalReport/report_list')), 'report_list')
+const plan_chain = r => require.ensure([], () => r(require('@/components/statisticalReport/plan_chain')), 'plan_chain')
 
 Vue.use(Router)
   const routes = [
@@ -124,9 +124,9 @@ Vue.use(Router)
       component: report
     },
      {//统计报表
-      path: '/report_list',
-      name: 'report_list',
-      component: report_list
+      path: '/plan_chain',
+      name: 'plan_chain',
+      component: plan_chain
     },
     {//年度计划
       path: '/annual_plan',

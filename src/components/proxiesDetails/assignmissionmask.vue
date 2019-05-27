@@ -524,7 +524,7 @@
 											</el-form-item>
 										</el-col>	
 									</el-row>
-									<el-row>
+									<!-- <el-row>
 										<el-col :span="8">
 											<el-form-item label="我方经办人" prop="OURAGENT"  label-width="110px">
 												<el-input v-model="dataInfo.OURAGENT" disabled></el-input>
@@ -540,7 +540,7 @@
 												<el-input v-model="dataInfo.OPPOSITE_AGENT" disabled></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
+									</el-row> -->
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="合同编号" prop="CONTRACTNUM" label-width="110px">

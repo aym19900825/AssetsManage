@@ -216,10 +216,15 @@ export default {
       }
       this.requestData();
     },
-    requestData(opt){
+    requestData(opt,val){
       this.isHeight();//获取高度
       this.loadding = true;
-      var data = this.searchList;
+      if(!!val){
+        var data={};
+      }else{
+        var data = this.searchList;
+      }
+      // var data = this.searchList;
       if(opt=='item' || opt =='itemgrant' || opt=='itemreturn' || opt=='itemdisposition'){
         if(!(!!this.searchList.DEPTID && this.searchList.DEPTID == 128)){
 					data.DEPTID = this.searchList.DEPTID;

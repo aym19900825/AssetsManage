@@ -323,7 +323,7 @@
 					PRO_NAME: '',
 					VERSION: '',
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			//搜索
 			searchinfo() {
@@ -577,8 +577,9 @@
 					// this.$router.push({path: '/report' ,query: {appname: this.productType,id:this.selMenu[0].ID,}});
 				}
 			},
-			requestData() {
-				this.$refs.table.requestData();
+			requestData(val1,val2) {
+				this.$refs.table.requestData(val1,val2);
+
 				// var url = this.basic_url + '/api-apps/appSelection/' + this.appName + '/pageForStation';
 				// this.$axios.get(url, {}).then((res) => {
 				// 	this.list = res.data.data;

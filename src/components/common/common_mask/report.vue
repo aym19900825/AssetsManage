@@ -486,6 +486,7 @@ import tree_grid from '../../common/TreeGrid.vue'//树表格
         },
         //运行统计报表确定
         determine(){
+        this.src='';
 				var token = sessionStorage.getItem('access_token');
            var str=JSON.stringify(this.dataInfo);
          //var str=this.dataInfo; 
@@ -497,13 +498,13 @@ import tree_grid from '../../common/TreeGrid.vue'//树表格
 					str=str.replace("\",\"","&");
         }
 
-        this.str="&"+str.replace(',', '&');
-        this.file=this.file+this.str;
+          this.str="&"+str.replace(',', '&');
+          var filename=this.file+this.str;
 		  		var src=this.basic_url;
 					var pos = src.lastIndexOf(':');
 					src=src.substring(0,pos+1); 
 					this.src=src+"5300";
-          this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
+          this.src = this.src+"/ureport/preview?_u=mysql:"+filename+'&access_token='+token;
           this.loading = false;//加载动画关闭
       },
       //报表的重置

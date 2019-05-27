@@ -176,7 +176,7 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
 					REPORT_NUM:'',
-					PROXY_TYPE:'',
+					V_NAME:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -229,7 +229,7 @@
 			resetbtn(){
 				this.searchList = {
 					REPORT_NUM:'',
-					PROXY_TYPE:'',
+					V_NAME:'',
 				};
 				this.requestData('init');
 			},

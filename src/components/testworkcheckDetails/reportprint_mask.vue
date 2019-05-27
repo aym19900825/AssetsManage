@@ -18,18 +18,18 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
-						<div class="text-center" v-show="viewtitle">
+						<!-- <div class="text-center" v-show="viewtitle">
 							<span v-show="this.report.STATE==7" class="pr10">
-								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
+								<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告打印</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
+						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="寄出信息" name="1">
+								<el-collapse-item title="打印信息" name="1">
 									<el-row :gutter="10">
 										<el-col :span="4" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
@@ -149,15 +149,10 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
-
-								<!-- <el-collapse-item title="文件" name="3">
-									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
-								</el-collapse-item> -->
-
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
-							<!-- <el-button type="success" @click="readAuth">确认报告打印</el-button> 在外面显示，批量寄出-->
+							<el-button type="success" @click="readAuth">打印报告</el-button>
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -178,7 +173,6 @@
 
 <script>
 	import Config from '../../config.js'
-	import docTable from '../common/doc.vue'
 	import approvalmask from '../workflow/approving.vue'
 	import flowhistorymask from '../workflow/flowhistory.vue'
 	import flowmapmask from '../workflow/flowmap.vue'
@@ -186,7 +180,6 @@
 	export default {
 		name: 'masks',
 		components: {
-			docTable,
 			approvalmask,
 			flowhistorymask,
 			flowmapmask,
@@ -243,6 +236,7 @@
                     STATE:'',//流程状态
 					STATEDesc:'',
 					V_NAME:'',//委托单位
+					V_NAMEDesc:'',//委托单位
 					DETECTIONTYPE:'',//检测类型
 					CJDW:'',//承检单位
 					LEADER:'',//主检负责人
@@ -261,7 +255,7 @@
                     DEPARTMENT:'',//机构描述
 				},
 				dataid:'',
-				reportSend:'reportSend',//appname
+				reportBase:'reportBase',//appname
             }
 		},
 		methods: {
@@ -311,7 +305,7 @@
 			//生成的报告文件列表
 			detailgetData(){
 				// console.log('detailgetData');
-				var url = this.basic_url +'/api-apps/app/reportSend/' +this.dataid;
+				var url = this.basic_url +'/api-apps/app/reportBase/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.report = res.data;
 					console.log(res);
@@ -344,21 +338,9 @@
 					this.report.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.docParm.userid = res.data.id;
-					this.docParm.username = res.data.username;
-					this.docParm.deptid = res.data.deptId;
-					this.docParm.deptfullname = res.data.deptName;
-					var _this = this;
-					setTimeout(function(){
-						_this.docParm.model = 'edit';
-						_this.docParm.appname = '报告归档/检测标准';
-						_this.docParm.recordid = _this.report.ID;
-						_this.docParm.appid = 91;
-						_this.$refs.docTable.getData();
-					},100);
 				}).catch((err) => {
                 });
-                // var url = this.basic_url +'/api-apps/app/reportSend/' + dataid;
+                // var url = this.basic_url +'/api-apps/app/reportBase/' + dataid;
 				// this.$axios.get(url, {}).then((res) => {
 				// 	this.report = res.data;
 				// 	this.show = true;
@@ -388,13 +370,13 @@
 				this.noviews = false;//按钮
 				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
-				var url = this.basic_url + '/api-apps/app/reportSend/flow/isStart/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/reportBase/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;
 					}else{
-						var url = this.basic_url + '/api-apps/app/reportSend/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/reportBase/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 							res.data.CJDW = Number(res.data.CJDW);
 							var resullt=res.data.datas;
@@ -447,7 +429,7 @@
 			},
 			//启动流程
 			startup(){
-				var url = this.basic_url + '/api-apps/app/reportSend/flow/'+this.dataid;
+				var url = this.basic_url + '/api-apps/app/reportBase/flow/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					if(res.data.resp_code == 1) {
 							this.$message({
@@ -460,7 +442,7 @@
 							type: 'success'
 						});
 						this.detailgetData();
-						var url = this.basic_url + '/api-apps/app/reportSend/flow/Executors/'+this.dataid;
+						var url = this.basic_url + '/api-apps/app/reportBase/flow/Executors/'+this.dataid;
 						this.$axios.get(url, {}).then((res) => {
 							var resullt=res.data.datas;
 							var users='';
@@ -481,8 +463,8 @@
 			//审批流程
 			approvals(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportSend;
-				 var url = this.basic_url + '/api-apps/app/reportSend/flow/isEnd/'+this.dataid;
+				this.approvingData.app=this.reportBase;
+				 var url = this.basic_url + '/api-apps/app/reportBase/flow/isEnd/'+this.dataid;
 		    		this.$axios.get(url, {}).then((res) => {
 		    			if(res.data.resp_code == 0) {
 							this.$message({
@@ -490,7 +472,7 @@
 								type: 'warning'
 							});
 		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/reportSend/flow/isExecute/'+this.dataid;
+		    				var url = this.basic_url + '/api-apps/app/reportBase/flow/isExecute/'+this.dataid;
 		    				this.$axios.get(url, {}).then((res) => {
 				    			if(res.data.resp_code == 1) {
 										this.$message({
@@ -498,7 +480,7 @@
 											type: 'warning'
 										});
 								}else{
-									var url = this.basic_url + '/api-apps/app/reportSend/flow/customFlowValidate/'+this.dataid;
+									var url = this.basic_url + '/api-apps/app/reportBase/flow/customFlowValidate/'+this.dataid;
 								this.$axios.get(url, {}).then((res) => {
 				    				if(res.data.resp_code == 1) {
 										this.$message({
@@ -517,33 +499,26 @@
 			//流程历史
 			flowhistory(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportSend;
+				this.approvingData.app=this.reportBase;
 //				this.$refs.flowhistoryChild.open();
 				this.$refs.flowhistoryChild.getdata(this.dataid);
 			},
 			//流程地图
 			flowmap(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportSend;
+				this.approvingData.app=this.reportBase;
 				this.$refs.flowmapChild.getimage();
 			},
 			//当前责任人
 			viewpepole(){
 				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportSend;
+				this.approvingData.app=this.reportBase;
 				this.$refs.vewPopleChild.getvewPople(this.dataid);
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {
-				this.$refs.report.validate((valid) => {
-					if(!valid && opt == 'docUpload'){
-						this.$message({
-							message: '请先正确填写信息，再进行文档上传',
-							type: 'warning'
-						});
-					}
-					if(valid) {
-						var url = this.basic_url + '/api-apps/app/reportSend/saveOrUpdate';
+				if(valid) {
+						var url = this.basic_url + '/api-apps/app/reportBase/saveOrUpdate';
 						this.$axios.post(url, this.report).then((res) => {
 							if(res.data.resp_code == 0) {
 								if(opt == 'docUpload'){
@@ -586,7 +561,6 @@
 						});
 						this.falg = false;
 					}
-				});
 			},
 			
 			//保存

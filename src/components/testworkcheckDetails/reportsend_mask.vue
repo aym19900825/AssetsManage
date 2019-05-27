@@ -18,15 +18,15 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
-						<div class="text-center" v-show="viewtitle">
+						<!-- <div class="text-center" v-show="viewtitle">
 							<span v-show="this.report.STATE==7" class="pr10">
-								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
+								<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button>
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告寄出</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
 							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div>
+						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="寄出信息" name="1">
@@ -146,11 +146,6 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item> -->
-
-								<!-- <el-collapse-item title="文件" name="3">
-									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
-								</el-collapse-item> -->
-
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
@@ -198,16 +193,7 @@
 				selUser: [],
 				edit: true, //禁填
 				show: false,
-				docParm: {
-					'model': 'new',
-					'recordid': 1,
-					'userid': 1,
-					'username': '',
-					'deptid': 1,
-					'deptfullname': '',
-					'appname': '',
-					'appid': 1
-				},
+				
 				isok1: true,
 				isok2: false,
 				down: true,
@@ -280,16 +266,6 @@
 					this.report.ENTERBY = res.data.id;
 					var date = new Date();
 					this.report.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.docParm = {
-						'model': 'new',
-						'appname': '报告归档',
-						'recordid': 1,
-						'appid': 91
-					};
-					this.docParm.userid = res.data.id;
-					this.docParm.username = res.data.username;
-					this.docParm.deptid = res.data.deptId;
-					this.docParm.deptfullname = res.data.deptName;
 				}).catch((err) => {
 				});
 				this.addtitle = true;
@@ -341,18 +317,6 @@
 					this.report.CHANGEBY = res.data.id;
 					var date = new Date();
 					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-					this.docParm.userid = res.data.id;
-					this.docParm.username = res.data.username;
-					this.docParm.deptid = res.data.deptId;
-					this.docParm.deptfullname = res.data.deptName;
-					var _this = this;
-					setTimeout(function(){
-						_this.docParm.model = 'edit';
-						_this.docParm.appname = '报告归档/检测标准';
-						_this.docParm.recordid = _this.report.ID;
-						_this.docParm.appid = 91;
-						_this.$refs.docTable.getData();
-					},100);
 				}).catch((err) => {
                 });
                 // var url = this.basic_url +'/api-apps/app/reportSend/' + dataid;
@@ -532,58 +496,50 @@
 			},
 			// 保存users/saveOrUpdate
 			save(opt) {
-				this.$refs.report.validate((valid) => {
-					if(!valid && opt == 'docUpload'){
-						this.$message({
-							message: '请先正确填写信息，再进行文档上传',
-							type: 'warning'
-						});
-					}
-					if(valid) {
-						var url = this.basic_url + '/api-apps/app/reportSend/saveOrUpdate';
-						this.$axios.post(url, this.report).then((res) => {
-							if(res.data.resp_code == 0) {
-								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
-									this.docParm.model = 'edit';
-									this.$refs.docTable.autoLoad();
-									this.report.id = res.data.datas.id;
+				if(valid) {
+					var url = this.basic_url + '/api-apps/app/reportSend/saveOrUpdate';
+					this.$axios.post(url, this.report).then((res) => {
+						if(res.data.resp_code == 0) {
+							if(opt == 'docUpload'){
+								this.docParm.recordid = res.data.datas.id;
+								this.docParm.model = 'edit';
+								this.$refs.docTable.autoLoad();
+								this.report.id = res.data.datas.id;
+							}else{
+								this.$message({
+									message: '保存成功',
+									type: 'success'
+								});
+								this.$emit('request');
+							}
+						}else{
+							this.show = true;
+							if(res.data.resp_code == 1) {
+								//res.data.resp_msg!=''后台返回提示信息
+								if( res.data.resp_msg!=''){
+									this.$message({
+										message: res.data.resp_msg,
+										type: 'warning'
+									});
 								}else{
 									this.$message({
-										message: '保存成功',
-										type: 'success'
+										message:'相同数据不可重复添加！',
+										type: 'warning'
 									});
-									this.$emit('request');
-								}
-							}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复添加！',
-											type: 'warning'
-										});
-									}
 								}
 							}
-						}).catch((err) => {
-						});
-						this.falg = true;
-					} else {
-						this.show = true;
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-						this.falg = false;
-					}
-				});
+						}
+					}).catch((err) => {
+					});
+					this.falg = true;
+				} else {
+					this.show = true;
+					this.$message({
+						message: '未填写完整，请填写',
+						type: 'warning'
+					});
+					this.falg = false;
+				}
 			},
 			
 			//保存

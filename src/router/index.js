@@ -123,8 +123,63 @@ Vue.use(Router)
       name: 'report',
       component: report
     },
-     {//统计报表
+    {//统计报表
       path: '/plan_chain',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain1',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain3',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain4',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain5',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain6',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain7',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain8',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain9',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain10',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain11',
+      name: 'plan_chain',
+      component: plan_chain
+    },
+    {//统计报表
+      path: '/plan_chain2',
       name: 'plan_chain',
       component: plan_chain
     },

@@ -417,20 +417,24 @@
 			childByValue:function(val) {
 				this.src='';
 				this.pramList=[];
+				this.$refs.navsTabs.showClick(val);
 				this.app=val.app;
 				this.path=val.path;
 				this.name=val.name;
-				this.$refs.navsTabs.showClick(val);
+				console.log(val);
 				var url = this.basic_url + '/api-apps/app/'+this.app+'/report?type=统计类';
 				this.$axios.get(url, {}).then((res) => { 
 					var reportarr=res.data.datas;
 					var reportid;
+					console.log(reportarr);
 					for(let a=0;a<reportarr.length;a++){
             if(reportarr[a].file==this.path){
 							 reportid=reportarr[a].id;
 						}
 					}
+					console.log(reportid);
 					 var url = this.basic_url + '/api-apps/app/'+this.app+'/reportParams/'+reportid;
+					 console.log(url);
             this.$axios.get(url, {}).then((res) => {
 							var list = res.data.datas;
 							var plistsize = res.data.datas.length;
@@ -467,6 +471,7 @@
 						}
 					}
 					 var url = this.basic_url + '/api-apps/app/'+this.app+'/reportParams/'+reportid;
+					  console.log(url);
             this.$axios.get(url, {}).then((res) => {
             this.pramList = res.data.datas;
           }).catch((wrong) => {

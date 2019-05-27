@@ -330,7 +330,7 @@
 					STARTETIME: '',
 					STATUS: '',
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			searchinfo(index) {
 				this.requestData('init');
@@ -544,9 +544,6 @@
 			},
 			//上传文件列表
 			handleSuccess(response, file, fileList){
-				console.log(response);
-				console.log(file);
-				console.log(fileList);
 			},
 			//导入上传文件
 			uploadUrl(){
@@ -654,8 +651,8 @@
 				this.selMenu = val;
 			},
 			//Table默认加载数据
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			requestData(opt,opt1) {
+				this.$refs.table.requestData(opt,opt1);
 			},
 			handleNodeClick(data) {},
 			childByValue:function(childValue) {

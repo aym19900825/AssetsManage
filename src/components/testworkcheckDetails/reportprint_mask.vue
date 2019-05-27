@@ -29,7 +29,7 @@
 						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="打印信息" name="1">
+								<el-collapse-item title="报告信息" name="1">
 									<el-row :gutter="10">
 										<el-col :span="4" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
@@ -119,8 +119,55 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
+
+								<el-collapse-item title="人员资质" name="2">
+									<div class="table-func" v-show="noviews">
+										<el-button type="success" size="mini" round @click="addfield">
+											<i class="icon-add"></i>
+											<font>新建行</font>
+										</el-button>
+									</div>
+									<div class="pt10">
+										<el-table ref="qualification" :header-cell-style="rowClass" :fit="true"
+										:data="report.QUALIFICATIONList"
+										row-key="ID"
+										border
+										stripe
+										max-height="260"
+										highlight-current-row
+										style="width: 100%;"
+										@cell-click="iconOperation"
+										:default-sort="{prop:'report.QUALIFICATIONList', order: 'descending'}">
+											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
+												<template slot-scope="scope">
+													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
+													<i class="el-icon-edit" v-else></i>
+												</template>
+											</el-table-column>
+											<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
+											</el-table-column>
+											<el-table-column prop="C_NAME" label="证书名称" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
+															<el-button slot="append" icon="icon-search" @click="getqualication(scope.row)" :disabled="noedit"></el-button>
+														</el-input>
+														<span v-else>{{scope.row.C_NAME}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column fixed="right" label="操作" width="120">
+												<template slot-scope="scope">
+													<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
+														<i class="icon-trash red"></i>
+													</el-button>
+												</template>
+											</el-table-column>
+										</el-table>
+									</div>
+								</el-collapse-item>
 								
-								<el-collapse-item title="其他" name="2" v-show="views">
+								<!-- <el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -148,7 +195,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</el-collapse-item>
+								</el-collapse-item> -->
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
@@ -194,21 +241,11 @@
 				selUser: [],
 				edit: true, //禁填
 				show: false,
-				docParm: {
-					'model': 'new',
-					'recordid': 1,
-					'userid': 1,
-					'username': '',
-					'deptid': 1,
-					'deptfullname': '',
-					'appname': '',
-					'appid': 1
-				},
 				isok1: true,
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1','2'], //手风琴数量
+				activeNames: ['1','2','3'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
 				//tree
@@ -252,18 +289,90 @@
                     CHANGEBY:'',//修改人
                     CHANGEDATE:'',//修改时间
                     DEPTID:'',//机构ID
-                    DEPARTMENT:'',//机构描述
+					DEPARTMENT:'',//机构描述
+					QUALIFICATIONList: [],//报告打印记录
 				},
 				dataid:'',
 				reportBase:'reportBase',//appname
             }
 		},
 		methods: {
-			showLoading(){
-				this.loading = true;
+			//点击重置[作业指导书]搜索
+			resetbtn(){
+				this.searchList =  { 
+					NUM: '',
+					DESCRIPTION: '',
+				};
+				this.workInsData();
 			},
-			closeLoading(){
-				this.loading = false;
+			//点击搜索[作业指导书]查询
+			searchinfo() {
+				this.workInsData();
+			},
+			//点击重置[资质证书]搜索
+			resetbtn2(){
+				this.searchList2 =  { 
+					c_name: '',
+					c_date: '',
+				};
+				this.qualicationData();
+			},
+			//点击搜索[资质证书]查询
+			searchinfo2() {
+				this.qualicationData();
+			},
+			//人员资质-新建行
+			addfield() {
+				var obj = {
+					C_NAME: '',
+					isEditing: true
+				};
+				this.report.QUALIFICATIONList.push(obj);
+			},
+			//刪除新建行
+			deleteRow(index, row, listName){
+				var TableName = '';
+				if(listName =='tableList'){
+					TableName = 'QUALIFICATION';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/app/inspectionPro/' + TableName +'/' + row.ID;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.report[TableName+'List'].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
+						});
+					}).catch(() => {
+
+					});
+				}else{
+					this.report[TableName+'List'].splice(index,1);
+				}
+			},
+			iconOperation(row, column, cell, event) {
+				if(column.property === "iconOperation") {
+					row.isEditing = !row.isEditing;
+				}
+			},
+			//表头居中
+			rowClass({ row, rowIndex}) {
+			    return 'text-align:center'
 			},
 			//获取导入表格勾选信息
 			selChange(val) {
@@ -311,7 +420,6 @@
 					console.log(res);
 					// this.report.WORKORDER_REPORTList = !!this.report.WORKORDER_REPORTList?this.report.WORKORDER_REPORTList:[];
 					this.report.WORKORDER_REPORTList.push(res.data);
-					this.show = true;
 				}).catch((err) => {
 				});
 			},
@@ -332,6 +440,7 @@
 				this.modify = true;//修订
 				this.statusshow1 = false;
 				this.statusshow2 = true;
+				this.show = true;
 				this.detailgetData();
 				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
 					this.report.DEPTID = res.data.deptId;//传给后台机构id

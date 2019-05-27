@@ -93,7 +93,7 @@
 				</div>
 			</div>
 			<!--右侧内容显示 End-->
-			<reportprintmask ref="reportsend" @request="requestData" v-bind:page=page></reportprintmask>
+			<reportprintmask ref="reportPrint" @request="requestData" v-bind:page=page></reportprintmask>
 			<!--报表-->
 			<reportmask :reportData="reportData" ref="reportChild" ></reportmask>
 		</div>
@@ -271,7 +271,7 @@
 		    },
 			//添加类别
 			openAddMgr() {
-				this.$refs.reportsend.visible();
+				this.$refs.reportPrint.visible();
 			},
 			//修改
 			modify() {
@@ -293,7 +293,7 @@
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'
 						});
-						this.$refs.reportsend.view(this.selUser[0]);
+						this.$refs.reportPrint.view(this.selUser[0]);
 					}
 					//驳回
 					else if(this.selUser[0].STATE == 0) {
@@ -319,13 +319,13 @@
 							}
 						});
 					}else{
-						this.$refs.reportsend.detail(this.selUser[0]);	
+						this.$refs.reportPrint.detail(this.selUser[0]);	
 					}
 				}
 			},
 			//查看
 			view(data) {
-				this.$refs.reportsend.view(data);
+				this.$refs.reportPrint.view(data);
 			},
 			//高级查询
 			modestsearch() {
@@ -346,7 +346,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/reportSend/deletes';
+					var url = this.basic_url + '/api-apps/app/reportPrint/deletes';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组
@@ -393,7 +393,7 @@
 					});
 					return;
 				} else {
-					var url = this.basic_url + '/api-apps/app/reportSend/physicsDel';
+					var url = this.basic_url + '/api-apps/app/reportPrint/physicsDel';
 					//changeUser为勾选的数据
 					var changeUser = selData;
 					//deleteid为id的数组

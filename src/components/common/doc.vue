@@ -230,6 +230,8 @@ export default {
             })
         },
         getData(opt){
+            console.log(123);
+            console.log(this.docParm.model);
             if(this.docParm.model == 'new' || opt=='new'){
                 this.doc = [];
                 return false;

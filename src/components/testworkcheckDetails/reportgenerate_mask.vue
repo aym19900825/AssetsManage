@@ -199,8 +199,8 @@
 														<el-table-column label="成果文件名称" prop="FILENAME">
 														</el-table-column>
 
-														<el-table-column label="是否审核" width="100" align="center" prop="ISTOGETHERDesc">
-														</el-table-column>
+														<!-- <el-table-column label="是否审核" width="100" align="center" prop="ISTOGETHERDesc">
+														</el-table-column> -->
 
 														<el-table-column label="审核人" width="100" align="center" prop="CHECKERDesc">
 														</el-table-column>
@@ -218,7 +218,7 @@
 															</template>
 														</el-table-column>
 
-														<el-table-column label="操作" width="120px">
+														<el-table-column label="操作" align="center" width="120px">
 															<template slot-scope="scope2">
 																<el-button title="预览" @click="readFile(scope2.row)" type="text" size="small"> 
 																	<i class="icon-eye"></i>
@@ -944,6 +944,7 @@
 													message: res.data.resp_msg,
 													type: 'warning'
 												});
+												this.loading = false;
 											}
 										}).catch((err) => {
 										});

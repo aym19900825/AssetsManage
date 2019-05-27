@@ -33,29 +33,28 @@
 					<div v-show="search">
 						<el-form inline-message :model="searchList" label-width="70px">
 							<el-row :gutter="10">
-                                <el-col :span="7">
+                                <el-col :span="5">
 									<el-form-item label="报告编号" prop="REPORT_NUM">
 										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
-								<el-col :span="7">
-									<el-form-item label="报告名称" prop="REPORTNAME">
-										<el-input v-model="searchList.REPORTNAME" @keyup.enter.native="searchinfo"></el-input>
+								<el-col :span="5">
+									<el-form-item label="委托单位名称" prop="V_NAME" label-width="100px">
+										<el-select clearable 
+											v-model="searchList.V_NAME" 
+											filterable 
+											default-first-option 
+											placeholder="请选择" style="width:100%;">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
-								<el-col :span="7">
-									<el-form-item label="委托单位" prop="V_NAME" label-width="90px">
-										<el-input v-model="searchList.V_NAME" @keyup.enter.native="searchinfo"></el-input>
+								<el-col :span="5">
+									<el-form-item label="归档人" prop="ONHOLEPERSONDesc" label-width="70px">
+										<el-input v-model="searchList.ONHOLEPERSONDesc" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
-							</el-row>
-							<el-row :gutter="10">
-								<el-col :span="7">
-									<el-form-item label="归档人" prop="ONHOLEPERSON" label-width="70px">
-										<el-input v-model="searchList.ONHOLEPERSON" @keyup.enter.native="searchinfo"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="7">
+								<el-col :span="5">
 									<el-form-item label="归档时间" prop="ONHOLTIME">
 										<el-date-picker v-model="searchList.ONHOLTIME" type="date" placeholder="请选择" value-format="yyyy-MM-dd" style="width: 100%;" @keyup.enter.native="searchinfo">
 										</el-date-picker>
@@ -93,13 +92,13 @@
 								</el-table-column>
 								<el-table-column label="主检负责人" width="120" sortable prop="LEADERDesc" v-if="checkedName.indexOf('主检负责人')!=-1">
 								</el-table-column>
-								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSON" v-if="this.checkedName.indexOf('归档人')!=-1">
+								<el-table-column label="归档人" width="100" sortable prop="ONHOLEPERSONDesc" v-if="this.checkedName.indexOf('归档人')!=-1">
 								</el-table-column>
 								<el-table-column label="归档时间" width="185" sortable prop="ONHOLTIME" v-if="this.checkedName.indexOf('归档时间')!=-1" :formatter="dateFormat">
 								</el-table-column>
 								<el-table-column label="完成日期" width="160" sortable prop="COMPDATE" v-if="checkedName.indexOf('完成日期')!=-1" :formatter="dateFormat">
 								</el-table-column>
-								<el-table-column label="完成方式" width="120" sortable prop="COMPMODEDesc" v-if="checkedName.indexOf('完成方式')!=-1">
+								<el-table-column label="完成方式" width="120" sortable prop="COMPMODE" v-if="checkedName.indexOf('完成方式')!=-1">
 								</el-table-column>
 							</v-table>
 							<!-- 表格 End-->
@@ -141,6 +140,7 @@
 				basic_url: Config.dev_url,
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画\
+				selectData: [],//委托单位名称
 				commentArr: {},
 				value: '',
 				options: [{
@@ -191,7 +191,7 @@
 						prop: 'LEADERDesc'
 					},{
 						label: '归档人',
-						prop: 'ONHOLEPERSON'
+						prop: 'ONHOLEPERSONDesc'
 					},{
 						label: '归档时间',
 						prop: 'ONHOLTIME'
@@ -200,7 +200,7 @@
 						prop: 'COMPDATE'
 					},{
 						label: '完成方式',
-						prop: 'COMPMODEDesc'
+						prop: 'COMPMODE'
 					},
 				],
 				selUser: [],
@@ -212,9 +212,8 @@
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
 					REPORT_NUM:'',
-					REPORTNAME:'',
 					V_NAME:'',
-					ONHOLEPERSON: '',
+					ONHOLEPERSONDesc: '',
 					ONHOLTIME:'',
 				},
 				//tree
@@ -230,6 +229,34 @@
 			}
 		},
 		methods: {
+			//委托单位名称
+			getSelPromise(){
+				var arr1 = [];
+				var resFun = new Promise((resolve,reject)=>{
+					this.$axios.get(this.basic_url + '/api-user/depts/findFirstSecond', {}).then((res) => {
+						this.selectData = res.data;
+						resolve(arr1);
+					}).catch((wrong) => {})
+				})
+				return resFun;
+			},
+			getSelectData(){
+				this.getSelPromise().then(()=>{
+					this.$axios.get(this.basic_url + '/api-apps/app/customer', {}).then((res) => {
+						var resData = res.data.data;
+						for (let i = 0; i < resData.length; i++) {
+							this.selectData.push({
+								id: resData[i].ID,
+								fullname:  resData[i].NAME
+							})
+						}
+					}).catch((wrong) => {})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+			},
+			//选择数据
 			setSelData(val){
 				this.selUser = val;
 			},
@@ -240,7 +267,6 @@
 			resetbtn(){
 				this.searchList = {
 					REPORT_NUM:'',
-					REPORTNAME:'',
 					V_NAME:'',
 					ONHOLEPERSON: '',
 					ONHOLTIME:'',
@@ -477,7 +503,7 @@
 				})
 
 			},
-			//代办跳转
+			//首页待办任务跳转
 			getRouterData() {
 				// 只是改了query，其他都不变
 				this.id = this.$route.query.bizId;
@@ -486,9 +512,11 @@
 
 		},
 		mounted() {
+			//首页待办任务跳转
 			if(this.$route.query.bizId != undefined) {
 				this.getRouterData();
 			}
+			this.getSelectData();//委托单位名称
 		},
 	}
 </script>

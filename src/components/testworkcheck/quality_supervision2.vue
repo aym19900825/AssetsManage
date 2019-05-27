@@ -33,14 +33,20 @@
 					<div v-show="search">
 						<el-form inline-message :model="searchList">
 							<el-row :gutter="10">
-                                <el-col :span="7">
-									<el-form-item label="编码" prop="REPORTNUM" label-width="45px">
-										<el-input v-model="searchList.REPORTNUM" @keyup.enter.native="searchinfo"></el-input>
+                               <el-col :span="7">
+									<el-form-item label="报告编号" prop="REPORT_NUM" label-width="80px">
+										<el-input v-model="searchList.REPORT_NUM" @keyup.enter.native="searchinfo"></el-input>
 									</el-form-item>
 								</el-col>
 								<el-col :span="7">
-									<el-form-item label="报告描述" prop="DESCRIPTION"  label-width="80px">
-										<el-input v-model="searchList.DESCRIPTION" @keyup.enter.native="searchinfo"></el-input>
+									<el-form-item label="委托单位名称" prop="V_NAME" label-width="100px">
+										<el-select clearable 
+											v-model="searchList.V_NAME" 
+											filterable 
+											default-first-option 
+											placeholder="请选择" style="width:100%;">
+											<el-option v-for="(data,index) in selectData" :key="index" :value="data.id" :label="data.fullname"></el-option>
+										</el-select>
 									</el-form-item>
 								</el-col>
 								<el-col :span="4">
@@ -117,6 +123,7 @@
 				po_url:Config.po_url,//pageoffice 服务路径
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
+				selectData: [],//委托单位名称
 				commentArr: {},
 				value: '',
 				options: [{
@@ -174,8 +181,8 @@
 				ismin: true,
 				fullHeight: document.documentElement.clientHeight - 210 + 'px', //获取浏览器高度
                 searchList: { //点击高级搜索后显示的内容
-					REPORTNUM:'',
-					DESCRIPTION:'',
+					REPORT_NUM:'',
+					V_NAME:'',
 				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据，
@@ -190,6 +197,34 @@
 			}
 		},
 		methods: {
+			//委托单位名称
+			getSelPromise(){
+				var arr1 = [];
+				var resFun = new Promise((resolve,reject)=>{
+					this.$axios.get(this.basic_url + '/api-user/depts/findFirstSecond', {}).then((res) => {
+						this.selectData = res.data;
+						resolve(arr1);
+					}).catch((wrong) => {})
+				})
+				return resFun;
+			},
+			getSelectData(){
+				this.getSelPromise().then(()=>{
+					this.$axios.get(this.basic_url + '/api-apps/app/customer', {}).then((res) => {
+						var resData = res.data.data;
+						for (let i = 0; i < resData.length; i++) {
+							this.selectData.push({
+								id: resData[i].ID,
+								fullname:  resData[i].NAME
+							})
+						}
+					}).catch((wrong) => {})
+				})
+				.catch(function(err){
+					console.log(err);
+				})
+			},
+			//选择数据
 			setSelData(val){
 				this.selUser = val;
 			},
@@ -199,8 +234,8 @@
 			//重置
 			resetbtn(){
 				this.searchList = {
-					REPORTNUM:'',
-					DESCRIPTION:'',
+					REPORT_NUM:'',
+					V_NAME:'',
 				};
 				this.requestData('init');
 			},
@@ -403,6 +438,7 @@
 				}).catch((wrong) => {
 				})
 			},
+			//首页待办任务跳转
 			getRouterData() {
 				// 只是改了query，其他都不变
 					this.id = this.$route.query.bizId;
@@ -411,9 +447,11 @@
 			
 			},
 			mounted() {
+				//首页待办任务跳转
 				if(this.$route.query.bizId!=undefined){
 					this.getRouterData();
 				}
+				this.getSelectData();//委托单位名称
 			},
 	}
 </script>

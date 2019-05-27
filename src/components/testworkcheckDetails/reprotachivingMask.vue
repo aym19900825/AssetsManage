@@ -36,12 +36,12 @@
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="5" class="pull-right pr10">
+										<el-col :span="6" class="pull-right pr10">
 											<el-input v-model="report.PROXY_TYPEDesc" :disabled="edit">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
-										<el-col :span="5" class="pull-right pr10">
+										<el-col :span="7" class="pull-right pr10">
 											<el-input v-model="report.REPORT_NUM" :disabled="edit">
 												<template slot="prepend">报告编号</template>
 											</el-input>
@@ -119,7 +119,7 @@
 										</el-col>
 									</el-row> -->
 								</el-collapse-item>
-								<el-collapse-item title="其他" name="2" v-show="views">
+								<!-- <el-collapse-item title="其他" name="2" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -148,7 +148,7 @@
 											</el-form-item>
 										</el-col>
 									</el-row>
-								</el-collapse-item>
+								</el-collapse-item> -->
 								<el-collapse-item title="文件" name="2">
 									<doc-table ref="docTable" :docParm = "docParm" @saveParent = "save" @showLoading = "showLoading" @closeLoading = "closeLoading"></doc-table>
 								</el-collapse-item>

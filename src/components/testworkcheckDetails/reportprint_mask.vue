@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加报告寄出</div>
-					<div class="mask_title" v-show="modifytitle">修改报告寄出</div>
-					<div class="mask_title" v-show="viewtitle">查看报告寄出</div>
+					<div class="mask_title" v-show="addtitle">添加报告打印</div>
+					<div class="mask_title" v-show="modifytitle">修改报告打印</div>
+					<div class="mask_title" v-show="viewtitle">查看报告打印</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -21,7 +21,7 @@
 						<div class="text-center" v-show="viewtitle">
 							<span v-show="this.report.STATE==7" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告寄出</el-button>
+								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告打印</el-button>
 							</span>
 							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
 							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
@@ -157,7 +157,7 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
-							<!-- <el-button type="success" @click="readAuth">确认报告寄出</el-button> 在外面显示，批量寄出-->
+							<!-- <el-button type="success" @click="readAuth">确认报告打印</el-button> 在外面显示，批量寄出-->
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>

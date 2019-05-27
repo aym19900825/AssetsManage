@@ -213,7 +213,7 @@
                     <el-col :span="8">
                       <el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
                         <!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit"></el-input> -->
-                        <el-select v-model="dataInfo.ITEM_STATUS" filterable allow-create placeholder="请选择" style="width:100%;">
+                        <el-select v-model="dataInfo.ITEM_STATUS" filterable allow-create placeholder="请选择" style="width:100%;" :disabled="noedit">
 													<el-option
 														v-for="item in itemstateoptions"
 														:key="item.id"
@@ -1502,7 +1502,7 @@ export default {
   methods: {
     // 报告份数
 			compare(){
-				if(this.dataInfo.REPORT_QUALITY<this.dataInfo.REPORT_COUNT){
+				if(parseInt(this.dataInfo.REPORT_QUALITY)>parseInt(this.dataInfo.REPORT_COUNT)){
 					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY;
 					this.$message({
 						message: '交付委托方份数不能大于报告份数',
@@ -2034,7 +2034,12 @@ export default {
             this.noedit1 = true;
             this.PNAME = true;
             this.PNAME1 = true;
-					}
+          }
+          //如果是从年度计划下达的赋默认值
+          if(!!res.data.N_CODE){
+            res.data.REPORT_FOMAT='国家中心'
+            res.data.REPORT_MODE='自取'
+          }
 					this.dataInfo = res.data;
           this.show = true;
           this.outcontents();
@@ -2185,6 +2190,15 @@ export default {
       this.PNAME = true; //生产单位
       this.PNAME1 = true;
       this.isEditing = false;
+      var _this = this;
+      setTimeout(function(){
+					_this.docParm.model = 'view';
+					_this.docParm.appname = '检测委托书';
+          _this.docParm.recordid = dataid;
+          _this.docParm.appid = 95;
+					_this.$refs.docTable.getData();
+				},100);
+
       this.detailgetData();
       this.$axios
         .get(
@@ -3008,7 +3022,6 @@ export default {
      var url = this.basic_url + '/api-apps/appSelection/workNotCheb/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1';
 		 this.$axios.get(url, {}).then((res) => {
             this.standardList =res.data.data;
-            console.log(this.standardList);
         }).catch((wrong) => {}) 
     },
     addBasis(val) {
@@ -3036,7 +3049,6 @@ export default {
       var url = this.basic_url + '/api-apps/appSelection/workNotCheo/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1';
       this.$axios.get(url,{}).then((res) => {
             this.contentList = res.data.data;
-            console.log(this.contentList);
         }).catch((wrong) => {})
     },
     add(val) {
@@ -3172,8 +3184,8 @@ export default {
 						}else{
 						//没有样品的时候
 							// this.dataInfo.ITEM_NAME = "";
-							this.dataInfo.ITEM_MODEL = "";
-							this.dataInfo.ITEM_QUALITY = "";
+							// this.dataInfo.ITEM_MODEL = "";
+							// this.dataInfo.ITEM_QUALITY = "";
 							this.dataInfo.ITEM_STATUS = "";
 							this.dataInfo.ITEM_ID = "";
 							this.dataInfo.ITEM_SECRECY = "";

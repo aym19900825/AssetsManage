@@ -149,7 +149,7 @@
 										</p>
 									</template>
 								</el-table-column>
-								<el-table-column label="委托方名称名称" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称名称')!=-1">
+								<el-table-column label="委托方名称" sortable width="260px" prop="V_NAMEDesc" v-if="this.checkedName.indexOf('委托方名称名称')!=-1">
 								</el-table-column>
 								<el-table-column label="状态" sortable width="140px" prop="STATEDesc" v-if="this.checkedName.indexOf('状态')!=-1">
 								</el-table-column>

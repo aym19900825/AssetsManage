@@ -619,7 +619,7 @@
 					STATEDesc: '编制',
 					ENTERBY: '',
 					STATUS: '',
-					CHECTCOST:0.00,
+					CHECTCOST:0,
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: [],
 				},
@@ -772,7 +772,7 @@
 					STATEDesc: '编制',
 					ENTERBY: '',
 					STATUS: '',
-					CHECTCOST:0.00,
+					CHECTCOST:0,
 					WORK_NOTICE_CHECKBASISList: [],
 					WORK_NOTICE_CHECKPROJECTList: [],
 				}

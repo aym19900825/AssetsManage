@@ -417,19 +417,14 @@
 			childByValue:function(val) {
 				this.src='';
 				this.pramList=[];
-				console.log(val);
 				this.app=val.app;
 				this.path=val.path;
 				this.name=val.name;
-				console.log(this.name);
 				this.$refs.navsTabs.showClick(val);
 				var url = this.basic_url + '/api-apps/app/'+this.app+'/report?type=统计类';
-				console.log(this.app);
-				console.log(url);
 				this.$axios.get(url, {}).then((res) => { 
 					var reportarr=res.data.datas;
 					var reportid;
-					console.log(reportarr);
 					for(let a=0;a<reportarr.length;a++){
             if(reportarr[a].file==this.path){
 							 reportid=reportarr[a].id;
@@ -438,7 +433,6 @@
 					 var url = this.basic_url + '/api-apps/app/'+this.app+'/reportParams/'+reportid;
             this.$axios.get(url, {}).then((res) => {
 							var list = res.data.datas;
-							console.log(res);
 							var plistsize = res.data.datas.length;
               for(var i=0;i<plistsize;i++){
                 if(list[i].type=='4'||list[i].type=='3'||list[i].type=='10'){
@@ -456,7 +450,6 @@
                 }
               }
             this.pramList = list;
-            console.log(this.pramList);
           }).catch((wrong) => {
 				  })
 				}).catch((wrong) => {
@@ -465,12 +458,9 @@
 		  //请求参数
 			Statistics() {
 				var url = this.basic_url + '/api-apps/app/'+this.app+'/report?type=统计类';
-				console.log(this.app);
-				console.log(url);
 				this.$axios.get(url, {}).then((res) => { 
 					var reportarr=res.data.datas;
 					var reportid;
-					console.log(reportarr);
 					for(let a=0;a<reportarr.length;a++){
             if(reportarr[a].file==this.path){
 							 reportid=reportarr[a].id;
@@ -479,7 +469,6 @@
 					 var url = this.basic_url + '/api-apps/app/'+this.app+'/reportParams/'+reportid;
             this.$axios.get(url, {}).then((res) => {
             this.pramList = res.data.datas;
-            console.log(this.pramList);
           }).catch((wrong) => {
 				  })
 				}).catch((wrong) => {
@@ -513,13 +502,12 @@
         }
 
         this.str="&"+str.replace(',', '&');
-        this.file=this.path+this.str;
+          var filename=this.path+this.str;
 		  		var src=this.basic_url;
 					var pos = src.lastIndexOf(':');
 					src=src.substring(0,pos+1); 
 					this.src=src+"5300";
-					this.src = this.src+"/ureport/preview?_u=mysql:"+this.file+'&access_token='+token;
-					console.log(this.src);
+					this.src = this.src+"/ureport/preview?_u=mysql:"+filename+'&access_token='+token;
           this.loading = false;//加载动画关闭
 			},
 			//人员的确定

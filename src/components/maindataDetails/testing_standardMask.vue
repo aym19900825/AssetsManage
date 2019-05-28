@@ -163,6 +163,7 @@
 	import { Loading } from 'element-ui'
 	export default {
 		name: 'masks',
+		components: {docTable},
 		props: {
 			dataInfo: {
 				type: Object,
@@ -192,7 +193,6 @@
 			},
 			page: Object ,
 		},
-		components: {docTable},
 		data() {
 			return {
 				// pickerOptions1: {

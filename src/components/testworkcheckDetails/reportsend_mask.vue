@@ -84,27 +84,6 @@
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="是否寄出" prop="ISSEND">
-												<el-radio-group v-model="report.ISSEND">
-													<el-radio label="1">是</el-radio>
-													<el-radio label="2">否</el-radio>
-												</el-radio-group>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="寄出人" prop="SENDPERSONDesc">
-												<el-input v-model="report.SENDPERSONDesc" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="寄出时间" prop="SENDDATE">
-												<el-input v-model="report.SENDDATE" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-
-									<el-row>
-										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
 												<el-input v-model="report.COMPDATE" :disabled="noedit"></el-input>
 											</el-form-item>

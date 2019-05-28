@@ -220,7 +220,7 @@
 					<el-row>
 						<el-col :span="8">
 							<el-form-item label="打印人" label-width="100px">
-								<el-input v-model="reportPrintForm.PRINT_PERSON" :disabled="edit"></el-input>
+								<el-input v-model="reportPrintForm.PRINT_PERSONDesc" :disabled="edit"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="8">
@@ -302,7 +302,8 @@
 				// this.resetForm();
 				this.reportPrintForm =  {
 					REPORT_COUNT: '1',  //打印份数
-					PRINT_PERSON: this.username,//打印人
+					PRINT_PERSON: this.$store.state.currentuser.id,//打印人ID
+					PRINT_PERSONDesc:this.$store.state.currentuser.nickname,//打印人姓名
 					PRINT_DATE: this.getToday(),//打印时间
 					PRINT_COUNT: this.count,//打印次数
 				};

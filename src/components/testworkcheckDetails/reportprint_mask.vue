@@ -18,15 +18,6 @@
 				</div>
 				<div class="mask_content">
 					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
-						<!-- <div class="text-center" v-show="viewtitle">
-							<span v-show="this.report.STATE==7" class="pr10">
-								<el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button>
-								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告打印</el-button>
-							</span>
-							<el-button type="primary" round plain size="mini" @click="flowmap" ><i class="icon-git-pull-request"></i> 流程地图</el-button>
-							<el-button type="primary" round plain size="mini" @click="flowhistory"><i class="icon-plan"></i> 流程历史</el-button>
-							<el-button type="primary" round plain size="mini" @click="viewpepole"><i class="icon-user"></i> 当前责任人</el-button>
-						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="报告信息" name="1">
@@ -36,18 +27,23 @@
 												<template slot="prepend">流程状态</template>
 											</el-input>
 										</el-col>
-										<el-col :span="5" class="pull-right">
+										<el-col :span="6" class="pull-right">
 											<el-input v-model="report.PROXY_TYPEDesc" :disabled="true">
 												<template slot="prepend">检测类型</template>
 											</el-input>
 										</el-col>
+										<el-col :span="4" class="pull-right">
+											<el-input v-model="report.REPORT_VERSION" :disabled="true">
+												<template slot="prepend">报告版本</template>
+											</el-input>
+										</el-col>
+										<el-col :span="7" class="pull-right">
+											<el-input v-model="report.REPORT_NUM" :disabled="true">
+												<template slot="prepend">报告编号</template>
+											</el-input>
+										</el-col>
 									</el-row>
 									<el-row class="pt10">
-										<el-col :span="8">
-											<el-form-item label="报告编号" prop="REPORT_NUM">
-												<el-input v-model="report.REPORT_NUM" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
 										<el-col :span="8">
 											<el-form-item label="委托单位名称" prop="V_NAME">
 												<el-input v-model="report.V_NAME" :disabled="noedit"></el-input>
@@ -58,11 +54,16 @@
 												<el-input v-model="report.PROXYNUM" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-									<el-row>
 										<el-col :span="8">
 											<el-form-item label="委托书版本" prop="PROXY_VERSION">
 												<el-input v-model="report.PROXY_VERSION" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="工作任务单" prop="WONUMID">
+												<el-input v-model="report.WONUMID" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
@@ -79,27 +80,6 @@
 
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="是否寄出" prop="ISSEND">
-												<el-radio-group v-model="report.ISSEND">
-													<el-radio label="1">是</el-radio>
-													<el-radio label="2">否</el-radio>
-												</el-radio-group>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="寄出人" prop="SENDPERSONDesc">
-												<el-input v-model="report.SENDPERSONDesc" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="寄出时间" prop="SENDDATE">
-												<el-input v-model="report.SENDDATE" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-
-									<el-row>
-										<el-col :span="8">
 											<el-form-item label="完成日期" prop="COMPDATE">
 												<el-input v-model="report.COMPDATE" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -109,27 +89,18 @@
 												<el-input v-model="report.COMPMODE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-									</el-row>
-
-									<el-row>
 										<el-col :span="8">
-											<el-form-item label="实收费用" prop="ACTUALCOST">
-												<el-input v-model="report.ACTUALCOST" :disabled="noedit"></el-input>
+											<el-form-item label="报告总份数" prop="REPORT_QUALITY">
+												<el-input v-model="report.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
 								</el-collapse-item>
 
-								<el-collapse-item title="人员资质" name="2">
-									<div class="table-func" v-show="noviews">
-										<el-button type="success" size="mini" round @click="addfield">
-											<i class="icon-add"></i>
-											<font>新建行</font>
-										</el-button>
-									</div>
+								<el-collapse-item title="打印历史" name="2">
 									<div class="pt10">
 										<el-table ref="qualification" :header-cell-style="rowClass" :fit="true"
-										:data="report.QUALIFICATIONList"
+										:data="report.REPORT_PRINT_LIST"
 										row-key="ID"
 										border
 										stripe
@@ -137,32 +108,62 @@
 										highlight-current-row
 										style="width: 100%;"
 										@cell-click="iconOperation"
-										:default-sort="{prop:'report.QUALIFICATIONList', order: 'descending'}">
+										:default-sort="{prop:'report.REPORT_PRINT_LIST', order: 'descending'}">
 											<el-table-column prop="iconOperation" fixed width="50px" v-if="!viewtitle">
 												<template slot-scope="scope">
 													<i class="el-icon-check" v-if="scope.row.isEditing"></i>
 													<i class="el-icon-edit" v-else></i>
 												</template>
 											</el-table-column>
-											<el-table-column prop="STEP" label="序号" sortable width="120px" label-width="150px" type="index">
+											<el-table-column prop="STEP" label="序号" sortable width="55px" type="index">
 											</el-table-column>
-											<el-table-column prop="C_NAME" label="证书名称" sortable>
+											<el-table-column prop="REPORT_COUNT" label="打印份数" sortable>
 												<template slot-scope="scope">
-													<el-form-item :prop="'QUALIFICATIONList.'+scope.$index + '.C_NAME'" :rules="{required: true, message: '不能为空', trigger: 'blur'}">
-														<el-input v-if="scope.row.isEditing" v-model="scope.row.C_NAME" placeholder="请输入证书名称">
-															<el-button slot="append" icon="icon-search" @click="getqualication(scope.row)" :disabled="noedit"></el-button>
-														</el-input>
-														<span v-else>{{scope.row.C_NAME}}</span>
+													<el-form-item :prop="'REPORT_PRINT_LIST.'+scope.$index + '.REPORT_COUNT'">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.REPORT_COUNT"></el-input>
+														<span v-else>{{scope.row.REPORT_COUNT}}</span>
 													</el-form-item>
 												</template>
 											</el-table-column>
-											<el-table-column fixed="right" label="操作" width="120">
+											<el-table-column prop="PRINT_PERSON" label="打印人" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'REPORT_PRINT_LIST.'+scope.$index + '.PRINT_PERSON'">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.PRINT_PERSON"></el-input>
+														<span v-else>{{scope.row.PRINT_PERSON}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="PRINT_DATE" label="打印时间" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'REPORT_PRINT_LIST.'+scope.$index + '.PRINT_DATE'">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.PRINT_DATE"></el-input>
+														<span v-else>{{scope.row.PRINT_DATE}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="PRINT_COUNT" label="打印次数" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'REPORT_PRINT_LIST.'+scope.$index + '.PRINT_COUNT'">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.PRINT_COUNT"></el-input>
+														<span v-else>{{scope.row.PRINT_COUNT}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<el-table-column prop="IPADDRESS" label="IP地址" sortable>
+												<template slot-scope="scope">
+													<el-form-item :prop="'REPORT_PRINT_LIST.'+scope.$index + '.IPADDRESS'">
+														<el-input v-if="scope.row.isEditing" v-model="scope.row.IPADDRESS"></el-input>
+														<span v-else>{{scope.row.IPADDRESS}}</span>
+													</el-form-item>
+												</template>
+											</el-table-column>
+											<!-- <el-table-column fixed="right" label="操作" width="120">
 												<template slot-scope="scope">
 													<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'tableList')" type="text" size="small" v-show="!viewtitle">
 														<i class="icon-trash red"></i>
 													</el-button>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 										</el-table>
 									</div>
 								</el-collapse-item>
@@ -199,41 +200,70 @@
 							</el-collapse>
 						</div>
 						<div class="content-footer" v-show ="!addtitle">
-							<el-button type="success" @click="readAuth">打印报告</el-button>
+							<el-button type="success" @click="openPrintReport">打印报告</el-button>
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
 					</el-form>
 				</div>
 			</div>
-			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
-			<!--流程历史-->
-			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
-			<!--流程地图-->
-			<flowmapmask :approvingData="approvingData" ref="flowmapChild" ></flowmapmask>
-			<!--当前责任人-->
-			<vewPoplemask :approvingData="approvingData"  ref="vewPopleChild" ></vewPoplemask>
+			<el-dialog title="打印信息" width="60%" :modal-append-to-body="false" :visible.sync="passdialog" :before-close="resetPrintReport">
+				<el-form inline-message :model="reportPrintForm" ref="reportPrintForm">
+					<el-row>
+						<el-col :span="8">
+							<el-form-item label="打印份数" prop="REPORT_COUNT" label-width="100px" :rules="[{ required: true, message: '必填', trigger: 'blur' }]">
+								<el-input-number v-model="reportPrintForm.REPORT_COUNT" :min="1" :max="5" style="width:100%;" label="描述文字"></el-input-number>
+							</el-form-item>
+						</el-col>
+						<el-col :span="8" class="red pl10" style="line-height: 36px;">最多不超过：{{this.report.REPORT_QUALITY}}份。</el-col>
+					</el-row>
+					<el-row>
+						<el-col :span="8">
+							<el-form-item label="打印人" label-width="100px">
+								<el-input v-model="reportPrintForm.PRINT_PERSON" :disabled="edit"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="8">
+							<el-form-item label="打印时间" label-width="100px">
+								<el-input v-model="reportPrintForm.PRINT_DATE" :disabled="edit"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="8">
+							<el-form-item label="打印次数" label-width="100px">
+								<el-input v-model="reportPrintForm.PRINT_COUNT" :disabled="edit"></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+				<span slot="footer" class="dialog-footer">
+					<el-button type="primary" @click="printReport">确定打印</el-button>
+					<el-button @click="resetPrintReport">取 消</el-button>
+				</span>
+			</el-dialog>
 		</div>
 	</div>
 </template>
 
 <script>
 	import Config from '../../config.js'
-	import approvalmask from '../workflow/approving.vue'
-	import flowhistorymask from '../workflow/flowhistory.vue'
-	import flowmapmask from '../workflow/flowmap.vue'
-	import vewPoplemask from '../workflow/vewPople.vue'
 	export default {
 		name: 'masks',
-		components: {
-			approvalmask,
-			flowhistorymask,
-			flowmapmask,
-			vewPoplemask,
-			},
+		components: {},
 		data() {
 			return {
+				count:1,//打印次数
+				//报告打印数据
+				reportPrintForm:{
+					// REPORT_COUNT: '',//报告打印份数号
+					// PRINT_PERSON:'',//打印人
+					// PRINT_DATE:'',//打印时间
+					// PRINT_COUNT:'',//打印次数
+					// IPADDRESS:'',//IP地址
+					// REPORT_QUALITY:'',//报告总份数
+					// DEPTID:'',//打印人机构
+					// STATUS:'0'//逻辑状态
+				},
+				passdialog:false,//报告打印弹出框
 				approvingData:{},//审批的数据
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
@@ -249,8 +279,6 @@
 				dialogVisible: false, //对话框
 				selectData: [],
 				//tree
-				resourceData: [], //数组，我这里是通过接口获取数据
-				category:{},//从父组件接过来的值
 				addtitle:true,
 				modifytitle:false,
 				viewtitle:false,
@@ -259,76 +287,81 @@
 				views:false,//录入修改人信息
 				noviews:true,//按钮
 				modify:false,//修订
-				hintshow:false,
-				statusshow1:true,
-				statusshow2:false,
 				start:false,
-				approval:false,
                 report:{
-					REPORT_NUM:'',	//报告编码
-					REPORTNAME:'',	//报告文件
-                    DESCRIPTION:'',	//报告描述
-                    WONUMID:'',	//工作任务单ID
-                    STATUS:'',	//活动/不活动
-                    STATE:'',//流程状态
-					STATEDesc:'',
-					V_NAME:'',//委托单位
-					V_NAMEDesc:'',//委托单位
-					DETECTIONTYPE:'',//检测类型
-					CJDW:'',//承检单位
-					LEADER:'',//主检负责人
-					ENTERBY:'',//提交人
-					ISSEND:'1',//是否寄出
-					SENDPERSON:'',//寄出人
-					SENDDATE:'',//寄出时间
-					COMPDATE:'',//完成日期
-					COMPMODE:'',//完成方式
-					ENTERBY:'',//录入人ID
-					ENTERBYDesc:'',//录入人描述
-					ENTERDATE:'',//录入时间
-                    CHANGEBY:'',//修改人
-                    CHANGEDATE:'',//修改时间
-                    DEPTID:'',//机构ID
-					DEPARTMENT:'',//机构描述
-					QUALIFICATIONList: [],//报告打印记录
+					REPORT_PRINT_LIST: [],//报告打印记录
 				},
 				dataid:'',
 				reportBase:'reportBase',//appname
             }
 		},
 		methods: {
-			//点击重置[作业指导书]搜索
-			resetbtn(){
-				this.searchList =  { 
-					NUM: '',
-					DESCRIPTION: '',
+			//打开报告打印界面
+			openPrintReport(){
+				this.passdialog = true;
+				// this.resetForm();
+				this.reportPrintForm =  {
+					REPORT_COUNT: '1',  //打印份数
+					PRINT_PERSON: this.username,//打印人
+					PRINT_DATE: this.getToday(),//打印时间
+					PRINT_COUNT: this.count,//打印次数
 				};
-				this.workInsData();
 			},
-			//点击搜索[作业指导书]查询
-			searchinfo() {
-				this.workInsData();
+			//获取当前时间
+			getToday(){
+				var date = new Date();
+				var month = date.getMonth();
+				month++;
+				var str = date.getFullYear() + '-' + month + '-'+ date.getDate() + ' ' +  date.getHours() + ':' + date.getMinutes()+ ':' + date.getSeconds() ;
+				var rate = this.$moment(str).format("YYYY-MM-DD HH:mm:ss")
+				return rate;
 			},
-			//点击重置[资质证书]搜索
-			resetbtn2(){
-				this.searchList2 =  { 
-					c_name: '',
-					c_date: '',
+			//关闭报告寄出弹出框
+			resetPrintReport(){
+				this.passdialog = false;
+				this.resetForm();
+			},
+			//清空数据
+			resetForm(){
+				this.reportPrintForm =  {
+					'REPORT_COUNT': '',  //打印份数
+					'PRINT_PERSON': '',//打印人
+					'PRINT_DATE': '',//打印时间
+					'PRINT_COUNT': ''//打印次数
 				};
-				this.qualicationData();
 			},
-			//点击搜索[资质证书]查询
-			searchinfo2() {
-				this.qualicationData();
+			//点击【确定打印】按钮
+			printReport(){
+				this.$refs.reportPrintForm.validate((valid) => {
+					if(valid) {
+						var url = this.basic_url + '/api-apps/app/reportPrint/operate/confirmReportSend?ids='+this.reportPrintForm.REPORT_COUNT;//等星星弄好接口更换
+						this.$axios.get(url, {}).then((res) => {
+							//resp_code == 0是后台返回的请求成功的信息
+							if(res.data.resp_code == 0) {
+								this.$message({
+									message: '打印提交成功',
+									type: 'success'
+								});
+								this.reportPrintForm.PRINT_COUNT= this.count++,//打印次数
+								this.resetPrintReport();//关闭弹出窗口
+							}else {
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'warning'
+								});
+								this.passdialog = true;//打开弹出窗口
+							}
+						}).catch((err) => {
+						});
+					} else {
+						this.$message({
+							message: '请填写打印份数',
+							type: 'warning',
+						});
+					}
+				})
 			},
-			//人员资质-新建行
-			addfield() {
-				var obj = {
-					C_NAME: '',
-					isEditing: true
-				};
-				this.report.QUALIFICATIONList.push(obj);
-			},
+		
 			//刪除新建行
 			deleteRow(index, row, listName){
 				var TableName = '';
@@ -406,103 +439,33 @@
 				this.views = false;//录入修改人信息
 				this.noviews = true;//按钮
 				this.modify = false;//修订
-				this.hintshow = false;
-				this.statusshow1 = true;
-				this.statusshow2 = false;
 				this.show = true;
 			},
-			//生成的报告文件列表
+			//查看报告
 			detailgetData(){
-				// console.log('detailgetData');
 				var url = this.basic_url +'/api-apps/app/reportBase/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.report = res.data;
-					console.log(res);
-					// this.report.WORKORDER_REPORTList = !!this.report.WORKORDER_REPORTList?this.report.WORKORDER_REPORTList:[];
-					this.report.WORKORDER_REPORTList.push(res.data);
 				}).catch((err) => {
 				});
 			},
-			// 这里是修改
-			detail(maindata) {
-				this.dataid = maindata.ID;
-				this.report.DESCRIPTION = maindata.DESCRIPTION;
-				this.report.STATEDesc = maindata.STATEDesc;
-				this.report.REPORT_NUM = maindata.REPORT_NUM;
-				this.addtitle = false;
-				this.modifytitle = true;
-				this.viewtitle = false;
-				this.dept = true;
-				this.noedit = false;//表单内容
-				this.views = false;//录入修改人信息
-				this.noviews = true;//按钮
-				this.hintshow = false;
-				this.modify = true;//修订
-				this.statusshow1 = false;
-				this.statusshow2 = true;
-				this.show = true;
-				this.detailgetData();
-				this.$axios.get(this.basic_url + '/api-user/users/currentMap', {}).then((res) => {
-					this.report.DEPTID = res.data.deptId;//传给后台机构id
-					this.report.CHANGEBY = res.data.id;
-					var date = new Date();
-					this.report.CHANGEDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-				}).catch((err) => {
-                });
-                // var url = this.basic_url +'/api-apps/app/reportBase/' + dataid;
-				// this.$axios.get(url, {}).then((res) => {
-				// 	this.report = res.data;
-				// 	this.show = true;
-				// }).catch((err) => {
-				// 	this.$message({
-				// 		message: '网络错误，请重试',
-				// 		type: 'error'
-				// 	});
-				// });
-				// this.show = true;
-			},
+			
 			//这是查看
 			view(data) {
 				this.dataid = data.ID;
 				console.log(data.ID);
-				this.report.ISSEND=='1'//是否寄出
 				// this.report.DESCRIPTION = data.DESCRIPTION;
 				// this.report.STATEDesc = data.STATEDesc;
 				// this.report.REPORT_NUM = data.REPORT_NUM;
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
-				this.dept = true;
 				this.show = true;//弹出框打开
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮
 				//判断启动流程和审批的按钮是否显示
 				this.detailgetData();
-				var url = this.basic_url + '/api-apps/app/reportBase/flow/isStart/'+this.dataid;
-				this.$axios.get(url, {}).then((res) => {
-					if(res.data.resp_code==1){
-						this.start=true;
-						this.approval=false;
-					}else{
-						var url = this.basic_url + '/api-apps/app/reportBase/flow/Executors/'+this.dataid;
-						this.$axios.get(url, {}).then((res) => {
-							res.data.CJDW = Number(res.data.CJDW);
-							var resullt=res.data.datas;
-							var users='';
-							for(var i=0;i<resullt.length;i++){
-								users = users + resullt[i].username+",";
-							}
-							if(users.indexOf(this.username) != -1){
-								this.approval=true;
-								this.start=false;
-							}else{
-								this.approval=false;
-								this.start=false;
-							}
-						});
-					}
-				});				
 			},
 			//点击关闭按钮
 			close() {
@@ -536,169 +499,9 @@
 				$(".mask_div").css("top", "0px");
 				$(".mask_divbg").css("top", "100px");
 			},
-			//启动流程
-			startup(){
-				var url = this.basic_url + '/api-apps/app/reportBase/flow/'+this.dataid;
-				this.$axios.get(url, {}).then((res) => {
-					if(res.data.resp_code == 1) {
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
-							});
-				    }else{
-				    	this.$message({
-							message:res.data.resp_msg,
-							type: 'success'
-						});
-						this.detailgetData();
-						var url = this.basic_url + '/api-apps/app/reportBase/flow/Executors/'+this.dataid;
-						this.$axios.get(url, {}).then((res) => {
-							var resullt=res.data.datas;
-							var users='';
-							for(var i=0;i<resullt.length;i++){
-								users = users + resullt[i].username+",";
-							}
-							if(users.indexOf(this.username) != -1){
-								this.approval=true;
-								this.start=false;
-							}else{
-								this.approval=false;
-								this.start=false;
-							}
-						});
-				    }
-				});
-			},	
-			//审批流程
-			approvals(){
-				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportBase;
-				 var url = this.basic_url + '/api-apps/app/reportBase/flow/isEnd/'+this.dataid;
-		    		this.$axios.get(url, {}).then((res) => {
-		    			if(res.data.resp_code == 0) {
-							this.$message({
-								message:res.data.resp_msg,
-								type: 'warning'
-							});
-		    			}else{
-		    				var url = this.basic_url + '/api-apps/app/reportBase/flow/isExecute/'+this.dataid;
-		    				this.$axios.get(url, {}).then((res) => {
-				    			if(res.data.resp_code == 1) {
-										this.$message({
-											message:res.data.resp_msg,
-											type: 'warning'
-										});
-								}else{
-									var url = this.basic_url + '/api-apps/app/reportBase/flow/customFlowValidate/'+this.dataid;
-								this.$axios.get(url, {}).then((res) => {
-				    				if(res.data.resp_code == 1) {
-										this.$message({
-											message:res.data.resp_msg,
-											type: 'warning'
-										});
-									}else{
-									 	this.$refs.approvalChild.visible();
-									}
-								})
-								}
-		    				});
-		    			}
-					});
-			},
-			//流程历史
-			flowhistory(){
-				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportBase;
-//				this.$refs.flowhistoryChild.open();
-				this.$refs.flowhistoryChild.getdata(this.dataid);
-			},
-			//流程地图
-			flowmap(){
-				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportBase;
-				this.$refs.flowmapChild.getimage();
-			},
-			//当前责任人
-			viewpepole(){
-				this.approvingData.id =this.dataid;
-				this.approvingData.app=this.reportBase;
-				this.$refs.vewPopleChild.getvewPople(this.dataid);
-			},
-			// 保存users/saveOrUpdate
-			save(opt) {
-				if(valid) {
-						var url = this.basic_url + '/api-apps/app/reportBase/saveOrUpdate';
-						this.$axios.post(url, this.report).then((res) => {
-							if(res.data.resp_code == 0) {
-								if(opt == 'docUpload'){
-									this.docParm.recordid = res.data.datas.id;
-									this.docParm.model = 'edit';
-									this.$refs.docTable.autoLoad();
-									this.report.id = res.data.datas.id;
-								}else{
-									this.$message({
-										message: '保存成功',
-										type: 'success'
-									});
-									this.$emit('request');
-								}
-							}else{
-								this.show = true;
-								if(res.data.resp_code == 1) {
-									//res.data.resp_msg!=''后台返回提示信息
-									if( res.data.resp_msg!=''){
-									 	this.$message({
-											message: res.data.resp_msg,
-											type: 'warning'
-									 	});
-									}else{
-										this.$message({
-											message:'相同数据不可重复添加！',
-											type: 'warning'
-										});
-									}
-								}
-							}
-						}).catch((err) => {
-						});
-						this.falg = true;
-					} else {
-						this.show = true;
-						this.$message({
-							message: '未填写完整，请填写',
-							type: 'warning'
-						});
-						this.falg = false;
-					}
-			},
 			
-			//保存
-			saveAndUpdate() {
-				this.save();
-				if(this.falg){
-					this.show = false;
-				}
-			},
-			//保存并继续
-			saveAndSubmit() {
-				this.save();
-				this.show = true;
-				this.reset();
-			},
-			reset(){
-				this.report = {
-                    ID:'',	//报告ID
-                    REPORT_NUM:'',	//编码
-                    DESCRIPTION:'',	//报告描述
-                    WONUMID:'',	//工作任务单ID
-                    STATUS:'',	//活动/不活动
-                    STATE:'',//流程状态
-                    STATEDesc:'',
-                }
-			},
 			//预览报告文件
 			readAuth(){
-				// this.detailgetData();
             	var url = this.po_url+"/show?fileid=" + this.report.FILEID
 				+ '&userid=' +  this.userid
 				+ '&username=' + this.username

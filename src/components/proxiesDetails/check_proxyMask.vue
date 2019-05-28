@@ -858,7 +858,7 @@
                         </el-radio-group>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="8">
                       <el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
                         <el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
 													 <el-checkbox v-for="item in logos" :key="item.id" :label="item.code" :value="item.name" >{{item.name}}</el-checkbox>

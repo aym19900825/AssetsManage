@@ -274,6 +274,8 @@ export default {
          var url = this.basic_url + '/api-user/dicts';
       }else if(this.appName == 'serialnum'){
         var url = this.basic_url + '/api-user/serialnum';
+      }else if(this.appName == 'number'){//(实施人员用的编号列表)
+        var url = this.basic_url + '/api-user/number';  
       }else if(this.appName == 'loginlog'){
         var url = this.basic_url + '/api-log/logs/loginLog';
       }else if(this.appName == 'operlog'){

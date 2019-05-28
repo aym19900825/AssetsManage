@@ -1,21 +1,16 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="应用" height="360px" :visible.sync="dialogapp" width="80%">
+		<el-dialog :modal-append-to-body="false" title="数据" height="360px" :visible.sync="dialogapp" width="80%">
 			<el-form inline-message :model="searchList" label-width="45px">
 				<el-row :gutter="10">
 					<el-col :span="5">
-						<el-form-item label="编码" prop="NUM">
-							<el-input v-model="searchList.NUM"></el-input>
+						<el-form-item label="名称" prop="name">
+							<el-input v-model="searchList.name"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="5">
-						<el-form-item label="名称" prop="TYPE">
-							<el-input v-model="searchList.TYPE"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="5">
-						<el-form-item label="版本" prop="VERSION">
-							<el-input v-model="searchList.VERSION"></el-input>
+						<el-form-item label="描述" prop="description">
+							<el-input v-model="searchList.description"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="4">
@@ -26,55 +21,33 @@
 			</el-form>
 
 			<el-table ref="table" :header-cell-style="rowClass" 
-						:data="applicationList" 
-						border 
-						stripe 
-						:height="fullHeight" 
-						style="width: 100%;" 
-						:default-sort="{prop:'applicationList', order: 'descending'}" 
-						@selection-change="SelChange" 
-						@current-change="setSel"
-				
-						v-loading="loading"  
-						element-loading-text="加载中…"
-						element-loading-spinner="el-icon-loading"
-						element-loading-background="rgba(255, 255, 255, 0.9)">
-					<el-table-column type="selection" fixed width="55" align="center">
-					</el-table-column>
-					<el-table-column label="应用英文名称" width="155" sortable prop="code" >
-					</el-table-column>
-					<el-table-column label="应用名称" width="150" sortable prop="name">
-					</el-table-column>
-					<el-table-column label="处理类" width="250" sortable prop="handleclass">
-					</el-table-column>
-					<el-table-column label="应用描述" width="185" sortable prop="description">
-					</el-table-column>
-					<el-table-column label="数据库表" width="185" sortable prop="object_id">
-					</el-table-column>
-					<el-table-column label="模块" width="185" sortable prop="module">
-					</el-table-column>
-					<el-table-column label="排序" width="120" align="right" sortable prop="sort">
-					</el-table-column>
-					<el-table-column label="录入时间" width="120" prop="createTime" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="流程代办单据号" width="180" prop="flow_todo_num" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat">
-					</el-table-column>
+                :data="applicationList" 
+                border 
+                stripe 
+                :height="fullHeight" 
+                style="width: 100%;" 
+                :default-sort="{prop:'applicationList', order: 'descending'}" 
+                @selection-change="SelChange" 
+                @current-change="setSel"
+        
+                v-loading="loading"  
+                element-loading-text="加载中…"
+                element-loading-spinner="el-icon-loading"
+                element-loading-background="rgba(255, 255, 255, 0.9)">
+            <el-table-column type="selection" fixed width="55" align="center">
+            </el-table-column>
+            <el-table-column label="表名" sortable width="320" prop="name">
+            </el-table-column>
+            <el-table-column label="描述" sortable prop="description">
+            </el-table-column>
 			</el-table>
-
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 		    </el-pagination>
-
-				<!-- 表格 End-->
-				<div slot="footer">
-			       <el-button type="primary" @click="determine">确 定</el-button>
-			       <el-button @click="resetBasisInfo">取 消</el-button>
-			    </div>
+            <!-- 表格 End-->
+            <div slot="footer">
+                <el-button type="primary" @click="determine">确 定</el-button>
+                <el-button @click="resetBasisInfo">取 消</el-button>
+            </div>
 		</el-dialog>
 	</div>
 </template>
@@ -102,9 +75,8 @@
 			totalCount: 0
 		},
 		searchList: {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
+			name:'',
+			description:'',
 		},
     }
   },
@@ -143,9 +115,8 @@
 	},
 	resetbtn(){
 		this.searchList = {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
+			name:'',
+			description:'',
 		}
 	},
   	//点击关闭按钮
@@ -217,7 +188,7 @@ requestData() {
 				name: this.searchList.name,
 				description: this.searchList.description,
 			}
-			var url = this.basic_url + '/api-apps/appcfg';
+			var url = this.basic_url + '/apps-center/objectcfg';
 			this.$axios.get(url, {
 				params: data
 			}).then((res) => {

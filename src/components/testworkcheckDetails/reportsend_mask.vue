@@ -29,7 +29,7 @@
 						</div> -->
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-								<el-collapse-item title="寄出信息" name="1">
+								<el-collapse-item title="报告信息" name="1">
 									<el-row :gutter="10">
 										<el-col :span="4" class="pull-right">
 											<el-input v-model="report.STATEDesc" :disabled="true">
@@ -95,8 +95,52 @@
 										</el-col>
 									</el-row>
 								</el-collapse-item>
+								<el-collapse-item title="寄出信息" name="2">
+									<el-row class="pt10">
+										<el-col :span="8">
+											<el-form-item label="收件人">
+												<el-input v-model="report.ACCEPT_PERSONDesc" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="收件人电话">
+												<el-input v-model="report.ACCEPT_PHONE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="收件地址">
+												<el-input v-model="report.ACCEPT_ADDRESS" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="快递单号">
+												<el-input v-model="report.EXPRESS_NUM" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="快递公司">
+												<el-input v-model="report.EXPRESS_COMPANY" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+
+									<el-row>
+										<el-col :span="8">
+											<el-form-item label="寄出人">
+												<el-input v-model="report.SENDPERSONDesc" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="寄出时间">
+												<el-input v-model="report.SENDDATE" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+									</el-row>
+								</el-collapse-item>
 								
-								<!-- <el-collapse-item title="其他" name="2" v-show="views">
+								<!-- <el-collapse-item title="其他" name="3" v-show="views">
 									<el-row>
 										<el-col :span="8">
 											<el-form-item label="录入人" prop="ENTERBYDesc">
@@ -177,7 +221,7 @@
 				isok2: false,
 				down: true,
 				up: false,
-				activeNames: ['1','2'], //手风琴数量
+				activeNames: ['1','2','3'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
 				//tree

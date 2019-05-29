@@ -5,8 +5,8 @@
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
 					<!-- <div class="mask_title" v-show="addtitle">添加报告归档</div> -->
-					<div class="mask_title" v-show="modifytitle">修改分包方分包协议</div>
-					<div class="mask_title" v-show="viewtitle">查看分包方分包协议</div>
+					<div class="mask_title" v-show="modifytitle">修改承包方分包协议</div>
+					<div class="mask_title" v-show="viewtitle">查看承包方分包协议</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -50,12 +50,12 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="分包方名称" prop="DEPTIDDesc" label-width="100px">
+											<el-form-item label="承包方名称" prop="DEPTIDDesc" label-width="100px">
 												<el-input v-model="report.DEPTIDDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
                                         <el-col :span="8">
-											<el-form-item label="分包性质" prop="CONTRACT_NATUREDesc" label-width="100px">
+											<el-form-item label="承包性质" prop="CONTRACT_NATUREDesc" label-width="100px">
 												<el-input v-model="report.CONTRACT_NATUREDesc" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -83,7 +83,7 @@
 									</el-row>
                                     <el-row  :gutter="20">
                                        <el-col :span="24">
-											<el-form-item label="分包方资质证明及有效期" prop="ONHOLTIME">
+											<el-form-item label="承包方资质证明及有效期" prop="ONHOLTIME">
 												<el-input type="textarea" rows="3" v-model="report.ONHOLTIME" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -104,7 +104,7 @@
 
                                     <el-row :gutter="20">
 										<el-col :span="24">
-											<el-form-item label="对分包报告/证书的要求" prop="Q_TYPE">
+											<el-form-item label="对承包报告/证书的要求" prop="Q_TYPE">
 												<el-input type="textarea" rows="3" v-model="report.Q_TYPE" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -265,22 +265,22 @@
                 dataid:'',
                 subcontrac:'subcontrac',//appname
                 report:{
-					ID:'',  //分包协议ID
-					PROXY_CONTRACT_NUM:'',  //分包协议编号
+					ID:'',  //承包协议ID
+					PROXY_CONTRACT_NUM:'',  //承包协议编号
 					PROXYNUM:'',    //委托书编号
 					V_NAME:'',//委托方名称
 					VENDOR:'',  //单位名称
-					CONTRACT_NATURE:'',//分包性质
+					CONTRACT_NATURE:'',//承包性质
 					STATE:'1',//流程状态
 					STATEDesc:'草稿',
 					ITEM_STATUS:'',//样品状态
-					TYPE:'',    //分包协议类别
+					TYPE:'',    //承包协议类别
 					ITEMNAME :'',//样品名称
 					COMPDATE:'',//完成日期
 					P_REMARKS:'',   //检验/检测项目内容
 					BASIS:'',   //检验检测项目依据
 					REQUIRES:'',    //对环境和操作人员要求
-					Q_TYPE:'',  //对分包报告/证书的要求
+					Q_TYPE:'',  //对承包报告/证书的要求
 					CHECKCOST:'',   //检验检测费用
 					STATUS:'',  //信息状态
 					ENTERBY:'',//   录入人

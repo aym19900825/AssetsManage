@@ -72,7 +72,7 @@
 								</el-table-column>
 								<el-table-column label="委托书编号" width="140" sortable prop="PROXYNUM" v-if="checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书版本" width="100" prop="VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
+								<el-table-column label="委托书版本" width="100" prop="PROXY_VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
 								</el-table-column>
 								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
@@ -238,7 +238,7 @@
 						prop: 'PROXYNUM'
 					},{
 						label: '委托书版本',
-						prop: 'VERSION'
+						prop: 'PROXY_VERSION'
 					},{
 						label: '检测类型',
 						prop: 'PROXY_TYPEDesc'
@@ -300,15 +300,14 @@
 					}
 					//ids为cancelid数组用逗号拼接的字符串
 					this.ids = cancelid.toString(',');
-
 					this.passdialog = true;
 					this.reportSendForm =  {
+						IDS:this.ids,//IDS
 						ACCEPT_PERSON: '', //收件人
 						ACCEPT_PHONE: '', //收件人电话
 						ACCEPT_ADDRESS: '', //收件地址
 						EXPRESS_NUM: '', //快递单号
 						EXPRESS_COMPANY: '', //快递公司
-
 						SENDPERSON: this.$store.state.currentuser.id,//寄出人ID
 						SENDPERSONDesc: this.$store.state.currentuser.nickname,//寄出人姓名
 						SENDDATE: this.getToday(),//寄出时间
@@ -477,14 +476,16 @@
 							});
 							return;
 						} else {
-							var url = this.basic_url + '/api-apps/app/reportSend/operate/confirmReportSend?ids='+this.ids;
-							this.$axios.get(url, this.reportSendForm).then((res) => {
+							var url = this.basic_url + '/api-apps/app/reportSend/operate/confirmReportSend';
+							this.$axios.post(url, this.reportSendForm).then((res) => {
 								//resp_code == 0是后台返回的请求成功的信息
 								if(res.data.resp_code == 0) {
 									this.$message({
 										message: '确认成功',
 										type: 'success'
 									});
+									//关闭报告寄出弹出框
+									this.passdialog = false;
 									//重新加载数据
 									this.$emit('requests');
 								}else {

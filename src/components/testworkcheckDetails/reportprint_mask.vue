@@ -212,7 +212,7 @@
 					<el-row>
 						<el-col :span="8">
 							<el-form-item label="打印份数" prop="REPORT_COUNT" label-width="100px" :rules="[{ required: true, message: '必填', trigger: 'blur' }]">
-								<el-input-number v-model="reportPrintForm.REPORT_COUNT" :min="1" :max="5" style="width:100%;" label="描述文字"></el-input-number>
+								<el-input-number v-model="reportPrintForm.REPORT_COUNT" :min="1" :max="this.REPORT_QUALITY" style="width:100%;" label="描述文字"></el-input-number>
 							</el-form-item>
 						</el-col>
 						<el-col :span="8" class="red pl10" style="line-height: 36px;">最多不超过：{{this.report.REPORT_QUALITY}}份。</el-col>
@@ -234,9 +234,14 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
+					<el-row>
+						<el-col :span="24">
+							<iframe :src="this.reportFileUrl" width="100%" frameborder="0" scrolling="auto" overflow-x="auto"></iframe>
+						</el-col>
+					</el-row>
 				</el-form>
 				<span slot="footer" class="dialog-footer">
-					<el-button type="primary" @click="printReport">确定打印</el-button>
+					<el-button type="primary" @click="printAuth">确定打印</el-button>
 					<el-button @click="resetPrintReport">取 消</el-button>
 				</span>
 			</el-dialog>
@@ -251,6 +256,8 @@
 		components: {},
 		data() {
 			return {
+				REPORT_QUALITY:'',//份数
+				reportFileUrl:'',//单据
 				count:1,//打印次数
 				//报告打印数据
 				reportPrintForm:{
@@ -300,6 +307,7 @@
 			openPrintReport(){
 				this.passdialog = true;
 				// this.resetForm();
+				console.log(this.reportFileUrl);
 				this.reportPrintForm =  {
 					REPORT_COUNT: '1',  //打印份数
 					PRINT_PERSON: this.$store.state.currentuser.id,//打印人ID
@@ -333,6 +341,8 @@
 			},
 			//点击【确定打印】按钮
 			printReport(){
+				// console.log(this.reportPrintForm.REPORT_COUNT);
+				// console.log(this.REPORT_QUALITY);
 				this.$refs.reportPrintForm.validate((valid) => {
 					if(valid) {
 						var url = this.basic_url + '/api-apps/app/reportPrint/operate/confirmReportSend?ids='+this.reportPrintForm.REPORT_COUNT;//等星星弄好接口更换
@@ -447,6 +457,7 @@
 				var url = this.basic_url +'/api-apps/app/reportBase/' +this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.report = res.data;
+					this.REPORT_QUALITY=parseInt(res.data.REPORT_QUALITY);
 				}).catch((err) => {
 				});
 			},
@@ -454,7 +465,6 @@
 			//这是查看
 			view(data) {
 				this.dataid = data.ID;
-				console.log(data.ID);
 				// this.report.DESCRIPTION = data.DESCRIPTION;
 				// this.report.STATEDesc = data.STATEDesc;
 				// this.report.REPORT_NUM = data.REPORT_NUM;
@@ -508,6 +518,19 @@
 				+ '&username=' + this.username
 				+ '&deptid=' + this.deptid
 				+ '&deptfullname=' + this.deptfullname
+				window.open(url); 
+			},
+			
+			//打印报告文件
+			printAuth(){
+            	var url = this.po_url+"/print?fileid=" + this.report.FILEID
+				+ '&userid=' +  this.userid
+				+ '&username=' + this.username
+				+ '&deptid=' + this.deptid
+				+ '&deptfullname=' + this.deptfullname
+				+ '&report_print_count=' + this.reportPrintForm.REPORT_COUNT
+				+ '&report_quality=' + this.REPORT_QUALITY
+				this.reportFileUrl= url;
 				window.open(url); 
         	},
 			//时间格式化

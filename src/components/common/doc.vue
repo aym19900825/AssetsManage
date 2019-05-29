@@ -60,6 +60,7 @@
     </el-table>
     <el-pagination class="pageLeft"
         @size-change="sizeChange"
+        background
         @current-change="currentChange"
         :current-page="page.currentPage"
         :page-sizes="[10, 20, 30, 40]"

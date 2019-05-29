@@ -63,11 +63,6 @@
 					<el-col :span="24">
 						<!-- 表格 Begin-->
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
-							<!-- <el-table-column label="应用编号" width="100" sortable prop="serialnum" v-if="this.checkedName.indexOf('序列号')!=-1">
-								<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.serialnum}}</p>
-								</template>
-							</el-table-column> -->
 							<el-table-column label="应用名" width="180" sortable prop="markx" v-if="this.checkedName.indexOf('前缀')!=-1">
 								<template slot-scope="scope">
 									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.markx}}</p>
@@ -110,7 +105,7 @@
 	import navs_left from '../common/left_navs/nav_left5.vue'
 	import navs_tabs from '../common/nav_tabs.vue'
 	import tableControle from '../plugin/table-controle/controle.vue'
-	import numbsetmask from '../settingDetails/number_settingMask.vue'
+	import numbsetmask from '../settingDetails/number_mask.vue'
 	import vTable from '../plugin/table/table.vue'
 	export default {
 		name: 'number_settings',
@@ -124,29 +119,21 @@
 		},
 		data() {
 			return {
-				appName: 'serialnum',
+				appName: 'number',
 				basic_url: Config.dev_url,
-				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
 				checkedName: [//控制Table-列显示和隐藏
-					'是否初始化',
-					'初始化日期格式',
-					'应用名',
-					'表名',
-					'描述',
-					'前缀',
-					'初始化起始数',
-					'增加量',
-					'是否拼接日期',
-					'拼接日期格式',
-					'序列号',
-					'保留位数',
+				'是否初始化',
+				'初始化日期格式',
+				'应用名',
+				'表名',
+				'描述',
+				'前缀',
+				'初始化起始数',
+				'增加量',
+				'是否拼接日期',
+				'拼接日期格式',
+				'序列号',
+				'保留位数',
 				],
 				tableHeader: [//控制Table-列头标题名称
 					{
@@ -200,8 +187,6 @@
 				],
 				commentArr:{},
 				selMenu: [],
-				'启用': true,
-				'冻结': false,
 				numberList: [],
 				search: false,
 				show: false,
@@ -259,22 +244,20 @@
 				this.$refs.child.childMethods();
 			},
 			modify() {//修改自动编号设置数据
-				this.aaaData = this.selMenu;
-				if(this.aaaData.length == 0) {
+				if(this.selMenu.length == 0) {
 					this.$message({
 						message: '请您选择要修改的数据',
 						type: 'warning'
 					});
 					return;
-				} else if(this.aaaData.length > 1) {
+				} else if(this.selMenu.length > 1) {
 					this.$message({
 						message: '不可同时修改多条数据',
 						type: 'warning'
 					});
 					return;
 				} else {
-					this.numbsetForm = this.selMenu[0]; 
-					this.$refs.child.detail();
+					this.$refs.child.detail(this.selMenu[0].id);
 				}
 			},
 			//查看

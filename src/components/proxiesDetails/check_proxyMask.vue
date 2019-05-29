@@ -27,10 +27,26 @@
           >
             <div class="text-center" v-show="viewtitle">
               <span v-if="this.dataInfo.STATE!=3" class="pr10">
-                <el-button id="start" type="success" round plain size="mini" @click="startup" v-show="start">
+                <el-button
+                  id="start"
+                  type="success"
+                  round
+                  plain
+                  size="mini"
+                  @click="startup"
+                  v-show="start"
+                >
                   <i class="icon-start"></i> 提交审批
                 </el-button>
-                <el-button id="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval&&nodeState!='3'">
+                <el-button
+                  id="approval"
+                  type="warning"
+                  round
+                  plain
+                  size="mini"
+                  @click="approvals"
+                  v-show="approval&&nodeState!='3'"
+                >
                   <i class="icon-edit-3"></i> 审批
                 </el-button>
                 <el-button
@@ -96,16 +112,23 @@
                             @click="getinspect_cust()"
                           ></el-button>
                         </el-input>
-                      </el-form-item> -->
+                      </el-form-item>-->
                       <el-form-item label="名称" prop="V_NAMEDesc" label-width="110px">
-											<el-autocomplete 
-												v-model="dataInfo.V_NAMEDesc" 
-												:fetch-suggestions="querySearchAsync" 
-												@select="handleSelect"
-												placeholder="请输入内容"
-                        :disabled="specialedit" style="width:100%">
-												<el-button slot="append" icon="el-icon-search" @click="getinspect_cust()" :disabled="specialedit"></el-button>
-											</el-autocomplete>
+                        <el-autocomplete
+                          v-model="dataInfo.V_NAMEDesc"
+                          :fetch-suggestions="querySearchAsync"
+                          @select="handleSelect"
+                          placeholder="请输入内容"
+                          :disabled="specialedit"
+                          style="width:100%"
+                        >
+                          <el-button
+                            slot="append"
+                            icon="el-icon-search"
+                            @click="getinspect_cust()"
+                            :disabled="specialedit"
+                          ></el-button>
+                        </el-autocomplete>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -120,7 +143,7 @@
                         <el-input v-model="dataInfo.V_ADDRESS" :disabled="edit"></el-input>
                       </el-form-item>
                     </el-col>
-										<el-col :span="8">
+                    <el-col :span="8">
                       <el-form-item label="邮编" prop="V_ZIPCODE" label-width="110px">
                         <el-input v-model="dataInfo.V_ZIPCODE" :disabled="noedit2"></el-input>
                       </el-form-item>
@@ -213,14 +236,21 @@
                     <el-col :span="8">
                       <el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
                         <!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit"></el-input> -->
-                        <el-select v-model="dataInfo.ITEM_STATUS" filterable allow-create placeholder="请选择" style="width:100%;" :disabled="noedit">
-													<el-option
-														v-for="item in itemstateoptions"
-														:key="item.id"
-														:label="item.name"
-														:value="item.code">
-													</el-option>
-												</el-select>
+                        <el-select
+                          v-model="dataInfo.ITEM_STATUS"
+                          filterable
+                          allow-create
+                          placeholder="请选择"
+                          style="width:100%;"
+                          :disabled="noedit"
+                        >
+                          <el-option
+                            v-for="item in itemstateoptions"
+                            :key="item.id"
+                            :label="item.name"
+                            :value="item.code"
+                          ></el-option>
+                        </el-select>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -283,22 +313,29 @@
                     </el-col>
                   </el-row>
                   <el-row>
-										<el-form-item label="抽样方案" prop="REMARKS" label-width="110px">
-                    	<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
-                  	</el-form-item>
-									</el-row>
-									<el-row>
-										<el-form-item label="判定依据" prop="JUDGE" label-width="110px">
-											<!-- <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input> -->
-                      <el-autocomplete 
-												v-model="dataInfo.JUDGE" 
-												@select="handleSelect2"
-												placeholder="请输入内容"
-                        :disabled="noedit" style="width:100%">
-												<el-button slot="append" icon="el-icon-search" @click="basisleadbtn('main')" :disabled="noedit"></el-button>
-											</el-autocomplete>
-										</el-form-item>
-									</el-row>
+                    <el-form-item label="抽样方案" prop="REMARKS" label-width="110px">
+                      <el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
+                    </el-form-item>
+                  </el-row>
+                  <el-row>
+                    <el-form-item label="判定依据" prop="JUDGE" label-width="110px">
+                      <!-- <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input> -->
+                      <el-autocomplete
+                        v-model="dataInfo.JUDGE"
+                        @select="handleSelect2"
+                        placeholder="请输入内容"
+                        :disabled="noedit"
+                        style="width:100%"
+                      >
+                        <el-button
+                          slot="append"
+                          icon="el-icon-search"
+                          @click="basisleadbtn('main')"
+                          :disabled="noedit"
+                        ></el-button>
+                      </el-autocomplete>
+                    </el-form-item>
+                  </el-row>
                 </el-collapse-item>
                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
                   <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -369,7 +406,12 @@
                             <el-form-item
                               :prop="'INSPECT_PROXY_BASISList.'+scope.$index + '.S_DESC'"
                             >
-                              <el-input size="small" v-model="scope.row.S_DESC" placeholder="请输入"  :disabled="noedit"></el-input>
+                              <el-input
+                                size="small"
+                                v-model="scope.row.S_DESC"
+                                placeholder="请输入"
+                                :disabled="noedit"
+                              ></el-input>
                             </el-form-item>
                           </template>
                         </el-table-column>
@@ -858,10 +900,15 @@
                         </el-radio-group>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6">
+                    <el-col :span="8">
                       <el-form-item label="标识" prop="CNAS_OR_CMA_ID" label-width="110px">
                         <el-checkbox-group v-model="dataInfo.CNAS_OR_CMA_ID" :disabled="noedit">
-													 <el-checkbox v-for="item in logos" :key="item.id" :label="item.code" :value="item.name" >{{item.name}}</el-checkbox>
+                          <el-checkbox
+                            v-for="item in logos"
+                            :key="item.id"
+                            :label="item.code"
+                            :value="item.name"
+                          >{{item.name}}</el-checkbox>
                         </el-checkbox-group>
                       </el-form-item>
                     </el-col>
@@ -870,12 +917,20 @@
                   <el-row>
                     <el-col :span="4">
                       <el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
-                        <el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit" @blur="compare"></el-input>
+                        <el-input
+                          v-model="dataInfo.REPORT_QUALITY"
+                          :disabled="noedit"
+                          @blur="compare"
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="4">
                       <el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
-                        <el-input v-model="dataInfo.REPORT_COUNT" :disabled="noedit" @blur="compare"></el-input>
+                        <el-input
+                          v-model="dataInfo.REPORT_COUNT"
+                          :disabled="noedit"
+                          @blur="compare"
+                        ></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -907,24 +962,19 @@
                   </el-row>
                   <el-row>
                     <el-col :span="8">
-                      <el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
+                      <el-col :span="8">
+											<el-form-item label="标准收费(元)" prop="CHECK_COST" label-width="110px">
+												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
+												<el-input id="INSPECTCOST" style="display:none"></el-input>
+												<el-input id="ALLCOST" style="display:none"></el-input>
+											</el-form-item>
+										</el-col>
+                      <el-form-item label="合同收费(元)" prop="CONTRACTCOST" label-width="110px">
                         <el-input
                           v-model="dataInfo.CONTRACTCOST"
                           id="stacost"
                           @blur="staPrice"
                           disabled
-                        ></el-input>
-                        <el-input id="INSPECTCOST" style="display:none" disabled></el-input>
-                        <el-input id="ALLCOST" style="display:none" disabled></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                      <el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
-                        <el-input
-                          v-model="dataInfo.CHECK_COST"
-                          id="cost"
-                          @blur="toPrice"
-                          :disabled="noedit"
                         ></el-input>
                       </el-form-item>
                     </el-col>
@@ -1073,7 +1123,7 @@
         title="客户联系人"
         :visible.sync="dialogVisibleuser"
         width="80%"
-       >
+      >
         <el-table
           :header-cell-style="rowClass"
           :data="CUSTOMER_PERSONList"
@@ -1220,8 +1270,8 @@ export default {
         }
       },
       approvingData: {},
-      itemstateoptions:[],//样品状态
-      determinebasicList:[],//判定依据的
+      itemstateoptions: [], //样品状态
+      determinebasicList: [], //判定依据的
       loading: false,
       loadSign: true, //加载
       commentArr: {},
@@ -1230,11 +1280,11 @@ export default {
       index: "",
       indexs: "",
       weituoname: [], //用于存委托书名称
-      determinebasiname:[],//用于存判定依据的S_NAME
-			weituodata:[],//委托方的数据
-      logos: "",//标识
-      standardList:[],//如果是年度计划生成委托书用于保存时中心外的依据
-      contentList:[],//如果是年度计划生成委托书用于保存时中心内的依据
+      determinebasiname: [], //用于存判定依据的S_NAME
+      weituodata: [], //委托方的数据
+      logos: "", //标识
+      standardList: [], //如果是年度计划生成委托书用于保存时中心外的依据
+      contentList: [], //如果是年度计划生成委托书用于保存时中心内的依据
       dataInfo: {
         MAINGROUP: "", //主检组
         LEADER: "", //主检负责人
@@ -1266,14 +1316,14 @@ export default {
         PAYMENT_METHOD: "", //付款方式
         COMPDATE: "",
         COMPMODE: "", //完成方式
-        REMARKS: "",//抽样方案
-        JUDGE:"",//判定依据
+        REMARKS: "", //抽样方案
+        JUDGE: "", //判定依据
         V_NAME: "", //委托方名称名称
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
         P_NAME: "",
-        REPORT_QUALITY:'',
-        REPORT_COUNT:'',
+        REPORT_QUALITY: "",
+        REPORT_COUNT: "",
         CNAS_OR_CMA_ID: [],
         CHECK_COST: 0, //合同费用
         ACTUALCOST: 0, //实收费用
@@ -1335,7 +1385,7 @@ export default {
       value: "",
       selval: [],
       edit: true, //禁填
-      specialedit:false,
+      specialedit: false,
       noedit: false,
       noedit1: false,
       special: false,
@@ -1375,13 +1425,13 @@ export default {
         ], //委托方名称名称
         V_ADDRESS: [
           {
-            required: true,
+            required: true
           }
         ], //地址
         V_ZIPCODE: [
           {
             required: false,
-            trigger: "change",
+            trigger: "change"
           }
         ], //邮编
         V_PERSON: [{ required: true, validator: this.Validators.isNickname }], //联系人姓名
@@ -1399,7 +1449,7 @@ export default {
         PRODUCT: [
           {
             required: false,
-            trigger: "change",
+            trigger: "change"
           }
         ], //产品名称
         ITEM_NAME: [
@@ -1414,14 +1464,24 @@ export default {
           { required: true, message: "必填", trigger: "change" }
         ], //检后处理
         REMARKS: [
-          { required: true, message: "必填", trigger: "blur",validator: this.Validators.isSpecificKey}
+          {
+            required: true,
+            message: "必填",
+            trigger: "blur",
+            validator: this.Validators.isSpecificKey
+          }
         ], //抽样方案
-        JUDGE : [
-          { required: true, message: "必填", trigger: "blur",validator: this.Validators.isSpecificKey}
-        ],// 判定依据
-        COMPDATE: [{ required: true, message: "必填", trigger: "blur"}], //完成日期
-        REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur"}], //交委托方分数
-        REPORT_COUNT:[{required: true, message: "必填", trigger: "blur"}],
+        JUDGE: [
+          {
+            required: true,
+            message: "必填",
+            trigger: "blur",
+            validator: this.Validators.isSpecificKey
+          }
+        ], // 判定依据
+        COMPDATE: [{ required: true, message: "必填", trigger: "blur" }], //完成日期
+        REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur" }], //交委托方分数
+        REPORT_COUNT: [{ required: true, message: "必填", trigger: "blur" }],
         REPORT_MODE: [{ required: true, message: "必选", trigger: "change" }], //发送方式
         REPORT_FOMAT: [{ required: true, message: "必填", trigger: "change" }], //格式
         CHECK_COST: [
@@ -1501,15 +1561,18 @@ export default {
   },
   methods: {
     // 报告份数
-			compare(){
-				if(parseInt(this.dataInfo.REPORT_QUALITY)>parseInt(this.dataInfo.REPORT_COUNT)){
-					this.dataInfo.REPORT_COUNT=this.dataInfo.REPORT_QUALITY;
-					this.$message({
-						message: '交付委托方份数不能大于报告份数',
-						type: 'warning'
-					});
-				}
-			},
+    compare() {
+      if (
+        parseInt(this.dataInfo.REPORT_QUALITY) >
+        parseInt(this.dataInfo.REPORT_COUNT)
+      ) {
+        this.dataInfo.REPORT_COUNT = this.dataInfo.REPORT_QUALITY;
+        this.$message({
+          message: "交付委托方份数不能大于报告份数",
+          type: "warning"
+        });
+      }
+    },
     priceFormate(row, column) {
       var money = row.UNITCOST;
       return (row.UNITCOST = this.toFixedPrice(money));
@@ -1549,7 +1612,7 @@ export default {
             }
             var paramData2 = this.ALLCOST;
             this.$forceUpdate();
-            this.dataInfo.CONTRACTCOST = this.number_format(
+            this.dataInfo.CHECK_COST = this.number_format(
               parseFloat(paramData2.replace(/,/g, "").replace("元", "")) +
                 parseFloat(paramData1.replace(/,/g, "").replace("元", "")),
               2
@@ -1595,7 +1658,7 @@ export default {
               paramData2 = "0.00元";
             }
             this.$forceUpdate();
-            this.dataInfo.CONTRACTCOST = this.number_format(
+            this.dataInfo.CHECK_COST = this.number_format(
               parseFloat(paramData2.replace(/,/g, "").replace("元", "")) +
                 parseFloat(paramData1.replace(/,/g, "").replace("元", "")),
               2
@@ -1802,12 +1865,12 @@ export default {
         PAYMENT_METHOD: "", //付款方式
         COMPDATE: "",
         COMPMODE: "正常", //完成方式
-        REMARKS: "",//抽样方案
-        JUDGE:"",//判定依据
+        REMARKS: "", //抽样方案
+        JUDGE: "", //判定依据
         V_NAME: "", //委托方名称名称
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
-        REPORT_COUNT:'',//报告分数
+        REPORT_COUNT: "", //报告分数
         CNAS_OR_CMA_ID: [],
         ACTUAL_PERCENT: 0,
         CHECK_COST: 0, //合同费用
@@ -1919,10 +1982,12 @@ export default {
           this.dataInfo.DEPTID = res.data.deptId;
           this.dataInfo.ENTERBY = res.data.id;
           var date = new Date();
-          this.dataInfo.ENTERDATE = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
-          this.dataInfo.DETECTIONTYPE = "2";//委托书类别
+          this.dataInfo.ENTERDATE = this.$moment(date).format(
+            "YYYY-MM-DD HH:mm:ss"
+          );
+          this.dataInfo.DETECTIONTYPE = "2"; //委托书类别
           this.dataInfo.DETECTIONTYPEDesc = "检测";
-          this.dataInfo.PROXY_TYPE = "12";//检验检测类型，12为第三方委托
+          this.dataInfo.PROXY_TYPE = "12"; //检验检测类型，12为第三方委托
           this.dataInfo.R_VENDORDesc = this.$store.state.currentcjdw[0].fullname;
           this.dataInfo.R_VENDOR = this.$store.state.currentcjdw[0].id;
           this.show = true;
@@ -1950,7 +2015,7 @@ export default {
       this.noedit2 = false;
       this.special = true;
       this.special1 = false;
-      this.specialedit=false;//委托方的名称
+      this.specialedit = false; //委托方的名称
     },
     //
     detailgetData() {
@@ -1991,17 +2056,17 @@ export default {
             );
           }
           //用于获取主键负责人的数据
-           var url =this.basic_url +"/api-user/users/" +res.data.LEADER;
-            this.$axios.get(url, {}).then(res => {
+          var url = this.basic_url + "/api-user/users/" + res.data.LEADER;
+          this.$axios.get(url, {}).then(res => {
             var resullt = res.data;
             this.leaderdata.push(resullt);
           });
           res.data.LEADER = Number(res.data.LEADER);
           // 标识的渲染
-          res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(',');
+          res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(",");
           //用于获取主检组菜的数据
-          var url =this.basic_url +"/api-user/depts/" +res.data.MAINGROUP;
-            this.$axios.get(url, {}).then(res => {
+          var url = this.basic_url + "/api-user/depts/" + res.data.MAINGROUP;
+          this.$axios.get(url, {}).then(res => {
             var resullt = res.data;
             this.maingroup.push(resullt);
           });
@@ -2017,7 +2082,7 @@ export default {
             res.data.LEADER = Number(res.data.LEADER);
           }
           //
-          
+
           if (res.data.ISRECEIVE == "1") {
             //这是先有样品时判断能不能修改
             this.special = true;
@@ -2027,7 +2092,7 @@ export default {
             this.PNAME1 = true;
           } else if (res.data.ISRECEIVE == "2") {
             //2，委托方名称不能动；
-            this.specialedit=true;//委托方的名称
+            this.specialedit = true; //委托方的名称
             this.noedit2 = true;
             this.special = true;
             this.special1 = true;
@@ -2036,13 +2101,12 @@ export default {
             this.PNAME1 = true;
           }
           //如果是从年度计划下达的赋默认值
-          if(!!res.data.N_CODE){
-            res.data.REPORT_FOMAT='国家中心'
-            res.data.REPORT_MODE='自取'
+          if (!!res.data.N_CODE) {
+            res.data.REPORT_FOMAT = "国家中心";
+            res.data.REPORT_MODE = "自取";
           }
-					this.dataInfo = res.data;
+          this.dataInfo = res.data;
           this.show = true;
-          this.outcontents();
           this.outbasis();
           //深拷贝数据
           let _obj = JSON.stringify(this.dataInfo);
@@ -2186,18 +2250,18 @@ export default {
       this.noedit1 = true;
       this.noedit2 = true;
       this.special = true;
-      this.specialedit=true;//委托方的名称
+      this.specialedit = true; //委托方的名称
       this.PNAME = true; //生产单位
       this.PNAME1 = true;
       this.isEditing = false;
       var _this = this;
-      setTimeout(function(){
-					_this.docParm.model = 'view';
-					_this.docParm.appname = '检测委托书';
-          _this.docParm.recordid = dataid;
-          _this.docParm.appid = 95;
-					_this.$refs.docTable.getData();
-				},100);
+      setTimeout(function() {
+        _this.docParm.model = "view";
+        _this.docParm.appname = "检测委托书";
+        _this.docParm.recordid = dataid;
+        _this.docParm.appid = 95;
+        _this.$refs.docTable.getData();
+      }, 100);
 
       this.detailgetData();
       this.$axios
@@ -2313,7 +2377,8 @@ export default {
       this.dataInfo.P_NAME = val[0];
       this.dataInfo.P_NAMEDesc = val[1]; //生产单位
       this.dataInfo.PRODUCT_UNIT = val[4]; //生产单位的信用代码
-      if (val[5] == 1) {//中心内（中心外）
+      if (val[5] == 1) {
+        //中心内（中心外）
         this.dataInfo.PRODUCE_TYPE = 1;
         this.dataInfo.DEPUTE_TYPE = 1;
       } else {
@@ -2444,7 +2509,7 @@ export default {
       this.deptindex = val;
       //子表
       if (val == "maintable") {
-        if (!!this.dataInfo.PRO_NUM ) {
+        if (!!this.dataInfo.PRO_NUM) {
           var data = {
             P_NUM: this.dataInfo.P_NUM,
             PRO_NUM: this.dataInfo.PRO_NUM,
@@ -2460,7 +2525,7 @@ export default {
         }
       } else {
         if (!!this.dataInfo.PRO_NUM) {
-          this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM,'main');
+          this.$refs.standardchild.basislead(this.dataInfo.PRO_NUM, "main");
           // this.main = "table";
         } else {
           this.$message({
@@ -2491,7 +2556,7 @@ export default {
           REMARKS: "",
           TECHNICAL_REQUIRE: value[i].TECHNICAL_REQUIRE,
           UNITCOST: value[i].UNITCOST,
-          REALITY_PRICE:value[i].UNITCOST,
+          REALITY_PRICE: value[i].UNITCOST,
           VERSION: value[i].VERSION,
           QUATITY: 0
         };
@@ -2668,6 +2733,7 @@ export default {
     },
     // 保存users/saveOrUpdate
     save(parameter) {
+      this.outcontents();
       this.$refs.dataInfo.validate(valid => {
         if (!valid && parameter == "docUpload") {
           this.$message({
@@ -2675,54 +2741,55 @@ export default {
             type: "warning"
           });
         }
-        
+
         if (valid) {
-            if(this.contentList.length>0){
-              this.$message({
-                message: "请将分包要求补充完整",
-                type: "warning"
-              });
-                return
-            } 
-          if (
-            this.dataInfo.INSPECT_PROXY_BASISList.length ==0 &&
-            this.dataInfo.INSPECT_PROXY_PROJECList.length == 0 
-          ) {
+          console.log(this.contentList.length);
+          if (this.contentList.length > 0 && this.contentList.length !=this.dataInfo.CHECK_PROXY_CONTRACTList.length) {
             this.$message({
-              message: "检测依据和检验项目与要求是必填项，请填写！",
+              message: "请将分包要求补充完整",
               type: "warning"
             });
-            return false;
           } else {
-          this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(',');
-            var url = this.basic_url + "/api-apps/app/inspectPro2/saveOrUpdate";
-            this.$axios
-              .post(url, this.dataInfo)
-              .then(res => {
-                if (res.data.resp_code == 0) {
-                  if (parameter == "docUpload") {
-                    this.docParm.recordid = res.data.datas.ID;
-                    this.docParm.model = "edit";
-                    this.$refs.docTable.autoLoad();
-                    this.dataInfo.ID = res.data.datas.ID;
-                    this.dataInfo.PROXYNUM = res.data.datas.PROXYNUM;
-                  } else {
-                    this.$message({
-                      message: "保存成功",
-                      type: "success"
-                    });
-                    if (parameter == "Update") {
-                      this.show = false;
+            if (
+              this.dataInfo.INSPECT_PROXY_BASISList.length == 0 &&
+              this.dataInfo.INSPECT_PROXY_PROJECList.length == 0
+            ) {
+              this.$message({
+                message: "检测依据和检验项目与要求是必填项，请填写！",
+                type: "warning"
+              });
+              return false;
+            } else {
+              this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(",");
+              var url =this.basic_url + "/api-apps/app/inspectPro2/saveOrUpdate";
+              this.$axios
+                .post(url, this.dataInfo)
+                .then(res => {
+                  if (res.data.resp_code == 0) {
+                    if (parameter == "docUpload") {
+                      this.docParm.recordid = res.data.datas.ID;
+                      this.docParm.model = "edit";
+                      this.$refs.docTable.autoLoad();
+                      this.dataInfo.ID = res.data.datas.ID;
+                      this.dataInfo.PROXYNUM = res.data.datas.PROXYNUM;
                     } else {
-                      this.show = true;
+                      this.$message({
+                        message: "保存成功",
+                        type: "success"
+                      });
+                      if (parameter == "Update") {
+                        this.show = false;
+                      } else {
+                        this.show = true;
+                      }
+                      //重新加载数据
+                      this.$emit("request");
+                      this.reset();
                     }
-                    //重新加载数据
-                    this.$emit("request");
-                    this.reset();
                   }
-                }
-              })
-              .catch(err => {});
+                })
+                .catch(err => {});
+            }
           }
         } else {
           this.show = true;
@@ -2813,13 +2880,13 @@ export default {
       if (!!customid) {
         this.requestData();
       } else {
-         this.$message({
+        this.$message({
           message: "请先选委托方名称名称",
           type: "warning"
         });
       }
     },
- //姓名
+    //姓名
     requestData(val) {
       this.loading = true;
       var data = {
@@ -2835,20 +2902,20 @@ export default {
           params: data
         })
         .then(res => {
-					if(!!res.data.CUSTOMER_PERSONList[0]){
-						if (val == "default") {
-							this.dataInfo.V_PERSON = res.data.CUSTOMER_PERSONList[0].PERSON;
-							this.dataInfo.V_PHONE = res.data.CUSTOMER_PERSONList[0].PHONE;
-						} else {
-							this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
-							this.dialogVisibleuser = true;
-						}
-        	}else{
-						this.$message({
-							message: "该委托单位没有客户，请输入",
-							type: "warning"
-						});
-					}
+          if (!!res.data.CUSTOMER_PERSONList[0]) {
+            if (val == "default") {
+              this.dataInfo.V_PERSON = res.data.CUSTOMER_PERSONList[0].PERSON;
+              this.dataInfo.V_PHONE = res.data.CUSTOMER_PERSONList[0].PHONE;
+            } else {
+              this.CUSTOMER_PERSONList = res.data.CUSTOMER_PERSONList;
+              this.dialogVisibleuser = true;
+            }
+          } else {
+            this.$message({
+              message: "该委托单位没有客户，请输入",
+              type: "warning"
+            });
+          }
           this.loading = false;
         });
     },
@@ -3018,11 +3085,18 @@ export default {
       this.$refs.basis.requestData(data);
     },
     //保存时用于判断是否有中心外的数据中有检测技术依据
-    outbasis(){
-     var url = this.basic_url + '/api-apps/appSelection/workNotCheb/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1';
-		 this.$axios.get(url, {}).then((res) => {
-            this.standardList =res.data.data;
-        }).catch((wrong) => {}) 
+    outbasis() {
+      var arr=[];
+        for (var i = 0; i < this.dataInfo.CHECK_PROXY_CONTRACTList.length; i++) {
+          arr.push(this.dataInfo.CHECK_PROXY_CONTRACTList[i].BASIS);
+        }
+      var url = this.basic_url + '/api-apps/appSelection/workNotCheb/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1&S_NAME_where_not_in='+arr;
+      this.$axios
+        .get(url, {})
+        .then(res => {
+          this.standardList = res.data.data;
+        })
+        .catch(wrong => {});
     },
     addBasis(val) {
       var str = val.toString(",");
@@ -3045,11 +3119,18 @@ export default {
       this.$refs.contents.requestData(data);
     },
     // 如果是年度计划生成委托书用于保存时中心内的依据
-    outcontents(){
-      var url = this.basic_url + '/api-apps/appSelection/workNotCheo/page?N_CODE_wheres='+this.dataInfo.N_CODE+'&DEPTTYPE=1';
-      this.$axios.get(url,{}).then((res) => {
-            this.contentList = res.data.data;
-        }).catch((wrong) => {})
+    outcontents() {
+      var url =
+        this.basic_url +
+        "/api-apps/appSelection/workNotCheo/page?N_CODE_wheres=" +
+        this.dataInfo.N_CODE +
+        "&DEPTTYPE=1";
+      this.$axios
+        .get(url, {})
+        .then(res => {
+          this.contentList = res.data.data;
+        })
+        .catch(wrong => {});
     },
     add(val) {
       var str = val.toString(",");
@@ -3060,52 +3141,59 @@ export default {
       }
     },
     //判定依据
-    determinebasic(){
-      var url=this.basic_url +'/api-apps/app/inspectionSta2?PRO_NUM_wheres='+this.dataInfo.PRO_NUM+'&NUM_wheres='+this.dataInfo.P_NUM+'&S_NUM_where_not_in='+this.dataInfo.S_NUM;
-	    this.$axios.get(url, {}).then((res) => {
-            this.determinebasicList = res.data.data;
-            let datas=res.data.data;
-            for(let i=0;i<datas.length;i++){
-              this.determinebasiname.push(datas[i].S_NAME);
-					  }
-      }).catch((wrong) => {})
+    determinebasic() {
+      var url =
+        this.basic_url +
+        "/api-apps/app/inspectionSta2?PRO_NUM_wheres=" +
+        this.dataInfo.PRO_NUM +
+        "&NUM_wheres=" +
+        this.dataInfo.P_NUM +
+        "&S_NUM_where_not_in=" +
+        this.dataInfo.S_NUM;
+      this.$axios
+        .get(url, {})
+        .then(res => {
+          this.determinebasicList = res.data.data;
+          let datas = res.data.data;
+          for (let i = 0; i < datas.length; i++) {
+            this.determinebasiname.push(datas[i].S_NAME);
+          }
+        })
+        .catch(wrong => {});
     },
     querySearchAsync2(queryString, callback) {
-			var list = [{}];
-			let param = {
-						pageNum: 1,
-						pageSize: 9999,
-						key: queryString
-			} 
-			this.determinebasiname.forEach(function(item,i){
-          if(item.indexOf(queryString) != -1){
-            list.push({"value":item});   
-          }
-      })
-      if(!queryString){
-          list = list.splice(0,7);
+      var list = [{}];
+      let param = {
+        pageNum: 1,
+        pageSize: 9999,
+        key: queryString
+      };
+      this.determinebasiname.forEach(function(item, i) {
+        if (item.indexOf(queryString) != -1) {
+          list.push({ value: item });
+        }
+      });
+      if (!queryString) {
+        list = list.splice(0, 7);
       }
       callback(list);
     },
-    accountSearch2(){
-
-    },
-    handleSelect2(){
-      
-    },
+    accountSearch2() {},
+    handleSelect2() {},
     //委托单位
     weituo() {
       var url =
-        this.basic_url +"/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=" +
+        this.basic_url +
+        "/api-apps/app/inspectPro/operate/proxycustomer?DEPTID=" +
         this.$store.state.currentcjdw[0].id; //如果父组件没有传CJDW承检单位侧显示所有数
       this.$axios
         .get(url, {})
         .then(res => {
-					let datas=res.data.data;
-					this.weituodata=res.data.data;
-				  for(let i=0;i<datas.length;i++){
+          let datas = res.data.data;
+          this.weituodata = res.data.data;
+          for (let i = 0; i < datas.length; i++) {
             this.weituoname.push(datas[i].customername);
-					}
+          }
           this.loading = false; //加载动画关闭
         })
         .catch(wrong => {
@@ -3114,93 +3202,96 @@ export default {
           // 	type: 'erro'
           // });
         });
-		},
-		
-		querySearchAsync(queryString, callback) {
-			var list = [{}];
-			let param = {
-						pageNum: 1,
-						pageSize: 9999,
-						key: queryString
-			} 
-			this.weituoname.forEach(function(item,i){
-          if(item.indexOf(queryString) != -1){
-            list.push({"value":item});   
-          }
-      })
-      if(!queryString){
-          list = list.splice(0,7);
+    },
+
+    querySearchAsync(queryString, callback) {
+      var list = [{}];
+      let param = {
+        pageNum: 1,
+        pageSize: 9999,
+        key: queryString
+      };
+      this.weituoname.forEach(function(item, i) {
+        if (item.indexOf(queryString) != -1) {
+          list.push({ value: item });
+        }
+      });
+      if (!queryString) {
+        list = list.splice(0, 7);
       }
       callback(list);
-		},
-		// 模糊查询下拉框 鼠标键盘选中点击触发
-    handleSelect(item){
-				this.accountSearch = item.value;
-				for(let i=0;i<this.weituodata.length;i++){
-          if(item.value==this.weituodata[i].customername){
+    },
+    // 模糊查询下拉框 鼠标键盘选中点击触发
+    handleSelect(item) {
+      this.accountSearch = item.value;
+      for (let i = 0; i < this.weituodata.length; i++) {
+        if (item.value == this.weituodata[i].customername) {
           //委托方赋值
-						this.dataInfo.V_NAME = this.weituodata[i].customerid;//委托方名称id
-						this.dataInfo.V_NAMEDesc =this.weituodata[i].customername; //委托方名称名称
-						this.dataInfo.V_ADDRESS = this.weituodata[i].customeraddress;//地址
-						this.dataInfo.V_ZIPCODE = this.weituodata[i].customerzipcode;//邮编
-						this.dataInfo.VENDOR = this.weituodata[i].customercode; //委托方名称的信用代码
-						this.dataInfo.P_NAME = this.weituodata[i].customerid;
-						this.dataInfo.P_NAMEDesc = this.weituodata[i].customername; //生产单位
-						this.dataInfo.PRODUCT_UNIT = this.weituodata[i].customercode; //生产单位的信用代码
-						//接到值的时候在去请求一下姓名的接口
-      				this.requestData("default");
-						if ( this.weituodata[i].depttype== 1) {//中心内（中心外）
-							this.dataInfo.PRODUCE_TYPE = 1;
-							this.dataInfo.DEPUTE_TYPE = 1;
-						} else {
-							this.dataInfo.PRODUCE_TYPE = 2;
-							this.dataInfo.DEPUTE_TYPE = 2;
-						}
-						if(!!this.weituodata[i].itemid){
-								//样品有值的时候
-								var url=this.basic_url + '/api-apps/app/item/' + itemid;
-								this.$axios.get(url, {}).then((res) => {
-										this.dataInfo.P_NAME =res.data.P_NAME; //生产单位
-										this.dataInfo.ITEM_NAME = res.data.DESCRIPTION; //样品名称
-										this.dataInfo.ITEM_ID = res.data.ID; //样品id
-										this.dataInfo.ITEMNUM = res.data.ITEMNUM; //样品数量
-										this.dataInfo.ITEM_MODEL = res.data.MODEL; //模型
-										this.dataInfo.ITEM_QUALITY = res.data.QUATITY; //质量
-										this.dataInfo.PRODUCT = res.data.PRODUCT; //产品名称
-										this.dataInfo.PRODUCT_TYPE = res.data.PRODUCT_TYPE; //产品类别
-										this.dataInfo.PRO_NUM = res.data.PRO_NUM; //产品编号
-										this.dataInfo.PRO_VERSION = res.data.P_VERSION; //产品版本
-										this.dataInfo.P_NUM = res.data.P_NUM; //产品类别编号
-										this.dataInfo.P_VERSION = res.data.P_VERSION; //产品类别版本
-										this.dataInfo.P_NAME = res.data.P_NAME; //生产单位名称id
-										this.dataInfo.P_NAMEDesc = res.data.P_NAMEDesc; //生产单位name
-										this.special1 = true;
-										this.special = true;
-										this.special2 = true; //样品名称
-										this.PNAME = true; //生产单位
-										this.PNAME1 = true;
-										this.dataInfo.ISRECEIVE = 1;
-								});
-						}else{
-						//没有样品的时候
-							// this.dataInfo.ITEM_NAME = "";
-							// this.dataInfo.ITEM_MODEL = "";
-							// this.dataInfo.ITEM_QUALITY = "";
-							this.dataInfo.ITEM_STATUS = "";
-							this.dataInfo.ITEM_ID = "";
-							this.dataInfo.ITEM_SECRECY = "";
-							this.special1 = false;
-							this.special = true;
-							this.PNAME = false; //生产单位
-							this.PNAME1 = false;
-							this.dataInfo.ISRECEIVE = 0;
-						}
-					}
-				}
-		},
+          this.dataInfo.V_NAME = this.weituodata[i].customerid; //委托方名称id
+          this.dataInfo.V_NAMEDesc = this.weituodata[i].customername; //委托方名称名称
+          this.dataInfo.V_ADDRESS = this.weituodata[i].customeraddress; //地址
+          this.dataInfo.V_ZIPCODE = this.weituodata[i].customerzipcode; //邮编
+          this.dataInfo.VENDOR = this.weituodata[i].customercode; //委托方名称的信用代码
+          this.dataInfo.P_NAME = this.weituodata[i].customerid;
+          this.dataInfo.P_NAMEDesc = this.weituodata[i].customername; //生产单位
+          this.dataInfo.PRODUCT_UNIT = this.weituodata[i].customercode; //生产单位的信用代码
+          //接到值的时候在去请求一下姓名的接口
+          this.requestData("default");
+          if (this.weituodata[i].depttype == 1) {
+            //中心内（中心外）
+            this.dataInfo.PRODUCE_TYPE = 1;
+            this.dataInfo.DEPUTE_TYPE = 1;
+          } else {
+            this.dataInfo.PRODUCE_TYPE = 2;
+            this.dataInfo.DEPUTE_TYPE = 2;
+          }
+          if (!!this.weituodata[i].itemid) {
+            //样品有值的时候
+            var url = this.basic_url + "/api-apps/app/item/" + itemid;
+            this.$axios.get(url, {}).then(res => {
+              this.dataInfo.P_NAME = res.data.P_NAME; //生产单位
+              this.dataInfo.ITEM_NAME = res.data.DESCRIPTION; //样品名称
+              this.dataInfo.ITEM_ID = res.data.ID; //样品id
+              this.dataInfo.ITEMNUM = res.data.ITEMNUM; //样品数量
+              this.dataInfo.ITEM_MODEL = res.data.MODEL; //模型
+              this.dataInfo.ITEM_QUALITY = res.data.QUATITY; //质量
+              this.dataInfo.PRODUCT = res.data.PRODUCT; //产品名称
+              this.dataInfo.PRODUCT_TYPE = res.data.PRODUCT_TYPE; //产品类别
+              this.dataInfo.PRO_NUM = res.data.PRO_NUM; //产品编号
+              this.dataInfo.PRO_VERSION = res.data.P_VERSION; //产品版本
+              this.dataInfo.P_NUM = res.data.P_NUM; //产品类别编号
+              this.dataInfo.P_VERSION = res.data.P_VERSION; //产品类别版本
+              this.dataInfo.P_NAME = res.data.P_NAME; //生产单位名称id
+              this.dataInfo.P_NAMEDesc = res.data.P_NAMEDesc; //生产单位name
+              this.special1 = true;
+              this.special = true;
+              this.special2 = true; //样品名称
+              this.PNAME = true; //生产单位
+              this.PNAME1 = true;
+              this.dataInfo.ISRECEIVE = 1;
+            });
+          } else {
+            //没有样品的时候
+            // this.dataInfo.ITEM_NAME = "";
+            // this.dataInfo.ITEM_MODEL = "";
+            // this.dataInfo.ITEM_QUALITY = "";
+            this.dataInfo.ITEM_STATUS = "";
+            this.dataInfo.ITEM_ID = "";
+            this.dataInfo.ITEM_SECRECY = "";
+            this.special1 = false;
+            this.special = true;
+            this.PNAME = false; //生产单位
+            this.PNAME1 = false;
+            this.dataInfo.ISRECEIVE = 0;
+          }
+        }
+      }
+    },
     //获取标识
     logo() {
-      var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=identification ';
+      var url =
+        this.basic_url +
+        "/api-user/dicts/findChildsByCode?code=identification ";
       this.$axios
         .get(url, {})
         .then(res => {
@@ -3215,23 +3306,26 @@ export default {
         });
     },
     //样品状态
-      ITEM_STATUS(){
-        var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=item_accept_status';
-				this.$axios.get(url, {}).then((res) => {
+    ITEM_STATUS() {
+      var url =
+        this.basic_url +
+        "/api-user/dicts/findChildsByCode?code=item_accept_status";
+      this.$axios
+        .get(url, {})
+        .then(res => {
           this.itemstateoptions = res.data;
-				}).catch((wrong) => {
-				})
-      },
+        })
+        .catch(wrong => {});
+    }
   },
   mounted() {
     this.getCompany();
     this.getuser();
     this.RVENDORSelect();
-		this.weituo();
+    this.weituo();
     this.logo();
-    this.ITEM_STATUS();//样品状态
-    this.determinebasic();//判定依据
-    
+    this.ITEM_STATUS(); //样品状态
+    this.determinebasic(); //判定依据
   }
 };
 </script>
@@ -3239,8 +3333,8 @@ export default {
 <style>
 @import "../../assets/css/mask-modules.css";
 .el-autocomplete {
-    position: relative;
-    display: block;
+  position: relative;
+  display: block;
 }
 .el-collapse-item__content {
   padding-bottom: 0px;

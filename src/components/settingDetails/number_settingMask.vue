@@ -137,6 +137,7 @@
 
 <script>
 	import Config from '../../config.js'
+	
 	export default {
 		name: 'masks',
 		props: {

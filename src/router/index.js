@@ -130,57 +130,57 @@ Vue.use(Router)
     },
     {//统计报表
       path: '/plan_chain1',
-      name: 'plan_chain',
+      name: 'plan_chain1',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain3',
-      name: 'plan_chain',
+      name: 'plan_chain3',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain4',
-      name: 'plan_chain',
+      name: 'plan_chain4',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain5',
-      name: 'plan_chain',
+      name: 'plan_chain5',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain6',
-      name: 'plan_chain',
+      name: 'plan_chain6',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain7',
-      name: 'plan_chain',
+      name: 'plan_chain7',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain8',
-      name: 'plan_chain',
+      name: 'plan_chain8',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain9',
-      name: 'plan_chain',
+      name: 'plan_chain9',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain10',
-      name: 'plan_chain',
+      name: 'plan_chain10',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain11',
-      name: 'plan_chain',
+      name: 'plan_chain11',
       component: plan_chain
     },
     {//统计报表
       path: '/plan_chain2',
-      name: 'plan_chain',
+      name: 'plan_chain2',
       component: plan_chain
     },
     {//年度计划

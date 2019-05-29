@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-if="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加自动编号设置</div>
-					<div class="mask_title" v-show="modifytitle">修改自动编号设置</div>
-					<div class="mask_title" v-show="viewtitle">查看自动编号设置</div>
+					<div class="mask_title" v-show="addtitle">添加编号设置</div>
+					<div class="mask_title" v-show="modifytitle">修改编号设置</div>
+					<div class="mask_title" v-show="viewtitle">查看编号设置</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{ 'icon-maximization': isok1, 'icon-restore':isok2}"></i>
@@ -17,14 +17,14 @@
 					</div>
 				</div>
 				<div class="mask_content">
-					<el-form inline-message :model="numbsetForm" :rules="rules" ref="numbsetForm" status-icon>
+					<el-form inline-message :model="numbsetForm" :rules="rules" ref="numbsetForm">
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
                                     <el-row>
                                         <el-col :span="8">
-											<el-form-item label="是否作为自定义设置" prop="isCustomUse" label-width="140px">
-												<el-select v-model="numbsetForm.isCustomUse" placeholder="请选择">
+											<el-form-item label="自定义设置" prop="isCustomUse" label-width="120px">
+												<el-select v-model="numbsetForm.isCustomUse" :disabled="noedit" placeholder="请选择" style="width:100%;" >
                                                     <el-option
                                                         v-for="item in options"
                                                         :key="item.value"
@@ -35,9 +35,9 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="是否使用多流水号" prop="isMultiple" label-width="140px">
+											<el-form-item label="使用多流水号" prop="isMultiple" label-width="120px">
 												<!-- <el-input v-model="numbsetForm.isMultiple" :disabled="noedit"></el-input> -->
-                                                <el-select v-model="numbsetForm.isMultiple" placeholder="请选择">
+                                                <el-select v-model="numbsetForm.isMultiple" :disabled="noedit" placeholder="请选择" style="width:100%;">
                                                     <el-option
                                                         v-for="item in options"
                                                         :key="item.value"
@@ -47,28 +47,32 @@
                                                 </el-select>
 											</el-form-item>
 										</el-col>
-                                       
+                                       <el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
+											<el-form-item label="序列号" prop="serialnum" label-width="120px">
+												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
                                     </el-row>
                                     <el-row v-show='numbsetForm.isCustomUse=="1"'>
                                        <el-col :span="8">
-											<el-form-item label="标识一" prop="markx" label-width="110px">
+											<el-form-item label="标识一" prop="markx" label-width="120px">
 												<el-input v-model="numbsetForm.markx" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="标识二" prop="marky" label-width="110px">
+											<el-form-item label="标识二" prop="marky" label-width="120px">
 												<el-input v-model="numbsetForm.marky" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="标识三" prop="markz" label-width="110px">
+											<el-form-item label="标识三" prop="markz" label-width="120px">
 												<el-input v-model="numbsetForm.markz" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col> 
                                     </el-row>
                                     <el-row v-show='numbsetForm.isCustomUse!="1"'>
                                        <el-col :span="8">
-											<el-form-item label="app" prop="markx" label-width="110px">
+											<el-form-item label="应用" prop="markx" label-width="120px">
 												<el-input v-model="numbsetForm.markx" :disabled="edit" width="100%">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getapp()">
 													</el-button>
@@ -76,8 +80,8 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-                                            <el-form-item label="表" prop="marky" label-width="110px">
-												<el-input v-model="numbsetForm.marky" :disabled="edit" width="100%">
+                                            <el-form-item label="表" prop="marky" label-width="120px">
+												<el-input v-model="numbsetForm.marky" :disabled="edit">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getdata()">
 													</el-button>
 												</el-input>
@@ -91,8 +95,8 @@
                                     </el-row>
 									<el-row>
 										<el-col :span="8">
-											<el-form-item label="是否初始化日期" prop="isInitbydate" label-width="110px">
-                                                <el-select v-model="numbsetForm.isInitbydate" placeholder="请选择">
+											<el-form-item label="初始化日期" prop="isInitbydate" label-width="120px">
+                                                <el-select v-model="numbsetForm.isInitbydate" :disabled="noedit" placeholder="请选择" style="width:100%;">
                                                     <el-option
                                                         v-for="item in options"
                                                         :key="item.value"
@@ -104,11 +108,19 @@
 										</el-col>
 										<el-col :span="8">
 											<el-form-item label="初始化日期格式"  prop="initformat" label-width="120px"   :rules="numbsetForm.isInitbydate == '1'?rules.initformat:[{ required: false, message: '请选择任务启动时间', trigger: 'blur' }]"> 
-												<el-input v-model="numbsetForm.initformat" :disabled="noedit"></el-input>
+												<!-- <el-input v-model="numbsetForm.initformat" :disabled="noedit"></el-input> -->
+												<el-select v-model="numbsetForm.initformat" :disabled="noedit" placeholder="请选择" style="width:100%;">
+                                                    <el-option
+                                                        v-for="item in dateFormatoption"
+                                                        :key="item.id"
+                                                        :label="item.name"
+                                                        :value="item.code">
+                                                    </el-option>
+                                                </el-select>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8" v-show='numbsetForm.isInitbydate=="1"||numbsetForm.isMultiple=="1"'>
-											<el-form-item label="初始化起始数" prop="initnum" label-width="110px">
+											<el-form-item label="初始化起始数" prop="initnum" label-width="120px">
 												<el-input v-model="numbsetForm.initnum" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -119,18 +131,14 @@
 										</el-col> -->
 									</el-row>
 									<el-row>
-										<el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
-											<el-form-item label="序列号" prop="serialnum" label-width="110px">
-												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
+										
 										<el-col :span="8">
-											<el-form-item label="保留位数" prop="retain" label-width="110px">
+											<el-form-item label="保留位数" prop="retain" label-width="120px">
 												<el-input v-model="numbsetForm.retain" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="增加量" prop="increase" label-width="110px">
+											<el-form-item label="增加量" prop="increase" label-width="120px">
 												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
@@ -224,7 +232,7 @@
                                 </div>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion  v-show='numbsetForm.isMultiple=="1"'>
                                     <el-tabs v-model="activeName1" ref="tab" >
-                                        <el-tab-pane label="流水号/序号" name="second">
+                                        <el-tab-pane label="流水号/序号" name="first">
                                         <el-table
                                             :data="numbsetForm.numberSerialnoList"
                                             row-key="ID"
@@ -347,7 +355,8 @@
                     }, {
                     value: '0',
                     label: '否'
-                }],
+				}],
+				dateFormatoption:[],
                 value: '',
 				basic_url: Config.dev_url,
 				modify:false,//修订、修改人、修改时间
@@ -382,6 +391,23 @@
 				views:false,//录入修改人信息
 				noviews:true,//按钮
 				modify:false,//修订
+				numbsetForm:{
+					isCustomUse:'0',
+					isMultiple:'0',
+					isInitbydate:'0',
+					initformat:'',
+					initnum:'',
+					increase:'',
+					issplicingdate:'',
+					splicingformat:'',
+					serialnum:'',
+					retain:'',
+					createuser:'',
+					createuserDesc:'',
+					updateuser:'',
+                    updateuserDesc:'',
+                    numberPrefixList:[],
+				}
 			};
 		},
 		methods: {
@@ -404,9 +430,10 @@
 			//form表单内容清空
 			resetNew(){
                 this.numbsetForm = {
-					isinitbydate:'',
+					isCustomUse:'0',
+					isMultiple:'0',
+					isInitbydate:'0',
 					initformat:'',
-					prefix:'',
 					initnum:'',
 					increase:'',
 					issplicingdate:'',
@@ -432,7 +459,7 @@
             data(val){
                 this.numbsetForm.marky=val;
             },
-            childMethods() {//添加内容时从父组件带过来的
+            adddata() {
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.createuser=res.data.id;
 					this.numbsetForm.createuserDesc=res.data.nickname;
@@ -440,6 +467,7 @@
 					this.numbsetForm.createtime = this.$moment(date).format("YYYY-MM-DD  HH:mm:ss");
 				}).catch((err)=>{
 				})
+				this.resetNew();
             	this.addtitle = true;
 				this.modifytitle = false;
 				this.viewtitle = false;
@@ -447,8 +475,18 @@
 				this.views = false;//录入修改人信息
 				this.noviews = true;//按钮
 				this.modify = false;//修订
-            },
-            detail(id) {//修改内容时从父组件带过来的
+				this.show=true;
+			},
+			data(id){
+				var url=this.basic_url + '/api-user/number/'+id;
+                this.$axios.get(url,{}).then((res)=>{
+					this.numbsetForm=res.data;
+					this.show = true;
+				}).catch((err)=>{
+				})
+			},
+			detail(id) {//修改内容时从父组件带过来的
+			this.data(id);
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.updateuser=res.data.id;
 					this.numbsetForm.updateuserDesc=res.data.nickname;
@@ -456,12 +494,6 @@
 					this.numbsetForm.updatetime = this.$moment(date).format("YYYY-MM-DD HH:mm:ss");
 				}).catch((err)=>{
                 });
-                var url=this.basic_url + '/api-user/number/'+id;
-                this.$axios.get(url,{}).then((res)=>{
-                    this.numbsetForm=res.data;
-					console.log(res);
-				}).catch((err)=>{
-				})
             	this.addtitle = false;
 				this.modifytitle = true;
 				this.viewtitle = false;
@@ -469,31 +501,25 @@
 				this.views = false;//录入修改人信息
 				this.noviews = true;//按钮
 				this.modify = true;//修订
-            	this.show = true;
+            	
             },
             //这是查看
-			view(item) {
+			view(id) {
+				this.data(id);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
-				this.noviews = false;//按钮
-				this.show = true;				
+				this.noviews = false;//按钮			
 			},
 			//点击关闭按钮
 			close() {
 				this.show = false;
 			},
-			open(){
-				this.show = true;
-			},
 			cancelForm(){
 				this.show = false;
-				this.reset();
-			},
-			reset() {
-				this.show = false;
+				this.resetNew();
 			},
 			toggle(e) {
 				if(this.isok1 == true) {
@@ -563,18 +589,27 @@
 				$('.v-modal').hide();
 			});
             },
-            //年度计划类型
+            //类型
             numPrefixType(){
                 var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=numPrefixType';
                 this.$axios.get(url, {}).then((res) => {
-                    console.log(res);
-                this.numPrefixTypeoption = res.data;
-                        }).catch((wrong) => {
-                        })	
+                	this.numPrefixTypeoption = res.data;
+				}).catch((wrong) => {
+				})	
+			},
+			//类型
+            dateFormat(){
+                var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=dateFormat';
+                this.$axios.get(url, {}).then((res) => {
+					console.log(res);
+                	this.dateFormatoption = res.data;
+				}).catch((wrong) => {
+				})	
             },
         },
         mounted(){
-            this.numPrefixType();
+			this.numPrefixType();
+			this.dateFormat();
         }
 	}
 </script>

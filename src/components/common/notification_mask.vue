@@ -1117,7 +1117,6 @@
 				this.$axios.get(usersUrl, {}).then((res) => {
 					this.dataInfo.DEPTID = res.data.deptId;//传给后台机构id
 					this.dataInfo.CHANGEBY = res.data.id;
-					console.log(this.dataInfo.CHANGEBY);
 					if(!!this.dataInfo.WP_NUM){
 							this.special=true;
 					}else{
@@ -1125,7 +1124,6 @@
 					}
 					var date = new Date();
 					this.dataInfo.CHANGEDATE = this.$moment(date).format("YYYY-MM-dd HH:mm:ss");
-					console.log(this.dataInfo.CHANGEDATE);
 				}).catch((err) => {
 				});
 				this.detailgetData();
@@ -1201,7 +1199,6 @@
 			review(dataid){
 					var url = this.basic_url + '/api-apps/app/workNot/operate/createWorkNotice?ID=' + dataid+"&ischeck=1";
 					this.$axios.get(url, {}).then((res) => {
-							console.log(res);
 							if(res.data.resp_code == "0") {
 									this.dataInfo=res.data;
 									this.show=true;
@@ -1278,9 +1275,9 @@
 				if(value.TYPE==1||value.TYPE==3){
 					this.dataInfo.V_NAME=value.ID;
 					this.dataInfo.V_NAMEDesc=value.NAME;
-					this.dataInfo.V_ADDRESS=val.CONTACT_ADDRESS;
-					this.dataInfo.V_ZIPCODE=val.ZIPCODE;
-					this.dataInfo.VENDOR=val.CODE;
+					this.dataInfo.V_ADDRESS=value.CONTACT_ADDRESS;
+					this.dataInfo.V_ZIPCODE=value.ZIPCODE;
+					this.dataInfo.VENDOR=value.CODE;
 					this.dataInfo.DEPUTE_TYPE=1;
 				}else if(value.TYPE==2){
 					this.dataInfo.V_NAMEDesc=value.fullname;
@@ -1371,7 +1368,6 @@
 						params: params
 					}).then((res) => {
 						this.page.totalCount = res.data.count;
-					  console.log(res.data);
 						this.gridDataList = res.data;
 						this.loading = false;
 					});

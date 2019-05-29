@@ -47,18 +47,7 @@
                                                 </el-select>
 											</el-form-item>
 										</el-col>
-                                        <el-col :span="8">
-											<el-form-item label="是否初始化日期" prop="isInitbydate" label-width="110px">
-                                                <el-select v-model="numbsetForm.isInitbydate" placeholder="请选择">
-                                                    <el-option
-                                                        v-for="item in options"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value">
-                                                    </el-option>
-                                                </el-select>
-											</el-form-item>
-										</el-col>
+                                       
                                     </el-row>
                                     <el-row v-show='numbsetForm.isCustomUse=="1"'>
                                        <el-col :span="8">
@@ -79,7 +68,7 @@
                                     </el-row>
                                     <el-row v-show='numbsetForm.isCustomUse!="1"'>
                                        <el-col :span="8">
-											<el-form-item label="标识一" prop="markx" label-width="110px">
+											<el-form-item label="app" prop="markx" label-width="110px">
 												<el-input v-model="numbsetForm.markx" :disabled="edit" width="100%">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getapp()">
 													</el-button>
@@ -87,7 +76,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-                                            <el-form-item label="标识二" prop="marky" label-width="110px">
+                                            <el-form-item label="表" prop="marky" label-width="110px">
 												<el-input v-model="numbsetForm.marky" :disabled="edit" width="100%">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getdata()">
 													</el-button>
@@ -102,40 +91,35 @@
                                     </el-row>
 									<el-row>
 										<el-col :span="8">
+											<el-form-item label="是否初始化日期" prop="isInitbydate" label-width="110px">
+                                                <el-select v-model="numbsetForm.isInitbydate" placeholder="请选择">
+                                                    <el-option
+                                                        v-for="item in options"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value">
+                                                    </el-option>
+                                                </el-select>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
 											<el-form-item label="初始化日期格式"  prop="initformat" label-width="120px"   :rules="numbsetForm.isInitbydate == '1'?rules.initformat:[{ required: false, message: '请选择任务启动时间', trigger: 'blur' }]"> 
 												<el-input v-model="numbsetForm.initformat" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="前缀" prop="prefix" label-width="110px">
-												<el-input v-model="numbsetForm.prefix" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-									</el-row>
-									<el-row>
-										<el-col :span="8">
+										<el-col :span="8" v-show='numbsetForm.isInitbydate=="1"||numbsetForm.isMultiple=="1"'>
 											<el-form-item label="初始化起始数" prop="initnum" label-width="110px">
 												<el-input v-model="numbsetForm.initnum" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="增加量" prop="increase" label-width="110px">
-												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
+										<!-- <el-col :span="8">
+											<el-form-item label="前缀" prop="prefix" label-width="110px">
+												<el-input v-model="numbsetForm.prefix" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col>
-										<el-col :span="8">
-											<el-form-item label="是否拼接日期" prop="issplicingdate" label-width="110px">
-												<el-input v-model="numbsetForm.issplicingdate" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
+										</el-col> -->
 									</el-row>
 									<el-row>
-										<el-col :span="8">
-											<el-form-item label="拼接日期格式" prop="splicingformat" label-width="110px">
-												<el-input v-model="numbsetForm.splicingformat" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-										<el-col :span="8">
+										<el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
 											<el-form-item label="序列号" prop="serialnum" label-width="110px">
 												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
 											</el-form-item>
@@ -145,11 +129,16 @@
 												<el-input v-model="numbsetForm.retain" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
+											<el-form-item label="增加量" prop="increase" label-width="110px">
+												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
 									</el-row>
 								</el-collapse-item>
 
                                 <div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
-                                    <el-tabs v-model="activeName" >
+                                    <el-tabs v-model="activeName" ref="tabs" >
                                         <el-tab-pane label="编号的段落设置" name="first">
                                         <div class="table-func table-funcb">
                                             <el-button type="success" size="mini" :disabled="noedit" round @click="add" v-show="!viewtitle">
@@ -230,6 +219,11 @@
                                             </el-table-column>
                                         </el-table>
                                         </el-tab-pane>
+                                        
+                                    </el-tabs>
+                                </div>
+								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion  v-show='numbsetForm.isMultiple=="1"'>
+                                    <el-tabs v-model="activeName1" ref="tab" >
                                         <el-tab-pane label="流水号/序号" name="second">
                                         <el-table
                                             :data="numbsetForm.numberSerialnoList"
@@ -286,7 +280,7 @@
                                         </el-table>
                                         </el-tab-pane>
                                     </el-tabs>
-                                </div>
+								</div>			
 								<el-collapse-item title="其他" name="2"  v-show="views">
 									<el-row>
 										<el-col :span="8">
@@ -361,7 +355,8 @@
 				dialogVisible: false, //对话框
 				edit: true, //禁填
                 activeNames: ['1','2','3'], //手风琴数量
-                activeName: "first", //tabs
+				activeName: "first", //tabs
+				activeName1:"first",
 				show: false,
 				isok1: true,
                 isok2: false,

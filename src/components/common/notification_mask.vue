@@ -98,7 +98,8 @@
 									</el-col>
 									<el-col :span="8">
 										<el-form-item label="任务号" prop="TASKNUM" label-width="110px">
-											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit || dataInfo.WP_NUM ==''"></el-input>
+											<!-- <el-input v-model="dataInfo.TASKNUM" :disabled="noedit || dataInfo.WP_NUM ==''"></el-input> -->
+											<el-input v-model="dataInfo.TASKNUM" :disabled="noedit"></el-input>
 										</el-form-item>
 									</el-col>
 									<el-col :span="8" v-show="reviewtitle">
@@ -157,7 +158,8 @@
 										<el-form-item label="受检企业" prop="V_NAMEDesc" label-width="140px">
 											<el-input v-model="dataInfo.V_NAMEDesc" disabled>
 												<!-- <el-button slot="append" :disabled="noedit || dataInfo.PROXY_TYPE=='2'|| dataInfo.PROXY_TYPE=='4'|| dataInfo.WP_NUM!=''" icon="el-icon-search" @click="getDept('notice')" ></el-button> -->
-												<el-button slot="append" :disabled="noedit || dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button>
+												<!-- <el-button slot="append" :disabled="noedit || dataInfo.WP_NUM==''" icon="el-icon-search" @click="getDept('notice')" ></el-button> -->
+												<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getDept('notice')" ></el-button>
 											</el-input>
 										</el-form-item>
 									</el-col>
@@ -197,16 +199,16 @@
 										<el-table :data="dataInfo.WORK_NOTICE_CHECKBASISList" row-key="ID" border stripe :fit="true" max-height="260" highlight-current-row="highlight-current-row" style="width: 100%;" :default-sort="{prop:'dataInfo.WORK_NOTICE_CHECKBASISList', order: 'descending'}">
 											<el-table-column label="序号" sortable width="80px" prop="NUMBER" type="index">
 											</el-table-column>
-											<el-table-column label="编码" sortable width="200px" prop="S_NUM">
+											<!-- <el-table-column label="编码" sortable width="200px" prop="S_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.S_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.S_NUM" placeholder="请输入内容" :disabled="noedit">
-														   <!-- <el-button slot="append" icon="el-icon-search" :disabled="standard"></el-button> -->
-													</el-input>
+														   <el-button slot="append" icon="el-icon-search" :disabled="standard"></el-button> -->
+													<!-- </el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.S_NUM}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column label="标准编号" sortable width="200px" prop="SS_NUM">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.SS_NUM'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">

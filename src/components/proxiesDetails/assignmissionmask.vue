@@ -508,16 +508,16 @@
 										</el-col>
 									</el-row>
 									<el-row>
-									  <el-col :span="8">
-											<el-form-item label="标准费用(元)" prop="CONTRACTCOST" label-width="110px">
-												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice" disabled></el-input>
-											</el-form-item>
-										</el-col>  
 										<el-col :span="8">
-											<el-form-item label="合同收费(元)" prop="CHECK_COST" label-width="110px">
+											<el-form-item label="标准收费(元)" prop="CHECK_COST" label-width="110px">
 												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+									  <el-col :span="8">
+											<el-form-item label="合同费用(元)" prop="CONTRACTCOST" label-width="110px">
+												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice" disabled></el-input>
+											</el-form-item>
+										</el-col>  
 										<el-col :span="8">
 											<el-form-item label="实收费用(元)" prop="ACTUALCOST" label-width="110px">
 												<el-input  v-model="dataInfo.ACTUALCOST" id="actualcost"  @blur="actualPrice" :disabled="noedit"></el-input>
@@ -1002,7 +1002,7 @@
 							var paramData1 = this.INSPECTCOST;
 							var paramData2 = this.ALLCOST;
 							this.$forceUpdate();
-							this.dataInfo.CONTRACTCOST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
+							this.dataInfo.CHECK_COST = this.number_format(parseFloat(paramData2.replace(/,/g,'').replace('元','')) + parseFloat(paramData1.replace(/,/g,'').replace('元','')),2) ;
 						} else {
 							sums[index] = ' ';
 						}

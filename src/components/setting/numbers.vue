@@ -65,7 +65,7 @@
 						<v-table ref="table" :appName="appName" :searchList="searchList" @getSelData="setSelData">
 							<el-table-column label="应用名" width="180" sortable prop="markx" v-if="this.checkedName.indexOf('前缀')!=-1">
 								<template slot-scope="scope">
-									<p class="blue" title="点击查看详情" @click=view(scope.row)>{{scope.row.markx}}</p>
+									<p class="blue" title="点击查看详情" @click=view(scope.row.id)>{{scope.row.markx}}</p>
 								</template>
 							</el-table-column>
 							<el-table-column label="表名" width="260" sortable prop="marky" v-if="this.checkedName.indexOf('表名')!=-1">
@@ -95,7 +95,7 @@
 			</div>
 		</div>
 		<!--右侧内容显示 End-->
-		<numbsetmask :numbsetForm="numbsetForm" ref="child" @request="requestData" v-bind:page=page></numbsetmask>
+		<numbsetmask ref="child" @request="requestData" v-bind:page=page></numbsetmask>
 	</div>
 </div>
 </template>
@@ -203,7 +203,6 @@
 					pageSize: 20,
 					totalCount: 0
 				},
-				aaaData: [],
 				numbsetForm: {}//修改子组件时传递数据
 			}
 		},
@@ -225,23 +224,7 @@
 				this.requestData('init');
 			},
 			openAddMgr() {//添加自动编号设置数据
-				this.numbsetForm = {
-					isinitbydate:'',
-					initformat:'',
-					prefix:'',
-					initnum:'',
-					increase:'',
-					issplicingdate:'',
-					splicingformat:'',
-					serialnum:'',
-					retain:'',
-					createuser:'',
-					createuserDesc:'',
-					updateuser:'',
-					updateuserDesc:''
-				};
-				this.$refs.child.open();
-				this.$refs.child.childMethods();
+				this.$refs.child.adddata();
 			},
 			modify() {//修改自动编号设置数据
 				if(this.selMenu.length == 0) {
@@ -261,9 +244,8 @@
 				}
 			},
 			//查看
-			 view(item) {
-			 	this.numbsetForm = item;
-				this.$refs.child.view(item);
+			 view(id) {
+				this.$refs.child.view(id);
 			},
 			open(){
 				this.show = true;

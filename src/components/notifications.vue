@@ -153,6 +153,8 @@
 								</el-table-column>
 								<el-table-column label="任务号" width="120" prop="TASKNUM" sortable v-if="checkedName.indexOf('任务号')!=-1">
 								</el-table-column>
+								<el-table-column label="执行状态" width="120" prop="LEADER_STATUSDesc" sortable v-if="checkedName.indexOf('执行状态')!=-1">
+								</el-table-column>
 								<el-table-column label="年度计划编号" width="150" prop="WP_NUM" sortable v-if="checkedName.indexOf('年度计划编号')!=-1">
 								</el-table-column>
 								<el-table-column label="受检产品名称" width="150" sortable prop="ITEM_NAME" v-if="checkedName.indexOf('受检产品名称')!=-1">
@@ -229,6 +231,7 @@
 					'任务号',
 					'抽样方案',
 					'完成日期',
+					'执行状态'
 				],
 				tableHeader: [{
 						label: '工作任务通知书编号',
@@ -261,6 +264,10 @@
 					{
 						label: '承检单位',
 						prop: 'CJDWDesc'
+					},
+					{
+						label: '执行状态',
+						prop: 'LEADER_STATUSDesc'
 					},
 					{
 						label: '任务号',

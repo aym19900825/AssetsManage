@@ -2398,8 +2398,8 @@ export default {
       if (val[0] == "falg") {
         // this.dataInfo.P_NAME='';
         // this.dataInfo.ITEM_NAME = "";
-        this.dataInfo.ITEM_MODEL = "";
-        this.dataInfo.ITEM_QUALITY = "";
+        // this.dataInfo.ITEM_MODEL = "";
+        // this.dataInfo.ITEM_QUALITY = "";
         this.dataInfo.ITEM_STATUS = "";
         this.dataInfo.ITEM_ID = "";
         this.dataInfo.ITEM_SECRECY = "";

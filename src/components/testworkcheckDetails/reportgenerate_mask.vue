@@ -605,6 +605,25 @@
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
+					//格式化日期时间段数据，先找到首页
+					var indexData = this.selectReportData.filter((data)=>{
+						if(data.name == '首页'){
+							return data;
+						}
+					});
+					//格式化日期时间daterange
+					if(indexData.length > 0){
+						var dateRange = indexData[0].List.filter((data)=>{
+							if(data.type == 'daterange'){
+								return data;
+							}
+						});
+						if(dateRange.length > 0){
+							for(let i=0; i<dateRange.length; i++){
+								dateRange[i].value = dateRange[i].value.replace("[","").replace("]","").split(',');
+							}
+						}
+					}
 					// console.log(res.data);
 					// console.log(this.reportTemplate.RE_TYPE);
 					// console.log(this.dataid);

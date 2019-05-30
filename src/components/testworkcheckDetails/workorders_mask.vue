@@ -434,7 +434,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="260px">
+												<el-table-column prop="VENDORDesc" label="承包方名称" sortable width="200px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VENDORDesc">
 														</el-input>
@@ -442,7 +442,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="BASIS" label="检验/检测标准依据" sortable width="240px">
+												<el-table-column prop="BASIS" label="检验/检测标准依据" sortable width="220px">
 													<template slot-scope="scope">
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.BASIS">
 														</el-input>
@@ -450,11 +450,11 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="PROXYNUM" label="项目名称" sortable width="200px">
+												<el-table-column prop="P_REMARKS" label="项目名称" sortable width="200px">
 													<template slot-scope="scope">
-														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.PROXYNUM" placeholder="请输入">
+														<el-input :disabled="true" v-if="scope.row.isEditing" size="small" v-model="scope.row.P_REMARKS" placeholder="请输入">
 														</el-input>
-														<span v-else>{{scope.row.PROXYNUM}}</span>
+														<span v-else>{{scope.row.P_REMARKS}}</span>
 													</template>
 												</el-table-column>
 
@@ -468,7 +468,7 @@
 
 												<el-table-column label="检测结果" width="100px" sortable>
 														<template slot-scope="scope">
-															<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="true||scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+															<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="scope.row.WONUM!=workorderForm.WONUM" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 														</template>
 													</el-table-column>
 

@@ -19,7 +19,6 @@
 					<el-form inline-message :model="workorderForm" :rules="rules" ref="workorderForm">
 						<div class="content-accordion" id="information">
 							<el-collapse v-model="activeNames">
-
 								<!-- 样品信息列表 Begin-->
 								<el-collapse-item title="检测要求与样品信息" name="1">
 									<el-row>
@@ -61,7 +60,7 @@
 												</el-button>
 											</div>
 							            	<el-table :data="workorderForm.WORKORDER_PROJECTList" border stripe :fit="true" max-height="360" @cell-click="iconOperation" style="width: 100%;" :default-sort="{prop:'workorderbasisList', order: 'descending'}">
-												<el-table-column prop="P_DESC" label="检验检测项目名称" sortable>
+												<el-table-column prop="P_DESC" label="检验检测项目名称" width="150px" sortable>
 												</el-table-column>
 							            		<el-table-column prop="TECHNICAL_REQUIRE" label="技术要求" width="220px" sortable>
 												</el-table-column>
@@ -75,7 +74,7 @@
 														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row)" :disabled="scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
 													</template>
 												</el-table-column>
-												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>
+												<el-table-column prop="ISQUALIFIED" label="不合格类别" width="140px" sortable>
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORKORDER_PROJECTList.'+scope.$index + '.ISQUALIFIED'" style="margin-left: 0px;">
 															<el-select v-model="scope.row.ISQUALIFIED" placeholder="请选择" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||scope.row.WORKORDER_PROJECT_ITEMList.length==0">
@@ -114,7 +113,8 @@
 												</el-table-column>
 												<el-table-column label="检测结果" width="100px" sortable>
 													<template slot-scope="scope">
-														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														<el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button>
+														<!-- <el-button type="primary" size="mini" round @click="addRemark(scope.$index,scope.row,'contract')" :disabled="pageDisable||scope.row.WONUM!=workorderForm.WONUM||masterId!=$store.state.currentuser.id" v-text="workorderForm.STATE>'2'?'查看结果':'添加结果'"></el-button> -->
 													</template>
 												</el-table-column>
 												<el-table-column prop="ISQUALIFIED" label="不合格类别" sortable>

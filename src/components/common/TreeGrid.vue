@@ -133,8 +133,6 @@
     // 格式化数据源
       data: function () {
         let me = this
-        console.log(1234);
-        console.log(this.appName);
         if(this.appName == 'workorder'){
           this.stripe = false;
         }

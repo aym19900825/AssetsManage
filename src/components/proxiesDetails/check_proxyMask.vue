@@ -1322,8 +1322,8 @@ export default {
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
         P_NAME: "",
-        REPORT_QUALITY: "",
-        REPORT_COUNT: "",
+        REPORT_QUALITY: 2,
+        REPORT_COUNT: 4,
         CNAS_OR_CMA_ID: [],
         CHECK_COST: 0, //合同费用
         ACTUALCOST: 0, //实收费用
@@ -1870,7 +1870,8 @@ export default {
         V_NAME: "", //委托方名称名称
         V_ADDRESS: "", //委托方名称地址
         V_ZIPCODE: "",
-        REPORT_COUNT: "", //报告分数
+        REPORT_COUNT: 4, //报告分数
+        REPORT_QUALITY:2,//交付分数
         CNAS_OR_CMA_ID: [],
         ACTUAL_PERCENT: 0,
         CHECK_COST: 0, //合同费用
@@ -2020,7 +2021,6 @@ export default {
     //
     detailgetData() {
       var url = this.basic_url + "/api-apps/app/inspectPro2/" + this.dataid;
-      console.log(url);
       this.$axios
         .get(url, {})
         .then(res => {
@@ -2064,7 +2064,7 @@ export default {
           });
           res.data.LEADER = Number(res.data.LEADER);
           // 标识的渲染
-          if(res.data.N_CODE=''){
+          if(res.data.N_CODE==''){
             res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(",");
           }else{
             if(res.data.CNAS_OR_CMA_ID!=""){
@@ -2116,7 +2116,6 @@ export default {
             res.data.REPORT_MODE = "自取";
           }
           this.dataInfo = res.data;
-          console.log(this.dataInfo);
           this.show = true;
           this.outbasis();
           //深拷贝数据
@@ -2754,7 +2753,6 @@ export default {
         }
 
         if (valid) {
-          console.log(this.contentList.length);
           if (this.contentList.length > 0 && this.contentList.length > this.dataInfo.CHECK_PROXY_CONTRACTList.length) {
             this.$message({
               message: "请将分包要求补充完整",
@@ -2773,7 +2771,6 @@ export default {
             } else {
               
               this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(",");
-              console.log(this.dataInfo.CNAS_OR_CMA_ID);
               var url =this.basic_url + "/api-apps/app/inspectPro2/saveOrUpdate";
               this.$axios
                 .post(url, this.dataInfo)
@@ -3142,7 +3139,6 @@ export default {
         .get(url, {})
         .then(res => {
           this.contentList = res.data.data;
-          console.log(res.data.data);
         })
         .catch(wrong => {});
     },

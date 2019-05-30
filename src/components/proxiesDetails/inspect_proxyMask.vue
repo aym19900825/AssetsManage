@@ -972,9 +972,9 @@
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
-					REMARKS: [
-						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
-					],//抽样方案
+					// REMARKS: [
+					// 	{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
+					// ],//抽样方案
 					JUDGE:[
 						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
 					],//判定依据
@@ -2114,13 +2114,22 @@
 						});
 					}
 					if (valid) {
-						if(this.dataInfo.INSPECT_PROXY_BASISList.length<=0&&this.dataInfo.INSPECT_PROXY_PROJECList.length<=0&&this.dataInfo.CHECK_PROXY_CONTRACTList.length<=0){
-							this.$message({
-								message: '检测依据和检验项目与要求和分包要求是必填项，请填写！',
-								type: 'warning'
-							});
-							return false;
-			        	}else{
+					if (this.contentList.length > 0 && this.contentList.length > this.dataInfo.CHECK_PROXY_CONTRACTList.length) {
+            this.$message({
+              message: "请将分包要求补充完整",
+              type: "warning"
+            });
+          } else {
+            if (
+              this.dataInfo.INSPECT_PROXY_BASISList.length == 0 &&
+              this.dataInfo.INSPECT_PROXY_PROJECList.length == 0
+            ) {
+              this.$message({
+                message: "检测依据和检验项目与要求是必填项，请填写！",
+                type: "warning"
+              });
+              return false;
+            } else {
 									if(this.dataInfo.CNAS_OR_CMA_ID){
 											this.dataInfo.CNAS_OR_CMA_ID=1;
 									}
@@ -2151,6 +2160,7 @@
 							}).catch((err) => {
 							});
 						}
+					}
 			        }else{
 			          	this.show = true;
 			            this.$message({

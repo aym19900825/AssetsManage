@@ -4,9 +4,9 @@
 		<div class="mask_divbg" v-show="show">
 			<div class="mask_div">
 				<div class="mask_title_div clearfix">
-					<div class="mask_title" v-show="addtitle">添加年度计划</div>
-					<div class="mask_title" v-show="modifytitle">修改年度计划</div>
-					<div class="mask_title" v-show="viewtitle">查看年度计划</div>
+					<div class="mask_title" v-show="addtitle">添加年度抽查计划</div>
+					<div class="mask_title" v-show="modifytitle">修改年度抽查计划</div>
+					<div class="mask_title" v-show="viewtitle">查看年度抽查计划</div>
 					<div class="mask_anniu">
 						<span class="mask_span mask_max" @click="toggle">
 							<i v-bind:class="{'icon-maximization': isok1, 'icon-restore':isok2}"></i>

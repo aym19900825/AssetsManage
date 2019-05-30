@@ -988,7 +988,7 @@
 			},
 			addfield() { 
 				//插入行到文件文件Table中
-				this.samplesForm.ITEM_LINEList = [];
+				// this.samplesForm.ITEM_LINEList = [];
 				var date=new Date();
 				var time = this.$moment(date).format("YYYY-MM-DD");
 				if(/.*[\u4e00-\u9fa5]+.*$/.test(this.samplesForm.QUATITY)){
@@ -1113,7 +1113,6 @@
 			},
 			//生成委托书
 			generate(){
-				// console.log(this.samplesForm);
 				var dataid = this.samplesForm.ID;
 				var url =this.basic_url + '/api-apps/app/item/operate/isExcProxy?ID=' +dataid;
 				this.$axios.get(url,{}).then((res) => {

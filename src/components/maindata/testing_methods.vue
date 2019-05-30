@@ -289,7 +289,7 @@
 					VERSION:'',
 					DEPTID:''
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			searchinfo(index) {//高级查询
 				this.requestData('init');
@@ -596,8 +596,8 @@
 				this.selMenu = val;
 			},
 			//Table默认加载数据
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			requestData(opt,val) {
+				this.$refs.table.requestData(opt,val);
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

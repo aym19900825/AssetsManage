@@ -638,7 +638,7 @@
 					], //受检产品型号
 					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,message: '必填', trigger:'blur',},{trigger:'blur', validator:this.Validators.isInteger}], //样品数量
+					QUALITY: [{required: true,message: '必填',validator:this.Validators.isInteger}], //样品数量
 					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
 					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [

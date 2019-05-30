@@ -111,7 +111,7 @@
 												<!-- <el-input v-model="numbsetForm.initformat" :disabled="noedit"></el-input> -->
 												<el-select v-model="numbsetForm.initformat" :disabled="noedit" placeholder="请选择" style="width:100%;">
                                                     <el-option
-                                                        v-for="item in dateFormatoption"
+                                                        v-for="item in initDateFormatoption"
                                                         :key="item.id"
                                                         :label="item.name"
                                                         :value="item.code">
@@ -194,7 +194,16 @@
                                                 </el-form-item>
                                             </template>
                                             </el-table-column>
-
+                                             
+											 <el-table-column prop="category" label="类型" width="300px">
+                                                <template slot-scope="scope">
+                                                    <el-form-item :prop="'numberPrefixList.'+scope.$index + '.category'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
+														<el-select v-model="scope.row.category" filterable allow-create default-first-option placeholder="请选择">
+                                                        <el-option v-for="item in numPrefixTypeoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
+														</el-select>
+														</el-form-item>
+                                                </template>
+                                            </el-table-column>
                                             <el-table-column prop="value" label="值">
                                             <template slot-scope="scope">
                                                 <el-form-item
@@ -205,19 +214,11 @@
                                             </template>
                                             </el-table-column>
 
-                                            <el-table-column prop="category" label="类型" width="300px">
-                                                <template slot-scope="scope">
-                                                    <el-form-item :prop="'numberPrefixList.'+scope.$index + '.category'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-select v-model="scope.row.category" filterable allow-create default-first-option placeholder="请选择">
-                                                        <el-option v-for="item in numPrefixTypeoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
-														</el-select>
-														</el-form-item>
-                                                </template>
-                                            </el-table-column>
+                                            
 
                                             <el-table-column fixed="right" label="操作" width="120px">
                                                 <el-button
-                                              
+                                                @click.native.prevent="deleteRow(scope.$index,scope.row,'numberPrefixList')"
                                                 type="text"
                                                 size="small"
                                                 v-if="!viewtitle"
@@ -276,7 +277,7 @@
                                             <el-table-column fixed="right" label="操作" width="120">
                                             <template slot-scope="scope">
                                                 <el-button
-                                                @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')"
+                                                @click.native.prevent="deleteRow(scope.$index,scope.row,'numberSerialnoList')"
                                                 type="text"
                                                 size="small"
                                                 v-if="!viewtitle"
@@ -356,7 +357,7 @@
                     value: '0',
                     label: '否'
 				}],
-				dateFormatoption:[],
+				
                 value: '',
 				basic_url: Config.dev_url,
 				modify:false,//修订、修改人、修改时间
@@ -370,7 +371,9 @@
 				isok1: true,
                 isok2: false,
                 numbsetForm:{},
-                numPrefixTypeoption:[],//类型
+				numPrefixTypeoption:[],//类型
+				dateFormatoption:[],
+				initDateFormatoption:[],
 				rules:{
           			markx:[{ required: true, message: '必填',}],
                     marky:[{ required: true, message: '必填',}],
@@ -395,6 +398,9 @@
 					isCustomUse:'0',
 					isMultiple:'0',
 					isInitbydate:'0',
+					markx:'',
+					marky:'',
+					markz:'',
 					initformat:'',
 					initnum:'',
 					increase:'',
@@ -433,6 +439,9 @@
 					isCustomUse:'0',
 					isMultiple:'0',
 					isInitbydate:'0',
+					markx:'',
+					marky:'',
+					markz:'',
 					initformat:'',
 					initnum:'',
 					increase:'',
@@ -512,6 +521,44 @@
 				this.noedit = true;//表单内容
 				this.views = true;//录入修改人信息
 				this.noviews = false;//按钮			
+			},
+			//刪除新建行
+			deleteRow(index, row, listName){
+				var TableName = '';
+				if(listName =='numberPrefixList'){
+					TableName = 'numberPrefixList';
+				}else{
+					TableName = 'numberSerialnoList';
+				}
+				if(row.ID){
+					var url = this.basic_url + '/api-apps/number/' + TableName +'/' + row.id;
+					this.$confirm('确定删除此数据吗？', '提示', {
+						confirmButtonText: '确定',
+						cancelButtonText: '取消',
+					}).then(({
+						value
+					}) => {
+						this.$axios.delete(url, {}).then((res) => {
+							if(res.data.resp_code == 0){
+								this.numbsetForm[TableName].splice(index,1);
+								this.$message({
+									message: '删除成功',
+									type: 'success'
+								});
+							}else{
+								this.$message({
+									message: res.data.resp_msg,
+									type: 'error'
+								});
+							}
+						}).catch((err) => {
+						});
+					}).catch(() => {
+
+					});
+				}else{
+					this.numbsetForm[TableName].splice(index,1);
+				}
 			},
 			//点击关闭按钮
 			close() {
@@ -603,6 +650,14 @@
                 this.$axios.get(url, {}).then((res) => {
 					console.log(res);
                 	this.dateFormatoption = res.data;
+				}).catch((wrong) => {
+				})	
+			},
+			//类型
+            initDateFormat(){
+                var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=dateFormat';
+                this.$axios.get(url, {}).then((res) => {
+                	this.initDateFormatoption = res.data;
 				}).catch((wrong) => {
 				})	
             },

@@ -420,7 +420,7 @@
 					ENTERBY: '',
 					STATEDesc: '',
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			searchinfo() {
 				this.requestData('init');
@@ -822,8 +822,8 @@
 				}
 				return this.$moment(date).format("YYYY-MM-DD"); 
 			},
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			requestData(opt,val) {
+				this.$refs.table.requestData(opt,val);
 			},
 
 			//机构树

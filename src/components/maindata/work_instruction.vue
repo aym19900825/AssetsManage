@@ -263,7 +263,7 @@
 					VERSION:'',
 					DEPTID:''
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			searchinfo() {
 				this.requestData('init');
@@ -302,16 +302,16 @@
 					}
 		    	}else if(item.name=="修改"){
 					if(isshowbtn=='0'){
-          this.$message({
-						message: '您没有修改的权限',
-						type: 'warning'
-					});
+						this.$message({
+							message: '您没有修改的权限',
+							type: 'warning'
+						});
 					}else{
-				        this.modify();
+				    this.modify();
 					}
 		    	}else if(item.name=="彻底删除"){
 					if(isshowbtn=='0'){
-                       this.$message({
+            this.$message({
 						message: '您没有彻底删除的权限',
 						type: 'warning'
 					});
@@ -553,8 +553,8 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//Table默认加载数据
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			requestData(opt,val) {
+				this.$refs.table.requestData(opt,val);
 			},
 			childByValue:function(childValue) {
         		// childValue就是子组件传过来的值

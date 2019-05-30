@@ -962,13 +962,13 @@
                   </el-row>
                   <el-row>
                     <el-col :span="8">
-                      <el-col :span="8">
 											<el-form-item label="标准收费(元)" prop="CHECK_COST" label-width="110px">
 												<el-input v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 												<el-input id="INSPECTCOST" style="display:none"></el-input>
 												<el-input id="ALLCOST" style="display:none"></el-input>
 											</el-form-item>
-										</el-col>
+										</el-col >
+                    <el-col :span="8">
                       <el-form-item label="合同收费(元)" prop="CONTRACTCOST" label-width="110px">
                         <el-input
                           v-model="dataInfo.CONTRACTCOST"
@@ -1463,14 +1463,14 @@ export default {
         ITEM_DISPOSITION: [
           { required: true, message: "必填", trigger: "change" }
         ], //检后处理
-        REMARKS: [
-          {
-            required: true,
-            message: "必填",
-            trigger: "blur",
-            validator: this.Validators.isSpecificKey
-          }
-        ], //抽样方案
+        // REMARKS: [
+        //   {
+        //     required: true,
+        //     message: "必填",
+        //     trigger: "blur",
+        //     validator: this.Validators.isSpecificKey
+        //   }
+        // ], //抽样方案
         JUDGE: [
           {
             required: true,
@@ -2020,6 +2020,7 @@ export default {
     //
     detailgetData() {
       var url = this.basic_url + "/api-apps/app/inspectPro2/" + this.dataid;
+      console.log(url);
       this.$axios
         .get(url, {})
         .then(res => {
@@ -2063,7 +2064,16 @@ export default {
           });
           res.data.LEADER = Number(res.data.LEADER);
           // 标识的渲染
-          res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(",");
+          if(res.data.N_CODE=''){
+            res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(",");
+          }else{
+            if(res.data.CNAS_OR_CMA_ID!=""){
+              res.data.CNAS_OR_CMA_ID = res.data.CNAS_OR_CMA_ID.split(",");
+            }else{
+              res.data.CNAS_OR_CMA_ID=[]; 
+            }
+          }
+          
           //用于获取主检组菜的数据
           var url = this.basic_url + "/api-user/depts/" + res.data.MAINGROUP;
           this.$axios.get(url, {}).then(res => {
@@ -2106,6 +2116,7 @@ export default {
             res.data.REPORT_MODE = "自取";
           }
           this.dataInfo = res.data;
+          console.log(this.dataInfo);
           this.show = true;
           this.outbasis();
           //深拷贝数据
@@ -2744,7 +2755,7 @@ export default {
 
         if (valid) {
           console.log(this.contentList.length);
-          if (this.contentList.length > 0 && this.contentList.length !=this.dataInfo.CHECK_PROXY_CONTRACTList.length) {
+          if (this.contentList.length > 0 && this.contentList.length > this.dataInfo.CHECK_PROXY_CONTRACTList.length) {
             this.$message({
               message: "请将分包要求补充完整",
               type: "warning"
@@ -2760,7 +2771,9 @@ export default {
               });
               return false;
             } else {
+              
               this.dataInfo.CNAS_OR_CMA_ID = this.dataInfo.CNAS_OR_CMA_ID.join(",");
+              console.log(this.dataInfo.CNAS_OR_CMA_ID);
               var url =this.basic_url + "/api-apps/app/inspectPro2/saveOrUpdate";
               this.$axios
                 .post(url, this.dataInfo)
@@ -3129,6 +3142,7 @@ export default {
         .get(url, {})
         .then(res => {
           this.contentList = res.data.data;
+          console.log(res.data.data);
         })
         .catch(wrong => {});
     },

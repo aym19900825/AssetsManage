@@ -313,7 +313,7 @@
 					VERSION: '',
 					DEPTID:'',
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			searchinfo(index) {//高级查询
 				this.requestData('init');
@@ -629,8 +629,8 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			requestData(opt,val2) {
+				this.$refs.table.requestData(opt,val2);
 			},
 			
 			childByValue:function(childValue) {

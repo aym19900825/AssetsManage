@@ -232,7 +232,7 @@
 					DECRIPTION: '',
 					DEPTID: '',
 				};
-				this.requestData('init');
+				this.requestData('init','this.searchList');
 			},
 			searchinfo(index) {
 				this.page.currentPage = 1;
@@ -520,8 +520,8 @@
 				return this.$moment(date).format("YYYY-MM-DD");
 			},
 			//Table默认加载数据
-			requestData(opt) {
-				this.$refs.table.requestData(opt);
+			requestData(opt,val) {
+				this.$refs.table.requestData(opt,val);
 			},
 			
 			childByValue:function(childValue) {

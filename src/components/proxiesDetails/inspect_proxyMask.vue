@@ -972,9 +972,9 @@
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
-					REMARKS: [
-						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
-					],//抽样方案
+					// REMARKS: [
+					// 	{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
+					// ],//抽样方案
 					JUDGE:[
 						{required: true, message: '必填', trigger: 'blur',validator:this.Validators.isSpecificKey}
 					],//判定依据

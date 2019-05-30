@@ -189,11 +189,13 @@ requestData() {
 				description: this.searchList.description,
 			}
 			var url = this.basic_url + '/apps-center/objectcfg';
+
 			this.$axios.get(url, {
 				params: data
 			}).then((res) => {
 				this.page.totalCount = res.data.count;
 				//总的页数
+
 			
 				this.applicationList = res.data.data;
 				this.loading = false;//加载动画关闭

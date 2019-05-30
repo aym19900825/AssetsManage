@@ -346,7 +346,7 @@
 				STATUS:'',
 				LEADER_STATUS:''
 			};
-			this.requestData('init');
+			this.requestData('init','this.searchList');
 		},
 		//请求点击
 		getbtn(item){
@@ -772,8 +772,8 @@
 			}
 			return this.$moment(date).format("YYYY-MM-DD");
 		},
-		requestData(opt) {
-			this.$refs.table.requestData(opt);
+		requestData(opt,val) {
+			this.$refs.table.requestData(opt,val);
 		},
 		//树
 		getKey() {

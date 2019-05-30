@@ -420,7 +420,7 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+					if(this.selUser[0].STATE!=1) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'

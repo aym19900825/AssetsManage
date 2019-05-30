@@ -283,12 +283,18 @@
 			//打开确认报告寄出弹出框
 			openSendReport(){
 				var selData = this.selUser;
+				console.log(selData);
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择您要寄出的报告',
 						type: 'warning'
 					});
 					return;
+				} else if (selData[0].STATE=='20') {//这个判断有问题，待修改
+					this.$message({
+						message: '选择的数据中包含已寄出报告，不能重复确认报告寄出。',
+						type: 'warning'
+					});
 				} else {
 					//changeUser为勾选的数据
 					var changeUser = selData;

@@ -236,7 +236,7 @@
 					</el-row>
 					<el-row>
 						<el-col :span="24">
-							<iframe :src="this.reportFileUrl" width="100%" frameborder="0" scrolling="auto" overflow-x="auto"></iframe>
+							<iframe :src="this.reportFileUrl" width="100%" frameborder="0" scrolling="auto" overflow-x="auto" style="display:none;"></iframe>
 						</el-col>
 					</el-row>
 				</el-form>
@@ -307,7 +307,6 @@
 			openPrintReport(){
 				this.passdialog = true;
 				// this.resetForm();
-				console.log(this.reportFileUrl);
 				this.reportPrintForm =  {
 					REPORT_COUNT: '1',  //打印份数
 					PRINT_PERSON: this.$store.state.currentuser.id,//打印人ID
@@ -523,15 +522,18 @@
 			
 			//打印报告文件
 			printAuth(){
-            	var url = this.po_url+"/print?fileid=" + this.report.FILEID
-				+ '&userid=' +  this.userid
-				+ '&username=' + this.username
-				+ '&deptid=' + this.deptid
-				+ '&deptfullname=' + this.deptfullname
-				+ '&report_print_count=' + this.reportPrintForm.REPORT_COUNT
-				+ '&report_quality=' + this.REPORT_QUALITY
-				this.reportFileUrl= url;
-				window.open(url); 
+				var recounts = this.reportPrintForm.REPORT_COUNT;
+				for (var i = 1; i <= recounts; i++) { 
+					var url = this.po_url+"/print?fileid=" + this.report.FILEID
+					+ '&userid=' +  this.userid
+					+ '&username=' + this.username
+					+ '&deptid=' + this.deptid
+					+ '&deptfullname=' + this.deptfullname
+					+ '&report_print_count=' + i
+					+ '&report_quality=' + this.REPORT_QUALITY
+					this.reportFileUrl= url;
+					window.open(url); 
+				}
         	},
 			//时间格式化
 			dateFormat(row, column) {

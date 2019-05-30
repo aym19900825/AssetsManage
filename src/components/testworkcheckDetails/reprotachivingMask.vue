@@ -157,7 +157,7 @@
 						<div class="content-footer" v-show="!addtitle">
 							<!-- <el-button type="primary" @click="saveAndUpdate()">保存</el-button> -->
 							<!-- <el-button type="success" @click="saveAndSubmit()" v-show="addtitle">保存并继续</el-button> -->
-							<el-button type="success" @click="submitReprot">确认报告归档</el-button>
+							<el-button type="success" v-show="this.report.STATE=='13'" @click="submitReprot">确认报告归档</el-button>
 							<el-button type="primary" @click="readAuth">查看报告文件</el-button>
 							<el-button @click="close">取消</el-button>
 						</div>
@@ -251,7 +251,7 @@
                             message: '确认成功',
                             type: 'success'
 						});
-						this.detailgetData();
+						this.close();
                     }else{
                         this.$message({
 							message: res.data.resp_msg,

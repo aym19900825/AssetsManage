@@ -1423,9 +1423,8 @@ export default {
             validator: this.Validators.isSpecificKey
           }
         ], //委托方名称名称
-        V_ADDRESS: [
-          {
-            required: true
+        V_ADDRESS: [{
+            required: true,trigger: "change"
           }
         ], //地址
         V_ZIPCODE: [

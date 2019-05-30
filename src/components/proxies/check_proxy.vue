@@ -428,7 +428,7 @@
 				//请求点击
 		    getbtn(item){
 		    	if(item.name=="添加"){
-		        this.openAddMgr();
+		       this.openAddMgr();
 		    	}else if(item.name=="修改"){
 		    	 this.modify();
 		    	}else if(item.name=="彻底删除"){
@@ -472,7 +472,7 @@
 					});
 					return;
 				} else {
-					if(this.selUser[0].STATE == 3 || this.selUser[0].STATE == 2) {
+					if(this.selUser[0].STATE !=1) {
 						this.$message({
 							message: '已启动的流程，不允许修改数据，只可以查看。',
 							type: 'warning'

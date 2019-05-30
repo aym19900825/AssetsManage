@@ -147,12 +147,12 @@
 										<el-row>
 											<el-col :span="24">
 												<el-form-item label="委托方提供技术资料" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="viewtitle"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.TECHNICAL_INFORMATION" :disabled="!viewtitle"></el-input>
 												</el-form-item>
 											</el-col>
 											<el-col :span="24">
 												<el-form-item label="特殊要求" label-width="140px">
-													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="viewtitle"></el-input>
+													<el-input placeholder="请输入内容" v-model="workorderForm.SPECIAL_REQUIREMENTS" :disabled="!viewtitle"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -212,8 +212,8 @@
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
-												<el-form-item label="样品状态" prop="ITEM_STATU" label-width="120px">
-													<el-input v-model="workorderForm.ITEM_STATU" :disabled="noedit"></el-input>
+												<el-form-item label="样品状态" prop="ITEM_STATUSDesc" label-width="120px">
+													<el-input v-model="workorderForm.ITEM_STATUSDesc" :disabled="noedit"></el-input>
 												</el-form-item>
 											</el-col>
 										</el-row>
@@ -568,7 +568,7 @@
 									<el-row class="pt10">
 										<el-col :span="24">
 											<el-form-item label="备注" prop="MEMO" label-width="45px">
-												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="viewtitle"></el-input>
+												<el-input type="textarea" rows="3" v-model="workorderForm.MEMO" :disabled="!viewtitle"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -1082,7 +1082,6 @@
 					this.$axios.get(url, { }).then((res) => {
 						this.workorderForm = res.data.datas;
 						var workorderForm=res.data.datas
-						console.log(res.data.datas);
 						workorderForm.CJDW = Number(workorderForm.CJDW);
 						this.show=true;
 						for(let i = 0;i<workorderForm.WORKORDER_PROJECTList.length;i++){
@@ -1185,7 +1184,6 @@
 			close() {
 				this.show = false;
 				this.$emit('request');
-				//this.resetNew();
 			},
 			toggle(e) {
 				if(this.isok1 == true) {

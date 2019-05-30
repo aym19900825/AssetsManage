@@ -927,13 +927,11 @@
 										'recordid': this.reptemDetailId,
 									}).then((res) => {
 										this.moduleFileList = res.data.fileList;
-										debugger;
 										var Url1 = this.basic_url + '/api-merge/merge/workorder/MergeWord';
 										var path = [];
 										for(let j=0; j<this.selData.length;j++){
 											path.push(this.selData[j].FILEPATH);
 										}
-										debugger;
 										var postData = {
 											proxynum: '',
 											templatecode: this.reportTemplate.RE_TYPE,

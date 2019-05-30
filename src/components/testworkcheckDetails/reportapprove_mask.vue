@@ -19,7 +19,7 @@
 				<div class="mask_content">
 					<el-form inline-message :model="report" ref="report" label-width="100px" class="demo-adduserForm">
 						<div class="text-center" v-show="viewtitle">
-							<span v-show="this.report.STATE==7" class="pr10">
+							<span v-show="this.report.STATE=='7'" class="pr10">
 								<!-- <el-button class="start" type="success" round plain size="mini" @click="startup" v-show="start" ><i class="icon-start"></i> 提交审核</el-button> -->
 								<el-button class="approval" type="warning" round plain size="mini" @click="approvals" v-show="approval"><i class="icon-edit-3"></i> 报告审核</el-button>
 							</span>
@@ -157,7 +157,7 @@
 				</div>
 			</div>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -296,6 +296,33 @@
 				this.statusshow2 = false;
 				this.show = true;
 			},
+			//刷新页面的审批按钮
+			refresh(){
+				this.$emit('realtime');
+				var url = this.basic_url + '/api-apps/app/reportApprove/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+						var resullt=res.data.datas;
+						for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(res.data.datas.length == 0){
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+							return;
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+						}
+					});	
+					
+			},
 			//生成的报告文件列表
 			detailgetData(){
 				console.log(this.dataid);
@@ -360,9 +387,7 @@
 			},
 			//这是查看
 			view(data) {
-				// console.log(data);
 				this.dataid = data;
-				// console.log(this.dataid);
 				this.addtitle = false;
 				this.modifytitle = false;
 				this.viewtitle = true;
@@ -375,6 +400,7 @@
 				this.detailgetData();
 				var url = this.basic_url + '/api-apps/app/reportApprove/flow/isStart/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
+					console.log(res);
 					if(res.data.resp_code==1){
 						this.start=true;
 						this.approval=false;

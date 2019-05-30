@@ -495,14 +495,14 @@
 						type: 'warning'
 					});
 					return;
-				} else if(this.selMenu[0].STATE!='6') {
+				} else if(this.selMenu[0].STATE!='6'&&this.selMenu[0].STATE!='17'&&this.selMenu[0].STATE!='16') {
 					console.log(this.selMenu[0].STATE);
 					this.$message({
 						message: '此任务单状态不是待生成，暂不能使用报告生成与编辑',
 						type: 'warning'
 					});
 					return;
-				} else if((this.selMenu[0].STATE == '6'||this.selMenu[0].STATE == '0')&&this.selMenu[0].IS_MAIN=='1') {//待生成
+				} else if((this.selMenu[0].STATE == '6'||this.selMenu[0].STATE == '0'||this.selMenu[0].STATE == '17'||this.selMenu[0].STATE == '16')&&this.selMenu[0].IS_MAIN=='1') {//待生成
 					this.$refs.reportGenerationMask.showDialog(this.selMenu[0].ID,this.selMenu[0].REPORTTEMPLATENUM);
 				}
 			},

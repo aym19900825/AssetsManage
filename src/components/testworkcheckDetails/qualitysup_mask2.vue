@@ -136,7 +136,7 @@
 				</div>
 			</div>
 			<!--审批页面-->
-			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="detailgetData"  ></approvalmask>
+			<approvalmask :approvingData="approvingData" ref="approvalChild" @detail="refresh"></approvalmask>
 			<!--流程历史-->
 			<flowhistorymask :approvingData="approvingData"  ref="flowhistoryChild" ></flowhistorymask>
 			<!--流程地图-->
@@ -272,6 +272,33 @@
 				this.statusshow1 = true;
 				this.statusshow2 = false;
 				this.show = true;
+			},
+			//刷新页面的审批按钮
+			refresh(){
+				this.$emit('realtime');
+				var url = this.basic_url + '/api-apps/app/qualitySupApp/flow/Executors/'+this.dataid;
+					this.$axios.get(url, {}).then((res) => {
+						var resullt=res.data.datas;
+						for(var i=0;i<resullt.length;i++){
+							this.users =this.users + resullt[i].username+",";
+						}
+						if(res.data.datas.length == 0){
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+							return;
+						}
+						if(this.users.indexOf(this.username) != -1){
+							this.approval=true;
+							this.start=false;
+							this.detailgetData();
+						}else{
+							this.approval=false;
+							this.start=false;
+							this.detailgetData();
+						}
+					});	
+					
 			},
 			//修改代码
 			detailgetData(){

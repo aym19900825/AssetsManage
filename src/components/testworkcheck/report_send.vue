@@ -290,35 +290,46 @@
 						type: 'warning'
 					});
 					return;
-				} else if (selData[0].STATE=='20') {//这个判断有问题，待修改
-					this.$message({
-						message: '选择的数据中包含已寄出报告，不能重复确认报告寄出。',
-						type: 'warning'
-					});
-				} else {
-					//changeUser为勾选的数据
+				} else if(selData.length > 0){
 					var changeUser = selData;
-					//cancelid为id的数组
-					var cancelid = [];
-					var ids;
+					var cancelstate = [];
 					for(var i = 0; i < changeUser.length; i++) {
-						cancelid.push(changeUser[i].ID);
+						if (changeUser[i].STATE=='20') {//这个判断有问题，待修改
+							this.$message({
+								message: '选择的数据中包含已寄出的报告，不能重复寄出。',
+								type: 'warning'
+							});
+							return;
+						}else {
+							//changeUser为勾选的数据
+							var changeUser = selData;
+							//cancelid为id的数组
+							var cancelid = [];
+							var ids;
+							for(var i = 0; i < changeUser.length; i++) {
+								cancelid.push(changeUser[i].ID);
+							}
+							//ids为cancelid数组用逗号拼接的字符串
+							this.ids = cancelid.toString(',');
+							
+							this.passdialog = true;
+							this.reportSendForm =  {
+								IDS:this.ids,//IDS
+								ACCEPT_PERSON: '', //收件人
+								ACCEPT_PHONE: '', //收件人电话
+								ACCEPT_ADDRESS: '', //收件地址
+								EXPRESS_NUM: '', //快递单号
+								EXPRESS_COMPANY: '', //快递公司
+								SENDPERSON: this.$store.state.currentuser.id,//寄出人ID
+								SENDPERSONDesc: this.$store.state.currentuser.nickname,//寄出人姓名
+								SENDDATE: this.getToday(),//寄出时间
+							};
+							this.view();//重新加载查看方法
+						}
 					}
-					//ids为cancelid数组用逗号拼接的字符串
-					this.ids = cancelid.toString(',');
-					this.passdialog = true;
-					this.reportSendForm =  {
-						IDS:this.ids,//IDS
-						ACCEPT_PERSON: '', //收件人
-						ACCEPT_PHONE: '', //收件人电话
-						ACCEPT_ADDRESS: '', //收件地址
-						EXPRESS_NUM: '', //快递单号
-						EXPRESS_COMPANY: '', //快递公司
-						SENDPERSON: this.$store.state.currentuser.id,//寄出人ID
-						SENDPERSONDesc: this.$store.state.currentuser.nickname,//寄出人姓名
-						SENDDATE: this.getToday(),//寄出时间
-					};
+						
 				}
+				
 			},
 			//获取当前时间
 			getToday(){
@@ -468,7 +479,6 @@
 			},
 			//查看
 			view(data) {
-				console.log(data);
 				this.$refs.reportsend.view(data);
 			},
 			//确认报告寄出

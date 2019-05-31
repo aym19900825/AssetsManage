@@ -229,14 +229,14 @@
 												</template>
 											</el-table-column>
 											
-											<el-table-column prop="VERSION" label="版本" sortable width="120px">
+											<!-- <el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容" :disabled="noedit"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column prop="FILESIZE" label="文件大小" sortable width="120px">
 												<template slot-scope="scope">
 													<span>{{(scope.row.FILESIZE<0?scope.row.FILESIZE:0) + 'M'}}</span>
@@ -334,7 +334,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
+												<!-- <el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="noedit">
@@ -342,7 +342,7 @@
 														<span v-else>{{scope.row.VERSION}}</span>
 														</el-form-item>	
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small" v-if="!viewtitle">
@@ -534,7 +534,7 @@
 				pickerOptions1: {
 					disabledDate: (time) => {
 						if(!!this.dataInfo.XD_DATE){
-							return time.getTime() < new Date(this.dataInfo.XD_DATE).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
+							return time.getTime() <= new Date(this.dataInfo.XD_DATE).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
 						}else{
 							this.dataInfo.COMPDATE='';
 							// this.$message({
@@ -640,10 +640,9 @@
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
 					QUALITY: [{required: true,message: '必填',validator:this.Validators.isInteger}], //样品数量
 					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
-					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
+					XD_DATE: [{required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [
-						{required: true,trigger: 'blur',message: '必填',	},
-						{trigger: 'blur',validator: this.Validators.isSpecificKey},
+						{required: true,trigger: 'blur',message: '必填',validator: this.Validators.isSpecificKey},
 					],//抽样方案
 					MEMO: [
 						{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
@@ -1325,7 +1324,7 @@
 					} else {
 						this.show=true;
 					 	this.$message({
-							message: '有必填项未填写，请重新填写',
+							message: '有必填项未填写，请填写完整',
 							type: 'warning',
 						});
 						this.falg=false

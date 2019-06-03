@@ -1435,7 +1435,10 @@ export default {
           }
         ], //邮编
         V_PERSON: [{ required: true, validator: this.Validators.isNickname }], //联系人姓名
-        V_PHONE: [{ required: true, validator: this.Validators.isPhones }], //联系人电话
+        V_PHONE: [
+          {required: true, message: '必填'},
+          {trigger: 'blur', validator: this.Validators.isPhones,}
+        ],
         R_VENDORDesc: [
           {
             required: false,
@@ -1472,12 +1475,8 @@ export default {
         //   }
         // ], //抽样方案
         JUDGE: [
-          {
-            required: true,
-            message: "必填",
-            trigger: "blur",
-            validator: this.Validators.isSpecificKey
-          }
+          {required: true,message: "必填",},
+           {trigger: "blur",validator: this.Validators.isSpecificKey}
         ], // 判定依据
         COMPDATE: [{ required: true, message: "必填", trigger: "blur" }], //完成日期
         REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur" }], //交委托方分数

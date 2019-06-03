@@ -484,11 +484,19 @@
 									</el-row>
 
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="4">
 											<el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
 												<el-input v-model="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										 <el-col :span="4">
+                      <el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
+                        <el-input
+                          v-model="dataInfo.REPORT_COUNT"
+                          :disabled="noedit"
+                        ></el-input>
+                      </el-form-item>
+                    </el-col>
 										<el-col :span="8">
 											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">

@@ -140,9 +140,17 @@
 											</el-col>
 										</el-row>
 										<el-row>
-											<el-col :span="8">
+										<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit" ></el-input>
+													<!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit" ></el-input> -->
+													<el-select v-model="dataInfo.ITEM_STATUS" filterable allow-create placeholder="请选择" style="width:100%;" :disabled="noedit">
+													<el-option
+														v-for="item in itemstateoptions"
+														:key="item.id"
+														:label="item.name"
+														:value="item.code">
+													</el-option>
+												</el-select>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -482,11 +490,19 @@
 									</el-row>
 
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="4">
 											<el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
 												<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										 <el-col :span="4">
+                      <el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
+                        <el-input
+                          v-model="dataInfo.REPORT_COUNT"
+                          :disabled="noedit"
+                        ></el-input>
+                      </el-form-item>
+                    </el-col>
 										<el-col :span="8">
 											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
@@ -507,11 +523,11 @@
 									</el-row>
 									<el-row>
 									  <el-col :span="8">
-											<el-col :span="8">
 											<el-form-item label="标准收费(元)" prop="CHECK_COST" label-width="110px">
 												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
 											<el-form-item label="合同费用(元)" prop="CONTRACTCOST" label-width="110px">
 												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice" disabled></el-input>
 											</el-form-item>
@@ -757,6 +773,7 @@
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
 					logos: "",//标识
+					itemstateoptions:[],//样品状态
 					CHECK_PROXY_CONTRACTList: [//分包要求
 						{
 							INSPECT_GROUP:'',	//专业组
@@ -1942,13 +1959,22 @@
 						// 	type: 'erro'
 						// });
 					});
-			}
+			},
+				//样品状态
+      ITEM_STATUS(){
+        var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=item_accept_status';
+				this.$axios.get(url, {}).then((res) => {
+          this.itemstateoptions = res.data;
+				}).catch((wrong) => {
+				})
+			},
 			
         },
        
 		mounted() {
 			this.RVENDORSelect();
 			this.logo();
+			this.ITEM_STATUS()
 		},
 	}
 </script>

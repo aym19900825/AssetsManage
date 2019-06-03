@@ -319,21 +319,22 @@
                   </el-row>
                   <el-row>
                     <el-form-item label="判定依据" prop="JUDGE" label-width="110px">
-                      <!-- <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input> -->
-                      <el-autocomplete
+                      <el-input v-model="dataInfo.JUDGE" :disabled="noedit">
+                      <!-- <el-autocomplete
                         v-model="dataInfo.JUDGE"
                         @select="handleSelect2"
                         placeholder="请输入内容"
                         :disabled="noedit"
                         style="width:100%"
-                      >
+                      > -->
                         <el-button
                           slot="append"
                           icon="el-icon-search"
                           @click="basisleadbtn('main')"
                           :disabled="noedit"
                         ></el-button>
-                      </el-autocomplete>
+                        </el-input>
+                      <!-- </el-autocomplete> -->
                     </el-form-item>
                   </el-row>
                 </el-collapse-item>
@@ -1701,6 +1702,7 @@ export default {
 
     // 中心内机构
     withindept() {
+      console.log(new Date);
       this.$refs.withinspectchild.visible();
     },
     //中心外机构
@@ -2023,6 +2025,7 @@ export default {
       this.$axios
         .get(url, {})
         .then(res => {
+          console.log(res);
           this.RVENDORSelect();
           this.getmaingroup(res.data.MAINGROUP);
           // 依据
@@ -2074,11 +2077,14 @@ export default {
           }
           
           //用于获取主检组菜的数据
-          var url = this.basic_url + "/api-user/depts/" + res.data.MAINGROUP;
-          this.$axios.get(url, {}).then(res => {
-            var resullt = res.data;
-            this.maingroup.push(resullt);
-          });
+          if(!!!res.data.MAINGROUP){
+            var url = this.basic_url + "/api-user/depts/" + res.data.MAINGROUP;
+            this.$axios.get(url, {}).then(res => {
+              var resullt = res.data;
+              this.maingroup.push(resullt);
+            });
+          }
+          
           if (res.data.MAINGROUP == "") {
             res.data.MAINGROUP = "";
           } else {

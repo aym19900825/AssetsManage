@@ -129,32 +129,19 @@
 	},
   	visible() {
 		this.dialogcustom= true;
-		this.dept= this.defaultdept;
 		this.requestData();
 
   	},
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.requestData();
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.requestData();
-		},
+	//改变页数
+	sizeChange(val) {
+		this.page.pageSize = val;
+		this.requestData();
+	},
+	//当前页数
+	currentChange(val) {
+		this.page.currentPage = val;
+		this.requestData();
+	},
 	//Table默认加载数据
 	
 	getdept(dept){
@@ -221,20 +208,15 @@
 		};
 		var DEPTID=this.$store.state.currentcjdw[0].id;
 		var url = this.basic_url + '/api-apps/app/inspectPro/operate/pdTreeSearch?deptId='+this.dept+'&searchName='+this.searchList.searchName;
+		console.log(url);
+		console.log(123);
 		this.$axios.get(url,{}).then((res) => {
 			this.page.totalCount = res.data.datas.count;
 			//总的页数
 			let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-			if(this.page.currentPage >= totalPage) {
-				this.loadSign = false
-			} else {
-				this.loadSign = true
-			}
 			this.customerList = res.data.datas.data;
 			this.loading = false;//加载动画关闭
-			if($('.el-table__body-wrapper table').find('.filing').length>0 && this.page.currentPage < totalPage){
-				$('.el-table__body-wrapper table').find('.filing').remove();
-			}//滚动加载数据判断filing
+			
 		}).catch((wrong) => {
 			// this.$message({
 			// 	message: '网络错误，请重试1',

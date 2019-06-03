@@ -142,7 +142,8 @@
         this.loading = true;
         var url = this.basic_url + '/api-user/depts/treeMapAll';
         this.$axios.get(url, {}).then((res) => {
-            let result=res.data
+            console.log(res.data);
+            let result=res.data;
             for(let i=0;i<result.length;i++){
                 if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
                     let subDepts=result[i].subDepts;
@@ -171,8 +172,9 @@
 			proarr.push(this.selUser[0].id);
             proarr.push(this.selUser[0].fullname);
             proarr.push(this.selUser[0].depttype);
-			proarr.push(this.selUser[0].depttypeName);
-			this.$emit('deptdata',proarr);
+            proarr.push(this.selUser[0].depttypeName);
+            proarr.push(this.selUser[0].simplename);
+            this.$emit('deptdata',proarr);
 			this.requestData();
             this.resetBasisInfo();//调用resetBasisInfo函数
 		}

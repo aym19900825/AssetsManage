@@ -168,7 +168,7 @@
                                             <template slot-scope="scope">
                                                 <el-form-item
                                                 :prop="'numberPrefixList.'+scope.$index + '.prefix'"
-                                                :rules="[{required: true, message: '请输入', trigger: 'blur'}]"
+
                                                 >
                                                 <el-input
                                                     size="small"
@@ -195,22 +195,37 @@
                                             </template>
                                             </el-table-column>
                                              
-											 <el-table-column prop="category" label="类型" width="300px">
+											<el-table-column prop="category" label="类型" width="300px">
                                                 <template slot-scope="scope">
                                                     <el-form-item :prop="'numberPrefixList.'+scope.$index + '.category'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-select v-model="scope.row.category" filterable allow-create default-first-option placeholder="请选择">
-                                                        <el-option v-for="item in numPrefixTypeoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
+                                                            <el-option v-for="item in numPrefixTypeoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
 														</el-select>
-														</el-form-item>
+													</el-form-item>
                                                 </template>
                                             </el-table-column>
-                                            <el-table-column prop="value" label="值">
+                                            <el-table-column prop="value" label="值" >
                                             <template slot-scope="scope">
                                                 <el-form-item
                                                 :prop="'numberPrefixList.'+scope.$index + '.value'"
                                                 >
-                                                <el-input size="small" v-model="scope.row.value" placeholder="请输入"  :disabled="noedit"></el-input>
-                                                </el-form-item>
+                                                <!-- 当类型是自定义的时候 -->
+												<el-input size="small" v-model="scope.row.value" placeholder="请输入"  :disabled="noedit" v-show="scope.row.category=='4'"></el-input>
+                                                <!-- 当类型是日期 -->
+												<el-select v-model="scope.row.value" placeholder="请选择" v-show="scope.row.category=='2'">
+													<el-option v-for="item in dateFormatoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
+												</el-select>
+												<!-- 机构 -->
+												<el-input v-model="scope.row.valueDesc" :disabled="edit" v-show="scope.row.category=='3'">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getdept(scope.$index)">
+													</el-button>
+												</el-input>
+												<!-- 业务字段 -->
+												<el-input v-model="scope.row.value" :disabled="edit" v-show="scope.row.category=='1'">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getdata(scope.$index)">
+													</el-button>
+												</el-input>
+												</el-form-item>
                                             </template>
                                             </el-table-column>
 
@@ -251,17 +266,12 @@
                                                 <el-form-item
                                                 :prop="'numberSerialnoList.'+scope.$index + '.numberPrefix'"
                                                 >
-                                                <el-input
-                                                    size="small"
-                                                    v-model="scope.row.numberPrefix"
-                                                    placeholder="请输入"
-                                                    :disabled="noedit"
-                                                ></el-input>
+												 <span>{{scope.row.numberPrefix}}</span>
                                                 </el-form-item>
                                             </template>
                                             </el-table-column>
 
-                                            <el-table-column prop="serialnum" label="序号" sortable width="120px">
+                                            <el-table-column prop="serialnum" label="序号" sortable width="420px">
                                             <template slot-scope="scope">
                                                 <el-form-item
                                                 :prop="'numberSerialnoList.'+scope.$index + '.serialnum'"
@@ -333,6 +343,7 @@
 			<!-- 弹出 -->
             <appmask ref="appchild" @appdata='appdata'></appmask>
             <datamask ref="datachild" @appdata='data'></datamask>
+			<deptmask ref="deptchild" @deptdata='deptdata'></deptmask>
             <!-- <deptmask ref="deptchild" @deptdata = "deptdata"></deptmask> -->
 		</div>
 	</div>
@@ -341,12 +352,14 @@
 <script>
     import Config from '../../config.js'
     import appmask from '../common/common_mask/applicationmask.vue'//应用管理
-    import datamask from '../common/common_mask/datamask.vue'//数据管理
+	import datamask from '../common/common_mask/datamask.vue'//数据管理
+	import deptmask from '../common/common_mask/deptmask.vue'//机构管理
 	export default {
         name: 'masks',
         components: {
             appmask,
-            datamask
+			datamask,
+			deptmask,
 		},
 		data() {
 			return {
@@ -467,6 +480,16 @@
             },
             data(val){
                 this.numbsetForm.marky=val;
+			},
+			//子表机构
+			getdept(index){
+				this.index=index;
+                this.$refs.deptchild.visible();
+			},
+			//机构赋值
+            deptdata(val){
+				this.numbsetForm.numberPrefixList[this.index].valueDesc=val[1];
+				this.numbsetForm.numberPrefixList[this.index].value=val[4];
             },
             adddata() {
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
@@ -636,7 +659,7 @@
 				$('.v-modal').hide();
 			});
             },
-            //类型
+            //编号的段落设置类型
             numPrefixType(){
                 var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=numPrefixType';
                 this.$axios.get(url, {}).then((res) => {
@@ -644,18 +667,17 @@
 				}).catch((wrong) => {
 				})	
 			},
-			//类型
+			//编号的段落设置类型中的日期
             dateFormat(){
                 var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=dateFormat';
                 this.$axios.get(url, {}).then((res) => {
-					console.log(res);
                 	this.dateFormatoption = res.data;
 				}).catch((wrong) => {
 				})	
 			},
-			//类型
+			//初始化日期格式
             initDateFormat(){
-                var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=dateFormat';
+                var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=initDateFormat';
                 this.$axios.get(url, {}).then((res) => {
                 	this.initDateFormatoption = res.data;
 				}).catch((wrong) => {

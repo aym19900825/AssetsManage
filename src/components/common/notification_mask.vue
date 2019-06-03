@@ -783,15 +783,22 @@
 			},
 			//承检单位
 			getCompany() {
-				var url=this.basic_url+'/api-user/depts/findStation/2';
+				var url=this.basic_url+'/api-user/depts/treeByType?type=2';
 				this.$axios.get(url, {
 				}).then((res) => {
+					console.log(res);
 					this.selectData = res.data;
 				});
 			},
 			changeCJDW(){
-				this.getCompany();
-				this.getDeptPerson();
+				console.log(this.dataInfo.CJDW);
+				console.log(this.selectData);
+				for(var a=0;a<this.selectData.length;a++){
+					if(this.selectData[a].id==this.dataInfo.CJDW){
+						this.dataInfo.P_LEADERDesc = this.selectData[a].leaderName;
+						this.dataInfo.P_LEADERD = this.selectData[a].leader;
+					}
+				}
 				this.dataInfo.PRODUCT_TYPE = '';
 				this.dataInfo.P_NUM = '';
 				this.dataInfo.ITEM_NAME = '';
@@ -805,28 +812,6 @@
 			// 受检企业
 			getDept(parm){
 				this.$refs.enterprisechild.getData(parm);
-			},
-			getDeptPerson() {//高级查询
-				var data = {
-					params: {
-						id: this.dataInfo.CJDW
-					}
-				};
-				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, data).then((res) => {
-					if(res.data.length > 0){
-						var data  = res.data[0];
-						this.dataInfo.P_LEADERDesc = data.leaderName;
-						this.dataInfo.P_LEADERD = data.leader;
-						this.dataInfo.ACCEPT_PERSONDesc = data.leaderName;
-						this.dataInfo.ACCEPT_PERSON = data.leader;
-					}
-				}).catch((wrong) => {
-					this.$message({
-						message: wrong.resp_msg,
-						type: 'warning'
-					});
-				})
 			},
 			addcategory(){//产品类别
 				if(!!this.dataInfo.CJDW){

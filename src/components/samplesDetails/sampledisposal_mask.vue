@@ -191,8 +191,8 @@
 			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="resetSample">取 消</el-button>
 				<el-button type="primary" @click="addsamplebtn">确 定</el-button>
+				<el-button @click="resetSample">取 消</el-button>
 			</span>
 		</el-dialog>
 		<usermask :tit="userMakeTit" @getSelData="getUserData" ref="usermask" ></usermask>
@@ -579,7 +579,7 @@
 						}
 						var url = this.basic_url + '/api-apps/appCustom/saveDisposition';
 						this.samplesForm.child = this.selData;
-						if(samplesForm.ITEM_MANAGEMENT == '3'){
+						if(this.samplesForm.ITEM_MANAGEMENT == '3'){
 							this.samplesForm.ITEM_MANAGEMENT = this.samplesForm.other;
 						}
 						this.$axios.post(url, this.samplesForm).then((res) => {
@@ -636,7 +636,7 @@
 			// 		this.requestData()
 			// 	}
 			// },
-			requestData(index) {//高级查询字段
+			requestData() {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -646,11 +646,6 @@
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
 					this.samplesList = res.data.data;
 				}).catch((wrong) => {})
 			},

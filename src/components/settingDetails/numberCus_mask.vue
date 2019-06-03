@@ -24,7 +24,7 @@
                                     <el-row>
                                         <el-col :span="8">
 											<el-form-item label="自定义设置" prop="isCustomUse" label-width="120px">
-												<el-select v-model="numbsetForm.isCustomUse" :disabled="noedit" placeholder="请选择" style="width:100%;" >
+												<el-select v-model="numbsetForm.isCustomUse" :disabled="edit" placeholder="请选择" style="width:100%;">
                                                     <el-option
                                                         v-for="item in options"
                                                         :key="item.value"
@@ -87,14 +87,11 @@
 												</el-input>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="列名" prop="columnname" label-width="110px">
-												<el-input v-model="numbsetForm.columnname" :disabled="edit">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getcolumnname(numbsetForm.marky)">
-													</el-button>
-												</el-input>
+										<!-- <el-col :span="8">
+											<el-form-item label="标识三" prop="markz" label-width="110px">
+												<el-input v-model="numbsetForm.markz" :disabled="noedit"></el-input>
 											</el-form-item>
-										</el-col> 
+										</el-col>  -->
                                     </el-row>
 									<el-row>
 										<el-col :span="8">
@@ -213,7 +210,7 @@
                                                 :prop="'numberPrefixList.'+scope.$index + '.value'"
                                                 >
                                                 <!-- 当类型是自定义的时候 -->
-												<el-input size="small" v-model="scope.row.value" placeholder="请输入"  :disabled="noedit" v-show="scope.row.category=='4'&& scope.row.category=='1'"></el-input>
+												<el-input size="small" v-model="scope.row.value" placeholder="请输入"  :disabled="noedit" v-show="scope.row.category=='4'"></el-input>
                                                 <!-- 当类型是日期 -->
 												<el-select v-model="scope.row.value" placeholder="请选择" v-show="scope.row.category=='2'">
 													<el-option v-for="item in dateFormatoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
@@ -224,8 +221,8 @@
 													</el-button>
 												</el-input>
 												<!-- 业务字段 -->
-												<el-input v-model="scope.row.value" :disabled="edit" v-show="scope.row.category=='1'&& numbsetForm.isCustomUse!='1'">
-													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getcolumnname(numbsetForm.marky,scope.$index)">
+												<el-input v-model="scope.row.value" :disabled="edit" v-show="scope.row.category=='1'">
+													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getdata(scope.$index)">
 													</el-button>
 												</el-input>
 												</el-form-item>
@@ -347,7 +344,6 @@
             <appmask ref="appchild" @appdata='appdata'></appmask>
             <datamask ref="datachild" @appdata='data'></datamask>
 			<deptmask ref="deptchild" @deptdata='deptdata'></deptmask>
-			<colummask ref="columchild" @columdata='columdata'></colummask>			
             <!-- <deptmask ref="deptchild" @deptdata = "deptdata"></deptmask> -->
 		</div>
 	</div>
@@ -358,14 +354,12 @@
     import appmask from '../common/common_mask/applicationmask.vue'//应用管理
 	import datamask from '../common/common_mask/datamask.vue'//数据管理
 	import deptmask from '../common/common_mask/deptmask.vue'//机构管理
-	import colummask from '../common/common_mask/colummask.vue'//机构管理
 	export default {
         name: 'masks',
         components: {
             appmask,
 			datamask,
 			deptmask,
-			colummask,
 		},
 		data() {
 			return {
@@ -476,7 +470,7 @@
 				}
             },
             getapp(){
-                this.$refs.appchild.requestData();
+                this.$refs.appchild.requestData('cus');
             },
             appdata(val){
                 this.numbsetForm.markx=val;
@@ -496,19 +490,7 @@
             deptdata(val){
 				this.numbsetForm.numberPrefixList[this.index].valueDesc=val[1];
 				this.numbsetForm.numberPrefixList[this.index].value=val[4];
-			},
-			getcolumnname(marky,indexs){
-				this.indexs=indexs;
-                this.$refs.columchild.requestData(marky);
-			},
-			//机构赋值
-            columdata(val){
-				if(typeof(this.indexs)=="undefined"){
-					this.numbsetForm.columnname=val;
-				}else{
-					this.numbsetForm.numberPrefixList[this.indexs].value=val;
-				}
-			},
+            },
             adddata() {
             	this.$axios.get(this.basic_url + '/api-user/users/currentMap',{}).then((res)=>{
 					this.numbsetForm.createuser=res.data.id;
@@ -637,7 +619,7 @@
 			submitForm() {
 				this.$refs.numbsetForm.validate((valid) => {
 		          if (valid) {
-					var url = this.basic_url + '/api-user/number/saveOrUpdate';
+					var url = this.basic_url + '/api-user/number/saveOrUpdateCus';
 					this.$axios.post(url, this.numbsetForm).then((res) => {
 						//resp_code == 0是后台返回的请求成功的信息
 						if(res.data.resp_code == 0) {

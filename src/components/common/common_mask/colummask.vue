@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog :modal-append-to-body="false" title="应用" height="360px" :visible.sync="dialogapp" width="80%">
+		<el-dialog :modal-append-to-body="false" title="应用" height="360px" :visible.sync="dialogapp" width="60%">
 			<el-form inline-message :model="searchList" label-width="45px">
 				<el-row :gutter="10">
 					<el-col :span="5">
@@ -41,34 +41,17 @@
 						element-loading-background="rgba(255, 255, 255, 0.9)">
 					<el-table-column type="selection" fixed width="55" align="center">
 					</el-table-column>
-					<el-table-column label="应用英文名称" width="155" sortable prop="code" >
+					<el-table-column label="列名" width="155" sortable prop="columnname" >
 					</el-table-column>
-					<el-table-column label="应用名称" width="150" sortable prop="name">
+					<el-table-column label="类型" width="250" sortable prop="type">
 					</el-table-column>
-					<el-table-column label="处理类" width="250" sortable prop="handleclass">
+					<el-table-column label="描述" sortable prop="description">
 					</el-table-column>
-					<el-table-column label="应用描述" width="185" sortable prop="description">
-					</el-table-column>
-					<el-table-column label="数据库表" width="185" sortable prop="object_id">
-					</el-table-column>
-					<el-table-column label="模块" width="185" sortable prop="module">
-					</el-table-column>
-					<el-table-column label="排序" width="120" align="right" sortable prop="sort">
-					</el-table-column>
-					<el-table-column label="录入时间" width="120" prop="createTime" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="变更时间" width="120" prop="updateTime" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="流程" width="120" prop="flowkey" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="流程代办单据号" width="180" prop="flow_todo_num" sortable :formatter="dateFormat">
-					</el-table-column>
-					<el-table-column label="流程代办描述" width="180" prop="flow_todo_desc" sortable :formatter="dateFormat">
-					</el-table-column>
+					
 			</el-table>
 
-				<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
-		    </el-pagination>
+				<!-- <el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
+		    </el-pagination> -->
 
 				<!-- 表格 End-->
 				<div slot="footer">
@@ -96,15 +79,10 @@
 		applicationList:[],
 		dialogapp:false,
 		fullHeight: document.documentElement.clientHeight - 200 +'px',//获取浏览器高度
-		page: {
-			currentPage: 1,
-			pageSize: 20,
-			totalCount: 0
-		},
+		
 		searchList: {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
+			columnname: '',
+			description: '',
 		},
     }
   },
@@ -137,15 +115,12 @@
 			});
   },	
 	searchinfo() {
-		this.page.currentPage = 1;
-		this.page.pageSize = 20;
 		this.requestData();
 	},
 	resetbtn(){
 		this.searchList = {
-			NUM:'',
-			VERSION:'',
-			DEPTID: '',
+			columnname: '',
+			description: '',
 		}
 	},
   	//点击关闭按钮
@@ -154,7 +129,6 @@
 	},
 		//改变页数
 	sizeChange(val) {
-		this.page.pageSize = val;
 		this.requestData();
 	},
 	//当前页数
@@ -163,32 +137,21 @@
 		this.requestData();
 	},
 	//Table默认加载数据
-	requestData(val) {
+	requestData(val,index) {
+		this.index=index;
 			this.loading = true;//加载动画打开
 			var data = {
-				page: this.page.currentPage,
-				limit: this.page.pageSize,
-				name: this.searchList.name,
+				columnname: this.searchList.columnname,
 				description: this.searchList.description,
 			}
-			// var url = this.basic_url + '/api-apps/appcfg';
-			if(val=='cus'){
-				var url = this.basic_url + '/api-apps/appcfg/findByMyMenu'
-			}else{
-        var url = this.basic_url + '/api-apps/appcfg';
-			}
+      var url=this.basic_url + '/api-apps/appcfg/findAttrsByObjName?objName='+val;
 			this.$axios.get(url, {
 				params: data
 			}).then((res) => {
-				if(val=='cus'){
-					this.applicationList = res.data
-				}else{
-					this.applicationList = res.data.data;
-				}
-				this.page.totalCount = res.data.count;
-				//总的页数
-				this.dialogapp = true;
-				this.loading = false;//加载动画关闭
+				console.log(res);
+					this.applicationList = res.data;
+					this.dialogapp = true;
+					this.loading = false;//加载动画关闭
 			}).catch((wrong) => {
 				// this.$message({
 				// 	message: '网络错误，请重试',
@@ -208,7 +171,7 @@
 				type: 'warning'
 			});
 		}else{
-			this.$emit('appdata',this.selUser[0].name);
+			this.$emit('columdata',this.selUser[0].columnname);
 			// this.requestData();
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
@@ -217,8 +180,8 @@
     resetBasisInfo(){//点击确定或取消按钮时重置数据20190303
         this.dialogapp = false;//关闭弹出框
         this.categoryList = [];//列表数据置空
-        this.page.currentPage = 1;//页码重新传值
-        this.page.pageSize = 20;//页码重新传值
+        // this.page.currentPage = 1;//页码重新传值
+        // this.page.pageSize = 20;//页码重新传值
     },
     handleClose(done) {
         this.$confirm('确认关闭？')

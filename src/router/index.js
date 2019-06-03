@@ -28,7 +28,7 @@ const data_management = r => require.ensure([], () => r(require('@/components/se
 const safe_management = r => require.ensure([], () => r(require('@/components/setting/safe_management')), 'safe_management')
 const number_settings = r => require.ensure([], () => r(require('@/components/setting/number_settings')), 'number_settings')//自动编号
 const numbers = r => require.ensure([], () => r(require('@/components/setting/numbers')), 'numbers')//编号设置（实施用）
-const customernumber = r => require.ensure([], () => r(require('@/components/setting/customernumber')), 'customernumber')//编号设置（客户备用）
+const numberCus = r => require.ensure([], () => r(require('@/components/setting/numberCus')), 'numberCus')//编号设置（客户备用）
 const dictionaries_management = r => require.ensure([], () => r(require('@/components/setting/dictionaries_management')), 'dictionaries_management')
 const personinfo = r => require.ensure([], () => r(require('@/components/setting/personinfo')), 'personinfo')
 const passwordedit = r => require.ensure([], () => r(require('@/components/setting/passwordedit')), 'passwordedit')
@@ -248,17 +248,17 @@ Vue.use(Router)
       name: 'number_settings',
       component: number_settings
     },
-    //编号客户用
-    {
-      path: '/customernumber',
-      name: 'customernumber',
-      component: customernumber
-    },
      //编号实施用
-     {
+    {
       path: '/numbers',
       name: 'numbers',
       component: numbers
+    },
+     //编号客户用
+    {
+      path: '/numberCus',
+      name: 'numberCus',
+      component: numberCus
     },
     {//机构管理
       path: '/dept_management',

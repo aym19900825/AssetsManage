@@ -72,7 +72,7 @@
 								</el-table-column>
 								<el-table-column label="委托书编号" width="140" sortable prop="PROXYNUM" v-if="checkedName.indexOf('委托书编号')!=-1">
 								</el-table-column>
-								<el-table-column label="委托书版本" width="100" prop="PROXY_VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
+								<el-table-column label="委托书版本" width="100" prop="VERSION" v-if="checkedName.indexOf('委托书版本')!=-1">
 								</el-table-column>
 								<el-table-column label="检测类型" width="140" sortable prop="PROXY_TYPEDesc" v-if="checkedName.indexOf('检测类型')!=-1">
 								</el-table-column>
@@ -238,7 +238,7 @@
 						prop: 'PROXYNUM'
 					},{
 						label: '委托书版本',
-						prop: 'PROXY_VERSION'
+						prop: 'VERSION'
 					},{
 						label: '检测类型',
 						prop: 'PROXY_TYPEDesc'

@@ -206,12 +206,16 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案" prop="REMARKS" label-width="200px">
+									<el-row>
+										<el-form-item label="抽样方案" prop="REMARKS" label-width="110px">
                     	<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="判定依据" prop="JUDGE" label-width="200px">
+									</el-row>	
+									<el-row>
+										<el-form-item label="判定依据" prop="JUDGE" label-width="110px">
 											<el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input>
 										</el-form-item>
+									</el-row>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">

@@ -299,37 +299,37 @@
 							}).catch(_ => {
 								var url = this.basic_url + '/api-apps/app/product/saveOrUpdate';
 								this.$axios.post(url, this.PRODUCT).then((res) => {
-								//resp_code == 0是后台返回的请求成功的信息
-								if(res.data.resp_code == 0) {
-									this.$message({
-										message: '保存成功',
-										type: 'success'
-									});
-									if(parameter=="Update"){
-										this.show = false;
-										this.$emit('request');
+									//resp_code == 0是后台返回的请求成功的信息
+									if(res.data.resp_code == 0) {
+										this.$message({
+											message: '保存成功',
+											type: 'success'
+										});
+										if(parameter=="Update"){
+											this.show = false;
+											this.$emit('request');
+										}else{
+											this.show = true;
+											this.visible()
+										}
+										this.$refs["PRODUCT"].resetFields(); //清空表单验证
 									}else{
 										this.show = true;
-										this.visible()
-									}
-									this.$refs["PRODUCT"].resetFields(); //清空表单验证
-								}else{
-									this.show = true;
-									if(res.data.resp_code == 1) {
-										//res.data.resp_msg!=''后台返回提示信息
-										if( res.data.resp_msg!=''){
-											this.$message({
-												message: res.data.resp_msg,
-												type: 'warning'
-											});
-										}else{
-											this.$message({
-												message:'相同数据不可重复添加！',
-												type: 'warning'
-											});
+										if(res.data.resp_code == 1) {
+											//res.data.resp_msg!=''后台返回提示信息
+											if( res.data.resp_msg!=''){
+												this.$message({
+													message: res.data.resp_msg,
+													type: 'warning'
+												});
+											}else{
+												this.$message({
+													message:'相同数据不可重复添加！',
+													type: 'warning'
+												});
+											}
 										}
 									}
-								}
 							}).catch((err) => {
 							});
 							});	

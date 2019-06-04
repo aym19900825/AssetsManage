@@ -352,7 +352,12 @@
 									message: '打印提交成功',
 									type: 'success'
 								});
-								this.reportPrintForm.PRINT_COUNT= this.count++,//打印次数
+								this.reportPrintForm.PRINT_COUNT= this.count++;//打印次数
+								//保存打印历史记录
+								var url = this.basic_url + '/api-apps/app/reportPrint/saveOrUpdate';
+								this.$axios.post(url, this.reportPrintForm).then((res) => {
+								}).catch((err) => {
+							});
 								this.resetPrintReport();//关闭弹出窗口
 							}else {
 								this.$message({

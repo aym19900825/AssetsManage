@@ -409,7 +409,6 @@
 		},
 		//查看
 		view(id) {
-			console.log(id);
 			this.$refs.child.view(id);
 		},
 		//高级查询

@@ -249,14 +249,6 @@
 				commentArr: {},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
-				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
 				selectData: [], //获取检验/检测方法类别
 				modify:false,//修订、修改人、修改时间
 				selMenu:[],
@@ -332,6 +324,7 @@
 		},
 		methods: {
 			selDataChange(val){
+				console.log(val);
 				this.selData = val;
 			},
 			getUserData(data){
@@ -578,6 +571,7 @@
 							return;
 						}
 						var url = this.basic_url + '/api-apps/appCustom/saveDisposition';
+						console.log(this.samplesForm);
 						this.samplesForm.child = this.selData;
 						if(this.samplesForm.ITEM_MANAGEMENT == '3'){
 							this.samplesForm.ITEM_MANAGEMENT = this.samplesForm.other;

@@ -136,7 +136,7 @@
 										<span v-text="scope.row.QUALITY==-1?'1':scope.row.QUALITY"></span>
 									</template>
 								</el-table-column>
-								<el-table-column label="样品承接人" sortable width="120px" prop="ACCEPT_PERSON" v-if="this.checkedName.indexOf('样品承接人')!=-1">
+								<el-table-column label="样品承接人" sortable width="120px" prop="ACCEPT_PERSONDesc" v-if="this.checkedName.indexOf('样品承接人')!=-1">
 								</el-table-column>
 								<el-table-column label="处理人" sortable width="100px" prop="DO_PERSONDesc" v-if="this.checkedName.indexOf('处理人')!=-1">
 								</el-table-column>
@@ -233,7 +233,7 @@
 					},
 					{
 						label: '样品承接人',
-						prop: 'ACCEPT_PERSON'
+						prop: 'ACCEPT_PERSONDesc'
 					},
 					{
 						label: '处理批准人',

@@ -231,10 +231,6 @@ export default {
             })
         },
         getData(opt){
-            console.log(123);
-            console.log(this.docParm.model);
-            console.log(this.docParm.appname);
-            console.log(this.docParm.recordid);
             if(this.docParm.model == 'new' || opt=='new'){
                 this.doc = [];
                 return false;
@@ -245,7 +241,6 @@ export default {
                 'appname': this.docParm.appname,
                 'recordid': this.docParm.recordid,
             }).then((res) => {
-                console.log(res.data.fileList);
                 this.doc = res.data.fileList;
                 this.page.totalCount = res.data.total;
             }).catch((err) => {});

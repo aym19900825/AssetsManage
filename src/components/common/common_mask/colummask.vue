@@ -148,7 +148,6 @@
 			this.$axios.get(url, {
 				params: data
 			}).then((res) => {
-				console.log(res);
 					this.applicationList = res.data;
 					this.dialogapp = true;
 					this.loading = false;//加载动画关闭

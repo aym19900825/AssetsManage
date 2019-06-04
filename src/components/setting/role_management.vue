@@ -442,8 +442,8 @@
 				this.$refs.table.requestData(opt);
 			},
 			judge(data) {//是否停用
-                return data.inactive=="1" ? '是' : '否'
-            },
+        return data.inactive=="1" ? '是' : '否'
+      },
 			//机构树
 			getKey() {
 				let that = this;

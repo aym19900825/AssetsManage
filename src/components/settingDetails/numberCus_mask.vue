@@ -21,7 +21,7 @@
 						<div class="content-accordion">
 							<el-collapse v-model="activeNames">
 								<el-collapse-item title="基础信息" name="1">
-                                    <el-row>
+                                    <!-- <el-row>
                                         <el-col :span="8">
 											<el-form-item label="自定义设置" prop="isCustomUse" label-width="120px">
 												<el-select v-model="numbsetForm.isCustomUse" :disabled="edit" placeholder="请选择" style="width:100%;">
@@ -34,25 +34,7 @@
                                                 </el-select>
 											</el-form-item>
 										</el-col>
-										<el-col :span="8">
-											<el-form-item label="使用多流水号" prop="isMultiple" label-width="120px">
-												<!-- <el-input v-model="numbsetForm.isMultiple" :disabled="noedit"></el-input> -->
-                                                <el-select v-model="numbsetForm.isMultiple" :disabled="noedit" placeholder="请选择" style="width:100%;">
-                                                    <el-option
-                                                        v-for="item in options"
-                                                        :key="item.value"
-                                                        :label="item.label"
-                                                        :value="item.value">
-                                                    </el-option>
-                                                </el-select>
-											</el-form-item>
-										</el-col>
-                                       <el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
-											<el-form-item label="序列号" prop="serialnum" label-width="120px">
-												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
-                                    </el-row>
+                                    </el-row> -->
                                     <el-row v-show='numbsetForm.isCustomUse=="1"'>
                                        <el-col :span="8">
 											<el-form-item label="标识一" prop="markx" label-width="120px">
@@ -85,6 +67,19 @@
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getdata()">
 													</el-button>
 												</el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8">
+											<el-form-item label="使用多流水号" prop="isMultiple" label-width="120px">
+												<!-- <el-input v-model="numbsetForm.isMultiple" :disabled="noedit"></el-input> -->
+                                                <el-select v-model="numbsetForm.isMultiple" :disabled="noedit" placeholder="请选择" style="width:100%;">
+                                                    <el-option
+                                                        v-for="item in options"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value">
+                                                    </el-option>
+                                                </el-select>
 											</el-form-item>
 										</el-col>
 										<!-- <el-col :span="8">
@@ -131,7 +126,6 @@
 										</el-col> -->
 									</el-row>
 									<el-row>
-										
 										<el-col :span="8">
 											<el-form-item label="保留位数" prop="retain" label-width="120px">
 												<el-input v-model="numbsetForm.retain" :disabled="noedit"></el-input>
@@ -140,6 +134,11 @@
 										<el-col :span="8">
 											<el-form-item label="增加量" prop="increase" label-width="120px">
 												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
+											<el-form-item label="序列号" prop="serialnum" label-width="120px">
+												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -232,6 +231,7 @@
                                             
 
                                             <el-table-column fixed="right" label="操作" width="120px">
+												<template slot-scope="scope">
                                                 <el-button
                                                 @click.native.prevent="deleteRow(scope.$index,scope.row,'numberPrefixList')"
                                                 type="text"
@@ -240,6 +240,7 @@
                                                 >
                                                 <i class="icon-trash red"></i>
                                                 </el-button>
+												</template>
                                             </el-table-column>
                                         </el-table>
                                         </el-tab-pane>
@@ -549,12 +550,12 @@
 			deleteRow(index, row, listName){
 				var TableName = '';
 				if(listName =='numberPrefixList'){
-					TableName = 'numberPrefixList';
+					TableName = 'deletePrefix';
 				}else{
-					TableName = 'numberSerialnoList';
+					TableName = 'deleteSerialno';
 				}
-				if(row.ID){
-					var url = this.basic_url + '/api-apps/number/' + TableName +'/' + row.id;
+				if(row.id){
+					var url = this.basic_url + '/api-user/number/' + TableName +'/' + row.id;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',

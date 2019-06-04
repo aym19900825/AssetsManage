@@ -240,7 +240,7 @@ export default {
 			}
 		},
 		//删除
-		delinfo(){
+		deluserinfo(){
 			var selData = this.selUser;
 				if(selData.length == 0) {
 					this.$message({

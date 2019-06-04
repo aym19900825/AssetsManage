@@ -1114,7 +1114,8 @@
 			},
 			//检测依据弹出框
             addbasis(){
-            	var selData = this.selUser;
+				var selData = this.selUser;
+				
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择数据',

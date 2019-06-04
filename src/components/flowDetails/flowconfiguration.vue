@@ -50,7 +50,7 @@
 																<el-button slot="append" icon="el-icon-search" @click="addperson(index)"></el-button>
 															</el-input>
 														</el-col>
-														<el-col :span="8" v-show="bigtitle[index].type=='1'||bigtitle[index].type=='2'">
+														<el-col :span="8" v-show="bigtitle[index].type=='2'">
 															<el-input placeholder="请输入内容" v-model="bigtitle[index].group" :disabled="false" class="input-with-select">
 																<el-select v-model="bigtitle[index].type" slot="prepend" :disabled="false" placeholder="请选择" style="width:120px; padding-left:10px;">
 																	<el-option
@@ -61,6 +61,19 @@
 																	</el-option>
 																</el-select>
 																<el-button slot="append" icon="el-icon-search" @click="addusergroup(index)"></el-button>
+															</el-input>
+														</el-col>
+														<el-col :span="8" v-show="bigtitle[index].type=='1'">
+															<el-input placeholder="请输入内容" v-model="bigtitle[index].group" :disabled="false" class="input-with-select">
+																<el-select v-model="bigtitle[index].type" slot="prepend" :disabled="false" placeholder="请选择" style="width:120px; padding-left:10px;">
+																	<el-option
+																	v-for="item in options"
+																	:key="item.code"
+																	:label="item.name"
+																	:value="item.code">
+																	</el-option>
+																</el-select>
+																<el-button slot="append" icon="el-icon-search" @click="addrole(index)"></el-button>
 															</el-input>
 														</el-col>
 														<el-col :span="8" v-show="bigtitle[index].type!='1'&&bigtitle[index].type!='2'&&bigtitle[index].type!='0'">
@@ -161,6 +174,7 @@
 			</div>
 			<user ref="userchild" @executer="executer"></user>
             <usergroup ref="groupchild" @group="group"></usergroup>
+			<rolemask ref="rolemaskchild" @role="role"></rolemask>
 		</div>
 	</div>
 </template>
@@ -168,12 +182,14 @@
 <script>
 	import Config from '../../config.js'
 	import user from '../common/common_mask/usermask.vue'
-    import usergroup from'../common/common_mask/usergroup.vue'
+	import usergroup from'../common/common_mask/usergroup.vue'
+	import rolemask from'../common/common_mask/rolemask.vue'
 	export default {
 		name: 'masks',
 		components: {
 			 user,
 			 usergroup,
+			 rolemask,
 		},
 		data() {
 			return {
@@ -249,6 +265,10 @@
 				this.index=index;
 				this.$refs.groupchild.visible(); 
 			},
+			addrole(index){
+				this.index=index;
+				this.$refs.rolemaskchild.visible(); 
+			},
 			//添加显示弹窗
 			visible(id) {
                 this.show = true;
@@ -281,6 +301,9 @@
 			},
 			group:function(group){
 				this.bigtitle[this.index].group=group;
+			},
+			role:function(role){
+				this.bigtitle[this.index].group=role;
 			},
 			//点击关闭按钮
 			close() {

@@ -47,11 +47,6 @@
                                                 </el-select>
 											</el-form-item>
 										</el-col>
-                                       <el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
-											<el-form-item label="序列号" prop="serialnum" label-width="120px">
-												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
-											</el-form-item>
-										</el-col>
                                     </el-row>
                                     <el-row v-show='numbsetForm.isCustomUse=="1"'>
                                        <el-col :span="8">
@@ -88,7 +83,7 @@
 											</el-form-item>
 										</el-col>
 										<el-col :span="8">
-											<el-form-item label="列名" prop="columnname" label-width="110px">
+											<el-form-item label="编号列" prop="columnname" label-width="110px">
 												<el-input v-model="numbsetForm.columnname" :disabled="edit">
 													<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="getcolumnname(numbsetForm.marky)">
 													</el-button>
@@ -134,7 +129,6 @@
 										</el-col> -->
 									</el-row>
 									<el-row>
-										
 										<el-col :span="8">
 											<el-form-item label="保留位数" prop="retain" label-width="120px">
 												<el-input v-model="numbsetForm.retain" :disabled="noedit"></el-input>
@@ -143,6 +137,11 @@
 										<el-col :span="8">
 											<el-form-item label="增加量" prop="increase" label-width="120px">
 												<el-input v-model="numbsetForm.increase" :disabled="noedit"></el-input>
+											</el-form-item>
+										</el-col>
+										<el-col :span="8" v-show='numbsetForm.isMultiple!="1"'>
+											<el-form-item label="序列号" prop="serialnum" label-width="120px">
+												<el-input v-model="numbsetForm.serialnum" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
 									</el-row>
@@ -201,7 +200,7 @@
 											<el-table-column prop="category" label="类型" width="300px">
                                                 <template slot-scope="scope">
                                                     <el-form-item :prop="'numberPrefixList.'+scope.$index + '.category'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
-														<el-select v-model="scope.row.category" filterable allow-create default-first-option placeholder="请选择">
+														<el-select v-model="scope.row.category" placeholder="请选择">
                                                             <el-option v-for="item in numPrefixTypeoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
 														</el-select>
 													</el-form-item>
@@ -213,7 +212,7 @@
                                                 :prop="'numberPrefixList.'+scope.$index + '.value'"
                                                 >
                                                 <!-- 当类型是自定义的时候 -->
-												<el-input size="small" v-model="scope.row.value" placeholder="请输入"  :disabled="noedit" v-show="scope.row.category=='4'&& scope.row.category=='1'"></el-input>
+												<el-input size="small" v-model="scope.row.value" placeholder="请输入"  :disabled="noedit" v-show="scope.row.category=='4'||(scope.row.category=='1'&&numbsetForm.isCustomUse=='1')"></el-input>
                                                 <!-- 当类型是日期 -->
 												<el-select v-model="scope.row.value" placeholder="请选择" v-show="scope.row.category=='2'">
 													<el-option v-for="item in dateFormatoption" :key="item.id" :label="item.name" :value="item.code"></el-option>
@@ -235,6 +234,7 @@
                                             
 
                                             <el-table-column fixed="right" label="操作" width="120px">
+												<template slot-scope="scope">
                                                 <el-button
                                                 @click.native.prevent="deleteRow(scope.$index,scope.row,'numberPrefixList')"
                                                 type="text"
@@ -243,6 +243,7 @@
                                                 >
                                                 <i class="icon-trash red"></i>
                                                 </el-button>
+												</template>
                                             </el-table-column>
                                         </el-table>
                                         </el-tab-pane>
@@ -567,12 +568,12 @@
 			deleteRow(index, row, listName){
 				var TableName = '';
 				if(listName =='numberPrefixList'){
-					TableName = 'numberPrefixList';
+					TableName = 'deletePrefix';
 				}else{
-					TableName = 'numberSerialnoList';
+					TableName = 'deleteSerialno';
 				}
-				if(row.ID){
-					var url = this.basic_url + '/api-apps/number/' + TableName +'/' + row.id;
+				if(row.id){
+					var url = this.basic_url + '/api-user/number/' + TableName +'/' + row.id;
 					this.$confirm('确定删除此数据吗？', '提示', {
 						confirmButtonText: '确定',
 						cancelButtonText: '取消',
@@ -580,6 +581,7 @@
 						value
 					}) => {
 						this.$axios.delete(url, {}).then((res) => {
+							console.log(res);
 							if(res.data.resp_code == 0){
 								this.numbsetForm[TableName].splice(index,1);
 								this.$message({
@@ -697,6 +699,7 @@
             initDateFormat(){
                 var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=initDateFormat';
                 this.$axios.get(url, {}).then((res) => {
+					console.log(res);
                 	this.initDateFormatoption = res.data;
 				}).catch((wrong) => {
 				})	
@@ -705,6 +708,7 @@
         mounted(){
 			this.numPrefixType();
 			this.dateFormat();
+			this.initDateFormat();
         }
 	}
 </script>

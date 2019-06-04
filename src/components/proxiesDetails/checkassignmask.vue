@@ -140,9 +140,17 @@
 											</el-col>
 										</el-row>
 										<el-row>
-											<el-col :span="8">
+										<el-col :span="8">
 												<el-form-item label="样品状态" prop="ITEM_STATUS" label-width="110px">
-													<el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit" ></el-input>
+													<!-- <el-input v-model="dataInfo.ITEM_STATUS" :disabled="noedit" ></el-input> -->
+													<el-select v-model="dataInfo.ITEM_STATUS" filterable allow-create placeholder="请选择" style="width:100%;" :disabled="noedit">
+													<el-option
+														v-for="item in itemstateoptions"
+														:key="item.id"
+														:label="item.name"
+														:value="item.code">
+													</el-option>
+												</el-select>
 												</el-form-item>
 											</el-col>
 											<el-col :span="8">
@@ -198,12 +206,16 @@
 										</el-form-item>
 									</el-col>
 									</el-row>
-										<el-form-item label="抽样方案" prop="REMARKS" label-width="200px">
+									<el-row>
+										<el-form-item label="抽样方案" prop="REMARKS" label-width="110px">
                     	<el-input v-model="dataInfo.REMARKS" :disabled="noedit"></el-input>
 										</el-form-item>
-										<el-form-item label="判定依据" prop="JUDGE" label-width="200px">
+									</el-row>	
+									<el-row>
+										<el-form-item label="判定依据" prop="JUDGE" label-width="110px">
 											<el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input>
 										</el-form-item>
+									</el-row>
 								</el-collapse-item>
 								<div class="el-collapse-item pt10 pr20 pb20" aria-expanded="true" accordion>
 									<el-tabs v-model="activeName">
@@ -482,11 +494,19 @@
 									</el-row>
 
 									<el-row>
-										<el-col :span="8">
+										<el-col :span="4">
 											<el-form-item label="交付委托方份数" prop="REPORT_QUALITY" label-width="120px">
 												<el-input v-model.number="dataInfo.REPORT_QUALITY" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										 <el-col :span="4">
+                      <el-form-item label="报告份数" prop="REPORT_COUNT" label-width="120px">
+                        <el-input
+                          v-model="dataInfo.REPORT_COUNT"
+                          :disabled="noedit"
+                        ></el-input>
+                      </el-form-item>
+                    </el-col>
 										<el-col :span="8">
 											<el-form-item label="发送方式" prop="REPORT_MODE" label-width="110px">
 												<el-radio-group v-model="dataInfo.REPORT_MODE" :disabled="noedit">
@@ -507,11 +527,11 @@
 									</el-row>
 									<el-row>
 									  <el-col :span="8">
-											<el-col :span="8">
 											<el-form-item label="标准收费(元)" prop="CHECK_COST" label-width="110px">
 												<el-input  v-model="dataInfo.CHECK_COST" id="cost" @blur="toPrice" :disabled="noedit"></el-input>
 											</el-form-item>
 										</el-col>
+										<el-col :span="8">
 											<el-form-item label="合同费用(元)" prop="CONTRACTCOST" label-width="110px">
 												<el-input v-model="dataInfo.CONTRACTCOST" id="stacost" @blur="staPrice" disabled></el-input>
 											</el-form-item>
@@ -757,6 +777,7 @@
 					INSPECT_PROXY_PROJECList: [],
 					INSPECT_PROXY_BASISList: [],//
 					logos: "",//标识
+					itemstateoptions:[],//样品状态
 					CHECK_PROXY_CONTRACTList: [//分包要求
 						{
 							INSPECT_GROUP:'',	//专业组
@@ -838,10 +859,6 @@
 					PRODUCT: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//产品名称
 					ITEM_NAME: [{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey}],//样品名称
 					PAYMENT_METHOD:[{ required: true, message: '请选择', trigger: 'change' }],//付款方式
-					ITEM_QUALITY: [
-						{ required: true, message: '必填', trigger: 'blur'},
-						{ trigger: 'blur', validator:this.Validators.isInteger}
-					],//数量
 					ITEM_METHOD: [{ required: true, message: '必填', trigger: 'change' }],//取样方式
 					ITEM_DISPOSITION: [{ required: true, message: '必填', trigger: 'change' }],//检后处理
 					REMARKS: [
@@ -1942,13 +1959,22 @@
 						// 	type: 'erro'
 						// });
 					});
-			}
+			},
+				//样品状态
+      ITEM_STATUS(){
+        var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=item_accept_status';
+				this.$axios.get(url, {}).then((res) => {
+          this.itemstateoptions = res.data;
+				}).catch((wrong) => {
+				})
+			},
 			
         },
        
 		mounted() {
 			this.RVENDORSelect();
 			this.logo();
+			this.ITEM_STATUS()
 		},
 	}
 </script>

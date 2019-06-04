@@ -177,6 +177,9 @@
                         <!-- <div class="content-footer" v-show="viewtitle">
 							<el-button type="primary" @click="createinspect()">生成委托书</el-button>
 						</div> -->
+						<div class="content-footer" v-show="viewtitle">
+							<el-button type="primary" @click="createInspect" v-show="this.report.STATE=='2'">生成委托书</el-button>
+						</div>
 					</el-form>
 				</div>
 			</div>
@@ -206,28 +209,6 @@
 			 vewPoplemask,
 		},
 		data() {
-			var validateNum = (rule, value, callback) => {
-				if(value != ""){
-		             if((/^[0-9a-zA-Z()（）]+$/).test(value) == false){
-		                 callback(new Error("请填写数字、字母或括号（编码不填写可自动生成）"));
-		             }else{
-		                 callback();
-		             }
-		         }else{
-		             callback();
-		         }
-			};
-			var validateType = (rule, value, callback) => {
-				if(value === '') {
-					callback(new Error('请填写产品类别名称'));
-				} else {
-					if((/^[!@#$%^&*";',.~！@#￥%……&*《》？，。?、|]+$/).test(value) == true){
-		                 callback(new Error("请规范填写名称"));
-		            }else{
-		                callback();
-		            }
-				}
-			};
 			return {
 				approvingData:{},
 				falg:false,//保存验证需要的
@@ -242,10 +223,6 @@
 				activeNames: ['1','2'], //手风琴数量
 				dialogVisible: false, //对话框
 				selectData: [],
-				rules: {
-					NUM: [{required: false,trigger: 'change',validator: validateNum,}],
-					TYPE: [{required: true,trigger: 'blur',validator: validateType,}],
-				},
 				//tree
 				resourceData: [], //数组，我这里是通过接口获取数据
 				category:{},//从父组件接过来的值

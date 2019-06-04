@@ -557,7 +557,6 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=report_result_type';
 				this.$axios.get(url, {}).then((res) => {
 					this.reportResultType = res.data;
-					// console.log(res.data);
 				}).catch((wrong) => {
 				})	
 			},
@@ -566,7 +565,6 @@
 				var url = this.basic_url + '/api-user/dicts/findChildsByCode?code=isSynthetical';
 				this.$axios.get(url, {}).then((res) => {
 					this.optsData = res.data;
-					console.log(res.data);
 				}).catch((wrong) => {
 				})	
 			},
@@ -584,7 +582,6 @@
 					}else {
 						this.reportTemplate.RE_TYPE=this.datanum;
 					};
-					// console.log(res.data.data[0].ID);
 					// this.reptemDetailNum=res.data.data[0].RE_NUM
 					
 					// this.reportTemplate.RE_TYPE = res.data.data[0].RE_NUM;
@@ -598,10 +595,8 @@
 				this.selectData.filter((item)=>{
 					if(item.RE_NUM ==  this.reportTemplate.RE_TYPE){
 						this.reptemDetailId = item.ID;
-						// console.log(this.reptemDetailId);
 					}
 				});
-				// console.log(this.reportTemplate.RE_TYPE);
 				var url = this.basic_url + '/api-merge/templateConfig/findDataByIds/'+ this.reportTemplate.RE_TYPE +'/'+this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.selectReportData = res.data;//报告首页
@@ -624,9 +619,6 @@
 							}
 						}
 					}
-					// console.log(res.data);
-					// console.log(this.reportTemplate.RE_TYPE);
-					// console.log(this.dataid);
 					// this.reportGenerateForm.inspect_date = this.getToday();
 					this.dealData(res.data);
 				}).catch((wrong) => {});
@@ -637,7 +629,6 @@
 				// this.$refs.table2.clearSelection();
 				// this.$refs.table2.toggleRowSelection(row);
 				this.currentRow = row;
-				// console.log(row);
 			},
 			//获取不合格类别
 			getIsQualified() {
@@ -663,8 +654,6 @@
 					var itemType = item.typeid;
 					var totalIndex = 0;
 					list.forEach((val,index)=>{
-						// console.log(listIndex);
-						// console.log(data[listIndex]);
 						var param = '';
 						if(listIndex == 0){
 							param = 'param'+ itemType + index;
@@ -769,8 +758,6 @@
 				var url = this.basic_url +'/api-merge/merge/workorder/findByWorkorderId/'+ this.dataid;
 				this.$axios.get(url, {}).then((res) => {
 					this.reportGenerateForm.WORKORDER_REPORTList=res.data.datas;
-					console.log(res);
-					// console.log(this.dataid);
 				}).catch((err) => {
 				});
 			},	
@@ -821,7 +808,6 @@
 			},
 			//回退成果文件
 			sendback(row){
-				console.log();
 				// /app/workorder/operate/reback?WORKORDERID=当前主表IDreback
 				var Url = this.basic_url + '/api-apps/app/workorder/operate/reback?WORKORDERID='+this.dataid;
 				this.$axios.get(Url, {}).then((res) => {
@@ -876,7 +862,6 @@
 					var repotFileId=this.selData[0].ID;
 					var url = this.basic_url + '/api-apps/app/workorder/operate/createReportApprove?ID='+ repotFileId;
 						this.$axios.get(url, {}).then((res) => {
-							// console.log(repotFileId);
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								this.$message({
@@ -913,13 +898,12 @@
 							//resp_code == 0是后台返回的请求成功的信息
 							if(res.data.resp_code == 0) {
 								//默认保存成功后执行生成报告
-								console.log(this.selData)
-								if(this.selData.length == 0){
-									this.$message({
-										message: '请选择要生成报告的成果文件',
-										type: 'warning'
-									});
-								}else{
+								// if(this.selData.length == 0){
+								// 	this.$message({
+								// 		message: '请选择要生成报告的成果文件',
+								// 		type: 'warning'
+								// 	});
+								// }else{
 									this.thirdBtn = false;//生成报告按钮不显示
 									var url = this.file_url + '/file/fileList?page=0&size=10';
 									this.$axios.post(url,{
@@ -968,7 +952,7 @@
 
 									}).catch((err) => {
 									});
-								}
+								// }
 								//重新加载数据
 								this.requestData();
 							}
@@ -1019,9 +1003,6 @@
 				//判断当前模板编号，如果从父组件传过来值则用传过来的，如果没有则用选的值this.reportTemplate.RE_TYPE;
 				// this.reportTemplate.RE_TYPE=this.datanum;
 				this.requestData();//加载数据
-				
-				console.log(this.templateNum);
-				console.log(this.reportTemplate.RE_TYPE);
 			},
 
 			sizeChange(val) {//分页，总页数

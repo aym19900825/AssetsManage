@@ -191,8 +191,8 @@
 			<el-pagination background class="text-right pt10" @size-change="sizeChange" @current-change="currentChange" :current-page="page.currentPage" :page-sizes="[10, 20, 30, 40,100]" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.totalCount">
 			</el-pagination>
 			<span slot="footer" class="dialog-footer">
-				<el-button @click="resetSample">取 消</el-button>
 				<el-button type="primary" @click="addsamplebtn">确 定</el-button>
+				<el-button @click="resetSample">取 消</el-button>
 			</span>
 		</el-dialog>
 		<usermask :tit="userMakeTit" @getSelData="getUserData" ref="usermask" ></usermask>
@@ -249,14 +249,6 @@
 				commentArr: {},
 				falg:false,//保存验证需要的
 				basic_url: Config.dev_url,
-				value: '',
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
 				selectData: [], //获取检验/检测方法类别
 				modify:false,//修订、修改人、修改时间
 				selMenu:[],
@@ -332,6 +324,7 @@
 		},
 		methods: {
 			selDataChange(val){
+				console.log(val);
 				this.selData = val;
 			},
 			getUserData(data){
@@ -578,8 +571,9 @@
 							return;
 						}
 						var url = this.basic_url + '/api-apps/appCustom/saveDisposition';
+						console.log(this.samplesForm);
 						this.samplesForm.child = this.selData;
-						if(samplesForm.ITEM_MANAGEMENT == '3'){
+						if(this.samplesForm.ITEM_MANAGEMENT == '3'){
 							this.samplesForm.ITEM_MANAGEMENT = this.samplesForm.other;
 						}
 						this.$axios.post(url, this.samplesForm).then((res) => {
@@ -636,7 +630,7 @@
 			// 		this.requestData()
 			// 	}
 			// },
-			requestData(index) {//高级查询字段
+			requestData() {//高级查询字段
 				var data = {
 					page: this.page.currentPage,
 					limit: this.page.pageSize,
@@ -646,11 +640,6 @@
 				}).then((res) => {
 					this.page.totalCount = res.data.count;
 					let totalPage = Math.ceil(this.page.totalCount / this.page.pageSize);
-					if(this.page.currentPage >= totalPage) {
-						this.loadSign = false;
-					} else {
-						this.loadSign = true;
-					}
 					this.samplesList = res.data.data;
 				}).catch((wrong) => {})
 			},

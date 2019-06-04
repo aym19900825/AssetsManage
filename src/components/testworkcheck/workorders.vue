@@ -465,7 +465,6 @@
 					});
 					return;
 				} else if(this.selMenu[0].STATE!='2') {
-					console.log(this.selMenu[0].STATE);
 					this.$message({
 						message: '此任务单状态不是执行中，暂不能生成分包协议',
 						type: 'warning'
@@ -496,7 +495,6 @@
 					});
 					return;
 				} else if(this.selMenu[0].STATE!='6'&&this.selMenu[0].STATE!='17'&&this.selMenu[0].STATE!='16') {
-					console.log(this.selMenu[0].STATE);
 					this.$message({
 						message: '此任务单状态不是待生成，暂不能使用报告生成与编辑',
 						type: 'warning'
@@ -606,7 +604,6 @@
 				}else{
 					var url = this.basic_url +'/api-apps/app/workorder/' +this.selMenu[0].ID;
 					this.$axios.get(url, {}).then((res) => {
-						console.log(res);
 						if(res.data.WORKORDER_PROJECTList.length==0&&res.data.WORKORDER_CONTRACTList.length==0){
 							this.$message({
 								message: '此任务单没有任务可下达,请确认。',
@@ -650,7 +647,6 @@
 			
 			getDetail(data){
 				this.view(data);
-				console.log(data);
 			},
 			//查看
 			view(data) {
@@ -801,7 +797,6 @@
 				}).then((res) => {
 					this.loading = false;
 					let result=res.data.datas;
-					// console.log(res.data.datas);
 					for(let i=0;i<result.length;i++){
 						if(typeof(result[i].subDepts)!="undefined"&&result[i].subDepts.length>0){
 							let subDepts=result[i].subDepts;
@@ -822,7 +817,6 @@
 					this.resourceData = res.data.datas;
 					// this.resourceData = res.data;
 					this.treeData = this.transformTree(this.resourceData);
-					// console.log(this.treeData);
 				});
 			},
 			transformTree(data) {
@@ -896,7 +890,6 @@
 				};
 				var url = this.basic_url + '/api-user/permissions/getPermissionByRoleIdAndSecondMenu';
 				this.$axios.get(url, {params: data}).then((res) => {
-					// console.log(res.data);
 					this.buttons = res.data;
 					// if(res.data.length==0){
 					// 	this.buttons=[{

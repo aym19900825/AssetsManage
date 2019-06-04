@@ -173,7 +173,7 @@
 						</div> -->
                         <div class="content-footer" v-show="viewtitle">
 							<el-button type="success" @click="confirmReceipt" v-show="this.report.STATE=='1'"><i class="icon-check"></i> 确认接收此分包协议</el-button>
-							<el-button type="primary" @click="createInspect" v-show="this.report.STATE=='2'">生成委托书</el-button>
+							<!-- <el-button type="primary" @click="createInspect" v-show="this.report.STATE=='2'">生成委托书</el-button> -->
 						</div>
 					</el-form>
 				</div>

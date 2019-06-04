@@ -23,7 +23,10 @@
 
 											<el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
 
-											<el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年"></el-date-picker>
+											<div class="block">
+												   <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" format="yyyy" value-format="yyyy" placeholder="选择年">
+													 </el-date-picker>
+											</div>		 
 
 											<el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
 												<el-button slot="append" :disabled="noedit" icon="el-icon-search"  @click="requestData(item)"></el-button>
@@ -51,7 +54,10 @@
 
 											<el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='1'" value-format="yyyy-MM-dd" style="width:100%;"></el-date-picker>
 
-											<el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" placeholder="选择年" style="width:100%;"></el-date-picker>
+											<div class="block">
+												   <el-date-picker v-model="dataInfo[item.param]" v-show="item.type=='7'" type="year" format="yyyy" value-format="yyyy" placeholder="选择年">
+													 </el-date-picker>
+											</div>
 
 											<el-input v-model="dataInfo[item.param]" v-show="item.type=='3'" :disabled="true">
 												<el-button slot="append" :disabled="noedit" icon="el-icon-search" @click="requestData(item)"></el-button>
@@ -496,7 +502,8 @@
 			},
 			determine(){
 				var token = sessionStorage.getItem('access_token');
-           var str=JSON.stringify(this.dataInfo);
+					 var str=JSON.stringify(this.dataInfo);
+					 console.log(this.dataInfo);
          //var str=this.dataInfo; 
 				for(var j=0;j<str.length;j++){
           str=str.replace("\":\"",'=');

@@ -229,14 +229,14 @@
 												</template>
 											</el-table-column>
 											
-											<el-table-column prop="VERSION" label="版本" sortable width="120px">
+											<!-- <el-table-column prop="VERSION" label="版本" sortable width="120px">
 												<template slot-scope="scope">
 													<el-form-item :prop="'WORK_NOTICE_CHECKBASISList.' + scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]">
 													<el-input v-show="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入内容" :disabled="noedit"></el-input>
 													<span v-show="!scope.row.isEditing">{{scope.row.VERSION}}</span>
 													</el-form-item>
 												</template>
-											</el-table-column>
+											</el-table-column> -->
 											<el-table-column prop="FILESIZE" label="文件大小" sortable width="120px">
 												<template slot-scope="scope">
 													<span>{{(scope.row.FILESIZE<0?scope.row.FILESIZE:0) + 'M'}}</span>
@@ -334,7 +334,7 @@
 													</template>
 												</el-table-column>
 
-												<el-table-column prop="VERSION" label="项目版本" sortable width="120px">
+												<!-- <el-table-column prop="VERSION" label="项目版本" sortable width="120px">
 													<template slot-scope="scope">
 														<el-form-item :prop="'WORK_NOTICE_CHECKPROJECTList.'+scope.$index + '.VERSION'" :rules="[{required: true, message: '请输入', trigger: 'blur'}]" >
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.VERSION" placeholder="请输入" :disabled="noedit">
@@ -342,7 +342,7 @@
 														<span v-else>{{scope.row.VERSION}}</span>
 														</el-form-item>	
 													</template>
-												</el-table-column>
+												</el-table-column> -->
 												<el-table-column fixed="right" label="操作" width="120">
 													<template slot-scope="scope">
 														<el-button @click.native.prevent="deleteRow(scope.$index,scope.row,'projectList')" type="text" size="small" v-if="!viewtitle">
@@ -534,7 +534,7 @@
 				pickerOptions1: {
 					disabledDate: (time) => {
 						if(!!this.dataInfo.XD_DATE){
-							return time.getTime() < new Date(this.dataInfo.XD_DATE).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
+							return time.getTime() <= new Date(this.dataInfo.XD_DATE).getTime()- 1*24*60*60*1000;//减去一天的时间代表可以选择同一天;
 						}else{
 							this.dataInfo.COMPDATE='';
 							// this.$message({
@@ -630,20 +630,19 @@
 					TASKNUM:[{required: false, trigger: 'change', validator:this.Validators.isSpecificKey}],
 					CJDW: [{required: true,trigger: 'change',message: '请选择',}], //承检单位
 					P_LEADERDesc: [{required: true,  message: '请选择'}], //项目负责人
-					PRODUCT_TYPE: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品类别
-					ITEM_NAME: [{required: true, trigger: 'blur', message:'请选择'}], //受检产品名称
+					PRODUCT_TYPE: [{required: true, trigger: 'change', message:'请选择'}], //受检产品类别
+					ITEM_NAME: [{required: true, trigger: 'change', message:'请选择'}], //受检产品名称
 					ITEM_MODEL: [
 						{required: true,trigger: 'blur',message: '必填'},
 						{trigger: 'blur', validator:this.Validators.isSpecificKey}
 					], //受检产品型号
 					V_NAME: [{required: true,validator: this.Validators.isSpecificKey}], //受检企业
 					VENDOR: [{required: true,trigger: 'blur',message: '必填'}], //受检企业编号
-					QUALITY: [{required: true,message: '必填',validator:this.Validators.isInteger}], //样品数量
+					QUALITY: [{required: true,message: '必填'}], //样品数量
 					CHECTCOST:[{required: false, trigger:'blur', validator:this.Validators.isPrices}], //检验检测费用
-					XD_DATE: [{type: 'string', required: true, message: '请选择', trigger: 'change'}],//下达日期
+					XD_DATE: [{required: true, message: '请选择', trigger: 'change'}],//下达日期
 					SOLUTION: [
-						{required: true,trigger: 'blur',message: '必填',	},
-						{trigger: 'blur',validator: this.Validators.isSpecificKey},
+						{required: true,trigger: 'blur',message: '必填',validator: this.Validators.isSpecificKey},
 					],//抽样方案
 					MEMO: [
 						{required: false, trigger: 'blur', validator: this.Validators.isSpecificKey},
@@ -784,15 +783,22 @@
 			},
 			//承检单位
 			getCompany() {
-				var url=this.basic_url+'/api-user/depts/findStation/2';
+				var url=this.basic_url+'/api-user/depts/treeByType?type=2';
 				this.$axios.get(url, {
 				}).then((res) => {
+					console.log(res);
 					this.selectData = res.data;
 				});
 			},
 			changeCJDW(){
-				this.getCompany();
-				this.getDeptPerson();
+				console.log(this.dataInfo.CJDW);
+				console.log(this.selectData);
+				for(var a=0;a<this.selectData.length;a++){
+					if(this.selectData[a].id==this.dataInfo.CJDW){
+						this.dataInfo.P_LEADERDesc = this.selectData[a].leaderName;
+						this.dataInfo.P_LEADERD = this.selectData[a].leader;
+					}
+				}
 				this.dataInfo.PRODUCT_TYPE = '';
 				this.dataInfo.P_NUM = '';
 				this.dataInfo.ITEM_NAME = '';
@@ -806,28 +812,6 @@
 			// 受检企业
 			getDept(parm){
 				this.$refs.enterprisechild.getData(parm);
-			},
-			getDeptPerson() {//高级查询
-				var data = {
-					params: {
-						id: this.dataInfo.CJDW
-					}
-				};
-				var url = this.basic_url + '/api-user/depts/treeMap';
-				this.$axios.get(url, data).then((res) => {
-					if(res.data.length > 0){
-						var data  = res.data[0];
-						this.dataInfo.P_LEADERDesc = data.leaderName;
-						this.dataInfo.P_LEADERD = data.leader;
-						this.dataInfo.ACCEPT_PERSONDesc = data.leaderName;
-						this.dataInfo.ACCEPT_PERSON = data.leader;
-					}
-				}).catch((wrong) => {
-					this.$message({
-						message: wrong.resp_msg,
-						type: 'warning'
-					});
-				})
 			},
 			addcategory(){//产品类别
 				if(!!this.dataInfo.CJDW){
@@ -1325,7 +1309,7 @@
 					} else {
 						this.show=true;
 					 	this.$message({
-							message: '有必填项未填写，请重新填写',
+							message: '有必填项未填写，请填写完整',
 							type: 'warning',
 						});
 						this.falg=false

@@ -319,21 +319,22 @@
                   </el-row>
                   <el-row>
                     <el-form-item label="判定依据" prop="JUDGE" label-width="110px">
-                      <!-- <el-input v-model="dataInfo.JUDGE" :disabled="noedit"></el-input> -->
-                      <el-autocomplete
+                      <el-input v-model="dataInfo.JUDGE" :disabled="noedit">
+                      <!-- <el-autocomplete
                         v-model="dataInfo.JUDGE"
                         @select="handleSelect2"
                         placeholder="请输入内容"
                         :disabled="noedit"
                         style="width:100%"
-                      >
+                      > -->
                         <el-button
                           slot="append"
                           icon="el-icon-search"
                           @click="basisleadbtn('main')"
                           :disabled="noedit"
                         ></el-button>
-                      </el-autocomplete>
+                        </el-input>
+                      <!-- </el-autocomplete> -->
                     </el-form-item>
                   </el-row>
                 </el-collapse-item>
@@ -1434,7 +1435,10 @@ export default {
           }
         ], //邮编
         V_PERSON: [{ required: true, validator: this.Validators.isNickname }], //联系人姓名
-        V_PHONE: [{ required: true, validator: this.Validators.isPhones }], //联系人电话
+        V_PHONE: [
+          {required: true, message: '必填'},
+          {trigger: 'blur', validator: this.Validators.isPhones,}
+        ],
         R_VENDORDesc: [
           {
             required: false,
@@ -1471,12 +1475,8 @@ export default {
         //   }
         // ], //抽样方案
         JUDGE: [
-          {
-            required: true,
-            message: "必填",
-            trigger: "blur",
-            validator: this.Validators.isSpecificKey
-          }
+          {required: true,message: "必填",},
+           {trigger: "blur",validator: this.Validators.isSpecificKey}
         ], // 判定依据
         COMPDATE: [{ required: true, message: "必填", trigger: "blur" }], //完成日期
         REPORT_QUALITY: [{ required: true, message: "必填", trigger: "blur" }], //交委托方分数
@@ -1701,6 +1701,7 @@ export default {
 
     // 中心内机构
     withindept() {
+      console.log(new Date);
       this.$refs.withinspectchild.visible();
     },
     //中心外机构
@@ -2023,6 +2024,7 @@ export default {
       this.$axios
         .get(url, {})
         .then(res => {
+          console.log(res);
           this.RVENDORSelect();
           this.getmaingroup(res.data.MAINGROUP);
           // 依据
@@ -2074,11 +2076,14 @@ export default {
           }
           
           //用于获取主检组菜的数据
-          var url = this.basic_url + "/api-user/depts/" + res.data.MAINGROUP;
-          this.$axios.get(url, {}).then(res => {
-            var resullt = res.data;
-            this.maingroup.push(resullt);
-          });
+          if(!!!res.data.MAINGROUP){
+            var url = this.basic_url + "/api-user/depts/" + res.data.MAINGROUP;
+            this.$axios.get(url, {}).then(res => {
+              var resullt = res.data;
+              this.maingroup.push(resullt);
+            });
+          }
+          
           if (res.data.MAINGROUP == "") {
             res.data.MAINGROUP = "";
           } else {

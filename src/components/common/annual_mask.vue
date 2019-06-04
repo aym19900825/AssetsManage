@@ -81,33 +81,6 @@
 								<!-- 年度计划列表 Begin-->
 								<el-collapse-item title="年度计划列表" name="2" class="ml30">
 									<div style="position: absolute; top:10px; right:40px;">
-										<!-- <el-dropdown size="small" v-show="!viewtitle">
-											<el-button round type="primary" size="mini">
-												<i class="icon-inventory-line-callin"></i> 导入<i class="el-icon-arrow-down el-icon-right"></i>
-											</el-button>
-
-											<el-dropdown-menu slot="dropdown">
-												<el-dropdown-item>
-													<div @click="download"><i class="icon-download-cloud"></i>下载模版</div>
-												</el-dropdown-item>
-												<el-dropdown-item>
-													<el-upload
-													ref="upload"
-													class="upload"
-													:action="uploadUrl()"
-													:on-success="fileSuccess"
-													:limit=1
-													multiple
-													method:="post">
-														<div>上传</div>
-													</el-upload>
-												</el-dropdown-item>
-											</el-dropdown-menu>
-										</el-dropdown>
-										<el-button type="primary" size="mini" round v-show="!addtitle" @click="exportData" style="margin-left: 10px;">
-											<i class="icon-upload-cloud"></i>
-											<font>导出</font>
-										</el-button> -->
 										<el-button type="success" size="mini" round @click="addfield1" v-show="!viewtitle">
 											<i class="icon-add"></i>
 											<font>新建行</font>
@@ -140,12 +113,12 @@
 											</el-table-column>
 											<el-table-column prop="PRODUCT_TYPE" label="产品类别" sortable width="200px">
 												<template slot-scope="scope">
-													<!-- <el-form-item :prop="'worlplanlist.'+scope.$index + '.PRODUCT_TYPE'" :rules="{required: true, message: '请选择', trigger: 'change'}"> -->
+													<el-form-item :prop="'worlplanlist.'+scope.$index + '.PRODUCT_TYPE'" :rules="{required: true, message: '请选择', trigger: 'change'}"> 
 														<el-input v-if="scope.row.isEditing" size="small" v-model="scope.row.PRODUCT_TYPE" :disabled="edit" placeholder="请选择">
 															<el-button slot="append" icon="el-icon-search" @click="addprobtn(scope.row)" :disabled="noedit"></el-button>
 														</el-input>
 														<span v-if="!scope.row.isEditing">{{scope.row.PRODUCT_TYPE}}</span>
-													<!-- </el-form-item> -->
+													</el-form-item>
 												</template>
 											</el-table-column>
 											<el-table-column prop="ITEM_NAME" label="产品名称" sortable width="200px">
@@ -673,8 +646,6 @@
 					</el-table-column>
 					<el-table-column label="联系地址" sortable prop="CONTACT_ADDRESS">
 					</el-table-column>
-					<!--<el-table-column label="信息状态" sortable width="100" prop="STATUS" :formatter="judge" v-if="this.checkedName.indexOf('信息状态')!=-1">
-					</el-table-column>-->
 				</el-table>
 				<el-pagination background class="text-right pt10"
 					@size-change="sizeChange"
@@ -719,15 +690,7 @@
 		        showBtn: [],
 		        showBtnOrdinary: true,
 		        fullHeight: document.documentElement.clientHeight - 210+'px',//获取浏览器高度
-				value: '',
 				assignshow:false,//下达任务通知书按钮
-				options: [{
-					value: '1',
-					label: '活动'
-				}, {
-					value: '0',
-					label: '不活动'
-				}],
 				loadSign: true, //鼠标滚动加载数据
 				loading: false,//默认加载数据时显示loading动画
 				commentArr:{},
@@ -927,11 +890,11 @@
 				}
 			},
 			//检测项目与要求修改和保存状态
-			changeEdit(row){
-				this.$nextTick(function(){
-					row.isEditing = !row.isEditing;
-				});
-			},
+			// changeEdit(row){
+			// 	this.$nextTick(function(){
+			// 		row.isEditing = !row.isEditing;
+			// 	});
+			// },
 			//生产企业名称
 			prodeptbtn(item){
 				// this.requestData();
@@ -976,19 +939,16 @@
 				}).catch((wrong) => {})
 			},
 			//受检企业名称
-			getdeptbtn(item){
-				// this.requestData();
-				this.requestDeptname();
-				this.dialogVisible5 = true;
-				// this.$emit('request');
-				this.deptindex = item;
-				this.requestnum = '3';
-				this.deptnum = '2';
-			},
+			// getdeptbtn(item){
+			// 	// this.requestData();
+			// 	this.requestDeptname();
+			// 	this.dialogVisible5 = true;
+			// 	// this.$emit('request');
+			// 	this.deptindex = item;
+			// 	this.requestnum = '3';
+			// 	this.deptnum = '2';
+			// },
 			
-			fileSuccess(){
-				this.detail(this.WORKPLAN.ID);
-			},
 			//删除计划列表
 			delPlan(index,row,TableName,delList){
 				//删除依据对应的项目与要求
@@ -1078,13 +1038,8 @@
 				}
 				
 			},
-			showLineData(row){
-				// this.editPlan = row;
-				this.proTestListForm.proTestList = !!row.WORLPLANLINE_PROJECTList ? row.WORLPLANLINE_PROJECTList : [];
-				this.basisListForm.basisList = !!row.WORLPLANLINE_BASISList ? row.WORLPLANLINE_BASISList : [];
-			},
    			//年度计划表格函数-------------------------------------------------------------------------------------------------
-   			iconOperation(row){
+   			iconOperation(row,flag){
 				var basisFlag = false;
 				var projectFlag = false;
 				this.$refs.worlPlanListForm.validate((valid) => {
@@ -1149,17 +1104,6 @@
 				// 	this.basisListForm.basisList = [];
 				// }
         	},
-   			//上传文件 Begin
-			handleExceed(files, fileList) {
-				this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
-			},
-			beforeRemove(file, fileList) {
-				return this.$confirm(`确定移除 ${ file.name }？`);
-			},
-			//上传文件 End
-   			judge(data) {
-				return data.STATUS=="1" ? '活动' : '不活动'
-			},
    			//时间格式化  
 			dateFormat(row, column) {
 				var date = row[column.property];
@@ -1170,7 +1114,8 @@
 			},
 			//检测依据弹出框
             addbasis(){
-            	var selData = this.selUser;
+				var selData = this.selUser;
+				
 				if(selData.length == 0) {
 					this.$message({
 						message: '请选择数据',
@@ -1644,7 +1589,7 @@
 				var obj = {
 					'ID': '',
 					'WP_NUM': 10001,
-					'WP_LINENUM': this.index,
+					'WP_LINENUM': this.worlPlanListForm.worlplanlist.length+1,
 					'ITEM_NAME': '',
 					'MODEL': '',
 					'V_NAME': '',
@@ -1672,7 +1617,8 @@
 			addfield1(){//年度计划列表新建行
 				var flag = true;
 				if (this.isEditList && this.worlPlanListForm.worlplanlist.length>0){
-					flag = this.iconOperation(this.editPlan);
+					flag = this.iconOperation(this.editPlan,flag);
+					console.log(flag);
 				}
 				if(flag){
 					this.newPlanLine();
@@ -1697,24 +1643,6 @@
 					VERSION:''
                 };
                 this.WORKPLAN.WORLPLANLINE_PROJECTList.push(obj4);
-			},
-			delfield1(item){//年度计划列表删除行
-                var index = this.WORKPLAN.WORLPLANLINEList.indexOf(item);
-                if (index !== -1) {
-                    this.WORKPLAN.WORLPLANLINEList.splice(index, 1);
-                }
-			},
-			delfield3(item){//年度计划列表删除行
-                var index = this.inspectionList_child.WORLPLANLINE_BASISList.indexOf(item);
-                if (index !== -1) {
-                    this.inspectionList_child.WORLPLANLINE_BASISList.splice(index, 1);
-                }
-			},
-			delfield4(item){//年度计划列表删除行
-                var index = this.inspectionList_child.WORLPLANLINE_PROJECTList.indexOf(item);
-                if (index !== -1) {
-                    this.inspectionList_child.WORLPLANLINE_PROJECTList.splice(index, 1);
-                }
 			},
 			col_but(col_but) {
 				if(col_but == 'col_but1') {
@@ -1890,7 +1818,7 @@
 				setTimeout(function(){
 					_this.docParm.model = 'view';
 					_this.docParm.appname = '年度计划';
-					_this.docParm.recordid = _this.WORKPLAN.ID;
+					_this.docParm.recordid = dataid;
 					_this.docParm.appid = 20;
 					_this.$refs.docTable.getData();
 				},100);
@@ -1985,13 +1913,14 @@
 						}
 						if(this.worlPlanListForm.worlplanlist.length>0){
 							for(var i=0;i<this.worlPlanListForm.worlplanlist.length;i++){
-								if(!this.worlPlanListForm.worlplanlist[i].WORLPLANLINE_PROJECTList||!this.worlPlanListForm.worlplanlist[i].WORLPLANLINE_BASISList||this.worlPlanListForm.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0||this.worlPlanListForm.worlplanlist[i].WORLPLANLINE_BASISList.length == 0){
+								if(this.worlPlanListForm.worlplanlist[i].WORLPLANLINE_PROJECTList.length == 0||this.worlPlanListForm.worlplanlist[i].WORLPLANLINE_BASISList.length == 0){
 									this.$message({
 										message: '检测依据、检测项目与要求是必填项，请填写！',
 										type: 'warning'
 									});
 									return false;
-								}else{
+								}
+							}
 									if(!this.isEditList){
 										this.WORKPLAN.WORLPLANLINEList = this.worlPlanListForm.worlplanlist;
 										var url = this.basic_url +'/api-apps/app/workplan/saveOrUpdate';
@@ -2037,8 +1966,8 @@
 										});
 										return false;
 									}
-								}
-							}
+								
+							
 						}else{
 							this.$message({
 								message: '年度计划列表是必填项，请填写！',
@@ -2241,14 +2170,6 @@
 					}
 					xhr.send();
 			},
-			fileSuccess(){//上传成功后返回数据
-				this.page.currentPage = 1;
-				this.requestData();
-			},
-			uploadUrl(){
-				var url = this.basic_url +'/api-apps/app/workplan/importExc?table=WORLPLANLINE&access_token='+sessionStorage.getItem('access_token');
-				return url;
-            },
 			exportData() {
 				// /api-apps/app/workplan/exportExc/'+ids+'?access_token='+sessionStorage.getItem('access_token');    ids为选择数据的id，以逗号分隔
            		var url = this.basic_url + '/api-apps/app/workplan/exportExc?table=WORLPLANLINE&WP_NUM_wheres='+this.WORKPLAN.WP_NUM+'&access_token='+sessionStorage.getItem('access_token');

@@ -383,7 +383,7 @@
 					this.docParm.deptfullname = res.data.deptName;
 					var _this = this;
 					setTimeout(function(){
-						_this.docParm.model = 'view';
+						_this.docParm.model = 'edit';
 						_this.docParm.appname = '报告归档/检测标准';
 						_this.docParm.recordid = id;
 						_this.docParm.appid = 91;

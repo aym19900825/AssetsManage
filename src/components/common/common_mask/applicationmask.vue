@@ -152,64 +152,18 @@
 	close() {
 		this.dialogapp = false;
 	},
-	visible() {
-		this.dialogapp = true;
+		//改变页数
+	sizeChange(val) {
+		this.page.pageSize = val;
 		this.requestData();
 	},
-  	//表格滚动加载
-		// loadMore() {
-		// 	let up2down = sessionStorage.getItem('up2down');
-		// 	if(this.loadSign) {					
-		// 		if(up2down=='down'){
-		// 			this.page.currentPage++;
-		// 			if(this.page.currentPage > Math.ceil(this.page.totalCount / this.page.pageSize)) {
-		// 				this.page.currentPage = Math.ceil(this.page.totalCount / this.page.pageSize)
-		// 				return false;
-		// 			}
-		// 			let append_height = window.innerHeight - this.$refs.table.$el.offsetTop - 50;
-		// 			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-		// 				$('.el-table__body-wrapper table').append('<div class="filing" style="height: '+append_height+'px;width: 100%;"></div>');
-		// 				sessionStorage.setItem('toBtm','true');
-		// 			}
-		// 		}else{
-		// 			sessionStorage.setItem('toBtm','false');
-		// 			this.page.currentPage--;
-		// 			if(this.page.currentPage < 1) {
-		// 				this.page.currentPage=1;
-		// 				return false;
-		// 			}
-		// 		}
-		// 		this.loadSign = false;
-		// 		setTimeout(() => {
-		// 			this.loadSign = true;
-		// 		}, 1000)
-		// 		this.requestData();
-		// 	}
-		// },
-		//改变页数
-		sizeChange(val) {
-			this.page.pageSize = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.requestData();
-		},
-		//当前页数
-		currentChange(val) {
-			this.page.currentPage = val;
-			if(this.page.currentPage == Math.ceil(this.page.totalCount / this.page.pageSize)){
-				$('.el-table__body-wrapper table').append('<div class="filing" style="height: 800px;width: 100%;"></div>');
-				sessionStorage.setItem('toBtm','true');
-			}else{
-				sessionStorage.setItem('toBtm','false');
-			}
-			this.requestData();
-		},
+	//当前页数
+	currentChange(val) {
+		this.page.currentPage = val;
+		this.requestData();
+	},
 	//Table默认加载数据
-requestData() {
+	requestData(val) {
 			this.loading = true;//加载动画打开
 			var data = {
 				page: this.page.currentPage,
@@ -217,14 +171,23 @@ requestData() {
 				name: this.searchList.name,
 				description: this.searchList.description,
 			}
-			var url = this.basic_url + '/api-apps/appcfg';
+			// var url = this.basic_url + '/api-apps/appcfg';
+			if(val=='cus'){
+				var url = this.basic_url + '/api-apps/appcfg/findByMyMenu'
+			}else{
+        var url = this.basic_url + '/api-apps/appcfg';
+			}
 			this.$axios.get(url, {
 				params: data
 			}).then((res) => {
+				if(val=='cus'){
+					this.applicationList = res.data
+				}else{
+					this.applicationList = res.data.data;
+				}
 				this.page.totalCount = res.data.count;
 				//总的页数
-			
-				this.applicationList = res.data.data;
+				this.dialogapp = true;
 				this.loading = false;//加载动画关闭
 			}).catch((wrong) => {
 				// this.$message({
@@ -246,7 +209,7 @@ requestData() {
 			});
 		}else{
 			this.$emit('appdata',this.selUser[0].name);
-			this.requestData();
+			// this.requestData();
 			this.resetBasisInfo();//调用resetBasisInfo函数
 		}
     },
